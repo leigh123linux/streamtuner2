@@ -5,7 +5,7 @@
 # title: streamtuner2
 # description: directory browser for internet radio / audio streams
 # depends: gtk, pygtk, xml.dom.minidom, threading, lxml, pyquery, kronos
-# version: 2.0.8
+# version: 2.0.9
 # author: mario salzer
 # license: public domain
 # url: http://freshmeat.net/projects/streamtuner2
@@ -115,7 +115,7 @@ import favicon
 # this represents the main window
 # and also contains most application behaviour
 main = None
-class StreamTunerTwo(gtk.glade.XML):
+class StreamTunerTwo(gtk.Builder):
 
 
         # object containers
@@ -136,7 +136,9 @@ class StreamTunerTwo(gtk.glade.XML):
             self.load_theme(), gui_startup(0.05)
 
             # instantiate gtk/glade widgets in current object
-            gtk.glade.XML.__init__(self, ("st2.glade" if os.path.exists("st2.glade") else conf.share+"/st2.glade")), gui_startup(0.10)
+            gtk.Builder.__init__(self)
+            ui_file = ("st2.xml" if os.path.exists("st2.xml") else conf.share+"/st2.xml");
+            gtk.Builder.add_from_file(self, ui_file), gui_startup(0.10)
             # manual gtk operations
             self.extensionsCTM.set_submenu(self.extensions)  # duplicates Station>Extension menu into stream context menu
 
@@ -172,7 +174,7 @@ class StreamTunerTwo(gtk.glade.XML):
       
             # bind gtk/glade event names to functions
             gui_startup(0.95)
-            self.signal_autoconnect({
+            self.connect_signals({
                 "gtk_main_quit" : self.gtk_main_quit,                # close window
                 # treeviews / notebook
                 "on_stream_row_activated" : self.on_play_clicked,    # double click in a streams list
@@ -240,14 +242,14 @@ class StreamTunerTwo(gtk.glade.XML):
             if (self.channels.has_key(name)):
                 return self.channels[name]     # like self.shoutcast
             else:
-                return self.get_widget(name)   # or gives an error if neither exists
+                return self.get_object(name)   # or gives an error if neither exists
 
         # custom-named widgets are available from .widgets{} not via .get_widget()
         def get_widget(self, name):
             if self.widgets.has_key(name):
                 return self.widgets[name]
             else:
-                return gtk.glade.XML.get_widget(self, name)
+                return gtk.Builder.get_object(self, name)
                 
 
 
@@ -519,7 +521,7 @@ class AboutStreamtuner2:
         # about us
         def __init__(self):
             a = gtk.AboutDialog()
-            a.set_version("2.0.8")
+            a.set_version("2.0.9")
             a.set_name("streamtuner2")
             a.set_license("Public Domain\n\nNo Strings Attached.\nUnrestricted distribution,\nmodification, use.")
             a.set_authors(["Mario Salzer <http://mario.include-once.org/>\n\nConcept based on streamtuner 0.99.99 from\nJean-Yves Lefort, of which some code remains\nin the Google stations plugin.\n<http://www.nongnu.org/streamtuner/>\n\nMyOggRadio plugin based on cooperation\nwith Christian Ehm. <http://ehm-edv.de/>"])
