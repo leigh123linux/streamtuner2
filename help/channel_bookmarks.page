@@ -1,0 +1,38 @@
+<page	xmlns="http://projectmallard.org/1.0/"
+	type="guide"
+	id="bookmarks">
+
+<info>
+	<link type="guide" xref="index#channels"/>
+	<link type="guide" xref="channels#list"/>
+	<link type="guide" xref="streams#actions"/>
+        <desc>Collect favourites via bookmark function, entry editing and deleting.</desc>
+</info>
+
+	<title>Bookmarks</title>
+
+	<p>It's easy to lose the overview when you browse through the various channel tabs, genres
+        and internet radio stations. Therefore streamtuner2 allows to create bookmarks. This way
+        you can collect favoured streams in a single place.</p>
+
+        <p>Just right click a station you want to bookmark, and choose bookmark in the context
+        menu. Alternatively you can use the Streams entry in the application menu. Once bookmarked
+        you can see the station entry in the (!) "bookmarks" tab, under "favourite". That's where
+        they all go.</p>
+
+	<section id="editing">
+	<title>Editing</title>
+        <p>Entries can be removed from the bookmark list again. Use the edit menu for that.</p>
+
+	<p>Bookmarked stations are shown with a star in all other channel tabs. If you delete the
+        entry there, it won't remove it from the real bookmarks list.</p>
+	</section>
+
+	<section id="other">
+	<title>Subcategories</title>
+	<p>The bookmarks tab can display other categories besides "favourite". For example the
+	search feature creates a "search", while the "timer" and "links" plugins also display
+	lists here.</p>
+	</section>
+
+</page>

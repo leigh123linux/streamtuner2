@@ -1,0 +1,22 @@
+<page	xmlns="http://projectmallard.org/1.0/"
+	type="guide"
+	id="saving">
+
+<info>
+	<link type="guide" xref="index#functions"/>
+	<link type="guide" xref="streams#actions"/>
+	<desc>Export a station entry as .m3u/.pls file.</desc>
+</info>
+
+	<title>Saving</title>
+
+	<p>You can export the currently selected stream using <guiseq><gui>Station</gui> <gui>Save</gui></guiseq>. A file
+	dialog opens, where you can adapt the title. The extension of the filename decides on
+	the saved link format. Per default a .m3u file is created, because most audio players
+	understand this format.</p>
+	<p> But you can also save in .pls
+	or .xspf or .asx or .smil format. Note that the lower right dropdown
+	has no effect, you must edit the filename field.</p>
+
+
+</page>

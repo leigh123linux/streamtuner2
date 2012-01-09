@@ -1,0 +1,29 @@
+<page	xmlns="http://projectmallard.org/1.0/"
+	type="guide"
+	id="recording">
+
+<info>
+	<link type="guide" xref="streams#actions"/>
+	<link type="guide" xref="configuration#apps"/>
+	<link type="guide" xref="index#functions"/>
+	<desc>Save radio songs as MP3 files via streamripper.</desc>
+</info>
+
+	<title>Recording</title>
+
+	<p>Most stations that stream MP3 or OGG music can be recorded. This is accomplished by
+        the commandline tool "streamripper". If you select a station a press the [record] button,
+        a console window should appear. Within that streamripper outputs its current activity.</p>
+
+        <p>Per default recorded streams are written into the current directory. Often this is your
+        home directory. And streamripper automatically creates a directory with the recorded
+        radio station title as name. Within that directory the individual music titles are split
+        into separate .mp3 files.</p>
+
+        <p>You can influence all these behaviours with -arguments to the streamripper program.
+        Please refer to the manpage of streamripper. The options are too various to list here.
+        You can set default arguments (e.g. another default save directory) in the 'Apps' section of
+        the streamtuner2 configuration dialog.</p>
+
+
+</page>

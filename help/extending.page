@@ -1,0 +1,58 @@
+<page	xmlns="http://projectmallard.org/1.0/"
+	type="guide"
+	id="extending">
+
+<info>
+	<link type="guide" xref="index#advanced"/>
+        <desc>Writing your own channel plugins.</desc>
+</info>
+
+	<title>Extension Howto</title>
+
+	<p>Streamtuner2 is written in Python, a rather easy programming language. And it's also rather simple
+	to write a new channel plugin.</p>
+
+	<p>The basic layout of every channel plugin is as follows:</p>
+
+	<p><code type="text/python">
+
+from channels import *
+
+class myplugin (ChannelPlugin):
+
+    title = "MyNewChannel"
+    module = "myplugin"
+    homepage = "http://www.mymusicstation.com/"
+    categories = []
+
+
+
+    def update_categories(self):
+    
+        self.categories = []
+
+
+
+    def update_streams(self, cat, force=0):
+
+        entries = []
+
+        # ...
+        # get it from somewhere
+        # ...        
+
+        return entries
+        
+	</code></p>
+
+	<p>There are some self-explanatory description fields, and two important methods. Sometimes you
+        don't need categories even. The update_streams() function often downloads a website, parses it
+	with regular expressions or PyQuery / DOM methods, and packs into into a result list.</p>	
+
+	<p>Here entries is a list of dictionaries, with standardized entry names like "title" and "playing"
+	for the description, and "homepage" for a browsable link, and most importantly "url" for the
+	actual streaming link. Often you want to add a "genre" and "format" and "bitrate" info. But this depends
+	on your plugins data source, really.</p>
+	
+	
+</page>

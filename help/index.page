@@ -1,0 +1,41 @@
+<page	xmlns="http://projectmallard.org/1.0/"
+	type="guide"
+	id="index">
+
+	<info>
+	<credit type="author"><name>Mario Salzer</name></credit>
+        <desc>Documentation overview</desc>
+	</info>
+
+	<title><media type="image" mime="image/png" src="img/logo.png">♪</media> Streamtuner2 </title>
+
+	<p>Streamtuner2 shows internet radio stations for easy browsing, playing, recording.</p>
+
+	<section id="browsing" style="2column">
+            <title>Browsing channels and radio stations</title>
+    	</section>
+
+	<section id="channels" style="2column">
+            <title>Channel tabs</title>
+    	</section>
+
+	<section id="functions" style="2column">
+            <title>Functions</title>
+    	</section>
+
+	<section id="configuration" style="2column">
+            <title>Configuration</title>
+    	</section>
+
+	<section id="advanced" style="2column">
+            <title>Advanced topics</title>
+    	</section>
+
+	<section id="footer">
+	<p>You can get additional help from the online forum. See help menu for the link.</p>
+
+	<p>Update status: This documentation is based on available functions in streamtuner2
+	version 2.0.7 of August 2010. It is still incomplete however.</p>
+	</section>
+
+</page>

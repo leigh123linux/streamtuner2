@@ -1,0 +1,21 @@
+<page	xmlns="http://projectmallard.org/1.0/"
+	type="guide"
+	id="jamendo">
+
+<info>
+	<link type="guide" xref="index#channels"/>
+	<link type="guide" xref="channels#list"/>
+        <desc>Creative Commons music and artist hub.</desc>
+</info>
+
+	<title>Jamendo</title>
+
+	<p>Jamendo is a Creative Comments licensing oriented music distributor. It hosts audio
+	files for individual musicians and artists. Tracks and albums can thus be downloaded
+	free of charge. Yeah, imagine that.</p>
+
+        <p>The streamtuner2 plugin for Jamendo is pretty limited at the moment. It just provides
+	a quick overview over top artists and most listened albums from each genre. To browse
+	the whole collections, better go to the Jamendo homepage or use Rhythmbox.</p>
+
+</page>

@@ -1,0 +1,118 @@
+<page	xmlns="http://projectmallard.org/1.0/"
+	type="guide"
+	id="glossary">
+
+<info>
+	<link type="guide" xref="index#advanced"/>
+	<desc>Technical and streamtuner2 specific terminology and jargon.</desc>
+</info>
+
+	<title>Glossary</title>
+
+
+
+	<terms>
+
+	  <item>
+	    <title>Channel</title>
+	    <p>Each tab in the main window is a "channel". It represents one
+   	    music directory service.</p>
+	  </item>
+
+	  <item>
+	    <title>Stream</title>
+	    <p>"stream" is a technical term which means continuosly flowing
+	    data.  MP3 radio music for example is streamed, because it's not
+	    just a time-limited audio file, but unending (unless you stop
+	    the player or paying your ISP).</p>
+	    <p>In streamtuner2 we also use the terms "stream" and radio "station" interchangably.</p>
+	  </item>
+
+	  <item>
+	    <title>Genre</title>
+	    <p>Music genres are represented as "categories" in the left
+	    pane.  Every channel groups its music stations into some
+	    structure.</p>
+	  </item>
+
+	  <item>
+	    <title>URL</title>
+	    <p>URL stands for "Uniform Resource Locator" and simply means
+	    hyperlinks and web addresses like http://www.example.org/. 
+	    There is also the hipster term "URI", which is technically more
+	    general (but superseeded by "IRI" and "IRL" anyway).  In
+	    streamtuner2 the audio streaming link often is an URL, as is the
+	    radio station homepage of course.</p>
+	  </item>
+
+	  <item>
+	    <title>Radio</title>
+	    <p>Plays music. Sometimes interrupted by advertisements.
+   	    </p>
+	  </item>
+
+	  <item>
+	    <title>Favicons</title>
+	    <p>Favicons are small symbols for websites. Every website has one.
+	    Or should have. As it makes it easier to associate content with
+	    homepage addresses. (ST2 downloads favicons either per menu command
+	    or automatically for the current station once you hit play.)
+   	    </p>
+	  </item>
+
+	  <item>
+	    <title>Cache</title>
+	    <p>Radio lists are kept in "cache" files for efficiency reasons.
+	    To not redownload stream information on every category or channel
+	    flip, streamtuner2 saves this data. This avoids time consuming
+	    server requests.
+   	    </p>
+	  </item>
+
+	  <item>
+	    <title>Python</title>
+	    <p>Python is a programming language. It provides extensive constructs and
+	    many functions, yet is easy to learn. See python.org and Google.</p>
+	  </item>
+
+	  <item>
+	    <title>MP3</title>
+	    <p>MP3 (MPEG Layer 3) is an audio file format, part of the wider MPEG (Motion Picture
+	    Expert Group) video format. It's the most widespread format in use today,
+	    however doesn't provide the highest audio quality..</p>
+	  </item>
+
+	  <item>
+	    <title>OGG Vorbis</title>
+	    <p>OGG is a multimedia file format. Vorbis is an audio compression format.
+	    OGG Vorbis was developed as alternative to MP3. It's often of higher
+	    quality at lower file sizes, and isn't encumbered by US software patents.</p>
+	  </item>
+
+	  <item>
+	    <title>MIME</title>
+	    <p>For classification of web and email content, two-factor descriptions like
+	    "audio/ogg" are advised. These are called Multipurpose Internet Mail Extension
+            types, and are used on the web in lieu of file extensions (which URL resources don't have).
+            Note that ST2 uses the MP3 type wrong; it's officially audio/mpeg, and not audio/mp3 as shown in the settings window.</p>
+	  </item>
+
+	  <item>
+	    <title>Bitrate</title>
+	    <p>Audio streams are compressed with exactness loss. This can be heard
+	    at lower "bitrates". For MP3 files any music with less than 100 kbit/s
+	    starts to hiss, while OGG Vorbis still sounds okay at a datarate of
+	    for example 64 kbit/s. So while bitrate basically means file size per duration,
+	    it's commonly used as quality indicator.</p>
+	  </item>
+
+	</terms>
+
+	<section id="filetypes">
+            <title>Filetypes</title>
+
+            <p>Besides audio formats MP3 and OGG, there are also station/streaming link files.
+            These are often downloaded from the directory servers, before your music player gets activated.</p>
+	</section>
+
+</page>

@@ -1,0 +1,42 @@
+<page	xmlns="http://projectmallard.org/1.0/"
+	type="guide"
+	id="streams">
+
+<info>
+	<link type="guide" xref="index#browsing"/>
+        <desc>Radio streams lists, station information columns, entry actions.</desc>
+</info>
+
+	<title>Streams / Stations</title>
+
+	<p>Radio stations are listed in the right pane. Usually they have a title and a
+        description. The description is often the last played song. (This isn't updated
+        automatically to conserve bandwidth and because live information is seldomly available.)</p>
+
+	<media type="image" mime="image/png" src="img/streams.png">Station list</media>
+
+        <p>You can double click a station line to get it to play. Alternatively there are the
+        play and record buttons in the menubar. You can also invoke a stations homepage, if it
+        has one.</p>
+
+
+<section id="actions">
+	<title>Actions</title>
+</section>
+
+<section>
+	<title>Context menu</title>
+
+        <p>Additionally most actions are available in a context menu. Right click
+        a station entry to display it.</p>
+
+	<note><p>Reshuffling of station entries in the list is possible by dragging them. But
+	this is only a visual effect and will confuse the internal ordering of entries. Don't
+	do it.</p></note>
+
+	<p>You can always click the current category in the left list, to have the current
+	station list redisplayed. Which is useful after updating favicons, or accidental
+	dragging of entries.</p>
+</section>
+
+</page>

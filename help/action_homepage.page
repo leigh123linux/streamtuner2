@@ -1,0 +1,27 @@
+<page	xmlns="http://projectmallard.org/1.0/"
+	type="guide"
+	id="homepage">
+
+	<info>
+	<link type="guide" xref="index#functions"/>
+	<desc>Start a web browser for a station.</desc>
+	<link type="guide" xref="streams#actions"/>
+	</info>
+
+	<title>Radio homepages</title>
+
+	<p>Most radio stations are listed with a homepage URL. Use the <gui>house</gui> symbol in the
+	toolbar or <guiseq><gui>right click</gui> <gui>homepage</gui></guiseq> to open it in a web browser.</p>
+
+        <p>Some homepage links are guessed, because for example Shoutcast doesn't list them anymore.
+	And if you play a station without homepage URL, it automatically gets googled (but will not
+	be displayed until you reselect the category.)
+        </p>
+
+	<section>
+	<title>Channel service</title>
+	<p>You can also open channel homepages. Either from the <gui>Channel</gui> menu, or via
+	double clicking the channel tab.</p>
+	</section>
+
+</page>

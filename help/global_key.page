@@ -1,0 +1,37 @@
+<page	xmlns="http://projectmallard.org/1.0/"
+	type="topic"
+	id="global_key">
+
+<info>
+	<link type="guide" xref="index#advanced"/>
+        <desc>Global keyboard shortcut for radio switching.</desc>
+</info>
+
+	<title>Global_key</title>
+
+	<p>Using the global_key extension you can define a keyboard shortcut for switching within
+	a list of favourite radio stations. Per default it uses your bookmarks list, but it can be
+	configured to alternate in any other channel.</p>
+
+	<p>This is useful if you don't want to keep the streamtuner2 window in the foreground
+	all the time, but still want to switch radios easily.</p>
+
+	<p>Go into settings <key>F12</key> for plugins to define a keyboard shortcut:</p>
+
+	<table shade="rows" rules="rows cols">
+		<tr><td>keyspec:</td><td>corresponds to:</td></tr>
+		<tr><td>F9</td><td>Responds to only <key>F9</key>. (too generic)</td></tr>
+		<tr><td>&lt;Meta&gt;R</td><td>often the 'Windows'-key and R</td></tr>
+		<tr><td>&lt;Ctrl&gt;N</td><td>Control and <key>N</key></td></tr>
+		<tr><td>&lt;Shift&gt;F1</td><td>Shift and F1</td></tr>
+		<tr><td>&lt;Alt&gt;SPACE</td><td>Use Alt and <key>Space</key>. (too generic)</td></tr>
+		<tr><td>XF86Forward</td><td>Uses a "forward" function key. (default)</td></tr>
+	</table>
+
+	<p>To define another channel as source, enter its module name in the according field. Also
+	add a category separated by : colon here.</p>
+
+	<note><p>If the configured keyboard shortcut conflicts with another application,
+	it won't work. And if you choose it too generic, you won't be able to type longer
+	documents. Also found out: key names are case sensitive.</p></note>
+</page>

@@ -1,0 +1,20 @@
+<page	xmlns="http://projectmallard.org/1.0/"
+	type="guide"
+	id="internet_radio_org_uk">
+
+<info>
+	<link type="guide" xref="index#channels"/>
+	<link type="guide" xref="channels#list"/>
+	<link type="guide" xref="configuration#plugins"/>
+        <desc>Large radio directory from the UK.</desc>
+</info>
+
+	<title>Internet-Radio.org.uk</title>
+
+	<p>I-R.org.uk is a good alternative to Shoutcast. It also lacks channel homepage in most
+	cases, but is a likewise encyclopedical directory. Genres are similiar to Shoutcast.</p>
+
+	<note><p>Note that this plugin uses its own setting for how many links to retrieve. Instead
+	of stream numbers, it only counts pages. This is a lazyness related bug.</p></note>
+
+</page>

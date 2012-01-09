@@ -1,0 +1,69 @@
+<page	xmlns="http://projectmallard.org/1.0/"
+	type="guide"
+	id="channels">
+
+	<info>
+	<link type="guide" xref="index#browsing"/>
+	<desc>Switching through the channel tabs, different radio directoriy services.</desc>
+	</info>
+
+	<title>Channels</title>
+
+	<p>The tabs in the main window represent the music directory channels. Each lists
+        categories and streams from a specific radio directory.</p>
+
+	<media type="image" mime="image/png" src="img/channels.png">Tabs</media>
+
+        <p>If you first select a channel tab, the categories should appear or be loading.
+        Otherwise:</p>
+
+	<steps>
+		<item><p>Select a channel tab</p></item>
+		<item><p>Choose <guiseq><gui>Channel</gui> <gui>Reload categories...</gui></guiseq></p></item>
+		<item><p>Pick a category/genre from the overview, left.</p></item>
+	</steps>
+
+	<p>Individual channels provide different music/radio information. The table
+        views are however identical in each tab. You could modify the <code>datamap[]</code>
+        in the plugin files, if you want to adapt this.</p>
+
+	<section id="list">
+		<title>Available channels</title>
+	</section>
+
+
+	<section id="homepage">
+	<title>Channel service homepage</title>
+	<p>You can dobule click the channel tab to view the website of a directory services.
+	Alternatively there is an entry in the <gui>Channel</gui> menu.</p>
+	</section>
+
+	<section id="homepage">
+	<title>Channel menu options</title>
+	<terms>
+		<item>
+			<title>Homepage of directory service</title>
+			<p>Opens a webbrowser with the current channels website.</p>
+		</item>
+		<item>
+			<title>Reload</title>
+			<p>Updates the current category and displays fresh station lists.</p>
+		</item>
+		<item>
+			<title>Update favicons...</title>
+			<p>Starts assembling favicons for the current list of stations in the background.
+			To actually display the freshly loaded favicons, reselect the current category.</p>
+		</item>
+		<item>
+			<title>Reload category tree</title>
+			<p>Updates the genre list in the left category pane.
+			For most channels the category list is already complete, but it might
+			change over time. So this option often only is used for initializing streamtuner2
+			channels when the list is empty.</p>
+		</item>
+	</terms>
+	<p>The channel menu also contains a list of available channels. Select an entry to switch
+	into that tab.</p>
+	</section>
+
+</page>

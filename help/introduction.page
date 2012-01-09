@@ -1,0 +1,63 @@
+<page	xmlns="http://projectmallard.org/1.0/"
+	type="guide"
+	id="introduction">
+
+<info>
+	<link type="guide" xref="index"/>
+        <desc>Basic usage instructions. Selecting a channel, category, and playing a radio.</desc>
+</info>
+
+	<title>Introduction</title>
+
+	<p>Streamtuner2 is a simple browser for internet radios. It aquires its radio lists
+	from various directory services. These are represented as "channel" tabs in the main
+	window. Below are the category/genre lists (left) and the stations for a genre (right).</p>
+
+	<media src="img/mainwindow2.svg" type="image" mime="image/svg+xml" />
+
+        <section id="play">
+	<title>How to select and play a radio.</title>
+	<steps>
+		<item><p>Select a channel tab, like <code>Shoutcast</code>.</p></item>
+		<item><p>Click one of the genres in the left pane. For example <code>Classic</code>.</p></item>
+		<item><p>Now the right pane loads a radio list.</p></item>
+		<item><p>Double click one of the radio streams or use the <key>play</key> toolbar button.</p></item>
+	</steps>
+	<p>Note that some categories can and should be exanded. In a few plugins (modarchive),
+	the expandable genre/category brings up no station list on its own, while in Shoutcast
+	and most others it's a valid genre in itself.</p>
+	<p>Some radio stations cannot be played, because they just have a homepage. (That's the
+	case for all listings in the Google Stations channel.)</p>
+	</section>
+
+	<section id="actions">
+	<title>What else can you do?</title>
+	<p>Double clicking an entry row in the radio list starts your audio player. But there are
+	other functions available. Either go to the <guiseq><gui/><gui>Station</gui></guiseq> menu,
+	or access the context menu with a right click.</p>
+	<table shade="rows" rules="rows cols">
+		<tr><td>Play</td><td>Starts the radio in a configured audio player</td></tr>
+		<tr><td>Record</td><td>Opens a terminal window and streamripper, which cuts the radio broadcast into individual mp3 songs.</td></tr>
+		<tr><td>Bookmarks</td><td>Copy radio entry over into the <gui>bookmarks</gui> channel.</td></tr>
+		<tr><td>Homepage</td><td>Most radio stations have a homepage. Open this in a web browser.</td></tr>
+		<tr><td>Saving</td><td>A radio entry can be exported as .m3u or .pls file.</td></tr>
+		<tr><td>Extensions<guiseq><gui/><gui/></guiseq></td><td>Some plugins add other features in this submenu.</td></tr>
+		<tr><td>Editing</td><td>This command is in the <gui>Edit</gui> and context menu, allows to inspect and modify radio descriptions.</td></tr>
+		<tr><td>Searching</td><td>You can get a radio list according to search criteria.</td></tr>
+	</table>
+	<p> Play, Record and Homepage also have buttons in the toolbar.</p>
+	</section>
+
+	<section>
+	<title>Radio lists get stale</title>
+	<p>After some time, stream informations become obsolete. Therefore you should regularily
+	refresh the lists. The <gui>Reload</gui> button in the toolbar (or <key>F5</key>) is your friend. You can
+	also update the category lists with <guiseq><gui>Channel</gui> <gui>Reload Category Tree</gui></guiseq>
+	and load favicons using <guiseq><gui>Channel</gui> <gui>Update favicons..</gui></guiseq>.</p>
+	</section>
+
+	<section>
+	<note style="tip"><p>You should only select radio stations and genres that you like.</p></note>
+	</section>
+
+</page>

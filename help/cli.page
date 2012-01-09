@@ -1,0 +1,51 @@
+<page	xmlns="http://projectmallard.org/1.0/"
+	type="guide"
+	id="cli">
+
+<info>
+	<link type="guide" xref="index#advanced"/>
+        <desc>Console interface, exporting data.</desc>
+</info>
+
+	<title>CLI (command line interface)</title>
+
+	<p>Streamtuner2 is a graphical tool. But it also has a limited commandline interface,
+	which can be used to query station information. This is useful for interfacing with
+	other applications.</p>
+
+        <p>Open a terminal and call <code>streamtuner2 help</code> to get an overview over
+	available commands.</p>
+
+
+        <terms>
+          <title>Examples</title>
+          <item>
+            <title><code>streamtuner2 play "station"</code></title>
+            <p>This command looks through all channel plugins, and finds a station containing the
+	    mentioned title. In the shell you must put the station title in quotes, if it contains
+	    e.g. spaces. You can optionally specify a channelname before the station title.</p>
+          </item>
+          <item>
+            <title><code>streamtuner2 url [channel] "station"</code></title>
+            <p>Just looks up the streaming URL for a given station. If no channel name is given,
+		ST2 searches through all available channel plugins again.</p>
+          </item>
+          <item>
+            <title><code>streamtuner2 stream shoutcast "station"</code></title>
+            <p>Prints available station data as JSON</p>
+          </item>
+          <item>
+            <title><code>streamtuner2 category internet_radio_org_uk "Pop"</code></title>
+            <p>Loads fresh data from the specified channel service, and prints out JSON data for
+		the whole category. Note that the category name must have the excact case.</p>
+          </item>
+          <item>
+            <title><code>streamtuner2 categories channel</code></title>
+            <p>Fetches the current list of available categories/genres for a channel service.</p>
+          </item>
+        </terms>
+
+	<p>Specifying a channel name is often optional. If you add one, it should be all-lowercase.
+	You can also give a list, like "shoutcast,xiph" which would be searched then.</p>
+
+</page>

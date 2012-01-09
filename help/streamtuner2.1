@@ -1,0 +1,69 @@
+.\" this is one of the nanoweb man pages
+.\" (many thanks to the manpage howto!)
+.\"
+.TH streamtuner2 "July 2010" "BSD/Linux" "User Manuals"
+.SH NAME
+streamtuner2 \- Browser for internet radio stations
+.SH SYNOPSIS
+.B streamtuner2
+.I command
+[
+.BI channel ,...
+] [
+.IB title
+]
+
+.SH DESCRIPTION
+Streamtuner2 is a graphical application for browsing through internet
+radio station directories, like
+.BR Shoutcast.com " and " Xiph.org " or " Internet-Radio.org.uk .
+It is written in Python and easy to extend. And besides the grapical
+interface, has a commandline interface.
+
+.SH OPTIONS
+
+.B Display data from cache
+
+.TP
+.BI help
+Prints out a summary of available commands.
+.TP
+.BI stream " channel title"
+Searches for a station with the given title. Either looks in a single
+channel, or scans all plugins.
+.TP
+.BI url " channel title"
+Prints out only the streaming URL.
+.TP
+.BI play " " [ channel ] " title"
+Invokes the configured audio player.
+
+.PP
+.B Load data from directory service
+
+.TP
+.BI categories " channelname"
+Returns a nested JSON list of all categories/genres.
+.TP
+.BI category " ""channelname"" ""Category"""
+Prints out a JSON list of the genre. Each entry constains title, url and
+other meta information. Note that the category must have the exact case.
+
+.SH EXAMPLES
+.TP
+.BI streamtuner2 " stream" " shoutcast,xiph" " ""Top 100"""
+Searches for the term "Top 100" in the shoutcast and xiph channels, and
+returns all info about the first match as JSON output.
+.TP
+.BI streamtuner2 " play frequence3"
+Looks for the first occourence, and starts the audio player for FREQUENCE3.
+
+
+.SH FILES
+.IR /home/ $USER /.config/streamtuner2/settings.json
+.SH "SEE ALSO"
+.BR streamripper (1) 
+.BR audacious (1)
+.BR json (5)
+.BR m3u (5)
+.BR pls (5)

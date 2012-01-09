@@ -1,0 +1,91 @@
+<page	xmlns="http://projectmallard.org/1.0/"
+	type="guide"
+	id="technical">
+
+<info>
+	<link type="guide" xref="index#advanced"/>
+        <desc>Filenames, Directories, Dependencies</desc>
+</info>
+
+	<title>Technical information</title>
+
+
+	<section id="dependecies">
+  	  <title>Dependencies</title>
+        <terms>
+          <item><p>Python 2.5</p></item>
+          <item><p>PyGtk</p></item>
+          <item><p>Gtk+ 2.12</p></item>
+	</terms>
+        <terms>
+  	  <title>Soft dependencies</title>
+          <item><p>Python-LXML</p></item>
+          <item><p>Python-PyQuery</p></item>
+          <item><p>Audacious</p></item>
+	</terms>
+	</section>
+
+
+	<section id="config_files">
+  	  <title>Configuration files</title>
+        <terms>
+          <item>
+            <title>/home/$USER/.config/streamtuner2/</title>
+            <p>Corresponds to the XDG_CONFIG_HOME setting. All ST2 configuration settings
+            are contained within here and are in JSON format.</p>
+          </item>
+          <item>
+            <title>~/.config/streamtuner2/settings.json</title>
+            <p>General runtime options, plugin settings, and configured audio players.</p>
+          </item>
+          <item>
+            <title>~/.config/streamtuner2/window.json</title>
+            <p>Saved window sizes, list widths.</p>
+          </item>
+          <item>
+            <title>~/.config/streamtuner2/state.json</title>
+            <p>Last category in each channel tab.</p>
+          </item>
+          <item>
+            <title>~/.config/streamtuner2/bookmarks.json</title>
+            <p>Is a separate cahce file for your bookmarked/favourite radio stations.</p>
+          </item>
+          <item>
+            <title>~/.config/streamtuner2/cache/***.json</title>
+            <p>JSON files for stream lists in each channel.</p>
+          </item>
+          <item>
+            <title>~/.config/streamtuner2/icons/*.png</title>
+            <p>Holds downloaded favicons for station homepages.</p>
+          </item>
+	</terms>
+	</section>
+
+
+	<section id="install_dirs">
+  	  <title>Installation spread</title>
+        <terms>
+          <item>
+            <title>/usr/bin/streamtuner2</title>
+            <p>Is the main binary.</p>
+          </item>
+          <item>
+            <title>/usr/share/streamtuner2/</title>
+            <p>Contains the individual ST2 python modules, and plugins in channels/. Also packages in pyquery/, but which is only used if the according modules aren't installed by the distribution.</p>
+          </item>
+          <item>
+            <title>/usr/share/doc/streamtuner2/</title>
+            <p>Contains the README, and Mallard/gnome-help/yelp files under help/.</p>
+          </item>
+	</terms>
+	</section>
+
+
+	<section id="license">
+	<title>Public Domain</title>
+	<p>There is no licensing requirement with this application. All code can be copied, modified
+	and distributed unrestrictively.</p>
+	</section>
+
+
+</page>

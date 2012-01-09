@@ -1,0 +1,5 @@
+#!/usr/bin/perl -p
+
+s{(<gui>)?(\w.+( > \w.+)+)(</gui>)?}{<guiseq><gui>$2</gui></guiseq>}im;
+s{(\w.+?) > (\w.+?)}{$1</gui> <gui>$2}img;
+s{(\w.+?) > (\w.+?)}{$1</gui> <gui>$2}img;

@@ -1,0 +1,47 @@
+<page	xmlns="http://projectmallard.org/1.0/"
+	type="guide"
+	id="timer">
+
+<info>
+	<link type="guide" xref="bookmarks#other"/>
+	<link type="guide" xref="index#advanced"/>
+        <desc>Programming recurring play and recording events.</desc>
+</info>
+
+	<title>Timer</title>
+
+	<p>You can programm play/recording events with the timer plugin. Simply select a station
+	and choose <guiseq><gui>Station</gui> <gui>Extensions</gui> <gui>Add timer...</gui></guiseq>.
+	A small popup will ask for a data/time string. If you press <key>OK</key> the station
+	and the programmed time
+	will be stored in the bookmarks channel in the "timer" category.</p>
+
+        <note style="tip"><p>Note that streamtuner2 must be running for the programmed timer events to work.
+	(In a future version there might be the option to have it handled by the system cron
+	daemon.)</p></note>
+
+
+	<section id="timestring">
+	<title>Time specification strings</title>
+	<p>The time and date specificators follow a simple scheme. It's always one or more day names
+	followed by a clock range, and finally the action.</p>
+	<p>For example "<code>Mon,Tue,Wed</code>" will make the event occour on the first
+	three days of each week, while just "Fri" would limit it to Fridays.</p>
+	<p>A clock range of "<code>18:00-20:00</code>"
+	would start the event at 18 o'clock and last it two hours. Note that for "play" events, the end
+	time is irrelevant, since streamtuner2 can't kill your audio player anyway.</p>
+        <p>The end time is only important, if you replace "play" with the word "<code>record</code>"
+        in the timer event string. This runs streamripper instead and limits the recording time.</p>
+	</section>
+
+	<section id="editing">
+	<title>Editing events</title>
+        <p>You can remove entries from the "timer" list again. Use the normal <guiseq><gui>Edit</gui> <gui>Delete</gui></guiseq> for
+	that. It's also possible to modify the date+time strings by editing the stream info and
+	the specification in the "playing" field.</p>
+
+	<note style="warning"><p>However, such changes don't take effect until you restart streamtuner2. The timer
+	events are only scheduled when adding a new event, or on starting streamtuner2.</p></note>
+	</section>
+
+</page>
