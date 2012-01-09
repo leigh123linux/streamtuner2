@@ -1,0 +1,321 @@
+
+streamtuner2
+============
+
+ST2 is a internet radio browser. It queries online directories like
+shoutcast and xiph.org for music stations.
+
+It mimics the original streamtuner 1 to some extend. It's however
+written in Python now instead of C.
+
+
+installation howto
+------------------
+
+You can just execute the main binary "st2.py". All the other files
+need to be copied into /usr/share/streamtuner2/ however. If it
+doesn't work, make sure you have Python and gtk/pygtk installed:
+
+  sudo apt-get install python python-gtk2 python-glade2 python-xdg
+
+
+The *.glade file represents the GUI.  So if you have the glade-3
+application installed, you can inspect and enhance the interface.
+Give it a try, report back.
+
+
+development state
+-----------------
+
+There was a lengthy development pause, actual maintenance time of
+this application is probably 2-3 months now. However, it is mostly
+feature-complete meanwhile. The internal application structures are
+somewhat settled. Some modules are still pretty rough (json format,
+http functions), and especially the action module for playing and
+recording isn't very autonomic (though has some heuristic and uses
+stream format hints).
+
+The directory modules mostly work. If they don't, it's just a
+matter of adapting the regular expressions. Shoutcast and Live365
+lately changed the HTML output, so broke. Therefore PyQuery parsing
+methods were implemented, which extract stream info from HTML soup
+using CSS/jQuery selectors.
+And it should be pretty easy to add new ones. There will also
+somewhen be a feature to add simple station 'scripts'; in testing.
+
+
+comparison to streamtuner1
+--------------------------
+
+Streamtuner1 has been written around 2002-2004. At this time it was
+totally unfeasible to write any responsive application in a scripting
+language. Therefore it was implemented in C, which made it speedy.
+
+Using C however has some drawbacks. The codebase is more elaborate,
+and it often takes more time to adapt things.
+
+Personally I had some occasional crashes because of corrupt data
+from some of the directory services. Because that was more difficult
+to fix in C code, this rewrite started. It's purely for practical
+purposes, not because there was anything wrong with streamtuner1.
+
+streamtuner2 being implemented directly in Python (the C version had
+a Python plugin), cuts down the code size considerably. It's much
+easier to add new plugins. (Even though it doesn't look that way yet.)
+
+For older machines or netbooks, the C streamtuner1 might overall
+remain the better choice, btw. Running inside the Python VM makes this
+variant more stable, but also way more memory hungry. (This has been
+reduced with some de-optimizations already.)
+
+
+advertisement
+-------------
+
+If you are looking for a lightweight alternative, Tunapie is still
+in development, and it has a working Shoutcast+Xiph reader.
+http://tunapie.sourceforge.net/
+
+Streamtuner2 CLI can also be used as proxy server for streamtuner1.
+There is a wrapper available. But there was nobody yet to be found who
+wanted set it up globally. (Else streamtuner1 would just require a patch
+in /etc/hosts to work again.)
+It's available as st1proxy.tgz and cli-mode-only.tgz from
+http://milki.include-once.org/streamtuner2/ext/
+Contact me for setup help. Requires a webserver with unrestrained
+vhost support.
+
+
+license
+-------
+
+Public Domain.
+(no rules: unrestricted copying, modification, distribution, etc.)
+
+
+history
+-------
+
+2.0.9.
+- sys.path patch (less py module conflicts) from Stefan Talpalaru
+- fixed main_quit signal slot, so window size saving works
+- added [new] button in streamedit window
+- prepared remaining print syntax for python3 (still needs 2to3 though)
+- fix for https://bugzilla.redhat.com/show_bug.cgi?id=655596 array error
+- 
+
+
+2.0.8
+- configuration files use prettified json
+- fixed double quotation for %pls players and /local/file handling
+- (unused) channel .shutdown function introduced (late saving)
+- external plugin: basic file browser, no ID3 editing yet
+- allow interpolating of %genre and other fields, streamripper wrapper
+- fixed pyQuery parsing for latest shoutcast change
+  (strangely the regular expressions were still working)
+
+2.0.7
+- json cache files are now stored .gz compressed
+- xiph channel .format() call fixed into .mime_fmt()
+- simplified __init__ and attributes of main window object
+- .play() is now a per-channel function
+- global_key now accepts multiple keys, updates gtk view
+- new musicgoal plugin with radios and podcasts
+- silenced channel initialization errors
+- double clicking tabs is functioning now (-> channel service homepage)
+- shoutcast finally became a real channel plugin
+- processing.py pseudo module removed
+
+2.0.6
+- mirrored Station>Extensions menu into stream context menu
+- creation of .nobackup files in cache/ and icons/ directories
+- global_key plugin allows radio switching via keyboard shortcut
+- compound channel plugin is new, mixes different source channels
+- new external plugin: podspider
+- more documentation restructuring
+- feature plugins` options are now listed in configuration dialog
+- current_channel_gtk()
+- added basic package dependencies for .deb archives,
+  packaged-in lxml/ removed (lacked etree.so anyway)
+- TV plugin for shoutcast video listings
+- simpler overriding of stream column titles is now possible
+- cleaner .src.tgz package, contrib/ files have been externalized
+- minor fix for quicksearch function
+
+2.0.5
+- display logic now can extract homepage URLs from station titles
+- automated google search for missing station homepages
+- kept .m3u files are reused for playing (faster)
+- registration code for (stations) extension submenu
+- timer plugin for programming broadcast play/recordings, uses kronos
+- heuristic update of bookmarks when reloading station lists
+- general thread() wrapper function implemented, for worker pool
+- simple mygtk wrapper for adding menu entries
+- MyOggRadio plugin is now complete, can upload individual favourites
+- links plugin, which lists other radio directories in bookmarks tab
+- CLI mode implemented
+- two PHP wrapper scripts to generate YP.Shoutcast for Streamtuner1
+- GUI startup progress window added
+- one GtkWarning message fixed
+- the Shoutcast channel was plugin-ed out, but remains in the UI file
+- multiple additions to and restructuring of the help files, manpage
+
+2.0.4
+- PyQuery parsing for InternetRadio.org.uk channel, and adapted PQ
+  usage for shoutcast
+- utility function http.fix_url extended, common string parsing
+  functions strip_tags, mime_fmt are now in channels.GenericChannel
+- http module reworked, visual feedback now for GET and AJAX methods,
+  and CookieJar was enabled
+- channel/tab order can now be configured (instead of tab dragging)
+- fixed PyQuery wrapper module, packaged lxml modules in (evades
+  extra support for Windows port, native modules will be used on Linux)
+- more Gtk.Widget mini help popups in the dialog windows
+
+2.0.3
+- new channel plugin: MyOggRadio (an open source directory)
+- also Internet-Radio.org.uk channel, but only regex parsing for now
+- the quick search box is now in the toolbar, while an all-scanning
+  search feature has been implemented in the former dialog
+- Shoutcast.com broke regex parsing, the homepage links are gone
+- Category updates are now performed in a thread too
+- interna: GenericChannel.display() is now .prepare()
+- live365 category parsing fixed
+- Live365 and Xiph are no longer built-in tabs, can be fully disabled
+- fixed disabling search, config, streamedit windows (gtk close event)
+- and a few help files were added
+
+2.0.2
+- more checks for initializing channel plugins
+- gtkrc theming support extended: apply and combobox in config dialog
+- PyQuery as new alternative parsing mechanism, as option for shoutcast
+- category tree gets loaded on first display of empty channels
+- windows port tested, new external project: python+gtk installer bundle
+- removal of .pyc bytecode files from generic .deb and .rpm packages
+- distribution includes gtkrc theme "MountainDew"
+- removed most debug print statements, introduced a config option for it
+
+2.0.1
+- new channel plugin: jamendo (just a simple browser for now)
+- new channel plugin: basicch (all new, because old scraper nonfunc)
+- new channel plugin: punkcast (just a very basic listing)
+- fixed shoutcast channel parsing
+- new elaborate http.ajax method using braindamaged urllib2
+- extremely cool plugin configuration scheme implented w/ GUI controls
+- plugins (except code or glade built-in) now deactivatable individually
+- preliminary support for application themes
+- support for per-channel .play() method
+- reenabled audioformat= in play calls
+- channeltab doubleclick doesn't work despite hours of fruitless trying
+- add "format" to stream edit dialog
+- new helper methods: mygtk.bg(), config.get()
+
+2.0.0
+- search function implemented, highlights results in current category list
+- right click context menu added
+- station data inspection/editor added
+- auto_save_appstate implemented
+- station delete implemented
+- clean up of internal application interfaces: new self.channel() instead
+  of self.c[self.cc] kludges all around (all traces rm), and new self.row(),
+  and some auxiliary windows now have handling code in separate classes
+- now real favicons for directory providers are displayed
+- removed directory service homepage button (still in menu), donated icon
+  to stations instead; double-click on channel tab still resultless
+- load_favicon hook (for currently playing station) added
+- added channel switching to menu, and submenu view merged into edit
+- fixed initialisation of open channel tab (previously only default
+  shoutcast was populated by .first_show method)
+- made a new logo for 2.0.0 release
+- fixed shoutcast category loading
+
+
+1.9.9-2
+- bookmark handling fixed
+- pson/json decoding still flaky
+
+1.9.9
+- fixed record action
+- shoutcast parser redone twice
+- rebuilding of TreeView list more robust noew, always in gobject.idle()
+- favicon downloading methods implemented, display enabled per default
+- live365 is buggy, but usable
+- bookmarks still broken
+
+1.9.8
+- save-as dialog implemented (export to .m3u, .pls or .xspf)
+- download progress bar added
+- last selected category and stream entry is remembered in all channel
+  tabs now (though the implementation is spread between a separate but
+  unused state.json and mygtk.app_state() which stores notext indexes)
+- menu edit/copy implemented: saves current stream URL into clipboard
+- fixed XDG_CONFIG_HOME use
+- code parts have been extracted into separate modules
+- the Google stations plugin has been ported from streamtuner1
+- packaging of .deb and .rpm archives
+
+1.9.7
+- configuration window added
+- threading support enabled (uses python 2.6 processing if avail)
+- more generic window/state saving
+- update_categories() added in menu
+- "generic" class for channels has been separated from shoutcast
+- new channel module "live365" (without login support)
+- bookmarks module has comments now
+- new defaults for audio/ogg and other media types
+- pseudo-json is now a fallback if python 2.6 module isn't there
+- preparations for saner url extraction in action. class
+- better doc for mygtk.columns()
+- (temp.) faster initial startup by not .load()ing default category
+
+1.9.6
+- added xiph.org example implementation, incomplete
+- bookmark module basics done
+- rowmap defined manually again, instead of in mygtk.
+
+1.9.5
+- basic menu added, toolbar style switching
+- glade XML file is searched in binary dir
+- static classes move to bottom
+- forgotten/deleted streams feature added 
+- display() filter
+
+1.9.4
+- category change
+- app_state
+- mygtk.column_view() and .column_data() have been merged into
+  more general mygtk.columns() - more elaborate, only depends on
+  datamap, instead of individual sublists, pixbuf support added
+- shoutcast.rowtypes cellmap titles colsizes cellrendr colattrs gone
+
+1.9.3
+- thread for http GET (doesn't work)
+- app_restore added
+- action.record, browse, homepage stream / channel, .reload streams
+- .status() shortuct
+- dict2list removed (now in .columns_view)
+- treeviewcolumns sizes
+- simplified form of datamap, less dicts, more lists, reshuffled
+- http. wrapper class
+- action. with actual os.system() call
+
+1.9.2
+- action.play(), .m3u
+- pseudojson instead of pickle in Config class
+- more doc on top
+- icons in column_view() for category trees
+- fix for [format] regex in shoutcast
+- mime defaults for action. module in conf
+. .pls and .m3u methods in action.
+
+1.9.1
+- first real shoutcast server scans
+- ??
+- ..
+- cache stream lists + category names
+
+1.9.0
+- first GUI implementation with standard glade
+- at least shoutcast category names were read
+
+ 

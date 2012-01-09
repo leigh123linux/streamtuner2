@@ -1,0 +1,190 @@
+%product streamtuner2 - internet radio browser
+%version 2.0.8
+%vendor Mario Salzer
+%license
+%copyright Placed into the Public Domain, 2009/2010
+%readme README
+
+%description
+%description Browser for Internet Radio Stations
+%description   
+%description   streamtuner2 is a browser for radio station directories.
+%description   It can fetch lists from SHOUTcast, Xiph.org, Live365,
+%description   Jamendo, DMOZ, basic.ch, Punkcast. And it lists stream
+%description   entries by category or genre. It reuses existing audio
+%description   players, and recording is delegated to streamripper.
+%description   
+%description   It mimics the original streamtuner 0.99.99, but is easier
+%description   to extend because it's written entirely in Python. It's
+%description   already in a stable and useable form.
+%description   
+%description   There is no license to accept. Streamtuner2 is open source
+%description   and released into the Public Domain.
+
+
+%system all
+#-- base
+f 644 root root /usr/share/doc/streamtuner2/README		./README
+d 755 root root /usr/share/doc/streamtuner2/contrib		-
+f 644 root root /usr/share/doc/streamtuner2/contrib/streamripper_addgenre		./contrib/streamripper_addgenre
+f 755 root root /usr/bin/streamtuner2				./st2.py
+f 644 root root /usr/share/applications/streamtuner2.desktop	./streamtuner2.desktop
+d 755 root root /usr/share/streamtuner2				-
+f 644 root root /usr/share/streamtuner2/streamtuner2.png	./streamtuner2.png
+f 644 root root /usr/share/pixmaps/streamtuner2.png		./logo.png
+f 644 root root /usr/share/streamtuner2/st2.glade		./st2.glade
+f 644 root root /usr/share/streamtuner2/pson.py			./pson.py
+#f 644 root root /usr/share/streamtuner2/processing.py		./processing.py
+f 644 root root /usr/share/streamtuner2/action.py		./action.py
+f 644 root root /usr/share/streamtuner2/config.py		./config.py
+f 644 root root /usr/share/streamtuner2/http.py			./http.py
+f 644 root root /usr/share/streamtuner2/cli.py			./cli.py
+f 644 root root /usr/share/streamtuner2/mygtk.py		./mygtk.py
+f 644 root root /usr/share/streamtuner2/favicon.py		./favicon.py
+f 644 root root /usr/share/streamtuner2/kronos.py		./kronos.py
+f 644 root root /usr/share/streamtuner2/pq.py			./pq.py
+#-- channels
+d 755 root root /usr/share/streamtuner2/channels		-
+f 644 root root /usr/share/streamtuner2/channels/__init__.py	./channels/__init__.py
+f 644 root root /usr/share/streamtuner2/channels/_generic.py	./channels/_generic.py
+f 644 root root /usr/share/streamtuner2/channels/shoutcast.py 	./channels/shoutcast.py
+f 644 root root /usr/share/streamtuner2/channels/shoutcast.png 	./channels/shoutcast.png
+f 644 root root /usr/share/streamtuner2/channels/xiph.py	./channels/xiph.py
+f 644 root root /usr/share/streamtuner2/channels/xiph.png 	./channels/xiph.png
+f 644 root root /usr/share/streamtuner2/channels/live365.py	./channels/live365.py
+f 644 root root /usr/share/streamtuner2/channels/live365.png 	./channels/live365.png
+f 644 root root /usr/share/streamtuner2/channels/google.py	./channels/google.py
+f 644 root root /usr/share/streamtuner2/channels/google.png	./channels/google.png
+f 644 root root /usr/share/streamtuner2/channels/punkcast.py	./channels/punkcast.py
+f 644 root root /usr/share/streamtuner2/channels/punkcast.png	./channels/punkcast.png
+f 644 root root /usr/share/streamtuner2/channels/basicch.py 	./channels/basicch.py
+f 644 root root /usr/share/streamtuner2/channels/basicch.png 	./channels/basicch.png
+f 644 root root /usr/share/streamtuner2/channels/jamendo.py 	./channels/jamendo.py
+f 644 root root /usr/share/streamtuner2/channels/jamendo.png 	./channels/jamendo.png
+f 644 root root /usr/share/streamtuner2/channels/myoggradio.py 	./channels/myoggradio.py
+f 644 root root /usr/share/streamtuner2/channels/myoggradio.png	./channels/myoggradio.png
+f 644 root root /usr/share/streamtuner2/channels/internet_radio_org_uk.py ./channels/internet_radio_org_uk.py
+f 644 root root /usr/share/streamtuner2/channels/internet_radio_org_uk.png ./channels/internet_radio_org_uk.png
+f 644 root root /usr/share/streamtuner2/channels/timer.py 	./channels/timer.py
+f 644 root root /usr/share/streamtuner2/channels/links.py 	./channels/links.py
+f 644 root root /usr/share/streamtuner2/channels/global_key.py 	./channels/global_key.py
+f 644 root root /usr/share/streamtuner2/channels/tv.py 		./channels/tv.py
+f 644 root root /usr/share/streamtuner2/channels/tv.png 	./channels/tv.png
+f 644 root root /usr/share/streamtuner2/channels/musicgoal.py 	./channels/musicgoal.py
+f 644 root root /usr/share/streamtuner2/channels/musicgoal.png	./channels/musicgoal.png
+#-- scripts
+#d 755 root root /usr/share/streamtuner2/scripts		-
+#f 644 root root /usr/share/streamtuner2/scripts/radiotop40_de.py  ./scripts/radiotop40_de.py
+#-- themes
+f 644 root root /usr/share/streamtuner2/themes/MountainDew/gtk-2.0/gtkrc ./themes/MountainDew/gtk-2.0/gtkrc
+#-- help files
+f 644 root root /usr/share/man/man1/streamtuner2.1		 	 ./help/streamtuner2.1
+d 755 root root /usr/share/doc/streamtuner2/help 			-
+f 644 root root /usr/share/doc/streamtuner2/help/action_homepage.page 	 ./help/action_homepage.page
+f 644 root root /usr/share/doc/streamtuner2/help/action_playing.page 	 ./help/action_playing.page
+f 644 root root /usr/share/doc/streamtuner2/help/action_recording.page 	 ./help/action_recording.page
+f 644 root root /usr/share/doc/streamtuner2/help/action_saving.page 	 ./help/action_saving.page
+f 644 root root /usr/share/doc/streamtuner2/help/channel_bookmarks.page 	 ./help/channel_bookmarks.page
+f 644 root root /usr/share/doc/streamtuner2/help/channel_internetradioorguk.page 	 ./help/channel_internetradioorguk.page
+f 644 root root /usr/share/doc/streamtuner2/help/channel_jamendo.page 	 ./help/channel_jamendo.page
+f 644 root root /usr/share/doc/streamtuner2/help/channel_myoggradio.page 	 ./help/channel_myoggradio.page
+f 644 root root /usr/share/doc/streamtuner2/help/channel_shoutcast.page 	 ./help/channel_shoutcast.page
+f 644 root root /usr/share/doc/streamtuner2/help/channel_xiph.page 	 ./help/channel_xiph.page
+f 644 root root /usr/share/doc/streamtuner2/help/channels.page 	 ./help/channels.page
+f 644 root root /usr/share/doc/streamtuner2/help/cli.page 	 ./help/cli.page
+f 644 root root /usr/share/doc/streamtuner2/help/config_apps.page 	 ./help/config_apps.page
+f 644 root root /usr/share/doc/streamtuner2/help/configuration.page 	 ./help/configuration.page
+f 644 root root /usr/share/doc/streamtuner2/help/extending.page 	 ./help/extending.page
+f 644 root root /usr/share/doc/streamtuner2/help/global_key.page 	 ./help/global_key.page
+f 644 root root /usr/share/doc/streamtuner2/help/glossary.page 	 ./help/glossary.page
+f 644 root root /usr/share/doc/streamtuner2/help/glossary_json.page 	 ./help/glossary_json.page
+f 644 root root /usr/share/doc/streamtuner2/help/glossary_m3u.page 	 ./help/glossary_m3u.page
+f 644 root root /usr/share/doc/streamtuner2/help/glossary_pls.page 	 ./help/glossary_pls.page
+f 644 root root /usr/share/doc/streamtuner2/help/guiseq 	 ./help/guiseq
+f 644 root root /usr/share/doc/streamtuner2/help/index.page 	 ./help/index.page
+f 644 root root /usr/share/doc/streamtuner2/help/introduction.page 	 ./help/introduction.page
+f 644 root root /usr/share/doc/streamtuner2/help/reloading.page 	 ./help/reloading.page
+f 644 root root /usr/share/doc/streamtuner2/help/search.page 	 ./help/search.page
+f 644 root root /usr/share/doc/streamtuner2/help/streams.page 	 ./help/streams.page
+f 644 root root /usr/share/doc/streamtuner2/help/technical.page 	 ./help/technical.page
+f 644 root root /usr/share/doc/streamtuner2/help/timer.page 	 ./help/timer.page
+d 755 root root /usr/share/doc/streamtuner2/help/img 			-
+f 644 root root /usr/share/doc/streamtuner2/help/img/categories.png 	 ./help/img/categories.png
+f 644 root root /usr/share/doc/streamtuner2/help/img/channels.png 	 ./help/img/channels.png
+f 644 root root /usr/share/doc/streamtuner2/help/img/logo.png 	 ./help/img/logo.png
+f 644 root root /usr/share/doc/streamtuner2/help/img/mainwindow2.svg 	 ./help/img/mainwindow2.svg
+f 644 root root /usr/share/doc/streamtuner2/help/img/streams.png 	 ./help/img/streams.png
+#--pyquery
+d 755 root root /usr/share/streamtuner2/pyquery			-
+f 644 root root /usr/share/streamtuner2/pyquery/LICENSE.txt 	 ./pyquery/LICENSE.txt
+f 644 root root /usr/share/streamtuner2/pyquery/README.txt 	 ./pyquery/README.txt
+f 644 root root /usr/share/streamtuner2/pyquery/__init__.py 	 ./pyquery/__init__.py
+f 644 root root /usr/share/streamtuner2/pyquery/__init__.pyc 	 ./pyquery/__init__.pyc
+f 644 root root /usr/share/streamtuner2/pyquery/ajax.py 	 ./pyquery/ajax.py
+f 644 root root /usr/share/streamtuner2/pyquery/cssselectpatch.py 	 ./pyquery/cssselectpatch.py
+f 644 root root /usr/share/streamtuner2/pyquery/cssselectpatch.pyc 	 ./pyquery/cssselectpatch.pyc
+f 644 root root /usr/share/streamtuner2/pyquery/pyquery.py 	 ./pyquery/pyquery.py
+f 644 root root /usr/share/streamtuner2/pyquery/pyquery.pyc 	 ./pyquery/pyquery.pyc
+f 644 root root /usr/share/streamtuner2/pyquery/rules.py 	 ./pyquery/rules.py
+f 644 root root /usr/share/streamtuner2/pyquery/test.html 	 ./pyquery/test.html
+f 644 root root /usr/share/streamtuner2/pyquery/test.py 	 ./pyquery/test.py
+f 644 root root /usr/share/streamtuner2/pyquery/tests.txt 	 ./pyquery/tests.txt
+#-- lxml
+#d 755 root root /usr/share/streamtuner2/lxml			-
+#d 755 root root /usr/share/streamtuner2/lxml/html		-
+#f 644 root root /usr/share/streamtuner2/lxml/ElementInclude.py 	 /usr/share/pyshared/lxml/ElementInclude.py
+#f 644 root root /usr/share/streamtuner2/lxml/__init__.py 	 /usr/share/pyshared/lxml/__init__.py
+#f 644 root root /usr/share/streamtuner2/lxml/_elementpath.py 	 /usr/share/pyshared/lxml/_elementpath.py
+#f 644 root root /usr/share/streamtuner2/lxml/builder.py 	 /usr/share/pyshared/lxml/builder.py
+#f 644 root root /usr/share/streamtuner2/lxml/cssselect.py 	 /usr/share/pyshared/lxml/cssselect.py
+#f 644 root root /usr/share/streamtuner2/lxml/doctestcompare.py 	 /usr/share/pyshared/lxml/doctestcompare.py
+#f 644 root root /usr/share/streamtuner2/lxml/pyclasslookup.py 	 /usr/share/pyshared/lxml/pyclasslookup.py
+#f 644 root root /usr/share/streamtuner2/lxml/sax.py 	 /usr/share/pyshared/lxml/sax.py
+#f 644 root root /usr/share/streamtuner2/lxml/usedoctest.py 	 /usr/share/pyshared/lxml/usedoctest.py
+#f 644 root root /usr/share/streamtuner2/lxml/html/ElementSoup.py 	 /usr/share/pyshared/lxml/html/ElementSoup.py
+#f 644 root root /usr/share/streamtuner2/lxml/html/__init__.py 	 /usr/share/pyshared/lxml/html/__init__.py
+#f 644 root root /usr/share/streamtuner2/lxml/html/_dictmixin.py 	 /usr/share/pyshared/lxml/html/_dictmixin.py
+#f 644 root root /usr/share/streamtuner2/lxml/html/_diffcommand.py 	 /usr/share/pyshared/lxml/html/_diffcommand.py
+#f 644 root root /usr/share/streamtuner2/lxml/html/_html5builder.py 	 /usr/share/pyshared/lxml/html/_html5builder.py
+#f 644 root root /usr/share/streamtuner2/lxml/html/_setmixin.py 	 /usr/share/pyshared/lxml/html/_setmixin.py
+#f 644 root root /usr/share/streamtuner2/lxml/html/builder.py 	 /usr/share/pyshared/lxml/html/builder.py
+#f 644 root root /usr/share/streamtuner2/lxml/html/clean.py 	 /usr/share/pyshared/lxml/html/clean.py
+#f 644 root root /usr/share/streamtuner2/lxml/html/defs.py 	 /usr/share/pyshared/lxml/html/defs.py
+#f 644 root root /usr/share/streamtuner2/lxml/html/diff.py 	 /usr/share/pyshared/lxml/html/diff.py
+#f 644 root root /usr/share/streamtuner2/lxml/html/formfill.py 	 /usr/share/pyshared/lxml/html/formfill.py
+#f 644 root root /usr/share/streamtuner2/lxml/html/html5parser.py 	 /usr/share/pyshared/lxml/html/html5parser.py
+#f 644 root root /usr/share/streamtuner2/lxml/html/soupparser.py 	 /usr/share/pyshared/lxml/html/soupparser.py
+#f 644 root root /usr/share/streamtuner2/lxml/html/usedoctest.py 	 /usr/share/pyshared/lxml/html/usedoctest.py
+
+
+#-- windows
+%system win32
+%description  Windows version gets no love, nor support.
+%description  It requires manual installation of Python 2.6 and Gtk+ and Pygtk.org libraries first.
+f 644 root root /usr/share/applications/streamtuner2.lnk	./streamtuner2.lnk
+%shortcut $desktop$\streamtuner2.lnk|/usr/share/applications/streamtuner2.lnk
+%homepage http://streamtuner2.sourceforge.net/
+
+
+
+
+#-- distribution specific dependency rules
+%system all
+%requires python
+
+%format deb
+%requires python-lxml
+%requires python-imaging
+%requires python-pyquery
+%requires python-keybinder
+%requires python-gtk2
+%requires python-glade2
+# %requires python-httplib2
+# %requires python-json
+# %requires python-xdg
+# %requires python-xdgapp
+
+%format rpm
+%requires pygtk
+# %requires pyxdg
+# RPM package names are weirder, and there's no comprehensive list of them (Suse and Fedora depart anyway)

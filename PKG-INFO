@@ -1,0 +1,10 @@
+Metadata-Version: 1.0
+Name: streamtuner2
+Version: 2.0.9
+Summary: Streamtuner2 is an internet radio browser
+Home-page: http://sourceforge.net/projects/streamtuner2/
+Author: Mario Salzer
+Author-email: xmilky+st2@gmail....
+License: Public Domain
+Description: Streamtuner2 lists radio directory services like Shoutcast, Xiph, Live365, MyOggRadio, Jamendo. It allows listening via any audio player, and recording of streams via streamripper.
+Platform: ALL
