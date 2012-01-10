@@ -48,18 +48,23 @@ class action:
         lt = {"asx":"video/x-ms-asf", "pls":"audio/x-scpls", "m3u":"audio/x-mpegurl", "xspf":"application/xspf+xml", "href":"url/http", "ram":"audio/x-pn-realaudio", "smil":"application/smil"}
         # media formats
         mf = {"mp3":"audio/mp3", "ogg":"audio/ogg", "aac":"audio/aac"}
-
-
+        
+        
         # web
         @staticmethod
         def browser(url):
             __print__( conf.browser )
-            os.system(conf.browser + " '" + action.quote(url) + "' &")
+            action.run(conf.browser + " " + action.quote(url))
+
+
             
         # os shell cmd escaping
         @staticmethod
         def quote(s):
-            return "%r" % s
+            if conf.windows:
+                return s   # should actually be "\\\"%s\\\"" % s
+            else:
+                return "%r" % s
 
 
         # calls player for stream url and format
@@ -76,11 +81,15 @@ class action:
                 action.run( action.interpol(cmd, url) )
             except:
                 pass
+
         
+        # exec wrapper
         @staticmethod
         def run(cmd):
-            __print__( cmd )
-            os.system(cmd + (" &" if platform.system()!="Windows" else "")) 
+            if conf.windows:
+ 	        os.system("start \"%s\"")
+ 	    else:
+                os.system(cmd + " &")
 
 
         # streamripper
@@ -223,8 +232,8 @@ class action:
                 channelname = main.current_channel
             except:
                 channelname = "unknown"
-            return (conf.tmp+"/streamtuner2."+channelname+"."+stream_id+".m3u", len(stream_id) > 3 and stream_id != "XXXXXX")
-            
+            return (conf.tmp + os.sep + "streamtuner2."+channelname+"."+stream_id+".m3u", len(stream_id) > 3 and stream_id != "XXXXXX")
+        
         # check if there are any urls in a given file
         @staticmethod
         def has_urls(tmp_fn):
@@ -264,7 +273,7 @@ class action:
         @staticmethod
         def help(*args):
         
-            os.system("yelp /usr/share/doc/streamtuner2/help/ &")
+            action.run("yelp /usr/share/doc/streamtuner2/help/")
             #or action.browser("/usr/share/doc/streamtuner2/")
 
 #class action

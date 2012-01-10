@@ -19,6 +19,7 @@ import os
 import sys
 import pson
 import gzip
+import platform
 
 
 #-- create a single instance of config object
@@ -86,6 +87,7 @@ class ConfigDict(dict):
             self.channel_order = "shoutcast, xiph, internet_radio_org_uk, jamendo, myoggradio, .."
             self.reuse_m3u = 1
             self.google_homepage = 1
+            self.windows = platform.system()=="Windows"
 
             
         # each plugin has a .config dict list, we add defaults here
@@ -105,10 +107,10 @@ class ConfigDict(dict):
         # http://standards.freedesktop.org/basedir-spec/basedir-spec-0.6.html
         def xdg(self):
             home = os.environ.get("HOME", self.tmp)
-            config = os.environ.get("XDG_CONFIG_HOME", home+"/.config")
+            config = os.environ.get("XDG_CONFIG_HOME", os.environ.get("APPDATA", home+"/.config"))
             
             # storage dir
-            self.dir = config + "/" + "streamtuner2"
+            self.dir = config + "/streamtuner2"
             
             # create if necessary
             if (not os.path.exists(self.dir)):
