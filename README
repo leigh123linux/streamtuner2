@@ -78,7 +78,7 @@ http://tunapie.sourceforge.net/
 
 Streamtuner2 CLI can also be used as proxy server for streamtuner1.
 There is a wrapper available. But there was nobody yet to be found who
-wanted set it up globally. (Else streamtuner1 would just require a patch
+wanted it set up globally. (Else streamtuner1 would just require a patch
 in /etc/hosts to work again.)
 It's available as st1proxy.tgz and cli-mode-only.tgz from
 http://milki.include-once.org/streamtuner2/ext/
@@ -102,6 +102,8 @@ history
 - added [new] button in streamedit window
 - prepared remaining print syntax for python3 (still needs 2to3 though)
 - fix for https://bugzilla.redhat.com/show_bug.cgi?id=655596 array error
+- transitioned glade file to gtk.Builder, just a few things broke
+- made configuration window resizable
 - 
 
 

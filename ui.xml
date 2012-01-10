@@ -691,7 +691,7 @@
         <property name="shadow_type">none</property>
         <child>
           <object class="GtkVBox" id="vbox1233">
-            <property name="height_request">333</property>
+            <property name="height_request">500</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
@@ -862,12 +862,9 @@
                               <object class="GtkLabel" id="label15">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Here %u or %pls return a direct URL to
-the shoutcast link.
-
-And %g or %m3u provide a local .m3u file
-for the audio player, what's usually better.
-</property>
+                                <property name="label" translatable="yes">Shoutcast links are %u or %pls, parsed m3u files
+are available with %g or %m3u, while %d or %srv
+represent direct URLs to the streaming servers.</property>
                                 <property name="wrap">True</property>
                               </object>
                               <packing>
@@ -1052,7 +1049,17 @@ for the audio player, what's usually better.
                               </packing>
                             </child>
                             <child>
-                              <placeholder/>
+                              <object class="GtkLabel" id="label124124_placeholder">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">placeholder
+&lt;a href="file:///usr/share/doc/streamtuner2/help/configuration.page"&gt;see help&lt;/a&gt;</property>
+                                <property name="use_markup">True</property>
+                              </object>
+                              <packing>
+                                <property name="top_attach">7</property>
+                                <property name="bottom_attach">8</property>
+                              </packing>
                             </child>
                             <child>
                               <placeholder/>
@@ -1317,9 +1324,9 @@ channel tabs</property>
                                       <object class="GtkLabel" id="label45">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
+                                        <property name="tooltip_text" translatable="yes">needs restart</property>
                                         <property name="xpad">11</property>
-                                        <property name="label" translatable="yes">use Gtk+ theme
-(needs restart) </property>
+                                        <property name="label" translatable="yes">use Gtk+ theme</property>
                                       </object>
                                       <packing>
                                         <property name="expand">True</property>
@@ -1479,6 +1486,62 @@ files</property>
                               </packing>
                             </child>
                             <child>
+                              <object class="GtkLabel" id="label47">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="xalign">0.10000000149011612</property>
+                                <property name="xpad">1</property>
+                                <property name="label" translatable="yes">Start streamtuner2 with &lt;b&gt;http_proxy=&lt;/b&gt;
+as environment variable. This will
+get picked up by Python and urllib.</property>
+                                <property name="use_markup">True</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="right_attach">2</property>
+                                <property name="top_attach">9</property>
+                                <property name="bottom_attach">10</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label28">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">HTTP proxy</property>
+                              </object>
+                              <packing>
+                                <property name="top_attach">9</property>
+                                <property name="bottom_attach">10</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label26">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="xalign">0.10000000149011612</property>
+                                <property name="label" translatable="yes">You can only influence this by
+setting XDG_CONFIG_HOME to a
+different location.</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="right_attach">2</property>
+                                <property name="top_attach">5</property>
+                                <property name="bottom_attach">6</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label25">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">.config dir</property>
+                              </object>
+                              <packing>
+                                <property name="top_attach">4</property>
+                                <property name="bottom_attach">5</property>
+                              </packing>
+                            </child>
+                            <child>
                               <object class="GtkEntry" id="config_dir">
                                 <property name="width_request">200</property>
                                 <property name="height_request">20</property>
@@ -1495,64 +1558,8 @@ files</property>
                               <packing>
                                 <property name="left_attach">1</property>
                                 <property name="right_attach">2</property>
-                                <property name="top_attach">2</property>
-                                <property name="bottom_attach">3</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="label25">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">.config dir</property>
-                              </object>
-                              <packing>
-                                <property name="top_attach">2</property>
-                                <property name="bottom_attach">3</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="label26">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="xalign">0.10000000149011612</property>
-                                <property name="label" translatable="yes">You can only influence this by
-setting XDG_CONFIG_HOME to a
-different location.</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="top_attach">3</property>
-                                <property name="bottom_attach">4</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="label28">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">HTTP proxy</property>
-                              </object>
-                              <packing>
-                                <property name="top_attach">5</property>
-                                <property name="bottom_attach">6</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="label47">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="xalign">0.10000000149011612</property>
-                                <property name="xpad">1</property>
-                                <property name="label" translatable="yes">Start streamtuner2 with &lt;b&gt;http_proxy=&lt;/b&gt;
-as environment variable. This will
-get picked up by Python and urllib.</property>
-                                <property name="use_markup">True</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="top_attach">5</property>
-                                <property name="bottom_attach">6</property>
+                                <property name="top_attach">4</property>
+                                <property name="bottom_attach">5</property>
                               </packing>
                             </child>
                             <child>
@@ -1567,8 +1574,8 @@ get picked up by Python and urllib.</property>
                               <packing>
                                 <property name="left_attach">1</property>
                                 <property name="right_attach">2</property>
-                                <property name="top_attach">7</property>
-                                <property name="bottom_attach">8</property>
+                                <property name="top_attach">2</property>
+                                <property name="bottom_attach">3</property>
                               </packing>
                             </child>
                             <child>
@@ -1907,8 +1914,10 @@ Plugins</property>
   </object>
   <object class="GtkWindow" id="win_streamedit">
     <property name="can_focus">False</property>
+    <property name="border_width">5</property>
     <property name="title" translatable="yes">inspect/edit stream data</property>
     <property name="window_position">center-on-parent</property>
+    <property name="skip_pager_hint">True</property>
     <property name="deletable">False</property>
     <property name="opacity">0.94999999999999996</property>
     <signal name="delete-event" handler="streamedit_cancel" swapped="no"/>
@@ -2296,8 +2305,8 @@ Plugins</property>
                                 <property name="use_action_appearance">False</property>
                                 <property name="label" translatable="yes">bookmark</property>
                                 <property name="use_underline">True</property>
-                                <accelerator key="F8" signal="activate"/>
                                 <accelerator key="d" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+                                <accelerator key="F8" signal="activate"/>
                                 <signal name="activate" handler="bookmark" swapped="no"/>
                               </object>
                             </child>
@@ -2309,8 +2318,8 @@ Plugins</property>
                                 <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
-                                <accelerator key="s" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                                 <accelerator key="F2" signal="activate"/>
+                                <accelerator key="s" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                                 <signal name="activate" handler="save_as" swapped="no"/>
                               </object>
                             </child>
@@ -2322,9 +2331,9 @@ Plugins</property>
                                 <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
-                                <accelerator key="Return" signal="activate" modifiers="GDK_MOD1_MASK"/>
-                                <accelerator key="space" signal="activate" modifiers="GDK_MOD1_MASK"/>
                                 <accelerator key="F3" signal="activate"/>
+                                <accelerator key="space" signal="activate" modifiers="GDK_MOD1_MASK"/>
+                                <accelerator key="Return" signal="activate" modifiers="GDK_MOD1_MASK"/>
                                 <signal name="activate" handler="streamedit_open" swapped="no"/>
                               </object>
                             </child>
@@ -2402,8 +2411,8 @@ Plugins</property>
                                 <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
-                                <accelerator key="x" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                                 <accelerator key="Delete" signal="activate"/>
+                                <accelerator key="x" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                                 <signal name="activate" handler="delete_entry" swapped="no"/>
                               </object>
                             </child>
