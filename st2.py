@@ -137,7 +137,7 @@ class StreamTunerTwo(gtk.Builder):
 
             # instantiate gtk/glade widgets in current object
             gtk.Builder.__init__(self)
-            ui_file = ("st2.xml" if os.path.exists("st2.xml") else conf.share+"/st2.xml");
+            ui_file = [i for i in sum([[i, conf.share+"/"+i] for i in ["ui.xml", "st2.gtk"]], []) if os.path.exists(i)][0];
             gtk.Builder.add_from_file(self, ui_file), gui_startup(0.10)
             # manual gtk operations
             self.extensionsCTM.set_submenu(self.extensions)  # duplicates Station>Extension menu into stream context menu
