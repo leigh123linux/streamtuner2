@@ -172,10 +172,14 @@ class shoutcast(channels.ChannelPlugin):
                    for div in (pq(e) for e in pq(html).find("div.dirlist")):
 
                        entries.append({
-                            "title": div.find("a.clickabletitleGenre, div.stationcol a").attr("title"),
-                            "url": div.find("a.playbutton, a.playbutton1, a.playimage").attr("href"),
-                            "homepage": http.fix_url(div.find("a.playbutton.clickabletitle, a[target=_blank], a.clickabletitleGenre, a.clickabletitle, div.stationcol a, a").attr("href")),
-                            "playing": div.find("div.playingtextGenre, div.playingtext").attr("title"),
+                            "title": div.find("a.playbutton,a.playbutton1").attr("title"),
+                            "url": div.find("a.playbutton,a.playbutton1").attr("href"),
+                            "homepage": http.fix_url(div.find("a.div_website").attr("href")),
+                            "playing": div.find("div.playingtext").attr("title"),
+#                            "title": div.find("a.clickabletitleGenre, div.stationcol a").attr("title"),
+#                            "url": div.find("a.playbutton, a.playbutton1, a.playimage").attr("href"),
+#                            "homepage": http.fix_url(div.find("a.playbutton.clickabletitle, a[target=_blank], a.clickabletitleGenre, a.clickabletitle, div.stationcol a, a").attr("href")),
+#                            "playing": div.find("div.playingtextGenre, div.playingtext").attr("title"),
                             "listeners": int(div.find("div.dirlistners").text()),
                             "bitrate": int(div.find("div.dirbitrate").text()),
                             "format": self.mime_fmt(div.find("div.dirtype").text()),
