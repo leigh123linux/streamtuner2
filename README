@@ -104,6 +104,8 @@ history
 - fix for https://bugzilla.redhat.com/show_bug.cgi?id=655596 array error
 - transitioned glade file to gtk.Builder, just a few things broke
 - made configuration window resizable
+- locked station list columns, no longer resortable (associatation mismatch)
+- applied Vincents fixed for Windows action.run and Shoutcast PQ parsing
 - 
 
 

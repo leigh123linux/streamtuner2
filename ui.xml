@@ -675,6 +675,51 @@
       <action-widget response="0">timer_ok</action-widget>
     </action-widgets>
   </object>
+  <object class="GtkWindow" id="url_action_container">
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkVBox" id="url_action_list">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <object class="GtkLabel" id="url_action_1_online_forum">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">http://sourceforge.net/projects/streamtuner2/forums/forum/1173108</property>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="url_action_2_fossil_wiki">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">http://fossil.include-once.org/streamtuner2/</property>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="url_action_3_project_homepage">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">http://milki.include-once.org/streamtuner2/</property>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
   <object class="GtkWindow" id="win_config">
     <property name="width_request">565</property>
     <property name="can_focus">False</property>
@@ -1053,7 +1098,7 @@ represent direct URLs to the streaming servers.</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="label" translatable="yes">placeholder
-&lt;a href="file:///usr/share/doc/streamtuner2/help/configuration.page"&gt;see help&lt;/a&gt;</property>
+&lt;a href="http://fossil.include-once.org/streamtuner2/wiki?name=player"&gt;see help&lt;/a&gt;</property>
                                 <property name="use_markup">True</property>
                               </object>
                               <packing>
@@ -2284,7 +2329,7 @@ Plugins</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="GtkMenuBar" id="menubar1">
+                  <object class="GtkMenuBar" id="mainmenu">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
@@ -2305,8 +2350,8 @@ Plugins</property>
                                 <property name="use_action_appearance">False</property>
                                 <property name="label" translatable="yes">bookmark</property>
                                 <property name="use_underline">True</property>
-                                <accelerator key="d" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                                 <accelerator key="F8" signal="activate"/>
+                                <accelerator key="d" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                                 <signal name="activate" handler="bookmark" swapped="no"/>
                               </object>
                             </child>
@@ -2318,8 +2363,8 @@ Plugins</property>
                                 <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
-                                <accelerator key="F2" signal="activate"/>
                                 <accelerator key="s" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+                                <accelerator key="F2" signal="activate"/>
                                 <signal name="activate" handler="save_as" swapped="no"/>
                               </object>
                             </child>
@@ -2331,9 +2376,9 @@ Plugins</property>
                                 <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
-                                <accelerator key="F3" signal="activate"/>
-                                <accelerator key="space" signal="activate" modifiers="GDK_MOD1_MASK"/>
                                 <accelerator key="Return" signal="activate" modifiers="GDK_MOD1_MASK"/>
+                                <accelerator key="space" signal="activate" modifiers="GDK_MOD1_MASK"/>
+                                <accelerator key="F3" signal="activate"/>
                                 <signal name="activate" handler="streamedit_open" swapped="no"/>
                               </object>
                             </child>
@@ -2411,8 +2456,8 @@ Plugins</property>
                                 <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
-                                <accelerator key="Delete" signal="activate"/>
                                 <accelerator key="x" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+                                <accelerator key="Delete" signal="activate"/>
                                 <signal name="activate" handler="delete_entry" swapped="no"/>
                               </object>
                             </child>
@@ -2639,6 +2684,16 @@ Plugins</property>
                                 <property name="label" translatable="yes">online forum</property>
                                 <property name="use_underline">True</property>
                                 <signal name="activate" handler="menu_onlineforum" swapped="no"/>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkMenuItem" id="menufossilwiki">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="use_action_appearance">False</property>
+                                <property name="label" translatable="yes">wiki/fossil/bugs</property>
+                                <property name="use_underline">True</property>
+                                <signal name="activate" handler="menu_fossilwiki" swapped="no"/>
                               </object>
                             </child>
                             <child>

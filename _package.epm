@@ -161,6 +161,7 @@ f 644 root root /usr/share/streamtuner2/pyquery/tests.txt 	 ./pyquery/tests.txt
 %system win32
 %description  Windows version gets no love, nor support.
 %description  It requires manual installation of Python 2.6 and Gtk+ and Pygtk.org libraries first.
+f 644 root root /usr/bin/streamtuner2.lnk			./streamtuner2.lnk
 f 644 root root /usr/share/applications/streamtuner2.lnk	./streamtuner2.lnk
 %shortcut $desktop$\streamtuner2.lnk|/usr/share/applications/streamtuner2.lnk
 %homepage http://streamtuner2.sourceforge.net/
@@ -178,7 +179,7 @@ f 644 root root /usr/share/applications/streamtuner2.lnk	./streamtuner2.lnk
 %requires python-pyquery
 %requires python-keybinder
 %requires python-gtk2
-%requires python-glade2
+# %requires python-glade2
 # %requires python-httplib2
 # %requires python-json
 # %requires python-xdg

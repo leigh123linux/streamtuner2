@@ -115,26 +115,14 @@ class shoutcast(channels.ChannelPlugin):
                 return []
             ucat = urllib.quote(cat)
 
-            
-            # new extraction regex
-            if not conf.get("pyquery") or not pq:
-              rx_stream = re.compile("""
-                 <a\s+class="?playbutton\d?[^>]+id="(\d+)".+?
-		 <a\s+class="[\w\s]*title[\w\s]*"[^>]+href="(http://[^">]+)"[^>]*>([^<>]+)</a>.+?
-                 (?:Recently\s*played|Coming\s*soon|Now\s*playing):\s*([^<]*).+?
-                 ners">(\d*)<.+?
-                 bitrate">(\d*)<.+?
-                 type">([MP3AAC]*)
-                 """, re.S|re.I|re.X)
-            rx_next = re.compile("""onclick="showMoreGenre""")
-
-
 
             # loop
             entries = []
             next = 0
             max = int(conf.max_streams)
             count = max
+            rx_stream = None
+            rx_next = re.compile("""onclick="showMoreGenre""")
             while (next < max):
 
                # page
@@ -148,11 +136,25 @@ class shoutcast(channels.ChannelPlugin):
                # regular expressions
                if not conf.get("pyquery") or not pq:
                
+                   # new extraction regex
+                   if not rx_stream:
+                       rx_stream = re.compile(
+                           """
+                           <a\s+class="?playbutton\d?[^>]+id="(\d+)".+?
+                           <a\s+class="[\w\s]*title[\w\s]*"[^>]+href="(http://[^">]+)"[^>]*>([^<>]+)</a>.+?
+                           (?:Recently\s*played|Coming\s*soon|Now\s*playing):\s*([^<]*).+?
+                           ners">(\d*)<.+?
+                           bitrate">(\d*)<.+?
+                           type">([MP3AAC]*)
+                           """,
+                           re.S|re.I|re.X
+                       )
+
                    # extract entries
                    self.parent.status("parsing document...")
                    __print__("loop-rx")
-                   for uu in rx_stream.findall(html):
-                       (id, homepage, title, playing, ls, bit, fmt) = uu
+                   for m in rx_stream.findall(html):
+                       (id, homepage, title, playing, ls, bit, fmt) = m
                        __print__(uu)
                        entries += [{
                            "title": self.entity_decode(title),

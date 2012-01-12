@@ -208,6 +208,8 @@ class StreamTunerTwo(gtk.Builder):
                 "menu_about": lambda w: AboutStreamtuner2(),
                 "menu_help": action.action.help,
                 "menu_onlineforum": lambda w: action.browser("http://sourceforge.net/projects/streamtuner2/forums/forum/1173108"),
+                "menu_fossilwiki": lambda w: action.browser("http://fossil.include-once.org/streamtuner2/"),
+                "menu_projhomepage": lambda w: action.browser("http://milki.include-once.org/streamtuner2/"),
                # "menu_bugreport": lambda w: BugReport(),
                 "menu_copy": self.menu_copy,
                 "delete_entry": self.delete_entry,
