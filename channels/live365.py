@@ -1,12 +1,8 @@
+# api: st2
+# title: live365 channel
 #
-# api: streamtuner2
-# title: live365
-# state: deprecated
+# 2.0.9 fixed by Abhisek Sanyal
 #
-# Live365 probably won't be made working anymore. Too many Javascript+XML blobs.
-# Pretty cumbersome/sluggish to use the actual website nowadays.
-#
-
 
 
 
@@ -66,7 +62,33 @@ class live365(ChannelPlugin):
 
         # read category thread from /listen/browse.live
         def update_categories(self):
-            return
+            self.categories = []
+
+            # fetch page
+            html = http.get("http://www.live365.com/index.live", feedback=self.parent.status);
+            rx_genre = re.compile("""
+                href=['"]/genres/([\w\d%+]+)['"][^>]*>
+                (   (?:<nobr>)?   )
+                ( \w[-\w\ /'.&]+ )
+                (   (?:</a>)?   )
+            """, re.X|re.S)
+
+            # collect
+            last = []
+            for uu in rx_genre.findall(html):
+                (link, sub, title, main) = uu
+
+                # main
+                if main and not sub:
+                    self.categories.append(title)
+                    self.categories.append(last)
+                    last = []
+                # subcat
+                else:
+                    last.append(title)
+
+            # don't forget last entries
+            self.categories.append(last)
 
 
 
@@ -75,54 +97,52 @@ class live365(ChannelPlugin):
         
             # search / url
             if (not search):
-                url = "http://www.live365.com/genres/" + self.cat2tag(cat)
+                url = "http://www.live365.com/cgi-bin/directory.cgi?first=1&rows=200&mode=2&genre=" + self.cat2tag(cat)
             else:
-                url = "http://www.live365.com/cgi-bin/directory.cgi?mode=2&site=web&searchdesc=" + urllib.quote(search)
+                url = "http://www.live365.com/cgi-bin/directory.cgi?site=..&searchdesc=" + urllib.quote(search) + "&searchgenre=" + self.cat2tag(cat) + "&x=0&y=0"
             html = http.get(url, feedback=self.parent.status)
             # we only need to download one page, because live365 always only gives 200 results
-
-            # extract JS calls
+	    
+            # terse format            
             rx = re.compile(r"""
-                    new\s+top\.Station;
-                \s+ stn.set\("stationName",    \s+   "(\w+)"\);
-                \s+ stn.set\("title",          \s+   "([^"]+)"\);
-                \s+ stn.set\("id",             \s+   "(\d+)"\);
-                \s+ stn.set\("listenerAccess", \s+   "(\w+)"\);
-                \s+ stn.set\("status",         \s+   "(\w+)"\);
-                \s+ stn.set\("serverMode",     \s+   "(\w+)"\);
-                \s+ stn.set\("rating",         \s+   "(\d+)"\);
-                \s+ stn.set\("ratingCount",    \s+   "(\d+)"\);
-                \s+ stn.set\("tlh",            \s+   "(\d+)"\);
-                \s+ stn.set\("imgUrl",         \s+   "([^"]+)"\);
-                \s+ stn.set\("location",       \s+   "([^"]+)"\);
+            ['"](OK|PM_ONLY|SUBSCRIPTION).*?
+            href=['"](http://www.live365.com/stations/\w+)['"].*?
+            page['"]>([^<>]*)</a>.*?
+            CLASS=['"]genre-link['"][^>]*>(.+?)</a>.+?
+            &station_id=(\d+).+?
+            class=["']desc-link['"][^>]+>([^<>]*)<.*?
+            =["']audioQuality.+?>(\d+)\w<.+?
+            >DrawListenerStars\((\d+),.+?
+            >DrawRatingStars\((\d+),\s+(\d+),.*?
                 """, re.X|re.I|re.S|re.M)
-
-#('jtava', 'ANRLIVE.NET', '293643', 'PUBLIC', 'OK', 'OR', '298', '31',
-#'98027', 'http://www.live365.com/userdata/37/15/1371537/stationlogo80x45.jpg', 'n/a')
-
+#            src="(http://www.live365.com/.+?/stationlogo\w+.jpg)".+?
 
             # append entries to result list
             __print__( html )
             ls = []
             for row in rx.findall(html):
                 __print__( row )
-
+                points = int(row[8])
+                count = int(row[9])
                 ls.append({
                     "launch_id": row[0],
-                    "title": entity_decode(row[1]),
-                    "station_id": row[2],
-                    "sofo": row[3],
-                    "state":  (""  if  row[4]=="OK"  else  gtk.STOCK_STOP),
-                    "rating": int(row[6]),
-                    "listeners": int(row[8]),
-                    "img_": row[9],
-                    "description": entity_decode(row[10]),
+                    "sofo": row[0],  # subscribe-or-fuck-off status flags
+                    "state":  (""  if  row[0]=="OK"  else  gtk.STOCK_STOP),
+                    "homepage": entity_decode(row[1]),
+                    "title": entity_decode(row[2]),
+                    "genre": self.strip_tags(row[3]),
+                    "bitrate": int(row[6]),
+                    "listeners": int(row[7]),
                     "max": 0,
-                    "genre": cat,
-                    "bitrate": 128,
-                    "playing": "",
-                    "url": "http://www.live365.com/cgi-bin/mini.cgi?version=3&templateid=xml&from=web&site=web&caller=&tag=web&station_name="+row[0]+"&_=1388870321828",
-                    "format": "application/xml",
+                    "rating": (points + count**0.4) / (count - 0.001*(count-0.1)),   # prevents division by null, and slightly weights (more votes are higher scored than single votes)
+                    "rating_points": points,
+                    "rating_count": count,
+                    # id for URL:
+                    "station_id": row[4],
+                    "url": self.base_url + "play/" + row[4],
+                    "description": entity_decode(row[5]),
+                   #"playing": row[10],
+                   # "deleted": row[0] != "OK",
                 })
             return ls
             
