@@ -1,23 +1,22 @@
 %product streamtuner2 - internet radio browser
-%version 2.0.8.5
+%version 2.0.9
 %vendor Mario Salzer
 %license
-%copyright Placed into the Public Domain, 2009/2010
+%copyright Placed into the Public Domain, 2009-2014
 %readme README
 
-%description
 %description Browser for Internet Radio Stations
-%description   
+%description   .
 %description   streamtuner2 is a browser for radio station directories.
 %description   It can fetch lists from SHOUTcast, Xiph.org, Live365,
 %description   Jamendo, DMOZ, basic.ch, Punkcast. And it lists stream
 %description   entries by category or genre. It reuses existing audio
 %description   players, and recording is delegated to streamripper.
-%description   
+%description   .
 %description   It mimics the original streamtuner 0.99.99, but is easier
 %description   to extend because it's written entirely in Python. It's
 %description   already in a stable and useable form.
-%description   
+%description   .
 %description   There is no license to accept. Streamtuner2 is open source
 %description   and released into the Public Domain.
 
