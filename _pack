@@ -15,6 +15,7 @@ pax -wvJf streamtuner2-$VERSION.src.txz \
 	streamtuner2/PKG-INFO streamtuner2/version streamtuner2/_pack streamtuner2/*.epm
 # streamtuner2/scripts
 cd -
+mv ../streamtuner2-*.txz linux-3.0-all/
 
 
 echo "-------------------- .deb -----------------------"
@@ -32,7 +33,12 @@ epm -vvv -n -a all -f portable -s streamtuner2.png streamtuner2 _package.epm
 echo "-------------------- .rpm -----------------------"
 epm -vvv -n -a all -f rpm streamtuner2 _package.epm
 /usr/bin/rpmbuild -bb --buildroot "/home/mario/projects/streamtuner2/linux-3.0-all/buildroot" --target all linux-3.0-all/streamtuner2.spec
-mv linux-3.0-all/RPMS/all/*.rpm linux-3.0-all
+mv linux-3.0-all/RPMS/all/*.rpm linux-3.0-all/streamtuner2-$VERSION.rpm
+rm -r linux-3.0-all/RPMS
+rm -r linux-3.0-all/rpms
+rm -r linux-3.0-all/buildroot
+rmdir linux-3.0-all/streamtuner2-$VERSION
+rm linux-3.0-all/streamtuner2.spec
 
 
 echo "-------------------- win32 -----------------------"
@@ -40,4 +46,6 @@ for pkg in "win32"
 do
   epm-win32sfx -v streamtuner2 _package.epm
 done
+mv win32/*exe linux-3.0-all/
+rmdir win32
 

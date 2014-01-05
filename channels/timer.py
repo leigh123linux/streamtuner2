@@ -16,7 +16,7 @@
 #
 # Programmed events are visible in "timer" under the "bookmarks" channel. Times
 # are stored in the description field, and can thus be edited. However, after editing
-# times manuall, streamtuner2 must be restarted for the changes to take effect.
+# times manually, streamtuner2 must be restarted for the changes to take effect.
 #
 
 
@@ -67,7 +67,7 @@ class timer:
         self.streams = self.bookmarks.streams["timer"]
         
         # widgets
-        parent.signal_autoconnect({
+        parent.add_signals.update({
             "timer_ok": self.add_timer,
             "timer_cancel": lambda w,*a: self.parent.timer_dialog.hide() or 1,
         })

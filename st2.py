@@ -122,6 +122,7 @@ class StreamTunerTwo(gtk.Builder):
         channels = {}    # channel modules
         features = {}    # non-channel plugins
         working = []     # threads
+        add_signals = {} # channel gtk-handler signals
 
         # status variables
         channel_names = ["bookmarks"]    # order of channel notebook tabs
@@ -173,7 +174,7 @@ class StreamTunerTwo(gtk.Builder):
       
             # bind gtk/glade event names to functions
             gui_startup(0.95)
-            self.connect_signals({
+            self.connect_signals(dict( {
                 "gtk_main_quit" : self.gtk_main_quit,                # close window
                 # treeviews / notebook
                 "on_stream_row_activated" : self.on_play_clicked,    # double click in a streams list
@@ -223,7 +224,7 @@ class StreamTunerTwo(gtk.Builder):
                 "streamedit_save": streamedit.save,
                 "streamedit_new": streamedit.new,
                 "streamedit_cancel": streamedit.cancel,
-            })
+            }.items() + self.add_signals.items() ))
             
             # actually display main window
             gui_startup(0.99)
@@ -472,8 +473,9 @@ class StreamTunerTwo(gtk.Builder):
                         self.features[module] = plugin_class(parent=self)
                     
                 except Exception, e:
-                    print("error initializing:", module)
-                    print(e)
+                    print("error initializing:", module, ", exception:")
+                    import traceback
+                    traceback.print_exc()
 
             # default plugins
             conf.add_plugin_defaults(self.channels["bookmarks"].config, "bookmarks")

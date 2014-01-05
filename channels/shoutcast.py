@@ -123,83 +123,88 @@ class shoutcast(channels.ChannelPlugin):
             count = max
             rx_stream = None
             rx_next = re.compile("""onclick="showMoreGenre""")
-            while (next < max):
 
-               # page
-               url = "http://www.shoutcast.com/genre-ajax/" + ucat
-	       referer = url.replace("/genre-ajax", "/radio")
-	       params = { "strIndex":"0", "count":str(count), "ajax":"true", "mode":"listeners", "order":"desc" }
-               html = http.ajax(url, params, referer)   #,feedback=self.parent.status)
+            try:
+               while (next < max):
 
-               __print__(html)
+                  # page
+                  url = "http://www.shoutcast.com/genre-ajax/" + ucat
+                  referer = url.replace("/genre-ajax", "/radio")
+                  params = { "strIndex":"0", "count":str(count), "ajax":"true", "mode":"listeners", "order":"desc" }
+                  html = http.ajax(url, params, referer)   #,feedback=self.parent.status)
 
-               # regular expressions
-               if not conf.get("pyquery") or not pq:
-               
-                   # new extraction regex
-                   if not rx_stream:
-                       rx_stream = re.compile(
-                           """
-                           <a\s+class="?playbutton\d?[^>]+id="(\d+)".+?
-                           <a\s+class="[\w\s]*title[\w\s]*"[^>]+href="(http://[^">]+)"[^>]*>([^<>]+)</a>.+?
-                           (?:Recently\s*played|Coming\s*soon|Now\s*playing):\s*([^<]*).+?
-                           ners">(\d*)<.+?
-                           bitrate">(\d*)<.+?
-                           type">([MP3AAC]*)
-                           """,
-                           re.S|re.I|re.X
-                       )
+                  __print__(html)
 
-                   # extract entries
-                   self.parent.status("parsing document...")
-                   __print__("loop-rx")
-                   for m in rx_stream.findall(html):
-                       (id, homepage, title, playing, ls, bit, fmt) = m
-                       __print__(uu)
-                       entries += [{
-                           "title": self.entity_decode(title),
-                           "url": "http://yp.shoutcast.com/sbin/tunein-station.pls?id=" + id,
-                           "homepage": http.fix_url(homepage),
-                           "playing": self.entity_decode(playing),
-                           "genre": cat, #self.strip_tags(uu[4]),
-                           "listeners": int(ls),
-                           "max": 0, #int(uu[6]),
-                           "bitrate": int(bit),
-                           "format": self.mime_fmt(fmt),
-                       }]
+                  # regular expressions
+                  if not conf.get("pyquery") or not pq:
+                  
+                      # new extraction regex
+                      if not rx_stream:
+                          rx_stream = re.compile(
+                              """
+                              <a\s+class="?playbutton\d?[^>]+id="(\d+)".+?
+                              <a\s+class="[\w\s]*title[\w\s]*"[^>]+href="(http://[^">]+)"[^>]*>([^<>]+)</a>.+?
+                              (?:Recently\s*played|Coming\s*soon|Now\s*playing):\s*([^<]*).+?
+                              ners">(\d*)<.+?
+                              bitrate">(\d*)<.+?
+                              type">([MP3AAC]*)
+                              """,
+                              re.S|re.I|re.X
+                          )
 
-               # PyQuery parsing
-               else:
-                   # iterate over DOM
-                   for div in (pq(e) for e in pq(html).find("div.dirlist")):
+                      # extract entries
+                      self.parent.status("parsing document...")
+                      __print__("loop-rx")
+                      for m in rx_stream.findall(html):
+                          (id, homepage, title, playing, ls, bit, fmt) = m
+                          __print__(uu)
+                          entries += [{
+                              "title": self.entity_decode(title),
+                              "url": "http://yp.shoutcast.com/sbin/tunein-station.pls?id=" + id,
+                              "homepage": http.fix_url(homepage),
+                              "playing": self.entity_decode(playing),
+                              "genre": cat, #self.strip_tags(uu[4]),
+                              "listeners": int(ls),
+                              "max": 0, #int(uu[6]),
+                              "bitrate": int(bit),
+                              "format": self.mime_fmt(fmt),
+                          }]
 
-                       entries.append({
-                            "title": div.find("a.playbutton,a.playbutton1").attr("title"),
-                            "url": div.find("a.playbutton,a.playbutton1").attr("href"),
-                            "homepage": http.fix_url(div.find("a.div_website").attr("href")),
-                            "playing": div.find("div.playingtext").attr("title"),
-#                            "title": div.find("a.clickabletitleGenre, div.stationcol a").attr("title"),
-#                            "url": div.find("a.playbutton, a.playbutton1, a.playimage").attr("href"),
-#                            "homepage": http.fix_url(div.find("a.playbutton.clickabletitle, a[target=_blank], a.clickabletitleGenre, a.clickabletitle, div.stationcol a, a").attr("href")),
-#                            "playing": div.find("div.playingtextGenre, div.playingtext").attr("title"),
-                            "listeners": int(div.find("div.dirlistners").text()),
-                            "bitrate": int(div.find("div.dirbitrate").text()),
-                            "format": self.mime_fmt(div.find("div.dirtype").text()),
-                            "max": 0,
-                            "genre": cat,
-                           # "title2": e.find("a.playbutton").attr("name"),
-                       })
+                  # PyQuery parsing
+                  else:
+                      # iterate over DOM
+                      for div in (pq(e) for e in pq(html).find("div.dirlist")):
+
+                          entries.append({
+                               "title": div.find("a.playbutton,a.playbutton1").attr("title"),
+                               "url": div.find("a.playbutton,a.playbutton1").attr("href"),
+                               "homepage": http.fix_url(div.find("a.div_website").attr("href")),
+                               "playing": div.find("div.playingtext").attr("title"),
+   #                            "title": div.find("a.clickabletitleGenre, div.stationcol a").attr("title"),
+   #                            "url": div.find("a.playbutton, a.playbutton1, a.playimage").attr("href"),
+   #                            "homepage": http.fix_url(div.find("a.playbutton.clickabletitle, a[target=_blank], a.clickabletitleGenre, a.clickabletitle, div.stationcol a, a").attr("href")),
+   #                            "playing": div.find("div.playingtextGenre, div.playingtext").attr("title"),
+                               "listeners": int(div.find("div.dirlistners").text()),
+                               "bitrate": int(div.find("div.dirbitrate").text()),
+                               "format": self.mime_fmt(div.find("div.dirtype").text()),
+                               "max": 0,
+                               "genre": cat,
+                              # "title2": e.find("a.playbutton").attr("name"),
+                          })
 
 
-               # display partial results (not strictly needed anymore, because we fetch just one page)
-               self.parent.status()
-               self.update_streams_partially_done(entries)
-               
-               # more pages to load?
-               if (re.search(rx_next, html)):
-                  next += count
-               else:
-                  next = 99999
+                  # display partial results (not strictly needed anymore, because we fetch just one page)
+                  self.parent.status()
+                  self.update_streams_partially_done(entries)
+                  
+                  # more pages to load?
+                  if (re.search(rx_next, html)):
+                     next += count
+                  else:
+                     next = 99999
+                     
+            except:
+               return entries
             
             #fin
             __print__(entries)
