@@ -106,8 +106,8 @@ history
 - made configuration window resizable
 - locked station list columns, no longer resortable (associatation mismatch)
 - applied Vincents fixed for Windows action.run and Shoutcast PQ parsing
-- reading of live365 restored, but no .pls location so far
-
+- live365 parsing restored by patch from Abhisek Sanyal
+- fix Pixbuf typecasing in mygtk liststore appending
 
 2.0.8
 - configuration files use prettified json

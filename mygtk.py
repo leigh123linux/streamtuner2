@@ -33,6 +33,8 @@ import os.path
 import copy
 
 
+def __print__(*args):
+        print(" ".join([str(a) for a in args]))
 
 # simplified gtk constructors               ---------------------------------------------
 class mygtk:
@@ -155,7 +157,7 @@ class mygtk:
 
                     except:
                         # brute-force typecast
-                        ls.append(  [ty(va) for va,ty in zip(row,vartypes)]  )
+                        ls.append(  [va  if ty==gtk.gdk.Pixbuf  else ty(va)   for va,ty in zip(row,vartypes)]  )
 
                 # apply array to widget
                 widget.set_model(ls)
