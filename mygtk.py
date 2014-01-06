@@ -4,7 +4,7 @@
 # type: functions
 # title: mygtk helper functions
 # description: simplify usage of some gtk widgets
-# version: 1.5
+# version: 1.6
 # author: mario
 # license: public domain
 #
@@ -25,16 +25,37 @@
 
 
 # gtk modules
-import pygtk
-import gtk
-import gtk.glade
-import gobject
+gtk = 0   # 0=gtk2, else gtk3
+if gtk:
+    from gi import pygtkcompat as pygtk
+    pygtk.enable() 
+    pygtk.enable_gtk(version='3.0')
+    from gi.repository import Gtk as gtk
+    from gi.repository import GObject as gobject
+    from gi.repository import GdkPixbuf
+    ui_file = "gtk3.xml"
+if not gtk:
+    import pygtk
+    import gtk
+    import gobject
+    ui_file = "ui.xml"
+
+# filesystem
 import os.path
 import copy
 
 
+# debug
 def __print__(*args):
         print(" ".join([str(a) for a in args]))
+
+
+try:
+  empty_pixbuf = gtk.gdk.pixbuf_new_from_data("\0\0\0\0",gtk.gdk.COLORSPACE_RGB,True,8,1,1,4)
+except:
+  empty_pixbuf = GdkPixbuf.Pixbuf.new_from_data("\0\0\0\0", GdkPixbuf.Colorspace.RGB, True, 8, 1, 1, 4, None, None)
+
+
 
 # simplified gtk constructors               ---------------------------------------------
 class mygtk:
@@ -136,7 +157,7 @@ class mygtk:
                     unicode: u"",
                     bool: False,
                     int: 0,
-                    gtk.gdk.Pixbuf: gtk.gdk.pixbuf_new_from_data("\0\0\0\0",gtk.gdk.COLORSPACE_RGB,True,8,1,1,4)
+                    gtk.gdk.Pixbuf: empty_pixbuf
                 }
                 if gtk.gdk.Pixbuf in vartypes:
                     pix_entry = vartypes.index(gtk.gdk.Pixbuf) 
@@ -157,7 +178,7 @@ class mygtk:
 
                     except:
                         # brute-force typecast
-                        ls.append(  [va  if ty==gtk.gdk.Pixbuf  else ty(va)   for va,ty in zip(row,vartypes)]  )
+                        ls.append( [va  if ty==gtk.gdk.Pixbuf  else ty(va)   for va,ty in zip(row,vartypes)]  )
 
                 # apply array to widget
                 widget.set_model(ls)
@@ -175,8 +196,10 @@ class mygtk:
         #
         @staticmethod     
         def tree(widget, entries, title="category", icon=gtk.STOCK_DIRECTORY):
+
             # list types
             ls = gtk.TreeStore(str, str)
+
             # add entries
             for entry in entries:
                 if (type(entry) == str):
@@ -184,27 +207,33 @@ class mygtk:
                 else:
                     for sub_title in entry:
                         ls.append(main, [sub_title, icon])
+
             # just one column
             tvcolumn = gtk.TreeViewColumn(title);
             widget.append_column(tvcolumn)
+
             # inner display: icon & string
             pix = gtk.CellRendererPixbuf()
             txt = gtk.CellRendererText()
+
             # position
             tvcolumn.pack_start(pix, expand=False)
             tvcolumn.pack_end(txt, expand=True)
+
             # select array content source in treestore
-            tvcolumn.set_attributes(pix, stock_id=1)
-            tvcolumn.set_attributes(txt, text=0)
+            tvcolumn.add_attribute(pix, "stock_id", 1)
+            tvcolumn.add_attribute(txt, "text", 0)
+
             # finalize
             widget.set_model(ls)
             tvcolumn.set_sort_column_id(0)
+            widget.set_search_column(0)
             #tvcolumn.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
             #tvcolumn.set_fixed_width(125])
-            widget.set_search_column(0)
             #widget.expand_all()
             #widget.expand_row("3", False)
             #print(widget.row_expanded("3"))
+
             return ls
 
 

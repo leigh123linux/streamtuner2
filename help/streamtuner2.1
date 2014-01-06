@@ -1,7 +1,7 @@
 .\" this is one of the nanoweb man pages
 .\" (many thanks to the manpage howto!)
 .\"
-.TH streamtuner2 "July 2010" "BSD/Linux" "User Manuals"
+.TH streamtuner2 "January 2014" "BSD/Linux" "User Manuals"
 .SH NAME
 streamtuner2 \- Browser for internet radio stations
 .SH SYNOPSIS
@@ -22,11 +22,13 @@ interface, has a commandline interface.
 
 .SH OPTIONS
 
-.B Display data from cache
-
 .TP
 .BI help
 Prints out a summary of available commands.
+
+.PP
+.B Cached data
+
 .TP
 .BI stream " channel title"
 Searches for a station with the given title. Either looks in a single
@@ -39,7 +41,7 @@ Prints out only the streaming URL.
 Invokes the configured audio player.
 
 .PP
-.B Load data from directory service
+.B Instantly retrieve data from directory service
 
 .TP
 .BI categories " channelname"

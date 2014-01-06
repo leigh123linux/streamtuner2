@@ -172,10 +172,19 @@ class ConfigDict(dict):
                 else:
                     self[key] = value
             # descends into sub-dicts instead of wiping them with subkeys
+
              
+        # check for existing filename in directory list
+        def find_in_dirs(self, dirs, file):
+            for d in dirs:
+                if os.path.exists(d+"/"+file):
+                    return d+"/"+file
+
 
    
 #-- actually fill global conf instance
 conf = ConfigDict()
+
+
 
 

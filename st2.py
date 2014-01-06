@@ -5,7 +5,7 @@
 # title: streamtuner2
 # description: directory browser for internet radio / audio streams
 # depends: gtk, pygtk, xml.dom.minidom, threading, lxml, pyquery, kronos
-# version: 2.0.9
+# version: 2.1.0
 # author: mario salzer
 # license: public domain
 # url: http://freshmeat.net/projects/streamtuner2
@@ -91,17 +91,13 @@ except:
     Thread.stop = lambda self: None
 
 # gtk modules
-import pygtk
-import gtk
-import gtk.glade
-import gobject
+from mygtk import pygtk, gtk, gobject, ui_file, mygtk
 
 
 # custom modules
 sys.path.insert(0, "/usr/share/streamtuner2")   # pre-defined directory for modules
 sys.path.insert(0, ".")   # pre-defined directory for modules
 from config import conf   # initializes itself, so all conf.vars are available right away
-from mygtk import mygtk   # gtk treeview
 import http
 import action  # needs workaround... (action.main=main)
 from channels import *
@@ -137,8 +133,7 @@ class StreamTunerTwo(gtk.Builder):
 
             # instantiate gtk/glade widgets in current object
             gtk.Builder.__init__(self)
-            ui_file = [i for i in sum([[i, conf.share+"/"+i] for i in ["ui.xml", "st2.gtk"]], []) if os.path.exists(i)][0];
-            gtk.Builder.add_from_file(self, ui_file), gui_startup(0.10)
+            gtk.Builder.add_from_file(self, conf.find_in_dirs([".", conf.share], ui_file)), gui_startup(0.10)
             # manual gtk operations
             self.extensionsCTM.set_submenu(self.extensions)  # duplicates Station>Extension menu into stream context menu
 
@@ -237,14 +232,15 @@ class StreamTunerTwo(gtk.Builder):
 
           
 
-        #-- Shortcut fo glade.get_widget()
-        # allows access to widgets as direct attributes instead of using .get_widget()
-        # also looks in self.channels[] for the named channel plugins
+        #-- Shortcut for glade.get_widget()
+        # Allows access to widgets as direct attributes instead of using .get_widget()
+        # Also looks in self.channels[] for the named channel plugins
         def __getattr__(self, name):
             if (self.channels.has_key(name)):
                 return self.channels[name]     # like self.shoutcast
             else:
                 return self.get_object(name)   # or gives an error if neither exists
+
 
         # custom-named widgets are available from .widgets{} not via .get_widget()
         def get_widget(self, name):
@@ -265,11 +261,13 @@ class StreamTunerTwo(gtk.Builder):
             #    self.notebook_channels.set_current_page(0)
             #    self.current_channel = "bookmarks"
             #    return self.channels["bookmarks"]
+
             
         def current_channel_gtk(self):
             i = self.notebook_channels.get_current_page()
             try: return self.channel_names[i]
             except: return "bookmarks"
+
 
         # notebook tab clicked
         def channel_switch(self, notebook, page, page_num=0, *args):
@@ -291,26 +289,28 @@ class StreamTunerTwo(gtk.Builder):
                 print("channel .first_show() initialization error")
 
 
-
-
         # convert ListStore iter to row number
         def rowno(self):
             (model, iter) = self.model_iter()
             return model.get_path(iter)[0]
 
+
         # currently selected entry in stations list, return complete data dict
         def row(self):
             return self.channel().stations() [self.rowno()]
+
             
         # return ListStore object and Iterator for currently selected row in gtk.TreeView station list
         def model_iter(self):
             return self.channel().gtk_list.get_selection().get_selected()
+
             
         # fetches a single varname from currently selected station entry
         def selected(self, name="url"):
             return self.row().get(name)
 
                 
+
 
 
         # play button
@@ -320,21 +320,25 @@ class StreamTunerTwo(gtk.Builder):
                 self.channel().play(row)
                 favicon.download_playing(row)
 
+
         # streamripper
         def on_record_clicked(self, widget):
             row = self.row()
             action.record(row.get("url"), "audio/mp3", "url/direct", row=row)
 
+
         # browse stream
         def on_homepage_stream_clicked(self, widget):
             url = self.selected("homepage")             
             action.browser(url)
+
              
         # browse channel
         def on_homepage_channel_clicked(self, widget, event=2):
             if event == 2 or event.type == gtk.gdk._2BUTTON_PRESS:
                 __print__("dblclick")
                 action.browser(self.channel().homepage)            
+
 
         # reload stream list in current channel-category
         def on_reload_clicked(self, widget=None, reload=1):
@@ -343,6 +347,7 @@ class StreamTunerTwo(gtk.Builder):
             self.thread(
                 lambda: (  self.channel().load(category,reload), reload and self.bookmarks.heuristic_update(self.current_channel,category)  )
             )
+
             
         # thread a function, add to worker pool (for utilizing stop button)
         def thread(self, target, *args):
@@ -350,11 +355,13 @@ class StreamTunerTwo(gtk.Builder):
             thread.start()
             self.working.append(thread)
 
+
         # stop reload/update threads
         def on_stop_clicked(self, widget):
             while self.working:
                 thread = self.working.pop()
                 thread.stop()
+
         
         # click in category list
         def on_category_clicked(self, widget, event, *more):
@@ -362,6 +369,7 @@ class StreamTunerTwo(gtk.Builder):
             __print__("on_category_clicked", category, self.current_channel)
             self.on_reload_clicked(None, reload=0)
             pass
+
 
         # add current selection to bookmark store
         def bookmark(self, widget):
@@ -375,14 +383,17 @@ class StreamTunerTwo(gtk.Builder):
             # refresh bookmarks tab
             self.bookmarks.load(self.bookmarks.default)
 
+
         # reload category tree
         def update_categories(self, widget):
             Thread(target=self.channel().reload_categories).start()
             
+
         # menu invocation: refresh favicons for all stations in current streams category
         def update_favicons(self, widget):
             entries = self.channel().stations()
             favicon.download_all(entries)
+
 
         # save a file            
         def save_as(self, widget):
@@ -393,9 +404,11 @@ class StreamTunerTwo(gtk.Builder):
                 action.save(row, fn)
             pass
 
+
         # save current stream URL into clipboard
         def menu_copy(self, w):
             gtk.clipboard_get().set_text(self.selected("url"))
+
 
         # remove an entry
         def delete_entry(self, w):
@@ -403,6 +416,7 @@ class StreamTunerTwo(gtk.Builder):
             del self.channel().stations()[ n ]
             self.channel().switch()
             self.channel().save()
+
 
         # stream right click
         def station_context_menu(self, treeview, event):
@@ -434,6 +448,7 @@ class StreamTunerTwo(gtk.Builder):
                 sbar_msg.append(1)
                 mygtk.do(lambda:self.statusbar.push(sbar_cid, text))
             pass
+
 
         # load plugins from /usr/share/streamtuner2/channels/
         def load_plugin_channels(self):
@@ -481,6 +496,7 @@ class StreamTunerTwo(gtk.Builder):
             conf.add_plugin_defaults(self.channels["bookmarks"].config, "bookmarks")
             #conf.add_plugin_defaults(self.channels["shoutcast"].config, "shoutcast")
 
+
         # store window/widget states (sizes, selections, etc.)
         def app_state(self, widget):
             # gtk widget states
@@ -494,6 +510,7 @@ class StreamTunerTwo(gtk.Builder):
                     channelopts[id] = {"current":self.channels[id].current}
             conf.save("state", channelopts, nice=1)
 
+
         # apply gtkrc stylesheet
         def load_theme(self):
             if conf.get("theme"):
@@ -502,6 +519,7 @@ class StreamTunerTwo(gtk.Builder):
                     if os.path.exists(f):
                         gtk.rc_parse(f)
                 pass
+
 
         # end application and gtk+ main loop
         def gtk_main_quit(self, widget, *x):
@@ -568,9 +586,11 @@ class auxiliary_window(object):
 # and also: quick search textbox (uses main.q instead)
 class search (auxiliary_window):
 
+
         # show search dialog   
         def menu_search(self, w):
             self.search_dialog.show();
+
 
         # hide dialog box again
         def cancel(self, *args):
@@ -628,6 +648,7 @@ class search (auxiliary_window):
         # live search on directory server homepages
         def server_query(self, w):
             "unimplemented"
+
             
         # don't search at all, open a web browser
         def google(self, w):
@@ -687,6 +708,7 @@ search = search()
 # aux win: stream data editing dialog
 class streamedit (auxiliary_window):
 
+
         # show stream data editing dialog
         def open(self, mw):
             row = main.row()
@@ -695,6 +717,7 @@ class streamedit (auxiliary_window):
                 if w:
                     w.set_text((str(row.get(name)) if row.get(name) else ""))
             self.win_streamedit.show()
+
 
         # copy widget contents to stream
         def save(self, w):
@@ -705,6 +728,7 @@ class streamedit (auxiliary_window):
                    row[name] = w.get_text()
             main.channel().save()
             self.cancel(w)
+
             
         # add a new list entry, update window
         def new(self, w):
@@ -713,6 +737,7 @@ class streamedit (auxiliary_window):
             main.channel().switch() # update display
             main.channel().gtk_list.get_selection().select_path(str(len(s)-1)); # set cursor to last row
             self.open(w)
+
 
         # hide window
         def cancel(self, *w):
@@ -729,6 +754,7 @@ streamedit = streamedit()
 # aux win: settings UI
 class config_dialog (auxiliary_window):
 
+
         # display win_config, pre-fill text fields from global conf. object
         def open(self, widget):
             self.add_plugins()
@@ -737,9 +763,11 @@ class config_dialog (auxiliary_window):
             self.combobox_theme()
             self.win_config.show()
 
+
         def hide(self, *args):
             self.win_config.hide()
             return True
+
         
         # set/load values between gtk window and conf. dict
         def apply(self, config, prefix="config_", save=0):
@@ -762,6 +790,7 @@ class config_dialog (auxiliary_window):
                     w.set_active(bool(val))
             pass
 
+
         # fill combobox
         def combobox_theme(self):
            # self.theme.combo_box_new_text()
@@ -777,11 +806,13 @@ class config_dialog (auxiliary_window):
             # erase this function, so it only ever gets called once
             self.combobox_theme = lambda: None
 
+
         # retrieve currently selected value
         def apply_theme(self):
             if self.theme.get_active() >= 0:
                 conf.theme = self.theme.get_model()[ self.theme.get_active()][0]
                 main.load_theme()
+
 
         # add configuration setting definitions from plugins
         once = 0
@@ -815,6 +846,7 @@ class config_dialog (auxiliary_window):
                 # spacer 
                 self.add_( "filler_pl_"+name, gtk.HSeparator() )
             self.once = 1
+
 
         # put gtk widgets into config dialog notebook
         def add_(self, id, w, label=None, color=""):
@@ -893,6 +925,7 @@ config_dialog = config_dialog()
 #
 class bookmarks(GenericChannel):
 
+
         # desc
         api = "streamtuner2"
         module = "bookmarks"
@@ -900,18 +933,21 @@ class bookmarks(GenericChannel):
         version = 0.4
         base_url = "file:.config/streamtuner2/bookmarks.json"
         listformat = "*/*"
+
         
         # i like this
         config = [
             {"name":"like_my_bookmarks", "type":"boolean", "value":0, "description":"I like my bookmarks"},
         ]
 
+
         # content
-        categories = ["favourite", ]
+        categories = ["favourite", ]  # timer, links, search, and links show up as needed
         current = "favourite"
         default = "favourite"
         streams = {"favourite":[], "search":[], "scripts":[], "timer":[], }
         
+
         # cache list, to determine if a PLS url is bookmarked
         urls = []
 
@@ -921,17 +957,22 @@ class bookmarks(GenericChannel):
             pass
         def update_streams(self, cat):
             return self.streams.get(cat, [])
+
             
         # initial display
         def first_show(self):
             if not self.streams["favourite"]:
                 self.cache()
+
+
         # all entries just come from "bookmarks.json"
         def cache(self):
             # stream list
             cache = conf.load(self.module)
             if (cache):
                 self.streams = cache
+
+
         # save to cache file
         def save(self):
             conf.save(self.module, self.streams, nice=1)
@@ -975,6 +1016,8 @@ class bookmarks(GenericChannel):
             if cat not in self.categories: # add category if missing
                 self.categories.append(cat)
                 self.display_categories()
+
+
         # change cursor
         def set_category(self, cat):
             self.add_category(cat)
@@ -1060,8 +1103,10 @@ class bookmarks(GenericChannel):
 #-- startup progress bar
 progresswin, progressbar = 0, 0
 def gui_startup(p=0.0, msg="streamtuner2 is starting"):
+
     global progresswin,progressbar
     if not progresswin:
+
         # GtkWindow "progresswin"
         progresswin = gtk.Window()
         progresswin.set_property("title", "streamtuner2")
@@ -1072,6 +1117,7 @@ def gui_startup(p=0.0, msg="streamtuner2 is starting"):
         progresswin.set_property("window_position", "center")
         progresswin.set_property("decorated", False)
         progresswin.set_property("visible", True)
+
         # GtkProgressBar "progressbar"
         progressbar = gtk.ProgressBar()
         progressbar.set_property("visible", True)
@@ -1079,13 +1125,14 @@ def gui_startup(p=0.0, msg="streamtuner2 is starting"):
         progressbar.set_property("text", msg)
         progresswin.add(progressbar)
         progresswin.show_all()
+
     try:
       if p<1:
         progressbar.set_fraction(p)
         progressbar.set_property("text", msg)
         while gtk.events_pending(): gtk.main_iteration(False)
       else:
-        progresswin.destroy()
+        progresswin.hide()
     except: return
 
 
