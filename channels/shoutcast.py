@@ -76,25 +76,25 @@ class shoutcast(channels.ChannelPlugin):
         # sub-categories are queried per 'AJAX'
         def update_categories(self):
             html = http.get(self.base_url)
-            self.categories = ["default"]
+            self.categories = []
             __print__( html )
 
             # <h2>Radio Genres</h2>
-	    rx_main = re.compile(r'<li class="prigen" id="(\d+)".+?<a href="/radio/([\w\s]+)">[\w\s]+</a></li>', re.S)
-	    rx_sub = re.compile(r'<a href="/radio/([\w\s\d]+)">[\w\s\d]+</a></li>')
-            for uu in rx_main.findall(html):
+	    rx = re.compile(r'<li((?:\s+id="\d+"\s+class="files")?)><a href="\?action=sub&cat=([\w\s]+)#(\d+)">[\w\s]+</a>', re.S)
+            sub = []
+            for uu in rx.findall(html):
                 __print__(uu)
-		(id,name) = uu
+		(main,name,id) = uu
                 name = urllib.unquote(name)
 
                 # main category
-                self.categories.append(name)
-
-                # sub entries
-                html = http.ajax("http://shoutcast.com/genre.jsp", {"genre":name, "id":id})
-                __print__(html)
-                sub = rx_sub.findall(html)
-                self.categories.append(sub)
+                if main:
+                    if sub:
+                        self.categories.append(sub)
+                        sub = []
+                    self.categories.append(name)
+                else:
+                    sub.append(name)
 
             # it's done
             __print__(self.categories)
@@ -122,74 +122,87 @@ class shoutcast(channels.ChannelPlugin):
             max = int(conf.max_streams)
             count = max
             rx_stream = None
-            rx_next = re.compile("""onclick="showMoreGenre""")
 
             try:
-               while (next < max):
+               if (next < max):
 
+
+                  #/radiolist.cfm?action=sub&string=&cat=Oldies&_cf_containerId=radiolist&_cf_nodebug=true&_cf_nocache=true&_cf_rc=0
+                  #/radiolist.cfm?start=19&action=sub&string=&cat=Oldies&amount=18&order=listeners
                   # page
-                  url = "http://www.shoutcast.com/genre-ajax/" + ucat
-                  referer = url.replace("/genre-ajax", "/radio")
-                  params = { "strIndex":"0", "count":str(count), "ajax":"true", "mode":"listeners", "order":"desc" }
+                  url = "http://www.shoutcast.com/radiolist.cfm?action=sub&string=&cat="+ucat+"&order=listeners&amount="+str(count)
+                  __print__(url)
+                  referer = "http://www.shoutcast.com/?action=sub&cat="+ucat
+                  params = {} # "strIndex":"0", "count":str(count), "ajax":"true", "mode":"listeners", "order":"desc" }
                   html = http.ajax(url, params, referer)   #,feedback=self.parent.status)
 
                   __print__(html)
+                  __print__(re.compile("id=(\d+)").findall(html));
 
                   # regular expressions
-                  if not conf.get("pyquery") or not pq:
+                  if 1:  #not conf.get("pyquery") or not pq:
+
+                      # new html
+                      """ 
+                      <tr>
+                         <td width="6%"><a href="#" onClick="window.open('player/?radname=Schlagerhoelle%20%2D%20das%20Paradies%20fr%20Schlager%20%20und%20Discofox&stationid=14687&coding=MP3','radplayer','height=232,width=776')"><img class="icon transition" src="/img/icon-play.png" alt="Play"></a></td>
+                         <td width="30%"><a class="transition" href="http://yp.shoutcast.com/sbin/tunein-station.pls?id=14687">Schlagerhoelle - das Paradies fr Schlager  und Discofox</a></td>
+                         <td width="12%" style="text-align:left;" width="10%">Oldies</td>
+                         <td width="12%" style="text-align:left;" width="10%">955</td>
+                         <td width="12%" style="text-align:left;" width="10%">128</td>
+                         <td width="12%" style="text-align:left;" width="10%">MP3</td>
+                      </tr>
+                      """
                   
                       # new extraction regex
                       if not rx_stream:
                           rx_stream = re.compile(
                               """
-                              <a\s+class="?playbutton\d?[^>]+id="(\d+)".+?
-                              <a\s+class="[\w\s]*title[\w\s]*"[^>]+href="(http://[^">]+)"[^>]*>([^<>]+)</a>.+?
-                              (?:Recently\s*played|Coming\s*soon|Now\s*playing):\s*([^<]*).+?
-                              ners">(\d*)<.+?
-                              bitrate">(\d*)<.+?
-                              type">([MP3AAC]*)
+                               <a [^>]+  href="http://yp.shoutcast.com/sbin/tunein-station.pls\?
+                                         id=(\d+)">   ([^<>]+)   </a>  </td>
+                               \s+  <td [^>]+  >([^<>]+)</td>
+                               \s+  <td [^>]+  >(\d+)</td>
+                               \s+  <td [^>]+  >(\d+)</td>
+                               \s+  <td [^>]+  >(\w+)</td>
                               """,
                               re.S|re.I|re.X
                           )
+                      __print__( rx_stream)
 
                       # extract entries
                       self.parent.status("parsing document...")
                       __print__("loop-rx")
                       for m in rx_stream.findall(html):
-                          (id, homepage, title, playing, ls, bit, fmt) = m
-                          __print__(uu)
+                          __print__(m)
+                          (id, title, genre, listeners, bitrate, fmt) = m
                           entries += [{
-                              "title": self.entity_decode(title),
+                              "id": id,
                               "url": "http://yp.shoutcast.com/sbin/tunein-station.pls?id=" + id,
-                              "homepage": http.fix_url(homepage),
-                              "playing": self.entity_decode(playing),
-                              "genre": cat, #self.strip_tags(uu[4]),
-                              "listeners": int(ls),
-                              "max": 0, #int(uu[6]),
-                              "bitrate": int(bit),
+                              "title": self.entity_decode(title),
+                              #"homepage": http.fix_url(homepage),
+                              #"playing": self.entity_decode(playing),
+                              "genre": genre,
+                              "listeners": int(listeners),
+                              #"max": 0, #int(uu[6]),
+                              "bitrate": int(bitrate),
                               "format": self.mime_fmt(fmt),
                           }]
 
                   # PyQuery parsing
                   else:
                       # iterate over DOM
-                      for div in (pq(e) for e in pq(html).find("div.dirlist")):
+                      for div in (pq(e) for e in pq(html).find("tr")):
 
                           entries.append({
-                               "title": div.find("a.playbutton,a.playbutton1").attr("title"),
-                               "url": div.find("a.playbutton,a.playbutton1").attr("href"),
-                               "homepage": http.fix_url(div.find("a.div_website").attr("href")),
-                               "playing": div.find("div.playingtext").attr("title"),
-   #                            "title": div.find("a.clickabletitleGenre, div.stationcol a").attr("title"),
-   #                            "url": div.find("a.playbutton, a.playbutton1, a.playimage").attr("href"),
-   #                            "homepage": http.fix_url(div.find("a.playbutton.clickabletitle, a[target=_blank], a.clickabletitleGenre, a.clickabletitle, div.stationcol a, a").attr("href")),
-   #                            "playing": div.find("div.playingtextGenre, div.playingtext").attr("title"),
-                               "listeners": int(div.find("div.dirlistners").text()),
-                               "bitrate": int(div.find("div.dirbitrate").text()),
-                               "format": self.mime_fmt(div.find("div.dirtype").text()),
+                               "title": div.find("a.transition").text(),
+                               "url": div.find("a.transition").attr("href"),
+                               "homepage": "",
+                               "playing": div.find("td:eq(2)").text(),
+                               "listeners": int(div.find("td:eq(4)").text()),
+                               "bitrate": int(div.find("td:eq(5)").text()),
+                               "format": self.mime_fmt(div.find("td:eq(6)").text()),
                                "max": 0,
                                "genre": cat,
-                              # "title2": e.find("a.playbutton").attr("name"),
                           })
 
 
@@ -198,12 +211,10 @@ class shoutcast(channels.ChannelPlugin):
                   self.update_streams_partially_done(entries)
                   
                   # more pages to load?
-                  if (re.search(rx_next, html)):
-                     next += count
-                  else:
-                     next = 99999
+                  next = 99999
                      
-            except:
+            except Exception as e:
+               __print__(e)
                return entries
             
             #fin
