@@ -5,7 +5,7 @@
 # title: streamtuner2
 # description: directory browser for internet radio / audio streams
 # depends: gtk, pygtk, xml.dom.minidom, threading, lxml, pyquery, kronos
-# version: 2.1.0
+# version: 2.0.9.5
 # author: mario salzer
 # license: public domain
 # url: http://freshmeat.net/projects/streamtuner2
@@ -129,11 +129,11 @@ class StreamTunerTwo(gtk.Builder):
         def __init__(self):
 
             # gtkrc stylesheet
-            self.load_theme(), gui_startup(0.05)
+            self.load_theme(), gui_startup(1/20)
 
             # instantiate gtk/glade widgets in current object
             gtk.Builder.__init__(self)
-            gtk.Builder.add_from_file(self, conf.find_in_dirs([".", conf.share], ui_file)), gui_startup(0.10)
+            gtk.Builder.add_from_file(self, conf.find_in_dirs([".", conf.share], ui_file)), gui_startup(2/20)
             # manual gtk operations
             self.extensionsCTM.set_submenu(self.extensions)  # duplicates Station>Extension menu into stream context menu
 
@@ -142,7 +142,7 @@ class StreamTunerTwo(gtk.Builder):
               "bookmarks": bookmarks(parent=self),   # this the remaining built-in channel
               "shoutcast": None,#shoutcast(parent=self),
             }
-            gui_startup(0.15)
+            gui_startup(3/20)
             self.load_plugin_channels()   # append other channel modules / plugins
 
 
@@ -161,14 +161,14 @@ class StreamTunerTwo(gtk.Builder):
                 pass # fails for disabled/reordered plugin channels
 
             # display current open channel/notebook tab
-            gui_startup(0.90)
+            gui_startup(17/20)
             self.current_channel = self.current_channel_gtk()
             try: self.channel().first_show()
             except: print("channel .first_show() initialization error")
 
       
             # bind gtk/glade event names to functions
-            gui_startup(0.95)
+            gui_startup(19/20)
             self.connect_signals(dict( {
                 "gtk_main_quit" : self.gtk_main_quit,                # close window
                 # treeviews / notebook
@@ -222,7 +222,7 @@ class StreamTunerTwo(gtk.Builder):
             }.items() + self.add_signals.items() ))
             
             # actually display main window
-            gui_startup(0.99)
+            gui_startup(99/100)
             self.win_streamtuner2.show()
             
             # WHY DON'T YOU WANT TO WORK?!
@@ -437,11 +437,11 @@ class StreamTunerTwo(gtk.Builder):
                 mygtk.do(lambda:self.statusbar.pop(sbar_cid))
             # progressbar
             if (type(text)==float):
-                if (text >= 1.0):  # completed
+                if (text >= 999/1000):  # completed
                     mygtk.do(lambda:self.progress.hide())
                 else:  # show percentage
                     mygtk.do(lambda:self.progress.show() or self.progress.set_fraction(text))
-                    if (text <= 0.0):  # unknown state
+                    if (text <= 0):  # unknown state
                         mygtk.do(lambda:self.progress.pulse())
             # add text
             elif (type(text)==str):
@@ -463,7 +463,7 @@ class StreamTunerTwo(gtk.Builder):
 
             # step through
             for module in ls:
-                gui_startup(0.2 + 0.7 * float(ls.index(module))/len(ls), "loading module "+module)
+                gui_startup(2/10 + 7/10 * float(ls.index(module))/len(ls), "loading module "+module)
                                 
                 # skip module if disabled
                 if conf.plugins.get(module, 1) == False:
@@ -487,7 +487,7 @@ class StreamTunerTwo(gtk.Builder):
                     else:
                         self.features[module] = plugin_class(parent=self)
                     
-                except Exception, e:
+                except Exception as e:
                     print("error initializing:", module, ", exception:")
                     import traceback
                     traceback.print_exc()
@@ -515,7 +515,7 @@ class StreamTunerTwo(gtk.Builder):
         def load_theme(self):
             if conf.get("theme"):
                 for dir in (conf.dir, conf.share, "/usr/share"):
-                    f = dir + "/themes/" + conf.theme + "/gtk-2.0/gtkrc"
+                    f = dir + "/themes/" + conf.theme + "/gtk-2"+".0/gtkrc"
                     if os.path.exists(f):
                         gtk.rc_parse(f)
                 pass
@@ -542,10 +542,10 @@ class AboutStreamtuner2:
         # about us
         def __init__(self):
             a = gtk.AboutDialog()
-            a.set_version("2.0.9")
+            a.set_version("2.0.9.5")
             a.set_name("streamtuner2")
             a.set_license("Public Domain\n\nNo Strings Attached.\nUnrestricted distribution,\nmodification, use.")
-            a.set_authors(["Mario Salzer <http://mario.include-once.org/>\n\nConcept based on streamtuner 0.99.99 from\nJean-Yves Lefort, of which some code remains\nin the Google stations plugin.\n<http://www.nongnu.org/streamtuner/>\n\nMyOggRadio plugin based on cooperation\nwith Christian Ehm. <http://ehm-edv.de/>"])
+            a.set_authors(["Mario Salzer <http://mario.include-once.org/>\n\nConcept based on streamtuner 0."+"99."+"99 from\nJean-Yves Lefort, of which some code remains\nin the Google stations plugin.\n<http://www.nongnu.org/streamtuner/>\n\nMyOggRadio plugin based on cooperation\nwith Christian Ehm. <http://ehm-edv.de/>"])
             a.set_website("http://milki.include-once.org/streamtuner2/")
             a.connect("response", lambda a, ok: ( a.hide(), a.destroy() ) )
             a.show()
@@ -930,7 +930,7 @@ class bookmarks(GenericChannel):
         api = "streamtuner2"
         module = "bookmarks"
         title = "bookmarks"
-        version = 0.4
+        version = 4/10
         base_url = "file:.config/streamtuner2/bookmarks.json"
         listformat = "*/*"
 
@@ -1102,7 +1102,7 @@ class bookmarks(GenericChannel):
 
 #-- startup progress bar
 progresswin, progressbar = 0, 0
-def gui_startup(p=0.0, msg="streamtuner2 is starting"):
+def gui_startup(p=0/100, msg="streamtuner2 is starting"):
 
     global progresswin,progressbar
     if not progresswin:
@@ -1150,7 +1150,7 @@ if __name__ == "__main__":
         
         # prepare for threading in Gtk+ callbacks
         gobject.threads_init()
-        gui_startup(0.05)
+        gui_startup(1/100)
         
         # prepare main window
         main = StreamTunerTwo()
@@ -1167,7 +1167,7 @@ if __name__ == "__main__":
 
 
         # run
-        gui_startup(1.00)
+        gui_startup(100/100)
         gtk.main()
         
         
