@@ -76,16 +76,16 @@ class GenericChannel(object):
            ["Station Title",275,["title",	str,    "text",	{"strikethrough":11, "cell-background":12, "cell-background-set":13}],  ["favicon",gtk.gdk.Pixbuf,"pixbuf",{"width":20}], ],
            ["Now Playing",185,	["playing",	str,	"text",	{"strikethrough":11}],	],
            ["Listeners", 45,	["listeners",	int,	"t",	{"strikethrough":11}],	],
-#           ["Max",	45,	["max",		int,	"t",	{}],	],
+          #["Max",	45,	["max",		int,	"t",	{}],	],
            ["Bitrate",	35,	["bitrate",	int,	"t",	{}],	],
            ["Homepage",	160,	["homepage",	str,	"t",	{"underline":10}],	],
-           [False,	25,	["---url",	str,	"t",	{"strikethrough":11}],	],
-           [False,	0,	["---format",	str,	None,	{}],	],
+           [False,	25,	["url",		str,	"t",	{"strikethrough":11}],	],
+           [False,	0,	["format",	str,	None,	{}],	],
            [False,	0,	["favourite",	bool,	None,	{}],	],
            [False,	0,	["deleted",	bool,	None,	{}],	],
            [False,	0,	["search_col",	str,	None,	{}],	],
            [False,	0,	["search_set",	bool,	None,	{}],	],
-        ]        
+        ]
         rowmap = []   # [state,genre,title,...] field enumeration still needed separately
         titles = {}   # for easier adapting of column titles in datamap
         
