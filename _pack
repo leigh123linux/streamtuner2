@@ -1,9 +1,7 @@
 
 
 #-- meta data
-VERSION=$(get_version st2.py)
-epm_set_version _package.epm $VERSION
-perl -n -i -e 'if (/^(\s+a.set_version)[\d.(\")]+/m) { print "$1(\"'$VERSION'\")\n" } else { print }' st2.py
+VERSION=$(version --get st2.py --write _package.epm --write:_raw_:2 st2.py)
 
 
 echo "------------------ source .txz ------------------"
@@ -20,19 +18,21 @@ mv ../streamtuner2-*.txz linux-3.0-all/
 
 echo "-------------------- .deb -----------------------"
 fakeroot epm -vvv -n -a all -f deb DEP=deb streamtuner2 _package.epm
+dpkg-sig -s builder -k include-once linux-3.0-all/streamtuner2-$VERSION.deb
 
 
-echo "------------------ slackware --------------------"
-epm -vvv -n -a all -f slackware streamtuner2 _package.epm
+####echo "------------------ slackware --------------------"
+####epm -vvv -n -a all -f slackware streamtuner2 _package.epm
 
 
 echo "-------------- .tar.gz installer  ---------------"
 epm -vvv -n -a all -f portable -s streamtuner2.png streamtuner2 _package.epm
+mv linux-3.0-all/streamtuner2-$VERSION.tar.gz linux-3.0-all/streamtuner2-$VERSION.bin.tgz
 
 
 echo "-------------------- .rpm -----------------------"
 epm -vvv -n -a all -f rpm streamtuner2 _package.epm
-/usr/bin/rpmbuild -bb --buildroot "/home/mario/projects/streamtuner2/linux-3.0-all/buildroot" --target all linux-3.0-all/streamtuner2.spec
+/usr/bin/rpmbuild -bb --buildroot ./linux-3.0-all/buildroot --target all linux-3.0-all/streamtuner2.spec
 mv linux-3.0-all/RPMS/all/*.rpm linux-3.0-all/streamtuner2-$VERSION.rpm
 rm -r linux-3.0-all/RPMS
 rm -r linux-3.0-all/rpms
