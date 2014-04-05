@@ -101,7 +101,7 @@ def fix_url(url):
 
 # default HTTP headers for AJAX/POST request
 default_headers = {
-    "User-Agent": "streamtuner2/0.4 (X11; U; Linux AMD64; en; rv:1.5.0.1) like WinAmp/2.1 but not like Googlebot/2.1", #"Mozilla/5.0 (X11; U; Linux x86_64; de; rv:1.9.2.6) Gecko/20100628 Ubuntu/10.04 (lucid) Firefox/3.6.6",
+    "User-Agent": "streamtuner2/2.1 (X11; U; Linux AMD64; en; rv:1.5.0.1) like WinAmp/2.1 but not like Googlebot/2.1", #"Mozilla/5.0 (X11; U; Linux x86_64; de; rv:1.9.2.6) Gecko/20100628 Ubuntu/10.04 (lucid) Firefox/3.6.6",
     "Accept": "*/*;q=0.5, audio/*, url/*",
     "Accept-Language": "en-US,en,de,es,fr,it,*;q=0.1",
     "Accept-Encoding": "gzip,deflate",
