@@ -24,8 +24,15 @@
 #
 
 
+
+
+# debug
+def __print__(*args):
+        print(" ".join([str(a) for a in args]))
+
+
 # gtk modules
-gtk = 0   # 0=gtk2, else gtk3
+gtk = 3   # 0=gtk2, else gtk3
 if gtk:
     from gi import pygtkcompat as pygtk
     pygtk.enable() 
@@ -34,26 +41,23 @@ if gtk:
     from gi.repository import GObject as gobject
     from gi.repository import GdkPixbuf
     ui_file = "gtk3.xml"
+    __print__(gtk)
+    __print__(gobject)
 if not gtk:
     import pygtk
     import gtk
     import gobject
-    ui_file = "ui.xml"
+    ui_file = "gtk2.xml"
 
 # filesystem
 import os.path
 import copy
 
 
-# debug
-def __print__(*args):
-        print(" ".join([str(a) for a in args]))
-
-
 try:
-  empty_pixbuf = gtk.gdk.pixbuf_new_from_data("\0\0\0\0",gtk.gdk.COLORSPACE_RGB,True,8,1,1,4)
+  empty_pixbuf = gtk.gdk.pixbuf_new_from_data(b"\0\0\0\0",gtk.gdk.COLORSPACE_RGB,True,8,1,1,4)
 except:
-  empty_pixbuf = GdkPixbuf.Pixbuf.new_from_data("\0\0\0\0", GdkPixbuf.Colorspace.RGB, True, 8, 1, 1, 4, None, None)
+  empty_pixbuf = GdkPixbuf.Pixbuf.new_from_data(b"\0\0\0\0", GdkPixbuf.Colorspace.RGB, True, 8, 1, 1, 4, None, None)
 
 
 
@@ -128,6 +132,7 @@ class mygtk:
                         # next
                         datapos += 1
 
+                        __print__(cell)
                     # add column to treeview
                     widget.append_column(col)
                 # finalize widget
@@ -150,11 +155,13 @@ class mygtk:
                             rowmap.append(desc[var][0])    # dict{} column keys in entries[] list
                 # create gtk array storage
                 ls = gtk.ListStore(*vartypes)   # could be a TreeStore, too
+                __print__(vartypes)
+                __print__(rowmap)
 
                 # prepare for missing values, and special variable types
                 defaults = {
                     str: "",
-                    unicode: u"",
+                    unicode: "",
                     bool: False,
                     int: 0,
                     gtk.gdk.Pixbuf: empty_pixbuf
@@ -164,10 +171,11 @@ class mygtk:
                 
                 # sort data into gtk liststore array
                 for row in entries:
+#                    row["search_col"] = "white"
 
                     # generate ordered list from dictionary, using rowmap association
                     row = [   row.get( skey , defaults[vartypes[i]] )   for i,skey   in enumerate(rowmap)   ]
-                    
+
                     # autotransform string -> gtk image object
                     if (pix_entry and type(row[pix_entry]) == str):
                         row[pix_entry] = (  gtk.gdk.pixbuf_new_from_file(row[pix_entry])  if  os.path.exists(row[pix_entry])  else  defaults[gtk.gdk.Pixbuf]  )
@@ -179,7 +187,8 @@ class mygtk:
                     except:
                         # brute-force typecast
                         ls.append( [va  if ty==gtk.gdk.Pixbuf  else ty(va)   for va,ty in zip(row,vartypes)]  )
-
+                __print__(row)
+                
                 # apply array to widget
                 widget.set_model(ls)
                 return ls
