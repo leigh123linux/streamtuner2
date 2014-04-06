@@ -1,1 +1,0 @@
-perl -ne ' if (/version: ([-_\d\w.]+)/) { print $1 }' $@
