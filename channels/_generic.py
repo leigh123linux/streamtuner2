@@ -501,9 +501,8 @@ class ChannelPlugin(GenericChannel):
                 ev_label.add(label)
                 ev_label.connect('event', parent.on_homepage_channel_clicked)
 
-                # add notebook tab
-                tab = parent.notebook_channels.append_page(vbox, ev_label)
-                
+
+
                 # to widgets
                 self.gtk_cat = tv1
                 parent.widgets[module + "_cat"] = tv1
@@ -512,20 +511,24 @@ class ChannelPlugin(GenericChannel):
                 parent.widgets["v_" + module] = vbox
                 parent.widgets["c_" + module] = ev_label
                 tv2.connect('button-press-event', parent.station_context_menu)
+
+
+                # try to initialize superclass now, before adding to channel tabs
+                GenericChannel.gui(self, parent)
+
+
+                # add notebook tab
+                tab = parent.notebook_channels.append_page(vbox, ev_label)
                 
                 
                 
                 # double-click catch
-                
 
 
-            # add module to list            
-            #parent.channels[module] = None
-            #parent.channel_names.append(module)
-            """ -> already taken care of in main.load_plugins() """
-
-            # superclass
-            GenericChannel.gui(self, parent)
+                # add module to list            
+                #parent.channels[module] = None
+                #parent.channel_names.append(module)
+                """ -> already taken care of in main.load_plugins() """
 
 
 
