@@ -1,5 +1,5 @@
 %product streamtuner2 - internet radio browser
-%version 2.0.9
+%version 2.0.9.5
 %vendor Mario Salzer
 %license
 %copyright Placed into the Public Domain, 2009-2014
@@ -114,20 +114,20 @@ f 644 root root /usr/share/doc/streamtuner2/help/img/logo.png 	 ./help/img/logo.
 f 644 root root /usr/share/doc/streamtuner2/help/img/mainwindow2.svg 	 ./help/img/mainwindow2.svg
 f 644 root root /usr/share/doc/streamtuner2/help/img/streams.png 	 ./help/img/streams.png
 #--pyquery
-d 755 root root /usr/share/streamtuner2/pyquery			-
-f 644 root root /usr/share/streamtuner2/pyquery/LICENSE.txt 	 ./pyquery/LICENSE.txt
-f 644 root root /usr/share/streamtuner2/pyquery/README.txt 	 ./pyquery/README.txt
-f 644 root root /usr/share/streamtuner2/pyquery/__init__.py 	 ./pyquery/__init__.py
-f 644 root root /usr/share/streamtuner2/pyquery/__init__.pyc 	 ./pyquery/__init__.pyc
-f 644 root root /usr/share/streamtuner2/pyquery/ajax.py 	 ./pyquery/ajax.py
-f 644 root root /usr/share/streamtuner2/pyquery/cssselectpatch.py 	 ./pyquery/cssselectpatch.py
-f 644 root root /usr/share/streamtuner2/pyquery/cssselectpatch.pyc 	 ./pyquery/cssselectpatch.pyc
-f 644 root root /usr/share/streamtuner2/pyquery/pyquery.py 	 ./pyquery/pyquery.py
-f 644 root root /usr/share/streamtuner2/pyquery/pyquery.pyc 	 ./pyquery/pyquery.pyc
-f 644 root root /usr/share/streamtuner2/pyquery/rules.py 	 ./pyquery/rules.py
-f 644 root root /usr/share/streamtuner2/pyquery/test.html 	 ./pyquery/test.html
-f 644 root root /usr/share/streamtuner2/pyquery/test.py 	 ./pyquery/test.py
-f 644 root root /usr/share/streamtuner2/pyquery/tests.txt 	 ./pyquery/tests.txt
+#d 755 root root /usr/share/streamtuner2/pyquery			-
+#f 644 root root /usr/share/streamtuner2/pyquery/LICENSE.txt 	 ./pyquery/LICENSE.txt
+#f 644 root root /usr/share/streamtuner2/pyquery/README.txt 	 ./pyquery/README.txt
+#f 644 root root /usr/share/streamtuner2/pyquery/__init__.py 	 ./pyquery/__init__.py
+#f 644 root root /usr/share/streamtuner2/pyquery/__init__.pyc 	 ./pyquery/__init__.pyc
+#f 644 root root /usr/share/streamtuner2/pyquery/ajax.py 	 ./pyquery/ajax.py
+#f 644 root root /usr/share/streamtuner2/pyquery/cssselectpatch.py 	 ./pyquery/cssselectpatch.py
+#f 644 root root /usr/share/streamtuner2/pyquery/cssselectpatch.pyc 	 ./pyquery/cssselectpatch.pyc
+#f 644 root root /usr/share/streamtuner2/pyquery/pyquery.py 	 ./pyquery/pyquery.py
+#f 644 root root /usr/share/streamtuner2/pyquery/pyquery.pyc 	 ./pyquery/pyquery.pyc
+#f 644 root root /usr/share/streamtuner2/pyquery/rules.py 	 ./pyquery/rules.py
+#f 644 root root /usr/share/streamtuner2/pyquery/test.html 	 ./pyquery/test.html
+#f 644 root root /usr/share/streamtuner2/pyquery/test.py 	 ./pyquery/test.py
+#f 644 root root /usr/share/streamtuner2/pyquery/tests.txt 	 ./pyquery/tests.txt
 #-- lxml
 #d 755 root root /usr/share/streamtuner2/lxml			-
 #d 755 root root /usr/share/streamtuner2/lxml/html		-

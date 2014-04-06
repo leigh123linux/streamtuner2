@@ -1,7 +1,7 @@
 
 
 #-- meta data
-VERSION=$(version --get st2.py --write _package.epm --write:_raw_:2 st2.py)
+VERSION=$(version --get st2.py --write:rpmspec _package.epm --write:_raw_:2 st2.py)
 
 
 echo "------------------ source .txz ------------------"
