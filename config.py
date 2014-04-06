@@ -73,6 +73,8 @@ class ConfigDict(dict):
                 "bookmarks": 1,  # built-in plugins, cannot be disabled
                 "shoutcast": 1,
                 "punkcast": 0,   # disable per default
+                "basicch": 0,   # ceased
+                "tv": 0,   # no longer working
             }
             self.tmp = os.environ.get("TEMP", "/tmp")
             self.max_streams = "120"
