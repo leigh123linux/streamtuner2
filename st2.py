@@ -90,13 +90,14 @@ except:
     from threading import Thread
     Thread.stop = lambda self: None
 
+# add library path
+sys.path.insert(0, "/usr/share/streamtuner2")   # pre-defined directory for modules
+sys.path.insert(0, ".")   # pre-defined directory for modules
+
 # gtk modules
 from mygtk import pygtk, gtk, gobject, ui_file, mygtk
 
-
 # custom modules
-sys.path.insert(0, "/usr/share/streamtuner2")   # pre-defined directory for modules
-sys.path.insert(0, ".")   # pre-defined directory for modules
 from config import conf   # initializes itself, so all conf.vars are available right away
 import http
 import action  # needs workaround... (action.main=main)
