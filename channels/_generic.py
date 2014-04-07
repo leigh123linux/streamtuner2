@@ -22,7 +22,7 @@
 
 import gtk
 from mygtk import mygtk
-from config import conf
+from config import conf, __print__, dbg
 import http
 import action
 import favicon
@@ -30,7 +30,6 @@ import os.path
 import xml.sax.saxutils
 import re
 import copy
-
 
 
 # dict==object
@@ -209,7 +208,7 @@ class GenericChannel(object):
                     # parse error
                     self.parent.status("category parsed empty.")
                     self.streams[category] = [{"title":"no contents found on directory server","bitrate":0,"max":0,"listeners":0,"playing":"error","favourite":0,"deleted":0}]
-                    print("oooops, parser returned nothing for category " + category)
+                    __print__(dbg.ERR, "Oooops, parser returned nothing for category " + category)
                     
             # assign to treeview model
             #self.streams[self.default] = []
@@ -304,15 +303,13 @@ class GenericChannel(object):
             
         # display .current category, once notebook/channel tab is first opened
         def first_show(self):
-            print("first_show ", self.module)
-            print 1
-            print self.shown
+            __print__(dbg.PROC, "first_show ", self.module, self.shown)
+
             if (self.shown != 55555):
-                print 2
             
                 # if category tree is empty, initialize it
                 if not self.categories:
-                    print 3
+                    __print__(dbg.PROC, "first_show: reload_categories");
                     #self.parent.thread(self.reload_categories)
                     print("reload categories");
                     self.reload_categories()
@@ -323,12 +320,12 @@ class GenericChannel(object):
             
                 # load current category
                 else:
-                    print 4
+                    __print__(dbg.STAT, "first_show: load current category");
                     self.load(self.current)
                 
                 # put selection/cursor on last position
                 try:
-                    print 5
+                    __print__(dbg.STAT, "first_show: select last known category treelist position")
                     self.gtk_list.get_selection().select_path(self.shown)
                 except:
                     pass
@@ -530,17 +527,6 @@ class ChannelPlugin(GenericChannel):
                 #parent.channel_names.append(module)
                 """ -> already taken care of in main.load_plugins() """
 
-
-
-
-
-
-# wrapper for all print statements
-def __print__(*args):
-    if conf.debug:
-        print(" ".join([str(a) for a in args]))
-
-__debug_print__ = __print__
 
 
 

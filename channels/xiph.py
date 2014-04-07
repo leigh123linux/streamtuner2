@@ -21,7 +21,7 @@ from config import conf
 from mygtk import mygtk
 import http
 from channels import *
-from channels import __print__
+from config import __print__, dbg
 
 # python modules
 import re
@@ -90,7 +90,7 @@ class xiph (ChannelPlugin):
             g.reverse()
             for row in g:
                 pass
-                __print__( '        "' + row[1] + '", #' + str(row[0]) )
+                __print__( dbg.DATA, '        "' + row[1] + '", #' + str(row[0]) )
 
 
         # xml dom node shortcut to text content

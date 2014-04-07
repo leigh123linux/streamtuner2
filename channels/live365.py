@@ -12,7 +12,7 @@ from config import conf
 from mygtk import mygtk
 import http
 from channels import *
-from channels import __print__
+from config import __print__, dbg
 
 # python modules
 import re
@@ -118,10 +118,10 @@ class live365(ChannelPlugin):
 #            src="(http://www.live365.com/.+?/stationlogo\w+.jpg)".+?
 
             # append entries to result list
-            __print__( html )
+            __print__( dbg.DATA, html )
             ls = []
             for row in rx.findall(html):
-                __print__( row )
+                __print__( dbg.DATA, row )
                 points = int(row[8])
                 count = int(row[9])
                 ls.append({

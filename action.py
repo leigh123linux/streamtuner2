@@ -24,14 +24,8 @@
 import re
 import os
 import http
-from config import conf
+from config import conf, __print__, dbg
 import platform
-
-
-#from channels import __print__
-def __print__(*args):
-    if conf.debug:
-        print(" ".join([str(a) for a in args]))
 
 
 main = None

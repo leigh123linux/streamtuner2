@@ -13,7 +13,7 @@ import http
 from config import conf
 import action
 from channels import *
-from channels import __print__
+from config import __print__, dbg
 
 
 
@@ -86,7 +86,7 @@ class punkcast (ChannelPlugin):
         
         # look up ANY audio url
         for uu in rx_sound.findall(html):
-            __print__( uu )
+            __print__( dbg.DATA, uu )
             (url, fmt) = uu
             action.action.play(url, self.mime_fmt(fmt), "url/direct")
             return

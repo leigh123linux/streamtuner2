@@ -14,11 +14,14 @@
 #  standard library.
 #
             
-
-import urllib2
-from urllib import urlencode
+try:
+    import urllib2
+    from urllib import urlencode
+except:
+    import urllib.request as urllib2
+    import urllib.parse.urlencode as urlencode
 import config
-from channels import __print__
+from config import __print__, dbg
 
 
 

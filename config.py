@@ -30,7 +30,6 @@ conf = object()
 #-- global configuration data               ---------------------------------------------
 class ConfigDict(dict):
 
-
         # start
         def __init__(self):
         
@@ -162,13 +161,13 @@ class ConfigDict(dict):
                 r = pson.load(f)
                 f.close()
                 return r
-            except (Exception), e:
+            except Exception as e:
                 print("PSON parsing error (in "+name+")", e)
             
 
         # recursive dict update
         def update(self, with_new_data):
-            for key,value in with_new_data.iteritems():
+            for key,value in with_new_data.items():
                 if type(value) == dict:
                     self[key].update(value)
                 else:
@@ -188,5 +187,25 @@ class ConfigDict(dict):
 conf = ConfigDict()
 
 
+
+
+# wrapper for all print statements
+def __print__(*args):
+    if conf.debug:
+        print(" ".join([str(a) for a in args]))
+
+
+# error colorization
+dbg = type('obj', (object,), {
+    "ERR":  "[31m[ERR][0m",  # red    ERROR
+    "INIT": "[31m[INIT][0m", # red    INIT ERROR
+    "PROC": "[32m[PROC][0m", # green  PROCESS
+    "CONF": "[33m[CONF][0m", # brown  CONFIG DATA
+    "UI":   "[34m[UI][0m",   # blue   USER INTERFACE BEHAVIOUR
+    "HTTP": "[35m[HTTP][0m", # magenta HTTP REQUEST
+    "DATA": "[36m[DATA][0m", # cyan   DATA
+    "INFO": "[37m[INFO][0m", # gray   INFO
+    "STAT": "[37m[STATE][0m", # gray  CONFIG STATE
+})
 
 

@@ -27,12 +27,11 @@
 
 
 # debug
-def __print__(*args):
-        print(" ".join([str(a) for a in args]))
+from config import __print__, dbg
 
 
 # gtk modules
-gtk = 3   # 0=gtk2, else gtk3
+gtk = 0   # 0=gtk2, else gtk3
 if gtk:
     from gi import pygtkcompat as pygtk
     pygtk.enable() 

@@ -21,6 +21,10 @@
 
 #-- reading and writing json (for the config module)  ----------------------------------
 
+import sys
+if sys.version_info > (2, 9):
+    unicode = str
+    #dict.iteritems = dict.items
 
 # try to load the system module first
 try:
@@ -84,7 +88,7 @@ def filter_data(obj):
                 for i,v in enumerate(obj):
                         obj[i] = filter_data(v)
         elif type(obj) == dict:
-                for i,v in obj.iteritems():
+                for i,v in list(obj.items()):
                         i = filter_data(i)
                         obj[i] = filter_data(v)
         else:

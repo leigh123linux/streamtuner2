@@ -13,7 +13,6 @@
 #
 # Valid key names are for example F9, <Ctrl>G, <Alt>R, <Super>N
 #
-return
 
 
 import keybinder

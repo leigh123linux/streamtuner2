@@ -14,7 +14,7 @@
 
 from channels import *
 import re
-from config import conf
+from config import conf, __print__, dbg
 import http
 from pq import pq
 

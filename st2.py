@@ -99,10 +99,10 @@ from mygtk import pygtk, gtk, gobject, ui_file, mygtk
 
 # custom modules
 from config import conf   # initializes itself, so all conf.vars are available right away
+from config import __print__, dbg
 import http
 import action  # needs workaround... (action.main=main)
 from channels import *
-from channels import __print__
 import favicon
 #from pq import pq
 
@@ -130,11 +130,11 @@ class StreamTunerTwo(gtk.Builder):
         def __init__(self):
 
             # gtkrc stylesheet
-            self.load_theme(), gui_startup(1/20)
+            self.load_theme(), gui_startup(1/20.0)
 
             # instantiate gtk/glade widgets in current object
             gtk.Builder.__init__(self)
-            gtk.Builder.add_from_file(self, conf.find_in_dirs([".", conf.share], ui_file)), gui_startup(2/20)
+            gtk.Builder.add_from_file(self, conf.find_in_dirs([".", conf.share], ui_file)), gui_startup(2/20.0)
             # manual gtk operations
             self.extensionsCTM.set_submenu(self.extensions)  # duplicates Station>Extension menu into stream context menu
 
@@ -143,7 +143,7 @@ class StreamTunerTwo(gtk.Builder):
               "bookmarks": bookmarks(parent=self),   # this the remaining built-in channel
               "shoutcast": None,#shoutcast(parent=self),
             }
-            gui_startup(3/20)
+            gui_startup(3/20.0)
             self.load_plugin_channels()   # append other channel modules / plugins
 
 
@@ -162,14 +162,14 @@ class StreamTunerTwo(gtk.Builder):
                 pass # fails for disabled/reordered plugin channels
 
             # display current open channel/notebook tab
-            gui_startup(17/20)
+            gui_startup(17/20.0)
             self.current_channel = self.current_channel_gtk()
             try: self.channel().first_show()
-            except: print("channel .first_show() initialization error")
+            except: __print__(dbg.INIT, "main.__init__: current_channel.first_show() initialization error")
 
       
             # bind gtk/glade event names to functions
-            gui_startup(19/20)
+            gui_startup(19/20.0)
             self.connect_signals(dict( {
                 "gtk_main_quit" : self.gtk_main_quit,                # close window
                 # treeviews / notebook
@@ -223,7 +223,7 @@ class StreamTunerTwo(gtk.Builder):
             }.items() + self.add_signals.items() ))
             
             # actually display main window
-            gui_startup(99/100)
+            gui_startup(99/100.0)
             self.win_streamtuner2.show()
             
             # WHY DON'T YOU WANT TO WORK?!
@@ -283,11 +283,11 @@ class StreamTunerTwo(gtk.Builder):
             
             # if first selected, load current category
             try:
-                print("try: .first_show", self.channel().module);
-                print(self.channel().first_show)
-                print(self.channel().first_show())
+                __print__(dbg.PROC, "channel_switch: try .first_show", self.channel().module);
+                __print__(self.channel().first_show)
+                __print__(self.channel().first_show())
             except:
-                print("channel .first_show() initialization error")
+                __print__(dbg.INIT, "channel .first_show() initialization error")
 
 
         # convert ListStore iter to row number
@@ -337,13 +337,13 @@ class StreamTunerTwo(gtk.Builder):
         # browse channel
         def on_homepage_channel_clicked(self, widget, event=2):
             if event == 2 or event.type == gtk.gdk._2BUTTON_PRESS:
-                __print__("dblclick")
+                __print__(dbg.UI, "dblclick")
                 action.browser(self.channel().homepage)            
 
 
         # reload stream list in current channel-category
         def on_reload_clicked(self, widget=None, reload=1):
-            __print__("reload", reload, self.current_channel, self.channels[self.current_channel], self.channel().current)
+            __print__(dbg.UI, "reload", reload, self.current_channel, self.channels[self.current_channel], self.channel().current)
             category = self.channel().current
             self.thread(
                 lambda: (  self.channel().load(category,reload), reload and self.bookmarks.heuristic_update(self.current_channel,category)  )
@@ -367,7 +367,7 @@ class StreamTunerTwo(gtk.Builder):
         # click in category list
         def on_category_clicked(self, widget, event, *more):
             category = self.channel().currentcat()
-            __print__("on_category_clicked", category, self.current_channel)
+            __print__(dbg.UI, "on_category_clicked", category, self.current_channel)
             self.on_reload_clicked(None, reload=0)
             pass
 
@@ -464,11 +464,11 @@ class StreamTunerTwo(gtk.Builder):
 
             # step through
             for module in ls:
-                gui_startup(2/10 + 7/10 * float(ls.index(module))/len(ls), "loading module "+module)
+                gui_startup(2/10.0 + 7/10.0 * float(ls.index(module))/len(ls), "loading module "+module)
                                 
                 # skip module if disabled
                 if conf.plugins.get(module, 1) == False:
-                    __print__("disabled plugin:", module)
+                    __print__(dbg.STAT, "disabled plugin:", module)
                     continue
                 
                 # load plugin
@@ -489,7 +489,7 @@ class StreamTunerTwo(gtk.Builder):
                         self.features[module] = plugin_class(parent=self)
                     
                 except Exception as e:
-                    print("error initializing:", module, ", exception:")
+                    __print__(dbg.INIT, "load_plugin_channels: error initializing:", module, ", exception:")
                     import traceback
                     traceback.print_exc()
 
@@ -516,7 +516,7 @@ class StreamTunerTwo(gtk.Builder):
         def load_theme(self):
             if conf.get("theme"):
                 for dir in (conf.dir, conf.share, "/usr/share"):
-                    f = dir + "/themes/" + conf.theme + "/gtk-2"+".0/gtkrc"
+                    f = dir + "/themes/" + conf.theme + "/gtk-2.0/gtkrc"
                     if os.path.exists(f):
                         gtk.rc_parse(f)
                 pass
@@ -776,7 +776,7 @@ class config_dialog (auxiliary_window):
                 # map non-alphanumeric chars from config{} to underscores in according gtk widget names
                 id = re.sub("[^\w]", "_", key)
                 w = main.get_widget(prefix + id)
-                __print__("config_save", save, prefix+id, w, val)
+                __print__(dbg.CONF, "config", ("save" if save else "load"), prefix+id, w, val)
                 # recurse into dictionaries, transform: conf.play.audio/mp3 => conf.play_audio_mp3
                 if (type(val) == dict):
                     self.apply(val, prefix + id + "_", save)
@@ -799,9 +799,16 @@ class config_dialog (auxiliary_window):
             themedirs = (conf.share+"/themes", conf.dir+"/themes", "/usr/share/themes")
             themes = ["no theme"]
             [[themes.append(e) for e in os.listdir(dir)] for dir in themedirs if os.path.exists(dir)]
+            __print__(dbg.STAT, themes)
+            # prepare liststore
+            store = gtk.ListStore(gobject.TYPE_STRING)
+            self.theme.set_model(store)
+            cell = gtk.CellRendererText()
+            self.theme.pack_start(cell, True)
+            self.theme.add_attribute(cell, "text", 0)
             # add to combobox
             for num,themename in enumerate(themes):
-                 self.theme.append_text(themename)
+                 store.append([themename])
                  if conf.theme == themename:
                      self.theme.set_active(num)
             # erase this function, so it only ever gets called once
@@ -1008,7 +1015,7 @@ class bookmarks(GenericChannel):
         # simplified gtk TreeStore display logic (just one category for the moment, always rebuilt)
         def load(self, category, force=False):
             #self.liststore[category] = \
-#            print(category, self.streams.keys())
+            __print__(dbg.UI, category, self.streams.keys())
             mygtk.columns(self.gtk_list, self.datamap, self.prepare(self.streams.get(category,[])))
 
 
@@ -1103,7 +1110,7 @@ class bookmarks(GenericChannel):
 
 #-- startup progress bar
 progresswin, progressbar = 0, 0
-def gui_startup(p=0/100, msg="streamtuner2 is starting"):
+def gui_startup(p=0/100.0, msg="streamtuner2 is starting"):
 
     global progresswin,progressbar
     if not progresswin:
@@ -1115,7 +1122,7 @@ def gui_startup(p=0/100, msg="streamtuner2 is starting"):
         progresswin.set_property("width_request", 300)
         progresswin.set_property("default_height", 30)
         progresswin.set_property("height_request", 30)
-        progresswin.set_property("window_position", "center")
+        #progresswin.set_property("window_position", "center")
         progresswin.set_property("decorated", False)
         progresswin.set_property("visible", True)
 
@@ -1151,7 +1158,7 @@ if __name__ == "__main__":
         
         # prepare for threading in Gtk+ callbacks
         gobject.threads_init()
-        gui_startup(1/100)
+        gui_startup(1/100.0)
         
         # prepare main window
         main = StreamTunerTwo()
@@ -1168,7 +1175,7 @@ if __name__ == "__main__":
 
 
         # run
-        gui_startup(100/100)
+        gui_startup(100/100.0)
         gtk.main()
         
         

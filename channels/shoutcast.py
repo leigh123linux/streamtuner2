@@ -3,29 +3,16 @@
 # title: shoutcast
 # description: Channel/tab for Shoutcast.com directory
 # depends: pq, re, http
-# version: 1.2
+# version: 1.3
 # author: Mario
 # original: Jean-Yves Lefort
 #
 # Shoutcast is a server software for audio streaming. It automatically spools
-# station information on shoutcast.com, which this plugin can read out. But
-# since the website format is often changing, we now use PyQuery HTML parsing
-# in favour of regular expression (which still work, are faster, but not as
-# reliable).
+# station information on shoutcast.com, which this plugin can read out.
 #
-# This was previously a built-in channel plugin. It just recently was converted
-# from a glade predefined GenericChannel into a ChannelPlugin.
-#
-#
-# NOTES
-#
-# Just found out what Tunapie uses:
-#    http://www.shoutcast.com/sbin/newxml.phtml?genre=Top500
-# It's a simpler list format, no need to parse HTML. However, it also lacks
-# homepage links. But maybe useful as alternate fallback...
-# Also:
-#   http://www.shoutcast.com/sbin/newtvlister.phtml?alltv=1
-#   http://www.shoutcast.com/sbin/newxml.phtml?search=
+# After its recent aquisition the layout got slimmed down considerably. So
+# there's not a lot of information to fetch left. And this plugin is now back
+# to defaulting to regex extraction instead of HTML parsing & DOM extraction.
 #
 #
 #
@@ -34,11 +21,10 @@
 import http
 import urllib
 import re
+from config import conf, __print__, dbg
 from pq import pq
-from config import conf
 #from channels import *    # works everywhere but in this plugin(???!)
 import channels
-__print__ = channels.__print__
 
 
 
@@ -77,13 +63,13 @@ class shoutcast(channels.ChannelPlugin):
         def update_categories(self):
             html = http.get(self.base_url)
             self.categories = []
-            __print__( html )
+            __print__( dbg.DATA, html )
 
             # <h2>Radio Genres</h2>
 	    rx = re.compile(r'<li((?:\s+id="\d+"\s+class="files")?)><a href="\?action=sub&cat=([\w\s]+)#(\d+)">[\w\s]+</a>', re.S)
             sub = []
             for uu in rx.findall(html):
-                __print__(uu)
+                __print__( dbg.DATA, uu )
 		(main,name,id) = uu
                 name = urllib.unquote(name)
 
@@ -97,7 +83,7 @@ class shoutcast(channels.ChannelPlugin):
                     sub.append(name)
 
             # it's done
-            __print__(self.categories)
+            __print__( dbg.PROC, self.categories )
             conf.save("cache/categories_shoutcast", self.categories)
             pass
 
@@ -111,7 +97,7 @@ class shoutcast(channels.ChannelPlugin):
         def update_streams(self, cat, search=""):
 
             if (not cat or cat == self.empty):
-                __print__("nocat")
+                __print__( dbg.ERR, "nocat" )
                 return []
             ucat = urllib.quote(cat)
 
@@ -131,16 +117,22 @@ class shoutcast(channels.ChannelPlugin):
                   #/radiolist.cfm?start=19&action=sub&string=&cat=Oldies&amount=18&order=listeners
                   # page
                   url = "http://www.shoutcast.com/radiolist.cfm?action=sub&string=&cat="+ucat+"&order=listeners&amount="+str(count)
-                  __print__(url)
+                  __print__(dbg.HTTP, url)
                   referer = "http://www.shoutcast.com/?action=sub&cat="+ucat
                   params = {} # "strIndex":"0", "count":str(count), "ajax":"true", "mode":"listeners", "order":"desc" }
                   html = http.ajax(url, params, referer)   #,feedback=self.parent.status)
 
-                  __print__(html)
-                  __print__(re.compile("id=(\d+)").findall(html));
+                  __print__(dbg.DATA, html)
+                  #__print__(re.compile("id=(\d+)").findall(html));
 
-                  # regular expressions
-                  if 1:  #not conf.get("pyquery") or not pq:
+
+                  # With the new shallow <td> lists it doesn't make much sense to use
+                  # the pyquery DOM traversal. There aren't any sensible selectors to
+                  # extract values; it's just counting the tags.
+
+
+                  # regular expressions (default)
+                  if not conf.get("pyquery") or not pq:
 
                       # new html
                       """ 
@@ -167,13 +159,14 @@ class shoutcast(channels.ChannelPlugin):
                               """,
                               re.S|re.I|re.X
                           )
-                      __print__( rx_stream)
+
 
                       # extract entries
                       self.parent.status("parsing document...")
-                      __print__("loop-rx")
+                      __print__(dbg.PROC, "channels.shoutcast.update_streams: regex scraping mode")
+
                       for m in rx_stream.findall(html):
-                          __print__(m)
+                          #__print__(m)
                           (id, title, genre, listeners, bitrate, fmt) = m
                           entries += [{
                               "id": id,
@@ -183,10 +176,11 @@ class shoutcast(channels.ChannelPlugin):
                               #"playing": self.entity_decode(playing),
                               "genre": genre,
                               "listeners": int(listeners),
-                              #"max": 0, #int(uu[6]),
+                              "max": 0, #int(uu[6]),
                               "bitrate": int(bitrate),
                               "format": self.mime_fmt(fmt),
                           }]
+
 
                   # PyQuery parsing
                   else:
@@ -197,10 +191,9 @@ class shoutcast(channels.ChannelPlugin):
                                "title": div.find("a.transition").text(),
                                "url": div.find("a.transition").attr("href"),
                                "homepage": "",
-                               "playing": div.find("td:eq(2)").text(),
-                               "listeners": int(div.find("td:eq(4)").text()),
-                               "bitrate": int(div.find("td:eq(5)").text()),
-                               "format": self.mime_fmt(div.find("td:eq(6)").text()),
+                               "listeners": int(div.find("td:eq(3)").text()),
+                               "bitrate": int(div.find("td:eq(4)").text()),
+                               "format": self.mime_fmt(div.find("td:eq(5)").text()),
                                "max": 0,
                                "genre": cat,
                           })
@@ -214,11 +207,11 @@ class shoutcast(channels.ChannelPlugin):
                   next = 99999
                      
             except Exception as e:
-               __print__(e)
+               __print__(dbg.ERR, e)
                return entries
             
             #fin
-            __print__(entries)
+            __print__(dbg.DATA, entries)
             return entries
 
 

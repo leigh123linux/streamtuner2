@@ -15,7 +15,7 @@ import re
 import http
 from config import conf
 from channels import *
-from channels import __print__
+from config import __print__, dbg
 from xml.sax.saxutils import unescape
 
 
@@ -111,7 +111,7 @@ class modarchive (ChannelPlugin):
         
         for uu in rx_mod.findall(html):
             (url, id, fmt, title, file, rating) = uu
-            __print__( uu )
+            __print__( dbg.DATA, uu )
             entries.append({
                 "genre": cat,
                 "url": url,
