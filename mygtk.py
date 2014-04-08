@@ -34,15 +34,13 @@ import os.path
 import copy
 import sys
 
-if sys.version_info[0] >= 3:
-    unicode = str
+from compat2and3 import unicode, xrange, PY3
 
 
-# gtk version
-ver = 2   # 2=gtk2, 3=gtk3
-if "--gtk3" in sys.argv:
-    ver = 3
-if sys.version_info >= (3, 0):
+# gtk version (2=gtk2, 3=gtk3)
+ver = 2
+# if running on Python3 or with commandline flag
+if PY3 or "--gtk3" in sys.argv:
     ver = 3
 # load gtk modules
 if ver==3:
@@ -53,6 +51,7 @@ if ver==3:
     from gi.repository import GObject as gobject
     from gi.repository import GdkPixbuf
     ui_file = "gtk3.xml"
+    empty_pixbuf = GdkPixbuf.Pixbuf.new_from_data(b"\0\0\0\0", GdkPixbuf.Colorspace.RGB, True, 8, 1, 1, 4, None, None)
     __print__(dbg.PROC, gtk)
     __print__(dbg.PROC, gobject)
 else:
@@ -60,12 +59,8 @@ else:
     import gtk
     import gobject
     ui_file = "gtk2.xml"
+    empty_pixbuf = gtk.gdk.pixbuf_new_from_data(b"\0\0\0\0",gtk.gdk.COLORSPACE_RGB,True,8,1,1,4)
 
-
-try:
-  empty_pixbuf = gtk.gdk.pixbuf_new_from_data(b"\0\0\0\0",gtk.gdk.COLORSPACE_RGB,True,8,1,1,4)
-except:
-  empty_pixbuf = GdkPixbuf.Pixbuf.new_from_data(b"\0\0\0\0", GdkPixbuf.Colorspace.RGB, True, 8, 1, 1, 4, None, None)
 
 
 
@@ -116,7 +111,7 @@ class mygtk:
                         col.set_fixed_width(desc[1])
 
                     # loop through cells
-                    for var in range(2, len(desc)):
+                    for var in xrange(2, len(desc)):
                         cell = desc[var]
                         # cell renderer
                         if (cell[2] == "pixbuf"):
@@ -158,7 +153,7 @@ class mygtk:
                 rowmap = []    #["title", "desc", "bookmarked", "name", "count", "max", "img", ...]
                 if (not rowmap):
                     for desc in datamap:
-                        for var in range(2, len(desc)):
+                        for var in xrange(2, len(desc)):
                             vartypes.append(desc[var][1])  # content types
                             rowmap.append(desc[var][0])    # dict{} column keys in entries[] list
                 # create gtk array storage

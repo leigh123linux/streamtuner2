@@ -1,4 +1,3 @@
-.\" this is one of the nanoweb man pages
 .\" (many thanks to the manpage howto!)
 .\"
 .TH streamtuner2 "January 2014" "BSD/Linux" "User Manuals"
@@ -59,6 +58,15 @@ returns all info about the first match as JSON output.
 .TP
 .BI streamtuner2 " play frequence3"
 Looks for the first occourence, and starts the audio player for FREQUENCE3.
+
+
+.SH GRAPHICAL MODE
+
+There's only one option for the graphical UI mode:
+.TP
+.BI --gtk3
+Loads Gtk3 via PyGI instead of Gtk2. This is implicit when running on Python3
+anyway.
 
 
 .SH FILES

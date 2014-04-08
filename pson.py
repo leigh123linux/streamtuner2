@@ -22,9 +22,7 @@
 #-- reading and writing json (for the config module)  ----------------------------------
 
 import sys
-if sys.version_info > (2, 9):
-    unicode = str
-    #dict.iteritems = dict.items
+from compat2and3 import unicode
 
 # try to load the system module first
 try:

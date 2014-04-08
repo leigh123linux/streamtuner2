@@ -23,6 +23,7 @@ if sys.version_info < (3,0):
     # basic functions
     xrange = xrange
     range = xrange
+    unicode = unicode
 
     # urllib modules
     import urllib
@@ -44,6 +45,7 @@ else:
 
     # basic functions
     xrange = range
+    unicode = str
 
     # urllib modules
     import urllib.request as urllib
