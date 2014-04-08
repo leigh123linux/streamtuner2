@@ -66,11 +66,11 @@ class shoutcast(channels.ChannelPlugin):
             __print__( dbg.DATA, html )
 
             # <h2>Radio Genres</h2>
-	    rx = re.compile(r'<li((?:\s+id="\d+"\s+class="files")?)><a href="\?action=sub&cat=([\w\s]+)#(\d+)">[\w\s]+</a>', re.S)
+            rx = re.compile(r'<li((?:\s+id="\d+"\s+class="files")?)><a href="\?action=sub&cat=([\w\s]+)#(\d+)">[\w\s]+</a>', re.S)
             sub = []
             for uu in rx.findall(html):
                 __print__( dbg.DATA, uu )
-		(main,name,id) = uu
+                (main,name,id) = uu
                 name = urllib.unquote(name)
 
                 # main category

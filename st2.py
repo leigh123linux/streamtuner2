@@ -220,7 +220,7 @@ class StreamTunerTwo(gtk.Builder):
                 "streamedit_save": streamedit.save,
                 "streamedit_new": streamedit.new,
                 "streamedit_cancel": streamedit.cancel,
-            }.items() + self.add_signals.items() ))
+            }.items() | self.add_signals.items() ))
             
             # actually display main window
             gui_startup(99/100.0)
@@ -525,7 +525,7 @@ class StreamTunerTwo(gtk.Builder):
         # end application and gtk+ main loop
         def gtk_main_quit(self, widget, *x):
             if conf.auto_save_appstate:
-                try:  # doesn't work with gtk3 yet
+                try:  # doesn't work with gtk3 yet (probably just hooking at the wrong time)
                     self.app_state(widget)
                 except:
                     None

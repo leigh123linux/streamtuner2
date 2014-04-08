@@ -20,6 +20,7 @@
 #
 
 
+from config import __print__, dbg
 from channels import *
 import kronos
 from mygtk import mygtk
@@ -76,7 +77,7 @@ class timer:
         self.sched = kronos.ThreadedScheduler()
         for row in self.streams:
             try: self.queue(row)
-            except Exception,e: print("queuing error", e)
+            except Exception as e: __print__(dbg.ERR, "queuing error", e)
         self.sched.start()
 
 

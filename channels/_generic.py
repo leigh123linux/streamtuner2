@@ -183,7 +183,7 @@ class GenericChannel(object):
         def load(self, category, force=False):
         
             # get data from cache or download
-            if (force or not self.streams.has_key(category)):
+            if (force or not category in self.streams):
                 new_streams = self.update_streams(category)
       
                 if new_streams:
@@ -237,7 +237,7 @@ class GenericChannel(object):
             diff = []
             new = [row.get("url","http://example.com/") for row in new]
             for row in old:
-                if (row.has_key("url") and (row.get("url") not in new)):
+                if (url in row and (row.get("url") not in new)):
                     row["deleted"] = 1
                     diff.append(row)
             return diff

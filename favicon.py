@@ -28,7 +28,7 @@ google_placeholder_filesizes = (726,896)
 
 
 import os, os.path
-import urllib
+from compat2and3 import xrange, urllib
 import re
 from config import conf
 try: from processing import Process as Thread

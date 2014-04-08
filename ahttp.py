@@ -4,34 +4,16 @@
 # type: functions
 # title: http download / methods
 # description: http utility
-# version: 1.3
+# version: 1.4
 #
 #  Provides a http GET method with gtk.statusbar() callback.
 #  And a function to add trailings slashes on http URLs.
 #
-#  The latter code is pretty much unreadable. But let's put the
-#  blame on urllib2, the most braindamaged code in the Python
-#  standard library.
 #
 
 
-# Python 2.x            
-try:
-    import urllib2
-    from urllib import urlencode
-    import urlparse
-    import cookielib
-    from StringIO import StringIO
-# Python 3.x
-except:
-    import urllib.request as urllib2
-    from urllib.parse import urlencode
-    import urllib.parse as urlparse
-    from http import cookiejar as cookielib
-    from io import StringIO
-
+from compat2and3 import urllib2, urlencode, urlparse, cookielib, StringIO, xrange
 from gzip import GzipFile
-
 from config import conf, __print__, dbg
 
 

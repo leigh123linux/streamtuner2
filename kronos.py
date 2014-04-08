@@ -274,7 +274,7 @@ class Scheduler:
         while self.running:
             try:
                 self.sched.run()
-            except Exception,x:
+            except Exception as x:
                 print >>sys.stderr, "ERROR DURING SCHEDULER EXECUTION",x
                 print >>sys.stderr, "".join(
                     traceback.format_exception(*sys.exc_info()))
@@ -298,7 +298,7 @@ class Task:
         """Execute the task action in the scheduler's thread."""
         try:
             self.execute()
-        except Exception,x:
+        except Exception as x:
             self.handle_exception(x)
         self.reschedule(schedulerref())
 
@@ -466,7 +466,7 @@ try:
             # do the execute() call and exception handling here.
             try:
                 self.execute()
-            except Exception,x:
+            except Exception as x:
                 self.handle_exception(x)
 
     class ThreadedIntervalTask(ThreadedTaskMixin, IntervalTask):
@@ -533,7 +533,7 @@ if hasattr(os, "fork"):
                 # we are the child
                 try:
                     self.execute()
-                except Exception,x:
+                except Exception as x:
                     self.handle_exception(x)
                 os._exit(0)
             else:

@@ -58,7 +58,7 @@ class links (object):
 
 
         # collect links from channel plugins
-        for name,channel in parent.channels.iteritems():
+        for name,channel in parent.channels.items():
           try:
             self.streams.append({
                 "favourite": 1,
@@ -66,7 +66,7 @@ class links (object):
                 "homepage": channel.homepage,
             })
           except: pass
-        for title,homepage in self.default.iteritems():
+        for title,homepage in self.default.items():
             self.streams.append({
                 "title": title,
                 "homepage": homepage,
