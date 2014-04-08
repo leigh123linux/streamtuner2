@@ -5,7 +5,7 @@
 # title: streamtuner2
 # description: directory browser for internet radio / audio streams
 # depends: gtk, pygtk, xml.dom.minidom, threading, lxml, pyquery, kronos
-# version: 2.0.9.5
+# version: 2.0.9.6
 # author: mario salzer
 # license: public domain
 # url: http://freshmeat.net/projects/streamtuner2
@@ -100,7 +100,7 @@ from mygtk import pygtk, gtk, gobject, ui_file, mygtk
 # custom modules
 from config import conf   # initializes itself, so all conf.vars are available right away
 from config import __print__, dbg
-import http
+import ahttp
 import action  # needs workaround... (action.main=main)
 from channels import *
 import favicon
@@ -237,7 +237,7 @@ class StreamTunerTwo(gtk.Builder):
         # Allows access to widgets as direct attributes instead of using .get_widget()
         # Also looks in self.channels[] for the named channel plugins
         def __getattr__(self, name):
-            if (self.channels.has_key(name)):
+            if (name in self.channels):
                 return self.channels[name]     # like self.shoutcast
             else:
                 return self.get_object(name)   # or gives an error if neither exists
@@ -245,7 +245,7 @@ class StreamTunerTwo(gtk.Builder):
 
         # custom-named widgets are available from .widgets{} not via .get_widget()
         def get_widget(self, name):
-            if self.widgets.has_key(name):
+            if name in self.widgets:
                 return self.widgets[name]
             else:
                 return gtk.Builder.get_object(self, name)
@@ -525,7 +525,10 @@ class StreamTunerTwo(gtk.Builder):
         # end application and gtk+ main loop
         def gtk_main_quit(self, widget, *x):
             if conf.auto_save_appstate:
-                self.app_state(widget)
+                try:  # doesn't work with gtk3 yet
+                    self.app_state(widget)
+                except:
+                    None
             gtk.main_quit()
 
 
@@ -1153,7 +1156,7 @@ if __name__ == "__main__":
     "conf = Config()"       # already happened with "from config import conf"
 
     # graphical
-    if len(sys.argv) < 2:
+    if len(sys.argv) < 2 or "--gtk3" in sys.argv:
     
         
         # prepare for threading in Gtk+ callbacks
@@ -1166,7 +1169,7 @@ if __name__ == "__main__":
         # module coupling
         action.main = main      # action (play/record) module needs a reference to main window for gtk interaction and some URL/URI callbacks
         action = action.action  # shorter name
-        http.feedback = main.status  # http module gives status feedbacks too
+        ahttp.feedback = main.status  # http module gives status feedbacks too
         
         # first invocation
         if (conf.get("firstrun")):

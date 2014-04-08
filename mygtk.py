@@ -4,7 +4,7 @@
 # type: functions
 # title: mygtk helper functions
 # description: simplify usage of some gtk widgets
-# version: 1.6
+# version: 1.7
 # author: mario
 # license: public domain
 #
@@ -29,10 +29,23 @@
 # debug
 from config import __print__, dbg
 
+# filesystem
+import os.path
+import copy
+import sys
 
-# gtk modules
-gtk = 0   # 0=gtk2, else gtk3
-if gtk:
+if sys.version_info[0] >= 3:
+    unicode = str
+
+
+# gtk version
+ver = 2   # 2=gtk2, 3=gtk3
+if "--gtk3" in sys.argv:
+    ver = 3
+if sys.version_info >= (3, 0):
+    ver = 3
+# load gtk modules
+if ver==3:
     from gi import pygtkcompat as pygtk
     pygtk.enable() 
     pygtk.enable_gtk(version='3.0')
@@ -40,17 +53,13 @@ if gtk:
     from gi.repository import GObject as gobject
     from gi.repository import GdkPixbuf
     ui_file = "gtk3.xml"
-    __print__(gtk)
-    __print__(gobject)
-if not gtk:
+    __print__(dbg.PROC, gtk)
+    __print__(dbg.PROC, gobject)
+else:
     import pygtk
     import gtk
     import gobject
     ui_file = "gtk2.xml"
-
-# filesystem
-import os.path
-import copy
 
 
 try:
@@ -107,7 +116,7 @@ class mygtk:
                         col.set_fixed_width(desc[1])
 
                     # loop through cells
-                    for var in xrange(2, len(desc)):
+                    for var in range(2, len(desc)):
                         cell = desc[var]
                         # cell renderer
                         if (cell[2] == "pixbuf"):
@@ -126,7 +135,7 @@ class mygtk:
                         # attach cell to column
                         col.pack_end(rend, expand=cell[3].get("expand",True))
                         # apply attributes
-                        for attr,val in cell[3].iteritems():
+                        for attr,val in list(cell[3].items()):
                             col.add_attribute(rend, attr, val)
                         # next
                         datapos += 1
@@ -149,7 +158,7 @@ class mygtk:
                 rowmap = []    #["title", "desc", "bookmarked", "name", "count", "max", "img", ...]
                 if (not rowmap):
                     for desc in datamap:
-                        for var in xrange(2, len(desc)):
+                        for var in range(2, len(desc)):
                             vartypes.append(desc[var][1])  # content types
                             rowmap.append(desc[var][0])    # dict{} column keys in entries[] list
                 # create gtk array storage

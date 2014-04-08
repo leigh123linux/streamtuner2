@@ -13,16 +13,26 @@
 #  blame on urllib2, the most braindamaged code in the Python
 #  standard library.
 #
-            
+
+
+# Python 2.x            
 try:
     import urllib2
     from urllib import urlencode
+    import urlparse
+    import cookielib
+    from StringIO import StringIO
+# Python 3.x
 except:
     import urllib.request as urllib2
-    import urllib.parse.urlencode as urlencode
-import config
-from config import __print__, dbg
+    from urllib.parse import urlencode
+    import urllib.parse as urlparse
+    from http import cookiejar as cookielib
+    from io import StringIO
 
+from gzip import GzipFile
+
+from config import conf, __print__, dbg
 
 
 #-- url download                            ---------------------------------------------
@@ -148,8 +158,6 @@ def ajax(url, post, referer=""):
 
 
 # http://techknack.net/python-urllib2-handlers/    
-from gzip import GzipFile
-from StringIO import StringIO
 class ContentEncodingProcessor(urllib2.BaseHandler):
   """A handler to add gzip capabilities to urllib2 requests """
 
@@ -198,14 +206,13 @@ if urllib2:
     
     # base
     handlers[0] = urllib2.HTTPHandler()
-    if config.conf.debug:
+    if conf.debug:
         handlers[0].set_http_debuglevel(3)
         
     # content-encoding
     handlers[1] = ContentEncodingProcessor()
     
     # store cookies at runtime
-    import cookielib
     cj = cookielib.CookieJar()
     handlers[2] = urllib2.HTTPCookieProcessor( cj )
     

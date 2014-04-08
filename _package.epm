@@ -37,7 +37,7 @@ f 644 root root /usr/share/streamtuner2/pson.py			./pson.py
 #f 644 root root /usr/share/streamtuner2/processing.py		./processing.py
 f 644 root root /usr/share/streamtuner2/action.py		./action.py
 f 644 root root /usr/share/streamtuner2/config.py		./config.py
-f 644 root root /usr/share/streamtuner2/http.py			./http.py
+f 644 root root /usr/share/streamtuner2/ahttp.py		./ahttp.py
 f 644 root root /usr/share/streamtuner2/cli.py			./cli.py
 f 644 root root /usr/share/streamtuner2/mygtk.py		./mygtk.py
 f 644 root root /usr/share/streamtuner2/favicon.py		./favicon.py

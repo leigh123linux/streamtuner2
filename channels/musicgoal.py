@@ -16,7 +16,7 @@
 # st2 modules
 from config import conf
 from mygtk import mygtk
-import http
+import ahttp as http
 from channels import *
 
 # python modules

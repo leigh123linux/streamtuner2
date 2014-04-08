@@ -15,7 +15,7 @@
 from channels import *
 import re
 from config import conf, __print__, dbg
-import http
+import ahttp as http
 from pq import pq
 
 

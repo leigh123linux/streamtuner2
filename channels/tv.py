@@ -18,7 +18,7 @@
 # icon: http://cemagraphics.deviantart.com/art/Little-Tv-Icon-96461135
 
 from channels import *
-import http
+import ahttp as http
 import lxml.etree
 
 

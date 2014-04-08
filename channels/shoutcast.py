@@ -18,7 +18,7 @@
 #
 
 
-import http
+import ahttp as http
 import urllib
 import re
 from config import conf, __print__, dbg

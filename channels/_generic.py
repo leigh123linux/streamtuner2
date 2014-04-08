@@ -23,7 +23,7 @@
 import gtk
 from mygtk import mygtk
 from config import conf, __print__, dbg
-import http
+import ahttp as http
 import action
 import favicon
 import os.path
@@ -149,13 +149,13 @@ class GenericChannel(object):
             #mygtk.tree(self.gtk_cat, self.categories, title="Category", icon=gtk.STOCK_OPEN);
             
             # update column names
-            for field,title in self.titles.iteritems():
+            for field,title in list(self.titles.items()):
                 self.update_datamap(field, title=title)
             
             # prepare stream list
             if (not self.rowmap):
                 for row in self.datamap:
-                    for x in xrange(2, len(row)):
+                    for x in range(2, len(row)):
                         self.rowmap.append(row[x][0])
 
             # load default category
@@ -251,7 +251,7 @@ class GenericChannel(object):
                                             # then display() is called too early to take effect - load() & co should actually be postponed to when a notebook tab gets selected first
                                             # => might be fixed now, 1.9.8
                 # state icon: bookmark star
-                if (conf.show_bookmarks and self.parent.channels.has_key("bookmarks") and self.parent.bookmarks.is_in(streams[i].get("url", "file:///tmp/none"))):
+                if (conf.show_bookmarks and "bookmarks" in self.parent.channels and self.parent.bookmarks.is_in(streams[i].get("url", "file:///tmp/none"))):
                     streams[i]["favourite"] = 1
                 
                 # state icon: INFO or DELETE
@@ -311,11 +311,10 @@ class GenericChannel(object):
                 if not self.categories:
                     __print__(dbg.PROC, "first_show: reload_categories");
                     #self.parent.thread(self.reload_categories)
-                    print("reload categories");
                     self.reload_categories()
                     self.display_categories()
                     self.current = self.categories.keys()[0]
-                    print self.current
+                    __print__(dbg.STAT, self.current)
                     self.load(self.current)
             
                 # load current category

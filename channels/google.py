@@ -51,7 +51,7 @@
 import re, os, gtk
 from channels import *
 from xml.sax.saxutils import unescape as entity_decode, escape as xmlentities
-import http
+import ahttp as http
 
 
 ### constants #################################################################

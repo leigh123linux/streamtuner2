@@ -23,7 +23,7 @@
 
 import re
 import os
-import http
+import ahttp as http
 from config import conf, __print__, dbg
 import platform
 
@@ -81,8 +81,8 @@ class action:
         @staticmethod
         def run(cmd):
             if conf.windows:
- 	        os.system("start \"%s\"")
- 	    else:
+                os.system("start \"%s\"")
+            else:
                 os.system(cmd + " &")
 
 
