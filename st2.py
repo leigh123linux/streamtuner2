@@ -170,7 +170,7 @@ class StreamTunerTwo(gtk.Builder):
       
             # bind gtk/glade event names to functions
             gui_startup(19/20.0)
-            self.connect_signals(dict( {
+            self.connect_signals(dict( list({
                 "gtk_main_quit" : self.gtk_main_quit,                # close window
                 # treeviews / notebook
                 "on_stream_row_activated" : self.on_play_clicked,    # double click in a streams list
@@ -220,7 +220,7 @@ class StreamTunerTwo(gtk.Builder):
                 "streamedit_save": streamedit.save,
                 "streamedit_new": streamedit.new,
                 "streamedit_cancel": streamedit.cancel,
-            }.items() | self.add_signals.items() ))
+            }.items() ) + list( self.add_signals.items() ) ))
             
             # actually display main window
             gui_startup(99/100.0)
