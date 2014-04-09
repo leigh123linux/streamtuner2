@@ -95,7 +95,7 @@ sys.path.insert(0, "/usr/share/streamtuner2")   # pre-defined directory for modu
 sys.path.insert(0, ".")   # pre-defined directory for modules
 
 # gtk modules
-from mygtk import pygtk, gtk, gobject, ui_file, mygtk
+from mygtk import pygtk, gtk, gobject, ui_file, mygtk, ver as GTK_VER
 
 # custom modules
 from config import conf   # initializes itself, so all conf.vars are available right away
@@ -563,7 +563,10 @@ def station_context_menu(treeview, event):
                 path = treeview.get_path_at_pos(int(event.x), int(event.y))[0]
                 treeview.grab_focus()
                 treeview.set_cursor(path, None, False)
-                main.streamactions.popup(None, None, None, event.button, event.time)
+                if GTK_VER == 2:
+                    main.streamactions.popup(None, None, None, event.button, event.time)
+                else:
+                    main.streamactions.popup(None, None, None, None, event.button, event.time)
                 return None
             # we need to pass on to normal left-button signal handler
             else:
@@ -576,9 +579,9 @@ def station_context_menu(treeview, event):
 # encapsulates references to gtk objects AND properties in main window
 class auxiliary_window(object):
         def __getattr__(self, name):
-            if main.__dict__.has_key(name):
+            if name in main.__dict__:
                 return main.__dict__[name]
-            elif StreamTunerTwo.__dict__.has_key(name):
+            elif name in StreamTunerTwo.__dict__:
                 return StreamTunerTwo.__dict__[name]
             else:
                 return main.get_widget(name)

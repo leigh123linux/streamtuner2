@@ -135,7 +135,7 @@ class mygtk:
                         # next
                         datapos += 1
 
-                        __print__(cell)
+                        __print__(dbg.INFO, cell)
                     # add column to treeview
                     widget.append_column(col)
                 # finalize widget
@@ -158,8 +158,8 @@ class mygtk:
                             rowmap.append(desc[var][0])    # dict{} column keys in entries[] list
                 # create gtk array storage
                 ls = gtk.ListStore(*vartypes)   # could be a TreeStore, too
-                __print__(vartypes)
-                __print__(rowmap)
+                __print__(dbg.UI, vartypes)
+                __print__(dbg.DATA, rowmap)
 
                 # prepare for missing values, and special variable types
                 defaults = {
@@ -174,7 +174,11 @@ class mygtk:
                 
                 # sort data into gtk liststore array
                 for row in entries:
-#                    row["search_col"] = "white"
+
+                    # defaults
+                    row["deleted"] = 0
+                    row["search_col"] = "#ffffff"
+                    row["search_set"] = 0
 
                     # generate ordered list from dictionary, using rowmap association
                     row = [   row.get( skey , defaults[vartypes[i]] )   for i,skey   in enumerate(rowmap)   ]
