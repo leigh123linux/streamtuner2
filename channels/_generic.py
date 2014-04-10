@@ -72,8 +72,8 @@ class GenericChannel(object):
            # coltitle   width	[ datasrc key, type, renderer, attrs ]	[cellrenderer2], ...
            ["",		20,	["state",	str,  "pixbuf",	{}],	],
            ["Genre",	65,	['genre',	str,	"t",	{}],	],
-           ["Station Title",275,["title",	str,    "text",	{"strikethrough":11, "cell-background":12, "cell-background-set":13}],  ["favicon",gtk.gdk.Pixbuf,"pixbuf",{"width":20}], ],
-           ["Now Playing",185,	["playing",	str,	"text",	{"strikethrough":11}],	],
+           ["Station Title",275,["title",	str,    "text",	{"strikethrough":11, "cell-background":12, "cell-background-set":13}],  ["favicon", gtk.gdk.Pixbuf, "pixbuf", {}], ],
+           ["Now Playing",185,	["playing",	str,	"text",	{"strikethrough":11}],	],                                                                             #{"width":20}
            ["Listeners", 45,	["listeners",	int,	"t",	{"strikethrough":11}],	],
           #["Max",	45,	["max",		int,	"t",	{}],	],
            ["Bitrate",	35,	["bitrate",	int,	"t",	{}],	],

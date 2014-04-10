@@ -16,6 +16,11 @@
 #  Additionally it filters out any left-over objects. Sometimes
 #  pygtk-objects crawled into the streams[] lists, because rows
 #  might have been queried from the widgets.
+#       (Need to find out if that still happens..)
+#
+#  filter_data should become redundant, as mygtk.columns now
+#  converts unicode to str in Py2. And since we depend on Py2.7
+#  anway the JSON-like Python serialization should be dropped.
 #
 
 
@@ -61,7 +66,7 @@ def load(fp):
         try:
                 #print("try json")
                 r = json_load(fp)
-                r = filter_data(r)   # turn unicode() strings back into str() - pygtk does not accept u"strings"
+#                r = filter_data(r)   # turn unicode() strings back into str() - pygtk does not accept u"strings"
         except:
                 #print("fall back on pson")
                 fp.seek(0)

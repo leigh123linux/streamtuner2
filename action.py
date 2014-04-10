@@ -47,7 +47,7 @@ class action:
         # web
         @staticmethod
         def browser(url):
-            __print__( conf.browser )
+            __print__( dbg.CONF, conf.browser )
             action.run(conf.browser + " " + action.quote(url))
 
 
@@ -56,9 +56,9 @@ class action:
         @staticmethod
         def quote(s):
             if conf.windows:
-                return s   # should actually be "\\\"%s\\\"" % s
+                return str(s)   # should actually be "\\\"%s\\\"" % s
             else:
-                return "%r" % s
+                return "%r" % str(s)
 
 
         # calls player for stream url and format
@@ -70,7 +70,7 @@ class action:
                 if audioformat == "audio/mpeg":
                     audioformat = "audio/mp3"  # internally we use the more user-friendly moniker
                 cmd = conf.play.get(audioformat, conf.play.get("*/*", "vlc %u"))
-                __print__( "play", url, cmd )
+                __print__( dbg.PROC,"play", url, cmd )
             try:
                 action.run( action.interpol(cmd, url) )
             except:
@@ -89,7 +89,7 @@ class action:
         # streamripper
         @staticmethod
         def record(url, audioformat="audio/mp3", listformat="text/x-href", append="", row={}):
-            __print__( "record", url )
+            __print__( dbg.PROC, "record", url )
             cmd = conf.record.get(audioformat, conf.record.get("*/*", None))
             try: action.run( action.interpol(cmd, url, row) + append )
             except: pass
@@ -191,7 +191,7 @@ class action:
         @staticmethod
         def pls(url):
             text = http.get(url)
-            __print__( "pls_text=", text )
+            __print__( dbg.DATA, "pls_text=", text )
             return re.findall("\s*File\d*\s*=\s*(\w+://[^\s]+)", text, re.I)
             # currently misses out on the titles            
             
@@ -226,7 +226,7 @@ class action:
                 channelname = main.current_channel
             except:
                 channelname = "unknown"
-            return (conf.tmp + os.sep + "streamtuner2."+channelname+"."+stream_id+".m3u", len(stream_id) > 3 and stream_id != "XXXXXX")
+            return (str(conf.tmp) + os.sep + "streamtuner2."+channelname+"."+stream_id+".m3u", len(stream_id) > 3 and stream_id != "XXXXXX")
         
         # check if there are any urls in a given file
         @staticmethod
@@ -246,9 +246,9 @@ class action:
                 return tmp_fn
 
             # download PLS
-            __print__( "pls=",pls )
+            __print__( dbg.DATA, "pls=",pls )
             url_list = action.extract_urls(pls)
-            __print__( "urls=", url_list )
+            __print__( dbg.DATA, "urls=", url_list )
 
             # output URL list to temporary .m3u file
             if (len(url_list)):
@@ -260,7 +260,7 @@ class action:
                 # return path/name of temporary file
                 return tmp_fn
             else:
-                __print__( "error, there were no URLs in ", pls )
+                __print__( dbg.ERR, "error, there were no URLs in ", pls )
                 raise "Empty PLS"
 
         # open help browser                

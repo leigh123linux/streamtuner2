@@ -135,7 +135,7 @@ class mygtk:
                         # next
                         datapos += 1
 
-                        __print__(dbg.INFO, cell)
+                        __print__(dbg.INFO, cell, len(cell))
                     # add column to treeview
                     widget.append_column(col)
                 # finalize widget
@@ -158,8 +158,8 @@ class mygtk:
                             rowmap.append(desc[var][0])    # dict{} column keys in entries[] list
                 # create gtk array storage
                 ls = gtk.ListStore(*vartypes)   # could be a TreeStore, too
-                __print__(dbg.UI, vartypes)
-                __print__(dbg.DATA, rowmap)
+                __print__(dbg.UI, vartypes, len(vartypes))
+                __print__(dbg.DATA, rowmap, len(rowmap))
 
                 # prepare for missing values, and special variable types
                 defaults = {
@@ -175,13 +175,16 @@ class mygtk:
                 # sort data into gtk liststore array
                 for row in entries:
 
-                    # defaults
-                    row["deleted"] = 0
-                    row["search_col"] = "#ffffff"
-                    row["search_set"] = 0
+                    # preset some values if absent
+                    row.setdefault("deleted", False)
+                    row.setdefault("search_col", "#ffffff")
+                    row.setdefault("search_set", False)
 
                     # generate ordered list from dictionary, using rowmap association
                     row = [   row.get( skey , defaults[vartypes[i]] )   for i,skey   in enumerate(rowmap)   ]
+
+                    # map Python2 unicode to str
+                    row = [ str(value) if type(value) is unicode else value  for value in row ]
 
                     # autotransform string -> gtk image object
                     if (pix_entry and type(row[pix_entry]) == str):
@@ -194,7 +197,7 @@ class mygtk:
                     except:
                         # brute-force typecast
                         ls.append( [va  if ty==gtk.gdk.Pixbuf  else ty(va)   for va,ty in zip(row,vartypes)]  )
-                __print__(row)
+                __print__("[37m→[0m", row, len(row))
                 
                 # apply array to widget
                 widget.set_model(ls)
@@ -215,14 +218,15 @@ class mygtk:
 
             # list types
             ls = gtk.TreeStore(str, str)
+            print(entries)
 
             # add entries
             for entry in entries:
-                if (type(entry) == str):
-                    main = ls.append(None, [entry, icon])
+                if isinstance(entry, (str,unicode)):
+                    main = ls.append(None, [str(entry), icon])
                 else:
                     for sub_title in entry:
-                        ls.append(main, [sub_title, icon])
+                        ls.append(main, [str(sub_title), icon])
 
             # just one column
             tvcolumn = gtk.TreeViewColumn(title);
@@ -310,7 +314,7 @@ class mygtk:
                 if (not w):
                     continue
                 t = type(w)
-                for method,args in r[wn].iteritems():
+                for method,args in r[wn].items():
                     # gtk.Window
                     if method == "size":
                         w.resize(args[0], args[1])

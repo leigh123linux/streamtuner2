@@ -12,7 +12,7 @@
 #
 
 
-from compat2and3 import urllib2, urlencode, urlparse, cookielib, StringIO, xrange
+from compat2and3 import urllib2, urlencode, urlparse, cookielib, StringIO, xrange, PY3
 from gzip import GzipFile
 from config import conf, __print__, dbg
 
@@ -41,7 +41,7 @@ def progress_feedback(*args):
 
 #-- GET
 def get(url, maxsize=1<<19, feedback="old"):
-    __print__("GET", url)
+    __print__( dbg.HTTP, "GET", url)
 
     # statusbar info
     progress_feedback(url, 0.0)
@@ -69,7 +69,7 @@ def get(url, maxsize=1<<19, feedback="old"):
     progress_feedback()
         
     # fin
-    __print__(len(content))
+    __print__( dbg.INFO, "Content-Length", len(content) )
     return content
 
 
@@ -126,12 +126,12 @@ def ajax(url, post, referer=""):
     request = urllib2.Request(url, post, headers)
     
     # open url
-    __print__( vars(request) )
+    __print__( dbg.INFO, vars(request) )
     progress_feedback(url, 0.2)
     r = urllib2.urlopen(request)
     
     # get data
-    __print__( r.info() )
+    __print__( dbg.HTTP, r.info() )
     progress_feedback(0.5)
     data = r.read()
     progress_feedback()

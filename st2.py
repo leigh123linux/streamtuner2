@@ -5,7 +5,7 @@
 # title: streamtuner2
 # description: directory browser for internet radio / audio streams
 # depends: gtk, pygtk, xml.dom.minidom, threading, lxml, pyquery, kronos
-# version: 2.0.9.6
+# version: 2.0.9.7
 # author: mario salzer
 # license: public domain
 # url: http://freshmeat.net/projects/streamtuner2
@@ -80,8 +80,6 @@
 import sys
 import os, os.path
 import re
-import copy
-import urllib
 
 # threading or processing module
 try:
@@ -92,7 +90,7 @@ except:
 
 # add library path
 sys.path.insert(0, "/usr/share/streamtuner2")   # pre-defined directory for modules
-sys.path.insert(0, ".")   # pre-defined directory for modules
+sys.path.insert(0, ".")   # development module path
 
 # gtk modules
 from mygtk import pygtk, gtk, gobject, ui_file, mygtk, ver as GTK_VER
@@ -104,7 +102,6 @@ import ahttp
 import action  # needs workaround... (action.main=main)
 from channels import *
 import favicon
-#from pq import pq
 
 
 
@@ -563,10 +560,11 @@ def station_context_menu(treeview, event):
                 path = treeview.get_path_at_pos(int(event.x), int(event.y))[0]
                 treeview.grab_focus()
                 treeview.set_cursor(path, None, False)
-                if GTK_VER == 2:
-                    main.streamactions.popup(None, None, None, event.button, event.time)
-                else:
-                    main.streamactions.popup(None, None, None, None, event.button, event.time)
+                main.streamactions.popup(
+                      parent_menu_shell=None, parent_menu_item=None, func=None,
+                      button=event.button, activate_time=event.time,
+                      data=None
+                )
                 return None
             # we need to pass on to normal left-button signal handler
             else:
@@ -778,7 +776,7 @@ class config_dialog (auxiliary_window):
         
         # set/load values between gtk window and conf. dict
         def apply(self, config, prefix="config_", save=0):
-            for key,val in config.iteritems():
+            for key,val in config.items():
                 # map non-alphanumeric chars from config{} to underscores in according gtk widget names
                 id = re.sub("[^\w]", "_", key)
                 w = main.get_widget(prefix + id)
@@ -834,7 +832,7 @@ class config_dialog (auxiliary_window):
             if self.once:
                 return
 
-            for name,enabled in conf.plugins.iteritems():
+            for name,enabled in conf.plugins.items():
 
                 # add plugin load entry
                 if name:
@@ -1053,8 +1051,8 @@ class bookmarks(GenericChannel):
             check = {"http//": "[row]"}
             check = dict((row["url"],row) for row in fav)
             # walk through all channels/streams
-            for chname,channel in main.channels.iteritems():
-                for cat,streams in channel.streams.iteritems():
+            for chname,channel in main.channels.items():
+                for cat,streams in channel.streams.items():
 
                     # keep the potentially changed rows
                     if (chname == updated_channel) and (cat == updated_category):

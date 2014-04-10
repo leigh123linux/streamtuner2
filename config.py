@@ -22,13 +22,15 @@ import gzip
 import platform
 
 
+
+
 #-- create a single instance of config object
 conf = object()
 
 
-
 #-- global configuration data               ---------------------------------------------
 class ConfigDict(dict):
+
 
         # start
         def __init__(self):
@@ -52,6 +54,7 @@ class ConfigDict(dict):
             else:
                 self.save("settings")
                 self.firstrun = 1
+
 
         # some defaults
         def defaults(self):
@@ -89,6 +92,7 @@ class ConfigDict(dict):
             self.reuse_m3u = 1
             self.google_homepage = 1
             self.windows = platform.system()=="Windows"
+            self.debug = 1
 
             
         # each plugin has a .config dict list, we add defaults here
@@ -182,11 +186,6 @@ class ConfigDict(dict):
                     return d+"/"+file
 
 
-   
-#-- actually fill global conf instance
-conf = ConfigDict()
-
-
 
 
 # wrapper for all print statements
@@ -207,5 +206,14 @@ dbg = type('obj', (object,), {
     "INFO": "[37m[INFO][0m", # gray   INFO
     "STAT": "[37m[STATE][0m", # gray  CONFIG STATE
 })
+
+
+   
+#-- actually fill global conf instance
+conf = ConfigDict()
+if conf:
+    __print__(dbg.PROC, "ConfigDict() initialized")
+
+
 
 
