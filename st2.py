@@ -32,20 +32,13 @@
 """ project status """
 #
 # The application runs mostly stable. The GUI interfaces are workable.
+# It's supposed to run on Gtk2 and Gtk3. Python3 support is still WIP.
 # There haven't been any optimizations regarding memory usage and
-# performance. The current internal API is acceptable. Documentation is
-# coming up.
+# performance. The current internal API is vastly undocumented.
 #
 #  current bugs:
 #   - audio- and list-format support is not very robust / needs better API
-#   - lots of GtkWarning messages
 #   - not all keyboard shortcuts work
-#   - in-list search doesn't work in our treeviews (???)
-#   - JSON files are only trouble: loading of data files might lead to more
-#     errors now, even if pson module still falls back on old method
-#     (unicode strings from json.load are useless to us, require typecasts)
-#     (nonsupport of tuples led to regression in mygtk.app_restore)
-#     (sometimes we receive 8bit-content, which the json module can't save)
 #
 #  features:
 #   - treeview lists are created from datamap[] structure and stream{} dicts
@@ -67,11 +60,6 @@
 #   - MEDIUM: audio players / decoders are easily affected by buffer overflows
 #     from corrupt mp3/stream data, and streamtuner2 executes them
 #      - but since that's the purpose -> no workaround
-#
-#  still help wanted on:
-#   - any of the above
-#   - new plugins (local file viewer)
-#   - nicer logo (or donations accepted to consult graphics designer)
 #
 
 

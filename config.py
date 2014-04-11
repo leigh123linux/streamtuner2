@@ -125,7 +125,7 @@ class ConfigDict(dict):
         # store some configuration list/dict into a file                
         def save(self, name="settings", data=None, gz=0, nice=0):
             name = name + ".json"
-            if (data == None):
+            if (data is None):
                 data = dict(self.__dict__)  # ANOTHER WORKAROUND: typecast to plain dict(), else json filter_data sees it as object and str()s it
                 nice = 1
             # check for subdir
@@ -156,9 +156,9 @@ class ConfigDict(dict):
             try:
                 # .gz or normal file
                 if os.path.exists(file + ".gz"):
-                    f = gzip.open(file + ".gz", "r")
+                    f = gzip.open(file + ".gz", "rt")
                 elif os.path.exists(file):
-                    f = open(file, "r")
+                    f = open(file, "rt")
                 else:
                     return # file not found
                 # decode
@@ -166,7 +166,7 @@ class ConfigDict(dict):
                 f.close()
                 return r
             except Exception as e:
-                print("PSON parsing error (in "+name+")", e)
+                print(dbg.ERR, "PSON parsing error (in "+name+")", e)
             
 
         # recursive dict update
