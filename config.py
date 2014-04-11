@@ -17,7 +17,7 @@
 
 import os
 import sys
-import pson
+import json
 import gzip
 import platform
 
@@ -145,7 +145,7 @@ class ConfigDict(dict):
             else:
                 f = open(file, "w")
             # encode
-            pson.dump(data, f, indent=(4 if nice else None))
+            json.dump(data, f, indent=(4 if nice else None))
             f.close()
 
 
@@ -162,7 +162,7 @@ class ConfigDict(dict):
                 else:
                     return # file not found
                 # decode
-                r = pson.load(f)
+                r = json.load(f)
                 f.close()
                 return r
             except Exception as e:

@@ -33,7 +33,7 @@ f 644 root root /usr/share/streamtuner2/streamtuner2.png	./streamtuner2.png
 f 644 root root /usr/share/pixmaps/streamtuner2.png		./logo.png
 f 644 root root /usr/share/streamtuner2/gtk2.xml		./gtk2.xml
 f 644 root root /usr/share/streamtuner2/gtk3.xml		./gtk3.xml
-f 644 root root /usr/share/streamtuner2/pson.py			./pson.py
+#f 644 root root /usr/share/streamtuner2/pson.py			./pson.py
 #f 644 root root /usr/share/streamtuner2/processing.py		./processing.py
 f 644 root root /usr/share/streamtuner2/action.py		./action.py
 f 644 root root /usr/share/streamtuner2/config.py		./config.py
