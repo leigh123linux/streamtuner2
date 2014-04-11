@@ -237,7 +237,7 @@ class GenericChannel(object):
             diff = []
             new = [row.get("url","http://example.com/") for row in new]
             for row in old:
-                if (url in row and (row.get("url") not in new)):
+                if ("url" in row and (row.get("url") not in new)):
                     row["deleted"] = 1
                     diff.append(row)
             return diff
