@@ -19,12 +19,12 @@
 
 
 import ahttp as http
-import urllib
 import re
 from config import conf, __print__, dbg
 from pq import pq
 #from channels import *    # works everywhere but in this plugin(???!)
 import channels
+from compat2and3 import urllib
 
 
 
