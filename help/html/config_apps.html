@@ -1,0 +1,117 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Audio players</title>
+<link rel="stylesheet" type="text/css" href="C.css">
+<script type="text/javascript" src="jquery.js"></script><script type="text/javascript" src="jquery.syntax.js"></script><script type="text/javascript" src="yelp.js"></script>
+</head>
+<body><div class="page" role="main">
+<div class="header"><div class="trails" role="navigation"><div class="trail">
+<a class="trail" href="index.html" title="♪ Streamtuner2"><span class="media"><span class="media media-image"><img src="img/logo.png" class="media media-inline" alt="♪"></span></span> Streamtuner2 </a> › <a class="trail" href="index.html#configuration" title="Configuration">Configuration</a> » <a class="trail" href="configuration.html" title="Settings dialog">Settings dialog</a> › <a class="trail" href="configuration.html#apps" title="Player application settings">Player application settings</a> » </div></div></div>
+<div class="body">
+<div class="hgroup"><h1 class="title"><span class="title">Audio players</span></h1></div>
+<div class="region">
+<div class="contents">
+<p class="p">On BSD/Linux systems there are a plethora of audio players. In streamtuner2 you can
+	configure most of them as target application. Mostly it makes sense to use a single
+	application for all audio formats. But at least the */* media type should be handled
+	by a generic player, like vlc.</p>
+<div class="table"><div class="inner"><div class="region"><table class="table">
+<tr>
+<td></td>
+<td style="border-left-style: solid;"></td>
+<td style="border-left-style: solid;"></td>
+</tr>
+<tr class="shade">
+<td style="border-top-style: solid;"></td>
+<td style="border-top-style: solid;border-left-style: solid;"></td>
+<td style="border-top-style: solid;border-left-style: solid;"></td>
+</tr>
+<tr>
+<td style="border-top-style: solid;"></td>
+<td style="border-top-style: solid;border-left-style: solid;"></td>
+<td style="border-top-style: solid;border-left-style: solid;"></td>
+</tr>
+<tr class="shade">
+<td style="border-top-style: solid;"></td>
+<td style="border-top-style: solid;border-left-style: solid;"></td>
+<td style="border-top-style: solid;border-left-style: solid;"></td>
+</tr>
+<tr>
+<td style="border-top-style: solid;"></td>
+<td style="border-top-style: solid;border-left-style: solid;"></td>
+<td style="border-top-style: solid;border-left-style: solid;"></td>
+</tr>
+<tr class="shade">
+<td style="border-top-style: solid;"></td>
+<td style="border-top-style: solid;border-left-style: solid;"></td>
+<td style="border-top-style: solid;border-left-style: solid;"></td>
+</tr>
+<tr>
+<td style="border-top-style: solid;"></td>
+<td style="border-top-style: solid;border-left-style: solid;"></td>
+<td style="border-top-style: solid;border-left-style: solid;"></td>
+</tr>
+<tr class="shade">
+<td style="border-top-style: solid;"></td>
+<td style="border-top-style: solid;border-left-style: solid;"></td>
+<td style="border-top-style: solid;border-left-style: solid;"></td>
+</tr>
+<tr>
+<td style="border-top-style: solid;"></td>
+<td style="border-top-style: solid;border-left-style: solid;"></td>
+<td style="border-top-style: solid;border-left-style: solid;"></td>
+</tr>
+</table></div></div></div>
+<p class="p">Some audio players open a second instance when you actually want to switch radios.
+	In this case it's a common workaround to write <span class="code">pkill vlc ; vlc %u</span> instead.
+	This ends the previous player and starts it anew.</p>
+<p class="p">Some applications, like Rhythmbox or Banshee, are pure GUI applications and cannot
+	be invoked with a play URL by other apps. This makes them unsuitable for use with
+	streamtuner2.</p>
+</div>
+<div id="abbr" class="sect"><div class="inner">
+<div class="hgroup"><h2 class="title"><span class="title">URL placeholders</span></h2></div>
+<div class="region"><div class="contents">
+<p class="p">Any listed application can be invoked with a different kind of URL or filename.be invoked with a play URL by other apps.
+	Which to use often depends on the application.</p>
+<div class="table"><div class="inner"><div class="region"><table class="table">
+<tr>
+<td></td>
+<td style="border-left-style: solid;"></td>
+<td style="border-left-style: solid;"></td>
+</tr>
+<tr class="shade">
+<td style="border-top-style: solid;"></td>
+<td style="border-top-style: solid;border-left-style: solid;"></td>
+<td style="border-top-style: solid;border-left-style: solid;"></td>
+</tr>
+<tr>
+<td style="border-top-style: solid;"></td>
+<td style="border-top-style: solid;border-left-style: solid;"></td>
+<td style="border-top-style: solid;border-left-style: solid;"></td>
+</tr>
+<tr class="shade">
+<td style="border-top-style: solid;"></td>
+<td style="border-top-style: solid;border-left-style: solid;"></td>
+<td style="border-top-style: solid;border-left-style: solid;"></td>
+</tr>
+</table></div></div></div>
+<p class="p">You sould preferrably use the long forms. Most audio players like %m3u most, while
+	streamripper needs %srv for recording.</p>
+</div></div>
+</div></div>
+<div class="sect sect-links" role="navigation">
+<div class="hgroup"></div>
+<div class="contents"><div class="links guidelinks"><div class="inner">
+<div class="title"><h2><span class="title">More Information</span></h2></div>
+<div class="region"><ul><li class="links "><a href="configuration.html#apps" title="Player application settings">Player application settings</a></li></ul></div>
+</div></div></div>
+</div>
+</div>
+<div class="clear"></div>
+</div>
+<div class="footer"></div>
+</div></body>
+</html>

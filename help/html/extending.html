@@ -1,0 +1,69 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Extension Howto</title>
+<link rel="stylesheet" type="text/css" href="C.css">
+<script type="text/javascript" src="jquery.js"></script><script type="text/javascript" src="jquery.syntax.js"></script><script type="text/javascript" src="yelp.js"></script>
+</head>
+<body><div class="page" role="main">
+<div class="header"><div class="trails" role="navigation"><div class="trail">
+<a class="trail" href="index.html" title="♪ Streamtuner2"><span class="media"><span class="media media-image"><img src="img/logo.png" class="media media-inline" alt="♪"></span></span> Streamtuner2 </a> › <a class="trail" href="index.html#advanced" title="Advanced topics">Advanced topics</a> » </div></div></div>
+<div class="body">
+<div class="hgroup"><h1 class="title"><span class="title">Extension Howto</span></h1></div>
+<div class="region">
+<div class="contents">
+<p class="p">Streamtuner2 is written in Python, a rather easy programming language. And it's also rather simple
+	to write a new channel plugin.</p>
+<p class="p">The basic layout of every channel plugin is as follows:</p>
+<p class="p"><span class="code">
+
+from channels import *
+
+class myplugin (ChannelPlugin):
+
+    title = "MyNewChannel"
+    module = "myplugin"
+    homepage = "http://www.mymusicstation.com/"
+    categories = []
+
+
+
+    def update_categories(self):
+    
+        self.categories = []
+
+
+
+    def update_streams(self, cat, force=0):
+
+        entries = []
+
+        # ...
+        # get it from somewhere
+        # ...        
+
+        return entries
+        
+	</span></p>
+<p class="p">There are some self-explanatory description fields, and two important methods. Sometimes you
+        don't need categories even. The update_streams() function often downloads a website, parses it
+	with regular expressions or PyQuery / DOM methods, and packs into into a result list.</p>
+<p class="p">Here entries is a list of dictionaries, with standardized entry names like "title" and "playing"
+	for the description, and "homepage" for a browsable link, and most importantly "url" for the
+	actual streaming link. Often you want to add a "genre" and "format" and "bitrate" info. But this depends
+	on your plugins data source, really.</p>
+</div>
+<div class="sect sect-links" role="navigation">
+<div class="hgroup"></div>
+<div class="contents"><div class="links guidelinks"><div class="inner">
+<div class="title"><h2><span class="title">More Information</span></h2></div>
+<div class="region"><ul><li class="links "><a href="index.html#advanced" title="Advanced topics">Advanced topics</a></li></ul></div>
+</div></div></div>
+</div>
+</div>
+<div class="clear"></div>
+</div>
+<div class="footer"></div>
+</div></body>
+</html>

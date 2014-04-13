@@ -1,0 +1,72 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Timer</title>
+<link rel="stylesheet" type="text/css" href="C.css">
+<script type="text/javascript" src="jquery.js"></script><script type="text/javascript" src="jquery.syntax.js"></script><script type="text/javascript" src="yelp.js"></script>
+</head>
+<body><div class="page" role="main">
+<div class="header"><div class="trails" role="navigation">
+<div class="trail">
+<a class="trail" href="index.html" title="♪ Streamtuner2"><span class="media"><span class="media media-image"><img src="img/logo.png" class="media media-inline" alt="♪"></span></span> Streamtuner2 </a> › <a class="trail" href="index.html#advanced" title="Advanced topics">Advanced topics</a> » </div>
+<div class="trail">
+<a class="trail" href="index.html" title="♪ Streamtuner2"><span class="media"><span class="media media-image"><img src="img/logo.png" class="media media-inline" alt="♪"></span></span> Streamtuner2 </a> › <a class="trail" href="index.html#browsing" title="Browsing channels and radio stations">Browsing channels and radio stations</a> » <a class="trail" href="streams.html" title="Streams / Stations">Streams / Stations</a> › <a class="trail" href="streams.html#actions" title="Actions">Actions</a> » <a class="trail" href="bookmarks.html" title="Bookmarks">Bookmarks</a> › <a class="trail" href="bookmarks.html#other" title="Subcategories">Subcategories</a> » </div>
+<div class="trail">
+<a class="trail" href="index.html" title="♪ Streamtuner2"><span class="media"><span class="media media-image"><img src="img/logo.png" class="media media-inline" alt="♪"></span></span> Streamtuner2 </a> › <a class="trail" href="index.html#browsing" title="Browsing channels and radio stations">Browsing channels and radio stations</a> » <a class="trail" href="channels.html" title="Channels">Channels</a> › <a class="trail" href="channels.html#list" title="Available channels">Available channels</a> » <a class="trail" href="bookmarks.html" title="Bookmarks">Bookmarks</a> › <a class="trail" href="bookmarks.html#other" title="Subcategories">Subcategories</a> » </div>
+<div class="trail">
+<a class="trail" href="index.html" title="♪ Streamtuner2"><span class="media"><span class="media media-image"><img src="img/logo.png" class="media media-inline" alt="♪"></span></span> Streamtuner2 </a> › <a class="trail" href="index.html#channels" title="Channel tabs">Channel tabs</a> » <a class="trail" href="bookmarks.html" title="Bookmarks">Bookmarks</a> › <a class="trail" href="bookmarks.html#other" title="Subcategories">Subcategories</a> » </div>
+</div></div>
+<div class="body">
+<div class="hgroup"><h1 class="title"><span class="title">Timer</span></h1></div>
+<div class="region">
+<div class="contents">
+<p class="p">You can programm play/recording events with the timer plugin. Simply select a station
+	and choose <span class="guiseq"><span class="gui">Station</span> ▸ <span class="gui">Extensions</span> ▸ <span class="gui">Add timer...</span></span>.
+	A small popup will ask for a data/time string. If you press <span class="key"><kbd>OK</kbd></span> the station
+	and the programmed time
+	will be stored in the bookmarks channel in the "timer" category.</p>
+<div class="note note-tip" title="Tip"><div class="inner"><div class="region"><div class="contents"><p class="p">Note that streamtuner2 must be running for the programmed timer events to work.
+	(In a future version there might be the option to have it handled by the system cron
+	daemon.)</p></div></div></div></div>
+</div>
+<div id="timestring" class="sect"><div class="inner">
+<div class="hgroup"><h2 class="title"><span class="title">Time specification strings</span></h2></div>
+<div class="region"><div class="contents">
+<p class="p">The time and date specificators follow a simple scheme. It's always one or more day names
+	followed by a clock range, and finally the action.</p>
+<p class="p">For example "<span class="code">Mon,Tue,Wed</span>" will make the event occour on the first
+	three days of each week, while just "Fri" would limit it to Fridays.</p>
+<p class="p">A clock range of "<span class="code">18:00-20:00</span>"
+	would start the event at 18 o'clock and last it two hours. Note that for "play" events, the end
+	time is irrelevant, since streamtuner2 can't kill your audio player anyway.</p>
+<p class="p">The end time is only important, if you replace "play" with the word "<span class="code">record</span>"
+        in the timer event string. This runs streamripper instead and limits the recording time.</p>
+</div></div>
+</div></div>
+<div id="editing" class="sect"><div class="inner">
+<div class="hgroup"><h2 class="title"><span class="title">Editing events</span></h2></div>
+<div class="region"><div class="contents">
+<p class="p">You can remove entries from the "timer" list again. Use the normal <span class="guiseq"><span class="gui">Edit</span> ▸ <span class="gui">Delete</span></span> for
+	that. It's also possible to modify the date+time strings by editing the stream info and
+	the specification in the "playing" field.</p>
+<div class="note note-warning" title="Warning"><div class="inner"><div class="region"><div class="contents"><p class="p">However, such changes don't take effect until you restart streamtuner2. The timer
+	events are only scheduled when adding a new event, or on starting streamtuner2.</p></div></div></div></div>
+</div></div>
+</div></div>
+<div class="sect sect-links" role="navigation">
+<div class="hgroup"></div>
+<div class="contents"><div class="links guidelinks"><div class="inner">
+<div class="title"><h2><span class="title">More Information</span></h2></div>
+<div class="region"><ul>
+<li class="links "><a href="index.html#advanced" title="Advanced topics">Advanced topics</a></li>
+<li class="links "><a href="bookmarks.html#other" title="Subcategories">Subcategories</a></li>
+</ul></div>
+</div></div></div>
+</div>
+</div>
+<div class="clear"></div>
+</div>
+<div class="footer"></div>
+</div></body>
+</html>
