@@ -13,14 +13,15 @@
 	<section id="dependecies">
   	  <title>Dependencies</title>
         <terms>
-          <item><p>Python 2.5</p></item>
-          <item><p>PyGtk</p></item>
-          <item><p>Gtk+ 2.12</p></item>
+          <item><p>Python 2.7 or 3.x</p></item>
+          <item><p>PyGtk or PyGI</p></item>
+          <item><p>Gtk2 or Gtk3</p></item>
 	</terms>
         <terms>
   	  <title>Soft dependencies</title>
           <item><p>Python-LXML</p></item>
           <item><p>Python-PyQuery</p></item>
+          <item><p>Python-Kronos</p></item>
           <item><p>Audacious</p></item>
 	</terms>
 	</section>
