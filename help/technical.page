@@ -49,7 +49,7 @@
           </item>
           <item>
             <title>~/.config/streamtuner2/bookmarks.json</title>
-            <p>Is a separate cahce file for your bookmarked/favourite radio stations.</p>
+            <p>Is a separate cache file for your bookmarked/favourite radio stations.</p>
           </item>
           <item>
             <title>~/.config/streamtuner2/cache/***.json</title>
@@ -84,8 +84,10 @@
 
 	<section id="license">
 	<title>Public Domain</title>
-	<p>There is no licensing requirement with this application. All code can be copied, modified
+	<p>The majority of code distributed with ST2 is placed into the Public Domain; meaning
+        no licensing requirement and all code can be copied, modified
 	and distributed unrestrictively.</p>
+        <p>The bundled kronos.py and requests/ library are NOT however.</p>
 	</section>
 
 
