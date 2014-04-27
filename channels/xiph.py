@@ -2,15 +2,15 @@
 # api: streamtuner2
 # title: Xiph.org
 # description: Xiph/ICEcast radio directory
-# version: 0.1
+# version: 0.2
 #
 #
 # Xiph.org maintains the Ogg streaming standard and Vorbis audio compression
 # format, amongst others. The ICEcast server is an alternative to SHOUTcast.
-# But it turns out, that Xiph lists only MP3 streams, no OGG. And the directory
-# is less encompassing than Shoutcast.
 #
-#
+# It meanwhile provides a JSOL dump, which is faster to download and process.
+# So we'll use that over the older yp.xml. (Sadly it also doesn't output
+# homepage URLs, listeners, etc.)
 #
 #
 
@@ -22,11 +22,12 @@ from mygtk import mygtk
 import ahttp as http
 from channels import *
 from config import __print__, dbg
+import json
 
 # python modules
 import re
-from xml.sax.saxutils import unescape as entity_decode, escape as xmlentities
-import xml.dom.minidom
+#from xml.sax.saxutils import unescape as entity_decode, escape as xmlentities
+#import xml.dom.minidom
 
 
 
@@ -38,10 +39,11 @@ class xiph (ChannelPlugin):
         api = "streamtuner2"
         module = "xiph"
         title = "Xiph.org"
-        version = 0.1
+        version = 0.2
         homepage = "http://dir.xiph.org/"
-        base_url = "http://dir.xiph.org/"
-        yp = "yp.xml"
+        base_url = "http://api.dir.xiph.org/"
+        json = "experimental/full"
+        old_yp = "yp.xml"
         listformat = "url/http"
         config = [
            {"name":"xiph_min_bitrate", "value":64, "type":"int", "description":"minimum bitrate, filter anything below", "category":"filter"}
@@ -121,25 +123,29 @@ class xiph (ChannelPlugin):
             if (cat == "all"):
             
                 #-- get data
-                yp = http.get(self.base_url + self.yp)
+                data = http.get(self.base_url + self.json)
+                data = re.sub('":NaN,', '":0,', data)   # the output is JSOL, not valid JSON
+                data = re.sub('[\\\\]"(?!,)', '\'', data)   # and some invalid string escaping
+                data = re.sub('[\\\\]{1}', '', data)   # and all other backslashes to be safe
+                data = data.decode("latin-1")
                 
                 #-- extract
                 l = []
-                __print__( dbg.DATA, "xml.dom.minidom parses yp.xml" )
-                for entry in xml.dom.minidom.parseString(yp).getElementsByTagName("entry"):
-                    bitrate = self.bitrate(self.x(entry, "bitrate"))
+                __print__( dbg.DATA, "processing dir.xiph.org/experimental/full JSON" )
+                for e in json.loads(data):
+                    bitrate = e["bitrate"]
                     if conf.xiph_min_bitrate and bitrate and bitrate >= int(conf.xiph_min_bitrate):
                       l.append({
-                        "title": str(self.x(entry, "server_name")),
-                        "url": str(self.x(entry, "listen_url")),
-                        "format": self.mime_fmt(str(self.x(entry, "server_type"))[6:]),
-                        "bitrate": bitrate,
-                        "channels": str(self.x(entry, "channels")),
-                        "samplerate": str(self.x(entry, "samplerate")),
-                        "genre": str(self.x(entry, "genre")),
-                        "playing": str(self.x(entry, "current_song")),
+                        "title": e["stream_name"],
+                        "url": e["listen_url"],
+                        "format": "audio/mpeg",
+                        "bitrate": int(e["bitrate"]),
+                        "channels": e["channels"],
+                        "samplerate": e["samplerate"],
+                        "genre": e["genre"],
+                        "playing": e["current_song"],
                         "listeners": 0,
-                        "max": 0,              # this information is in the html view, but not in the yp.xml (seems pretty static, we might as well make it a built-in list)
+                        "max": 0,
                         "homepage": "",
                       })
                 
