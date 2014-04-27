@@ -4,7 +4,7 @@
 # type: application
 # title: streamtuner2
 # description: directory browser for internet radio / audio streams
-# depends: gtk, pygtk, xml.dom.minidom, threading, lxml, pyquery, kronos
+# depends: pygtk | pygi, threading, pyquery, kronos, requests
 # version: 2.0.9.7
 # author: mario salzer
 # license: public domain
@@ -78,6 +78,7 @@ except:
 
 # add library path
 sys.path.insert(0, "/usr/share/streamtuner2")   # pre-defined directory for modules
+sys.path.insert(0, "/usr/share/streamtuner2/bundle")   # external libraries
 sys.path.insert(0, ".")   # development module path
 
 # gtk modules
