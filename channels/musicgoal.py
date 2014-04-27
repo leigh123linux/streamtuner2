@@ -70,7 +70,7 @@ class musicgoal (ChannelPlugin):
                 return []
                 
             # retrieve API data
-            data = http.ajax(url, None)
+            data = http.get(url, params=None, ajax=1)
             data = json.loads(data)
                 
             # tranform datasets            

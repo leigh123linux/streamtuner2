@@ -121,10 +121,11 @@ class xiph (ChannelPlugin):
             if (cat == "all"):
             
                 #-- get data
-                yp = http.get(self.base_url + self.yp, 1<<22, feedback=self.parent.status)
+                yp = http.get(self.base_url + self.yp)
                 
                 #-- extract
                 l = []
+                __print__( dbg.DATA, "xml.dom.minidom parses yp.xml" )
                 for entry in xml.dom.minidom.parseString(yp).getElementsByTagName("entry"):
                     bitrate = self.bitrate(self.x(entry, "bitrate"))
                     if conf.xiph_min_bitrate and bitrate and bitrate >= int(conf.xiph_min_bitrate):

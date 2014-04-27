@@ -157,11 +157,11 @@ class myoggradio(ChannelPlugin):
             # just push data in, like the form does
             if form:
                 self.login()
-                http.ajax(self.api + "c_neu.jsp", submit)
+                http.get(self.api + "c_neu.jsp", params=submit, ajax=1, post=1)
 
             # use JSON interface
             else:
-                http.ajax(self.api + "commonadd.json?" + urllib.urlencode(submit))
+                http.get(self.api + "commonadd.json", params=submit, ajax=1)
     
             
     # authenticate against MyOggRadio
@@ -169,7 +169,7 @@ class myoggradio(ChannelPlugin):
         login = self.user_pw()    
         if login:
             data = dict(zip(["benutzer", "passwort"], login))
-            http.ajax(self.api + "c_login.jsp", data)
+            http.get(self.api + "c_login.jsp", params=data, ajax=1)
             # let's hope the JSESSIONID cookie is kept
 
 

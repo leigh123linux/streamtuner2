@@ -12,18 +12,19 @@
 #
 
 
-from compat2and3 import urllib2, urlencode, urlparse, cookielib, StringIO, xrange, PY3
-from gzip import GzipFile
 from config import conf, __print__, dbg
 import requests
 import copy
 
 
 
-#-- chains to progress meter and status bar in main window
+#-- hooks to progress meter and status bar in main window
 feedback = None
 
-# sets either text or percentage, so may take two parameters
+# Sets either text or percentage of main windows' status bar.
+#
+# Can either take a float parameter (e.g. 0.99 for % indicator)
+# or text message. Alternatively two parameters to update both.
 def progress_feedback(*args):
 
   # use reset values if none given
@@ -38,7 +39,7 @@ def progress_feedback(*args):
 
 
 
-# default HTTP headers for AJAX/POST request
+# default HTTP headers for requests
 default_headers = {
     "User-Agent": "streamtuner2/2.1 (X11; U; Linux AMD64; en; rv:1.5.0.1) like WinAmp/2.1 but not like Googlebot/2.1", #"Mozilla/5.0 (X11; U; Linux x86_64; de; rv:1.9.2.6) Gecko/20100628 Ubuntu/10.04 (lucid) Firefox/3.6.6",
     "Accept": "*/*;q=0.5, audio/*, url/*",
@@ -53,8 +54,11 @@ default_headers = {
 
 
 
-#-- GET
-def get(url, params={}, referer="", post=0, ajax=0, binary=0):
+#-- Retrieve data via HTTP
+#
+#  Well, it says "get", but it actually does POST and AJAXish GET requests too.
+#
+def get(url, params={}, referer="", post=0, ajax=0, binary=0, feedback=None):
     __print__( dbg.HTTP, "GET", url)
 
     # statusbar info
@@ -69,10 +73,8 @@ def get(url, params={}, referer="", post=0, ajax=0, binary=0):
     
     # read
     if post:
-        __print__("POST")
         r = requests.post(url, params=params, headers=headers)
     else:    
-        __print__("GET")
         r = requests.get(url, params=params, headers=headers)
         
     # result
@@ -87,13 +89,7 @@ def get(url, params={}, referer="", post=0, ajax=0, binary=0):
 
 
 
-# simulate ajax calls
-def ajax(url, params, referer="", binary=0):
-    get(url, params, referer, binary, ajax=1)
-
-
-
-#-- fix invalid URLs
+#-- Append missing trailing slash to URLs
 def fix_url(url):
     if url is None:
         url = ""

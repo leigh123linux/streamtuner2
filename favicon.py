@@ -88,7 +88,7 @@ def google_find_homepage(row):
             title = title.group(0).replace(" ", "%20")
             
             # do a google search
-            html = ahttp.ajax("http://www.google.de/search?hl=de&q="+title, None)
+            html = ahttp.get("http://www.google.de/search?hl=de&q="+title, params={}, ajax=1)
             
             # find first URL hit
             url = rx_u.search(html)
