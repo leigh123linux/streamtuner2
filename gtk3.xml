@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.16.1 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="search_dialog">
     <property name="can_focus">False</property>
+    <property name="opacity">0.95999999999999996</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">station search</property>
     <property name="window_position">center-on-parent</property>
     <property name="type_hint">dialog</property>
     <property name="deletable">False</property>
     <property name="gravity">center</property>
-    <property name="opacity">0.95999999999999996</property>
     <signal name="close" handler="search_cancel" swapped="no"/>
     <signal name="delete-event" handler="search_cancel" swapped="no"/>
     <child internal-child="vbox">
@@ -29,7 +30,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <signal name="clicked" handler="search_cancel" swapped="no"/>
               </object>
               <packing>
@@ -43,7 +43,6 @@
                 <property name="use_action_appearance">False</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -59,7 +58,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes">Instead of searching in the station list, just look up the above search term on google.</property>
-                <property name="use_action_appearance">False</property>
                 <property name="relief">half</property>
                 <signal name="clicked" handler="search_google" swapped="no"/>
               </object>
@@ -77,7 +75,6 @@
                 <property name="can_focus">False</property>
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes">Instead of doing a cache search, go through the search functions on the directory service homepages. (UNIMPLEMENTED)</property>
-                <property name="use_action_appearance">False</property>
                 <property name="relief">half</property>
                 <signal name="clicked" handler="search_srv" swapped="no"/>
               </object>
@@ -97,10 +94,9 @@
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes">Start searching for above search term in the currently loaded station lists. Doesn't find *new* information, just looks through the known data.</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_underline">True</property>
-                <accelerator key="Return" signal="activate"/>
                 <signal name="clicked" handler="search_go" swapped="no"/>
+                <accelerator key="Return" signal="activate"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -280,13 +276,147 @@
                   <placeholder/>
                 </child>
                 <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
                   <object class="GtkCheckButton" id="search_channel_all">
                     <property name="label" translatable="yes">all channels</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="xalign">0.5</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
@@ -365,7 +495,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="relief">none</property>
                   </object>
                   <packing>
@@ -381,7 +510,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="xalign">0.5</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
@@ -399,7 +527,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="xalign">0.5</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
@@ -417,7 +544,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="xalign">0.5</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -434,7 +560,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="relief">none</property>
                   </object>
                   <packing>
@@ -464,7 +589,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="relief">none</property>
                   </object>
                   <packing>
@@ -480,7 +604,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="xalign">0.5</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
@@ -498,7 +621,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="xalign">0.5</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -515,7 +637,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="xalign">0.5</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -532,7 +653,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="relief">none</property>
                   </object>
                   <packing>
@@ -692,7 +812,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <signal name="clicked" handler="timer_cancel" swapped="no"/>
               </object>
               <packing>
@@ -708,7 +827,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <signal name="clicked" handler="timer_ok" swapped="no"/>
               </object>
               <packing>
@@ -786,6 +904,60 @@
               <placeholder/>
             </child>
             <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
               <object class="GtkEntry" id="timer_value">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -800,6 +972,15 @@
                 <property name="top_attach">1</property>
                 <property name="bottom_attach">2</property>
               </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
             </child>
             <child>
               <placeholder/>
@@ -1012,7 +1193,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="invisible_char">●</property>
-                                <property name="invisible_char_set">True</property>
                                 <property name="primary_icon_activatable">False</property>
                                 <property name="secondary_icon_activatable">False</property>
                               </object>
@@ -1030,7 +1210,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="invisible_char">●</property>
-                                <property name="invisible_char_set">True</property>
                                 <property name="primary_icon_activatable">False</property>
                                 <property name="secondary_icon_activatable">False</property>
                               </object>
@@ -1048,7 +1227,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="invisible_char">●</property>
-                                <property name="invisible_char_set">True</property>
                                 <property name="primary_icon_activatable">False</property>
                                 <property name="secondary_icon_activatable">False</property>
                               </object>
@@ -1066,7 +1244,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="invisible_char">●</property>
-                                <property name="invisible_char_set">True</property>
                                 <property name="primary_icon_activatable">False</property>
                                 <property name="secondary_icon_activatable">False</property>
                               </object>
@@ -1114,7 +1291,6 @@ represent direct URLs to the streaming servers.</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="invisible_char">●</property>
-                                <property name="invisible_char_set">True</property>
                                 <property name="primary_icon_activatable">False</property>
                                 <property name="secondary_icon_activatable">False</property>
                               </object>
@@ -1170,7 +1346,6 @@ represent direct URLs to the streaming servers.</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="invisible_char">●</property>
-                                <property name="invisible_char_set">True</property>
                                 <property name="primary_icon_activatable">False</property>
                                 <property name="secondary_icon_activatable">False</property>
                               </object>
@@ -1188,7 +1363,6 @@ represent direct URLs to the streaming servers.</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="invisible_char">●</property>
-                                <property name="invisible_char_set">True</property>
                                 <property name="primary_icon_activatable">False</property>
                                 <property name="secondary_icon_activatable">False</property>
                               </object>
@@ -1217,7 +1391,6 @@ represent direct URLs to the streaming servers.</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="invisible_char">●</property>
-                                <property name="invisible_char_set">True</property>
                                 <property name="primary_icon_activatable">False</property>
                                 <property name="secondary_icon_activatable">False</property>
                               </object>
@@ -1370,13 +1543,48 @@ represent direct URLs to the streaming servers.</property>
                               <placeholder/>
                             </child>
                             <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
                               <object class="GtkCheckButton" id="config_show_bookmarks">
                                 <property name="label" translatable="yes">show bookmark star for favourites in stream lists</property>
                                 <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                               </object>
@@ -1400,7 +1608,6 @@ represent direct URLs to the streaming servers.</property>
                                     <property name="width_chars">4</property>
                                     <property name="text" translatable="yes">120</property>
                                     <property name="shadow_type">out</property>
-                                    <property name="invisible_char_set">True</property>
                                     <property name="primary_icon_activatable">False</property>
                                     <property name="secondary_icon_activatable">False</property>
                                   </object>
@@ -1436,7 +1643,6 @@ represent direct URLs to the streaming servers.</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                               </object>
@@ -1454,7 +1660,6 @@ represent direct URLs to the streaming servers.</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                               </object>
@@ -1472,7 +1677,6 @@ represent direct URLs to the streaming servers.</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                               </object>
@@ -1490,7 +1694,6 @@ represent direct URLs to the streaming servers.</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                               </object>
@@ -1508,7 +1711,6 @@ represent direct URLs to the streaming servers.</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                               </object>
@@ -1541,7 +1743,6 @@ channel tabs</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="invisible_char">●</property>
-                                    <property name="invisible_char_set">True</property>
                                     <property name="primary_icon_activatable">False</property>
                                     <property name="secondary_icon_activatable">False</property>
                                   </object>
@@ -1566,7 +1767,6 @@ channel tabs</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                               </object>
@@ -1806,6 +2006,78 @@ channel tabs</property>
                               <placeholder/>
                             </child>
                             <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
                               <object class="GtkLabel" id="label23">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
@@ -1835,7 +2107,6 @@ files</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="invisible_char">●</property>
-                                <property name="invisible_char_set">True</property>
                                 <property name="primary_icon_activatable">False</property>
                                 <property name="secondary_icon_activatable">False</property>
                               </object>
@@ -1910,7 +2181,6 @@ different location.</property>
                                 <property name="can_focus">True</property>
                                 <property name="editable">False</property>
                                 <property name="invisible_char">●</property>
-                                <property name="invisible_char_set">True</property>
                                 <property name="primary_icon_activatable">False</property>
                                 <property name="secondary_icon_activatable">False</property>
                               </object>
@@ -1928,7 +2198,6 @@ different location.</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="xalign">0.5</property>
                                 <property name="draw_indicator">True</property>
                               </object>
@@ -2246,7 +2515,6 @@ Plugins</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="use_action_appearance">False</property>
                     <signal name="clicked" handler="config_cancel" swapped="no"/>
                   </object>
                   <packing>
@@ -2264,7 +2532,6 @@ Plugins</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="use_action_appearance">False</property>
                     <signal name="clicked" handler="config_save" swapped="no"/>
                   </object>
                   <packing>
@@ -2295,12 +2562,12 @@ Plugins</property>
   </object>
   <object class="GtkWindow" id="win_streamedit">
     <property name="can_focus">False</property>
+    <property name="opacity">0.94999999999999996</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">inspect/edit stream data</property>
     <property name="window_position">center-on-parent</property>
     <property name="skip_pager_hint">True</property>
     <property name="deletable">False</property>
-    <property name="opacity">0.94999999999999996</property>
     <signal name="delete-event" handler="streamedit_cancel" swapped="no"/>
     <child>
       <object class="GtkTable" id="table6">
@@ -2494,7 +2761,6 @@ Plugins</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <signal name="clicked" handler="streamedit_cancel" swapped="no"/>
               </object>
               <packing>
@@ -2512,7 +2778,6 @@ Plugins</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes">Save changes.</property>
-                <property name="use_action_appearance">False</property>
                 <signal name="clicked" handler="streamedit_save" swapped="no"/>
               </object>
               <packing>
@@ -2529,7 +2794,6 @@ Plugins</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <signal name="clicked" handler="streamedit_new" swapped="no"/>
               </object>
               <packing>
@@ -2633,11 +2897,6 @@ Plugins</property>
     <property name="default_height">775</property>
     <property name="icon">/usr/share/pixmaps/streamtuner2.png</property>
     <property name="icon_name">applications-multimedia</property>
-    <child internal-child="accessible">
-      <object class="AtkObject" id="win_streamtuner2-atkobject">
-        <property name="AtkObject::accessible-name" translatable="yes">streamtuner2</property>
-      </object>
-    </child>
     <signal name="delete-event" handler="gtk_main_quit" swapped="no"/>
     <child>
       <object class="GtkVBox" id="vbox2">
@@ -2676,9 +2935,9 @@ Plugins</property>
                                 <property name="can_focus">False</property>
                                 <property name="label" translatable="yes">bookmark</property>
                                 <property name="use_underline">True</property>
-                                <accelerator key="d" signal="activate" modifiers="GDK_CONTROL_MASK"/>
-                                <accelerator key="F8" signal="activate"/>
                                 <signal name="activate" handler="bookmark" swapped="no"/>
+                                <accelerator key="F8" signal="activate"/>
+                                <accelerator key="d" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                               </object>
                             </child>
                             <child>
@@ -2689,9 +2948,9 @@ Plugins</property>
                                 <property name="can_focus">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
-                                <accelerator key="F2" signal="activate"/>
-                                <accelerator key="s" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                                 <signal name="activate" handler="save_as" swapped="no"/>
+                                <accelerator key="s" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+                                <accelerator key="F2" signal="activate"/>
                               </object>
                             </child>
                             <child>
@@ -2702,10 +2961,10 @@ Plugins</property>
                                 <property name="can_focus">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
-                                <accelerator key="F3" signal="activate"/>
-                                <accelerator key="space" signal="activate" modifiers="GDK_MOD1_MASK"/>
-                                <accelerator key="Return" signal="activate" modifiers="GDK_MOD1_MASK"/>
                                 <signal name="activate" handler="streamedit_open" swapped="no"/>
+                                <accelerator key="Return" signal="activate" modifiers="GDK_MOD1_MASK"/>
+                                <accelerator key="space" signal="activate" modifiers="GDK_MOD1_MASK"/>
+                                <accelerator key="F3" signal="activate"/>
                               </object>
                             </child>
                             <child>
@@ -2743,8 +3002,8 @@ Plugins</property>
                                 <property name="can_focus">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
-                                <accelerator key="F4" signal="activate" modifiers="GDK_MOD1_MASK"/>
                                 <signal name="activate" handler="gtk_main_quit" swapped="no"/>
+                                <accelerator key="F4" signal="activate" modifiers="GDK_MOD1_MASK"/>
                               </object>
                             </child>
                           </object>
@@ -2782,9 +3041,9 @@ Plugins</property>
                                 <property name="can_focus">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
-                                <accelerator key="Delete" signal="activate"/>
-                                <accelerator key="x" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                                 <signal name="activate" handler="delete_entry" swapped="no"/>
+                                <accelerator key="x" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+                                <accelerator key="Delete" signal="activate"/>
                               </object>
                             </child>
                             <child>
@@ -2795,8 +3054,8 @@ Plugins</property>
                                 <property name="can_focus">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
-                                <accelerator key="f" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                                 <signal name="activate" handler="search_open" swapped="no"/>
+                                <accelerator key="f" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                               </object>
                             </child>
                             <child>
@@ -2910,8 +3169,8 @@ Plugins</property>
                                 <property name="can_focus">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
-                                <accelerator key="F12" signal="activate"/>
                                 <signal name="activate" handler="menu_properties" swapped="no"/>
+                                <accelerator key="F12" signal="activate"/>
                               </object>
                             </child>
                           </object>
@@ -2946,8 +3205,8 @@ Plugins</property>
                                 <property name="can_focus">False</property>
                                 <property name="label" translatable="yes">Reload</property>
                                 <property name="use_underline">True</property>
-                                <accelerator key="F5" signal="activate"/>
                                 <signal name="activate" handler="on_reload_clicked" swapped="no"/>
+                                <accelerator key="F5" signal="activate"/>
                               </object>
                             </child>
                             <child>
@@ -3060,7 +3319,6 @@ Plugins</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="label" translatable="yes">play</property>
                             <property name="stock_id">gtk-media-play</property>
                             <signal name="clicked" handler="on_play_clicked" swapped="no"/>
@@ -3075,7 +3333,6 @@ Plugins</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="label" translatable="yes">record</property>
                             <property name="stock_id">gtk-media-record</property>
                             <signal name="clicked" handler="on_record_clicked" swapped="no"/>
@@ -3090,7 +3347,6 @@ Plugins</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="label" translatable="yes">station</property>
                             <property name="stock_id">gtk-home</property>
                             <signal name="clicked" handler="on_homepage_stream_clicked" swapped="no"/>
@@ -3115,7 +3371,6 @@ Plugins</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="label" translatable="yes">reload</property>
                             <property name="stock_id">gtk-refresh</property>
                             <signal name="clicked" handler="on_reload_clicked" swapped="no"/>
@@ -3130,7 +3385,6 @@ Plugins</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="label" translatable="yes">stop</property>
                             <property name="stock_id">gtk-cancel</property>
                             <signal name="clicked" handler="on_stop_clicked" swapped="no"/>
@@ -3357,6 +3611,11 @@ Plugins</property>
             <property name="position">2</property>
           </packing>
         </child>
+      </object>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="win_streamtuner2-atkobject">
+        <property name="AtkObject::accessible-name" translatable="yes">streamtuner2</property>
       </object>
     </child>
   </object>

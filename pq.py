@@ -19,7 +19,7 @@ try:
     # pq.each_pq = lambda self,func:  self.each(   lambda i,html: func( pq(html, parser="html") )   )
 
 
-except Exception, e:
+except Exception as e:
 
     # disable use
     pq = None

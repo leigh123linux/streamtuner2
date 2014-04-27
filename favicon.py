@@ -28,13 +28,12 @@ google_placeholder_filesizes = (726,896)
 
 
 import os, os.path
-import urllib
+from compat2and3 import xrange, urllib
 import re
-import urlparse
 from config import conf
 try: from processing import Process as Thread
 except: from threading import Thread
-import http
+import ahttp
 
 
 
@@ -89,12 +88,12 @@ def google_find_homepage(row):
             title = title.group(0).replace(" ", "%20")
             
             # do a google search
-            html = http.ajax("http://www.google.de/search?hl=de&q="+title, None)
+            html = ahttp.ajax("http://www.google.de/search?hl=de&q="+title, None)
             
             # find first URL hit
             url = rx_u.search(html)
             if url:
-                row["homepage"] = http.fix_url(url.group(1))
+                row["homepage"] = ahttp.fix_url(url.group(1))
     pass
 #-----------------
 
@@ -195,9 +194,9 @@ def direct_download(favicon, fn):
     
     # abort on
     if r.getcode() >= 300:
-       raise "HTTP error", r.getcode()
+       raise Error("HTTP error" + r.getcode())
     if not headers["Content-Type"].lower().find("image/"):
-       raise "can't use text/* content"
+       raise Error("can't use text/* content")
        
     # save file
     fn_tmp = fn+".tmp"
@@ -236,7 +235,7 @@ def html_download(url):
        None
     # just /pathname
     else:
-       favicon = urlparse.urljoin(url, favicon)
+       favicon = ahttp.urlparse.urljoin(url, favicon)
        #favicon = "http://" + domain(url) + "/" + favicon
 
     # download
@@ -266,7 +265,7 @@ import struct
 
 try:
     from PIL import BmpImagePlugin, PngImagePlugin, Image
-except Exception, e:
+except Exception as e:
     print("no PIL", e)
     always_google = 1
     only_google = 1

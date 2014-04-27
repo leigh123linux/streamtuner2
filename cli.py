@@ -17,7 +17,7 @@
 
 import sys
 #from channels import *
-import http
+import ahttp
 import action
 from config import conf
 import json

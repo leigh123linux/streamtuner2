@@ -4,7 +4,7 @@
 # type: functions
 # title: mygtk helper functions
 # description: simplify usage of some gtk widgets
-# version: 1.6
+# version: 1.7
 # author: mario
 # license: public domain
 #
@@ -29,10 +29,21 @@
 # debug
 from config import __print__, dbg
 
+# filesystem
+import os.path
+import copy
+import sys
 
-# gtk modules
-gtk = 0   # 0=gtk2, else gtk3
-if gtk:
+from compat2and3 import unicode, xrange, PY3
+
+
+# gtk version (2=gtk2, 3=gtk3)
+ver = 2
+# if running on Python3 or with commandline flag
+if PY3 or "--gtk3" in sys.argv:
+    ver = 3
+# load gtk modules
+if ver==3:
     from gi import pygtkcompat as pygtk
     pygtk.enable() 
     pygtk.enable_gtk(version='3.0')
@@ -40,23 +51,16 @@ if gtk:
     from gi.repository import GObject as gobject
     from gi.repository import GdkPixbuf
     ui_file = "gtk3.xml"
-    __print__(gtk)
-    __print__(gobject)
-if not gtk:
+    empty_pixbuf = GdkPixbuf.Pixbuf.new_from_data(b"\0\0\0\0", GdkPixbuf.Colorspace.RGB, True, 8, 1, 1, 4, None, None)
+    __print__(dbg.PROC, gtk)
+    __print__(dbg.PROC, gobject)
+else:
     import pygtk
     import gtk
     import gobject
     ui_file = "gtk2.xml"
+    empty_pixbuf = gtk.gdk.pixbuf_new_from_data(b"\0\0\0\0",gtk.gdk.COLORSPACE_RGB,True,8,1,1,4)
 
-# filesystem
-import os.path
-import copy
-
-
-try:
-  empty_pixbuf = gtk.gdk.pixbuf_new_from_data(b"\0\0\0\0",gtk.gdk.COLORSPACE_RGB,True,8,1,1,4)
-except:
-  empty_pixbuf = GdkPixbuf.Pixbuf.new_from_data(b"\0\0\0\0", GdkPixbuf.Colorspace.RGB, True, 8, 1, 1, 4, None, None)
 
 
 
@@ -126,12 +130,12 @@ class mygtk:
                         # attach cell to column
                         col.pack_end(rend, expand=cell[3].get("expand",True))
                         # apply attributes
-                        for attr,val in cell[3].iteritems():
+                        for attr,val in list(cell[3].items()):
                             col.add_attribute(rend, attr, val)
                         # next
                         datapos += 1
 
-                        __print__(cell)
+                        __print__(dbg.INFO, cell, len(cell))
                     # add column to treeview
                     widget.append_column(col)
                 # finalize widget
@@ -154,8 +158,8 @@ class mygtk:
                             rowmap.append(desc[var][0])    # dict{} column keys in entries[] list
                 # create gtk array storage
                 ls = gtk.ListStore(*vartypes)   # could be a TreeStore, too
-                __print__(vartypes)
-                __print__(rowmap)
+                __print__(dbg.UI, vartypes, len(vartypes))
+                __print__(dbg.DATA, rowmap, len(rowmap))
 
                 # prepare for missing values, and special variable types
                 defaults = {
@@ -170,10 +174,17 @@ class mygtk:
                 
                 # sort data into gtk liststore array
                 for row in entries:
-#                    row["search_col"] = "white"
+
+                    # preset some values if absent
+                    row.setdefault("deleted", False)
+                    row.setdefault("search_col", "#ffffff")
+                    row.setdefault("search_set", False)
 
                     # generate ordered list from dictionary, using rowmap association
                     row = [   row.get( skey , defaults[vartypes[i]] )   for i,skey   in enumerate(rowmap)   ]
+
+                    # map Python2 unicode to str
+                    row = [ str(value) if type(value) is unicode else value  for value in row ]
 
                     # autotransform string -> gtk image object
                     if (pix_entry and type(row[pix_entry]) == str):
@@ -186,7 +197,7 @@ class mygtk:
                     except:
                         # brute-force typecast
                         ls.append( [va  if ty==gtk.gdk.Pixbuf  else ty(va)   for va,ty in zip(row,vartypes)]  )
-                __print__(row)
+                __print__("[37m→[0m", row, len(row))
                 
                 # apply array to widget
                 widget.set_model(ls)
@@ -207,14 +218,15 @@ class mygtk:
 
             # list types
             ls = gtk.TreeStore(str, str)
+            print(entries)
 
             # add entries
             for entry in entries:
-                if (type(entry) == str):
-                    main = ls.append(None, [entry, icon])
+                if isinstance(entry, (str,unicode)):
+                    main = ls.append(None, [str(entry), icon])
                 else:
                     for sub_title in entry:
-                        ls.append(main, [sub_title, icon])
+                        ls.append(main, [str(sub_title), icon])
 
             # just one column
             tvcolumn = gtk.TreeViewColumn(title);
@@ -302,7 +314,7 @@ class mygtk:
                 if (not w):
                     continue
                 t = type(w)
-                for method,args in r[wn].iteritems():
+                for method,args in r[wn].items():
                     # gtk.Window
                     if method == "size":
                         w.resize(args[0], args[1])

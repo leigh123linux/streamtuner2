@@ -13,14 +13,15 @@
 	<section id="dependecies">
   	  <title>Dependencies</title>
         <terms>
-          <item><p>Python 2.5</p></item>
-          <item><p>PyGtk</p></item>
-          <item><p>Gtk+ 2.12</p></item>
+          <item><p>Python 2.7 or 3.x</p></item>
+          <item><p>PyGtk or PyGI</p></item>
+          <item><p>Gtk2 or Gtk3</p></item>
 	</terms>
         <terms>
   	  <title>Soft dependencies</title>
           <item><p>Python-LXML</p></item>
           <item><p>Python-PyQuery</p></item>
+          <item><p>Python-Kronos</p></item>
           <item><p>Audacious</p></item>
 	</terms>
 	</section>
@@ -48,7 +49,7 @@
           </item>
           <item>
             <title>~/.config/streamtuner2/bookmarks.json</title>
-            <p>Is a separate cahce file for your bookmarked/favourite radio stations.</p>
+            <p>Is a separate cache file for your bookmarked/favourite radio stations.</p>
           </item>
           <item>
             <title>~/.config/streamtuner2/cache/***.json</title>
@@ -83,8 +84,10 @@
 
 	<section id="license">
 	<title>Public Domain</title>
-	<p>There is no licensing requirement with this application. All code can be copied, modified
+	<p>The majority of code distributed with ST2 is placed into the Public Domain; meaning
+        no licensing requirement and all code can be copied, modified
 	and distributed unrestrictively.</p>
+        <p>The bundled kronos.py and requests/ library are NOT however.</p>
 	</section>
 
 

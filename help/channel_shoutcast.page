@@ -22,6 +22,9 @@
 		list must often be expanded to see the interesting entries.</p></item>
         </list>
 
+        <p>Since being sold from AOL to Radionomy, the directory got cut down. There are no longer
+        entries for currently played songs, and homepage links are largely gone. Hencewhy the
+        Shoutcast channel is no longer considered a primary feature.</p>
 
 <terms>
   <title>There are a few plugin options for this channel.</title>
@@ -32,7 +35,8 @@
   </item>
   <item>
     <title><code>debug output</code></title>
-    <p>Prints verbose messages to the console. This option is used while developing extensions for Streamtuner2.</p>
+    <p>Prints verbose messages to the console. This option is used while developing extensions for Streamtuner2.
+    And it actually ought to be a global option by now.</p>
   </item>
 </terms>
 

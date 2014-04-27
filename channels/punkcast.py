@@ -9,7 +9,7 @@
 
 
 import re
-import http
+import ahttp as http
 from config import conf
 import action
 from channels import *

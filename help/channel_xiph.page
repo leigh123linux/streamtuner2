@@ -16,7 +16,7 @@
         to the SHOUTcast server.)</p>
 
         <p>This channel is especially easy to read by Streamtuner2, because the source data is already
-        provided as &lt;XML&gt; file. However, it lacks some essential informaitons like station
+        provided as &lt;XML&gt; file. However, it lacks some essential informations like station
         homepages and listener numbers.</p>
 
         <p>Xiph also uses the .xspf format, instead of .pls stream links</p>
@@ -29,7 +29,7 @@
     <p>The bitrate of an audio stream determines the music quality. Many Xiph streams have simple
     and low quality microphone sources. To filter these out, and only leave high quality music
     stations, you can therefore set this option. OGG starts to sound good with 128 kbit/s (whereas
-    MP3 often needs 192 at least).</p>
+    MP3 often requires 192 at least).</p>
   </item>
 </terms>
 

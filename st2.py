@@ -4,8 +4,8 @@
 # type: application
 # title: streamtuner2
 # description: directory browser for internet radio / audio streams
-# depends: gtk, pygtk, xml.dom.minidom, threading, lxml, pyquery, kronos
-# version: 2.0.9.5
+# depends: pygtk | pygi, threading, pyquery, kronos, requests
+# version: 2.1.0
 # author: mario salzer
 # license: public domain
 # url: http://freshmeat.net/projects/streamtuner2
@@ -32,20 +32,13 @@
 """ project status """
 #
 # The application runs mostly stable. The GUI interfaces are workable.
+# It's supposed to run on Gtk2 and Gtk3. Python3 support is still WIP.
 # There haven't been any optimizations regarding memory usage and
-# performance. The current internal API is acceptable. Documentation is
-# coming up.
+# performance. The current internal API is vastly undocumented.
 #
 #  current bugs:
 #   - audio- and list-format support is not very robust / needs better API
-#   - lots of GtkWarning messages
 #   - not all keyboard shortcuts work
-#   - in-list search doesn't work in our treeviews (???)
-#   - JSON files are only trouble: loading of data files might lead to more
-#     errors now, even if pson module still falls back on old method
-#     (unicode strings from json.load are useless to us, require typecasts)
-#     (nonsupport of tuples led to regression in mygtk.app_restore)
-#     (sometimes we receive 8bit-content, which the json module can't save)
 #
 #  features:
 #   - treeview lists are created from datamap[] structure and stream{} dicts
@@ -68,11 +61,6 @@
 #     from corrupt mp3/stream data, and streamtuner2 executes them
 #      - but since that's the purpose -> no workaround
 #
-#  still help wanted on:
-#   - any of the above
-#   - new plugins (local file viewer)
-#   - nicer logo (or donations accepted to consult graphics designer)
-#
 
 
 
@@ -80,8 +68,6 @@
 import sys
 import os, os.path
 import re
-import copy
-import urllib
 
 # threading or processing module
 try:
@@ -92,19 +78,19 @@ except:
 
 # add library path
 sys.path.insert(0, "/usr/share/streamtuner2")   # pre-defined directory for modules
-sys.path.insert(0, ".")   # pre-defined directory for modules
+sys.path.insert(0, "/usr/share/streamtuner2/bundle")   # external libraries
+sys.path.insert(0, ".")   # development module path
 
 # gtk modules
-from mygtk import pygtk, gtk, gobject, ui_file, mygtk
+from mygtk import pygtk, gtk, gobject, ui_file, mygtk, ver as GTK_VER
 
 # custom modules
 from config import conf   # initializes itself, so all conf.vars are available right away
 from config import __print__, dbg
-import http
+import ahttp
 import action  # needs workaround... (action.main=main)
 from channels import *
 import favicon
-#from pq import pq
 
 
 
@@ -170,7 +156,7 @@ class StreamTunerTwo(gtk.Builder):
       
             # bind gtk/glade event names to functions
             gui_startup(19/20.0)
-            self.connect_signals(dict( {
+            self.connect_signals(dict( list({
                 "gtk_main_quit" : self.gtk_main_quit,                # close window
                 # treeviews / notebook
                 "on_stream_row_activated" : self.on_play_clicked,    # double click in a streams list
@@ -220,7 +206,7 @@ class StreamTunerTwo(gtk.Builder):
                 "streamedit_save": streamedit.save,
                 "streamedit_new": streamedit.new,
                 "streamedit_cancel": streamedit.cancel,
-            }.items() + self.add_signals.items() ))
+            }.items() ) + list( self.add_signals.items() ) ))
             
             # actually display main window
             gui_startup(99/100.0)
@@ -237,7 +223,7 @@ class StreamTunerTwo(gtk.Builder):
         # Allows access to widgets as direct attributes instead of using .get_widget()
         # Also looks in self.channels[] for the named channel plugins
         def __getattr__(self, name):
-            if (self.channels.has_key(name)):
+            if (name in self.channels):
                 return self.channels[name]     # like self.shoutcast
             else:
                 return self.get_object(name)   # or gives an error if neither exists
@@ -245,7 +231,7 @@ class StreamTunerTwo(gtk.Builder):
 
         # custom-named widgets are available from .widgets{} not via .get_widget()
         def get_widget(self, name):
-            if self.widgets.has_key(name):
+            if name in self.widgets:
                 return self.widgets[name]
             else:
                 return gtk.Builder.get_object(self, name)
@@ -525,7 +511,10 @@ class StreamTunerTwo(gtk.Builder):
         # end application and gtk+ main loop
         def gtk_main_quit(self, widget, *x):
             if conf.auto_save_appstate:
-                self.app_state(widget)
+                try:  # doesn't work with gtk3 yet (probably just hooking at the wrong time)
+                    self.app_state(widget)
+                except:
+                    None
             gtk.main_quit()
 
 
@@ -560,7 +549,11 @@ def station_context_menu(treeview, event):
                 path = treeview.get_path_at_pos(int(event.x), int(event.y))[0]
                 treeview.grab_focus()
                 treeview.set_cursor(path, None, False)
-                main.streamactions.popup(None, None, None, event.button, event.time)
+                main.streamactions.popup(
+                      parent_menu_shell=None, parent_menu_item=None, func=None,
+                      button=event.button, activate_time=event.time,
+                      data=None
+                )
                 return None
             # we need to pass on to normal left-button signal handler
             else:
@@ -573,9 +566,9 @@ def station_context_menu(treeview, event):
 # encapsulates references to gtk objects AND properties in main window
 class auxiliary_window(object):
         def __getattr__(self, name):
-            if main.__dict__.has_key(name):
+            if name in main.__dict__:
                 return main.__dict__[name]
-            elif StreamTunerTwo.__dict__.has_key(name):
+            elif name in StreamTunerTwo.__dict__:
                 return StreamTunerTwo.__dict__[name]
             else:
                 return main.get_widget(name)
@@ -772,7 +765,7 @@ class config_dialog (auxiliary_window):
         
         # set/load values between gtk window and conf. dict
         def apply(self, config, prefix="config_", save=0):
-            for key,val in config.iteritems():
+            for key,val in config.items():
                 # map non-alphanumeric chars from config{} to underscores in according gtk widget names
                 id = re.sub("[^\w]", "_", key)
                 w = main.get_widget(prefix + id)
@@ -828,7 +821,7 @@ class config_dialog (auxiliary_window):
             if self.once:
                 return
 
-            for name,enabled in conf.plugins.iteritems():
+            for name,enabled in conf.plugins.items():
 
                 # add plugin load entry
                 if name:
@@ -1047,8 +1040,8 @@ class bookmarks(GenericChannel):
             check = {"http//": "[row]"}
             check = dict((row["url"],row) for row in fav)
             # walk through all channels/streams
-            for chname,channel in main.channels.iteritems():
-                for cat,streams in channel.streams.iteritems():
+            for chname,channel in main.channels.items():
+                for cat,streams in channel.streams.items():
 
                     # keep the potentially changed rows
                     if (chname == updated_channel) and (cat == updated_category):
@@ -1153,7 +1146,7 @@ if __name__ == "__main__":
     "conf = Config()"       # already happened with "from config import conf"
 
     # graphical
-    if len(sys.argv) < 2:
+    if len(sys.argv) < 2 or "--gtk3" in sys.argv:
     
         
         # prepare for threading in Gtk+ callbacks
@@ -1166,7 +1159,7 @@ if __name__ == "__main__":
         # module coupling
         action.main = main      # action (play/record) module needs a reference to main window for gtk interaction and some URL/URI callbacks
         action = action.action  # shorter name
-        http.feedback = main.status  # http module gives status feedbacks too
+        ahttp.feedback = main.status  # http module gives status feedbacks too
         
         # first invocation
         if (conf.get("firstrun")):

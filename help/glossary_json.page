@@ -10,7 +10,7 @@
 	<title>JSON files</title>
 
 	<p>JSON is a data representation format derived from Javascript (the browser embedded
-        programming language for websites). Streamtuner2 uses it to store it's configuration
+        programming language for websites). Streamtuner2 uses it to store its configuration
         and radio station data files.</p>
 	<p>The MIME type of these files is application/json and they often look like: </p>
 

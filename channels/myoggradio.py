@@ -26,7 +26,7 @@ from action import action
 
 import re
 import json
-from StringIO import StringIO
+from compat2and3 import StringIO
 import copy
 
 

@@ -12,7 +12,7 @@
 
 
 import re
-import http
+import ahttp as http
 from config import conf
 from channels import *
 from config import __print__, dbg
