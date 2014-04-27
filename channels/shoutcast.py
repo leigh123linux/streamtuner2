@@ -119,10 +119,10 @@ class shoutcast(channels.ChannelPlugin):
                   url = "http://www.shoutcast.com/radiolist.cfm?action=sub&string=&cat="+ucat+"&order=listeners&amount="+str(count)
                   __print__(dbg.HTTP, url)
                   referer = "http://www.shoutcast.com/?action=sub&cat="+ucat
-                  params = {} # "strIndex":"0", "count":str(count), "ajax":"true", "mode":"listeners", "order":"desc" }
-                  html = http.ajax(url, params, referer)   #,feedback=self.parent.status)
+                  params = {}
+                  html = http.get(url, params=params, referer=referer, ajax=1)
 
-                  __print__(dbg.DATA, html)
+                  #__print__(dbg.DATA, html)
                   #__print__(re.compile("id=(\d+)").findall(html));
 
 
