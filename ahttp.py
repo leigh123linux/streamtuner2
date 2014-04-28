@@ -14,7 +14,7 @@
 
 from config import conf, __print__, dbg
 import requests
-import copy
+
 
 
 
@@ -39,8 +39,10 @@ def progress_feedback(*args):
 
 
 
+# prepare default query object
+session = requests.Session()
 # default HTTP headers for requests
-default_headers = {
+session.headers.update({
     "User-Agent": "streamtuner2/2.1 (X11; U; Linux AMD64; en; rv:1.5.0.1) like WinAmp/2.1 but not like Googlebot/2.1", #"Mozilla/5.0 (X11; U; Linux x86_64; de; rv:1.9.2.6) Gecko/20100628 Ubuntu/10.04 (lucid) Firefox/3.6.6",
     "Accept": "*/*;q=0.5, audio/*, url/*",
     "Accept-Language": "en-US,en,de,es,fr,it,*;q=0.1",
@@ -50,7 +52,7 @@ default_headers = {
     "Connection": "keep-alive",
     "Pragma": "no-cache",
     "Cache-Control": "no-cache",
-}
+})
 
 
 
@@ -65,7 +67,7 @@ def get(url, params={}, referer="", post=0, ajax=0, binary=0, feedback=None):
     progress_feedback(url, 0.1)
     
     # combine headers
-    headers = copy.copy(default_headers)
+    headers = {}
     if ajax:
         headers["X-Requested-With"] = "XMLHttpRequest"
     if referer:
@@ -73,9 +75,9 @@ def get(url, params={}, referer="", post=0, ajax=0, binary=0, feedback=None):
     
     # read
     if post:
-        r = requests.post(url, params=params, headers=headers)
+        r = session.post(url, params=params, headers=headers)
     else:    
-        r = requests.get(url, params=params, headers=headers)
+        r = session.get(url, params=params, headers=headers)
         
     # result
     progress_feedback(0.9)

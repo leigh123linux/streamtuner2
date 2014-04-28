@@ -74,6 +74,7 @@ class ConfigDict(dict):
             self.plugins = {
                 "bookmarks": 1,  # built-in plugins, cannot be disabled
                 "shoutcast": 1,
+                "xiph": 0,     # way too slow on first start
                 "punkcast": 0,   # disable per default
                 "basicch": 0,   # ceased
                 "tv": 0,   # no longer working

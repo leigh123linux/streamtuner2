@@ -93,6 +93,8 @@ from channels import *
 import favicon
 
 
+__version__ = "2.1.0"
+
 
 # this represents the main window
 # and also contains most application behaviour
@@ -532,7 +534,7 @@ class AboutStreamtuner2:
         # about us
         def __init__(self):
             a = gtk.AboutDialog()
-            a.set_version("2.0.9.5")
+            a.set_version(__version__)
             a.set_name("streamtuner2")
             a.set_license("Public Domain\n\nNo Strings Attached.\nUnrestricted distribution,\nmodification, use.")
             a.set_authors(["Mario Salzer <http://mario.include-once.org/>\n\nConcept based on streamtuner 0."+"99."+"99 from\nJean-Yves Lefort, of which some code remains\nin the Google stations plugin.\n<http://www.nongnu.org/streamtuner/>\n\nMyOggRadio plugin based on cooperation\nwith Christian Ehm. <http://ehm-edv.de/>"])
