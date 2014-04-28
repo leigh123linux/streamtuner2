@@ -58,18 +58,18 @@ import ahttp as http
 
 
 GOOGLE_DIRECTORY_ROOT	= "http://www.dmoz.org"
-CATEGORIES_URL_POSTFIX	= "/Arts/Music/Sound_Files/MP3/Streaming/Stations/"
+CATEGORIES_URL_POSTFIX	= "/Arts/Radio/Internet/"
 #GOOGLE_DIRECTORY_ROOT	= "http://directory.google.com"
 #CATEGORIES_URL_POSTFIX	= "/Top/Arts/Music/Sound_Files/MP3/Streaming/Stations/"
 GOOGLE_STATIONS_HOME	= GOOGLE_DIRECTORY_ROOT + CATEGORIES_URL_POSTFIX
 
 """<li><a href="/Arts/Music/Sound_Files/MP3/Streaming/Stations/Jazz/"><b>Jazz</b></a>"""
-re_category	= re.compile('<a href="(.+)">(<b>)([^:]+?)(</b>)</a>', re.I|re.M)
+re_category	= re.compile('<a href="(.+)">()([^:]+?)()</a>@', re.I|re.M)
 
 #re_stream	= re.compile('^<td><font face="arial,sans-serif"><a href="(.*)">(.*)</a>')
 #re_description	= re.compile('^<br><font size=-1> (.*?)</font>')
 """<li><a href="http://www.atlantabluesky.com/">Atlanta Blue Sky</a> - Rock and alternative streaming audio. Live real-time requests."""
-re_stream_desc	= re.compile('^<li><a href="(.*)">([^<>]+)</a>( - )?([^<>\n\r]+)', re.M|re.I)
+re_stream_desc	= re.compile('<li>\s*<a href="(.*)" class="listinglink">([^<>]+)</a>\s*( - )?\s*([^<>\n\r]+)', re.M|re.I)
 
 
 ######
