@@ -96,7 +96,21 @@ Public Domain.
 history
 -------
 
-2.0.9.
+2.1.0
+- support for running on Python3 or Python2,
+  as well as Gtk3 (PyGI) and Gtk2 (PyGtk with Python2) bindings
+- fixed Shoutcast, DMOZ, Live365
+- while Jamendo now lists radios only
+- removal of basic.ch and tv channels
+- include requests+urllib3 in favour of urllib+urllib2
+- some manual pages have been updated
+- drop PSON and only use plain json module henceforth
+- new bundle/ directory, but pyquery/lxml dropped
+- colorized debugging output
+- uninitialized channels are no longer attached as tabs
+- absent liststore references have finally been fixed
+
+2.0.9
 - sys.path patch (less py module conflicts) from Stefan Talpalaru
 - fixed main_quit signal slot, so window size saving works
 - added [new] button in streamedit window
