@@ -5,6 +5,9 @@
 # For now this is really just a browser, doesn't utilizt the jamendo API yet.
 # Requires more rework of streamtuner2 list display to show album covers.
 #
+# Recently required an API key as well. Thus probably will remain a stub.
+#
+#
 
 
 import re
@@ -65,9 +68,8 @@ class jamendo (ChannelPlugin):
             tags.append(title)
             
         self.categories = [
-           "top 100",
            "radios",
-           "tags", tags
+#           "tags", tags
         ]
         
 
@@ -76,6 +78,25 @@ class jamendo (ChannelPlugin):
     def update_streams(self, cat, force=0):
 
         entries = []
+        
+        # return a static list for now
+        if cat == "radios":
+        
+            entries = [
+                {"title": "Pop", "url": "http://streaming.radionomy.com/JamPop", "playing": "", "format": "audio/mpeg", "homepage": "http://www.jamendo.com/en/radios"},
+                {"title": "Rock", "url": "http://streaming.radionomy.com/JamRock", "playing": "", "format": "audio/mpeg", "homepage": "http://www.jamendo.com/en/radios"},
+                {"title": "Lounge", "url": "http://streaming.radionomy.com/JamLounge", "playing": "", "format": "audio/mpeg", "homepage": "http://www.jamendo.com/en/radios"},
+                {"title": "Electro", "url": "http://streaming.radionomy.com/JamElectro", "playing": "", "format": "audio/mpeg", "homepage": "http://www.jamendo.com/en/radios"},
+                {"title": "HipHop", "url": "http://streaming.radionomy.com/JamHipHop", "playing": "", "format": "audio/mpeg", "homepage": "http://www.jamendo.com/en/radios"},
+                {"title": "World", "url": "http://streaming.radionomy.com/JamWorld", "playing": "", "format": "audio/mpeg", "homepage": "http://www.jamendo.com/en/radios"},
+                {"title": "Jazz", "url": "http://streaming.radionomy.com/JamJazz", "playing": "", "format": "audio/mpeg", "homepage": "http://www.jamendo.com/en/radios"},
+                {"title": "Metal", "url": "http://streaming.radionomy.com/JamMetal", "playing": "", "format": "audio/mpeg", "homepage": "http://www.jamendo.com/en/radios"},
+                {"title": "Soundtrack", "url": "http://streaming.radionomy.com/JamSoundtrack", "playing": "", "format": "audio/mpeg", "homepage": "http://www.jamendo.com/en/radios"},
+                {"title": "Relaxation", "url": "http://streaming.radionomy.com/JamRelaxation", "playing": "", "format": "audio/mpeg", "homepage": "http://www.jamendo.com/en/radios"},
+                {"title": "Classical", "url": "http://streaming.radionomy.com/JamClassical", "playing": "", "format": "audio/mpeg", "homepage": "http://www.jamendo.com/en/radios"},
+            ]
+        
+        return entries
     
         # top list
         if cat == "top" or cat == "top 100":
@@ -99,19 +120,6 @@ class jamendo (ChannelPlugin):
 		})
 		
 		
-        # static
-        elif cat == "radios":
-
-            rx = '>(\w+[-/\s]*\w+)</a>.+?/(get2/stream/track/m3u/radio_track_inradioplaylist/[?]order=numradio_asc&radio_id=\d+)"'
-            for uu in re.findall(rx, http.get(self.base + "radios")):
-                (name, url) = uu
-                entries.append({
-                    "title": name,
-                    "url": self.homepage,
-                    "homepage": self.base + "radios",
-                })
-                
-
         # genre list            
         else:
             html = http.get(self.base + "tag/" + cat)
