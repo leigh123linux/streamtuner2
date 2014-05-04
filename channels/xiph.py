@@ -41,9 +41,8 @@ class xiph (ChannelPlugin):
         title = "Xiph.org"
         version = 0.2
         homepage = "http://dir.xiph.org/"
-        base_url = "http://api.dir.xiph.org/"
-        json = "experimental/full"
-        old_yp = "yp.xml"
+        #base_url = "http://api.dir.xiph.org/"
+        json_url = "http://api.include-once.org/xiph/cache.php"
         listformat = "url/http"
         config = [
            {"name":"xiph_min_bitrate", "value":64, "type":"int", "description":"minimum bitrate, filter anything below", "category":"filter"}
@@ -95,27 +94,8 @@ class xiph (ChannelPlugin):
                 __print__( dbg.DATA, '        "' + row[1] + '", #' + str(row[0]) )
 
 
-        # xml dom node shortcut to text content
-        def x(self, entry, name):
-            e = entry.getElementsByTagName(name)
-            if (e):
-                if (e[0].childNodes):
-                    return e[0].childNodes[0].data
-                    
-        # convert bitrate string to integer
-        # (also convert "Quality \d+" to pseudo bitrate)
-        def bitrate(self, s):
-            uu = re.findall("(\d+)", s)
-            if uu:
-                br = uu[0]
-                if br > 10:
-                    return int(br)
-                else:
-                    return int(br * 25.6)
-            else:
-                return 0
 
-        # downloads stream list from shoutcast for given category
+        # downloads stream list from xiph.org for given category
         def update_streams(self, cat, search=""):
 
             # there is actually just a single category to download,
@@ -123,11 +103,8 @@ class xiph (ChannelPlugin):
             if (cat == "all"):
             
                 #-- get data
-                data = http.get(self.base_url + self.json)
-                data = re.sub('":NaN,', '":0,', data)   # the output is JSOL, not valid JSON
-                data = re.sub('[\\\\]"(?!,)', '\'', data)   # and some invalid string escaping
-                data = re.sub('[\\\\]{1}', '', data)   # and all other backslashes to be safe
-                data = data.decode("latin-1")
+                data = http.get(self.json_url)
+                __print__(dbg.DATA, data)
                 
                 #-- extract
                 l = []
@@ -138,15 +115,13 @@ class xiph (ChannelPlugin):
                       l.append({
                         "title": e["stream_name"],
                         "url": e["listen_url"],
-                        "format": "audio/mpeg",
+                        "format": e["type"],
                         "bitrate": int(e["bitrate"]),
-                        "channels": e["channels"],
-                        "samplerate": e["samplerate"],
                         "genre": e["genre"],
                         "playing": e["current_song"],
                         "listeners": 0,
                         "max": 0,
-                        "homepage": "",
+                        "homepage": (e["homepage"] if ("homepage" in e) else ""),
                       })
                 
             # filter out a single subtree
@@ -307,4 +282,108 @@ class xiph (ChannelPlugin):
               "darkwave", #2
             ],
         ]
+"""
+[
 
+{"tag_name":"various","tag_usage":785},
+{"tag_name":"rock","tag_usage":691},
+{"tag_name":"radio","tag_usage":589},
+{"tag_name":"pop","tag_usage":578},
+{"tag_name":"dance","tag_usage":370},
+{"tag_name":"anime","tag_usage":339},
+{"tag_name":"jpop","tag_usage":301},
+{"tag_name":"jrock","tag_usage":299},
+{"tag_name":"jhiphop","tag_usage":291},
+{"tag_name":"jrap","tag_usage":291},
+{"tag_name":"hits","tag_usage":246},
+{"tag_name":"alternative","tag_usage":198},
+{"tag_name":"house","tag_usage":197},
+{"tag_name":"christian","tag_usage":190},
+{"tag_name":"talk","tag_usage":186},
+{"tag_name":"music","tag_usage":178},
+{"tag_name":"misc","tag_usage":154},
+{"tag_name":"jazz","tag_usage":127},
+{"tag_name":"electro","tag_usage":119},
+{"tag_name":"techno","tag_usage":113},
+{"tag_name":"top40","tag_usage":110},
+{"tag_name":"trance","tag_usage":110},
+{"tag_name":"electronic","tag_usage":110},
+{"tag_name":"oldies","tag_usage":104},
+{"tag_name":"news","tag_usage":102},
+{"tag_name":"80s","tag_usage":101},
+{"tag_name":"la","tag_usage":99},
+{"tag_name":"musica","tag_usage":92},
+{"tag_name":"lounge","tag_usage":87},
+{"tag_name":"metal","tag_usage":84},
+{"tag_name":"hip","tag_usage":80},
+{"tag_name":"country","tag_usage":80},
+{"tag_name":"mixed","tag_usage":78},
+{"tag_name":"rap","tag_usage":78},
+{"tag_name":"classic","tag_usage":77},
+{"tag_name":"indie","tag_usage":75},
+{"tag_name":"hop","tag_usage":73},
+{"tag_name":"promodj","tag_usage":71},
+{"tag_name":"eclectic","tag_usage":65},
+{"tag_name":"gospel","tag_usage":62},
+{"tag_name":"ambient","tag_usage":60},
+{"tag_name":"adult","tag_usage":58},
+{"tag_name":"top","tag_usage":58},
+{"tag_name":"disco","tag_usage":54},
+{"tag_name":"live","tag_usage":54},
+{"tag_name":"reggae","tag_usage":54},
+{"tag_name":"musique","tag_usage":53},
+{"tag_name":"classical","tag_usage":53},
+{"tag_name":"college","tag_usage":53},
+{"tag_name":"blues","tag_usage":51},
+{"tag_name":"the","tag_usage":50},
+{"tag_name":"world","tag_usage":50},
+{"tag_name":"salsa","tag_usage":46},
+{"tag_name":"contemporary","tag_usage":46},
+{"tag_name":"folk","tag_usage":45},
+{"tag_name":"and","tag_usage":45},
+{"tag_name":"punk","tag_usage":44},
+{"tag_name":"40","tag_usage":44},
+{"tag_name":"soul","tag_usage":44},
+{"tag_name":"hardcore","tag_usage":44},
+{"tag_name":"funk","tag_usage":43},
+{"tag_name":"urban","tag_usage":42},
+{"tag_name":"club","tag_usage":41},
+{"tag_name":"chillout","tag_usage":39},
+{"tag_name":"90s","tag_usage":39},
+{"tag_name":"unspecified","tag_usage":38},
+{"tag_name":"dubstep","tag_usage":37},
+{"tag_name":"hit","tag_usage":37},
+{"tag_name":"webradio","tag_usage":36},
+{"tag_name":"new","tag_usage":36},
+{"tag_name":"latin","tag_usage":35},
+{"tag_name":"game","tag_usage":35},
+{"tag_name":"deep","tag_usage":34},
+{"tag_name":"70s","tag_usage":33},
+{"tag_name":"b","tag_usage":33},
+{"tag_name":"international","tag_usage":33},
+{"tag_name":"community","tag_usage":32},
+{"tag_name":"progressive","tag_usage":32},
+{"tag_name":"fun","tag_usage":31},
+{"tag_name":"video","tag_usage":31},
+{"tag_name":"hiphop","tag_usage":30},
+{"tag_name":"musica","tag_usage":30},
+{"tag_name":"electronica","tag_usage":30},
+{"tag_name":"r","tag_usage":29},
+{"tag_name":"bass","tag_usage":28},
+{"tag_name":"jungle","tag_usage":27},
+{"tag_name":"sports","tag_usage":27},
+{"tag_name":"smooth","tag_usage":26},
+{"tag_name":"scanner","tag_usage":26},
+{"tag_name":"mix","tag_usage":26},
+{"tag_name":"best","tag_usage":26},
+{"tag_name":"60s","tag_usage":25},
+{"tag_name":"soulful","tag_usage":25},
+{"tag_name":"drum","tag_usage":25},
+{"tag_name":"religious","tag_usage":25},
+{"tag_name":"ska","tag_usage":25},
+{"tag_name":"garage","tag_usage":24},
+{"tag_name":"downtempo","tag_usage":24},
+{"tag_name":"retro","tag_usage":23},
+{"tag_name":"minimal","tag_usage":23},
+]
+"""
