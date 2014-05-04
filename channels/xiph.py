@@ -49,16 +49,16 @@ class xiph (ChannelPlugin):
         ]
 
         # content
-        categories = ["all", [],           ]
+        categories = [ "pop", "top40" ]
         current = ""
-        default = "all"
+        default = "pop"
         empty = None
         
         
         # prepare category names
         def __init__(self, parent=None):
             
-            self.categories = ["all"]
+            self.categories = []
             self.filter = {}
             for main in self.genres:
                 if (type(main) == str):
@@ -79,59 +79,43 @@ class xiph (ChannelPlugin):
 
         # just counts genre tokens, does not automatically create a category tree from it
         def update_categories(self):
-            g = {}
-            for row in self.streams["all"]:
-                for t in row["genre"].split():
-                    if g.has_key(t):
-                        g[t] += 1
-                    else:
-                        g[t] = 0
-            g = [ [v[1],v[0]] for v in g.items() ]
-            g.sort()
-            g.reverse()
-            for row in g:
-                pass
-                __print__( dbg.DATA, '        "' + row[1] + '", #' + str(row[0]) )
-
+            pass
 
 
         # downloads stream list from xiph.org for given category
         def update_streams(self, cat, search=""):
 
-            # there is actually just a single category to download,
-            # all else are virtual
-            if (cat == "all"):
+            # With the new JSON cache API on I-O, we can load categories individually:
+            params = {}
+            if cat:
+                params["cat"] = cat.lower()
+            if search:
+                params["search"] = search
             
-                #-- get data
-                data = http.get(self.json_url)
-                __print__(dbg.DATA, data)
-                
-                #-- extract
-                l = []
-                __print__( dbg.DATA, "processing dir.xiph.org/experimental/full JSON" )
-                for e in json.loads(data):
-                    bitrate = e["bitrate"]
-                    if conf.xiph_min_bitrate and bitrate and bitrate >= int(conf.xiph_min_bitrate):
-                      l.append({
-                        "title": e["stream_name"],
-                        "url": e["listen_url"],
-                        "format": e["type"],
-                        "bitrate": int(e["bitrate"]),
-                        "genre": e["genre"],
-                        "playing": e["current_song"],
-                        "listeners": 0,
-                        "max": 0,
-                        "homepage": (e["homepage"] if ("homepage" in e) else ""),
-                      })
-                
-            # filter out a single subtree
-            else:
-                rx = re.compile(self.filter.get(cat.lower(), cat.lower()))
-                l = []
-                for i,row in enumerate(self.streams["all"]):
-                    if rx.search(row["genre"]):
-                        l.append(row)
+            #-- get data
+            data = http.get(self.json_url, params=params)
+            __print__(dbg.DATA, data)
             
+            #-- extract
+            l = []
+            __print__( dbg.PROC, "processing api.dir.xiph.org JSON (via api.include-once.org cache)" )
+            data = json.loads(data)
+            for e in data.values():
+                __print__(dbg.DATA, e)
+                bitrate = int(e["bitrate"])
+                if conf.xiph_min_bitrate and bitrate and bitrate >= int(conf.xiph_min_bitrate):
+                  l.append({
+                    "title": e["stream_name"],
+                    "url": e["listen_url"],
+                    "format": e["type"],
+                    "bitrate": int(e["bitrate"]),
+                    "genre": e["genre"],
+                    "playing": e["current_song"],
+                    "listeners": 0,
+                    "max": 0,
+                    "homepage": (e["homepage"] if ("homepage" in e) else ""),
+                  })
+                
             # send back the list 
             return l
 
@@ -139,149 +123,390 @@ class xiph (ChannelPlugin):
 
 
         genres = [
-            "scanner", #442
-            "rock", #305
-            [
-              "metal|heavy", #36
-            ],
-            "various", #286
-            [
-              "mixed", #96
-            ],
-            "pop", #221
-            [
-              "top40|top|40|top 40", #32
-              "charts|hits", #20+4
-              "80s", #68
-              "90s", #20
-              "disco", #17
-              "remixes", #10
-            ],
-            "electronic|electro", #33
-            [
-              "dance", #161
-              "house", #106
-              "trance", #82
-              "techno", #72
-              "chillout", #16
-              "lounge", #12
-            ],
-            "alternative", #68
-            [
-              "college", #32
-              "student", #20
-              "progressive", #20
-            ],
-            "classical|classic", #58+20
-            "live", #57
-            "jazz", #42
-            [
-              "blues", #19
-            ],
-            "talk|spoken|speak", #41
-            [
-              "news", #39
-              "public", #12
-              "info", #5
-            ],
-            "world|international", #25
-            [
-              "latin", #34
-              "reggae", #12
-              "indie", #12
-              "folk", #9
-              "schlager", #14
-              "jungle", #13
-              "country", #7
-              "russian", #6
-            ],
-            "hip hop|hip|hop", #34
-            [
-               "oldschool", #10
-               "rap",
-            ],
-            "ambient", #34
-            "adult", #33
-           ## "music", #32
-            "oldies", #31
-            [
-              "60s", #2
-              "70s", #17
-            ],
-            "religious", #4
-            [
-              "christian|bible", #14
-            ],
-            "rnb|r&b", #12
-            [
-              "soul", #11
-              "funk", #24
-              "urban", #11
-            ],
-            "other", #25
-            [
-              "deep", #14
-              "soft", #12
-              "minimal", #12
-              "eclectic", #12
-              "drum", #12
-              "bass", #12
-              "experimental", #11
-              "hard", #10
-              "funky", #10
-              "downtempo", #10
-              "slow", #9
-              "break", #9
-              "electronica", #8
-              "dub", #8
-              "retro", #7
-              "punk", #7
-              "psychedelic", #7
-              "goa", #7
-              "freeform", #7
-              "c64", #7
-              "breaks", #7
-              "anime", #7
-              "variety", #6
-              "psytrance", #6
-              "island", #6
-              "downbeat", #6
-              "underground", #5
-              "newage", #5
-              "gothic", #5
-              "dnb", #5
-              "club", #5
-              "acid", #5
-              "video", #4
-              "trip", #4
-              "pure", #4
-              "industrial", #4
-              "groove", #4
-              "gospel", #4
-              "gadanie", #4
-              "french", #4
-              "dark", #4
-              "chill", #4
-              "age", #4
-              "wave", #3
-              "vocal", #3
-              "tech", #3
-              "studio", #3
-              "relax", #3
-              "rave", #3
-              "hardcore", #3
-              "breakbeat", #3
-              "avantgarde", #3
-              "swing", #2
-              "soundtrack", #2
-              "salsa", #2
-              "italian", #2
-              "independant", #2
-              "groovy", #2
-              "european", #2
-              "darkwave", #2
-            ],
-        ]
+              "pop",
+              [
+                  "top40",
+                  "top100",
+                  "schlager",
+                  "top",
+                  "90s",
+                  "80s",
+                  "britpop",
+                  "disco",
+                  "urban",
+                  "party",
+                  "mashup",
+                  "kpop",
+                  "jpop",
+                  "lounge",
+                  "softpop",
+              ],
+              "rock",
+              [
+                  "alternative",
+                  "electro",
+                  "country",
+                  "mixed",
+                  "metal",
+                  "eclectic",
+                  "folk",
+                  "anime",
+                  "hardcore",
+                  "pure"
+                  "jrock"
+              ],
+              "dance",
+              [
+                  "electronic",
+                  "deephouse",
+                  "dancefloor",
+                  "elektro"
+                  "b",
+                  "r",
+              ],
+              "hits",
+              [
+                  "russian"
+                  "hit",
+                  "star"
+              ],
+              "radio",
+              [
+                  "live",
+                  "community",
+                  "student",
+                  "internet"
+              ],
+              "classic",
+              [
+                   "classical",
+                   "ebu",
+                   "vivaldi",
+                   "piano",
+                   "opera",
+                   "classix",
+                   "chopin",
+                   "renaissance",
+                   "classique",
+              ],
+              "talk",
+              [
+                  "news",
+                  "politics",
+                  "medicine",
+                  "health"
+                  "sport",
+                  "education",
+                  "entertainment",
+              ],
+              "various",
+              [
+                  "hits",
+                  "ruhit",
+                  "mega"
+              ],
+              "house",
+              [
+                  "lounge",
+                  "trance",
+                  "techno",
+                  "handsup",
+                  "gay",
+                  "breaks",
+                  "dj",
+              ],
+              "jazz",
+              [
+                  "contemporary"
+              ],
+              "oldies",
+              [
+                  "golden",
+                  "decades",
+                  "info",
+                  "70s",
+                  "60s"
+              ],
+              "religious",
+              [
+                  "spiritual",
+                  "inspirational",
+                  "christian",
+                  "catholic",
+                  "teaching",
+                  "christmas",
+                  "gospel",
+              ],
+              "music",
+              "unspecified",
+              "misc",
+              "adult",
+              "indie",
+              [
+                  "reggae",
+                  "blues",
+                  "college",
+                  "soundtrack"
+              ],
+              "mixed",
+              [
+                  "disco",
+                  "mainstream",
+                  "soulfull"
+              ],
+              "funk",
+              "hiphop",
+              [
+                  "dubstep",
+                  "hip",
+                  "hop"
+              ],
+              "top",
+              [
+                  "urban"
+              ],
+              "musica",
+              "ambient",
+              [
+                  "downtempo",
+                  "dub"
+              ],
+              "promodj",
+              "world",    # REGIONAL
+              [
+                  "france",
+                  "greek",
+                  "german",
+                  "westcoast",
+                  "bollywood",
+                  "indian",
+                  "nederlands",
+                  "europa",
+                  "italia",
+                  "brazilian",
+                  "tropical",
+                  "korea",
+                  "seychelles",
+                  "black",
+                  "japanese",
+                  "ethnic",
+                  "country",
+                  "americana",
+                  "western",
+                  "cuba",
+                  "afrique",
+                  "paris",
+                  "celtic",
+                  "ambiance",
+                  "francais",
+                  "liberte",
+                  "anglais",
+                  "arabic",
+                  "hungary",
+                  "folklore"
+                  "latin",
+                  "dutch"
+              ],
+              "artist",   # ARTIST NAMES
+              [
+                  "mozart",
+                  "beatles",
+                  "michael",
+                  "nirvana",
+                  "elvis",
+                  "britney",
+                  "abba",
+                  "madonna",
+                  "depeche",
+              ],
+              "salsa",
+              "love",
+              "la",
+              "soul",
+              "the",
+              [
+                  "dome"
+              ],
+              "techno",
+              [
+                  "club",
+                  "progressive",
+                  "deep"
+              ],
+              "rap",
+              [
+                  "eurodance"
+              ],
+              "and",
+              [
+                  "italy"
+              ],
+              "webradio",
+              "best",
+              "electro",
+              "100%",
+              "rnb",
+              "retro",
+              "new",
+              "smooth",
+              [
+                  "cool"
+              ],
+              "easy",
+              [
+                  "lovesongs",
+                  "relaxmusic"
+              ],
+              "chillout",
+              "slow",
+              [
+                  "soft"
+              ],
+              "mix",
+              [
+                  "modern"
+              ],
+              "electronica",
+              "punk",
+              [
+                  "ska"
+              ],
+              "international",
+              "bass",
+              "zouk",
+              "video",
+              [
+                  "game"
+              ],
+              "hardstyle",
+              "scanner",
+              "chill",
+              [
+                  "out",
+                  "trip"
+              ],
+              "drum",
+              "roots",
+              "ac",
+              [
+                  "chr",
+                  "dc"
+              ],
+              "public",
+              "contemporary",
+              [
+                  "instrumental"
+              ],
+              "minimal",
+              "hot",
+              [
+                  "based"
+              ],
+              "free",
+              [
+                  "format"
+              ],
+              "hard",
+              [
+                  "heavy",
+                  "classicrock"
+              ],
+              "reggaeton",
+              "southern",
+              "musica",
+              "old",
+              "emisora",
+              "img",
+              "rockabilly",
+              "charts",
+              [
+                  "best80",
+                  "70er",
+                  "80er",
+                  "60er"
+              ],
+              "other",
+              [
+                  "varios"
+              ],
+              "soulful",
+              "listening",
+              "vegyes",
+              "trance",
+              [
+                  "clubbing",
+                  "electronical"
+              ],
+              "creative",
+              "variety",
+              "commons",
+              [
+                  "ccmusik"
+              ],
+              "tech",
+              [
+                  "edm",
+                  "prog"
+              ],
+              "minecraft",
+              "animes",
+              "chart",
+              "goth",
+              "technologie",
+              "tout",
+              "musical",
+              [
+                  "broadway"
+              ],
+              "romantica",
+              "newage",
+              "nostalgia",
+              "oldschool",
+              [
+                  "00s"
+              ],
+              "wij",
+              "relax",
+              [
+                  "age"
+              ],
+              "theatre",
+              "gothic",
+              "dnb",
+              "disney",
+              "funky",
+              "young",
+              "psychedelic",
+              "habbo",
+              "experimental",
+              "exitos",
+              "digital",
+              "no",
+              "industrial",
+              "epic",
+              "soundtracks",
+              "cover",
+              "chd",
+              "games",
+              "libre",
+              "wave",
+              "vegas",
+              "popular",
+              "comedy",
+              "alternate",
+              "instrumental",
+              [
+                  "swing"
+              ],
+              "ska",
+              [
+                  "punkrock",
+                  "oi"
+              ],
+              "podcast",
+              "darkwave",
+          ]
+
 """
 [
 
