@@ -61,7 +61,7 @@ session.headers.update({
 #  Well, it says "get", but it actually does POST and AJAXish GET requests too.
 #
 def get(url, params={}, referer="", post=0, ajax=0, binary=0, feedback=None):
-    __print__( dbg.HTTP, "GET", url)
+    __print__( dbg.HTTP, "GET", url, params )
 
     # statusbar info
     progress_feedback(url, 0.1)
@@ -78,7 +78,10 @@ def get(url, params={}, referer="", post=0, ajax=0, binary=0, feedback=None):
         r = session.post(url, params=params, headers=headers)
     else:    
         r = session.get(url, params=params, headers=headers)
-        
+
+    #__print__( dbg.HTTP, r.request.headers );
+    #__print__( dbg.HTTP, r.headers );
+            
     # result
     progress_feedback(0.9)
     content = (r.content if binary else r.text)
