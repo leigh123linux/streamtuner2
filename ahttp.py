@@ -43,13 +43,13 @@ def progress_feedback(*args):
 session = requests.Session()
 # default HTTP headers for requests
 session.headers.update({
-    "User-Agent": "streamtuner2/2.1 (X11; U; Linux AMD64; en; rv:1.5.0.1) like WinAmp/2.1 but not like Googlebot/2.1", #"Mozilla/5.0 (X11; U; Linux x86_64; de; rv:1.9.2.6) Gecko/20100628 Ubuntu/10.04 (lucid) Firefox/3.6.6",
-    "Accept": "*/*;q=0.5, audio/*, url/*",
+    "User-Agent": "streamtuner2/2.1 (X11; U; Linux AMD64; en; rv:1.5.0.1) like WinAmp/2.1",
+    "Accept": "*/*;q=0.5, audio/*, video/*, json/*, url/*",
     "Accept-Language": "en-US,en,de,es,fr,it,*;q=0.1",
     "Accept-Encoding": "gzip,deflate",
     "Accept-Charset": "ISO-8859-1,utf-8;q=0.7,*;q=0.1",
     "Keep-Alive": "115",
-    "Connection": "keep-alive",
+    "Connection": "close",
     "Pragma": "no-cache",
     "Cache-Control": "no-cache",
 })
