@@ -54,6 +54,7 @@ class GenericChannel(object):
         listformat = "audio/x-scpls"
         audioformat = "audio/mp3" # fallback value
         config = []
+        has_search = False
 
         # categories
         categories = ["empty", ]

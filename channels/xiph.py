@@ -47,6 +47,7 @@ class xiph (ChannelPlugin):
         config = [
            {"name":"xiph_min_bitrate", "value":64, "type":"int", "description":"minimum bitrate, filter anything below", "category":"filter"}
         ]
+        has_search = True
 
         # content
         categories = [ "pop", "top40" ]
