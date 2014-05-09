@@ -1,28 +1,39 @@
 
 # api: streamtuner2
 # title: jamendo browser
+# description: Jamendo is a license-free music collection and artist hub
+# depends: json
 #
-# For now this is really just a browser, doesn't utilizt the jamendo API yet.
-# Requires more rework of streamtuner2 list display to show album covers.
+# Now utilizes the Jamendo /v3.0/ API.
 #
-# Recently required an API key as well. Thus probably will remain a stub.
+# Radio station lists are fixed for now. Querying the API twice per station
+# doesn't seem overly sensible.
+#
+# Albums and Playlists are limited to 200 entries. Adding a cursor is
+# feasible however.
+#
+# Tracks are queried by genre, where currently there's just a small built-in
+# tag list in ST2.
 #
 #
+# The v3.0 streaming URLs don't seem to work. Therefore some /get2 URLs will
+# be used.
+#
+#  [x]  http://api.jamendo.com/v3.0/playlists/file?client_id=&id=
+#  [+]  http://storage-new.newjamendo.com/?trackid=792843&format=ogg2&u=0
+#  [+]  http://api.jamendo.com/get2/stream/track/xspf/?playlist_id=171574&n=all&order=random
+#  [+]  http://api.jamendo.com/get2/stream/track/xspf/?album_id=%s&streamencoding=ogg2&n=all
+#
+# Seem to resolve to OGG Vorbis each.
+#
+
 
 
 import re
 import ahttp as http
 from config import conf, __print__, dbg
 from channels import *
-from xml.sax.saxutils import unescape
 import json
-
-
-
-
-
-
-
 
 
 
@@ -44,7 +55,13 @@ class jamendo (ChannelPlugin):
     api = "http://api.jamendo.com/v3.0/"
     cid = "49daa4f5"
 
-    categories = ["radios"]
+    categories = [
+        "radios",
+        "playlists",
+        "albums",
+        "tracks",
+            ["pop", "rock", "dance", "classical", "jazz", "instrumental"]
+    ]
     titles = dict( title="Title", playing="Album/Artist/User", bitrate=False, listeners=False )
  
     config = [
@@ -53,21 +70,14 @@ class jamendo (ChannelPlugin):
     
 
 
-
     # refresh category list
     def update_categories(self):
 
-        self.categories = [
-           "radios",
-           "playlists",
-           "albums",
-           "tracks",
-             ["pop", "rock", "dance", "classical", "jazz", "instrumental"]
-        ]
+        pass
         
 
 
-    # download links from dmoz listing
+    # retrieve category or search
     def update_streams(self, cat, search="", force=0):
 
         entries = []
@@ -102,7 +112,9 @@ class jamendo (ChannelPlugin):
                     "title": e["name"],
                     "playing": e["user_name"],
                     "homepage": e["shareurl"],
-                    "url": "http://api.jamendo.com/v3.0/playlists/file?client_id="+self.cid+"&id="+e["id"]
+                    #"url": "http://api.jamendo.com/v3.0/playlists/file?client_id=%s&id=%s" % (self.cid, e["id"]),
+                    "url": "http://api.jamendo.com/get2/stream/track/xspf/?playlist_id=%s&n=all&order=random&from=app-%s" % (e["id"], self.cid),
+                    "format": "application/xspf+xml",
                 })
 
         # albums
@@ -119,27 +131,36 @@ class jamendo (ChannelPlugin):
                     "playing": e["artist_name"],
                     "favicon": e["image"],
                     "homepage": e["shareurl"],
-                    "url": "http://api.jamendo.com/v3.0/playlists/file?client_id="+self.cid+"&id="+e["id"]
+                    #"url": "http://api.jamendo.com/v3.0/playlists/file?client_id=%s&id=%s" % (self.cid, e["id"]),
+                    "url": "http://api.jamendo.com/get2/stream/track/xspf/?album_id=%s&streamencoding=ogg2&n=all&from=app-%s" % (e["id"], self.cid),
+                    "format": "application/xspf+xml",
                 })
 		
-        # genre list            
+        # genre list
         else:
             data = http.get(self.api + "tracks", params={
                 "client_id": self.cid,
                 ("fuzzytags" if cat else "search"): (search if search else cat),
                 "format": "json",
-                "audioformat":"mp31",
+                "audioformat":"ogg",
                 "limit": "200",
+                "offset": 200,
                 "imagesize": "50",
                 "order": "popularity_week",
+                "include": "musicinfo",
             })
             for e in json.loads(data)["results"]:
                 entries.append({
+                    "lang": e["musicinfo"]["lang"],
+                    "genre": " ".join(e["musicinfo"]["tags"]["genres"]),
+                    "description": ", ".join(e["musicinfo"]["tags"]["vartags"]),
                     "title": e["name"],
                     "playing": e["album_name"] + " / " + e["artist_name"],
                     "favicon": e["album_image"],
                     "homepage": e["shareurl"],
-                    "url": e["audio"]
+                    #"url": e["audio"],
+                    "url": "http://storage-new.newjamendo.com/?trackid=%s&format=ogg2&u=0&from=app-%s" % (e["id"], self.cid),
+                    "format": "audio/ogg",
                 })
  
         # done    
