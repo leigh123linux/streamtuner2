@@ -185,12 +185,22 @@ class GenericChannel(object):
         
             # get data from cache or download
             if (force or not category in self.streams):
+                __print__(dbg.PROC, "load", "update_streams")
                 new_streams = self.update_streams(category)
       
                 if new_streams:
-                
-                    # modify
-                    [self.postprocess(row) for row in new_streams]
+
+                    # check and modify entry;
+                    # assert that title and url are present
+                    modified = []
+                    for row in new_streams:
+                        if None in [row.get("title"), row.get("url")]:
+                            next
+                        try:
+                            modified.append( self.postprocess(row) )
+                        except Exception as e:
+                            __print__(e, dbg.ERR, row)
+                    new_streams = modified
       
                     # don't lose forgotten streams
                     if conf.retain_deleted:
@@ -245,7 +255,13 @@ class GenericChannel(object):
 
         
         # prepare data for display
+        #
+        #  - favourite icon
+        #  - or deleted icon
+        #
         def prepare(self, streams):
+            __print__(dbg.PROC, "prepare", streams)
+
             for i,row in enumerate(streams):
                                             # oh my, at least it's working
                                             # at start the bookmarks module isn't fully registered at instantiation in parent.channels{} - might want to do that step by step rather
@@ -275,7 +291,11 @@ class GenericChannel(object):
             return streams
 
     
-        # data preparations directly after reload        
+        # data preparations directly after reload
+        #
+        # - drop shoutcast homepage links
+        # - or find homepage name in title
+        #
         def postprocess(self, row):
 
             # remove non-homepages from shoutcast
