@@ -55,13 +55,8 @@ class jamendo (ChannelPlugin):
     api = "http://api.jamendo.com/v3.0/"
     cid = "49daa4f5"
 
-    categories = [
-        "radios",
-        "playlists",
-        "albums",
-        "tracks",
-            ["pop", "rock", "dance", "classical", "jazz", "instrumental"]
-    ]
+    categories = ["radios"]
+
     titles = dict( title="Title", playing="Album/Artist/User", bitrate=False, listeners=False )
  
     config = [
@@ -73,8 +68,15 @@ class jamendo (ChannelPlugin):
     # refresh category list
     def update_categories(self):
 
-        pass
-        
+        self.categories = [
+            "radios",
+            "playlists",
+            "albums",
+                ["newest"],
+            "tracks",
+                ["pop", "rock", "dance", "classical", "jazz", "instrumental"]
+        ]
+        return self.categories
 
 
     # retrieve category or search
@@ -85,27 +87,25 @@ class jamendo (ChannelPlugin):
         # return a static list for now
         if cat == "radios":
         
-            entries = [
-                {"title": "Best Of", "url": "http://streaming.radionomy.com/BestOf", "playing": "", "format": "audio/mpeg", "homepage": "http://www.jamendo.com/en/radios", "favicon": "http://imgjam1.jamendo.com/new_jamendo_radios/bestof30.jpg"},
-                {"title": "Pop", "url": "http://streaming.radionomy.com/JamPop", "playing": "", "format": "audio/mpeg", "homepage": "http://www.jamendo.com/en/radios", "favicon": "http://imgjam1.jamendo.com/new_jamendo_radios/pop30.jpg"},
-                {"title": "Rock", "url": "http://streaming.radionomy.com/JamRock", "playing": "", "format": "audio/mpeg", "homepage": "http://www.jamendo.com/en/radios", "favicon": "http://imgjam1.jamendo.com/new_jamendo_radios/rock30.jpg"},
-                {"title": "Lounge", "url": "http://streaming.radionomy.com/JamLounge", "playing": "", "format": "audio/mpeg", "homepage": "http://www.jamendo.com/en/radios", "favicon": "http://imgjam1.jamendo.com/new_jamendo_radios/lounge30.jpg"},
-                {"title": "Electro", "url": "http://streaming.radionomy.com/JamElectro", "playing": "", "format": "audio/mpeg", "homepage": "http://www.jamendo.com/en/radios", "favicon": "http://imgjam1.jamendo.com/new_jamendo_radios/electro30.jpg"},
-                {"title": "HipHop", "url": "http://streaming.radionomy.com/JamHipHop", "playing": "", "format": "audio/mpeg", "homepage": "http://www.jamendo.com/en/radios", "favicon": "http://imgjam1.jamendo.com/new_jamendo_radios/hiphop30.jpg"},
-                {"title": "World", "url": "http://streaming.radionomy.com/JamWorld", "playing": "", "format": "audio/mpeg", "homepage": "http://www.jamendo.com/en/radios", "favicon": "http://imgjam1.jamendo.com/new_jamendo_radios/world30.jpg"},
-                {"title": "Jazz", "url": "http://streaming.radionomy.com/JamJazz", "playing": "", "format": "audio/mpeg", "homepage": "http://www.jamendo.com/en/radios", "favicon": "http://imgjam1.jamendo.com/new_jamendo_radios/jazz30.jpg"},
-                {"title": "Metal", "url": "http://streaming.radionomy.com/JamMetal", "playing": "", "format": "audio/mpeg", "homepage": "http://www.jamendo.com/en/radios", "favicon": "http://imgjam1.jamendo.com/new_jamendo_radios/metal30.jpg"},
-                {"title": "Soundtrack", "url": "http://streaming.radionomy.com/JamSoundtrack", "playing": "", "format": "audio/mpeg", "homepage": "http://www.jamendo.com/en/radios", "favicon": "http://imgjam1.jamendo.com/new_jamendo_radios/soundtrack30.jpg"},
-                {"title": "Relaxation", "url": "http://streaming.radionomy.com/JamRelaxation", "playing": "", "format": "audio/mpeg", "homepage": "http://www.jamendo.com/en/radios", "favicon": "http://imgjam1.jamendo.com/new_jamendo_radios/relaxation30.jpg"},
-                {"title": "Classical", "url": "http://streaming.radionomy.com/JamClassical", "playing": "", "format": "audio/mpeg", "homepage": "http://www.jamendo.com/en/radios", "favicon": "http://imgjam1.jamendo.com/new_jamendo_radios/classical30.jpg"},
-            ]
+            entries = []
+            for radio in ["BestOf", "Pop", "Rock", "Lounge", "Electro", "HipHop", "World", "Jazz", "Metal", "Soundtrack", "Relaxation", "Classical"]:
+                entries.append({
+                    "genre": radio,
+                    "title": radio,
+                    "url": "http://streaming.radionomy.com/Jam" + radio,
+                    "playing": "various artists",
+                    "format": "audio/mpeg",
+                    "homepage": "http://www.jamendo.com/en/radios",
+                    "img": "http://imgjam1.jamendo.com/new_jamendo_radios/%s30.jpg" % radio.lower(),
+                })
         
         # playlist
         if cat == "playlists":
             data = http.get(self.api + cat, params = {
                 "client_id": self.cid,
                 "format": "json",
-                "limit": "200"
+                "limit": "200",
+                "order": "creationdate_desc",
             })
             for e in json.loads(data)["results"]:
                 entries.append({
@@ -118,18 +118,20 @@ class jamendo (ChannelPlugin):
                 })
 
         # albums
-        if cat == "albums":
-            data = http.get(self.api + cat, params = {
+        if cat in ["albums", "newest"]:
+            data = http.get(self.api + "albums/musicinfo", params = {
                 "client_id": self.cid,
                 "format": "json",
                 "limit": "200",
-                "imagesize": "50"
+                "imagesize": "50",
+                "order": ("popularity_week" if cat == "albums" else "releasedate_desc"),
             })
             for e in json.loads(data)["results"]:
                 entries.append({
+                    "genre": " ".join(e["musicinfo"]["tags"]),
                     "title": e["name"],
                     "playing": e["artist_name"],
-                    "favicon": e["image"],
+                    "img": e["image"],
                     "homepage": e["shareurl"],
                     #"url": "http://api.jamendo.com/v3.0/playlists/file?client_id=%s&id=%s" % (self.cid, e["id"]),
                     "url": "http://api.jamendo.com/get2/stream/track/xspf/?album_id=%s&streamencoding=ogg2&n=all&from=app-%s" % (e["id"], self.cid),
@@ -153,10 +155,10 @@ class jamendo (ChannelPlugin):
                 entries.append({
                     "lang": e["musicinfo"]["lang"],
                     "genre": " ".join(e["musicinfo"]["tags"]["genres"]),
-                    "description": ", ".join(e["musicinfo"]["tags"]["vartags"]),
+                    "extra": ", ".join(e["musicinfo"]["tags"]["vartags"]),
                     "title": e["name"],
                     "playing": e["album_name"] + " / " + e["artist_name"],
-                    "favicon": e["album_image"],
+                    "img": e["album_image"],
                     "homepage": e["shareurl"],
                     #"url": e["audio"],
                     "url": "http://storage-new.newjamendo.com/?trackid=%s&format=ogg2&u=0&from=app-%s" % (e["id"], self.cid),

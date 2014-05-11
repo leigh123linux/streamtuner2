@@ -260,7 +260,7 @@ class GenericChannel(object):
         #  - or deleted icon
         #
         def prepare(self, streams):
-            __print__(dbg.PROC, "prepare", streams)
+            #__print__(dbg.PROC, "prepare", streams)
 
             for i,row in enumerate(streams):
                                             # oh my, at least it's working
@@ -283,10 +283,18 @@ class GenericChannel(object):
                 
                 # favicons?
                 if conf.show_favicons:
-                    homepage_url = row.get("homepage")
-                    # check for availability of PNG file, inject local icons/ filename
-                    if homepage_url and favicon.available(homepage_url):
-                        streams[i]["favicon"] = favicon.file(homepage_url)
+                
+                    # entry provides its own image
+                    if "img" in row:
+                        favicon_url = row["img"]
+                        streams[i]["favicon"] = favicon.localcopy(favicon_url)
+                    
+                    # get actual homepage favicon.png
+                    elif "homepage" in row:
+                        homepage_url = row.get("homepage")
+                        # check for availability of PNG file, inject local icons/ filename
+                        if homepage_url and favicon.available(homepage_url):
+                            streams[i]["favicon"] = favicon.file(homepage_url)
                 
             return streams
 

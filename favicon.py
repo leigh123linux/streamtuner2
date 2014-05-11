@@ -52,10 +52,11 @@ def download_thread(entries):
     for e in entries:
         # try just once
         if e.get("homepage") in tried_urls:
-            pass
+            continue
         # retrieve specific img url as favicon
         elif e.get("img"):
-            pass
+            localcopy(e["img"], True)
+            continue
         # favicon from homepage URL
         elif e.get("homepage"):
             download(e["homepage"])
@@ -121,6 +122,24 @@ def file(url):
 # does the favicon exist
 def available(url):
     return os.path.exists(file(url))
+    
+    
+# copy image from url into icons/ directory
+def localcopy(url, download=False):
+    if url.startswith("http"):
+        fn = re.sub("[:/]", "_", url)
+        fn = conf.dir + "/icons/" + fn
+        if os.path.exists(fn):
+            return fn
+        elif download:
+            imgdata = ahttp.get(url, binary=1)
+            with open(fn, "wb") as f:
+                f.write(imgdata)
+                f.close()
+        if os.path.exists(fn):    
+            return fn
+    else:
+        return url
 
 
 
