@@ -163,7 +163,7 @@ class GenericChannel(object):
             if (self.current):
                 self.load(self.current)
             else:
-                mygtk.columns(self.gtk_list, self.datamap, [{}])
+                mygtk.columns(self.gtk_list, self.datamap, [])
                 
             # add to main menu
             mygtk.add_menu(parent.channelmenuitems, self.title, lambda w: parent.channel_switch(w, self.module) or 1)

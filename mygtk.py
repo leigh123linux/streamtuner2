@@ -90,7 +90,7 @@ class mygtk:
         # for missing cols. All values must already be in the correct type however.
         #
         @staticmethod
-        def columns(widget, datamap=[], entries=[], pix_entry=False, typecast=0):
+        def columns(widget, datamap=[], entries=None, pix_entry=False, typecast=0):
 
             # create treeviewcolumns?
             if (not widget.get_column(0)):
@@ -147,8 +147,8 @@ class mygtk:
                 #widget.set_reorderable(True)
                
             # add data?
-            if (entries):
-                #- expand datamap            
+            if (entries is not None):
+                #- expand datamap
                 vartypes = []  #(str, str, bool, str, int, int, gtk.gdk.Pixbuf, str, int)
                 rowmap = []    #["title", "desc", "bookmarked", "name", "count", "max", "img", ...]
                 if (not rowmap):
@@ -197,7 +197,9 @@ class mygtk:
                     except:
                         # brute-force typecast
                         ls.append( [va  if ty==gtk.gdk.Pixbuf  else ty(va)   for va,ty in zip(row,vartypes)]  )
-                __print__("[37m→[0m", row, len(row))
+
+                if entries:
+                     __print__("[37m→[0m", row, len(row))
                 
                 # apply array to widget
                 widget.set_model(ls)
