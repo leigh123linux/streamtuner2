@@ -60,7 +60,21 @@ class jamendo (ChannelPlugin):
     titles = dict( title="Title", playing="Album/Artist/User", bitrate=False, listeners=False )
  
     config = [
-        {"name":"jamendo_stream_format", "value":"ogg2", "type":"text", "description":"streaming format, 'ogg2' or 'mp31'"}
+        {"name":"jamendo_stream_format",
+         "value":"ogg",
+         "type": "text",
+         "description":"Streaming format. Use 'ogg' for Vorbis, 'mp32' for MP3 with 192kbps/VBR, or 'mp31' for 96kbps MP3, and even 'flac' for lossless audio."
+        },
+        {"name":"jamendo_image_size",
+         "value":"50",
+         "type":"text",
+         "description":"Preview images size (height and width) for albums or tracks. Valid values are 25, 35, 50, 60, 70, 85, 100, 150."
+        },
+        {"name": "jamendo_count",
+         "value": "1",
+         "type":"text",
+         "description": "How many result sets (200 entries each) to retrieve."
+        }
     ]    
     
 
@@ -83,6 +97,7 @@ class jamendo (ChannelPlugin):
     def update_streams(self, cat, search="", force=0):
 
         entries = []
+        fmt = self.stream_mime(conf.jamendo_stream_format)
         
         # return a static list for now
         if cat == "radios":
@@ -100,91 +115,96 @@ class jamendo (ChannelPlugin):
                 })
         
         # playlist
-        if cat == "playlists":
-            data = http.get(self.api + cat, params = {
-                "client_id": self.cid,
-                "format": "json",
-                "limit": "200",
-                "order": "creationdate_desc",
-            })
-            for e in json.loads(data)["results"]:
-                entries.append({
-                    "title": e["name"],
-                    "playing": e["user_name"],
-                    "homepage": e["shareurl"],
-                    #"url": "http://api.jamendo.com/v3.0/playlists/file?client_id=%s&id=%s" % (self.cid, e["id"]),
-                    "url": "http://api.jamendo.com/get2/stream/track/xspf/?playlist_id=%s&n=all&order=random&from=app-%s" % (e["id"], self.cid),
-                    "format": "application/xspf+xml",
+        elif cat == "playlists":
+            for offset in self.retrieval_offsets():
+                data = http.get(self.api + cat, params = {
+                    "client_id": self.cid,
+                    "format": "json",
+                    "audioformat": conf.jamendo_stream_format,
+                    "limit": "200",
+                    "offset": offset,
+                    "order": "creationdate_desc",
                 })
+                for e in json.loads(data)["results"]:
+                    entries.append({
+                        "title": e["name"],
+                        "playing": e["user_name"],
+                        "homepage": e["shareurl"],
+                        #"url": "http://api.jamendo.com/v3.0/playlists/file?client_id=%s&id=%s" % (self.cid, e["id"]),
+                        "url": "http://api.jamendo.com/get2/stream/track/xspf/?playlist_id=%s&n=all&order=random&from=app-%s" % (e["id"], self.cid),
+                        "format": "application/xspf+xml",
+                    })
 
         # albums
-        if cat in ["albums", "newest"]:
-            data = http.get(self.api + "albums/musicinfo", params = {
-                "client_id": self.cid,
-                "format": "json",
-                "limit": "200",
-                "imagesize": "50",
-                "order": ("popularity_week" if cat == "albums" else "releasedate_desc"),
-            })
-            for e in json.loads(data)["results"]:
-                entries.append({
-                    "genre": " ".join(e["musicinfo"]["tags"]),
-                    "title": e["name"],
-                    "playing": e["artist_name"],
-                    "img": e["image"],
-                    "homepage": e["shareurl"],
-                    #"url": "http://api.jamendo.com/v3.0/playlists/file?client_id=%s&id=%s" % (self.cid, e["id"]),
-                    "url": "http://api.jamendo.com/get2/stream/track/xspf/?album_id=%s&streamencoding=ogg2&n=all&from=app-%s" % (e["id"], self.cid),
-                    "format": "application/xspf+xml",
+        elif cat in ["albums", "newest"]:
+            for offset in self.retrieval_offsets():
+                data = http.get(self.api + "albums/musicinfo", params = {
+                    "client_id": self.cid,
+                    "format": "json",
+                    "audioformat": conf.jamendo_stream_format,
+                    "limit": "200",
+                    "offset": offset,
+                    "imagesize": "50",
+                    "order": ("popularity_week" if cat == "albums" else "releasedate_desc"),
                 })
+                for e in json.loads(data)["results"]:
+                    entries.append({
+                        "genre": " ".join(e["musicinfo"]["tags"]),
+                        "title": e["name"],
+                        "playing": e["artist_name"],
+                        "img": e["image"],
+                        "homepage": e["shareurl"],
+                        #"url": "http://api.jamendo.com/v3.0/playlists/file?client_id=%s&id=%s" % (self.cid, e["id"]),
+                        "url": "http://api.jamendo.com/get2/stream/track/xspf/?album_id=%s&streamencoding=ogg2&n=all&from=app-%s" % (e["id"], self.cid),
+                        "format": "application/xspf+xml",
+                    })
 		
         # genre list
         else:
-            data = http.get(self.api + "tracks", params={
-                "client_id": self.cid,
-                ("fuzzytags" if cat else "search"): (search if search else cat),
-                "format": "json",
-                "audioformat":"ogg",
-                "limit": "200",
-                "offset": 200,
-                "imagesize": "50",
-                "order": "popularity_week",
-                "include": "musicinfo",
-            })
-            for e in json.loads(data)["results"]:
-                entries.append({
-                    "lang": e["musicinfo"]["lang"],
-                    "genre": " ".join(e["musicinfo"]["tags"]["genres"]),
-                    "extra": ", ".join(e["musicinfo"]["tags"]["vartags"]),
-                    "title": e["name"],
-                    "playing": e["album_name"] + " / " + e["artist_name"],
-                    "img": e["album_image"],
-                    "homepage": e["shareurl"],
-                    #"url": e["audio"],
-                    "url": "http://storage-new.newjamendo.com/?trackid=%s&format=ogg2&u=0&from=app-%s" % (e["id"], self.cid),
-                    "format": "audio/ogg",
+            for offset in self.retrieval_offsets():
+                data = http.get(self.api + "tracks", params={
+                    "client_id": self.cid,
+                    ("fuzzytags" if cat else "search"): (search if search else cat),
+                    "format": "json",
+                    "audioformat": conf.jamendo_stream_format,
+                    "limit": "200",
+                    "offset": offset,
+                    "imagesize": conf.jamendo_image_size,
+                    "order": "popularity_week",
+                    "include": "musicinfo",
                 })
+                for e in json.loads(data)["results"]:
+                    entries.append({
+                        "lang": e["musicinfo"]["lang"],
+                        "genre": " ".join(e["musicinfo"]["tags"]["genres"]),
+                        "extra": ", ".join(e["musicinfo"]["tags"]["vartags"]),
+                        "title": e["name"],
+                        "playing": e["album_name"] + " / " + e["artist_name"],
+                        "img": e["album_image"],
+                        "homepage": e["shareurl"],
+                        #"url": e["audio"],
+                        "url": "http://storage-new.newjamendo.com/?trackid=%s&format=ogg2&u=0&from=app-%s" % (e["id"], self.cid),
+                        "format": fmt,
+                    })
  
         # done    
         return entries
+
+    
+    # offset list [0, 200, 400, 600, ...] according to max retrieval count
+    def retrieval_offsets(self):
+        return [200*1 for i in range(0, int(conf.jamendo_count))]
         
-        
-    # smaller album link
-    def cover(self, url):
-        return url.replace(".100",".50").replace(".130",".50")
-     
-    # track id to download url   
-    def track_url(self, track_id, fmt="ogg2", track="track", urltype="redirect"):
-        # track = "album"
-        # fmt = "mp31"
-        # urltype = "m3u"
-	return "http://api.jamendo.com/get2/stream/"+track+"/"+urltype+"/?id="+track_id+"&streamencoding="+fmt
 
     # audio/*
-    def stream_mime(self):
-        if conf.jamendo_stream_format.find("og") >= 0:
-            return "audio/ogg"
+    def stream_mime(self, name):
+        map = {
+            "ogg": "audio/ogg", "ogg2": "audio/ogg",
+            "mp3": "audio/mpeg", "mp31": "audio/mpeg", "mp33": "audio/mpeg",
+            "flac": "audio/flac"
+        }
+        if name in map:
+            return map[name]
         else:
-            return "audio/mpeg"
-
+            return map["mp3"]
 
