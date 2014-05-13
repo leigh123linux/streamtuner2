@@ -850,7 +850,7 @@ class config_dialog (auxiliary_window):
             w.set_property("visible", True)
             main.widgets[id] = w
             if label:
-                w.set_width_chars(10)
+                w.set_width_chars(11)
                 w = self.hbox(w, self.label(label))
             if color:
                 w = mygtk.bg(w, color)
@@ -860,7 +860,7 @@ class config_dialog (auxiliary_window):
             label = gtk.Label(label)
             label.set_property("visible", True)
             label.set_line_wrap(True) 
-            label.set_size_request(250, -1)
+            label.set_size_request(400, -1)
             return label
 
         def hbox(self, w1, w2):
