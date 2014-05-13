@@ -91,10 +91,10 @@ class surfmusik (ChannelPlugin):
             html = re.sub("&#x?\d+;", "", html)
         
             rx_radio = re.compile(r"""
+                <td\s+class="home1"><a[^>]*\s+href="(.+?)"[^>]*> .*?
                 <a\s+class="navil"\s+href="([^"]+)"[^>]*>([^<>]+)</a></td>
                 <td\s+class="ort">(.*?)</td>.*?
                 <td\s+class="ort">(.*?)</td>.*?
-                <td\s+class="home1"><a\s+class="navil"\s+href="(.+?)"
             """, re.X|re.I)
             rx_video = re.compile(r"""
                 <a[^>]+href="([^"]+)"[^>]*>(?:<[^>]+>)*Externer
@@ -102,7 +102,7 @@ class surfmusik (ChannelPlugin):
 
             # per-country list
             for uu in rx_radio.findall(html):
-                (homepage, name, genre, stadt, url) = uu
+                (url, homepage, name, genre, stadt) = uu
                 
                 # find mms:// for webtv stations
                 if is_tv:
@@ -111,7 +111,7 @@ class surfmusik (ChannelPlugin):
                         url = m.group(1)
                 # just convert /radio/ into /m3u/ link
                 else:
-                    url = "http://www.surfmusik.de/m3u/" + url[30:-5] + ".m3u",
+                    url = "http://www.surfmusik.de/m3u/" + url[30:-5] + ".m3u"
 
                 entries.append({
                     "title": name,
