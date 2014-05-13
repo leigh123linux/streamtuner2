@@ -148,7 +148,8 @@ class ConfigDict(dict):
             else:
                 f = open(file, "w")
             # encode
-            json.dump(data, f, indent=(4 if nice else None))
+            data = json.dumps(data, indent=(4 if nice else None))
+            f.write(data.encode("utf-8"))
             f.close()
 
 
