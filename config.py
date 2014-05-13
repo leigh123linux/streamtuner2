@@ -63,9 +63,9 @@ class ConfigDict(dict):
                "audio/mp3": "audacious ",	# %u for url to .pls, %g for downloaded .m3u
                "audio/ogg": "audacious ",
                "audio/aac": "amarok -l ",
-               "audio/x-pn-realaudio": "vlc ",
+               "audio/x-pn-realaudio": "vlc --one-instance",
                "audio/*": "totem ",
-               "*/*": "vlc %srv",
+               "*/*": "vlc --one-instance %srv",
             }
             self.record = {
                "*/*": "x-terminal-emulator -e streamripper %srv",
@@ -81,7 +81,7 @@ class ConfigDict(dict):
                 "tv": 0,   # no longer working
             }
             self.tmp = os.environ.get("TEMP", "/tmp")
-            self.max_streams = "120"
+            self.max_streams = "500"
             self.show_bookmarks = 1
             self.show_favicons = 1
             self.load_favicon = 1
