@@ -42,8 +42,6 @@ class shoutcast(channels.ChannelPlugin):
 
         # settings
         config = [
-            dict(name="pyquery", type="boolean", value=0, description="Use more reliable PyQuery HTML parsing\ninstead of faster regular expressions."),
-            dict(name="debug", type="boolean", value=0, description="enable debug output"),
         ]
         
         # categories
