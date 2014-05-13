@@ -1218,7 +1218,7 @@ represent direct URLs to the streaming servers.</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkEntry" id="config_play_audio_mp3">
+                              <object class="GtkEntry" id="config_play_audio_mpeg">
                                 <property name="width_request">200</property>
                                 <property name="height_request">20</property>
                                 <property name="visible">True</property>
@@ -1241,7 +1241,8 @@ represent direct URLs to the streaming servers.</property>
                               <object class="GtkLabel" id="label7">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">audio/mp3</property>
+                                <property name="label"
+                                translatable="yes">audio/mpeg</property>
                               </object>
                               <packing>
                                 <property name="top_attach">1</property>

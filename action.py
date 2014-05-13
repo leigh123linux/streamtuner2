@@ -41,7 +41,7 @@ class action:
         # streamlink formats
         lt = {"asx":"video/x-ms-asf", "pls":"audio/x-scpls", "m3u":"audio/x-mpegurl", "xspf":"application/xspf+xml", "href":"url/http", "ram":"audio/x-pn-realaudio", "smil":"application/smil"}
         # media formats
-        mf = {"mp3":"audio/mp3", "ogg":"audio/ogg", "aac":"audio/aac"}
+        mf = {"mp3":"audio/mpeg", "ogg":"audio/ogg", "aac":"audio/aac"}
         
         
         # web
@@ -63,12 +63,12 @@ class action:
 
         # calls player for stream url and format
         @staticmethod
-        def play(url, audioformat="audio/mp3", listformat="text/x-href"):
+        def play(url, audioformat="audio/mpeg", listformat="text/x-href"):
             if (url):
                 url = action.url(url, listformat)
             if (audioformat):
-                if audioformat == "audio/mpeg":
-                    audioformat = "audio/mp3"  # internally we use the more user-friendly moniker
+                if audioformat == "audio/mp3":
+                    audioformat = "audio/mpeg"
                 cmd = conf.play.get(audioformat, conf.play.get("*/*", "vlc %u"))
                 __print__( dbg.PROC,"play", url, cmd )
             try:
@@ -88,7 +88,7 @@ class action:
 
         # streamripper
         @staticmethod
-        def record(url, audioformat="audio/mp3", listformat="text/x-href", append="", row={}):
+        def record(url, audioformat="audio/mpeg", listformat="text/x-href", append="", row={}):
             __print__( dbg.PROC, "record", url )
             cmd = conf.record.get(audioformat, conf.record.get("*/*", None))
             try: action.run( action.interpol(cmd, url, row) + append )
@@ -211,7 +211,7 @@ class action:
                 return re.findall("<Ref\s+href=\"(http://.+?)\"", http.get(pls))
             elif (re.search("\.m3u|\.ram|\.smil", pls)):	#audio/x-mpegurl
                 return re.findall("(http://[^\s]+)", http.get(pls), re.I)
-            else:  # just assume it was a direct mp3/ogg streamserver link
+            else:  # just assume it was a direct mpeg/ogg streamserver link
                 return [ (pls if pls.startswith("/") else http.fix_url(pls)) ]
             pass
 

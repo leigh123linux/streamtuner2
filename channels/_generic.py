@@ -52,7 +52,7 @@ class GenericChannel(object):
         homepage = "http://milki.inlcude-once.org/streamtuner2/"
         base_url = ""
         listformat = "audio/x-scpls"
-        audioformat = "audio/mp3" # fallback value
+        audioformat = "audio/mpeg" # fallback value
         config = []
         has_search = False
 
@@ -431,9 +431,9 @@ class GenericChannel(object):
             s = s.lower().strip()
             # rename
             map = {
-                "audio/mpeg":"audio/mp3",  # Note the real mime type is /mpeg, but /mp3 is more understandable in the GUI
+                "audio/mp3":"audio/mpeg",  # Note the real mime type is /mpeg, but /mp3 is more understandable in the GUI
                 "ogg":"ogg", "ogm":"ogg", "xiph":"ogg", "vorbis":"ogg", "vnd.xiph.vorbis":"ogg",
-                "mpeg":"mp3", "mp":"mp3", "mp2":"mp3", "mpc":"mp3", "mps":"mp3",
+                "mp3":"mpeg", "mp":"mpeg", "mp2":"mpeg", "mpc":"mpeg", "mps":"mpeg",
                 "aac+":"aac", "aacp":"aac",
                 "realaudio":"x-pn-realaudio", "real":"x-pn-realaudio", "ra":"x-pn-realaudio", "ram":"x-pn-realaudio", "rm":"x-pn-realaudio",
                 # yes, we do video

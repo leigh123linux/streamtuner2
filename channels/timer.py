@@ -166,7 +166,7 @@ class timer:
     def play(self, row, *args, **kwargs):
         action.play(
             url = row["url"],
-            audioformat = row.get("format","audio/mp3"), 
+            audioformat = row.get("format","audio/mpeg"), 
             listformat = row.get("listformat","url/direct"),
         )
 
@@ -184,7 +184,7 @@ class timer:
         # start recording
         action.record(
             url = row["url"],
-            audioformat = row.get("format","audio/mp3"), 
+            audioformat = row.get("format","audio/mpeg"), 
             listformat = row.get("listformat","url/direct"),
             append = append,
         )

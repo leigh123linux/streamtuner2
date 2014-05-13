@@ -74,7 +74,7 @@ class punkcast (ChannelPlugin):
                     "genre": "?",
                     "title": title,
                     "playing": "PUNKCAST #"+id,
-                    "format": "audio/mp3",
+                    "format": "audio/mpeg",
                     "homepage": homepage,
             })
 

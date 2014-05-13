@@ -112,7 +112,7 @@ class internet_radio_org_uk (ChannelPlugin):
                         "playing": playing,
                         "bitrate": int(bitrate),
                         "listeners": int(listeners if listeners else 0),
-                        "format": "audio/mp3", # there is no stream info on that, but internet-radio.org.uk doesn't seem very ogg-friendly anyway, so we assume the default here
+                        "format": "audio/mpeg", # there is no stream info on that, but internet-radio.org.uk doesn't seem very ogg-friendly anyway, so we assume the default here
                     })
 
             # DOM parsing
@@ -131,7 +131,7 @@ class internet_radio_org_uk (ChannelPlugin):
                         "genre": dir.find("td").eq(0).text(),
                         "bitrate": int(bl[0]),
                         "listeners": int(bl[1]),
-                        "format": "audio/mp3",
+                        "format": "audio/mpeg",
                         "playing": dir.find("td").eq(1).children().remove().end().text()[13:].strip(),
                     })
             

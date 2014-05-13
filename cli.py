@@ -109,7 +109,7 @@ syntax:  streamtuner2 action [channel] "stream title"
     def play(self, *args):
         row = self.stream(*args)
         if row.get("url"):
-            #action.action.play(row["url"], audioformat=row.get("format","audio/mp3"))
+            #action.action.play(row["url"], audioformat=row.get("format","audio/mpeg"))
             self.plugins[self.current_channel].play(row)
             
     # return cache data 1:1

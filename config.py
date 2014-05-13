@@ -50,6 +50,7 @@ class ConfigDict(dict):
             last = self.load("settings")
             if (last):
                 self.update(last)
+                self.migrate()
             # store defaults in file
             else:
                 self.save("settings")
@@ -60,7 +61,7 @@ class ConfigDict(dict):
         def defaults(self):
             self.browser = "sensible-browser"
             self.play = {
-               "audio/mp3": "audacious ",	# %u for url to .pls, %g for downloaded .m3u
+               "audio/mpeg": "audacious ",	# %u for url to .pls, %g for downloaded .m3u
                "audio/ogg": "audacious ",
                "audio/aac": "amarok -l ",
                "audio/x-pn-realaudio": "vlc --one-instance",
@@ -179,6 +180,13 @@ class ConfigDict(dict):
                 else:
                     self[key] = value
             # descends into sub-dicts instead of wiping them with subkeys
+
+        # update old setting names
+        def migrate(self):
+            # 2.1.1
+            if "audio/mp3" in self.play:
+                self.play["audio/mpeg"] = self.play["audio/mp3"]
+                del self.play["audio/mp3"]
 
              
         # check for existing filename in directory list

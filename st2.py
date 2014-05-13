@@ -314,7 +314,7 @@ class StreamTunerTwo(gtk.Builder):
         # streamripper
         def on_record_clicked(self, widget):
             row = self.row()
-            action.record(row.get("url"), "audio/mp3", "url/direct", row=row)
+            action.record(row.get("url"), "audio/mpeg", "url/direct", row=row)
 
 
         # browse stream
@@ -725,7 +725,7 @@ class streamedit (auxiliary_window):
         # add a new list entry, update window
         def new(self, w):
             s = main.channel().stations()
-            s.append({"title":"new", "url":"", "format":"audio/mp3", "genre":"", "listeners":1});
+            s.append({"title":"new", "url":"", "format":"audio/mpeg", "genre":"", "listeners":1});
             main.channel().switch() # update display
             main.channel().gtk_list.get_selection().select_path(str(len(s)-1)); # set cursor to last row
             self.open(w)
@@ -770,7 +770,7 @@ class config_dialog (auxiliary_window):
                 id = re.sub("[^\w]", "_", key)
                 w = main.get_widget(prefix + id)
                 __print__(dbg.CONF, "config", ("save" if save else "load"), prefix+id, w, val)
-                # recurse into dictionaries, transform: conf.play.audio/mp3 => conf.play_audio_mp3
+                # recurse into dictionaries, transform: conf.play.audio/mpeg => conf.play_audio_mpeg
                 if (type(val) == dict):
                     self.apply(val, prefix + id + "_", save)
                 # load or set gtk.Entry text field
