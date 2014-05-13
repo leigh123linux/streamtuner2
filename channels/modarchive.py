@@ -1,6 +1,11 @@
 
 # api: streamtuner2
-# title: modarchive browser
+# title: MODarchive
+# description: Collection of module / tracker audio files (MOD, S3M, XM, etc.)
+# type: channel
+# version: 0.1
+# priority: extra
+# category: media
 #
 #
 # Just a genre browser.
@@ -38,7 +43,6 @@ class modarchive (ChannelPlugin):
     title = "modarchive"
     module = "modarchive"
     homepage = "http://www.modarchive.org/"
-    version = 0.1
     base = "http://modarchive.org/"
 
     # keeps category titles->urls    

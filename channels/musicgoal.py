@@ -1,10 +1,12 @@
 #
 # api: streamtuner2
-# title: MUSICGOAL channel
-# description: musicgoal.com/.de combines radio and podcast listings
+# title: MUSICGOAL
+# description: Broad list of radio stations and podcasts. Provides a sane API, but only 5 results each.
+# type: channel
+# category: radio
 # version: 0.1
+# priority: optional
 # status: experimental
-# pre-config: <const name="api"/>
 #
 # Musicgoal.com is a radio and podcast directory. This plugin tries to use
 # the new API for accessing listing data.
@@ -32,7 +34,6 @@ class musicgoal (ChannelPlugin):
         # desc
         module = "musicgoal"
         title = "MUSICGOAL"
-        version = 0.1
         homepage = "http://www.musicgoal.com/"
         base_url = homepage
         listformat = "url/direct"

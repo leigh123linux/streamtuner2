@@ -1,8 +1,11 @@
 #
 # api: streamtuner2
 # title: Xiph.org
-# description: Xiph/ICEcast radio directory
+# description: ICEcast radio directory. Now utilizes a cached JSON API.
+# type: channel
+# category: radio
 # version: 0.3
+# priority: standard
 #
 #
 # Xiph.org maintains the Ogg streaming standard and Vorbis audio compression
@@ -39,7 +42,6 @@ class xiph (ChannelPlugin):
         api = "streamtuner2"
         module = "xiph"
         title = "Xiph.org"
-        version = 0.3
         homepage = "http://dir.xiph.org/"
         #base_url = "http://api.dir.xiph.org/"
         json_url = "http://api.include-once.org/xiph/cache.php"

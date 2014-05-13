@@ -1,9 +1,11 @@
 #
-# type: feature
 # api: streamtuner2
-# title: global keyboard shortcut
-# description: allows switching radios in bookmarks list via key press
+# title: Global keyboard shortcut
+# description: Allows switching between bookmarked radios via key press.
+# type: feature
+# category: ui
 # version: 0.2
+# priority: extra
 # depends: python-keybinder
 #
 #
@@ -27,7 +29,6 @@ class global_key(object):
 
     module = "global_key"
     title = "keyboard shortcut"
-    version = 0.2
     
     config = [
         dict(name="switch_key", type="text", value="XF86Forward", description="global key for switching radio"),

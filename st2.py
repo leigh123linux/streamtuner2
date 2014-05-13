@@ -5,7 +5,7 @@
 # title: streamtuner2
 # description: directory browser for internet radio / audio streams
 # depends: pygtk | pygi, threading, pyquery, kronos, requests
-# version: 2.1.0
+# version: 2.1.1
 # author: mario salzer
 # license: public domain
 # url: http://freshmeat.net/projects/streamtuner2
@@ -78,7 +78,7 @@ except:
 
 # add library path
 sys.path.insert(0, "/usr/share/streamtuner2")   # pre-defined directory for modules
-sys.path.insert(0, "/usr/share/streamtuner2/bundle")   # external libraries
+sys.path.append(   "/usr/share/streamtuner2/bundle")   # external libraries
 sys.path.insert(0, ".")   # development module path
 
 # gtk modules
@@ -89,6 +89,7 @@ from config import conf   # initializes itself, so all conf.vars are available r
 from config import __print__, dbg
 import ahttp
 import action  # needs workaround... (action.main=main)
+import channels
 from channels import *
 import favicon
 
@@ -442,13 +443,8 @@ class StreamTunerTwo(gtk.Builder):
         # load plugins from /usr/share/streamtuner2/channels/
         def load_plugin_channels(self):
 
-            # find plugin files
-            ls = os.listdir(conf.share + "/channels/")
-            ls = [fn[:-3] for fn in ls if re.match("^[a-z][\w\d_]+\.py$", fn)]
-            
-            # resort with tab order
-            order = [module.strip() for module in conf.channel_order.lower().replace(".","_").replace("-","_").split(",")]
-            ls = [module for module in (order) if (module in ls)] + [module for module in (ls) if (module not in order)]
+            # find and order plugin files
+            ls = channels.module_list()
 
             # step through
             for module in ls:
@@ -753,11 +749,13 @@ class config_dialog (auxiliary_window):
 
         # display win_config, pre-fill text fields from global conf. object
         def open(self, widget):
-            self.add_plugins()
+            if self.first_open:
+                self.add_plugins()
+                self.combobox_theme()
+                self.first_open = 0
             self.apply(conf.__dict__, "config_", 0)
-            #self.win_config.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('#443399'))
-            self.combobox_theme()
             self.win_config.show()
+        first_open = 1
 
 
         def hide(self, *args):
@@ -818,18 +816,15 @@ class config_dialog (auxiliary_window):
 
 
         # add configuration setting definitions from plugins
-        once = 0
         def add_plugins(self):
-            if self.once:
-                return
 
-            for name,enabled in conf.plugins.items():
+            for name,meta in channels.module_meta().items():
 
                 # add plugin load entry
                 if name:
-                    label = ("enable ⎗ %s channel" if self.channels.get(name) else "use ⎗ %s plugin")
-                    cb =  gtk.ToggleButton(label=label % name)
-                    self.add_( "config_plugins_"+name, cb )#, label=None, color="#ddd" )
+                    cb = gtk.CheckButton(name)
+                    cb.child.set_markup("<b>%s</b> <i>(%s)</i> %s\n<small>%s</small>" % (meta["title"], meta["type"], meta.get("version", ""), meta["description"]))
+                    self.add_( "config_plugins_"+name, cb )
 
                 # look up individual plugin options, if loaded
                 if self.channels.get(name) or self.features.get(name):
@@ -848,7 +843,6 @@ class config_dialog (auxiliary_window):
 
                 # spacer 
                 self.add_( "filler_pl_"+name, gtk.HSeparator() )
-            self.once = 1
 
 
         # put gtk widgets into config dialog notebook
@@ -857,18 +851,24 @@ class config_dialog (auxiliary_window):
             main.widgets[id] = w
             if label:
                 w.set_width_chars(10)
-                label = gtk.Label(label)
-                label.set_property("visible", True)
-                label.set_line_wrap(True) 
-                label.set_size_request(250, -1)
-                vbox = gtk.HBox(homogeneous=False, spacing=10)
-                vbox.set_property("visible", True)
-                vbox.pack_start(w, expand=False, fill=False)
-                vbox.pack_start(label, expand=True, fill=True)
-                w = vbox
+                w = self.hbox(w, self.label(label))
             if color:
                 w = mygtk.bg(w, color)
             self.plugin_options.pack_start(w)
+
+        def label(self, label):
+            label = gtk.Label(label)
+            label.set_property("visible", True)
+            label.set_line_wrap(True) 
+            label.set_size_request(250, -1)
+            return label
+
+        def hbox(self, w1, w2):
+            vbox = gtk.HBox(homogeneous=False, spacing=10)
+            vbox.set_property("visible", True)
+            vbox.pack_start(w1, expand=False, fill=False)
+            vbox.pack_start(w2, expand=True, fill=True)
+            return vbox
 
         
         # save config

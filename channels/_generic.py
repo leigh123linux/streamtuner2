@@ -1,12 +1,14 @@
 #
 # encoding: UTF-8
 # api: streamtuner2
-# type: class
+# type: internal
+# category: ui
 # title: channel objects
 # description: base functionality for channel modules
-# version: 1.0
+# version: 1.1
 # author: mario
 # license: public domain
+# priority: core
 #
 #
 #  GenericChannel implements the basic GUI functions and defines
@@ -45,10 +47,8 @@ class struct(dict):
 class GenericChannel(object):
 
         # desc
-        api = "streamtuner2"
         module = "generic"
         title = "GenericChannel"
-        version = 1.0
         homepage = "http://milki.inlcude-once.org/streamtuner2/"
         base_url = ""
         listformat = "audio/x-scpls"

@@ -1,8 +1,11 @@
 #
 # api: streamtuner2
-# title: internet-radio.org.uk
-# description: io channel
+# title: Internet-Radio.org.uk
+# description: Broad list of webradios from all genres.
+# type: channel
+# category: radio
 # version: 0.1
+# priority: standard
 #
 #
 # Might become new main plugin
@@ -29,7 +32,6 @@ class internet_radio_org_uk (ChannelPlugin):
     title = "InternetRadio"
     module = "internet_radio_org_uk"
     homepage = "http://www.internet-radio.org.uk/"
-    version = 0.1
     listformat = "audio/x-scpls"
     
     # settings

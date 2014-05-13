@@ -1,11 +1,11 @@
 #
 # api: streamtuner2
-# title: radio scheduler
-# description: time play/record events for radio stations
+# title: Recording timer
+# description: Schedules play/record events for bookmarked radio stations.
+# type: feature
+# category: ui
 # depends: kronos
 # version: 0.5
-# config:
-# category: features
 # priority: optional
 # support: unsupported
 #
@@ -35,7 +35,6 @@ class timer:
     # plugin info
     module = "timer"
     title = "Timer"
-    version = 0.5
     
     
     # configuration settings

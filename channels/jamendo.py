@@ -1,8 +1,11 @@
 
 # api: streamtuner2
-# title: jamendo browser
-# description: Jamendo is a license-free music collection and artist hub
+# title: Jamendo
+# description: A license-free music collection and artist hub.
+# type: channel
+# category: radio
 # depends: json
+# priority: default
 #
 # Now utilizes the Jamendo /v3.0/ API.
 #

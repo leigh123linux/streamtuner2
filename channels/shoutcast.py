@@ -1,9 +1,12 @@
 #
 # api: streamtuner2
-# title: shoutcast
-# description: Channel/tab for Shoutcast.com directory
-# depends: pq, re, http
+# title: Shoutcast.com
+# description: Primary list of shoutcast servers (now managed by radionomy).
+# type: channel
+# category: radio
+# priority: default
 # version: 1.3
+# depends: pq, re, http
 # author: Mario
 # original: Jean-Yves Lefort
 #
@@ -35,7 +38,6 @@ class shoutcast(channels.ChannelPlugin):
         api = "streamtuner2"
         module = "shoutcast"
         title = "SHOUTcast"
-        version = 1.2
         homepage = "http://www.shoutcast.com/" 
         base_url = "http://shoutcast.com/"
         listformat = "audio/x-scpls"

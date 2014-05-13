@@ -1,10 +1,13 @@
 #
 # encoding: ISO-8859-1
 # api: streamtuner2
-# title: google stations
-# description: Looks up web radio stations from DMOZ/Google directory
+# title: Google stations
+# description: Looks up web radio homepages from DMOZ/Google directory.
+# type: channel
+# category: web
+# priority: deprecated
+# version: 0.2
 # depends: channels, re, http
-# version: 0.1
 # author: Mario, original: Jean-Yves Lefort
 #
 # This is a plugun from streamtuner1. It has been rewritten for the
@@ -82,7 +85,6 @@ class google(ChannelPlugin):
     title = "Google"
     module = "google"
     homepage = GOOGLE_STATIONS_HOME
-    version = 0.2
     
     # config data
     config = [

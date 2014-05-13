@@ -1,12 +1,11 @@
 #
 # api: streamtuner2
-# title: MyOggRadio channel plugin
-# description: open source internet radio directory MyOggRadio
+# title: MyOggRadio
+# description: Open source internet radio directory.
+# type: channel
+# category: radio
 # version: 0.5
-# config:
-#    <var name="myoggradio_login" type="text" value="user:password" description="login account for myoggradio service" />
 # priority: standard
-# category: channel
 # depends: json, StringIO
 #
 # MyOggRadio is an open source radio station directory. Because this matches
@@ -39,7 +38,6 @@ class myoggradio(ChannelPlugin):
     module = "myoggradio"
     homepage = "http://www.myoggradio.org/"
     api = "http://ehm.homelinux.org/MyOggRadio/"
-    version = 0.5
     listformat = "url/direct"
     
     # config data

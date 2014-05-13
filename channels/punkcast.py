@@ -1,6 +1,11 @@
 
 # api: streamtuner2
-# title: punkcast listing
+# title: PunkCast
+# description: Online video site that covered NYC artists. Not updated anymore.
+# type: channel
+# category: video
+# version: 0.1
+# priority: rare
 #
 #
 # Disables itself per default.
@@ -38,7 +43,6 @@ class punkcast (ChannelPlugin):
     title = "punkcast"
     module = "punkcast"
     homepage = "http://www.punkcast.com/"
-    version = 0.1
 
     # keeps category titles->urls    
     catmap = {}

@@ -1,13 +1,12 @@
 #
 # api: streamtuner2
-# title: file browser plugin
-# description: browses through local files, displays mp3/oggs and m3u/pls files
-# version: -0.5
+# title: File browser
+# description: Displays mp3/oggs or m3u/pls files from local media file directories.
+# type: channel
+# category: media
+# version: 0.0
+# priority: optional
 # depends: mutagen, kiwi
-# x:
-# x:
-# x:
-# x:
 #
 #
 # Local file browser.

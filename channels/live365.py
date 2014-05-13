@@ -1,5 +1,11 @@
-# api: st2
-# title: live365 channel
+
+# api: streamtunter2
+# title: Live365
+# description: Around 5000 categorized internet radio streams, some paid ad-free ones.
+# type: channel
+# category: radio
+# version: 0.2
+# priority: optional
 #
 # 2.0.9 fixed by Abhisek Sanyal
 #
@@ -28,10 +34,8 @@ class live365(ChannelPlugin):
 
 
         # desc
-        api = "streamtuner2"
         module = "live365"
         title = "Live365"
-        version = 0.1
         homepage = "http://www.live365.com/"
         base_url = "http://www.live365.com/"
         listformat = "url/http"

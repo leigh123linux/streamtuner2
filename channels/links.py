@@ -1,9 +1,11 @@
 #
 # api: streamtuner2
-# title: links to directory services
-# description: provides a simple list of homepages for directory services
+# title: Links to directory services
+# description: Static list of various music directory websites.
+# type: category
+# category: web
 # version: 0.1
-# priority: rare
+# priority: default
 #
 #
 # Simply adds a "links" entry in bookmarks tab, where known channels
