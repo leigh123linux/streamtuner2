@@ -47,8 +47,9 @@ class action:
         # web
         @staticmethod
         def browser(url):
-            __print__( dbg.CONF, conf.browser )
-            action.run(conf.browser + " " + action.quote(url))
+            bin = conf.play.get("url/http", "sensible-browser")
+            __print__( dbg.CONF, bin )
+            action.run(bin + " " + action.quote(url))
 
 
             
@@ -90,7 +91,7 @@ class action:
         @staticmethod
         def record(url, audioformat="audio/mpeg", listformat="text/x-href", append="", row={}):
             __print__( dbg.PROC, "record", url )
-            cmd = conf.record.get(audioformat, conf.record.get("*/*", None))
+            cmd = conf.record.get(audioformat, conf.play.get("record", None))
             try: action.run( action.interpol(cmd, url, row) + append )
             except: pass
 

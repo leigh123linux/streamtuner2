@@ -59,18 +59,16 @@ class ConfigDict(dict):
 
         # some defaults
         def defaults(self):
-            self.browser = "sensible-browser"
             self.play = {
                "audio/mpeg": "audacious ",	# %u for url to .pls, %g for downloaded .m3u
                "audio/ogg": "audacious ",
-               "audio/aac": "amarok -l ",
-               "audio/x-pn-realaudio": "vlc --one-instance",
                "audio/*": "totem ",
-               "*/*": "vlc --one-instance %srv",
+               "video/*": "vlc --one-instance %srv",
+               "record": "x-terminal-emulator -e streamripper %srv",
+                    #  x-terminal-emulator -e streamripper %srv -d /home/***USERNAME***/Musik
+               "url/http": "sensible-browser",
             }
             self.record = {
-               "*/*": "x-terminal-emulator -e streamripper %srv",
-                    #  x-terminal-emulator -e streamripper %srv -d /home/***USERNAME***/Musik
             }
             self.plugins = {
                 "bookmarks": 1,  # built-in plugins, cannot be disabled

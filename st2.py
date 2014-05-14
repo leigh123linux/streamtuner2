@@ -185,6 +185,8 @@ class StreamTunerTwo(gtk.Builder):
                 "menu_properties": config_dialog.open,
                 "config_cancel": config_dialog.hide,
                 "config_save": config_dialog.save,
+                "config_player_edited": config_dialog.edited_player_row,
+                "config_player_edited_2": config_dialog.edited_player_row_2,
                 "update_categories": self.update_categories,
                 "update_favicons": self.update_favicons,
                 "app_state": self.app_state,
@@ -747,42 +749,67 @@ streamedit = streamedit()
 class config_dialog (auxiliary_window):
 
 
-        # display win_config, pre-fill text fields from global conf. object
+        # Display win_config, pre-fill text fields from global conf. object
         def open(self, widget):
             if self.first_open:
                 self.add_plugins()
                 self.combobox_theme()
                 self.first_open = 0
-            self.apply(conf.__dict__, "config_", 0)
+            self.load_config(conf.__dict__, "config_")
+            self.load_config(conf.plugins, "config_plugins_")
             self.win_config.show()
         first_open = 1
 
-
+        # Hide window
         def hide(self, *args):
             self.win_config.hide()
             return True
 
         
-        # set/load values between gtk window and conf. dict
-        def apply(self, config, prefix="config_", save=0):
+        # Load values from conf. store into gtk widgets
+        def load_config(self, config, prefix="config_"):
             for key,val in config.items():
-                # map non-alphanumeric chars from config{} to underscores in according gtk widget names
-                id = re.sub("[^\w]", "_", key)
-                w = main.get_widget(prefix + id)
-                __print__(dbg.CONF, "config", ("save" if save else "load"), prefix+id, w, val)
-                # recurse into dictionaries, transform: conf.play.audio/mpeg => conf.play_audio_mpeg
-                if (type(val) == dict):
-                    self.apply(val, prefix + id + "_", save)
-                # load or set gtk.Entry text field
-                elif (w and save and type(w)==gtk.Entry):
-                    config[key] = w.get_text()
-                elif (w and type(w)==gtk.Entry):
-                    w.set_text(str(val))
-                elif (w and save):
-                    config[key] = w.get_active()
-                elif (w):
-                    w.set_active(bool(val))
-            pass
+                w = main.get_widget(prefix + key)
+                if w:
+                    # input field
+                    if type(w) is gtk.Entry:
+                        w.set_text(str(val))
+                    # checkmark
+                    elif type(w) is gtk.CheckButton:
+                        w.set_active(bool(val))
+                    # list
+                    elif type(w) is gtk.ListStore:
+                        w.clear()
+                        for k,v in val.items():
+                            w.append([k, v, True])
+                        w.append(["", "", True])
+                __print__(dbg.CONF, "config load", prefix+key, val, type(w))
+
+        # Store gtk widget valus back into conf. dict
+        def save_config(self, config, prefix="config_", save=0):
+            for key,val in config.items():
+                w = main.get_widget(prefix + key)
+                if w:
+                    # text
+                    if type(w) is gtk.Entry:
+                        config[key] = w.get_text()
+                    # boolean
+                    elif type(w) is gtk.CheckButton:
+                        config[key] = w.get_active()
+                    # dict
+                    elif type(w) is gtk.ListStore:
+                        config[key] = {}
+                        for row in w:
+                            if row[0] and row[1]:
+                                config[key][row[0]] = row[1]
+                __print__(dbg.CONF, "config save", prefix+key, val)
+
+        
+        # Gtk callback to update ListStore when entries get edited
+        def edited_player_row(self, cell, path, new_text, user_data=None, column=0):
+            main.config_play[path][column] = new_text
+        def edited_player_row_2(self, cell, path, new_text, user_data=None):
+            self.edited_player_row(cell, path, new_text, column=1)
 
 
         # fill combobox
@@ -845,7 +872,7 @@ class config_dialog (auxiliary_window):
                 self.add_( "filler_pl_"+name, gtk.HSeparator() )
 
 
-        # put gtk widgets into config dialog notebook
+        # Put config widgets into config dialog notebook
         def add_(self, id, w, label=None, color=""):
             w.set_property("visible", True)
             main.widgets[id] = w
@@ -856,6 +883,7 @@ class config_dialog (auxiliary_window):
                 w = mygtk.bg(w, color)
             self.plugin_options.pack_start(w)
 
+        # Create GtkLabel
         def label(self, label):
             label = gtk.Label(label)
             label.set_property("visible", True)
@@ -863,6 +891,7 @@ class config_dialog (auxiliary_window):
             label.set_size_request(400, -1)
             return label
 
+        # Wrap two widgets in vertical box
         def hbox(self, w1, w2):
             vbox = gtk.HBox(homogeneous=False, spacing=10)
             vbox.set_property("visible", True)
@@ -873,7 +902,8 @@ class config_dialog (auxiliary_window):
         
         # save config
         def save(self, widget):
-            self.apply(conf.__dict__, "config_", 1)
+            self.save_config(conf.__dict__, "config_")
+            self.save_config(conf.plugins, "config_plugins_")
             self.apply_theme()
             conf.save(nice=1)
             self.hide()
