@@ -26,6 +26,7 @@ import kronos
 from mygtk import mygtk
 from action import action
 import copy
+import re
 
 
 
