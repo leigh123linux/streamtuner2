@@ -93,6 +93,7 @@ class ConfigDict(dict):
             self.reuse_m3u = 1
             self.google_homepage = 1
             self.windows = platform.system()=="Windows"
+            self.pyquery = 1
             self.debug = 1
 
             
