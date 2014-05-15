@@ -194,8 +194,8 @@ class GenericChannel(object):
                     # assert that title and url are present
                     modified = []
                     for row in new_streams:
-                        if None in [row.get("title"), row.get("url")]:
-                            next
+                        if len(set(["", None]) & set([row.get("title"), row.get("url")])):
+                            continue
                         try:
                             modified.append( self.postprocess(row) )
                         except Exception as e:
