@@ -109,6 +109,9 @@ class StreamTunerTwo(gtk.Builder):
         features = {}    # non-channel plugins
         working = []     # threads
         add_signals = {} # channel gtk-handler signals
+        hooks = {
+            "play": [favicon.download_playing],  # observers queue here
+        }
 
         # status variables
         channel_names = ["bookmarks"]    # order of channel notebook tabs
@@ -130,7 +133,7 @@ class StreamTunerTwo(gtk.Builder):
             # initialize channels
             self.channels = {
               "bookmarks": bookmarks(parent=self),   # this the remaining built-in channel
-              "shoutcast": None,#shoutcast(parent=self),
+              #"shoutcast": None,#shoutcast(parent=self),
             }
             gui_startup(3/20.0)
             self.load_plugin_channels()   # append other channel modules / plugins
@@ -310,7 +313,7 @@ class StreamTunerTwo(gtk.Builder):
             row = self.row()
             if row:
                 self.channel().play(row)
-                favicon.download_playing(row)
+                [hook(row) for hook in self.hooks["play"]]
 
 
         # streamripper
@@ -850,7 +853,7 @@ class config_dialog (auxiliary_window):
                 # add plugin load entry
                 if name:
                     cb = gtk.CheckButton(name)
-                    cb.child.set_markup("<b>%s</b> <i>(%s)</i> %s\n<small>%s</small>" % (meta["title"], meta["type"], meta.get("version", ""), meta["description"]))
+                    cb.get_children()[0].set_markup("<b>%s</b> <i>(%s)</i> %s\n<small>%s</small>" % (meta["title"], meta["type"], meta.get("version", ""), meta["description"]))
                     self.add_( "config_plugins_"+name, cb )
 
                 # look up individual plugin options, if loaded
@@ -960,10 +963,9 @@ class bookmarks(GenericChannel):
 
 
         # desc
-        api = "streamtuner2"
         module = "bookmarks"
         title = "bookmarks"
-        version = 4/10
+        version = 0.4
         base_url = "file:.config/streamtuner2/bookmarks.json"
         listformat = "*/*"
 
