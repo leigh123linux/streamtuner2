@@ -417,7 +417,7 @@ class mygtk:
             return b
 
 
-        #
+        # Attach textual menu entry and callback
         @staticmethod
         def add_menu(menuwidget, label, action):
             m = gtk.MenuItem(label)
@@ -435,8 +435,17 @@ class mygtk:
             
 
 
-# Implement text combobox,
-# because debian packages lack the binding https://bugzilla.gnome.org/show_bug.cgi?id=660659
+# Text-only dropdown list.
+#
+# Necessary because gtk.ComboBoxText binding is absent in debian packages
+# https://bugzilla.gnome.org/show_bug.cgi?id=660659
+#
+# This one implements a convenience method `.set_default()` to define the active
+# selection by value, rather than by index.
+#
+# Can use a list[] of entries or a key->value dict{}, where the value becomes
+# display text, and the key the internal value.
+#
 class ComboBoxText(gtk.ComboBox):
 
     ls = None
@@ -453,8 +462,10 @@ class ComboBoxText(gtk.ComboBox):
         # collect entries
         self.ls = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
         self.set_model(self.ls)
-        for value in entries:
-            self.ls.append([value, value])
+        if type(entries[0]) is not tuple:
+            entries = zip(entries, entries)
+        for key,value in entries:
+            self.ls.append([key, value])
         
     # activate dropdown of given value
     def set_default(self, value):
@@ -471,5 +482,11 @@ class ComboBoxText(gtk.ComboBox):
         if index >= 0:
             return self.ls[index][0]
 
-
+    # Expand A=a|B=b|C=c option list into (key,value) tuple list, or A|B|C just into a list.
+    @staticmethod
+    def parse_options(opts, sep="|", assoc="="):
+        if opts.find(assoc) >= 0:
+            return [ (k,v) for k,v in (x.split(assoc, 1) for x in opts.split(sep)) ]
+        else:
+            return opts.split(sep) #dict( (v,v) for v in opts.split(sep) )
 

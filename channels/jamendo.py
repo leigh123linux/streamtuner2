@@ -71,8 +71,8 @@ class jamendo (ChannelPlugin):
         {"name": "jamendo_image_size",
          "value": "50",
          "type": "select",
-         "select": "25|35|50|55|60|65|70|75|85|100|130|150|200|300",
-         "description": "Preview images size (height and width in pixel) for albums or tracks."
+         "select": "25=25px|35=35px|50=50px|55=55px|60=60px|65=65px|70=70px|75=75px|85=85px|100=100px|130=130px|150=150px|200=200px|300=300px",
+         "description": "Preview images size (height and width) for albums or tracks."
         },
         {"name": "jamendo_count",
          "value": "1",

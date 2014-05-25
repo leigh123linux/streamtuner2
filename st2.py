@@ -220,10 +220,6 @@ class StreamTunerTwo(gtk.Builder):
             gui_startup(99/100.0)
             self.win_streamtuner2.show()
             
-            # WHY DON'T YOU WANT TO WORK?!
-            #self.shoutcast.gtk_list.set_enable_search(True)
-            #self.shoutcast.gtk_list.set_search_column(4)
-
 
           
 
@@ -249,13 +245,7 @@ class StreamTunerTwo(gtk.Builder):
                 
         # returns the currently selected directory/channel object
         def channel(self):
-            #try:
-                return self.channels[self.current_channel]
-            #except Exception,e:
-            #    print(e)
-            #    self.notebook_channels.set_current_page(0)
-            #    self.current_channel = "bookmarks"
-            #    return self.channels["bookmarks"]
+            return self.channels[self.current_channel]
 
             
         def current_channel_gtk(self):
@@ -865,7 +855,7 @@ class config_dialog (auxiliary_window):
                             self.add_( "config_"+opt["name"], cb, color=color )
                         # drop down list
                         elif opt["type"] == "select":
-                            cb = ComboBoxText(opt["select"].split("|")) # custom mygtk widget
+                            cb = ComboBoxText(ComboBoxText.parse_options(opt["select"])) # custom mygtk widget
                             self.add_( "config_"+opt["name"], cb, opt["description"], color )
                         # text entry
                         else:
