@@ -22,6 +22,9 @@ import gzip
 import platform
 
 
+# export symbols
+__all__ = ["conf", "__print__", "dbg"]
+
 
 
 #-- create a single instance of config object

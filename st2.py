@@ -799,7 +799,7 @@ class config_dialog (auxiliary_window):
                     # text
                     if type(w) is gtk.Entry:
                         config[key] = w.get_text()
-                    # 
+                    # pre-defined text
                     elif type(w) is ComboBoxText:
                         config[key] = w.get_active_text()
                     # boolean
@@ -821,34 +821,23 @@ class config_dialog (auxiliary_window):
             self.edited_player_row(cell, path, new_text, column=1)
 
 
-        # fill combobox
+        # list of Gtk themes in dropdown
         def combobox_theme(self):
-           # self.theme.combo_box_new_text()
             # find themes
             themedirs = (conf.share+"/themes", conf.dir+"/themes", "/usr/share/themes")
             themes = ["no theme"]
             [[themes.append(e) for e in os.listdir(dir)] for dir in themedirs if os.path.exists(dir)]
             __print__(dbg.STAT, themes)
-            # prepare liststore
-            store = gtk.ListStore(gobject.TYPE_STRING)
-            self.theme.set_model(store)
-            cell = gtk.CellRendererText()
-            self.theme.pack_start(cell, True)
-            self.theme.add_attribute(cell, "text", 0)
-            # add to combobox
-            for num,themename in enumerate(themes):
-                 store.append([themename])
-                 if conf.theme == themename:
-                     self.theme.set_active(num)
-            # erase this function, so it only ever gets called once
-            self.combobox_theme = lambda: None
+            # add dropdown
+            main.widgets["theme"] = ComboBoxText(themes)
+            self.theme_cb_placeholder.pack_start(self.theme)
+            self.theme_cb_placeholder.pack_end(mygtk.label(""))
 
 
         # retrieve currently selected value
         def apply_theme(self):
-            if self.theme.get_active() >= 0:
-                conf.theme = self.theme.get_model()[ self.theme.get_active()][0]
-                main.load_theme()
+            conf.theme = self.theme.get_active_text()
+            main.load_theme()
 
 
         # add configuration setting definitions from plugins
@@ -868,19 +857,19 @@ class config_dialog (auxiliary_window):
                     for opt in c.config:
 
                         # default values are already in conf[] dict (now done in conf.add_plugin_defaults)
+                        color = opt.get("color", None)
                             
                         # display checkbox
                         if opt["type"] == "boolean":
                             cb = gtk.CheckButton(opt["description"])
-                            #cb.set_line_wrap(True)
-                            self.add_( "config_"+opt["name"], cb )
+                            self.add_( "config_"+opt["name"], cb, color=color )
                         # drop down list
                         elif opt["type"] == "select":
                             cb = ComboBoxText(opt["select"].split("|")) # custom mygtk widget
-                            self.add_( "config_"+opt["name"], cb, opt["description"] )
+                            self.add_( "config_"+opt["name"], cb, opt["description"], color )
                         # text entry
                         else:
-                            self.add_( "config_"+opt["name"], gtk.Entry(), opt["description"] )
+                            self.add_( "config_"+opt["name"], gtk.Entry(), opt["description"], color )
 
                 # spacer 
                 self.add_( "filler_pl_"+name, gtk.HSeparator() )
@@ -893,27 +882,10 @@ class config_dialog (auxiliary_window):
             if label:
                 if type(w) is gtk.Entry:
                     w.set_width_chars(11)
-                w = self.hbox(w, self.label(label))
+                w = mygtk.hbox(w, mygtk.label(label))
             if color:
                 w = mygtk.bg(w, color)
             self.plugin_options.pack_start(w)
-
-        # Create GtkLabel
-        def label(self, label):
-            label = gtk.Label(label)
-            label.set_property("visible", True)
-            label.set_line_wrap(True) 
-            label.set_size_request(400, -1)
-            return label
-
-        # Wrap two widgets in vertical box
-        def hbox(self, w1, w2):
-            vbox = gtk.HBox(homogeneous=False, spacing=10)
-            vbox.set_property("visible", True)
-            vbox.pack_start(w1, expand=False, fill=False)
-            vbox.pack_start(w2, expand=True, fill=True)
-            return vbox
-
         
         # save config
         def save(self, widget):

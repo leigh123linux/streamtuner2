@@ -398,6 +398,26 @@ class mygtk:
             return w
 
 
+        # Create GtkLabel
+        @staticmethod
+        def label(text):
+            label = gtk.Label(text)
+            label.set_property("visible", True)
+            label.set_line_wrap(True) 
+            label.set_size_request(400, -1)
+            return label
+
+        # Wrap two widgets in horizontal box
+        @staticmethod
+        def hbox(w1, w2):
+            b = gtk.HBox(homogeneous=False, spacing=10)
+            b.set_property("visible", True)
+            b.pack_start(w1, expand=False, fill=False)
+            b.pack_start(w2, expand=True, fill=True)
+            return b
+
+
+        #
         @staticmethod
         def add_menu(menuwidget, label, action):
             m = gtk.MenuItem(label)
@@ -425,6 +445,7 @@ class ComboBoxText(gtk.ComboBox):
 
         # prepare widget
         gtk.ComboBox.__init__(self)
+        self.set_property("visible", True)
         cell = gtk.CellRendererText()
         self.pack_start(cell, True)
         self.add_attribute(cell, "text", 1)
@@ -439,8 +460,10 @@ class ComboBoxText(gtk.ComboBox):
     def set_default(self, value):
         for index,row in enumerate(self.ls):
             if value in row:
-                self.set_active(index)
-                pass
+                return self.set_active(index)
+        # add as custom entry
+        self.ls.append([value, value])
+        self.set_active(index + 1)
 
     # fetch currently selected text entry
     def get_active_text(self):

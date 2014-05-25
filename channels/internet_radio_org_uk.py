@@ -1,10 +1,10 @@
 #
 # api: streamtuner2
-# title: Internet-Radio.org.uk
+# title: Internet-Radio.com
 # description: Broad list of webradios from all genres.
 # type: channel
 # category: radio
-# version: 0.1
+# version: 0.2
 # priority: standard
 #
 #
