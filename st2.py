@@ -82,7 +82,7 @@ sys.path.append(   "/usr/share/streamtuner2/bundle")   # external libraries
 sys.path.insert(0, ".")   # development module path
 
 # gtk modules
-from mygtk import pygtk, gtk, gobject, ui_file, mygtk, ver as GTK_VER
+from mygtk import pygtk, gtk, gobject, ui_file, mygtk, ver as GTK_VER, ComboBoxText
 
 # custom modules
 from config import conf   # initializes itself, so all conf.vars are available right away
@@ -780,6 +780,9 @@ class config_dialog (auxiliary_window):
                     # checkmark
                     elif type(w) is gtk.CheckButton:
                         w.set_active(bool(val))
+                    # dropdown
+                    elif type(w) is ComboBoxText:
+                        w.set_default(val)
                     # list
                     elif type(w) is gtk.ListStore:
                         w.clear()
@@ -796,6 +799,9 @@ class config_dialog (auxiliary_window):
                     # text
                     if type(w) is gtk.Entry:
                         config[key] = w.get_text()
+                    # 
+                    elif type(w) is ComboBoxText:
+                        config[key] = w.get_active_text()
                     # boolean
                     elif type(w) is gtk.CheckButton:
                         config[key] = w.get_active()
@@ -863,11 +869,16 @@ class config_dialog (auxiliary_window):
 
                         # default values are already in conf[] dict (now done in conf.add_plugin_defaults)
                             
-                        # display checkbox or text entry
+                        # display checkbox
                         if opt["type"] == "boolean":
                             cb = gtk.CheckButton(opt["description"])
                             #cb.set_line_wrap(True)
                             self.add_( "config_"+opt["name"], cb )
+                        # drop down list
+                        elif opt["type"] == "select":
+                            cb = ComboBoxText(opt["select"].split("|")) # custom mygtk widget
+                            self.add_( "config_"+opt["name"], cb, opt["description"] )
+                        # text entry
                         else:
                             self.add_( "config_"+opt["name"], gtk.Entry(), opt["description"] )
 
@@ -880,7 +891,8 @@ class config_dialog (auxiliary_window):
             w.set_property("visible", True)
             main.widgets[id] = w
             if label:
-                w.set_width_chars(11)
+                if type(w) is gtk.Entry:
+                    w.set_width_chars(11)
                 w = self.hbox(w, self.label(label))
             if color:
                 w = mygtk.bg(w, color)

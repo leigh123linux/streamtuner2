@@ -415,3 +415,38 @@ class mygtk:
             
 
 
+# Implement text combobox,
+# because debian packages lack the binding https://bugzilla.gnome.org/show_bug.cgi?id=660659
+class ComboBoxText(gtk.ComboBox):
+
+    ls = None
+
+    def __init__(self, entries):
+
+        # prepare widget
+        gtk.ComboBox.__init__(self)
+        cell = gtk.CellRendererText()
+        self.pack_start(cell, True)
+        self.add_attribute(cell, "text", 1)
+
+        # collect entries
+        self.ls = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
+        self.set_model(self.ls)
+        for value in entries:
+            self.ls.append([value, value])
+        
+    # activate dropdown of given value
+    def set_default(self, value):
+        for index,row in enumerate(self.ls):
+            if value in row:
+                self.set_active(index)
+                pass
+
+    # fetch currently selected text entry
+    def get_active_text(self):
+        index = self.get_active()
+        if index >= 0:
+            return self.ls[index][0]
+
+
+
