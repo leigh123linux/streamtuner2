@@ -68,10 +68,11 @@ class jamendo (ChannelPlugin):
          "type": "text",
          "description":"Streaming format. Use 'ogg' for Vorbis, 'mp32' for MP3 with 192kbps/VBR, or 'mp31' for 96kbps MP3, and even 'flac' for lossless audio."
         },
-        {"name":"jamendo_image_size",
-         "value":"50",
-         "type":"text",
-         "description":"Preview images size (height and width) for albums or tracks. Valid values are 25, 35, 50, 60, 70, 85, 100, 150."
+        {"name": "jamendo_image_size",
+         "value": "50",
+         "type": "select",
+         "select": "25|35|50|55|60|65|70|75|85|100|130|150|200|300",
+         "description": "Preview images size (height and width in pixel) for albums or tracks."
         },
         {"name": "jamendo_count",
          "value": "1",
