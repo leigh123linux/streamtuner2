@@ -698,21 +698,13 @@ class streamedit (auxiliary_window):
 
         # show stream data editing dialog
         def open(self, mw):
-            row = main.row()
-            for name in ("title", "playing", "genre", "homepage", "url", "favicon", "format", "extra"):
-                w = main.get_widget("streamedit_" + name) 
-                if w:
-                    w.set_text((str(row.get(name)) if row.get(name) else ""))
+            config_dialog.load_config(main.row(), "streamedit_")
             self.win_streamedit.show()
 
 
         # copy widget contents to stream
         def save(self, w):
-            row = main.row()
-            for name in ("title", "playing", "genre", "homepage", "url", "favicon", "format", "extra"):
-               w = main.get_widget("streamedit_" + name)
-               if w:
-                   row[name] = w.get_text()
+            config_dialog.save_config(main.row(), "streamedit_")
             main.channel().save()
             self.cancel(w)
 
@@ -1046,7 +1038,7 @@ class bookmarks(GenericChannel):
             # This step is most likely redundant, but prevents accidently re-rewriting
             # stations that are in two channels (=duplicates with different PLS urls).
             check = {"http//": "[row]"}
-            check = dict((row["url"],row) for row in fav)
+            check = dict((row.get("url", "http//"),row) for row in fav)
             # walk through all channels/streams
             for chname,channel in main.channels.items():
                 for cat,streams in channel.streams.items():
