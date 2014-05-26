@@ -128,19 +128,20 @@ class shoutcast(channels.ChannelPlugin):
             # extract values; it's just counting the tags.
             # And there's a bug in PyQuery 1.2.4 and CssSelector. So make two
             # attempts, alternate between regex and DOM; user preference first.
+            entries = []
             use_regex = not conf.get("pyquery") or not pq
             retry = 2
-            while retry:
+            while retry and not entries:
                retry -= 1
                try:
                   if use_regex:
-                      return self.with_regex(html)
+                      entries = self.with_regex(html)
                   else:
-                      return self.with_dom(html)
+                      entries = self.with_dom(html)
                except Exception as e:
-                  use_regex ^= 1
                   __print__(dbg.ERR, e)
-            return []
+               use_regex ^= 1
+            return entries
 
 
         # Extract using regex

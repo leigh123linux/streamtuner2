@@ -3,6 +3,7 @@
 # title: Jamendo
 # description: A license-free music collection and artist hub.
 # type: channel
+# version: 2.2
 # category: radio
 # depends: json
 # priority: default
@@ -11,9 +12,6 @@
 #
 # Radio station lists are fixed for now. Querying the API twice per station
 # doesn't seem overly sensible.
-#
-# Albums and Playlists are limited to 200 entries. Adding a cursor is
-# feasible however.
 #
 # Tracks are queried by genre, where currently there's just a small built-in
 # tag list in ST2.
