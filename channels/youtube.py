@@ -87,9 +87,10 @@ class youtube (ChannelPlugin):
 
     categories = [
         "mostPopular",
-        ["Music", "Comedy", "Movies", "Shows", "Short Movies", "Trailers", "Film & Animation", "Entertainment", "News & Politics", "Sci-Fi/Fantasy"],
+        ["Music", "Comedy", "Movies", "Shows", "Short Movies", "Trailers", "Film & Animation", "Entertainment", "News & Politics"],
         "topics",
-        ["music", "pop", "music video"],
+        ["Pop", "Billboard charts", "Rock", "Hip Hop", "Classical", "Soundtrack", "Ambient",
+         "Jazz", "Blues", "Soul", "Country", "Disco", "Dance", "House", "Trance", "Techno", "Electronica"],
         "my channels",
         ["Key of Awesome", "Pentatonix"]
     ] 
@@ -149,9 +150,23 @@ class youtube (ChannelPlugin):
     }
     # Freebase topics
     topic_id = {
-        "music": "/m/0kpv0g",
         "pop": "/m/064t9",
-        "music video": "/m/05k5h7g",
+        "billboard charts": "/m/04qf57",
+        "rock": "/m/06by7",
+        "dance": "/m/0ggx5q",
+        "classical": "/m/0ggq0m",
+        "hip hop": "/m/0glt670",
+        "soundtrack": "/m/0l14gg",
+        "ambient": "/m/0fd3y",
+        "electronica": "/m/0m0jc",
+        "jazz": "/m/03_d0",
+        "techno": "/m/07gxw",
+        "disco": "/m/026z9",
+        "country": "/m/01lyv",
+        "blues": "/m/0155w",
+        "soul": "/m/0gywn",
+        "trance": "/m/07lnk",
+        "house": "/m/03mb9",
     }
 
 
@@ -166,6 +181,7 @@ class youtube (ChannelPlugin):
 
         entries = []
         channels = self.categories[self.categories.index("my channels") + 1]
+        self.parent.status(-0.1)
         
         # Most Popular
         if cat == "mostPopular":
@@ -180,8 +196,8 @@ class youtube (ChannelPlugin):
                 entries.append( self.wrap3(row, {"genre": cat}) )
 
         # Topics
-        elif cat in self.topic_id:
-            for row in self.api("search", order="date", regionCode=conf.youtube_region, topicId=self.topic_id[cat], type="video"):
+        elif cat.lower() in self.topic_id:
+            for row in self.api("search", order="date", regionCode=conf.youtube_region, topicId=self.topic_id[cat.lower()], type="video"):
                 entries.append( self.wrap3(row, {"genre": cat}) )
 
         # My Channels
@@ -212,6 +228,7 @@ class youtube (ChannelPlugin):
             entries = [dict(title="Placeholder for subcategories", genre="./.", playing="./.", url="http://youtube.com/")]
  
         # done    
+        self.parent.status(1.0)
         return entries
         
 
@@ -236,12 +253,13 @@ class youtube (ChannelPlugin):
 
         # URL and default parameters
         (base_url, defaults) = self.service[ver]
-        params = dict(defaults.items() + params.items())
+        #params = dict(  defaults.items() | params.items()  )
+        params = dict( defaults, **params )
 
         # Retrieve data set
         while pages > 0:
             j = ahttp.get(base_url + method, params=params)
-            __print__(dbg.DATA, j)
+            #__print__(dbg.DATA, j)
             if j:
                 # json decode
                 data = json.loads(j)
@@ -255,7 +273,7 @@ class youtube (ChannelPlugin):
                     pages = 0
 
             # Continue to load results?
-            if items >= conf.max_streams:
+            if len(items) >= int(conf.max_streams):
                 pages = 0
             elif "pageInfo" in data and data["pageInfo"]["totalResults"] < 50:
                 pages = 0
@@ -264,7 +282,7 @@ class youtube (ChannelPlugin):
                 pages -= 1
             else:
                 pages = 0
-            self.parent.status(pages / 10.0)
+            self.parent.status( (11 - 1.852 * pages) / 10.0 )
 
         return items
 
