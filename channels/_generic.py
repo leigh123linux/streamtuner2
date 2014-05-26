@@ -186,6 +186,8 @@ class GenericChannel(object):
             # get data from cache or download
             if (force or not category in self.streams):
                 __print__(dbg.PROC, "load", "update_streams")
+                self.parent.status("Updating streams...")
+                self.parent.status(-0.1)
                 new_streams = self.update_streams(category)
       
                 if new_streams:
@@ -231,6 +233,8 @@ class GenericChannel(object):
 
             # set pointer
             self.current = category
+            self.parent.status("")
+            self.parent.status(1.0)
             pass
             
         # store current streams data

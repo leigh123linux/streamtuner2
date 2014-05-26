@@ -181,7 +181,6 @@ class youtube (ChannelPlugin):
 
         entries = []
         channels = self.categories[self.categories.index("my channels") + 1]
-        self.parent.status(-0.1)
         
         # Most Popular
         if cat == "mostPopular":
@@ -228,7 +227,6 @@ class youtube (ChannelPlugin):
             entries = [dict(title="Placeholder for subcategories", genre="./.", playing="./.", url="http://youtube.com/")]
  
         # done    
-        self.parent.status(1.0)
         return entries
         
 
@@ -253,8 +251,7 @@ class youtube (ChannelPlugin):
 
         # URL and default parameters
         (base_url, defaults) = self.service[ver]
-        #params = dict(  defaults.items() | params.items()  )
-        params = dict( defaults, **params )
+        params = dict( list(defaults.items()) + list(params.items())  )
 
         # Retrieve data set
         while pages > 0:
@@ -282,7 +279,7 @@ class youtube (ChannelPlugin):
                 pages -= 1
             else:
                 pages = 0
-            self.parent.status( (11 - 1.852 * pages) / 10.0 )
+            self.parent.status( (10 - 1.852 * pages) / 10.5 )
 
         return items
 

@@ -422,14 +422,11 @@ class StreamTunerTwo(gtk.Builder):
                 mygtk.do(lambda:self.statusbar.pop(sbar_cid))
             # progressbar
             if (type(text)==float):
-                __print__(dbg.PROC, "status.progressbar", float, text)
                 if (text >= 999.0/1000):  # completed
                     mygtk.do(lambda:self.progress.hide())
                 else:  # show percentage
-                    __print__(dbg.PROC, "status.progressbar", dbg.ERR, "fraction")
                     mygtk.do(lambda:self.progress.show() or self.progress.set_fraction(text))
                     if (text <= 0):  # unknown state
-                        __print__(dbg.PROC, "status.progressbar", dbg.STAT, "PULSE")
                         mygtk.do(lambda:self.progress.pulse())
             # add text
             elif (type(text)==str):
