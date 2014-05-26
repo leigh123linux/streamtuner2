@@ -5,7 +5,7 @@
 # type: channel
 # category: radio
 # priority: default
-# version: 1.3
+# version: 1.4
 # depends: pq, re, http
 # author: Mario
 # original: Jean-Yves Lefort
@@ -88,128 +88,110 @@ class shoutcast(channels.ChannelPlugin):
             pass
 
 
-
-        #def strip_tags(self, s):
-        #    rx = re.compile(""">(\w+)<""")
-        #    return " ".join(rx.findall(s))
-
         # downloads stream list from shoutcast for given category
         def update_streams(self, cat, search=""):
 
             if (not cat or cat == self.empty):
                 __print__( dbg.ERR, "nocat" )
                 return []
-            ucat = urllib.quote(cat)
 
+            #/radiolist.cfm?action=sub&string=&cat=Oldies&_cf_containerId=radiolist&_cf_nodebug=true&_cf_nocache=true&_cf_rc=0
+            #/radiolist.cfm?start=19&action=sub&string=&cat=Oldies&amount=18&order=listeners
+            # page
+            url = "http://www.shoutcast.com/radiolist.cfm"
+            params = {
+                "action": "sub",
+                "string": "",
+                "cat": cat,
+                "order": "listeners",
+                "amount": conf.max_streams,
+            }
+            referer = "http://www.shoutcast.com/?action=sub&cat="+cat
+            html = http.get(url, params=params, referer=referer, ajax=1)
 
-            # loop
-            entries = []
-            next = 0
-            max = int(conf.max_streams)
-            count = max
-            rx_stream = None
+            #__print__(dbg.DATA, html)
+            #__print__(re.compile("id=(\d+)").findall(html));
+            # new html
+            """ 
+            <tr>
+               <td width="6%"><a href="#" onClick="window.open('player/?radname=Schlagerhoelle%20%2D%20das%20Paradies%20fr%20Schlager%20%20und%20Discofox&stationid=14687&coding=MP3','radplayer','height=232,width=776')"><img class="icon transition" src="/img/icon-play.png" alt="Play"></a></td>
+               <td width="30%"><a class="transition" href="http://yp.shoutcast.com/sbin/tunein-station.pls?id=14687">Schlagerhoelle - das Paradies fr Schlager  und Discofox</a></td>
+               <td width="12%" style="text-align:left;" width="10%">Oldies</td>
+               <td width="12%" style="text-align:left;" width="10%">955</td>
+               <td width="12%" style="text-align:left;" width="10%">128</td>
+               <td width="12%" style="text-align:left;" width="10%">MP3</td>
+            </tr>
+            """
 
-            try:
-               if (next < max):
-
-
-                  #/radiolist.cfm?action=sub&string=&cat=Oldies&_cf_containerId=radiolist&_cf_nodebug=true&_cf_nocache=true&_cf_rc=0
-                  #/radiolist.cfm?start=19&action=sub&string=&cat=Oldies&amount=18&order=listeners
-                  # page
-                  url = "http://www.shoutcast.com/radiolist.cfm?action=sub&string=&cat="+ucat+"&order=listeners&amount="+str(count)
-                  referer = "http://www.shoutcast.com/?action=sub&cat="+ucat
-                  params = {}
-                  html = http.get(url, params=params, referer=referer, ajax=1)
-
-                  #__print__(dbg.DATA, html)
-                  #__print__(re.compile("id=(\d+)").findall(html));
-
-
-                  # With the new shallow <td> lists it doesn't make much sense to use
-                  # the pyquery DOM traversal. There aren't any sensible selectors to
-                  # extract values; it's just counting the tags.
-
-
-                  # regular expressions (default)
-                  if not conf.get("pyquery") or not pq:
-
-                      # new html
-                      """ 
-                      <tr>
-                         <td width="6%"><a href="#" onClick="window.open('player/?radname=Schlagerhoelle%20%2D%20das%20Paradies%20fr%20Schlager%20%20und%20Discofox&stationid=14687&coding=MP3','radplayer','height=232,width=776')"><img class="icon transition" src="/img/icon-play.png" alt="Play"></a></td>
-                         <td width="30%"><a class="transition" href="http://yp.shoutcast.com/sbin/tunein-station.pls?id=14687">Schlagerhoelle - das Paradies fr Schlager  und Discofox</a></td>
-                         <td width="12%" style="text-align:left;" width="10%">Oldies</td>
-                         <td width="12%" style="text-align:left;" width="10%">955</td>
-                         <td width="12%" style="text-align:left;" width="10%">128</td>
-                         <td width="12%" style="text-align:left;" width="10%">MP3</td>
-                      </tr>
-                      """
-                  
-                      # new extraction regex
-                      if not rx_stream:
-                          rx_stream = re.compile(
-                              """
-                               <a [^>]+  href="http://yp.shoutcast.com/sbin/tunein-station.pls\?
-                                         id=(\d+)">   ([^<>]+)   </a>  </td>
-                               \s+  <td [^>]+  >([^<>]+)</td>
-                               \s+  <td [^>]+  >(\d+)</td>
-                               \s+  <td [^>]+  >(\d+)</td>
-                               \s+  <td [^>]+  >(\w+)</td>
-                              """,
-                              re.S|re.I|re.X
-                          )
-
-
-                      # extract entries
-                      self.parent.status("parsing document...")
-                      __print__(dbg.PROC, "channels.shoutcast.update_streams: regex scraping mode")
-
-                      for m in rx_stream.findall(html):
-                          #__print__(m)
-                          (id, title, genre, listeners, bitrate, fmt) = m
-                          entries += [{
-                              "id": id,
-                              "url": "http://yp.shoutcast.com/sbin/tunein-station.pls?id=" + id,
-                              "title": self.entity_decode(title),
-                              #"homepage": http.fix_url(homepage),
-                              #"playing": self.entity_decode(playing),
-                              "genre": genre,
-                              "listeners": int(listeners),
-                              "max": 0, #int(uu[6]),
-                              "bitrate": int(bitrate),
-                              "format": self.mime_fmt(fmt),
-                          }]
-
-
-                  # PyQuery parsing
+            # With the new shallow <td> lists it doesn't make much sense to use
+            # the pyquery DOM traversal. There aren't any sensible selectors to
+            # extract values; it's just counting the tags.
+            # And there's a bug in PyQuery 1.2.4 and CssSelector. So make two
+            # attempts, alternate between regex and DOM; user preference first.
+            use_regex = not conf.get("pyquery") or not pq
+            retry = 2
+            while retry:
+               retry -= 1
+               try:
+                  if use_regex:
+                      return self.with_regex(html)
                   else:
-                      # iterate over DOM
-                      for div in (pq(e) for e in pq(html).find("tr")):
-
-                          entries.append({
-                               "title": div.find("a.transition").text(),
-                               "url": div.find("a.transition").attr("href"),
-                               "homepage": "",
-                               "listeners": int(div.find("td:eq(3)").text()),
-                               "bitrate": int(div.find("td:eq(4)").text()),
-                               "format": self.mime_fmt(div.find("td:eq(5)").text()),
-                               "max": 0,
-                               "genre": cat,
-                          })
+                      return self.with_dom(html)
+               except Exception as e:
+                  use_regex ^= 1
+                  __print__(dbg.ERR, e)
+            return []
 
 
-                  # display partial results (not strictly needed anymore, because we fetch just one page)
-                  self.update_streams_partially_done(entries)
-                  
-                  # more pages to load?
-                  next = 99999
-                     
-            except Exception as e:
-               __print__(dbg.ERR, e)
-               return entries
-            
-            #fin
-            #__print__(dbg.DATA, entries)
+        # Extract using regex
+        def with_regex(self, html):
+            __print__(dbg.PROC, "channels.shoutcast.update_streams: regex scraping mode")
+            rx_stream = re.compile(
+                """
+                 <a [^>]+  href="http://yp.shoutcast.com/sbin/tunein-station.pls\?
+                           id=(\d+)">   ([^<>]+)   </a>  </td>
+                 \s+  <td [^>]+  >([^<>]+)</td>
+                 \s+  <td [^>]+  >(\d+)</td>
+                 \s+  <td [^>]+  >(\d+)</td>
+                 \s+  <td [^>]+  >(\w+)</td>
+                """,
+                re.S|re.I|re.X
+            )
+            # extract entries
+            entries = []
+            for m in rx_stream.findall(html):
+                #__print__(m)
+                (id, title, genre, listeners, bitrate, fmt) = m
+                entries += [{
+                    "id": id,
+                    "url": "http://yp.shoutcast.com/sbin/tunein-station.pls?id=" + id,
+                    "title": self.entity_decode(title),
+                    #"homepage": http.fix_url(homepage),
+                    #"playing": self.entity_decode(playing),
+                    "genre": genre,
+                    "listeners": int(listeners),
+                    "max": 0, #int(uu[6]),
+                    "bitrate": int(bitrate),
+                    "format": self.mime_fmt(fmt),
+                }]
+            return entries
+
+
+        # Iterate over DOM instead
+        def with_dom(self, html):
+            __print__(dbg.PROC, "channels.shoutcast.update_streams: attempt DOM/PyQuery processing")
+            entries = []
+            for div in (pq(e) for e in pq(html).find("tr")):
+                entries.append({
+                     "title": div.find("a.transition").text(),
+                     "url": div.find("a.transition").attr("href"),
+                     "homepage": "",
+                     "listeners": int(div.find("td:eq(3)").text()),
+                     "bitrate": int(div.find("td:eq(4)").text()),
+                     "format": self.mime_fmt(div.find("td:eq(5)").text()),
+                     "max": 0,
+                     "genre": cat,
+                })
             return entries
 
 
