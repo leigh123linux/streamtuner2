@@ -122,10 +122,10 @@ class live365(ChannelPlugin):
 #            src="(http://www.live365.com/.+?/stationlogo\w+.jpg)".+?
 
             # append entries to result list
-            __print__( dbg.DATA, html )
+            #__print__( dbg.DATA, html )
             ls = []
             for row in rx.findall(html):
-                __print__( dbg.DATA, row )
+                #__print__( dbg.DATA, row )
                 points = int(row[8])
                 count = int(row[9])
                 ls.append({

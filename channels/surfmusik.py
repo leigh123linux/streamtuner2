@@ -125,6 +125,8 @@ class surfmusik (ChannelPlugin):
                 # limit result list
                 if i > max:
                    break
+                if i % 10 == 0:
+                   self.parent.status(float(i)/float(max+5))
                 i += 1
  
         # done    

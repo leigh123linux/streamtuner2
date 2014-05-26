@@ -84,13 +84,11 @@ class internet_radio_org_uk (ChannelPlugin):
         #rx_homepage = re.compile('href="(http://[^"]+)"[^>]+target="_blank"')
         rx_pages = re.compile('href="/stations/[-+\w%\d\s]+/page(\d+)">\d+</a>')
         rx_numbers = re.compile("(\d+)")
-        self.parent.status("downloading category pages...")
 
 
         # multiple pages
+        max = max(int(conf.internetradio_max_pages), 1)
         page = 1
-        max = int(conf.internetradio_max_pages)
-        max = (max if max > 1 else 1)
         while page <= max:
         
             # fetch

@@ -138,6 +138,7 @@ class jamendo (ChannelPlugin):
                         "url": "http://api.jamendo.com/get2/stream/track/xspf/?playlist_id=%s&n=all&order=random&from=app-%s" % (e["id"], self.cid),
                         "format": "application/xspf+xml",
                     })
+                self.parent.status(float(offset)/float(1000))
 
         # albums
         elif cat in ["albums", "newest"]:
@@ -162,6 +163,7 @@ class jamendo (ChannelPlugin):
                         "url": "http://api.jamendo.com/get2/stream/track/xspf/?album_id=%s&streamencoding=ogg2&n=all&from=app-%s" % (e["id"], self.cid),
                         "format": "application/xspf+xml",
                     })
+                self.parent.status(float(offset)/float(1000))
 		
         # genre list
         else:
@@ -190,6 +192,7 @@ class jamendo (ChannelPlugin):
                         "url": "http://storage-new.newjamendo.com/?trackid=%s&format=ogg2&u=0&from=app-%s" % (e["id"], self.cid),
                         "format": fmt,
                     })
+                self.parent.status(float(offset)/float(1000))
  
         # done    
         return entries

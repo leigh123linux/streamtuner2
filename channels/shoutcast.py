@@ -117,7 +117,6 @@ class shoutcast(channels.ChannelPlugin):
                   #/radiolist.cfm?start=19&action=sub&string=&cat=Oldies&amount=18&order=listeners
                   # page
                   url = "http://www.shoutcast.com/radiolist.cfm?action=sub&string=&cat="+ucat+"&order=listeners&amount="+str(count)
-                  __print__(dbg.HTTP, url)
                   referer = "http://www.shoutcast.com/?action=sub&cat="+ucat
                   params = {}
                   html = http.get(url, params=params, referer=referer, ajax=1)
@@ -200,7 +199,6 @@ class shoutcast(channels.ChannelPlugin):
 
 
                   # display partial results (not strictly needed anymore, because we fetch just one page)
-                  self.parent.status()
                   self.update_streams_partially_done(entries)
                   
                   # more pages to load?
@@ -211,7 +209,7 @@ class shoutcast(channels.ChannelPlugin):
                return entries
             
             #fin
-            __print__(dbg.DATA, entries)
+            #__print__(dbg.DATA, entries)
             return entries
 
 

@@ -317,7 +317,7 @@ class youtube (ChannelPlugin):
 
     # API version 2.0s jsonified XML needs different unpacking:
     def wrap2(self, row):
-        __print__(dbg.DATA, row)
+        #__print__(dbg.DATA, row)
         return dict(
             genre = row["category"][1]["term"],
             title = row["title"]["$t"],
