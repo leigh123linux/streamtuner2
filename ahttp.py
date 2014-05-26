@@ -64,7 +64,7 @@ def get(url, params={}, referer="", post=0, ajax=0, binary=0, feedback=None):
     __print__( dbg.HTTP, "GET", url, params )
 
     # statusbar info
-    progress_feedback(url, 0.1)
+    progress_feedback(url)
     
     # combine headers
     headers = {}
@@ -83,11 +83,11 @@ def get(url, params={}, referer="", post=0, ajax=0, binary=0, feedback=None):
     #__print__( dbg.HTTP, r.headers );
             
     # result
-    progress_feedback(0.9)
+    #progress_feedback(0.9)
     content = (r.content if binary else r.text)
     
     # finish, clean statusbar
-    progress_feedback()
+    progress_feedback("")
     __print__( dbg.INFO, "Content-Length", len(content) )
     return content
 
