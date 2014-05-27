@@ -25,12 +25,12 @@ from pq import pq
 
 
 # streams and gui
-class internet_radio_org_uk (ChannelPlugin):
+class internet_radio (ChannelPlugin):
 
 
     # description
     title = "InternetRadio"
-    module = "internet_radio_org_uk"
+    module = "internet_radio"
     homepage = "http://www.internet-radio.org.uk/"
     listformat = "audio/x-scpls"
     

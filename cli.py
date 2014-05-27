@@ -35,7 +35,7 @@ class StreamTunerCLI (object):
 
     
     # channel plugins
-    channel_modules = ["shoutcast", "xiph", "internet_radio_org_uk", "jamendo", "myoggradio", "live365"]
+    channel_modules = ["shoutcast", "xiph", "internet_radio", "jamendo", "myoggradio", "live365"]
     current_channel = "cli"
     plugins = {} # only populated sparsely by .stream()
     

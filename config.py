@@ -65,39 +65,40 @@ class ConfigDict(dict):
             self.play = {
                "audio/mpeg": "audacious ",	# %u for url to .pls, %g for downloaded .m3u
                "audio/ogg": "audacious ",
-               "audio/*": "totem ",
+               "audio/*": "audacious ",
+               "video/youtube": "totem $(youtube-dl -g %srv)",
                "video/*": "vlc --one-instance %srv",
                "url/http": "sensible-browser",
             }
             self.record = {
                "audio/*": "xterm -e streamripper %srv",   # -d /home/***USERNAME***/Musik
-               "video/youtube": "xterm -e youtube-dl %srv",
+               "video/youtube": "xterm -e \"youtube-dl %srv\"",
             }
             self.plugins = {
-                "bookmarks": 1,  # built-in plugins, cannot be disabled
+                "bookmarks": 1, # built-in plugin, cannot be disabled
                 "shoutcast": 1,
                 "xiph": 1,
-                "file": 0,   # disable per default
-                "punkcast": 0,   # disable per default
+                "file": 0,      # disable per default
+                "punkcast": 0,  # disable per default
+                "history": 0,
                 "basicch": 0,   # ceased
-                "tv": 0,   # no longer working
+                "tv": 0,        # ceased
             }
             self.tmp = os.environ.get("TEMP", "/tmp")
             self.max_streams = "500"
             self.show_bookmarks = 1
             self.show_favicons = 1
             self.load_favicon = 1
-            self.heuristic_bookmark_update = 1
-            self.retain_deleted = 1
+            self.heuristic_bookmark_update = 0
+            self.retain_deleted = 0
             self.auto_save_appstate = 1
             self.theme = "" #"MountainDew"
-            self.debug = False
-            self.channel_order = "shoutcast, xiph, internet_radio_org_uk, jamendo, myoggradio, .."
+            self.channel_order = "shoutcast, xiph, internet_radio, jamendo, myoggradio, .."
             self.reuse_m3u = 1
-            self.google_homepage = 1
+            self.google_homepage = 0
             self.windows = platform.system()=="Windows"
             self.pyquery = 1
-            self.debug = 1
+            self.debug = 0
 
             
         # each plugin has a .config dict list, we add defaults here
