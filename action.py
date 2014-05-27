@@ -4,15 +4,18 @@
 # type: functions
 # title: play/record actions
 # description: Starts audio applications, guesses MIME types for URLs
+# version: 0.7
 #
 #
-#  Multimedia interface for starting audio players or browser.
+#  Multimedia interface for starting audio players, recording app,
+#  or web browser (listed as "url/http" association in players).
 #
 #
 #  Each channel plugin has a .listtype which describes the linked
 #  audio playlist format. It's audio/x-scpls mostly, seldomly m3u,
 #  but sometimes url/direct if the entry[url] directly leads to the
 #  streaming server.
+#
 #  As fallback there is a regex which just looks for URLs in the
 #  given resource (works for m3u/pls/xspf/asx/...). There is no
 #  actual url "filename" extension guessing.
@@ -67,12 +70,11 @@ class action:
         def play(url, audioformat="audio/mpeg", listformat="text/x-href"):
             if (url):
                 url = action.url(url, listformat)
-            if (audioformat):
-                if audioformat == "audio/mp3":
-                    audioformat = "audio/mpeg"
-                cmd = conf.play.get(audioformat, conf.play.get("*/*", "vlc %u"))
-                __print__( dbg.PROC,"play", url, cmd )
+            if audioformat == "audio/mp3":
+                audioformat = "audio/mpeg"
+            cmd = action.mime_match(audioformat, conf.play)
             try:
+                __print__( dbg.PROC, "play", url, cmd )
                 action.run( action.interpol(cmd, url) )
             except:
                 pass
@@ -91,9 +93,17 @@ class action:
         @staticmethod
         def record(url, audioformat="audio/mpeg", listformat="text/x-href", append="", row={}):
             __print__( dbg.PROC, "record", url )
-            cmd = conf.record.get(audioformat, conf.play.get("record", None))
+            cmd = action.mime_match(audioformat, conf.record)
             try: action.run( action.interpol(cmd, url, row) + append )
             except: pass
+
+
+        # Convert MIME type into list of ["audio/xyz", "audio/*", "*/*"] for comparison against record/play association
+        @staticmethod
+        def mime_match(fmt, cmd_list):
+            for match in [ fmt, fmt[:fmt.find("/")] + "/*", "*/*" ]:
+                if cmd_list.get(match, None):
+                    return cmd_list[match]
 
 
         # save as .m3u

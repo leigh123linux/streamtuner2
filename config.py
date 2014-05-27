@@ -67,11 +67,11 @@ class ConfigDict(dict):
                "audio/ogg": "audacious ",
                "audio/*": "totem ",
                "video/*": "vlc --one-instance %srv",
-               "record": "x-terminal-emulator -e streamripper %srv",
-                    #  x-terminal-emulator -e streamripper %srv -d /home/***USERNAME***/Musik
                "url/http": "sensible-browser",
             }
             self.record = {
+               "audio/*": "xterm -e streamripper %srv",   # -d /home/***USERNAME***/Musik
+               "video/youtube": "xterm -e youtube-dl %srv",
             }
             self.plugins = {
                 "bookmarks": 1,  # built-in plugins, cannot be disabled

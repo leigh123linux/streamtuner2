@@ -190,6 +190,8 @@ class StreamTunerTwo(gtk.Builder):
                 "config_save": config_dialog.save,
                 "config_player_edited": config_dialog.edited_player_row,
                 "config_player_edited_2": config_dialog.edited_player_row_2,
+                "config_record_edited": config_dialog.edited_record_row,
+                "config_record_edited_2": config_dialog.edited_record_row_2,
                 "update_categories": self.update_categories,
                 "update_favicons": self.update_favicons,
                 "app_state": self.app_state,
@@ -801,6 +803,10 @@ class config_dialog (auxiliary_window):
             main.config_play[path][column] = new_text
         def edited_player_row_2(self, cell, path, new_text, user_data=None):
             self.edited_player_row(cell, path, new_text, column=1)
+        def edited_record_row(self, cell, path, new_text, user_data=None, column=0):
+            main.config_record[path][column] = new_text
+        def edited_record_row_2(self, cell, path, new_text, user_data=None):
+            self.edited_record_row(cell, path, new_text, column=1)
 
 
         # list of Gtk themes in dropdown
