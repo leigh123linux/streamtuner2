@@ -14,7 +14,10 @@
 # doesn't seem overly sensible.
 #
 # Tracks are queried by genre, where currently there's just a small built-in
-# tag list in ST2.
+# tag list in ST2
+#
+# Per default Ogg Vorbis is used as streaming format. Playlists and albums
+# return as XSPF playlists.
 #
 #
 # The v3.0 streaming URLs don't seem to work. Therefore some /get2 URLs will
@@ -63,8 +66,9 @@ class jamendo (ChannelPlugin):
     config = [
         {"name":"jamendo_stream_format",
          "value":"ogg",
-         "type": "text",
-         "description":"Streaming format. Use 'ogg' for Vorbis, 'mp32' for MP3 with 192kbps/VBR, or 'mp31' for 96kbps MP3, and even 'flac' for lossless audio."
+         "type": "select",
+         "select": "ogg=Ogg Vorbis|mp32=MP3, 192vbr|mp31=MP3, 96kbps|flac=Xiph FLAC",
+         "description": "Default streaming audio format. Albums and playlists still return Vorbis mostly for best quality."
         },
         {"name": "jamendo_image_size",
          "value": "50",
@@ -147,9 +151,11 @@ class jamendo (ChannelPlugin):
         # Genre list, or Search
         else:
             if cat:
-                data = self.api(method = "tracks", order = "popularity_week", include = "musicinfo", fuzzytags = cat, audioformat = conf.jamendo_stream_format)
+                data = self.api(method = "tracks", order = "popularity_week", include = "musicinfo",
+                                fuzzytags = cat, audioformat = conf.jamendo_stream_format)
             elif search:
-                data = self.api(method = "tracks", order = "popularity_week", include = "musicinfo", search = search, audioformat = conf.jamendo_stream_format)
+                data = self.api(method = "tracks", order = "popularity_week", include = "musicinfo",
+                                search = search, audioformat = conf.jamendo_stream_format)
             else:
                 data = []
             for e in data:
@@ -163,14 +169,14 @@ class jamendo (ChannelPlugin):
                     "homepage": e["shareurl"],
                     #"url": e["audio"],
                     "url": "http://storage-new.newjamendo.com/?trackid=%s&format=ogg2&u=0&from=app-%s" % (e["id"], self.cid),
-                    "format": fmt,
+                    "format": self.stream_mime(fmt),
                 })
  
         # done    
         return entries
 
     
-    # Collect data from Jamenda API
+    # Collect data sets from Jamendo API
     def api(self, method, **params):
         r = []
         max = 200 * int(conf.jamendo_count)
@@ -185,14 +191,14 @@ class jamendo (ChannelPlugin):
             }.items()) + list(params.items())
         )
         while (params["offset"] < max) and (len(r) % 200 == 0):
-            data = json.loads(http.get(self.api_base + method, params))
-            if data and "results" in data:
+            data = http.get(self.api_base + method, params)
+            data = json.loads(data)
+            if data:
                 r += data["results"]
             else:
                 return r
             params["offset"] += 200;
             self.parent.status(float(params["offset"])/float(max+17))
-            __print__(dbg.PROC, params["offset"], max, len(r))
         return r
         
 
