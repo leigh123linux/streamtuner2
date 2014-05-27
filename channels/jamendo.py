@@ -59,7 +59,7 @@ class jamendo (ChannelPlugin):
     api_base = "http://api.jamendo.com/v3.0/"
     cid = "49daa4f5"
 
-    categories = ["radios"]
+    categories = []
 
     titles = dict( title="Title", playing="Album/Artist/User", bitrate=False, listeners=False )
  
@@ -94,7 +94,184 @@ class jamendo (ChannelPlugin):
             "albums",
                 ["newest"],
             "tracks",
-                ["pop", "rock", "dance", "classical", "jazz", "instrumental"]
+                [
+                "pop",
+                "synthpop",
+                "trashpop",
+                "disco",
+                "eurodance",
+                "electropop",
+
+                "rock",
+                "hardrock",
+                "alternativerock",
+                "acousticrock",
+                "poprock",
+
+                "dance",
+                "dancehall",
+                "trance",
+                "psytrance",
+                "trancecore",
+
+                "hiphop",
+                "rap",
+                "rappers",
+                "dubstep",
+                "beat",
+                "beats",
+                "breakbeats",
+                "dub",
+                "club",
+                "edm",
+                "electronic",
+                "techno",
+                "electric",
+                "synthesizer",
+                "triphop",
+                "house",
+                "electrohouse",
+                "darkelectro",
+                "rnb",
+
+                "metal",
+                "heavymetal",
+                "thrashmetal",
+                "powermetal",
+                "groovemetal",
+
+                "jazz",
+                "acidjazz",
+                "smoothjazz",
+                "classicjazz",
+
+                "instrumental",
+                "acoustic",
+
+                "singersongwriter",
+                "vocal",
+                "vocals",
+                "voice",
+
+
+                "game",
+                "gamemusic",
+                "8bit",
+                "computer",
+
+                "classical", ###
+                "organ",
+                "orchestral",
+                "choral",
+                "ballad",
+                "piano",
+                "mozart",
+                "violin",
+                "cello",
+                "fiddle",
+                "ukelele",
+                "trumpet",
+                "saxophone",
+                "harmonica",
+                "accordion",
+
+                "soul",
+                "blues",
+                "deltablues",
+                "swing",
+                "boogie",
+                "funk",
+                "electrofunk",
+                "folk",
+                "folkrock",
+
+                "world", ###
+                "african",
+                "middleeastern",
+                "arabic",
+                "asian",
+                "oriental",
+                "latin",
+                "french",
+                "german",
+                "irish",
+                "celtic",
+                "country",
+                "reggae",
+
+                "emotion",
+                "romantic", ###
+                "love",
+                "slow",
+                "quiet",
+                "happy",
+                "angry",
+                "sad",
+                "mysterious",
+                "atmospheric",
+                "mellow",
+                "dark",
+                "dream"
+                "energic",
+                "downtempo",
+                "sexy",
+                "melancholic",
+
+
+
+                "progressive",
+                "experimental",
+                "evolutive",
+                "alternative",
+                "sampler",
+                "minimalism",
+                "avantgarde",
+                "elegant",
+                "vintage",
+                "retro",
+                "oldschool",
+                "traditional",
+                "adult",
+                "communication",
+                "advertising",
+                "indie",
+                "improvisation",
+                "lofi",
+                "newage",
+                "grunge",
+                "raw",
+
+                "industrial",
+                "bass",
+                "drum",
+                "epic",
+                "soundtrack",
+                "rhythmic",
+                "keyboard",
+                "drummachine",
+                "acousticguitar",
+                "bongo",
+
+                "rumba",
+                "pinkfloydian",
+                "gothic",
+                "space",
+                "didgeridoo",
+                "energetic",
+                "worldfusion",
+                "fusion",
+                "noise",
+                "jungle",
+
+                "lounge",
+                "relaxing",
+                "easylistening",
+                "ambient",
+                "meditative",
+                "psychedelic",
+                "chillout",
+                "soft",
+                ]
         ]
         return self.categories
 
