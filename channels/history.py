@@ -75,6 +75,6 @@ class history:
 
         # update store
         self.bm.save()
-        if self.bm.current == "history":
-           self.bm.load("history")
+        #if self.bm.current == "history":
+        #   self.bm.load("history")
 

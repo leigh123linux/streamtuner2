@@ -151,7 +151,10 @@ class ConfigDict(dict):
                 f = open(file, "w")
             # encode
             data = json.dumps(data, indent=(4 if nice else None))
-            f.write(data.encode("utf-8"))
+            try:
+                f.write(data.encode("utf-8"))
+            except TypeError as e:
+                f.write(data)  # Python3 sometimes wants to write strings rather than bytes
             f.close()
 
 

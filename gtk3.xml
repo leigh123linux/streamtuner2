@@ -81,7 +81,7 @@
                                 <property name="can_focus">True</property>
                                 <child>
                                   <object class="GtkTreeView" id="tv_config_player">
-                                    <property name="width_request">0</property>
+                                    <property name="width_request">540</property>
                                     <property name="height_request">200</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
@@ -103,7 +103,7 @@
                                         <property name="sort_indicator">True</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="tvcr_config_player_type">
-                                            <signal name="edited" handler="config_player_edited" swapped="no"/>
+                                            <signal name="edited" handler="config_play_list_edit_col0" swapped="no"/>
                                           </object>
                                           <attributes>
                                             <attribute name="editable">2</attribute>
@@ -119,7 +119,7 @@
                                         <property name="title" translatable="yes">Application</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="tvcr_config_player_app">
-                                            <signal name="edited" handler="config_player_edited_2" swapped="no"/>
+                                            <signal name="edited" handler="config_play_list_edit_col1" swapped="no"/>
                                           </object>
                                           <attributes>
                                             <attribute name="editable">2</attribute>
@@ -138,25 +138,6 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="label15">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="xalign">0.019999999552965164</property>
-                                <property name="yalign">0.49000000953674316</property>
-                                <property name="label" translatable="yes">Use &lt;a href="http://fossil.include-once.org/streamtuner2/wiki?name=player"&gt;placeholders&lt;/a&gt; such as &lt;b&gt;%pls&lt;/b&gt; for Shoutcast playlists,
-or pass &lt;b&gt;%m3u&lt;/b&gt; for players that expect mp3 playlist files,
-and &lt;b&gt;%srv&lt;/b&gt; to use direct streaming URLs.</property>
-                                <property name="use_markup">True</property>
-                                <property name="wrap">True</property>
-                              </object>
-                              <packing>
-                                <property name="expand">True</property>
-                                <property name="fill">True</property>
-                                <property name="padding">5</property>
-                                <property name="position">2</property>
-                              </packing>
-                            </child>
-                            <child>
                               <object class="GtkLabel" id="label_record3">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
@@ -166,8 +147,11 @@ and &lt;b&gt;%srv&lt;/b&gt; to use direct streaming URLs.</property>
                               <packing>
                                 <property name="expand">True</property>
                                 <property name="fill">True</property>
-                                <property name="position">3</property>
+                                <property name="position">2</property>
                               </packing>
+                            </child>
+                            <child>
+                              <placeholder/>
                             </child>
                             <child>
                               <object class="GtkLabel" id="label_record1">
@@ -184,57 +168,51 @@ and &lt;b&gt;%srv&lt;/b&gt; to use direct streaming URLs.</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkScrolledWindow" id="scrolledwindow5">
+                              <object class="GtkTreeView" id="tv_config_record">
+                                <property name="width_request">540</property>
+                                <property name="height_request">100</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="border_width">5</property>
+                                <property name="model">config_record</property>
+                                <property name="headers_clickable">False</property>
+                                <property name="rules_hint">True</property>
+                                <property name="search_column">0</property>
+                                <property name="level_indentation">8</property>
+                                <property name="enable_grid_lines">both</property>
+                                <child internal-child="selection">
+                                  <object class="GtkTreeSelection" id="treeview-selection2"/>
+                                </child>
                                 <child>
-                                  <object class="GtkTreeView" id="tv_config_record">
-                                    <property name="width_request">0</property>
-                                    <property name="height_request">100</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="border_width">5</property>
-                                    <property name="model">config_record</property>
-                                    <property name="headers_clickable">False</property>
-                                    <property name="rules_hint">True</property>
-                                    <property name="search_column">0</property>
-                                    <property name="level_indentation">8</property>
-                                    <property name="enable_grid_lines">both</property>
-                                    <child internal-child="selection">
-                                      <object class="GtkTreeSelection" id="treeview-selection2"/>
-                                    </child>
+                                  <object class="GtkTreeViewColumn" id="tvc_config_record_type">
+                                    <property name="spacing">10</property>
+                                    <property name="min_width">125</property>
+                                    <property name="title" translatable="yes">Format</property>
+                                    <property name="sort_indicator">True</property>
                                     <child>
-                                      <object class="GtkTreeViewColumn" id="tvc_config_record_type">
-                                        <property name="spacing">10</property>
-                                        <property name="min_width">125</property>
-                                        <property name="title" translatable="yes">Format</property>
-                                        <property name="sort_indicator">True</property>
-                                        <child>
-                                          <object class="GtkCellRendererText" id="tvcr_config_record_type">
-                                            <signal name="edited" handler="config_record_edited" swapped="no"/>
-                                          </object>
-                                          <attributes>
-                                            <attribute name="editable">2</attribute>
-                                            <attribute name="text">0</attribute>
-                                          </attributes>
-                                        </child>
+                                      <object class="GtkCellRendererText" id="tvcr_config_record_type">
+                                        <signal name="edited" handler="config_record_list_edit_col0" swapped="no"/>
                                       </object>
+                                      <attributes>
+                                        <attribute name="editable">2</attribute>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
                                     </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkTreeViewColumn" id="tvc_config_record_app">
+                                    <property name="spacing">10</property>
+                                    <property name="min_width">300</property>
+                                    <property name="title" translatable="yes">Application</property>
                                     <child>
-                                      <object class="GtkTreeViewColumn" id="tvc_config_record_app">
-                                        <property name="spacing">10</property>
-                                        <property name="min_width">300</property>
-                                        <property name="title" translatable="yes">Application</property>
-                                        <child>
-                                          <object class="GtkCellRendererText" id="tvcr_config_record_app">
-                                            <signal name="edited" handler="config_record_edited_2" swapped="no"/>
-                                          </object>
-                                          <attributes>
-                                            <attribute name="editable">2</attribute>
-                                            <attribute name="text">1</attribute>
-                                          </attributes>
-                                        </child>
+                                      <object class="GtkCellRendererText" id="tvcr_config_record_app">
+                                        <signal name="edited" handler="config_record_list_edit_col1" swapped="no"/>
                                       </object>
+                                      <attributes>
+                                        <attribute name="editable">2</attribute>
+                                        <attribute name="text">1</attribute>
+                                      </attributes>
                                     </child>
                                   </object>
                                 </child>
@@ -243,6 +221,25 @@ and &lt;b&gt;%srv&lt;/b&gt; to use direct streaming URLs.</property>
                                 <property name="expand">True</property>
                                 <property name="fill">True</property>
                                 <property name="position">5</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label15">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="xalign">0.019999999552965164</property>
+                                <property name="yalign">0.49000000953674316</property>
+                                <property name="label" translatable="yes">Use &lt;a href="http://fossil.include-once.org/streamtuner2/wiki?name=player"&gt;placeholders&lt;/a&gt; such as &lt;b&gt;%pls&lt;/b&gt; for Shoutcast playlists,
+or pass &lt;b&gt;%m3u&lt;/b&gt; for players that expect mp3 playlist files,
+and &lt;b&gt;%srv&lt;/b&gt; to use direct streaming URLs.</property>
+                                <property name="use_markup">True</property>
+                                <property name="wrap">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">True</property>
+                                <property name="fill">True</property>
+                                <property name="padding">5</property>
+                                <property name="position">6</property>
                               </packing>
                             </child>
                             <child>
@@ -259,15 +256,8 @@ terminal window, as they're commandline tools.</property>
                               <packing>
                                 <property name="expand">True</property>
                                 <property name="fill">True</property>
-                                <property name="padding">15</property>
-                                <property name="position">6</property>
+                                <property name="position">7</property>
                               </packing>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
                             </child>
                           </object>
                         </child>
@@ -1891,6 +1881,141 @@ Plugins</property>
                   <placeholder/>
                 </child>
                 <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
                   <object class="GtkCheckButton" id="search_channel_all">
                     <property name="label" translatable="yes">all channels</property>
                     <property name="visible">True</property>
@@ -2252,6 +2377,9 @@ Plugins</property>
       </object>
     </child>
   </object>
+  <object class="GtkTextBuffer" id="textbuffer1">
+    <property name="text" translatable="yes">record,1</property>
+  </object>
   <object class="GtkDialog" id="timer_dialog">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
@@ -2580,6 +2708,60 @@ Plugins</property>
               <placeholder/>
             </child>
             <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
               <object class="GtkEntry" id="timer_value">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -2594,6 +2776,15 @@ Plugins</property>
                 <property name="top_attach">1</property>
                 <property name="bottom_attach">2</property>
               </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
             </child>
             <child>
               <placeholder/>
@@ -3094,8 +3285,8 @@ Plugins</property>
                                 <property name="label" translatable="yes">bookmark</property>
                                 <property name="use_underline">True</property>
                                 <signal name="activate" handler="bookmark" swapped="no"/>
-                                <accelerator key="d" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                                 <accelerator key="F8" signal="activate"/>
+                                <accelerator key="d" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                               </object>
                             </child>
                             <child>
@@ -3106,8 +3297,8 @@ Plugins</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
                                 <signal name="activate" handler="save_as" swapped="no"/>
-                                <accelerator key="F2" signal="activate"/>
                                 <accelerator key="s" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+                                <accelerator key="F2" signal="activate"/>
                               </object>
                             </child>
                             <child>
@@ -3118,9 +3309,9 @@ Plugins</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
                                 <signal name="activate" handler="streamedit_open" swapped="no"/>
-                                <accelerator key="F3" signal="activate"/>
-                                <accelerator key="space" signal="activate" modifiers="GDK_MOD1_MASK"/>
                                 <accelerator key="Return" signal="activate" modifiers="GDK_MOD1_MASK"/>
+                                <accelerator key="space" signal="activate" modifiers="GDK_MOD1_MASK"/>
+                                <accelerator key="F3" signal="activate"/>
                               </object>
                             </child>
                             <child>
@@ -3193,8 +3384,8 @@ Plugins</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
                                 <signal name="activate" handler="delete_entry" swapped="no"/>
-                                <accelerator key="Delete" signal="activate"/>
                                 <accelerator key="x" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+                                <accelerator key="Delete" signal="activate"/>
                               </object>
                             </child>
                             <child>

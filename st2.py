@@ -3,7 +3,7 @@
 # api: python
 # type: application
 # title: streamtuner2
-# description: directory browser for internet radio / audio streams
+# description: Directory browser for internet radio / audio streams
 # depends: pygtk | pygi, threading, pyquery, kronos, requests
 # version: 2.1.1
 # author: mario salzer
@@ -94,7 +94,7 @@ from channels import *
 import favicon
 
 
-__version__ = "2.1.0"
+__version__ = "2.1.1"
 
 
 # this represents the main window
@@ -188,11 +188,10 @@ class StreamTunerTwo(gtk.Builder):
                 "menu_properties": config_dialog.open,
                 "config_cancel": config_dialog.hide,
                 "config_save": config_dialog.save,
-                "config_player_edited": config_dialog.edited_player_row,
-                "config_player_edited_2": config_dialog.edited_player_row_2,
-                "config_record_edited": config_dialog.edited_record_row,
-                "config_record_edited_2": config_dialog.edited_record_row_2,
-                "update_categories": self.update_categories,
+                "config_play_list_edit_col0": lambda w,path,txt: (config_dialog.list_edit(self.config_play, path, 0, txt)),
+                "config_play_list_edit_col1": lambda w,path,txt: (config_dialog.list_edit(self.config_play, path, 1, txt)),
+                "config_record_list_edit_col0": lambda w,path,txt: (config_dialog.list_edit(self.config_record, path, 0, txt)),
+                "config_record_list_edit_col1": lambda w,path,txt: (config_dialog.list_edit(self.config_record, path, 1, txt)),
                 "update_favicons": self.update_favicons,
                 "app_state": self.app_state,
                 "bookmark": self.bookmark,
@@ -311,7 +310,7 @@ class StreamTunerTwo(gtk.Builder):
         # streamripper
         def on_record_clicked(self, widget):
             row = self.row()
-            action.record(row.get("url"), "audio/mpeg", "url/direct", row=row)
+            action.record(row.get("url"), row.get("format", "audio/mpeg"), "url/direct", row=row)
 
 
         # browse stream
@@ -798,15 +797,11 @@ class config_dialog (auxiliary_window):
                 __print__(dbg.CONF, "config save", prefix+key, val)
 
         
-        # Gtk callback to update ListStore when entries get edited
-        def edited_player_row(self, cell, path, new_text, user_data=None, column=0):
-            main.config_play[path][column] = new_text
-        def edited_player_row_2(self, cell, path, new_text, user_data=None):
-            self.edited_player_row(cell, path, new_text, column=1)
-        def edited_record_row(self, cell, path, new_text, user_data=None, column=0):
-            main.config_record[path][column] = new_text
-        def edited_record_row_2(self, cell, path, new_text, user_data=None):
-            self.edited_record_row(cell, path, new_text, column=1)
+        # Generic Gtk callback to update ListStore when entries get edited
+        def list_edit(self, liststore, path, column, new_text):
+            liststore[path][column] = new_text
+            # The signal_connect() dict actually prepares individual lambda functions
+            # to bind the correct ListStore and column id.
 
 
         # list of Gtk themes in dropdown
