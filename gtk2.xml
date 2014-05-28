@@ -242,21 +242,7 @@ and &lt;b&gt;%srv&lt;/b&gt; to use direct streaming URLs.</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="label_record2">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="xalign">0.019999999552965164</property>
-                                <property name="yalign">0.49000000953674316</property>
-                                <property name="label" translatable="yes">You usually want to run recording applications in a
-terminal window, as they're commandline tools.</property>
-                                <property name="use_markup">True</property>
-                                <property name="wrap">True</property>
-                              </object>
-                              <packing>
-                                <property name="expand">True</property>
-                                <property name="fill">True</property>
-                                <property name="position">7</property>
-                              </packing>
+                              <placeholder/>
                             </child>
                           </object>
                         </child>
@@ -1982,6 +1968,51 @@ Plugins</property>
                   <placeholder/>
                 </child>
                 <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
                   <object class="GtkCheckButton" id="search_channel_all">
                     <property name="label" translatable="yes">all channels</property>
                     <property name="visible">True</property>
@@ -2337,9 +2368,6 @@ Plugins</property>
         <signal name="activate" handler="on_homepage_stream_clicked" swapped="no"/>
       </object>
     </child>
-  </object>
-  <object class="GtkTextBuffer" id="textbuffer1">
-    <property name="text" translatable="yes">record,1</property>
   </object>
   <object class="GtkDialog" id="timer_dialog">
     <property name="can_focus">False</property>
@@ -2705,6 +2733,24 @@ Plugins</property>
               <placeholder/>
             </child>
             <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
               <object class="GtkEntry" id="timer_value">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -2721,6 +2767,9 @@ Plugins</property>
                 <property name="top_attach">1</property>
                 <property name="bottom_attach">2</property>
               </packing>
+            </child>
+            <child>
+              <placeholder/>
             </child>
             <child>
               <placeholder/>
@@ -3247,8 +3296,8 @@ Plugins</property>
                                 <property name="can_focus">False</property>
                                 <property name="label" translatable="yes">bookmark</property>
                                 <property name="use_underline">True</property>
-                                <accelerator key="d" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                                 <accelerator key="F8" signal="activate"/>
+                                <accelerator key="d" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                                 <signal name="activate" handler="bookmark" swapped="no"/>
                               </object>
                             </child>
@@ -3259,8 +3308,8 @@ Plugins</property>
                                 <property name="can_focus">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
-                                <accelerator key="F2" signal="activate"/>
                                 <accelerator key="s" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+                                <accelerator key="F2" signal="activate"/>
                                 <signal name="activate" handler="save_as" swapped="no"/>
                               </object>
                             </child>
@@ -3271,9 +3320,9 @@ Plugins</property>
                                 <property name="can_focus">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
-                                <accelerator key="F3" signal="activate"/>
-                                <accelerator key="space" signal="activate" modifiers="GDK_MOD1_MASK"/>
                                 <accelerator key="Return" signal="activate" modifiers="GDK_MOD1_MASK"/>
+                                <accelerator key="space" signal="activate" modifiers="GDK_MOD1_MASK"/>
+                                <accelerator key="F3" signal="activate"/>
                                 <signal name="activate" handler="streamedit_open" swapped="no"/>
                               </object>
                             </child>
@@ -3346,8 +3395,8 @@ Plugins</property>
                                 <property name="can_focus">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
-                                <accelerator key="Delete" signal="activate"/>
                                 <accelerator key="x" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+                                <accelerator key="Delete" signal="activate"/>
                                 <signal name="activate" handler="delete_entry" swapped="no"/>
                               </object>
                             </child>
@@ -3663,8 +3712,8 @@ Plugins</property>
                         </child>
                         <child>
                           <object class="GtkToolButton" id="stop">
-                            <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="visible_horizontal">False</property>
                             <property name="label" translatable="yes">stop</property>
                             <property name="stock_id">gtk-cancel</property>
                             <signal name="clicked" handler="on_stop_clicked" swapped="no"/>

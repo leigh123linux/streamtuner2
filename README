@@ -96,6 +96,22 @@ Public Domain.
 history
 -------
 
+2.1.1
+- Added SurfMusik and Youtube plugin channels. Google/DMOZ removed.
+- Jamendo viewing now utilizes the v3.0 JSON API for genres/tracks
+  and uses cover images instead of favicons.
+- A new logo was introduced.
+- The reworked configuration dialog now provides editable lists for
+  player and recording apps configuration, a more descriptive options
+  pane, a better overview for enabled and available plugins (with fresh
+  meta comment blocks), and dropdowns instead of text-fields are used.
+- Internet-Radio parsing was fixed, a workaround for absent titles
+  added. Shoutcast also alternates between DOM and Regex fetching.
+- For Xiph browsing a custom caching API was introduced.
+- Status bar / download progress display was fixed.
+- A history plugin was added. And extension hooks{} support started.
+- Some more Python3 fixes applied. Documentation was adapted.
+
 2.1.0
 - support for running on Python3 or Python2,
   as well as Gtk3 (PyGI) and Gtk2 (PyGtk with Python2) bindings

@@ -78,6 +78,7 @@ class ConfigDict(dict):
                 "bookmarks": 1, # built-in plugin, cannot be disabled
                 "shoutcast": 1,
                 "xiph": 1,
+                "modarchive": 0, # disable per default
                 "file": 0,      # disable per default
                 "punkcast": 0,  # disable per default
                 "history": 0,
