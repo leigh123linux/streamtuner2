@@ -4,7 +4,7 @@
 
 	<info>
 	<link type="guide" xref="index#browsing"/>
-	<desc>Switching through the channel tabs, different radio directoriy services.</desc>
+	<desc>Switching through the channel tabs, different radio directory services.</desc>
 	</info>
 
 	<title>Channels</title>
@@ -24,8 +24,8 @@
 	</steps>
 
 	<p>Individual channels provide different music/radio information. The table
-        views are however identical in each tab. You could modify the <code>datamap[]</code>
-        in the plugin files, if you want to adapt this.</p>
+        views are mostly identical in each tab. (You could modify the <code>datamap[]</code>
+        in the plugin files if you wanted to adapt this.)</p>
 
 	<section id="list">
 		<title>Available channels</title>

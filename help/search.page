@@ -10,12 +10,18 @@
 
 	<title>Searching</title>
 
-	<p>There are two search functions. The quick search field is in the toolbar, and allows
-	to highlight search terms in the current station list. The cache search is available
-	through the <guiseq><gui>Edit</gui> <gui>Search</gui></guiseq> menu instead and provides more details.</p>
+	<p>There are two search functions.</p>
+
+
+	<section id="quicksearch">
+	<title>Quick search</title>
+        <p>Just enter text into the quick search box atop. Streamtuner2 will instantly highlight
+	any matches in the current stations view. If you switch tabs, just click the glass icon
+	to reapply the highlighting.</p>
+	</section>
 
 	<section id="cachesearch">
-	<title>Dialog options</title>
+	<title>Search window</title>
 	<p>You can get to the search dialog via <guiseq><gui>Edit</gui> <gui>Find</gui></guiseq> or <key>Ctrl</key>+<key>F</key>. Centrally to this dialog is the
 	text field, where you can specify the phrase to scan for.</p>
 
@@ -27,24 +33,17 @@
 	into. Often you just want to search the titles of radio stations. But you can also
 	have the search occour in the description/playing fields. Alternatively you could
 	just search the homepage links.</p>
-	</section>
 
-	<section id="methods">
-	<title>Search methods</title>
 	<p>Lastly, there are three search methods. You mostly want to use the <gui>cache search</gui>,
 	which just scans through the station lists streamtuner2 has downloaded. Since you are mostly
 	looking for something you had already seen, this will give you the desired results.</p>
+
 	<p>The <gui>server search</gui> would try to do a live search on the directory servers,
 	providing you with the most recent data. However, it's not implemented for all channel
 	plugins, and therefore brings limited output.</p>
-	<p>Use the button <gui>google it</gui> as last resort, if streamtuner2 didn't find anything.</p>
-	</section>
 
-	<section id="quicksearch">
-	<title>Quick search</title>
-        <p>Just enter text into the quick search box. Streamtuner2 will instantly highlight
-	any matches in the current stations view. If you switch tabs, just click the glass icon
-	to reapply the highlighting.</p>
+	<p>Use the button <gui>google it</gui> as last resort, if streamtuner2 didn't find anything.</p>
+
 	</section>
 
 </page>

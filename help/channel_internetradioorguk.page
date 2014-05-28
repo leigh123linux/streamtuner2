@@ -9,12 +9,12 @@
         <desc>Large radio directory from the UK.</desc>
 </info>
 
-	<title>Internet-Radio.org.uk</title>
+	<title>Internet-Radio.com</title>
 
-	<p>I-R.org.uk is a good alternative to Shoutcast. It also lacks a channel homepage in most
+	<p>I-R.com is a good alternative to Shoutcast. It also lacks a channel homepage in most
 	cases, but is a likewise encyclopedical directory. Genres are similiar to Shoutcast.</p>
 
 	<note><p>Note that this plugin uses its own setting for how many links to retrieve. Instead
-	of stream numbers, it only counts pages. This is a lazyness related bug.</p></note>
+	of stream numbers, it only counts pages (which however speeds up processing now).</p></note>
 
 </page>

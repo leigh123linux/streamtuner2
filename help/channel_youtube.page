@@ -1,0 +1,38 @@
+<page	xmlns="http://projectmallard.org/1.0/"
+	type="guide"
+	id="youtube">
+
+<info>
+	<link type="guide" xref="index#channels"/>
+	<link type="guide" xref="channels#list"/>
+	<link type="guide" xref="configuration#plugins"/>
+        <desc>Youtube music/video listings.</desc>
+</info>
+
+	<title>Youtube</title>
+
+	<p>Googles <link href="https://youtube.com/">Youtube</link> provides a quirky
+        JSON API that makes browsing channels and genres feasible. This beta plugin
+        provides a little overview, and usually retrieves recent video uploads.</p>
+
+        <p>VLC can directly play Youtube URLs. For other players the default application
+        setting wraps <link href="http://youtube-dl.org/">youtube-dl</link>, which is also
+        used for recording.</p>
+
+
+<terms>
+  <title>Channel options.</title>
+  <item>
+    <title><code>Region</code></title>
+    <p>With the country dropdown you can predefine which mostPopular listins are returned.</p>
+  </item>
+  <item>
+    <title><code>My Channels</code></title>
+    <p>You can edit the list of YT channel names to fetch some of your favourite artists/uploaders.
+    To apply this setting, and have new categories show up in the genre pane, use
+    <guiseq><gui>Channel</gui> <gui>Update category tree</gui></guiseq> first.
+    </p>
+  </item>
+</terms>
+
+</page>

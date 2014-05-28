@@ -9,46 +9,47 @@
 
 	<title>Settings dialog</title>
 
-	<p>There are many options in streamtuner2. You can find the settings dialog in the edit menu,
-        preferences (last entry).</p>
+	<p>There are multiple behaviour options in streamtuner2.
+        You can find the settings dialog in the edit menu as "Preferences" (last entry).
+        </p>
 
         <terms>
-          <title>It is separated into four main areas.</title>
+          <title>It is separated into three main areas.</title>
           <item>
             <title>Player</title>
-            <p>Lists audio formats and the applications which shall be used for playing.</p>
+            <p>Lists audio formats and the audio player applications, or recording tools below.</p>
           </item>
           <item>
-            <title>Display</title>
-            <p>Influences the display of all stream/station lists.</p>
-          </item>
-          <item>
-            <title>System</title>
-            <p>Filesystem and environment settings. Boring.</p>
+            <title>Options</title>
+            <p>Influences the display of all stream/station lists, and contains some system settings.</p>
           </item>
           <item>
             <title>Channel Plugins</title>
-            <p>Every channel tab can have specific options. These are configured here. Also you can disable channels you don't need.</p>
+            <p>Every channel tab can have specific options. These are configured here.
+            Also you can disable channels you don't need.</p>
           </item>
         </terms>
 
 
 	<section id="apps">
 		<title>Player application settings</title>
-		<p>MIME types are elaborate identifiers for file types. audio/mp3 for example represents MP3 files, and audio/ogg
+		<p>MIME types are elaborate identifiers for file types; audio/mp3 for example represents MP3 files, and audio/ogg
 		means just OGG.</p>
 		<p>The text entry fields can hold the application name of an audio player. Often the application name
-		is just a lower case version of the program title, but you might have to look it up.</p>
-		<p>Behind the application program name is a placeholder. If the audio player is invoked, this placeholder
-		gets replaces with an URL (a http://..-Link) of the selected radio stream.</p>
-		<p>It's introduced by percent sign, and followed by letters. %m3u for example generates a .m3u file. Most
-		audio players understand that. Otherwise try %pls, which might even be faster because streamtuner2 doesn't
-		have to download and preprocess it. %srv instead gives a direct stream link.</p>
-		<p>The entry for */* is a catch-all. If the audio format of a radio station isn't know, this application
-		gets called.</p>
+		is just a lower case version of the program title.</p>
+		<p>Behind application names a placeholder can be used. On invocation such placeholders
+		get replaced with an URL (a http://..-Link) or filename for the selected radio stream.</p>
+		<p>It's introduced by a percent sign, and followed by letters. %m3u for example generates a .m3u file,
+                which most audio players understand. Otherwise try %pls, which might even be faster because streamtuner2 doesn't
+		have to download and preprocess it. Alternatively %srv instead gives a direct stream link.</p>
+		<p>Catch-all entries like */* or a generic audio/* entry allow to configure a default player.
+		</p>
 		<p><title>Recording</title></p>
-		<p>The last entry in the 'Apps' section specifies streamripper. It is used for recording stations. You
-		might want to add some commandline -arguments here.</p>
+		<p>The second block of entries in the 'Apps' section specifies recording applications.
+                Here streamripper is preconfigured for audio streams, and youtube-dl for Youtube videos for instance.
+                To define a target directory, you can add commandline arguments to each. Also it's typically
+                helpful to leave the xterm prefix on, so you can follow the processing state. (Alternatively to
+                xterm there is x-terminal-emulator, or rxvt, gnome-terminal, xfce4-terminal, etc.)</p>
 	</section>
 
 
@@ -68,12 +69,6 @@
 		<p>Remembering window states makes streamtuner2 not forget which channel and category was last
 		selected. You can however disable this option, and instead manually save the window states/layout
 		in the edit menu, if you want.</p>
-	</section>
-	
-
-	<section id="system">
-		<title>System info</title>
-		<p>There are just a few options here, and some are hard-wired. Usually you don't want to change them.</p>
 		<p>Setting another temporary directory might be useful, if you want to keep the temporary .m3u cache
 		files. They are created whenever you hit play. For archival or speed-up porposes you might want to keep
 		them elsewhere. They don't take a lot of space.</p>
@@ -82,8 +77,8 @@
 	<section id="plugins">
 		<title>Plugin and Channel settings</title>
 		<p>Each channel plugin can bring its own list of configuration settings. These are collected here.</p>
-		<p>The heading for each plugin is actually a button, which allows disabling the plugin. Alas the state
-		cannot be easily discerned with all themes.</p>
+		<p>The heading for each plugin allows to enable or disable it. To apply changed states you need to restart
+                streamtuner2 however.</p>
 		<p>If you want to find out more about the short option descriptions (most settings are checkboxes),
 		please have a look into the channels directory /usr/share/streamtuner2/channels/ and corresponding
 		*.py files. These are readable, and sometimes contain more information.</p>

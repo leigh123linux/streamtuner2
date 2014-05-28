@@ -19,6 +19,8 @@
 # TV stations don't seem to work mostly. And loading the webtv/ pages would
 # be somewhat slow (for querying the actual mms:// streams).
 #
+# * There's also an English version //surfmusic.com/
+#   So it might make sense to duplicate it with alternative category titles.
 #
 
 import re
@@ -37,10 +39,11 @@ class surfmusik (ChannelPlugin):
     homepage = "http://www.surfmusik.de/"
 
     base = "http://www.surfmusik.de/"
+    base2 = "http://www.surfmusic.de/"
     listformat = "audio/x-scpls"
 
     categories = [
-        "Genres", ["50ger 50s", "Dubstep", "Latin Jazz", "Schlager", "60get 60s", "Electronic", "Latino", "Sega", "70ger 70s", "Eurodance ", "Lounge", "Soft", "80ger 80s", "Filmmusik", "Metal", "Sport", "90ger 90s", "Flamenco", "Merengue", "Swing", "Acid", "Gay", "Mix", "Tamil", "Ambient", "Gospel", "New Age", "Tango", "Arabische Musik", "Gothic", "News", "Techno", "Afrikanische Musik", "Groove", "Nostalgie", "Gabber", "Artist Radio ", "Halloween", "Hardstyle", "Bachata", "Hip Hop", "Oldies", "Jumpstyle", "Bhangra", "Hoerspiel Radio", "Minimal", "Balladen", "House", "Pop", "Schranz", "Big Band", "Indian", "Punk", "Top 40", "Blues", "Indisch", "Radioversprecher", "Trance", "Bollywood", "Instrumentalmusik", "Reggae", "Trip Hop", "Campusradio", "Information", "RnB", "Tropical", "Celtic", "Italo Disco ", "Rochester", "Urban", "Chillout", "Jazz", "Rock", "Variety", "Country", "Karnevalsmusik", "Rock n Roll", "Volksmusik", "Dance", "Kinderradio", "Rumba/Salsa", "Zumba", "Discofox", "Kirchlich", "Russische Chansons", "Drum n Bass", "Klassik", "Salsa"],
+        "Genres", ["50ger 50s", "Dubstep", "Latin Jazz", "Schlager", "60ger 60s", "Electronic", "Latino", "Sega", "70ger 70s", "Eurodance ", "Lounge", "Soft", "80ger 80s", "Filmmusik", "Metal", "Sport", "90ger 90s", "Flamenco", "Merengue", "Swing", "Acid", "Gay", "Mix", "Tamil", "Ambient", "Gospel", "New Age", "Tango", "Arabische Musik", "Gothic", "News", "Techno", "Afrikanische Musik", "Groove", "Nostalgie", "Gabber", "Artist Radio ", "Halloween", "Hardstyle", "Bachata", "Hip Hop", "Oldies", "Jumpstyle", "Bhangra", "Hoerspiel Radio", "Minimal", "Balladen", "House", "Pop", "Schranz", "Big Band", "Indian", "Punk", "Top 40", "Blues", "Indisch", "Radioversprecher", "Trance", "Bollywood", "Instrumentalmusik", "Reggae", "Trip Hop", "Campusradio", "Information", "RnB", "Tropical", "Celtic", "Italo Disco ", "Rochester", "Urban", "Chillout", "Jazz", "Rock", "Variety", "Country", "Karnevalsmusik", "Rock n Roll", "Volksmusik", "Dance", "Kinderradio", "Rumba/Salsa", "Zumba", "Discofox", "Kirchlich", "Russische Chansons", "Drum n Bass", "Klassik", "Salsa"],
         "Deutschland", ["Baden Wuerttemberg", "Niedersachsen", "Bayern", "Nordrhein-Westfalen", "Berlin", "Rheinland-Pfalz", "Brandenburg", "Saarland", "Bremen", "Sachsen", "Hamburg", "Sachsen-Anhalt", "Hessen", "Schleswig-Holstein", "Mecklenburg-Vorpommern", "Thueringen"],
         "Europa", ["Albanien", "Griechenland", "Mallorca", "Slowakei", "Andorra", "Irland", "Malta", "Slovenien", "Armenien", "Island", "Niederlande", "Spanien", "Aserbaidschan", "Italien", "Norwegen", "Tschech. Republ", "Belgien", "Kasachstan", "Oesterreich", "Tuerkei", "Bosnien", "Kanarische Inseln", "Polen", "Ungarn", "Bulgarien", "Kirgistan", "Portugal", "Ukraine", "Daenemark", "Kroatien", "Rumaenien", "Wales", "Deutschland", "Lettland", "Russland", "Weissrussland", "England", "Liechtenstein", "Schottland", "Zypern", "Estland", "Litauen", "Schweden", "Finnland", "Luxemburg", "Schweiz", "Frankreich", "Mazedonien", "Serbien"],
         "Afrika", ["Angola", "Malawi", "Aethiopien", "Mauritius", "Aegypten", "Marokko", "Algerien", "Namibia", "Benin", "Nigeria", "Burundi", "Reunion", "Elfenbeinkueste", "Senegal", "Gabun", "Simbabwe", "Ghana", "Somalia", "Kamerun", "Sudan", "Kap Verde", "Suedafrika", "Kenia", "Tansania", "Kongo", "Togo", "Libyen", "Tunesien", "Madagaskar", "Uganda", "Mali"],
@@ -56,6 +59,7 @@ class surfmusik (ChannelPlugin):
     titles = dict( genre="Genre", title="Station", playing="Location", bitrate=False, listeners=False )
  
     config = [
+        #{"name": "surfmusik_lang", "type": "select", "select":"DE=SurfMusik.de|EN=SurfMusic.de", "description": "You can alternatively use the German or English category titles.", "category": "language"}
     ]    
 
 

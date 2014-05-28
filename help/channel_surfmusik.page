@@ -1,0 +1,34 @@
+<page	xmlns="http://projectmallard.org/1.0/"
+	type="guide"
+	id="surfmusik">
+
+<info>
+	<link type="guide" xref="index#channels"/>
+	<link type="guide" xref="channels#list"/>
+	<link type="guide" xref="configuration#plugins"/>
+        <desc>International radio listings.</desc>
+</info>
+
+	<title>SurfMusic</title>
+
+	<p><link href="http://surfmusic.de/">SurfMusic</link> is a user-collection of
+        internet radios. It's grouped by genres, or locations / countries.</p>
+
+        <p>It's both pretty large and rather quick to extract listings from. And it mostly
+        includes station homepage links.</p>
+
+
+        <p>The MusicTV and NewsTV sections also return results, but those are mostly
+        web-based video stations. Some of them are outdated links even.</p>
+
+
+<terms>
+  <title>Channel options.</title>
+  <item>
+    <title><code>Language</code></title>
+    <p>The current version is German-only. The English genre titles will be added
+    later.</p>
+  </item>
+</terms>
+
+</page>

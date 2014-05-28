@@ -27,11 +27,13 @@
 	</table>
 
 	<p>Some audio players open a second instance when you actually want to switch radios.
-	In this case it's a common workaround to write <code>pkill vlc ; vlc %u</code> instead.
-	This ends the previous player and starts it anew.</p>
+	In this case it's a common workaround to write <code>pkill vlc ; vlc %u</code> instead,
+	which ends the previous player process and starts it anew.
+        For VLC there's however also the option <code>--one-instance</code>, which sometimes
+        works better.</p>
 
-	<p>Some applications, like Rhythmbox or Banshee, are pure GUI applications and cannot
-	be invoked with a play URL by other apps. This makes them unsuitable for use with
+	<p>Some applications, like Rhythmbox or Banshee, are primarily audio browsers, not players,
+        and cannot be invoked with a play URL by other apps. This makes them less suitable for use with
 	streamtuner2.</p>
 
 	<section id="abbr">
