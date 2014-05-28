@@ -184,7 +184,7 @@ class StreamTunerTwo(gtk.Builder):
                 "menu_toolbar_size_small": lambda w: (self.toolbar.set_icon_size(gtk.ICON_SIZE_SMALL_TOOLBAR)),
                 "menu_toolbar_size_medium": lambda w: (self.toolbar.set_icon_size(gtk.ICON_SIZE_DND)),
                 "menu_toolbar_size_large": lambda w: (self.toolbar.set_icon_size(gtk.ICON_SIZE_DIALOG)),
-                # else
+                # win_config
                 "menu_properties": config_dialog.open,
                 "config_cancel": config_dialog.hide,
                 "config_save": config_dialog.save,
@@ -192,6 +192,7 @@ class StreamTunerTwo(gtk.Builder):
                 "config_play_list_edit_col1": lambda w,path,txt: (config_dialog.list_edit(self.config_play, path, 1, txt)),
                 "config_record_list_edit_col0": lambda w,path,txt: (config_dialog.list_edit(self.config_record, path, 0, txt)),
                 "config_record_list_edit_col1": lambda w,path,txt: (config_dialog.list_edit(self.config_record, path, 1, txt)),
+                # else
                 "update_categories": self.update_categories,
                 "update_favicons": self.update_favicons,
                 "app_state": self.app_state,
@@ -205,6 +206,7 @@ class StreamTunerTwo(gtk.Builder):
                # "menu_bugreport": lambda w: BugReport(),
                 "menu_copy": self.menu_copy,
                 "delete_entry": self.delete_entry,
+                # search dialog
                 "quicksearch_set": search.quicksearch_set,
                 "search_open": search.menu_search,
                 "search_go": search.start,
@@ -212,6 +214,7 @@ class StreamTunerTwo(gtk.Builder):
                 "search_google": search.google,
                 "search_cancel": search.cancel,
                 "true": lambda w,*args: True,
+                # win_streamedit
                 "streamedit_open": streamedit.open,
                 "streamedit_save": streamedit.save,
                 "streamedit_new": streamedit.new,
@@ -476,7 +479,6 @@ class StreamTunerTwo(gtk.Builder):
 
             # default plugins
             conf.add_plugin_defaults(self.channels["bookmarks"].config, "bookmarks")
-            #conf.add_plugin_defaults(self.channels["shoutcast"].config, "shoutcast")
 
 
         # store window/widget states (sizes, selections, etc.)
@@ -585,7 +587,6 @@ class search (auxiliary_window):
         def cancel(self, *args):
             self.search_dialog.hide()
             return True  # stop any other gtk handlers
-            #self.search_dialog.hide() #if conf.hide_searchdialog
             
             
         # perform search
@@ -742,6 +743,7 @@ class config_dialog (auxiliary_window):
                 self.add_plugins()
                 self.combobox_theme()
                 self.first_open = 0
+                self.win_config.resize(565, 625)
             self.load_config(conf.__dict__, "config_")
             self.load_config(conf.plugins, "config_plugins_")
             self.win_config.show()
@@ -1144,8 +1146,6 @@ def gui_startup(p=0/100.0, msg="streamtuner2 is starting"):
 #-- run main                                ---------------------------------------------
 if __name__ == "__main__":
 
-    #-- global configuration settings
-    "conf = Config()"       # already happened with "from config import conf"
 
     # graphical
     if len(sys.argv) < 2 or "--gtk3" in sys.argv:
