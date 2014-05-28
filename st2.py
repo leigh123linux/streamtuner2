@@ -192,6 +192,7 @@ class StreamTunerTwo(gtk.Builder):
                 "config_play_list_edit_col1": lambda w,path,txt: (config_dialog.list_edit(self.config_play, path, 1, txt)),
                 "config_record_list_edit_col0": lambda w,path,txt: (config_dialog.list_edit(self.config_record, path, 0, txt)),
                 "config_record_list_edit_col1": lambda w,path,txt: (config_dialog.list_edit(self.config_record, path, 1, txt)),
+                "update_categories": self.update_categories,
                 "update_favicons": self.update_favicons,
                 "app_state": self.app_state,
                 "bookmark": self.bookmark,
@@ -802,7 +803,7 @@ class config_dialog (auxiliary_window):
             liststore[path][column] = new_text
             # The signal_connect() dict actually prepares individual lambda functions
             # to bind the correct ListStore and column id.
-
+            
 
         # list of Gtk themes in dropdown
         def combobox_theme(self):
