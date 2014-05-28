@@ -3,9 +3,9 @@
 # title: MODarchive
 # description: Collection of module / tracker audio files (MOD, S3M, XM, etc.)
 # type: channel
-# version: 0.1
+# version: 0.2
 # priority: extra
-# category: media
+# category: music
 #
 #
 # Just a genre browser.
@@ -14,6 +14,10 @@
 # download method, it'll receive a .zip archive with embeded .mod file.
 # VLC in */* seems to work fine however.
 #
+# Modarchive actually provides an API
+# http://modarchive.org/index.php?xml-api
+# (If only it wasn't XML based..)
+#
 
 
 import re
@@ -21,7 +25,6 @@ import ahttp as http
 from config import conf
 from channels import *
 from config import __print__, dbg
-from xml.sax.saxutils import unescape
 
 
 
@@ -44,9 +47,10 @@ class modarchive (ChannelPlugin):
     module = "modarchive"
     homepage = "http://www.modarchive.org/"
     base = "http://modarchive.org/"
+    titles = dict(genre="Genre", title="Song", playing="File", listeners="Rating", bitrate=0)
 
     # keeps category titles->urls    
-    catmap = {}
+    catmap = {"Chiptune": "54", "Electronic - Ambient": "2", "Electronic - Other": "100", "Rock (general)": "13", "Trance - Hard": "64", "Swing": "75", "Rock - Soft": "15", "R &amp; B": "26", "Big Band": "74", "Ska": "24", "Electronic - Rave": "65", "Electronic - Progressive": "11", "Piano": "59", "Comedy": "45", "Christmas": "72", "Chillout": "106", "Reggae": "27", "Electronic - Industrial": "34", "Grunge": "103", "Medieval": "28", "Demo Style": "55", "Orchestral": "50", "Soundtrack": "43", "Electronic - Jungle": "60", "Fusion": "102", "Electronic - IDM": "99", "Ballad": "56", "Country": "18", "World": "42", "Jazz - Modern": "31", "Video Game": "8", "Funk": "32", "Electronic - Drum &amp; Bass": "6", "Alternative": "48", "Electronic - Minimal": "101", "Electronic - Gabber": "40", "Vocal Montage": "76", "Metal (general)": "36", "Electronic - Breakbeat": "9", "Soul": "25", "Electronic (general)": "1", "Punk": "35", "Pop - Synth": "61", "Electronic - Dance": "3", "Pop (general)": "12", "Trance - Progressive": "85", "Trance (general)": "71", "Disco": "58", "Electronic - House": "10", "Experimental": "46", "Trance - Goa": "66", "Rock - Hard": "14", "Trance - Dream": "67", "Spiritual": "47", "Metal - Extreme": "37", "Jazz (general)": "29", "Trance - Tribal": "70", "Classical": "20", "Hip-Hop": "22", "Bluegrass": "105", "Halloween": "82", "Jazz - Acid": "30", "Easy Listening": "107", "New Age": "44", "Fantasy": "52", "Blues": "19", "Other": "41", "Trance - Acid": "63", "Gothic": "38", "Electronic - Hardcore": "39", "One Hour Compo": "53", "Pop - Soft": "62", "Electronic - Techno": "7", "Religious": "49", "Folk": "21"}
     categories = []
  
     
@@ -102,15 +106,16 @@ class modarchive (ChannelPlugin):
     # download links from dmoz listing
     def update_streams(self, cat, force=0):
 
-        url = "http://modarchive.org/index.php?query="+self.catmap[cat]+"&request=search&search_type=genre"
-        html = http.get(url)
+        url = "http://modarchive.org/index.php"
+        params = dict(query=self.catmap[cat], request="search", search_type="genre")
+        html = http.get(url, params)
         entries = []
         
         rx_mod = re.compile("""
-            href="(http://modarchive.org/data/downloads.php[?]moduleid=(\d+)[#][^"]+)"
-            .*?    /formats/(\w+).png"
+            href="(http://api\.modarchive\.org/downloads\.php[?]moduleid=(\d+)[#][^"]+)"
+            .*?    /formats/(\w+)\.png"
             .*?    title="([^">]+)">([^<>]+)</a>
-            .*?    >Rated</a>\s*(\d+)
+            .*?    >(?:Rated|Unrated)</a>\s*(\d*)
         """, re.X|re.S)
         
         for uu in rx_mod.findall(html):
@@ -123,7 +128,7 @@ class modarchive (ChannelPlugin):
                 "format": self.mime_fmt(fmt) + "+zip",
                 "title": title,
                 "playing": file,
-                "listeners": int(rating),
+                "listeners": int(rating if rating else 0),
                 "homepage": "http://modarchive.org/index.php?request=view_by_moduleid&query="+id,
             })
         
