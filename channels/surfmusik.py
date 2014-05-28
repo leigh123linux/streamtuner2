@@ -2,15 +2,15 @@
 # api: streamtuner2
 # title: SurfMusik
 # description: User collection of streams categorized by region and genre.
-# version: 0.1
+# version: 0.4
 # type: channel
 # category: radio
 # author: gorgonz123
 # source: http://forum.ubuntuusers.de/topic/streamtuner2-zwei-internet-radios-anhoeren-au/3/
 # recognizes: max_streams
 #
-# While the categories and genre names are in German, there's a vast
-# collection of international stations on Surfmusik.de
+# This plugin comes in German (SurfMusik) and English (SurfMusic) variations.
+# It provides a vast collection of international stations and genres.
 # While it's not an open source project, most entries are user contributed.
 #
 # They do have a Windows client, hencewhy it's even more important for
@@ -19,13 +19,12 @@
 # TV stations don't seem to work mostly. And loading the webtv/ pages would
 # be somewhat slow (for querying the actual mms:// streams).
 #
-# * There's also an English version //surfmusic.com/
-#   So it might make sense to duplicate it with alternative category titles.
+#
 #
 
 import re
 import ahttp as http
-from config import conf
+from config import conf, dbg, __print__
 from channels import *
 
 
@@ -38,8 +37,11 @@ class surfmusik (ChannelPlugin):
     module = "surfmusik"
     homepage = "http://www.surfmusik.de/"
 
-    base = "http://www.surfmusik.de/"
-    base2 = "http://www.surfmusic.de/"
+    lang = "DE"   # last configured categories
+    base = {
+       "DE": "http://www.surfmusik.de/",
+       "EN": "http://www.surfmusic.de/",
+    }
     listformat = "audio/x-scpls"
 
     categories = [
@@ -59,18 +61,60 @@ class surfmusik (ChannelPlugin):
     titles = dict( genre="Genre", title="Station", playing="Location", bitrate=False, listeners=False )
  
     config = [
-        #{"name": "surfmusik_lang", "type": "select", "select":"DE=SurfMusik.de|EN=SurfMusic.de", "description": "You can alternatively use the German or English category titles.", "category": "language"}
+        {
+            "name": "surfmusik_lang",
+            "value": "EN",
+            "type": "select",
+            "select":"DE=SurfMusik (GERMAN)|EN=SurfMusic (ENGLISH)",
+            "description": "You can alternatively use the German or English localized category titles. Reload the category tree before fetching any stations.",
+            "category": "language",
+        }
     ]    
 
 
     # just a static list for now
     def update_categories(self):
-        pass
+
+        lang = conf.surfmusik_lang
+
+        cats = {
+            "DE": ["Genres", "Deutschland", "Europa", "USA", "Kanada", "Amerika", "Afrika", "Asien", "Ozeanien", "MusicTV", "NewsTV", "Poli", "Flug"],
+            "EN": ["Genres", "Europe", "Germany", "USA", "Canada", "America", "Africa", "Asia", "Oceania", "MusicTV", "NewsTV", "Poli", "Flug"],
+        }
+        map = {
+            "Genres": "genres.htm",
+            "Europe": "euro.htm",           "Europa": "euro.htm",
+            "Germany": "bundesland.htm",    "Deutschland": "bundesland.htm",
+            "Africa": "africa.htm",         "Afrika": "africa.htm",
+            "America": "amerika.htm",       "Amerika": "amerika.htm",
+            "Asia": "asien.htm",            "Asien": "asien.htm",
+            "Oceania": "ozean.htm",         "Ozeanien": "ozean.htm",
+            "Canada": "canadian-radio-stations.htm", "Kanada": "kanada-online-radio.htm",
+            "USA": "staaten.htm",
+        }
+        rx_links = re.compile(r"""
+            <a\b  [^>]+ \b  href="
+            (?:(?:http:)?//www.surfmusi[kc].de)? /?
+            (?:land|country|genre|format)/
+            ([\-+\w\d\s%]+)  \.html"
+        """, re.X)
+
+        r = []
+        for cat in cats[lang]:
+            r.append(cat)
+            if map.get(cat):
+                subcats = rx_links.findall( http.get(self.base[lang] + map[cat]) )
+                subcats = [x.replace("+", " ") for x in subcats]
+                subcats = [x.title() for x in subcats]
+                r.append(sorted(subcats))
+
+        self.categories = r
 
 
     # summarize links from surfmusik
     def update_streams(self, cat, force=0):
 
+        lang = conf.surfmusik_lang
         entries = []
         i = 0
         max = int(conf.max_streams)
@@ -79,19 +123,22 @@ class surfmusik (ChannelPlugin):
         # placeholder category
         if cat in ["Genres"]:
             path = None
+        # separate
+        elif cat in ["Poli", "Flug"]:
+            path = ""
         # tv
         elif cat in ["SurfTV", "MusikTV", "NewsTV"]:
             path = ""
             is_tv = 1
         # genre 
         elif cat in self.categories[1]:
-            path = "genre/"
+            path = ("genre/" if lang == "DE" else "format/")
         # country
         else:
-            path = "land/"
+            path = ("land/" if lang == "DE" else "country/")
         
         if path is not None:
-            html = http.get(self.base + path + cat.lower() + ".html")
+            html = http.get(self.base[lang] + path + cat.lower() + ".html")
             html = re.sub("&#x?\d+;", "", html)
         
             rx_radio = re.compile(r"""
