@@ -108,6 +108,7 @@ class shoutcast(channels.ChannelPlugin):
             }
             referer = "http://www.shoutcast.com/?action=sub&cat="+cat
             html = http.get(url, params=params, referer=referer, ajax=1)
+            self.parent.status(0.75)
 
             #__print__(dbg.DATA, html)
             #__print__(re.compile("id=(\d+)").findall(html));
@@ -126,21 +127,18 @@ class shoutcast(channels.ChannelPlugin):
             # With the new shallow <td> lists it doesn't make much sense to use
             # the pyquery DOM traversal. There aren't any sensible selectors to
             # extract values; it's just counting the tags.
+            #
             # And there's a bug in PyQuery 1.2.4 and CssSelector. So make two
             # attempts, alternate between regex and DOM; user preference first.
-            entries = []
-            use_regex = not conf.get("pyquery") or not pq
-            retry = 2
-            while retry and not entries:
-               retry -= 1
-               try:
-                  if use_regex:
-                      entries = self.with_regex(html)
-                  else:
-                      entries = self.with_dom(html)
-               except Exception as e:
-                  __print__(dbg.ERR, e)
-               use_regex ^= 1
+            #
+            for use_rx in [not conf.pyquery or not pq, conf.pyquery]:
+                try:
+                    entries = (self.with_regex(html) if use_rx else self.with_dom(html))
+                    if len(entries):
+                        break
+                except Exception as e:
+                    __print__(dbg.ERR, e)
+                    continue
             return entries
 
 
@@ -180,7 +178,7 @@ class shoutcast(channels.ChannelPlugin):
 
         # Iterate over DOM instead
         def with_dom(self, html):
-            __print__(dbg.PROC, "channels.shoutcast.update_streams: attempt DOM/PyQuery processing")
+            __print__(dbg.PROC, "channels.shoutcast.update_streams: attempt PyQuery/DOM traversal")
             entries = []
             for div in (pq(e) for e in pq(html).find("tr")):
                 entries.append({
