@@ -450,7 +450,7 @@ class ComboBoxText(gtk.ComboBox):
 
     ls = None
 
-    def __init__(self, entries):
+    def __init__(self, entries, no_scroll=1):
 
         # prepare widget
         gtk.ComboBox.__init__(self)
@@ -458,6 +458,8 @@ class ComboBoxText(gtk.ComboBox):
         cell = gtk.CellRendererText()
         self.pack_start(cell, True)
         self.add_attribute(cell, "text", 1)
+        if no_scroll:
+            self.connect("scroll_event", self.no_scroll)
 
         # collect entries
         self.ls = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
@@ -481,6 +483,11 @@ class ComboBoxText(gtk.ComboBox):
         index = self.get_active()
         if index >= 0:
             return self.ls[index][0]
+
+    # Signal/Event callback to prevent hover scrolling of ComboBox widgets
+    def no_scroll(self, widget, event, data=None):
+        return True
+
 
     # Expand A=a|B=b|C=c option list into (key,value) tuple list, or A|B|C just into a list.
     @staticmethod
