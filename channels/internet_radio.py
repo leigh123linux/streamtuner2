@@ -203,35 +203,42 @@ class internet_radio (ChannelPlugin):
                .*?
                <div[^>]+10px[^>]+>(.+?)</div>           
                .*?
-               (?:href="/station/[^>]+|<b)>\s*([^<>]+)\s*</[ab]>
+               listing2
                .*?
-               (?:<br>\s*([^<>]+)\s*<br>)+?                
+               (?:href="/station/[^>]+> | <b>) ([^<>]+) </[ab]>
+               (?:\s*</span>\s*)*
+               (?:<br>\s*([^<>]+)\s*<br>)?                
                .*?
-               <a[^>]+class="url"[^>]+href="([^<">]+)"  
+               (?:<a[^>]+class="url"[^>]+href="([^<">]+)")?  
+               .+
+               listing1
                .*?
-               (?:(\d+)\s+Kbps \s*<br>\s*)+?                  
-               (?:(\d+)\s+Listeners \s*<br>\s*)+?             
+               (?:(\d+)\s+Kbps \s*<br>\s*)?                  
+               (?:(\d+)\s+Listeners)?
+               (?:\s*<br>\s*)?
+               \s*</td>             
         """, re.S|re.X)
 
         for div in rx_tr.findall(html):
-            #__print__(dbg.DATA, len(div))
-            uu = rx_data.search(div)
-            if uu:
-                (url, genres, title, playing, homepage, bitrate, listeners) = uu.groups()
-                
-                # transform data
-                r.append({
-                    "url": url,
-                    "genre": self.strip_tags(genres),
-                    "homepage": http.fix_url(homepage),
-                    "title": title.strip(),
-                    "playing": playing.strip(),
-                    "bitrate": int(bitrate if bitrate else 0),
-                    "listeners": int(listeners if listeners else 0),
-                    "format": "audio/mpeg", # there is no stream info on that, but internet-radio.org.uk doesn't seem very ogg-friendly anyway, so we assume the default here
-                })
-            else:
-                __print__(dbg.ERR, "rx missed", div)
+            if div.find('id="pagination"') < 0:
+                #__print__(dbg.DATA, len(div))
+                uu = rx_data.search(div)
+                if uu:
+                    (url, genres, title, playing, homepage, bitrate, listeners) = uu.groups()
+                    
+                    # transform data
+                    r.append({
+                        "url": url,
+                        "genre": self.strip_tags(genres),
+                        "homepage": http.fix_url(homepage),
+                        "title": (title if title else "").strip(),
+                        "playing": (playing if playing else "").strip(),
+                        "bitrate": int(bitrate if bitrate else 0),
+                        "listeners": int(listeners if listeners else 0),
+                        "format": "audio/mpeg", # there is no stream info on that, but internet-radio.org.uk doesn't seem very ogg-friendly anyway, so we assume the default here
+                    })
+                else:
+                    __print__(dbg.ERR, "rx missed", div)
         return r
 
 
