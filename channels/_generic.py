@@ -49,7 +49,7 @@ class GenericChannel(object):
         # desc
         module = "generic"
         title = "GenericChannel"
-        homepage = "http://milki.inlcude-once.org/streamtuner2/"
+        homepage = "http://fossil.include-once.org/streamtuner2/"
         base_url = ""
         listformat = "audio/x-scpls"
         audioformat = "audio/mpeg" # fallback value

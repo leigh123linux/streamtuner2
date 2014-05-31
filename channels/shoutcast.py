@@ -63,13 +63,13 @@ class shoutcast(channels.ChannelPlugin):
         def update_categories(self):
             html = http.get(self.base_url)
             self.categories = []
-            __print__( dbg.DATA, html )
+            #__print__( dbg.DATA, html )
 
             # <h2>Radio Genres</h2>
             rx = re.compile(r'<li((?:\s+id="\d+"\s+class="files")?)><a href="\?action=sub&cat=([\w\s]+)#(\d+)">[\w\s]+</a>', re.S)
             sub = []
             for uu in rx.findall(html):
-                __print__( dbg.DATA, uu )
+                #__print__( dbg.DATA, uu )
                 (main,name,id) = uu
                 name = urllib.unquote(name)
 
@@ -83,7 +83,7 @@ class shoutcast(channels.ChannelPlugin):
                     sub.append(name)
 
             # it's done
-            __print__( dbg.PROC, self.categories )
+            #__print__( dbg.PROC, self.categories )
             conf.save("cache/categories_shoutcast", self.categories)
             pass
 

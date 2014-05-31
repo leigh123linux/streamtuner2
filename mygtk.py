@@ -134,8 +134,8 @@ class mygtk:
                             col.add_attribute(rend, attr, val)
                         # next
                         datapos += 1
+                        #__print__(dbg.INFO, cell, len(cell))
 
-                        __print__(dbg.INFO, cell, len(cell))
                     # add column to treeview
                     widget.append_column(col)
                 # finalize widget
@@ -220,7 +220,7 @@ class mygtk:
 
             # list types
             ls = gtk.TreeStore(str, str)
-            print(entries)
+            #__print__(dbg.DATA, ".tree", entries)
 
             # add entries
             for entry in entries:
