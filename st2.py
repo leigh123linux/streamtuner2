@@ -68,6 +68,7 @@
 import sys
 import os, os.path
 import re
+from collections import namedtuple
 
 # threading or processing module
 try:
@@ -111,6 +112,9 @@ class StreamTunerTwo(gtk.Builder):
         add_signals = {} # channel gtk-handler signals
         hooks = {
             "play": [favicon.download_playing],  # observers queue here
+            "init": [],
+            "config_load": [],
+            "config_save": [],
         }
 
         # status variables
@@ -153,8 +157,12 @@ class StreamTunerTwo(gtk.Builder):
             except:
                 pass # fails for disabled/reordered plugin channels
 
-            # display current open channel/notebook tab
+            # late plugin initializations
             gui_startup(17/20.0)
+            [callback(self) for callback in self.hooks["init"]]
+
+            # display current open channel/notebook tab
+            gui_startup(18/20.0)
             self.current_channel = self.current_channel_gtk()
             try: self.channel().first_show()
             except: __print__(dbg.INIT, "main.__init__: current_channel.first_show() initialization error")
@@ -222,7 +230,7 @@ class StreamTunerTwo(gtk.Builder):
             }.items() ) + list( self.add_signals.items() ) ))
             
             # actually display main window
-            gui_startup(99/100.0)
+            gui_startup(98.9/100.0)
             self.win_streamtuner2.show()
             
 
@@ -273,8 +281,7 @@ class StreamTunerTwo(gtk.Builder):
             # if first selected, load current category
             try:
                 __print__(dbg.PROC, "channel_switch: try .first_show", self.channel().module);
-                __print__(self.channel().first_show)
-                __print__(self.channel().first_show())
+                self.channel().first_show()
             except:
                 __print__(dbg.INIT, "channel .first_show() initialization error")
 
@@ -308,7 +315,7 @@ class StreamTunerTwo(gtk.Builder):
             row = self.row()
             if row:
                 self.channel().play(row)
-                [hook(row) for hook in self.hooks["play"]]
+                [callback(row) for callback in self.hooks["play"]]
 
 
         # streamripper
@@ -746,6 +753,7 @@ class config_dialog (auxiliary_window):
                 self.win_config.resize(565, 625)
             self.load_config(conf.__dict__, "config_")
             self.load_config(conf.plugins, "config_plugins_")
+            [callback() for callback in self.hooks["config_load"]]
             self.win_config.show()
         first_open = 1
 
@@ -877,7 +885,8 @@ class config_dialog (auxiliary_window):
         def save(self, widget):
             self.save_config(conf.__dict__, "config_")
             self.save_config(conf.plugins, "config_plugins_")
-            self.apply_theme()
+            [callback() for callback in main.hooks["config_save"]]
+            config_dialog.apply_theme()
             conf.save(nice=1)
             self.hide()
                   
@@ -964,10 +973,9 @@ class bookmarks(GenericChannel):
             return self.streams.get(cat, [])
 
             
-        # initial display
+        # streams are already loaded at instantiation
         def first_show(self):
-            if not self.streams["favourite"]:
-                self.cache()
+            pass
 
 
         # all entries just come from "bookmarks.json"
@@ -975,7 +983,9 @@ class bookmarks(GenericChannel):
             # stream list
             cache = conf.load(self.module)
             if (cache):
+                __print__(dbg.PROC, "load bookmarks.json")
                 self.streams = cache
+            
 
 
         # save to cache file
