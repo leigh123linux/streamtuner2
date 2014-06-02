@@ -63,6 +63,7 @@ class youtube (ChannelPlugin):
     module = "youtube"
     homepage = "http://www.youtube.com/"
     listformat = "url/youtube"
+    has_search = True
     fmt = "video/youtube"
     titles = dict( genre="Channel", title="Title", playing="Playlist", bitrate=False, listeners=False )
 
@@ -87,7 +88,7 @@ class youtube (ChannelPlugin):
 
     categories = [
         "mostPopular",
-        ["Music", "Comedy", "Movies", "Shows", "Short Movies", "Trailers", "Film & Animation", "Entertainment", "News & Politics"],
+        ["Music", "Comedy", "Movies", "Shows", "Trailers", "Film & Animation", "Entertainment", "News & Politics"],
         "topics",
         ["Pop", "Billboard charts", "Rock", "Hip Hop", "Classical", "Soundtrack", "Ambient",
          "Jazz", "Blues", "Soul", "Country", "Disco", "Dance", "House", "Trance", "Techno", "Electronica"],
@@ -177,13 +178,18 @@ class youtube (ChannelPlugin):
 
 
     # retrieve and parse
-    def update_streams(self, cat, force=0, search=None):
+    def update_streams(self, cat, search=None):
 
         entries = []
         channels = self.categories[self.categories.index("my channels") + 1]
         
+        # plain search request for videos        
+        if search is not None:
+            for row in self.api("search", type="video", regionCode=conf.youtube_region, q=search):
+                entries.append( self.wrap3(row, {"genre": "Youtube"}) )
+
         # Most Popular
-        if cat == "mostPopular":
+        elif cat == "mostPopular":
             #for row in self.api("feeds/api/standardfeeds/%s/most_popular"%conf.youtube_region, ver=2):
             #    entries.append(self.wrap2(row))
             for row in self.api("videos", chart="mostPopular", regionCode=conf.youtube_region):
@@ -217,10 +223,6 @@ class youtube (ChannelPlugin):
                 self.update_streams_partially_done(entries)
                 self.parent.status(i / 15.0)
             
-        # plain search request for videos        
-        elif search is not None:
-            for row in self.api("search", type="video", regionCode=conf.youtube_region, q=search):
-                entries.append( self.wrap3(row, {"genre": ""}) )
         
         # empty entries
         else:

@@ -217,9 +217,8 @@ class StreamTunerTwo(gtk.Builder):
                 # search dialog
                 "quicksearch_set": search.quicksearch_set,
                 "search_open": search.menu_search,
-                "search_go": search.start,
-                "search_srv": search.start,
-                "search_google": search.google,
+                "search_go": search.cache_search,
+                "search_srv": search.server_search,
                 "search_cancel": search.cancel,
                 "true": lambda w,*args: True,
                 # win_streamedit
@@ -595,46 +594,42 @@ class search (auxiliary_window):
             self.search_dialog.hide()
             return True  # stop any other gtk handlers
             
-            
-        # perform search
-        def start(self, *w):
+
+        # prepare variables
+        def prepare_search(self):
+            main.status("Searching... Stand back.")
             self.cancel()
-            
-            # prepare variables
             self.q = self.search_full.get_text().lower()
-            entries = []
             main.bookmarks.streams["search"] = []
             
+        # perform search
+        def cache_search(self, *w):
+            self.prepare_search()
+            entries = []
             # which fields?
-            fields = ["title", "playing", "genre", "homepage", "url", "extra", "favicon", "format"]
-            if not self.search_in_all.get_active():
-                fields = [f for f in fields if (main.get_widget("search_in_"+f) and main.get_widget("search_in_"+f).get_active())]
+            fields = ["title", "playing", "homepage"]
+            #if not self.search_in_all.get_active():
+            #    fields = [f for f in fields if (main.get_widget("search_in_"+f) and main.get_widget("search_in_"+f).get_active())]
             # channels?
             channels = main.channel_names[:]
-            if not self.search_channel_all.get_active():
-                channels = [c for c in channels if main.get_widget("search_channel_"+c).get_active()]
-            
-            # step through channels
+            #if not self.search_channel_all.get_active():
+            #    channels = [c for c in channels if main.get_widget("search_channel_"+c).get_active()]
             for c in channels:
                 if main.channels[c] and main.channels[c].streams:  # skip disabled plugins
-
                     # categories
                     for cat in main.channels[c].streams.keys():
-
                         # stations
                         for row in main.channels[c].streams[cat]:
-                    
-                            # assemble text fields
+                            # assemble text fields to compare
                             text = " ".join([row.get(f, " ") for f in fields])
-                        
-                            # compare
                             if text.lower().find(self.q) >= 0:
-
-                                # add result
+                                row["genre"] = c + " " + row["genre"]
                                 entries.append(row)
+            self.show_results(entries)
 
-            
-            # display "search" in "bookmarks"
+        # display "search" in "bookmarks"
+        def show_results(self, entries):
+            main.status(1.0)
             main.channel_switch(None, "bookmarks", 0)
             main.bookmarks.set_category("search")
             # insert data and show
@@ -643,14 +638,21 @@ class search (auxiliary_window):
             
             
         # live search on directory server homepages
-        def server_query(self, w):
-            "unimplemented"
-
-            
-        # don't search at all, open a web browser
-        def google(self, w):
-            self.cancel()
-            action.browser("http://www.google.com/search?q=" + self.search_full.get_text())
+        def server_search(self, w):
+            self.prepare_search()
+            entries = []
+            for i,cn in enumerate([main.channels[c] for c in main.channels]):
+#                main.status(main, 1.0 * i / 15)
+                if cn.has_search:
+                    __print__(dbg.PROC, "has_search:", cn.module)
+                    try:
+                        add = cn.update_streams(cat=None, search=self.q)
+                        for row in add:
+                            row["genre"] = cn.title + " " + row["genre"]
+                        entries += add
+                    except:
+                        continue
+            self.show_results(entries)
 
 
         # search text edited in text entry box
@@ -959,7 +961,7 @@ class bookmarks(GenericChannel):
         categories = ["favourite", ]  # timer, links, search, and links show up as needed
         current = "favourite"
         default = "favourite"
-        streams = {"favourite":[], "search":[], "scripts":[], "timer":[], }
+        streams = {"favourite":[], "search":[], "scripts":[], "timer":[], "history":[], }
         
 
         # cache list, to determine if a PLS url is bookmarked
