@@ -106,7 +106,7 @@ class surfmusik (ChannelPlugin):
 
 
     # summarize links from surfmusik
-    def update_streams(self, cat, force=0):
+    def update_streams(self, cat):
 
         (base_url, path_genre, path_country) = self.base[conf.surfmusik_lang]
         entries = []

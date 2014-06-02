@@ -58,7 +58,7 @@ class punkcast (ChannelPlugin):
 
 
     # get list
-    def update_streams(self, cat, force=0):
+    def update_streams(self, cat):
 
         rx_link = re.compile("""
             <a\shref="(http://punkcast.com/(\d+)/index.html)">

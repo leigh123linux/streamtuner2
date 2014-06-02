@@ -69,7 +69,7 @@ class internet_radio (ChannelPlugin):
 
 
     # fetch station lists
-    def update_streams(self, cat, force=0):    
+    def update_streams(self, cat):
     
         entries = []
         if cat not in self.categories:

@@ -73,7 +73,7 @@ class myoggradio(ChannelPlugin):
 
 
     # download links from dmoz listing
-    def update_streams(self, cat, force=0):
+    def update_streams(self, cat):
 
         # result list
         entries = []

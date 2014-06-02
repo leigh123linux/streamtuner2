@@ -277,7 +277,7 @@ class jamendo (ChannelPlugin):
 
 
     # retrieve category or search
-    def update_streams(self, cat, search="", force=0):
+    def update_streams(self, cat, search=None):
 
         entries = []
         fmt = self.stream_mime(conf.jamendo_stream_format)

@@ -103,7 +103,7 @@ class xiph (ChannelPlugin):
             l = []
             __print__( dbg.PROC, "processing api.dir.xiph.org JSON (via api.include-once.org cache)" )
             data = json.loads(data)
-            for e in data.values():
+            for e in data:
                 #__print__(dbg.DATA, e)
                 bitrate = int(e["bitrate"])
                 if conf.xiph_min_bitrate and bitrate and bitrate >= int(conf.xiph_min_bitrate):
