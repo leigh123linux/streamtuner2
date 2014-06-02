@@ -50,6 +50,7 @@ class history:
 
         # create category
         self.bm.add_category("history");
+        self.bm.reload_if_current(self.module)
 
         # hook up to .play event
         parent.hooks["play"].append(self.queue)
@@ -75,6 +76,8 @@ class history:
 
         # update store
         self.bm.save()
-        #if self.bm.current == "history":
-        #   self.bm.load("history")
+        self.bm.reload_if_current(self.module)
+
+
+
 

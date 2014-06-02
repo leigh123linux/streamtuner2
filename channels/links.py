@@ -106,4 +106,5 @@ class links (object):
         # add to bookmarks
         parent.bookmarks.streams[self.module] = self.streams
 
-
+        # redraw category
+        parent.bookmarks.reload_if_current(self.module)

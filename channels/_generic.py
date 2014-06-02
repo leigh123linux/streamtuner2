@@ -332,7 +332,12 @@ class GenericChannel(object):
             self.load(self.current, force=1)
         def switch(self):
             self.load(self.current, force=0)
-            
+        
+        # update streams pane if currently selected (used by bookmarks.links channel)
+        def reload_if_current(self, category):
+            if self.current == category:
+                self.reload()
+        
             
         # display .current category, once notebook/channel tab is first opened
         def first_show(self):
