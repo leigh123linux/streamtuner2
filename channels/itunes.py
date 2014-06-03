@@ -80,7 +80,7 @@ class itunes (ChannelPlugin):
         pass
 
     # Just copy over stream URLs and station titles
-    def update_streams(self, cat, search=None):
+    def update_streams(self, cat):
     
         m3u = http.get(self.base, {"category": cat.lower()})
         if len(m3u) < 256:

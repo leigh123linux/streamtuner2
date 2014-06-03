@@ -25,24 +25,25 @@
 	<p>You can get to the search dialog via <guiseq><gui>Edit</gui> <gui>Find</gui></guiseq> or <key>Ctrl</key>+<key>F</key>. Centrally to this dialog is the
 	text field, where you can specify the phrase to scan for.</p>
 
-	<p>Above you can check which channel plugins to inspect for the search term. Using this
+	<!--p>Above you can check which channel plugins to inspect for the search term. Using this
 	allows to limit the search to specific radio station directories, but usually you want
 	to search them all.</p>
 
 	<p>Below the search phrase text box, you can specifiy which station fields to look
 	into. Often you just want to search the titles of radio stations. But you can also
 	have the search occour in the description/playing fields. Alternatively you could
-	just search the homepage links.</p>
+	just search the homepage links.</p-->
 
-	<p>Lastly, there are three search methods. You mostly want to use the <gui>cache search</gui>,
-	which just scans through the station lists streamtuner2 has downloaded. Since you are mostly
-	looking for something you had already seen, this will give you the desired results.</p>
+	<p>And then there are two search methods.  You mostly want to use
+        the live <gui>Server search</gui>.  It passes your search terms to
+        the actual directory services, and loads the most recent data into a
+        result list (this might take a few seconds).  It's not implemented
+        for all channel plugins however.</p>
 
-	<p>The <gui>server search</gui> would try to do a live search on the directory servers,
-	providing you with the most recent data. However, it's not implemented for all channel
-	plugins, and therefore brings limited output.</p>
-
-	<p>Use the button <gui>google it</gui> as last resort, if streamtuner2 didn't find anything.</p>
+	<p>With <gui>Cache find</gui> would just look up entries in your
+        already downloaded channel/genre lists.  Since often you are just
+        looking for something you had already seen, this will give you the
+        desired results.</p>
 
 	</section>
 

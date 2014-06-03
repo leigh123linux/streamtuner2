@@ -89,7 +89,7 @@ class shoutcast(channels.ChannelPlugin):
 
 
         # downloads stream list from shoutcast for given category
-        def update_streams(self, cat, search=""):
+        def update_streams(self, cat):
 
             if (not cat or cat == self.empty):
                 __print__( dbg.ERR, "nocat" )

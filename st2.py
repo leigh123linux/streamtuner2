@@ -587,6 +587,7 @@ class search (auxiliary_window):
         # show search dialog   
         def menu_search(self, w):
             self.search_dialog.show();
+            self.search_dialog_current.set_label("just %s" % main.current_channel)
 
 
         # hide dialog box again
@@ -600,6 +601,10 @@ class search (auxiliary_window):
             main.status("Searching... Stand back.")
             self.cancel()
             self.q = self.search_full.get_text().lower()
+            if self.search_dialog_all.get_active():
+                self.targets = main.channels.keys()
+            else:
+                self.targets = [main.current_channel]
             main.bookmarks.streams["search"] = []
             
         # perform search
@@ -608,22 +613,16 @@ class search (auxiliary_window):
             entries = []
             # which fields?
             fields = ["title", "playing", "homepage"]
-            #if not self.search_in_all.get_active():
-            #    fields = [f for f in fields if (main.get_widget("search_in_"+f) and main.get_widget("search_in_"+f).get_active())]
-            # channels?
-            channels = main.channel_names[:]
-            #if not self.search_channel_all.get_active():
-            #    channels = [c for c in channels if main.get_widget("search_channel_"+c).get_active()]
-            for c in channels:
-                if main.channels[c] and main.channels[c].streams:  # skip disabled plugins
+            for i,cn in enumerate([main.channels[c] for c in self.targets]):
+                if cn.streams:  # skip disabled plugins
                     # categories
-                    for cat in main.channels[c].streams.keys():
+                    for cat in cn.streams.keys():
                         # stations
-                        for row in main.channels[c].streams[cat]:
+                        for row in cn.streams[cat]:
                             # assemble text fields to compare
                             text = " ".join([row.get(f, " ") for f in fields])
                             if text.lower().find(self.q) >= 0:
-                                row["genre"] = c + " " + row["genre"]
+                                row["genre"] = c + " " + row.get("genre", "")
                                 entries.append(row)
             self.show_results(entries)
 
@@ -641,17 +640,17 @@ class search (auxiliary_window):
         def server_search(self, w):
             self.prepare_search()
             entries = []
-            for i,cn in enumerate([main.channels[c] for c in main.channels]):
-#                main.status(main, 1.0 * i / 15)
-                if cn.has_search:
+            for i,cn in enumerate([main.channels[c] for c in self.targets]):
+                if cn.has_search:  # "search" in cn.update_streams.func_code.co_varnames:
                     __print__(dbg.PROC, "has_search:", cn.module)
                     try:
                         add = cn.update_streams(cat=None, search=self.q)
                         for row in add:
-                            row["genre"] = cn.title + " " + row["genre"]
+                            row["genre"] = cn.title + " " + row.get("genre", "")
                         entries += add
                     except:
                         continue
+                #main.status(main, 1.0 * i / 15)
             self.show_results(entries)
 
 

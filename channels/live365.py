@@ -38,6 +38,7 @@ class live365(ChannelPlugin):
         title = "Live365"
         homepage = "http://www.live365.com/"
         base_url = "http://www.live365.com/"
+        has_search = True
         listformat = "url/http"
         mediatype = "audio/mpeg"
 
@@ -97,13 +98,14 @@ class live365(ChannelPlugin):
 
 
         # extract stream infos
-        def update_streams(self, cat, search=""):
+        def update_streams(self, cat, search=None):
         
-            # search / url
-            if (not search):
-                url = "http://www.live365.com/cgi-bin/directory.cgi?first=1&rows=200&mode=2&genre=" + self.cat2tag(cat)
-            else:
+            # search
+            if search:
                 url = "http://www.live365.com/cgi-bin/directory.cgi?site=..&searchdesc=" + urllib.quote(search) + "&searchgenre=" + self.cat2tag(cat) + "&x=0&y=0"
+            # genre
+            else:
+                url = "http://www.live365.com/cgi-bin/directory.cgi?first=1&rows=200&mode=2&genre=" + self.cat2tag(cat)
             html = http.get(url, feedback=self.parent.status)
             # we only need to download one page, because live365 always only gives 200 results
 	    

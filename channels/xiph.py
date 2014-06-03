@@ -86,7 +86,7 @@ class xiph (ChannelPlugin):
 
 
         # downloads stream list from xiph.org for given category
-        def update_streams(self, cat, search=""):
+        def update_streams(self, cat, search=None):
 
             # With the new JSON cache API on I-O, we can load categories individually:
             params = {}

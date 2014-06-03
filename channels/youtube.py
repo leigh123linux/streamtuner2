@@ -3,11 +3,10 @@
 # title: Youtube
 # description: Channel, playlist and video browsing for youtube.
 # type: channel
-# version: 0.1
+# version: 0.2
 # category: video
 # priority: optional
 # suggests: youtube-dl
-# requires: ahttp
 # 
 # 
 # Lists recently popular youtube videos by category or channels.
@@ -186,7 +185,7 @@ class youtube (ChannelPlugin):
         # plain search request for videos        
         if search is not None:
             for row in self.api("search", type="video", regionCode=conf.youtube_region, q=search):
-                entries.append( self.wrap3(row, {"genre": "Youtube"}) )
+                entries.append( self.wrap3(row, {"genre": ""}) )
 
         # Most Popular
         elif cat == "mostPopular":

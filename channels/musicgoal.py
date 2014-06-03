@@ -58,7 +58,7 @@ class musicgoal (ChannelPlugin):
 
 
         # request json API
-        def update_streams(self, cat, search=""):
+        def update_streams(self, cat):
 
             # category type: podcast or radio
             if cat in self.podcast:

@@ -90,6 +90,8 @@ f 644 root root /usr/share/doc/streamtuner2/help/channel_jamendo.page 	 ./help/c
 f 644 root root /usr/share/doc/streamtuner2/help/channel_myoggradio.page 	 ./help/channel_myoggradio.page
 f 644 root root /usr/share/doc/streamtuner2/help/channel_shoutcast.page 	 ./help/channel_shoutcast.page
 f 644 root root /usr/share/doc/streamtuner2/help/channel_xiph.page 	 ./help/channel_xiph.page
+f 644 root root /usr/share/doc/streamtuner2/help/channel_youtube.page 	 ./help/channel_youtube.page
+f 644 root root /usr/share/doc/streamtuner2/help/channel_surfmusik.page 	 ./help/channel_surfmusik.page
 f 644 root root /usr/share/doc/streamtuner2/help/channels.page 	 ./help/channels.page
 f 644 root root /usr/share/doc/streamtuner2/help/cli.page 	 ./help/cli.page
 f 644 root root /usr/share/doc/streamtuner2/help/config_apps.page 	 ./help/config_apps.page

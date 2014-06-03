@@ -1069,13 +1069,14 @@ Plugins</property>
     <property name="stock">gtk-add</property>
   </object>
   <object class="GtkDialog" id="search_dialog">
+    <property name="width_request">325</property>
     <property name="can_focus">False</property>
-    <property name="opacity">0.95999999999999996</property>
+    <property name="opacity">0.94999999999999996</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">station search</property>
     <property name="window_position">center-on-parent</property>
+    <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
-    <property name="deletable">False</property>
     <property name="gravity">center</property>
     <signal name="close" handler="search_cancel" swapped="no"/>
     <signal name="delete-event" handler="search_cancel" swapped="no"/>
@@ -1138,9 +1139,10 @@ Plugins</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="GtkLabel" id="label1">
+                  <object class="GtkLabel" id="label1sd">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="ypad">10</property>
                     <property name="label" translatable="yes">for</property>
                   </object>
                   <packing>
@@ -1168,7 +1170,7 @@ Plugins</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label4">
+                  <object class="GtkLabel" id="label4sd">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
@@ -1186,7 +1188,63 @@ Plugins</property>
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkHBox" id="hbox2">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkLabel" id="label3sd">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="xpad">10</property>
+                    <property name="ypad">10</property>
+                    <property name="label" translatable="yes">in</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="search_dialog_all">
+                    <property name="label" translatable="yes">all channels</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="xalign">0.5</property>
+                    <property name="active">True</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="group">search_dialog_current</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="search_dialog_current">
+                    <property name="label" translatable="yes">just current</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="xalign">0.5</property>
+                    <property name="active">True</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="group">search_dialog_all</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
+              </packing>
             </child>
             <child>
               <placeholder/>
@@ -1201,9 +1259,7 @@ Plugins</property>
                     <property name="label" translatable="yes">Cache _find</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="can_default">True</property>
-                    <property name="has_default">True</property>
-                    <property name="receives_default">True</property>
+                    <property name="receives_default">False</property>
                     <property name="tooltip_text" translatable="yes">Start searching for above search term in the currently loaded station lists. Doesn't find *new* information, just looks through the known data.</property>
                     <property name="image">image1</property>
                     <property name="relief">half</property>
@@ -1222,6 +1278,10 @@ Plugins</property>
                     <property name="label" translatable="yes">Server _search</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="has_focus">True</property>
+                    <property name="is_focus">True</property>
+                    <property name="can_default">True</property>
+                    <property name="has_default">True</property>
                     <property name="receives_default">True</property>
                     <property name="tooltip_text" translatable="yes">Instead of doing a cache search, go through the search functions on the directory service homepages. (UNIMPLEMENTED)</property>
                     <property name="image">image2</property>
@@ -1333,7 +1393,8 @@ Plugins</property>
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
     <property name="type_hint">normal</property>
-    <signal name="delete-event" handler="true" swapped="no"/>
+    <signal name="close" handler="timer_cancel" swapped="no"/>
+    <signal name="delete-event" handler="timer_cancel" swapped="no"/>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox2">
         <property name="visible">True</property>
@@ -1386,6 +1447,96 @@ Plugins</property>
             <property name="can_focus">False</property>
             <property name="n_rows">3</property>
             <property name="n_columns">3</property>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
             <child>
               <placeholder/>
             </child>
@@ -1849,6 +2000,21 @@ Plugins</property>
             <child>
               <placeholder/>
             </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
           </object>
           <packing>
             <property name="expand">True</property>
@@ -1914,8 +2080,8 @@ Plugins</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">inspect/edit stream data</property>
     <property name="window_position">center-on-parent</property>
+    <property name="destroy_with_parent">True</property>
     <property name="skip_pager_hint">True</property>
-    <property name="deletable">False</property>
     <signal name="delete-event" handler="streamedit_cancel" swapped="no"/>
     <child>
       <object class="GtkTable" id="table6">
@@ -2276,8 +2442,8 @@ Plugins</property>
                                 <property name="label" translatable="yes">bookmark</property>
                                 <property name="use_underline">True</property>
                                 <signal name="activate" handler="bookmark" swapped="no"/>
-                                <accelerator key="F8" signal="activate"/>
                                 <accelerator key="d" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+                                <accelerator key="F8" signal="activate"/>
                               </object>
                             </child>
                             <child>
@@ -2288,8 +2454,8 @@ Plugins</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
                                 <signal name="activate" handler="save_as" swapped="no"/>
-                                <accelerator key="s" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                                 <accelerator key="F2" signal="activate"/>
+                                <accelerator key="s" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                               </object>
                             </child>
                             <child>
@@ -2300,9 +2466,9 @@ Plugins</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
                                 <signal name="activate" handler="streamedit_open" swapped="no"/>
-                                <accelerator key="Return" signal="activate" modifiers="GDK_MOD1_MASK"/>
-                                <accelerator key="space" signal="activate" modifiers="GDK_MOD1_MASK"/>
                                 <accelerator key="F3" signal="activate"/>
+                                <accelerator key="space" signal="activate" modifiers="GDK_MOD1_MASK"/>
+                                <accelerator key="Return" signal="activate" modifiers="GDK_MOD1_MASK"/>
                               </object>
                             </child>
                             <child>
@@ -2375,8 +2541,8 @@ Plugins</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
                                 <signal name="activate" handler="delete_entry" swapped="no"/>
-                                <accelerator key="x" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                                 <accelerator key="Delete" signal="activate"/>
+                                <accelerator key="x" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                               </object>
                             </child>
                             <child>
