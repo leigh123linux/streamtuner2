@@ -583,11 +583,15 @@ class auxiliary_window(object):
 # and also: quick search textbox (uses main.q instead)
 class search (auxiliary_window):
 
+        # either current channel, or last channel (avoid searching in bookmarks)
+        current = None
 
         # show search dialog   
         def menu_search(self, w):
             self.search_dialog.show();
-            self.search_dialog_current.set_label("just %s" % main.current_channel)
+            if not self.current or main.current_channel != "bookmarks":
+                self.current = main.current_channel
+                self.search_dialog_current.set_label("just %s" % main.channels[self.current].title)
 
 
         # hide dialog box again
@@ -604,7 +608,7 @@ class search (auxiliary_window):
             if self.search_dialog_all.get_active():
                 self.targets = main.channels.keys()
             else:
-                self.targets = [main.current_channel]
+                self.targets = [self.current]
             main.bookmarks.streams["search"] = []
             
         # perform search
