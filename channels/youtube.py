@@ -112,6 +112,13 @@ class youtube (ChannelPlugin):
           "description": "Filter by region id.",
           "category": "auth",
        },
+       {
+          "name": "youtube_wadsworth",
+          "type": "boolean",
+          "value": 0,
+          "description": "Apply Wadsworth constant.",
+          "category": "filter",
+       },
     ]    
 
     # from GET https://www.googleapis.com/youtube/v3/videoCategories?part=id%2Csnippet&
@@ -302,7 +309,7 @@ class youtube (ChannelPlugin):
 
         data.update(dict(
             url = "http://youtube.com/v/" + id,
-            homepage = "https://youtube.com/watch?v=" + id,
+            homepage = "https://youtube.com/watch?v=" + id + ("&wadsworth=1" if conf.youtube_wadsworth else ""),
             format = self.fmt,
             title = row["snippet"]["title"],
         ))
