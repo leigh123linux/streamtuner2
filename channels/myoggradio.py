@@ -23,6 +23,7 @@ from channels import *
 from config import conf
 from action import action
 from mygtk import mygtk
+import ahttp as http
 
 import re
 import json
@@ -38,7 +39,7 @@ class myoggradio(ChannelPlugin):
     title = "MyOggRadio"
     module = "myoggradio"
     homepage = "http://www.myoggradio.org/"
-    api = "http://ehm.homelinux.org/MyOggRadio/"
+    api = "http://www.myoggradio.org/"
     listformat = "url/direct"
     
     # config data
