@@ -69,6 +69,7 @@ import sys
 import os, os.path
 import re
 from collections import namedtuple
+from copy import copy
 
 # threading or processing module
 try:
@@ -626,6 +627,7 @@ class search (auxiliary_window):
                             # assemble text fields to compare
                             text = " ".join([row.get(f, " ") for f in fields])
                             if text.lower().find(self.q) >= 0:
+                                row = copy(row)
                                 row["genre"] = c + " " + row.get("genre", "")
                                 entries.append(row)
             self.show_results(entries)
@@ -1049,6 +1051,7 @@ class bookmarks(GenericChannel):
         def heuristic_update(self, updated_channel, updated_category):
 
             if not conf.heuristic_bookmark_update: return
+            __print__(dbg.ERR, "heuristic bookmark update")
             save = 0
             fav = self.streams["favourite"]
         
