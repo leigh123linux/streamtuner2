@@ -1,0 +1,42 @@
+{
+    "name": "streamtuner2",
+    "title": "streamtuner2",
+    "description": "Streamtuner2 is an internet radio browser. It utilizes various directory services like Shoutcast, Xiph, InternetRadio, SurfMusik, MyOggRadio, iCast, or Jamendo and Youtube to present categorized streaming stations. It chains to installed audio players like Audacious or VLC, uses streamripper for recording, but also allows bookmarking, exporting and easy searching.",
+    "homepage": "http://milki.include-once.org/streamtuner2/",
+    "license": "Public Domain",
+    "tags": "music, desktop, gtk, python",
+    "image": "http://milki.include-once.org/streamtuner2/screenshot.mini.png",
+    "urls": {
+        "fossil": "http://fossil.include-once.org/streamtuner2/",
+        "homepage": "http://milki.include-once.org/streamtuner2/",
+        "src": "http://milki.include-once.org/streamtuner2/streamtuner2-$version.src.txz",
+        "deb": "http://milki.include-once.org/streamtuner2/streamtuner2-$version.deb",
+        "rpm": "http://milki.include-once.org/streamtuner2/streamtuner2-$version.rpm"
+    },
+    "releases": [
+        {
+            "version": "2.1.1",
+            "state": "stable",
+            "scope": "major feature",
+            "changes": "YouTube and SurfMusik channels were added, MODarchive included, but Google/DMOZ removed. The Jamendo API now allows browsing genres and shows cover images. Internet-Radio extraction was fixed, and a custom caching API introduced for Xiph/ICEcast. The configuration dialog visualizes plugins and options more coherently now. A new logo was introduced, and many bugfixes applied.",
+            "download": "http://sourceforge.net/projects/streamtuner2/files/?source=navbar",
+            "published": "2014-05-28T16:31:00+0000"
+        },
+        {
+            "version": "2.1.0",
+            "state": "stable",
+            "scope": "major feature",
+            "changes": "Now supports running on Python3 and Python2, and can utilize either PyGI with GTk3 or PyGtk for Gtk2. Shoutcast, DMOZ and Live365 channels were fixed. Jamendo only lists radio stations for now. Basic.ch and Shoutcast TV channels were removed. HTTP downloading now uses requests and urllib3. Only real JSON is generated for config files now. Debugging output now is colorized, and ListStore references have finally been fixed.",
+            "download": "http://sourceforge.net/projects/streamtuner2/files/?source=navbar",
+            "published": "2014-04-28T02:13:00+0000"
+        },
+        {
+            "version": "2.0.9",
+            "state": "stable",
+            "scope": "major bugfix",
+            "changes": "Fixes for sys.path merging, Gtk.main_quit were applied. Stream editing now provides a [new] button. Transitioned glade UI to gtk.Builder, and made configuration window resizable, and stations lists are no longer sortable. Pixbuf typecasting has been fixed in the mygtk handler.",
+            "download": "http://sourceforge.net/projects/streamtuner2/files/?source=navbar",
+            "published": "2014-01-05T01:23:00+0000"
+        }
+    ]
+}
