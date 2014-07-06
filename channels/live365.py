@@ -9,6 +9,14 @@
 #
 # 2.0.9 fixed by Abhisek Sanyal
 #
+# 2.1.2 broken,
+# new URLs:
+#   GET /cgi-bin/mini.cgi?version=3&templateid=xml&from=web&site=web&caller=&tag=web&station_name=bofbm&_=1404610275892
+#      <NANOCASTER_PARAMS> (session id)
+#   GET /play?now=59&membername=&session=1404610276-475426&tag=web&s=bofbm&d=LIVE365&r=0
+#       &app_id=web%3ABROWSER&token=b99d7f579bacab06b9baa1502d53bedc-3101060080001248&AuthType=NORMAL
+#       &lid=276006-deu&SaneID=178.24.130.71-1404610229579
+#
 
 
 
