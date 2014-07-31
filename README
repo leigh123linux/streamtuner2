@@ -18,68 +18,23 @@ doesn't work, make sure you have Python and gtk/pygtk installed:
 
   sudo apt-get install python python-gtk2 python-glade2 python-xdg
 
-
-The *.glade file represents the GUI.  So if you have the glade-3
-application installed, you can inspect and enhance the interface.
-Give it a try, report back.
+The gtk*.xml file represents the GUI.  So with glade installed, you
+can inspect and adapt the interface.
 
 
-development state
------------------
+alternatives
+------------
 
-There was a lengthy development pause, actual maintenance time of
-this application is probably 2-3 months now. However, it is mostly
-feature-complete meanwhile. The internal application structures are
-somewhat settled. Some modules are still pretty rough (json format,
-http functions), and especially the action module for playing and
-recording isn't very autonomic (though has some heuristic and uses
-stream format hints).
+* http://sourceforge.net/projects/radiotray/
+* https://sites.google.com/site/glrpgreatlittleradioplayer/
+* http://tunapie.sourceforge.net/
+* VLC also has a few directory discovery services built-in
+* Rythmbox comes with last.fm, libre.fm, radio lookups
 
-The directory modules mostly work. If they don't, it's just a
-matter of adapting the regular expressions. Shoutcast and Live365
-lately changed the HTML output, so broke. Therefore PyQuery parsing
-methods were implemented, which extract stream info from HTML soup
-using CSS/jQuery selectors.
-And it should be pretty easy to add new ones. There will also
-somewhen be a feature to add simple station 'scripts'; in testing.
-
-
-comparison to streamtuner1
---------------------------
-
-Streamtuner1 has been written around 2002-2004. At this time it was
-totally unfeasible to write any responsive application in a scripting
-language. Therefore it was implemented in C, which made it speedy.
-
-Using C however has some drawbacks. The codebase is more elaborate,
-and it often takes more time to adapt things.
-
-Personally I had some occasional crashes because of corrupt data
-from some of the directory services. Because that was more difficult
-to fix in C code, this rewrite started. It's purely for practical
-purposes, not because there was anything wrong with streamtuner1.
-
-streamtuner2 being implemented directly in Python (the C version had
-a Python plugin), cuts down the code size considerably. It's much
-easier to add new plugins. (Even though it doesn't look that way yet.)
-
-For older machines or netbooks, the C streamtuner1 might overall
-remain the better choice, btw. Running inside the Python VM makes this
-variant more stable, but also way more memory hungry. (This has been
-reduced with some de-optimizations already.)
-
-
-advertisement
--------------
-
-If you are looking for a lightweight alternative, Tunapie is still
-in development, and it has a working Shoutcast+Xiph reader.
-http://tunapie.sourceforge.net/
 
 Streamtuner2 CLI can also be used as proxy server for streamtuner1.
 There is a wrapper available. But there was nobody yet to be found who
-wanted it set up globally. (Else streamtuner1 would just require a patch
-in /etc/hosts to work again.)
+wanted it set up globally.
 It's available as st1proxy.tgz and cli-mode-only.tgz from
 http://milki.include-once.org/streamtuner2/ext/
 Contact me for setup help. Requires a webserver with unrestrained
@@ -96,7 +51,20 @@ Public Domain.
 history
 -------
 
-2.1.1
+2.1.2 (2014-07-31)
+- Listing from the renewed Radionomy Shoutcast has been fixed.
+- Live365 was disabled.
+- New iTunes Radio stations channel (via RoliSoft Radio Playlist API).
+- New channel module "iCast.io" as seen in VLC.
+- SurfMusic.de is now available in a localized English display.
+- Shorter Youtube URLs are now used, Wadsworth constant available.
+- MyOggRadio.org API interaction fixed.
+- Fixed cache search to copy results before overwriting category.
+- Slim new search dialog offers scanning all channels or just current.
+- More online music service links have been added.
+- Better post-extraction cleanup.
+
+2.1.1 (2014-05-28)
 - Added SurfMusik and Youtube plugin channels. Google/DMOZ removed.
 - Jamendo viewing now utilizes the v3.0 JSON API for genres/tracks
   and uses cover images instead of favicons.
@@ -112,7 +80,7 @@ history
 - A history plugin was added. And extension hooks{} support started.
 - Some more Python3 fixes applied. Documentation was adapted.
 
-2.1.0
+2.1.0 (2014-01-05)
 - support for running on Python3 or Python2,
   as well as Gtk3 (PyGI) and Gtk2 (PyGtk with Python2) bindings
 - fixed Shoutcast, DMOZ, Live365
