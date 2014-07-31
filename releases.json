@@ -18,7 +18,7 @@
             "version": "2.1.2",
             "state": "stable",
             "scope": "minor feature",
-            "changes": "Radio list retrieval from Radionomys renewed Shoutcast have been fixed. The Live365 plugin however was disabled. There's also support for iTunes Radio stations (via RoliSoft Radio Playlist API), and a new channel module "iCast.io" as seen in VLC. SurfMusic.de is now available in a localized English display. Shorter Youtube URLs are now used and the Wadsworth constant available. MyOggRadio.org API interaction was fixed. More online music services have been added in the links list. The new and slimmer search dialog offers scanning all channels or just current and doesn't overwrite categories anymore."
+            "changes": "Radio list retrieval from Radionomys renewed Shoutcast have been fixed. The Live365 plugin however was disabled. There's also support for iTunes Radio stations (via RoliSoft Radio Playlist API), and a new channel module \"iCast.io\" as seen in VLC. SurfMusic.de is now available in a localized English display. Shorter Youtube URLs are now used and the Wadsworth constant available. MyOggRadio.org API interaction was fixed. More online music services have been added in the links list. The new and slimmer search dialog offers scanning all channels or just current and doesn't overwrite categories anymore.",
             "download": "http://sourceforge.net/projects/streamtuner2/files/?source=navbar",
             "published": "2014-07-31T01:00:00+0000"
         },
