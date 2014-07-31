@@ -4,20 +4,22 @@
 # description: Around 5000 categorized internet radio streams, some paid ad-free ones.
 # type: channel
 # category: radio
-# version: 0.2
+# version: 0.3
 # priority: optional
-#
-# 2.0.9 fixed by Abhisek Sanyal
 #
 # 2.1.2 broken,
 # new URLs:
+#
 #   GET /cgi-bin/mini.cgi?version=3&templateid=xml&from=web&site=web&caller=&tag=web&station_name=bofbm&_=1404610275892
 #      <NANOCASTER_PARAMS> (session id)
+#
 #   GET /play?now=59&membername=&session=1404610276-475426&tag=web&s=bofbm&d=LIVE365&r=0
 #       &app_id=web%3ABROWSER&token=b99d7f579bacab06b9baa1502d53bedc-3101060080001248&AuthType=NORMAL
 #       &lid=276006-deu&SaneID=178.24.130.71-1404610229579
 #
+#
 
+raise Exception
 
 
 
@@ -27,6 +29,7 @@ from mygtk import mygtk
 import ahttp as http
 from channels import *
 from config import __print__, dbg
+import action
 
 # python modules
 import re
@@ -35,144 +38,121 @@ from xml.sax.saxutils import unescape as entity_decode, escape as xmlentities
 import gtk
 import copy
 import urllib
-
+from itertools import groupby
+from time import time
+from xml.dom.minidom import parseString
 
 # channel live365
 class live365(ChannelPlugin):
 
+    # desc
+    module = "live365"
+    title = "Live365"
+    homepage = "http://www.live365.com/"
+    base_url = "http://www.live365.com/"
+    has_search = True
+    listformat = "url/http"
+    mediatype = "audio/mpeg"
+    has_search = False
 
-        # desc
-        module = "live365"
-        title = "Live365"
-        homepage = "http://www.live365.com/"
-        base_url = "http://www.live365.com/"
-        has_search = True
-        listformat = "url/http"
-        mediatype = "audio/mpeg"
+    # content
+    categories = ['Alternative', 'Blues', 'Classical', 'Country', 'Easy Listening', 'Electronic/Dance', 'Folk', 'Freeform', 'Hip-Hop/Rap', 'Inspirational', 'International', 'Jazz', 'Latin', 'Metal', 'New Age', 'Oldies', 'Pop', 'R&B/Urban', 'Reggae', 'Rock', 'Seasonal/Holiday', 'Soundtracks', 'Talk']
+    current = "Alternative"
+    default = "Pop"
+    empty = None
+    
+    # redefine
+    streams = {}
+    
 
-        # content
-        categories = ['Alternative', ['Britpop', 'Classic Alternative', 'College', 'Dancepunk', 'Dream Pop', 'Emo', 'Goth', 'Grunge', 'Indie Pop', 'Indie Rock', 'Industrial', 'Lo-Fi', 'Modern Rock', 'New Wave', 'Noise Pop', 'Post-Punk', 'Power Pop', 'Punk'], 'Blues', ['Acoustic Blues', 'Chicago Blues', 'Contemporary Blues', 'Country Blues', 'Delta Blues', 'Electric Blues', 'Cajun/Zydeco'], 'Classical', ['Baroque', 'Chamber', 'Choral', 'Classical Period', 'Early Classical', 'Impressionist', 'Modern', 'Opera', 'Piano', 'Romantic', 'Symphony'], 'Country', ['Alt-Country', 'Americana', 'Bluegrass', 'Classic Country', 'Contemporary Bluegrass', 'Contemporary Country', 'Honky Tonk', 'Hot Country Hits', 'Western'], 'Easy Listening', ['Exotica', 'Lounge', 'Orchestral Pop', 'Polka', 'Space Age Pop'], 'Electronic/Dance', ['Acid House', 'Ambient', 'Big Beat', 'Breakbeat', 'Disco', 'Downtempo', "Drum 'n' Bass", 'Electro', 'Garage', 'Hard House', 'House', 'IDM', 'Jungle', 'Progressive', 'Techno', 'Trance', 'Tribal', 'Trip Hop'], 'Folk', ['Alternative Folk', 'Contemporary Folk', 'Folk Rock', 'New Acoustic', 'Traditional Folk', 'World Folk'], 'Freeform', ['Chill', 'Experimental', 'Heartache', 'Love/Romance', 'Music To ... To', 'Party Mix', 'Patriotic', 'Rainy Day Mix', 'Reality', 'Shuffle/Random', 'Travel Mix', 'Trippy', 'Various', 'Women', 'Work Mix'], 'Hip-Hop/Rap', ['Alternative Rap', 'Dirty South', 'East Coast Rap', 'Freestyle', 'Gangsta Rap', 'Old School', 'Turntablism', 'Underground Hip-Hop', 'West Coast Rap'], 'Inspirational', ['Christian', 'Christian Metal', 'Christian Rap', 'Christian Rock', 'Classic Christian', 'Contemporary Gospel', 'Gospel', 'Praise/Worship', 'Sermons/Services', 'Southern Gospel', 'Traditional Gospel'], 'International', ['African', 'Arabic', 'Asian', 'Brazilian', 'Caribbean', 'Celtic', 'European', 'Filipino', 'Greek', 'Hawaiian/Pacific', 'Hindi', 'Indian', 'Japanese', 'Jewish', 'Mediterranean', 'Middle Eastern', 'North American', 'Soca', 'South American', 'Tamil', 'Worldbeat', 'Zouk'], 'Jazz', ['Acid Jazz', 'Avant Garde', 'Big Band', 'Bop', 'Classic Jazz', 'Cool Jazz', 'Fusion', 'Hard Bop', 'Latin Jazz', 'Smooth Jazz', 'Swing', 'Vocal Jazz', 'World Fusion'], 'Latin', ['Bachata', 'Banda', 'Bossa Nova', 'Cumbia', 'Latin Dance', 'Latin Pop', 'Latin Rap/Hip-Hop', 'Latin Rock', 'Mariachi', 'Merengue', 'Ranchera', 'Salsa', 'Tango', 'Tejano', 'Tropicalia'], 'Metal', ['Extreme Metal', 'Heavy Metal', 'Industrial Metal', 'Pop Metal/Hair', 'Rap Metal'], 'New Age', ['Environmental', 'Ethnic Fusion', 'Healing', 'Meditation', 'Spiritual'], 'Oldies', ['30s', '40s', '50s', '60s', '70s', '80s', '90s'], 'Pop', ['Adult Contemporary', 'Barbershop', 'Bubblegum Pop', 'Dance Pop', 'JPOP', 'Soft Rock', 'Teen Pop', 'Top 40', 'World Pop'], 'R&B/Urban', ['Classic R&B', 'Contemporary R&B', 'Doo Wop', 'Funk', 'Motown', 'Neo-Soul', 'Quiet Storm', 'Soul', 'Urban Contemporary'], 'Reggae', ['Contemporary Reggae', 'Dancehall', 'Dub', 'Pop-Reggae', 'Ragga', 'Reggaeton', 'Rock Steady', 'Roots Reggae', 'Ska'], 'Rock', ['Adult Album Alternative', 'British Invasion', 'Classic Rock', 'Garage Rock', 'Glam', 'Hard Rock', 'Jam Bands', 'Prog/Art Rock', 'Psychedelic', 'Rock & Roll', 'Rockabilly', 'Singer/Songwriter', 'Surf'], 'Seasonal/Holiday', ['Anniversary', 'Birthday', 'Christmas', 'Halloween', 'Hanukkah', 'Honeymoon', 'Valentine', 'Wedding'], 'Soundtracks', ['Anime', "Children's/Family", 'Original Score', 'Showtunes'], 'Talk', ['Comedy', 'Community', 'Educational', 'Government', 'News', 'Old Time Radio', 'Other Talk', 'Political', 'Scanner', 'Spoken Word', 'Sports']]
-        current = ""
-        default = "Pop"
-        empty = None
+    def __init__(self, parent=None):
+    
+        # override datamap fields  //@todo: might need a cleaner method, also: do we really want the stream data in channels to be different/incompatible?
+        self.datamap = copy.deepcopy(self.datamap)
+        self.datamap[5][0] = "Rating"
+        self.datamap[5][2][0] = "rating"
         
-        # redefine
-        streams = {}
-        
+        # superclass
+        ChannelPlugin.__init__(self, parent)
 
-        def __init__(self, parent=None):
+
+    # fixed for now
+    def update_categories(self):
+        pass
+
+
+    # extract stream infos
+    def update_streams(self, cat):
+    
+        url = "http://www.live365.com/genres/%s" % cat.lower()
+        html = http.get(url, feedback=self.parent.status)
         
-            # override datamap fields  //@todo: might need a cleaner method, also: do we really want the stream data in channels to be different/incompatible?
-            self.datamap = copy.deepcopy(self.datamap)
-            self.datamap[5][0] = "Rating"
-            self.datamap[5][2][0] = "rating"
-            self.datamap[3][0] = "Description"
-            self.datamap[3][2][0] = "description"
+        # Extract from JavaScript       
+        rx = re.compile(r"""
+                stn.set\(   " (\w+) ", \s+  " ((?:[^"\\]+|\\.)*) "\);  \s+
+            """, re.X|re.I|re.S|re.M)
+
+        # Group entries before adding them
+        ls = []
+        for i,g in groupby(rx.findall(html), self.group_by_station):
+            row = dict(g)
+            ls.append({
+                "name": row["stationName"],
+                "title": row["title"],
+                "playing": "",
+                "id": row["id"],
+                "access": row["listenerAccess"],
+                "status": row["status"],
+                "mode": row["serverMode"],
+                "rating": int(row["rating"]),
+                "rating": row["ratingCount"],
+                "listeners": int(row["tlh"]),
+                "location": row["location"],
+                "favicon": row["imgUrl"],
+                "format": self.mediatype,
+                "url": "urn:live365:%s:%s" % (row["id"], row["stationName"])
+            })
+        print ls
+        return ls
+
+    # inject session id etc. into direct audio url
+    def play(self, row):
+        if row.get("url"):
+
+            # params
+            id = row["id"]
+            name = row["name"]
+
+            # get session
+            mini = "http://www.live365.com/cgi-bin/mini.cgi?version=3&templateid=xml&from=web&site=web" \
+                 + "&caller=&tag=web&station_name=%s&_=%i111" % (name, time())
+            xml = parseString(http.get(mini)).getElementsByTagName("LIVE365_PLAYER_WINDOW")[0]
+            x = lambda name: xml.getElementsByTagName(name)[0].childNodes[0].data
+
+            # mk audio url
+            play =  "http://www.live365.com/play?now=0&" \
+                 + x("NANOCASTER_PARAMS") \
+                 + "&token=" + x("TOKEN") \
+                 + "&AuthType=NORMAL&lid=276006-deu&SaneID=178.24.130.71-1406763621701"
+            __print__(dbg.DATA, play)
             
-            # superclass
-            ChannelPlugin.__init__(self, parent)
+            # let's see what happens
+            action.action.play(play, self.mediatype, self.listformat)
 
-
-        # read category thread from /listen/browse.live
-        def update_categories(self):
-            self.categories = []
-
-            # fetch page
-            html = http.get("http://www.live365.com/index.live", feedback=self.parent.status);
-            rx_genre = re.compile("""
-                href=['"]/genres/([\w\d%+]+)['"][^>]*>
-                (   (?:<nobr>)?   )
-                ( \w[-\w\ /'.&]+ )
-                (   (?:</a>)?   )
-            """, re.X|re.S)
-
-            # collect
-            last = []
-            for uu in rx_genre.findall(html):
-                (link, sub, title, main) = uu
-
-                # main
-                if main and not sub:
-                    self.categories.append(title)
-                    self.categories.append(last)
-                    last = []
-                # subcat
-                else:
-                    last.append(title)
-
-            # don't forget last entries
-            self.categories.append(last)
-
-
-
-        # extract stream infos
-        def update_streams(self, cat, search=None):
-        
-            # search
-            if search:
-                url = "http://www.live365.com/cgi-bin/directory.cgi?site=..&searchdesc=" + urllib.quote(search) + "&searchgenre=" + self.cat2tag(cat) + "&x=0&y=0"
-            # genre
-            else:
-                url = "http://www.live365.com/cgi-bin/directory.cgi?first=1&rows=200&mode=2&genre=" + self.cat2tag(cat)
-            html = http.get(url, feedback=self.parent.status)
-            # we only need to download one page, because live365 always only gives 200 results
-	    
-            # terse format            
-            rx = re.compile(r"""
-            ['"](OK|PM_ONLY|SUBSCRIPTION).*?
-            href=['"](http://www.live365.com/stations/\w+)['"].*?
-            page['"]>([^<>]*)</a>.*?
-            CLASS=['"]genre-link['"][^>]*>(.+?)</a>.+?
-            &station_id=(\d+).+?
-            class=["']desc-link['"][^>]+>([^<>]*)<.*?
-            =["']audioQuality.+?>(\d+)\w<.+?
-            >DrawListenerStars\((\d+),.+?
-            >DrawRatingStars\((\d+),\s+(\d+),.*?
-                """, re.X|re.I|re.S|re.M)
-#            src="(http://www.live365.com/.+?/stationlogo\w+.jpg)".+?
-
-            # append entries to result list
-            #__print__( dbg.DATA, html )
-            ls = []
-            for row in rx.findall(html):
-                #__print__( dbg.DATA, row )
-                points = int(row[8])
-                count = int(row[9])
-                ls.append({
-                    "launch_id": row[0],
-                    "sofo": row[0],  # subscribe-or-fuck-off status flags
-                    "state":  (""  if  row[0]=="OK"  else  gtk.STOCK_STOP),
-                    "homepage": entity_decode(row[1]),
-                    "title": entity_decode(row[2]),
-                    "genre": self.strip_tags(row[3]),
-                    "bitrate": int(row[6]),
-                    "listeners": int(row[7]),
-                    "max": 0,
-                    "rating": (points + count**0.4) / (count - 0.001*(count-0.1)),   # prevents division by null, and slightly weights (more votes are higher scored than single votes)
-                    "rating_points": points,
-                    "rating_count": count,
-                    # id for URL:
-                    "station_id": row[4],
-                    "url": self.base_url + "play/" + row[4],
-                    "description": entity_decode(row[5]),
-                   #"playing": row[10],
-                   # "deleted": row[0] != "OK",
-                })
-            return ls
             
-        # faster if we do it in _update() prematurely
-        #def prepare(self, ls):
-        #    GenericChannel.prepare(ls)
-        #    for row in ls:
-        #        if (not row["state"]):
-        #            row["state"] = (gtk.STOCK_STOP, "") [row["sofo"]=="OK"]
-        #    return ls
 
-        
-        # html helpers
-        def cat2tag(self, cat):
-            return urllib.quote(cat.lower()) #re.sub("[^a-z]", "", 
-        def strip_tags(self, s):
-            return re.sub("<.+?>", "", s)
+
+    # itertools.groupby filter
+    gi = 0
+    def group_by_station(self, kv):
+        if kv[0] == "stationName":
+            self.gi += 1
+        return self.gi
+
+    # we can no longer cache all the things
+    def cache(self):
+        pass
+    def save(self):
+        pass
 
 
