@@ -5,7 +5,7 @@
 # title: streamtuner2
 # description: Directory browser for internet radio / audio streams
 # depends: pygtk | pygi, threading, pyquery, kronos, requests
-# version: 2.1.1
+# version: 2.1.2
 # author: mario salzer
 # license: public domain
 # url: http://freshmeat.net/projects/streamtuner2
@@ -96,7 +96,7 @@ from channels import *
 import favicon
 
 
-__version__ = "2.1.1"
+__version__ = "2.1.2"
 
 
 # this represents the main window

@@ -6,7 +6,7 @@
 # category: media
 # version: 0.0
 # priority: optional
-# depends: mutagen, kiwi
+# depends: mutagen
 #
 #
 # Local file browser.
@@ -180,6 +180,8 @@ class file (ChannelPlugin):
     # same as init
     def update_streams(self, cat, x=0):
         self.scan_dirs()
+        print(self.streams)
+        print(self.categories)
         return self.streams.get(os.path.basename(cat))
 
 

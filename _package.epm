@@ -1,5 +1,5 @@
 %product streamtuner2 - internet radio browser
-%version 2.1.1
+%version 2.1.2
 %vendor Mario Salzer
 %license
 %copyright Placed into the Public Domain, 2009-2014
@@ -33,7 +33,7 @@ f 644 root root /usr/share/streamtuner2/streamtuner2.png	./streamtuner2.png
 f 644 root root /usr/share/pixmaps/streamtuner2.png		./logo.png
 f 644 root root /usr/share/streamtuner2/gtk2.xml		./gtk2.xml
 f 644 root root /usr/share/streamtuner2/gtk3.xml		./gtk3.xml
-#f 644 root root /usr/share/streamtuner2/pson.py			./pson.py
+#f 644 root root /usr/share/streamtuner2/pson.py		./pson.py
 #f 644 root root /usr/share/streamtuner2/processing.py		./processing.py
 f 644 root root /usr/share/streamtuner2/compat2and3.py		./compat2and3.py
 f 644 root root /usr/share/streamtuner2/action.py		./action.py
@@ -47,8 +47,12 @@ f 644 root root /usr/share/streamtuner2/pq.py			./pq.py
 d 755 root root /usr/share/streamtuner2/channels		-
 f 644 root root /usr/share/streamtuner2/channels/__init__.py	./channels/__init__.py
 f 644 root root /usr/share/streamtuner2/channels/_generic.py	./channels/_generic.py
+f 644 root root /usr/share/streamtuner2/channels/icast.py 	./channels/icast.py
+f 644 root root /usr/share/streamtuner2/channels/icast.png 	./channels/icast.png
 f 644 root root /usr/share/streamtuner2/channels/internet_radio.py ./channels/internet_radio.py
 f 644 root root /usr/share/streamtuner2/channels/internet_radio.png ./channels/internet_radio.png
+f 644 root root /usr/share/streamtuner2/channels/itunes.py 	./channels/itunes.py
+f 644 root root /usr/share/streamtuner2/channels/itunes.png 	./channels/itunes.png
 f 644 root root /usr/share/streamtuner2/channels/jamendo.py 	./channels/jamendo.py
 f 644 root root /usr/share/streamtuner2/channels/jamendo.png 	./channels/jamendo.png
 f 644 root root /usr/share/streamtuner2/channels/live365.py	./channels/live365.py
@@ -75,8 +79,6 @@ f 644 root root /usr/share/streamtuner2/channels/timer.py 	./channels/timer.py
 #-- scripts
 #d 755 root root /usr/share/streamtuner2/scripts		-
 #f 644 root root /usr/share/streamtuner2/scripts/radiotop40_de.py  ./scripts/radiotop40_de.py
-#-- themes
-#f 644 root root /usr/share/streamtuner2/themes/MountainDew/gtk-2.0/gtkrc ./themes/MountainDew/gtk-2.0/gtkrc
 #-- help files
 f 644 root root /usr/share/man/man1/streamtuner2.1		 	 ./help/streamtuner2.1
 d 755 root root /usr/share/doc/streamtuner2/help 			-

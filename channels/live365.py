@@ -7,20 +7,18 @@
 # version: 0.3
 # priority: optional
 #
-# 2.1.2 broken,
-# new URLs:
+# 
 #
-#   GET /cgi-bin/mini.cgi?version=3&templateid=xml&from=web&site=web&caller=&tag=web&station_name=bofbm&_=1404610275892
-#      <NANOCASTER_PARAMS> (session id)
+# We're currently extracting from the JavaScript;
 #
-#   GET /play?now=59&membername=&session=1404610276-475426&tag=web&s=bofbm&d=LIVE365&r=0
-#       &app_id=web%3ABROWSER&token=b99d7f579bacab06b9baa1502d53bedc-3101060080001248&AuthType=NORMAL
-#       &lid=276006-deu&SaneID=178.24.130.71-1404610229579
+#    stn.set("param", "value");
+#
+# And using a HTML5 player direct URL now:
+#
+#    /cgi-bin/play.pls?stationid=%s&direct=1&file=%s.pls
 #
 #
-
-raise Exception
-
+#
 
 
 # streamtuner2 modules
@@ -41,6 +39,7 @@ import urllib
 from itertools import groupby
 from time import time
 from xml.dom.minidom import parseString
+
 
 # channel live365
 class live365(ChannelPlugin):
@@ -83,9 +82,12 @@ class live365(ChannelPlugin):
 
     # extract stream infos
     def update_streams(self, cat):
-    
-        url = "http://www.live365.com/genres/%s" % cat.lower()
-        html = http.get(url, feedback=self.parent.status)
+
+        # Retrieve genere index pages    
+        html = ""
+        for i in [1, 17, 33, 49]:
+            url = "http://www.live365.com/cgi-bin/directory.cgi?first=%i&site=web&mode=3&genre=%s&charset=UTF-8&target=content" % (i, cat.lower())
+            html += http.get(url, feedback=self.parent.status)
         
         # Extract from JavaScript       
         rx = re.compile(r"""
@@ -94,53 +96,25 @@ class live365(ChannelPlugin):
 
         # Group entries before adding them
         ls = []
-        for i,g in groupby(rx.findall(html), self.group_by_station):
-            row = dict(g)
+        for i,row in groupby(rx.findall(html), self.group_by_station):
+            row = dict(row)
             ls.append({
                 "name": row["stationName"],
                 "title": row["title"],
-                "playing": "",
+                "playing": "n/a",
                 "id": row["id"],
                 "access": row["listenerAccess"],
                 "status": row["status"],
                 "mode": row["serverMode"],
                 "rating": int(row["rating"]),
-                "rating": row["ratingCount"],
+                #"rating": row["ratingCount"],
                 "listeners": int(row["tlh"]),
                 "location": row["location"],
                 "favicon": row["imgUrl"],
                 "format": self.mediatype,
-                "url": "urn:live365:%s:%s" % (row["id"], row["stationName"])
+                "url": "%scgi-bin/play.pls?stationid=%s&direct=1&file=%s.pls" % (self.base_url, row["id"], row["stationName"])
             })
-        print ls
         return ls
-
-    # inject session id etc. into direct audio url
-    def play(self, row):
-        if row.get("url"):
-
-            # params
-            id = row["id"]
-            name = row["name"]
-
-            # get session
-            mini = "http://www.live365.com/cgi-bin/mini.cgi?version=3&templateid=xml&from=web&site=web" \
-                 + "&caller=&tag=web&station_name=%s&_=%i111" % (name, time())
-            xml = parseString(http.get(mini)).getElementsByTagName("LIVE365_PLAYER_WINDOW")[0]
-            x = lambda name: xml.getElementsByTagName(name)[0].childNodes[0].data
-
-            # mk audio url
-            play =  "http://www.live365.com/play?now=0&" \
-                 + x("NANOCASTER_PARAMS") \
-                 + "&token=" + x("TOKEN") \
-                 + "&AuthType=NORMAL&lid=276006-deu&SaneID=178.24.130.71-1406763621701"
-            __print__(dbg.DATA, play)
-            
-            # let's see what happens
-            action.action.play(play, self.mediatype, self.listformat)
-
-            
-
 
     # itertools.groupby filter
     gi = 0
@@ -149,10 +123,33 @@ class live365(ChannelPlugin):
             self.gi += 1
         return self.gi
 
-    # we can no longer cache all the things
-    def cache(self):
-        pass
-    def save(self):
-        pass
+
+    # inject session id etc. into direct audio url
+    def UNUSED_play(self, row):
+        if row.get("url"):
+
+            # params
+            id = row["id"]
+            name = row["name"]
+
+            # get mini.cgi station resource
+            mini_url = "http://www.live365.com/cgi-bin/mini.cgi?version=3&templateid=xml&from=web&site=web" \
+                 + "&caller=&tag=web&station_name=%s&_=%i111" % (name, time())
+            mini_r = http.get(mini_url, content=False)
+            mini_xml = parseString(mini_r.text).getElementsByTagName("LIVE365_PLAYER_WINDOW")[0]
+            mini = lambda name: mini_xml.getElementsByTagName(name)[0].childNodes[0].data
+            
+            # authorize with play.cgi
+            play_url = ""
+
+            # mk audio url
+            play =  "http://%s/play" % mini("STREAM_URL") \
+                 + "?now=0&" \
+                 + mini("NANOCASTER_PARAMS") \
+                 + "&token=" + mini("TOKEN") \
+                 + "&AuthType=NORMAL&lid=276006-deu&SaneID=178.24.130.71-1406763621701"
+            
+            # let's see what happens
+            action.action.play(play, self.mediatype, self.listformat)
 
 
