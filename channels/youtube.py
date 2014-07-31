@@ -309,7 +309,7 @@ class youtube (ChannelPlugin):
 
         data.update(dict(
             url = "http://youtube.com/v/" + id,
-            homepage = "https://youtube.com/watch?v=" + id + ("&wadsworth=1" if conf.youtube_wadsworth else ""),
+            homepage = "http://youtu.be/" + id + ("?wadsworth=1" if conf.youtube_wadsworth else ""),
             format = self.fmt,
             title = row["snippet"]["title"],
         ))
