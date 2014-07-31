@@ -44,14 +44,10 @@ session = requests.Session()
 # default HTTP headers for requests
 session.headers.update({
     "User-Agent": "streamtuner2/2.1 (X11; U; Linux AMD64; en; rv:1.5.0.1) like WinAmp/2.1",
-    "Accept": "*/*;q=0.5, audio/*, video/*, json/*, url/*",
+    "Accept": "*/*",
     "Accept-Language": "en-US,en,de,es,fr,it,*;q=0.1",
-    "Accept-Encoding": "gzip,deflate",
-    "Accept-Charset": "ISO-8859-1,utf-8;q=0.7,*;q=0.1",
-    "Keep-Alive": "115",
-    "Connection": "close",
-    "Pragma": "no-cache",
-    "Cache-Control": "no-cache",
+    "Accept-Encoding": "gzip, deflate",
+    "Accept-Charset": "UTF-8, ISO-8859-1;q=0.5, *;q=0.1",
 })
 
 
@@ -79,8 +75,8 @@ def get(url, params={}, referer="", post=0, ajax=0, binary=0, feedback=None):
     else:    
         r = session.get(url, params=params, headers=headers)
 
-    #__print__( dbg.HTTP, r.request.headers );
-    #__print__( dbg.HTTP, r.headers );
+    __print__( dbg.HTTP, r.request.headers );
+    __print__( dbg.HTTP, r.headers );
             
     # result
     #progress_feedback(0.9)
