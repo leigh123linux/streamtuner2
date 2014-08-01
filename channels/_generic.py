@@ -58,6 +58,7 @@ class GenericChannel(object):
 
         # categories
         categories = ["empty", ]
+        catmap = {}
         current = ""
         default = "empty"
         shown = None     # last selected entry in stream list, also indicator if notebook tab has been selected once / stream list of current category been displayed yet
@@ -133,6 +134,10 @@ class GenericChannel(object):
             cache = conf.load("cache/categories_" + self.module)
             if (cache):
                 self.categories = cache
+            # catmap (optional)
+            cache = conf.load("cache/catmap_" + self.module)
+            if (cache):
+                self.catmap = cache
             pass
 
             
@@ -376,7 +381,10 @@ class GenericChannel(object):
         
             # get data and save
             self.update_categories()
-            conf.save("cache/categories_"+self.module, self.categories)
+            if self.categories:
+                conf.save("cache/categories_"+self.module, self.categories)
+            if self.catmap:
+                conf.save("cache/catmap_" + self.module, self.catmap);
 
             # display outside of this non-main thread            
             mygtk.do(self.display_categories)
@@ -464,6 +472,11 @@ class GenericChannel(object):
         # convert special characters to &xx; escapes
         def xmlentities(self, s):
             return xml.sax.saxutils.escape(s)
+        
+        # Extracts integer from string
+        def to_int(self, s):
+            i = re.findall("\d+", s) or [0]
+            return int(i[0])
 
 
 
