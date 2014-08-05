@@ -5,7 +5,7 @@
 # type: channel
 # category: radio
 # priority: default
-# version: 1.4
+# version: 1.5
 # depends: pq, re, http
 # author: Mario
 # original: Jean-Yves Lefort
@@ -23,7 +23,7 @@
 # Therefore we'll be retrieving stuff from the homepage still. The new
 # interface conveniently uses JSON already, so let's use that:
 #
-#   POST http://www.shoutcast.com/Home/BrowseByGenre {genreid: 9}
+#   POST http://www.shoutcast.com/Home/BrowseByGenre {genrename: Pop}
 #
 # We do need a catmap now too, but that's easy to aquire and will be kept
 # within the cache dirs.
@@ -74,27 +74,22 @@ class shoutcast(channels.ChannelPlugin):
         html = http.get(self.base_url)
         #__print__( dbg.DATA, html )
         self.categories = []
-
-        # Main genres from mobile dropdown
-        """ <option value="1">Alternative</option> """
-        rx = re.compile(r'<option value="(\d+)">(\w+\h*\w+)<')
-        main = rx.findall(html)
+        
         # Genre list in sidebar
-        """ <li><a href="#c-genre-2" onclick="loadStationsByGenre(2, true)">Adult Alternative</a></li> """
-        rx = re.compile(r'c-genre-(\d+).+?>(\w[\w\h]*\w)<')
+        """  <li><a id="genre-90" href="/Genre?name=Adult" onclick="loadStationsByGenre('Adult', 90, 89); return false;">Adult</a></li> """
+        rx = re.compile(r"loadStationsByGenre\(  '([^']+)' [,\s]* (\d+) [,\s]* (\d+)  \)", re.X)
         subs = rx.findall(html)
-        print main
-        print subs
 
         # group
-        for (id, title) in subs:
-            if (id,title) in main:
+        current = []
+        for (title, id, main) in subs:
+            self.catmap[title] = int(id)
+            if not int(main):
                 self.categories.append(title)
                 current = []
                 self.categories.append(current)
             else:
                 current.append(title)
-            self.catmap[title] = int(id)
         self.save()
 
 
@@ -108,7 +103,7 @@ class shoutcast(channels.ChannelPlugin):
 
         # page
         url = "http://www.shoutcast.com/Home/BrowseByGenre"
-        params = { "genreid": int(id) }
+        params = { "genrename": cat }
         referer = None
         json = http.get(url, params=params, referer=referer, post=1, ajax=1)
         self.parent.status(0.75)
