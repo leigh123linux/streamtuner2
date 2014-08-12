@@ -1190,6 +1190,7 @@ if __name__ == "__main__":
         # run
         gui_startup(100/100.0)
         gtk.main()
+        __print__(dbg.PROC, r"[31m gtk_main_quit [0m")
         
         
     # invoke command-line interface

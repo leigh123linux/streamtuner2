@@ -214,15 +214,15 @@ def __print__(*args):
 
 # error colorization
 dbg = type('obj', (object,), {
-    "ERR":  "[31m[ERR][0m",  # red    ERROR
-    "INIT": "[31m[INIT][0m", # red    INIT ERROR
-    "PROC": "[32m[PROC][0m", # green  PROCESS
-    "CONF": "[33m[CONF][0m", # brown  CONFIG DATA
-    "UI":   "[34m[UI][0m",   # blue   USER INTERFACE BEHAVIOUR
-    "HTTP": "[35m[HTTP][0m", # magenta HTTP REQUEST
-    "DATA": "[36m[DATA][0m", # cyan   DATA
-    "INFO": "[37m[INFO][0m", # gray   INFO
-    "STAT": "[37m[STATE][0m", # gray  CONFIG STATE
+    "ERR":  r"[31m[ERR][0m",  # red    ERROR
+    "INIT": r"[31m[INIT][0m", # red    INIT ERROR
+    "PROC": r"[32m[PROC][0m", # green  PROCESS
+    "CONF": r"[33m[CONF][0m", # brown  CONFIG DATA
+    "UI":   r"[34m[UI][0m",   # blue   USER INTERFACE BEHAVIOUR
+    "HTTP": r"[35m[HTTP][0m", # magenta HTTP REQUEST
+    "DATA": r"[36m[DATA][0m", # cyan   DATA
+    "INFO": r"[37m[INFO][0m", # gray   INFO
+    "STAT": r"[37m[STATE][0m", # gray  CONFIG STATE
 })
 
 
