@@ -39,6 +39,11 @@ class dirble (ChannelPlugin):
 
     categories = []
     config = [
+        {"name": "dirble_api_key",
+         "value": "",
+         "type": "text",
+         "description": "Custom API access key."
+        },
         {"name": "dirble_fetch_homepage",
          "value": 0,
          "type": "boolean",
@@ -113,7 +118,7 @@ class dirble (ChannelPlugin):
     def api(self, *params):
         method = params[0]
         try:
-            j = http.get((self.base % (method, self.cid)) + "/".join([str(e) for e in params[1:]]))
+            j = http.get((self.base % (method, conf.dirble_api_key or self.cid)) + "/".join([str(e) for e in params[1:]]))
             r = json.loads(j);
         except:
             r = []
