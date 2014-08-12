@@ -107,17 +107,18 @@ class xiph (ChannelPlugin):
                 #__print__(dbg.DATA, e)
                 bitrate = int(e["bitrate"])
                 if conf.xiph_min_bitrate and bitrate and bitrate >= int(conf.xiph_min_bitrate):
-                  l.append({
-                    "title": e["stream_name"],
-                    "url": e["listen_url"],
-                    "format": e["type"],
-                    "bitrate": bitrate,
-                    "genre": e["genre"],
-                    "playing": e["current_song"],
-                    "listeners": 0,
-                    "max": 0,
-                    "homepage": (e["homepage"] if ("homepage" in e) else ""),
-                  })
+                    if not len(l) or l[-1]["title"] != e["stream_name"]:
+                        l.append({
+                          "title": e["stream_name"],
+                          "url": e["listen_url"],
+                          "format": e["type"],
+                          "bitrate": bitrate,
+                          "genre": e["genre"],
+                          "playing": e["current_song"],
+                          "listeners": 0,
+                          "max": 0,
+                          "homepage": (e["homepage"] if ("homepage" in e) else ""),
+                        })
                 
             # send back the list 
             return l
