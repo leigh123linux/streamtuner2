@@ -111,7 +111,7 @@ class xiph (ChannelPlugin):
                     "title": e["stream_name"],
                     "url": e["listen_url"],
                     "format": e["type"],
-                    "bitrate": int(e["bitrate"]),
+                    "bitrate": bitrate,
                     "genre": e["genre"],
                     "playing": e["current_song"],
                     "listeners": 0,
