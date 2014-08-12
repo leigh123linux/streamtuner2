@@ -1,7 +1,7 @@
 # encoding: UTF-8
 # api: streamtuner2
 # title: Dirble
-# description: New open radio station directory.
+# description: Open radio station directory.
 # version: 0.2
 # type: channel
 # category: radio
@@ -100,18 +100,20 @@ class dirble (ChannelPlugin):
     # Request homepage for stations, else try to deduce Dirble page
     def get_homepage(self, id, name):
         if conf.dirble_fetch_homepage:
-            return self.api("station", "id", id)["website"]
-        else:
-            name = re.sub("[^\w\s]+", "", name)
-            name = re.sub("\s", "-", name)
-            return "http://dirble.com/station/" + name.lower();
+            try:
+                return self.api("station", "id", id)["website"]
+            except:
+                None
+        name = re.sub("[^\w\s]+", "", name)
+        name = re.sub("\s", "-", name)
+        return "http://dirble.com/station/" + name.lower();
 
 
     # Patch API url together, send request, decode JSON and whathaveyou
     def api(self, *params):
         method = params[0]
-        j = http.get((self.base % (method, self.cid)) + "/".join([str(e) for e in params[1:]]))
         try:
+            j = http.get((self.base % (method, self.cid)) + "/".join([str(e) for e in params[1:]]))
             r = json.loads(j);
         except:
             r = []
