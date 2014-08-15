@@ -99,6 +99,8 @@ class live365(ChannelPlugin):
         for i,row in groupby(rx.findall(html), self.group_by_station):
             row = dict(row)
             ls.append({
+                "status": (None if row["listenerAccess"] == "PUBLIC" else gtk.STOCK_STOP),
+                "deleted": row["status"] != "OK",
                 "name": row["stationName"],
                 "title": row["title"],
                 "playing": "n/a",
