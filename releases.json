@@ -15,6 +15,14 @@
     },
     "releases": [
         {
+            "version": "2.1.3",
+            "state": "stable",
+            "scope": "minor bugfix",
+            "changes": "A new plugin for Dirble.com radio listings was introduced. Channel tabs can now be rearranged from notebook top to left side. The Live365 plugin was fixed again, as was the Xiph.org cache service. Shorter Youtube homepage URLs are now presented.",
+            "download": "http://sourceforge.net/projects/streamtuner2/files/?source=navbar",
+            "published": "2014-08-15T01:00:00+0000"
+        },
+        {
             "version": "2.1.2",
             "state": "stable",
             "scope": "minor feature",

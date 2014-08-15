@@ -96,7 +96,7 @@ from channels import *
 import favicon
 
 
-__version__ = "2.1.2"
+__version__ = "2.1.3"
 
 
 # this represents the main window
