@@ -5,10 +5,10 @@
 # title: streamtuner2
 # description: Directory browser for internet radio / audio streams
 # depends: pygtk | pygi, threading, pyquery, kronos, requests
-# version: 2.1.2
+# version: 2.1.3
 # author: mario salzer
 # license: public domain
-# url: http://freshmeat.net/projects/streamtuner2
+# url: http://freshcode.club/projects/streamtuner2
 # config: <env name="http_proxy" value="" description="proxy for HTTP access" />  <env name="XDG_CONFIG_HOME" description="relocates user .config subdirectory" />
 # category: multimedia
 # 
@@ -193,6 +193,10 @@ class StreamTunerTwo(gtk.Builder):
                 "menu_toolbar_size_small": lambda w: (self.toolbar.set_icon_size(gtk.ICON_SIZE_SMALL_TOOLBAR)),
                 "menu_toolbar_size_medium": lambda w: (self.toolbar.set_icon_size(gtk.ICON_SIZE_DND)),
                 "menu_toolbar_size_large": lambda w: (self.toolbar.set_icon_size(gtk.ICON_SIZE_DIALOG)),
+                "menu_notebook_pos_top": lambda w: self.notebook_channels.set_tab_pos(2),
+                "menu_notebook_pos_left": lambda w: self.notebook_channels.set_tab_pos(0),
+                "menu_notebook_pos_right": lambda w: self.notebook_channels.set_tab_pos(1),
+                "menu_notebook_pos_bottom": lambda w: self.notebook_channels.set_tab_pos(3),
                 # win_config
                 "menu_properties": config_dialog.open,
                 "config_cancel": config_dialog.hide,
@@ -234,8 +238,6 @@ class StreamTunerTwo(gtk.Builder):
             self.win_streamtuner2.show()
             
 
-          
-
         #-- Shortcut for glade.get_widget()
         # Allows access to widgets as direct attributes instead of using .get_widget()
         # Also looks in self.channels[] for the named channel plugins
@@ -245,29 +247,24 @@ class StreamTunerTwo(gtk.Builder):
             else:
                 return self.get_object(name)   # or gives an error if neither exists
 
-
-        # custom-named widgets are available from .widgets{} not via .get_widget()
+        # Custom-named widgets are available from .widgets{} not via .get_widget()
         def get_widget(self, name):
             if name in self.widgets:
                 return self.widgets[name]
             else:
                 return gtk.Builder.get_object(self, name)
                 
-
-
-                
-        # returns the currently selected directory/channel object
+        # returns the currently selected directory/channel object (remembered position)
         def channel(self):
             return self.channels[self.current_channel]
 
-            
+        # returns the currently selected directory/channel object (from gtk)
         def current_channel_gtk(self):
             i = self.notebook_channels.get_current_page()
             try: return self.channel_names[i]
             except: return "bookmarks"
 
-
-        # notebook tab clicked
+        # Notebook tab clicked
         def channel_switch(self, notebook, page, page_num=0, *args):
 
             # can be called from channelmenu as well:
@@ -285,14 +282,12 @@ class StreamTunerTwo(gtk.Builder):
             except:
                 __print__(dbg.INIT, "channel .first_show() initialization error")
 
-
-        # convert ListStore iter to row number
+        # Convert ListStore iter to row number
         def rowno(self):
             (model, iter) = self.model_iter()
             return model.get_path(iter)[0]
 
-
-        # currently selected entry in stations list, return complete data dict
+        # Currently selected entry in stations list, return complete data dict
         def row(self):
             return self.channel().stations() [self.rowno()]
 
@@ -300,44 +295,37 @@ class StreamTunerTwo(gtk.Builder):
         # return ListStore object and Iterator for currently selected row in gtk.TreeView station list
         def model_iter(self):
             return self.channel().gtk_list.get_selection().get_selected()
-
             
-        # fetches a single varname from currently selected station entry
+        # Fetches a single varname from currently selected station entry
         def selected(self, name="url"):
             return self.row().get(name)
 
+
                 
-
-
-
-        # play button
+        # Play button
         def on_play_clicked(self, widget, event=None, *args):
             row = self.row()
             if row:
                 self.channel().play(row)
                 [callback(row) for callback in self.hooks["play"]]
 
-
-        # streamripper
+        # Recording: invoke streamripper for current stream URL
         def on_record_clicked(self, widget):
             row = self.row()
             action.record(row.get("url"), row.get("format", "audio/mpeg"), "url/direct", row=row)
 
-
-        # browse stream
+        # Open stream homepage in web browser
         def on_homepage_stream_clicked(self, widget):
             url = self.selected("homepage")             
             action.browser(url)
 
-             
-        # browse channel
+        # Browse to channel homepage (double click on notebook tab)
         def on_homepage_channel_clicked(self, widget, event=2):
             if event == 2 or event.type == gtk.gdk._2BUTTON_PRESS:
                 __print__(dbg.UI, "dblclick")
                 action.browser(self.channel().homepage)            
 
-
-        # reload stream list in current channel-category
+        # Reload stream list in current channel-category
         def on_reload_clicked(self, widget=None, reload=1):
             __print__(dbg.UI, "reload", reload, self.current_channel, self.channels[self.current_channel], self.channel().current)
             category = self.channel().current
@@ -345,30 +333,26 @@ class StreamTunerTwo(gtk.Builder):
                 lambda: (  self.channel().load(category,reload), reload and self.bookmarks.heuristic_update(self.current_channel,category)  )
             )
 
-            
-        # thread a function, add to worker pool (for utilizing stop button)
+        # Thread a function, add to worker pool (for utilizing stop button)
         def thread(self, target, *args):
             thread = Thread(target=target, args=args)
             thread.start()
             self.working.append(thread)
 
-
-        # stop reload/update threads
+        # Stop reload/update threads
         def on_stop_clicked(self, widget):
             while self.working:
                 thread = self.working.pop()
                 thread.stop()
 
-        
-        # click in category list
+        # Click in category list
         def on_category_clicked(self, widget, event, *more):
             category = self.channel().currentcat()
             __print__(dbg.UI, "on_category_clicked", category, self.current_channel)
             self.on_reload_clicked(None, reload=0)
             pass
 
-
-        # add current selection to bookmark store
+        # Add current selection to bookmark store
         def bookmark(self, widget):
             self.bookmarks.add(self.row())
             # code to update current list (set icon just in on-screen liststore, it would be updated with next display() anyhow - and there's no need to invalidate the ls cache, because that's referenced by model anyhow)
@@ -380,19 +364,16 @@ class StreamTunerTwo(gtk.Builder):
             # refresh bookmarks tab
             self.bookmarks.load(self.bookmarks.default)
 
-
-        # reload category tree
+        # Reload category tree
         def update_categories(self, widget):
             Thread(target=self.channel().reload_categories).start()
-            
 
-        # menu invocation: refresh favicons for all stations in current streams category
+        # Menu invocation: refresh favicons for all stations in current streams category
         def update_favicons(self, widget):
             entries = self.channel().stations()
             favicon.download_all(entries)
 
-
-        # save a file            
+        # Save stream to file (.m3u)
         def save_as(self, widget):
             row = self.row()
             default_fn = row["title"] + ".m3u"
@@ -401,23 +382,24 @@ class StreamTunerTwo(gtk.Builder):
                 action.save(row, fn)
             pass
 
-
-        # save current stream URL into clipboard
+        # Save current stream URL into clipboard
         def menu_copy(self, w):
             gtk.clipboard_get().set_text(self.selected("url"))
 
-
-        # remove an entry
+        # Remove a stream entry
         def delete_entry(self, w):
             n = self.rowno()
             del self.channel().stations()[ n ]
             self.channel().switch()
             self.channel().save()
 
-
-        # stream right click
+        # Richt clicking a stream opens an action content menu
         def station_context_menu(self, treeview, event):
             return station_context_menu(treeview, event) # wrapper to the static function
+
+        # Alternative Notebook channel tabs between TOP and LEFT position
+        def switch_notebook_tabs_position(self, w, pos):
+            self.notebook_channels.set_tab_pos(pos);
             
 
 

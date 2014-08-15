@@ -1898,6 +1898,42 @@ Plugins</property>
               <placeholder/>
             </child>
             <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
               <object class="GtkEntry" id="timer_value">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -1912,6 +1948,12 @@ Plugins</property>
                 <property name="top_attach">1</property>
                 <property name="bottom_attach">2</property>
               </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
             </child>
             <child>
               <placeholder/>
@@ -2636,6 +2678,56 @@ Plugins</property>
                                         <property name="label" translatable="yes">Large</property>
                                         <property name="use_underline">True</property>
                                         <signal name="activate" handler="menu_toolbar_size_large" swapped="no"/>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkMenuItem" id="menu_entry_switch_channel_tabs">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">Channel tab position</property>
+                                <property name="use_underline">True</property>
+                                <child type="submenu">
+                                  <object class="GtkMenu" id="menu4">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <child>
+                                      <object class="GtkMenuItem" id="menu_entry_switch_channel_tabs1">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">Top</property>
+                                        <property name="use_underline">True</property>
+                                        <signal name="activate" handler="menu_notebook_pos_top" swapped="no"/>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkMenuItem" id="menu_entry_switch_channel_tabs2">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">Left</property>
+                                        <property name="use_underline">True</property>
+                                        <signal name="activate" handler="menu_notebook_pos_left" swapped="no"/>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkMenuItem" id="menu_entry_switch_channel_tabs3">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">Bottom</property>
+                                        <property name="use_underline">True</property>
+                                        <signal name="activate" handler="menu_notebook_pos_bottom" swapped="no"/>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkMenuItem" id="menu_entry_switch_channel_tabs4">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">Right</property>
+                                        <property name="use_underline">True</property>
+                                        <signal name="activate" handler="menu_notebook_pos_right" swapped="no"/>
                                       </object>
                                     </child>
                                   </object>

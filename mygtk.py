@@ -301,8 +301,11 @@ class mygtk:
                 # gtk.Notebook
                 if t == gtk.Notebook:
                     r[wn]["page"] = w.get_current_page()
+                    r[wn]["tab_pos"] = int(w.get_tab_pos())
             #print(r)
             return r
+
+        gtk_position_type_enum = [gtk.POS_LEFT, gtk.POS_RIGHT, gtk.POS_TOP, gtk.POS_BOTTOM]
 
 
         #-- restore window and widget properties
@@ -341,6 +344,8 @@ class mygtk:
                     # gtk.Notebook
                     if method == "page":
                         w.set_current_page(args)
+                    if method == "tab_pos":
+                        w.set_tab_pos(r[wn]["tab_pos"])
 
             pass
 
