@@ -6,10 +6,10 @@ NAME=streamtuner2
 VERSION=$(version --get:plugin st2.py --write:python st2.py)
 
 #-- bundle
-#fpm -s src -t deb -p "$NAME-$VERSION.deb" --prefix=/usr --deb-compression xz --deb-sign include-once -f st2.py
-#fpm -s src -t rpm -p "$NAME-$VERSION.rpm" --prefix=/usr --rpm-compression xz -f st2.py
-#fpm -s src -t exe -p "$NAME-$VERSION.exe" --prefix=c:/usr/ --exe-autoextract -f st2.py
-fpm -s src -t tar -p "$NAME-$VERSION.bin.tar.xz" --prefix=/usr/local --verbose -f st2.py
+fpm -s src -t deb -p "$NAME-$VERSION.deb" --prefix=/usr/share/streamtuner2 --deb-compression xz -f st2.py
+#fpm -s src -t rpm -p "$NAME-$VERSION.rpm" --prefix=/usr/share/streamtuner2 --rpm-compression xz -f st2.py
+#fpm -s src -t exe -p "$NAME-$VERSION.exe" --prefix=c:/usr/share/streamtuner2 --exe-autoextract -f st2.py
+#fpm -s src -t tar -p "$NAME-$VERSION.bin.tar.xz" --prefix=/usr/local/share/streamtuner2 --verbose -f st2.py
 exit
 
 #dpkg-deb -I streamtuner2*deb

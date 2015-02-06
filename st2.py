@@ -4,14 +4,28 @@
 # type: application
 # title: streamtuner2
 # description: Directory browser for internet radio / audio streams
-# depends: pygtk | pygi, threading, pyquery, kronos, requests
-# version: 2.1.3
+# depends: pygtk | pygi, threading, pyquery, python-lxml, requests
+# version: 2.1.3-3
 # author: mario salzer
 # license: public domain
 # url: http://freshcode.club/projects/streamtuner2
 # config: <env name="http_proxy" value="" description="proxy for HTTP access" />  <env name="XDG_CONFIG_HOME" description="relocates user .config subdirectory" />
 # category: multimedia
-# 
+# id: streamtuner2
+# pack:
+#   gtk*.xml,
+#   *.py,
+#   st2.py=/usr/bin/streamtuner2,
+#   channels/__init__.py,
+#   bundle,
+#   streamtuner2.desktop=/usr/share/applications/,
+#   README=/usr/share/doc/streamtuner2/,
+#   help/streamtuner2.1=/usr/share/man/man1/,
+#   help=/usr/share/doc/streamtuner2/,
+#   streamtuner2.png,
+#   logo.png=/usr/share/pixmaps/streamtuner2.png,
+# epoch:
+# architecture: all
 #
 #
 # Streamtuner2 is a GUI browser for internet radio directories. Various
@@ -20,14 +34,11 @@
 # playing and streamripper for recording broadcasts.
 #
 # It's an independent rewrite of streamtuner1 in a scripting language. So
-# it can be more easily extended and fixed. The use of PyQuery for HTML
-# parsing makes this simpler and more robust.
+# it can be more easily extended and fixed. The mix of JSON APIs, regex
+# or PyQuery extraction simplifies processing many sources.
 #
-# Stream lists are stored in JSON cache files.
-#
-#
-#
-
+# Primarily radio stations are displayed, some channels however are music
+# collections. Commercial and sign-up services are not the target purpose.
 
 """ project status """
 #
@@ -58,9 +69,7 @@
 #   - HIGH RISK: no verification of downloaded favicon image files (ico/png),
 #     as they are passed to gtk.gdk.Pixbuf (OTOH data pre-filtered by Google)
 #   - MEDIUM: audio players / decoders are easily affected by buffer overflows
-#     from corrupt mp3/stream data, and streamtuner2 executes them
-#      - but since that's the purpose -> no workaround
-#
+#     from corrupt mp3/stream data, and streamtuner2 just passes them on
 
 
 
@@ -96,7 +105,7 @@ from channels import *
 import favicon
 
 
-__version__ = "2.1.3"
+__version__ = "2.1.3-3"
 
 
 # this represents the main window
