@@ -28,7 +28,7 @@
     <property name="title" translatable="yes">streamtuner settings</property>
     <property name="window_position">center</property>
     <property name="destroy_with_parent">True</property>
-    <property name="icon">/usr/share/pixmaps/streamtuner2.png</property>
+    <property name="icon">/usr/share/streamtuner2/streamtuner2.png</property>
     <signal name="delete-event" handler="config_cancel" swapped="no"/>
     <child>
       <object class="GtkFrame" id="frame1">
