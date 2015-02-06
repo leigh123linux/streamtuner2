@@ -122,6 +122,9 @@ class dirble (ChannelPlugin):
             r = json.loads(j);
         except:
             r = []
+        if len(r) and "errormsg" in r[0]:
+          __print__(dbg.ERR, r[0]["errormsg"]) 
+          r = []
         return r
 
 
