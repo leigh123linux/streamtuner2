@@ -4,7 +4,7 @@
 # description: Broad list of webradios from all genres.
 # type: channel
 # category: radio
-# version: 1.1
+# version: 1.2
 # priority: standard
 #
 # Internet-Radio.co.uk/.com is one of the largest directories of streams.
@@ -110,47 +110,6 @@ class internet_radio (ChannelPlugin):
         # fin
         return entries
 
-    # Normal
-    """
-    """
-    # Variation
-    """
-    <tr><td width="74"> <div id="jquery_jplayer_19" class="jp-jplayer"></div>
-	<div id="jp_container_19" class="jp-audio-stream" role="application" aria-label="media player">
-		<div class="jp-type-single">
-			<div class="jp-gui jp-interface">
-				<div class="jp-controls">
-					<i onClick="ga('send', 'event', 'tunein', 'playjp', 'http://softrockradio.purestream.net:8032/listen.pls');" style="font-size: 60px;" class="jp-play text-danger mdi-av-play-circle-outline"></i>
-					<i style="font-size: 60px;" class="jp-pause text-danger mdi-av-pause-circle-outline"></i>
-			</div>	</div>
-			<div class="jp-no-solution text-center">
-				<small><a href="http://get.adobe.com/flashplayer/" target="_blank">Flash Required</a></small>
-	</div></div>
-        <div id="volume19" class="text-center" style="visibility: hidden;">
-                    <span class="jp-current-time"></span>
-                    <div class="jp-volume-bar progress" style="margin:0;">
-                            <div class="jp-volume-bar-value progress-bar active progress-bar-striped progress-bar-danger"></div>
-        </div>	</div>
-	</div>	</td>	<td>
-				<h4 class="text-danger" style="display: inline;">SoftRockRadio.net - Classic Soft Rock  (Soft Rock Radio)</h4>
-				<br>
-				<b>Kenny Loggins - Heart To Heart</b><br>
-				<a onClick="ga('send', 'event', 'externallink', 'listing', 'http://www.softrockradio.net');" class="small text-success" href="http://www.softrockradio.net" target="_blank">http://www.softrockradio.net</a>
-				<br>Genres: <a onClick="ga('send', 'event', 'genreclick', 'stationlisting', '70s');" href="/stations/70s/">70s</a> 80s <a onClick="ga('send', 'event', 'genreclick', 'stationlisting', 'classic rock');" href="/stations/classic rock/">classic rock</a><!--
-				<br><samp>19 http://softrockradio.purestream.net:8032/listen.pls shoutcast1 audio/mpeg</samp>
-				<div id="jplayer_inspector_19"></div>-->
-			</td>
-			<td width="120" class="text-right hidden-xs">
-				<p>
-              			139 Listeners<br>
-				 128 Kbps<br>
-				</p>
-				<a style="margin:1px" class="btn btn-default btn-xs" onClick="ga('send', 'event', 'tunein', 'playpls', 'http://softrockradio.purestream.net:8032/listen.pls');" href="/servers/tools/playlistgenerator/?u=http://softrockradio.purestream.net:8032/listen.pls&amp;t=.pls">PLS</a>
-				<a style="margin:1px" class="btn btn-default btn-xs" onClick="ga('send', 'event', 'tunein', 'playm3u', 'http://softrockradio.purestream.net:8032/listen.pls');" href="/servers/tools/playlistgenerator/?u=http://softrockradio.purestream.net:8032/listen.pls&amp;t=.m3u">M3U</a>
-				<a style="margin:1px" class="btn btn-default btn-xs" onClick="ga('send', 'event', 'tunein', 'playram', 'http://softrockradio.purestream.net:8032/listen.pls');" href="/servers/tools/playlistgenerator/?u=http://softrockradio.purestream.net:8032/listen.pls&amp;t=.ram">RAM</a>
-				<a style="margin:1px" class="btn btn-default btn-xs" onClick="window.open('/player/?mount=http://softrockradio.purestream.net:8032/listen.pls&amp;title=SoftRockRadio.net - Classic Soft Rock  (Soft Rock Radio)&amp;website=http://www.softrockradio.net','_blank','width=360,height=470'); ga('send', 'event', 'tunein', 'playpopup', 'http://softrockradio.purestream.net:8032/listen.pls');" href="#">FLA</a>
-    </td></tr>
-    """
 
     # Regex extraction
     def with_regex(self, html):
@@ -163,7 +122,7 @@ class internet_radio (ChannelPlugin):
         rx_data = re.compile(r"""
                playjp',\s*'(https?://[^'">]+)
                .*?   <h4.*?>([^<>]+)</
-               .*?   <b>([^<>]+)</b>
+               .*?   <b>([^<>]*)</b>
          (?:   .*?   href="(.*?)"        )?
          (?:   .*?   Genres:((?:</?a[^>]+>|\w+|\s+)+)    )?
                .*?   (\d+)\s*Listeners
@@ -201,20 +160,32 @@ class internet_radio (ChannelPlugin):
         for html in html_list:
             # the streams are arranged in table rows
             doc = pq(html)
-            for dir in (pq(e) for e in doc("tr.stream")):
+            for dir in (pq(e) for e in doc("tr")):
                 
-                bl = dir.find("td[align=right]").text()
+                # bitrate/listeners
+                bl = dir.find("p").text()
                 bl = rx_numbers.findall(str(bl) + " 0 0")
                 
+                # stream url
+                url = dir.find("i").eq(0).attr("onclick")
+                if url:
+                    url = re.search("(http://[^\'\"\>]+)", url)
+                    if url:
+                        url = url.group(0)
+                    else:
+                        url = ""
+                else:
+                    url = ""
+                
                 r.append({
-                    "title": dir.find("b").text(),
-                    "homepage": http.fix_url(dir.find("a.url").attr("href")),
-                    "url": dir.find("a").eq(2).attr("href"),
-                    "genre": dir.find("td").eq(0).text(),
-                    "bitrate": int(bl[0]),
-                    "listeners": int(bl[1]),
+                    "title": dir.find("h4").text(),
+                    "homepage": http.fix_url(dir.find("a.small").attr("href")),
+                    "url": url,
+                    "genre": dir.find("a[href^='/stations/']").text(),
+                    "listeners": int(bl[0]),
+                    "bitrate": int(bl[1]),
                     "format": "audio/mpeg",
-                    "playing": dir.find("td").eq(1).children().remove().end().text()[13:].strip(),
+                    "playing": dir.find("b").text(),
                 })
         return r
             
