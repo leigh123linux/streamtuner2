@@ -110,84 +110,46 @@ class internet_radio (ChannelPlugin):
         # fin
         return entries
 
-    # Advertised 
-    """
-    <tr valign="top" class="stream">
-    <td class="listing1" width="120" align="center">
-    <a onClick="return popitup('/player/?mount=http://uk2.internet-radio.com:31076/listen.pls&amp;title=Box Uk Radio Danceradiouk&amp;website=http://danceradiouk.com ')"
-       href="/player/?mount=http://uk2.internet-radio.com:31076/listen.pls&amp;title=Box Uk Radio Danceradiouk&amp;website=http://danceradiouk.com ">
-       <img style="margin-right: 6px;" src="/images/blank.gif" class="sprite sprite-flash" alt="Flash Player"></a>
-       <a onClick="_gaq.push(['_trackEvent', 'TuneIn', 'Play - M3U', 'http://uk2.internet-radio.com:31076/listen.pls']);"
-       href="http://servers.internet-radio.com/tools/playlistgenerator/?u=http://uk2.internet-radio.com:31076/listen.pls&amp;t=.m3u">
-       <img style="margin-right: 6px;" src="/images/blank.gif" class="sprite sprite-wmp" alt="Windows Media Player"></a>
-       <a onClick="_gaq.push(['_trackEvent', 'TuneIn', 'Play - PLS', 'http://uk2.internet-radio.com:31076/listen.pls']);"
-       href="http://servers.internet-radio.com/tools/playlistgenerator/?u=http://uk2.internet-radio.com:31076/listen.pls&amp;t=.pls">
-       <img style="margin-right: 6px;" src="/images/blank.gif" class="sprite sprite-winamp" alt="Winamp">
-       <img style="margin-right: 6px;" src="/images/blank.gif" class="sprite sprite-itunes" alt="iTunes"></a>
-       <a onClick="_gaq.push(['_trackEvent', 'TuneIn', 'Play - RAM', 'http://uk2.internet-radio.com:31076/listen.pls']);"
-       href="http://servers.internet-radio.com/tools/playlistgenerator/?u=http://uk2.internet-radio.com:31076/listen.pls&amp;t=.ram">
-       <img src="/images/blank.gif" class="sprite sprite-realplayer" alt="Realplayer"></a><br>
-       <div style="margin-top: 10px;"><a href="/stations/80s/">80s</a> <a href="/stations/90s/">90s</a> 00s <a href="/stations/rock/">Rock</a> <a href="/stations/disco/">Disco</a> <a href="/stations/pop/">Pop</a> </div></td>
-    <td class="listing2" ><img src="/images/icons/award_star_silver_1.png" alt="Featured" width="16" height="16">
-       <a href="/station/danceradioukchatbox/" style="font-weight:bold;">Box Uk Radio Danceradiouk</a>
-    <br>Bow Wow Wow - I Want Candy
-    <br><a onClick="_gaq.push(['_trackEvent','Link', 'Station Link', 'http://danceradiouk.com ']);"
-       class="url" href="http://danceradiouk.com " title="Box Uk Radio Danceradiouk" target="_blank">http://danceradiouk.com </a>
-    </td><td class="listing1" align="right" width="100">
-    128 Kbps<br>22 Listeners<br>
-    <img src="/images/blank.gif" class="sprite sprite-de" alt="Germany"><img src="/images/blank.gif" class="sprite sprite-cy" alt="Cyprus">
-    <img src="/images/blank.gif" class="sprite sprite-se" alt="Sweden"><img src="/images/blank.gif" class="sprite sprite-gb" alt="United Kingdom">
-    <img src="/images/blank.gif" class="sprite sprite-rw" alt="Rwanda"><img src="/images/blank.gif" class="sprite sprite-mx" alt="Mexico">
-    <img src="/images/blank.gif" class="sprite sprite-ru" alt="Russian Federation"><img src="/images/blank.gif" class="sprite sprite-si" alt="Slovenia">
-    <img src="/images/blank.gif" class="sprite sprite-ca" alt="Canada"><img src="/images/blank.gif" class="sprite sprite-tt" alt="Trinidad and Tobago">
-    <img src="/images/blank.gif" class="sprite sprite-ch" alt="Switzerland"><img src="/images/blank.gif" class="sprite sprite-hu" alt="Hungary">
-    <img src="/images/blank.gif" class="sprite sprite-lt" alt="Lithuania">
-    </td></tr>
-    """
     # Normal
     """
-    <tr valign="top" class="stream">
-    <td class="listing1" width="120" align="center">
-    <img style="margin-right: 6px;" src="/images/icons/blank.png" alt="Blank">
-    <a onClick="_gaq.push(['_trackEvent', 'TuneIn', 'Play - M3U', 'http://80.86.106.136:80/listen.pls']);"
-       href="http://servers.internet-radio.com/tools/playlistgenerator/?u=http://80.86.106.136:80/listen.pls&amp;t=.m3u">
-       <img style="margin-right: 6px;" src="/images/blank.gif" class="sprite sprite-wmp" alt="Windows Media Player"></a>
-       <a onClick="_gaq.push(['_trackEvent', 'TuneIn', 'Play - PLS', 'http://80.86.106.136:80/listen.pls']);"
-       href="http://servers.internet-radio.com/tools/playlistgenerator/?u=http://80.86.106.136:80/listen.pls&amp;t=.pls">
-       <img style="margin-right: 6px;" src="/images/blank.gif" class="sprite sprite-winamp" alt="Winamp">
-       <img style="margin-right: 6px;" src="/images/blank.gif" class="sprite sprite-itunes" alt="iTunes"></a>
-       <a onClick="_gaq.push(['_trackEvent', 'TuneIn', 'Play - RAM', 'http://80.86.106.136:80/listen.pls']);"
-       href="http://servers.internet-radio.com/tools/playlistgenerator/?u=http://80.86.106.136:80/listen.pls&amp;t=.ram">
-       <img src="/images/blank.gif" class="sprite sprite-realplayer" alt="Realplayer"></a>
-       <br><div style="margin-top: 10px;">Top 40 </div></td>
-    <td class="listing2" ><img src="/images/icons/award_star_bronze_1.png" alt="Recommended" width="16" height="16">
-       <a href="/station/kissfmromania/" style="font-weight:bold;">KissFM Romania - www.kissfm.ro</a>
-    ---ALTERNATIVELY--- <span style="color: #c00;"><b> TDI Radio MP3 48kbps</b></span>
-    <br><a onClick="_gaq.push(['_trackEvent','Link', 'Station Link', 'http://www.kissfm.ro']);"
-       class="url" href="http://www.kissfm.ro" title="KissFM Romania - www.kissfm.ro" target="_blank">http://www.kissfm.ro</a>
-    </td><td class="listing1" align="right" width="100">
-    32 Kbps<br>5716 Listeners<br>
-    </td></tr>
     """
     # Variation
     """
-    <td class="listing1" width="120" align="center">
-    <img style="margin-right: 6px;" src="/images/icons/blank.png" alt="Blank">
-      <a onClick="_gaq.push(['_trackEvent', 'TuneIn', 'Play - M3U', 'http://colostreaming.com:8092/listen.pls']);"
-       href="http://servers.internet-radio.com/tools/playlistgenerator/?u=http://colostreaming.com:8092/listen.pls&amp;t=.m3u">
-      <img style="margin-right: 6px;" src="/images/blank.gif" class="sprite sprite-wmp" alt="Windows Media Player"></a>
-      <a onClick="_gaq.push(['_trackEvent', 'TuneIn', 'Play - PLS', 'http://colostreaming.com:8092/listen.pls']);" 
-      href="http://servers.internet-radio.com/tools/playlistgenerator/?u=http://colostreaming.com:8092/listen.pls&amp;t=.pls">
-      <img style="margin-right: 6px;" src="/images/blank.gif" class="sprite sprite-winamp" alt="Winamp"><img style="margin-right: 6px;" src="/images/blank.gif" class="sprite sprite-itunes" alt="iTunes"></a>
-      <a onClick="_gaq.push(['_trackEvent', 'TuneIn', 'Play - RAM', 'http://colostreaming.com:8092/listen.pls']);" href="http://servers.internet-radio.com/tools/playlistgenerator/?u=http://colostreaming.com:8092/listen.pls&amp;t=.ram"><img src="/images/blank.gif" class="sprite sprite-realplayer" alt="Realplayer"></a>
-    <br><div style="margin-top: 10px;">Poprock <a href="/stations/dance/">Dance</a> 50s Various </div></td>
-    <td class="listing2" ><img src="/images/icons/award_star_bronze_1.png" alt="Recommended" width="16" height="16">
-      <span style="color: #c00;"><b> Jack and Jill Radio Pop Rock Dance 50s Big Band Classical Country Folk Jazz Blue</b></span>
-    <br>Vince Gill - When Love Finds You - (Album)When Love Finds You - 1994 Countr
-    <br><a onClick="_gaq.push(['_trackEvent','Link', 'Station Link', 'http://www.jackandjillradio.com']);"
-     class="url" href="http://www.jackandjillradio.com" title="Jack and Jill Radio Pop Rock Dance 50s Big Band Classical Country Folk Jazz Blues Its All Here!" target="_blank">http://www.jackandjillradio.com</a>
-    </td><td class="listing1" align="right" width="100">
-    24 Kbps<br></td>
+    <tr><td width="74"> <div id="jquery_jplayer_19" class="jp-jplayer"></div>
+	<div id="jp_container_19" class="jp-audio-stream" role="application" aria-label="media player">
+		<div class="jp-type-single">
+			<div class="jp-gui jp-interface">
+				<div class="jp-controls">
+					<i onClick="ga('send', 'event', 'tunein', 'playjp', 'http://softrockradio.purestream.net:8032/listen.pls');" style="font-size: 60px;" class="jp-play text-danger mdi-av-play-circle-outline"></i>
+					<i style="font-size: 60px;" class="jp-pause text-danger mdi-av-pause-circle-outline"></i>
+			</div>	</div>
+			<div class="jp-no-solution text-center">
+				<small><a href="http://get.adobe.com/flashplayer/" target="_blank">Flash Required</a></small>
+	</div></div>
+        <div id="volume19" class="text-center" style="visibility: hidden;">
+                    <span class="jp-current-time"></span>
+                    <div class="jp-volume-bar progress" style="margin:0;">
+                            <div class="jp-volume-bar-value progress-bar active progress-bar-striped progress-bar-danger"></div>
+        </div>	</div>
+	</div>	</td>	<td>
+				<h4 class="text-danger" style="display: inline;">SoftRockRadio.net - Classic Soft Rock  (Soft Rock Radio)</h4>
+				<br>
+				<b>Kenny Loggins - Heart To Heart</b><br>
+				<a onClick="ga('send', 'event', 'externallink', 'listing', 'http://www.softrockradio.net');" class="small text-success" href="http://www.softrockradio.net" target="_blank">http://www.softrockradio.net</a>
+				<br>Genres: <a onClick="ga('send', 'event', 'genreclick', 'stationlisting', '70s');" href="/stations/70s/">70s</a> 80s <a onClick="ga('send', 'event', 'genreclick', 'stationlisting', 'classic rock');" href="/stations/classic rock/">classic rock</a><!--
+				<br><samp>19 http://softrockradio.purestream.net:8032/listen.pls shoutcast1 audio/mpeg</samp>
+				<div id="jplayer_inspector_19"></div>-->
+			</td>
+			<td width="120" class="text-right hidden-xs">
+				<p>
+              			139 Listeners<br>
+				 128 Kbps<br>
+				</p>
+				<a style="margin:1px" class="btn btn-default btn-xs" onClick="ga('send', 'event', 'tunein', 'playpls', 'http://softrockradio.purestream.net:8032/listen.pls');" href="/servers/tools/playlistgenerator/?u=http://softrockradio.purestream.net:8032/listen.pls&amp;t=.pls">PLS</a>
+				<a style="margin:1px" class="btn btn-default btn-xs" onClick="ga('send', 'event', 'tunein', 'playm3u', 'http://softrockradio.purestream.net:8032/listen.pls');" href="/servers/tools/playlistgenerator/?u=http://softrockradio.purestream.net:8032/listen.pls&amp;t=.m3u">M3U</a>
+				<a style="margin:1px" class="btn btn-default btn-xs" onClick="ga('send', 'event', 'tunein', 'playram', 'http://softrockradio.purestream.net:8032/listen.pls');" href="/servers/tools/playlistgenerator/?u=http://softrockradio.purestream.net:8032/listen.pls&amp;t=.ram">RAM</a>
+				<a style="margin:1px" class="btn btn-default btn-xs" onClick="window.open('/player/?mount=http://softrockradio.purestream.net:8032/listen.pls&amp;title=SoftRockRadio.net - Classic Soft Rock  (Soft Rock Radio)&amp;website=http://www.softrockradio.net','_blank','width=360,height=470'); ga('send', 'event', 'tunein', 'playpopup', 'http://softrockradio.purestream.net:8032/listen.pls');" href="#">FLA</a>
+    </td></tr>
     """
 
     # Regex extraction
@@ -199,24 +161,13 @@ class internet_radio (ChannelPlugin):
         # Break up into <tr> blocks before extracting bits
         rx_tr = re.compile("""<tr[^>]*>(.+?)</tr>""", re.S)
         rx_data = re.compile(r"""
-               \?u=(https?://[^'">]+/listen\.pls)       
-               .*?
-               <div[^>]+10px[^>]+>(.+?)</div>           
-               .*?
-               listing2
-               .*?
-               (?:href="/station/[^>]+> | <b>) ([^<>]+) </[ab]>
-               (?:\s*</span>\s*)*
-               (?:<br>\s*([^<>]+)\s*<br>)?                
-               .*?
-               (?:<a[^>]+class="url"[^>]+href="([^<">]+)")?  
-               .+
-               listing1
-               .*?
-               (?:(\d+)\s+Kbps \s*<br>\s*)?                  
-               (?:(\d+)\s+Listeners)?
-               (?:\s*<br>\s*)?
-               \s*</td>             
+               playjp',\s*'(https?://[^'">]+)
+               .*?   <h4.*?>([^<>]+)</
+               .*?   <b>([^<>]+)</b>
+         (?:   .*?   href="(.*?)"        )?
+         (?:   .*?   Genres:((?:</?a[^>]+>|\w+|\s+)+)    )?
+               .*?   (\d+)\s*Listeners
+               .*?   (\d+)\s*Kbps
         """, re.S|re.X)
 
         for div in rx_tr.findall(html):
@@ -224,7 +175,7 @@ class internet_radio (ChannelPlugin):
                 #__print__(dbg.DATA, len(div))
                 uu = rx_data.search(div)
                 if uu:
-                    (url, genres, title, playing, homepage, bitrate, listeners) = uu.groups()
+                    (url, title, playing, homepage, genres, listeners, bitrate) = uu.groups()
                     
                     # transform data
                     r.append({
