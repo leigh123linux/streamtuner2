@@ -14,11 +14,12 @@
 	files for individual musicians and artists. Tracks and albums can thus be downloaded
 	free of charge. Yeah, imagine that.</p>
 
-        <p>The new Jamendo v3.0 is now utilized. It allows to list albums, playlists, and
-        individual tracks by genre. Radios are a static list.</p>
+        <p>The new Jamendo v3.0 is now utilized. It allows to list albums,
+        playlists, and individual tracks by genre.  The radio list is static
+        (they're looping over randomized songs from each genre.)</p>
 
-        <p>Instead of favicons, streamtuner2 can fetch album or track covers. Thus the images
-        are a bit larger, and retrieving them all via Channel &gt; Load favicons... takes a while
-        longer.</p>
+        <p>Instead of favicons, streamtuner2 can fetch album or track
+        covers.  Thus the images are a bit larger, and retrieving them all
+        via Channel &gt; Load favicons...  takes a while longer.</p>
 
 </page>

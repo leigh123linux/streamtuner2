@@ -9,15 +9,16 @@
 
 	<title>Settings dialog</title>
 
-	<p>There are multiple behaviour options in streamtuner2.
+	<p>There are various options for streamtuner2.
         You can find the settings dialog in the edit menu as "Preferences" (last entry).
         </p>
 
         <terms>
-          <title>It is separated into three main areas.</title>
+          <title>It's separated into three main areas.</title>
           <item>
             <title>Player</title>
-            <p>Lists audio formats and the audio player applications, or recording tools below.</p>
+            <p>Lists audio formats and the audio player applications, or recording tools below.
+            It's a file type to application table. Double click an entry for editing.</p>
           </item>
           <item>
             <title>Options</title>
@@ -39,7 +40,7 @@
 		is just a lower case version of the program title.</p>
 		<p>Behind application names a placeholder can be used. On invocation such placeholders
 		get replaced with an URL (a http://..-Link) or filename for the selected radio stream.</p>
-		<p>It's introduced by a percent sign, and followed by letters. %m3u for example generates a .m3u file,
+		<p>Placeholders are introduced by a percent sign, and followed by letters. %m3u for example generates a .m3u file,
                 which most audio players understand. Otherwise try %pls, which might even be faster because streamtuner2 doesn't
 		have to download and preprocess it. Alternatively %srv instead gives a direct stream link.</p>
 		<p>Catch-all entries like */* or a generic audio/* entry allow to configure a default player.
@@ -65,8 +66,8 @@
 		forgets stations or throws them out. If you keep this option enabled, these entries are kept in
 		streamtuner2. Browse down in the stations list to still see them.</p>
 		<p>It's possible to select a Gtk+ theme. But not all themes work with all Gtk display engines, and
-		not all themes work with streamtuner2. You just have to try it.</p>
-		<p>Remembering window states makes streamtuner2 not forget which channel and category was last
+		not all themes work with streamtuner2. You'll have to try.</p>
+		<p>Remembering window states allows streamtuner2 to reconstruct which channel and category was last
 		selected. You can however disable this option, and instead manually save the window states/layout
 		in the edit menu, if you want.</p>
 		<p>Setting another temporary directory might be useful, if you want to keep the temporary .m3u cache

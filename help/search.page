@@ -22,19 +22,16 @@
 
 	<section id="cachesearch">
 	<title>Search window</title>
-	<p>You can get to the search dialog via <guiseq><gui>Edit</gui> <gui>Find</gui></guiseq> or <key>Ctrl</key>+<key>F</key>. Centrally to this dialog is the
-	text field, where you can specify the phrase to scan for.</p>
 
-	<!--p>Above you can check which channel plugins to inspect for the search term. Using this
-	allows to limit the search to specific radio station directories, but usually you want
-	to search them all.</p>
+	<p>You can get to the search dialog via <guiseq><gui>Edit</gui>
+	<gui>Find</gui></guiseq> or <key>Ctrl</key>+<key>F</key>.  Centrally
+	to this dialog is the text field, where you can specify the phrase
+	to scan for.</p>
 
-	<p>Below the search phrase text box, you can specifiy which station fields to look
-	into. Often you just want to search the titles of radio stations. But you can also
-	have the search occour in the description/playing fields. Alternatively you could
-	just search the homepage links.</p-->
+        <p>It either will search in all channels, or just the last active
+        channel/service.</p>
 
-	<p>And then there are two search methods.  You mostly want to use
+	<p>Then there are two search methods.  You mostly want to use
         the live <gui>Server search</gui>.  It passes your search terms to
         the actual directory services, and loads the most recent data into a
         result list (this might take a few seconds).  It's not implemented

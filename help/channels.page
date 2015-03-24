@@ -9,8 +9,9 @@
 
 	<title>Channels</title>
 
-	<p>The tabs in the main window represent the music directory channels. Each lists
-        categories and streams from a specific radio directory.</p>
+	<p>The tabs in the main window represent the music directory
+        channels/services.  Each lists categories and streams from a
+        specific radio directory/website.</p>
 
 	<media type="image" mime="image/png" src="img/channels.png">Tabs</media>
 
@@ -34,7 +35,7 @@
 
 	<section id="homepage">
 	<title>Channel service homepage</title>
-	<p>You can dobule click the channel tab to view the website of a directory services.
+	<p>You can dobule click the channel tab to visit the channel/directory homepage.
 	Alternatively there is an entry in the <gui>Channel</gui> menu.</p>
 	</section>
 

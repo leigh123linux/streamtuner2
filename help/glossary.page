@@ -25,7 +25,7 @@
 	    data.  MP3 radio music for example is streamed, because it's not
 	    just a time-limited audio file, but unending (unless you stop
 	    the player or paying your ISP).</p>
-	    <p>In streamtuner2 we also use the terms "stream" and radio "station" interchangably.</p>
+	    <p>In streamtuner2 the terms "stream" and radio "station" are used interchangably.</p>
 	  </item>
 
 	  <item>
@@ -36,13 +36,13 @@
 	  </item>
 
 	  <item>
-	    <title>URL</title>
-	    <p>URL stands for "Uniform Resource Locator" and simply means
-	    hyperlinks and web addresses like http://www.example.org/. 
-	    There is also the hipster term "URI", which is technically more
-	    general (but superseeded by "IRI" and "IRL" anyway).  In
-	    streamtuner2 the audio streaming link often is an URL, as is the
-	    radio station homepage of course.</p>
+	    <title>URL</title> <p>URL stands for "Uniform Resource Locator"
+	    and simply means hyperlinks and web addresses like
+	    http://www.example.org/.  There is also the hipster term "URI",
+	    which is technically more general (but superseeded by "IRI" and
+	    "IRL" anyway).  In streamtuner2 the audio streaming link often
+	    is an URL, as is the radio station homepage of course.  (ISBN or
+	    Mailto URIs don't make much sense for either.)</p>
 	  </item>
 
 	  <item>
@@ -52,12 +52,10 @@
 	  </item>
 
 	  <item>
-	    <title>Favicons</title>
-	    <p>Favicons are small symbols for websites. Every website has one.
-	    Or should have. As it makes it easier to associate content with
-	    homepage addresses. (ST2 downloads favicons either per menu command
-	    or automatically for the current station once you hit play.)
-   	    </p>
+	    <title>Favicons</title> <p>Favicons are small symbols for
+	    websites.  Most website should have one.  (ST2 downloads
+	    favicons either per menu command or automatically for the
+	    current station once you hit play.) </p>
 	  </item>
 
 	  <item>
@@ -94,7 +92,8 @@
 	    <p>For classification of web and email content, two-factor descriptions like
 	    "audio/ogg" are advised. These are called Multipurpose Internet Mail Extension
             types, and are used on the web in lieu of file extensions (which URL resources don't have).
-            Note that ST2 uses the MP3 type wrong; it's officially audio/mpeg, and not audio/mp3 as shown in the settings window.</p>
+            Note that ST2 uses the MP3 type wrong; it's officially
+            audio/mpeg, and not audio/mp3 as shown in the settings window.</p>
 	  </item>
 
 	  <item>
@@ -102,7 +101,7 @@
 	    <p>Audio streams are compressed with exactness loss. This can be heard
 	    at lower "bitrates". For MP3 files any music with less than 100 kbit/s
 	    starts to hiss, while OGG Vorbis still sounds okay at a datarate of
-	    for example 64 kbit/s. So while bitrate basically means file size per duration,
+	    e.g. 64 kbit per second. So while bitrate basically means file size per duration,
 	    it's commonly used as quality indicator.</p>
 	  </item>
 

@@ -11,7 +11,7 @@
 
 	<p>Streamtuner2 is a simple browser for internet radios. It aquires its radio lists
 	from various directory services. These are represented as "channel" tabs in the main
-	window. Below are the category/genre lists (left) and the stations for a genre (right).</p>
+	window. Below are the category/genre lists (left) and all stations for a genre (right).</p>
 
 	<media src="img/mainwindow2.svg" type="image" mime="image/svg+xml" />
 
@@ -24,10 +24,7 @@
 		<item><p>Double click one of the radio streams or use the <key>play</key> toolbar button.</p></item>
 	</steps>
 	<p>Note that some categories can and should be exanded. In a few plugins (modarchive),
-	the expandable genre/category brings up no station list on its own, while in Shoutcast
-	and most others it's a valid genre in itself.</p>
-	<p>Some radio stations cannot be played, because they just have a homepage. (That's the
-	case for all listings in the Google Stations channel.)</p>
+	the grouping genre/categories are empty, while in other channels they're valid genres themselves.</p>
 	</section>
 
 	<section id="actions">

@@ -15,9 +15,11 @@
         It also hosts a list of ICEcast streaming stations (ICEcast is the non-commercial pendant
         to the SHOUTcast server.)</p>
 
-        <p>This channel is especially easy to read by Streamtuner2, because the source data is already
-        provided as &lt;XML&gt; file. However, it lacks some essential informations like station
-        homepages and listener numbers.</p>
+        <p>This channel is somehwat easy to read for Streamtuner2, because the source data is already
+        provided as &lt;XML&gt; file. (Internally we're using a caching service, which pre-converts
+        that into JSON lists. The Xiph-org JSON API isn't really working yet).</p>
+
+        <p>However, it lacks some essential informations like station homepages and listener numbers.</p>
 
         <p>Xiph also uses the .xspf format, instead of .pls stream links</p>
 
@@ -28,8 +30,8 @@
     <title><code>Filter by minimum bitrate</code></title>
     <p>The bitrate of an audio stream determines the music quality. Many Xiph streams have simple
     and low quality microphone sources. To filter these out, and only leave high quality music
-    stations, you can therefore set this option. OGG starts to sound good with 128 kbit/s (whereas
-    MP3 often requires 192 at least).</p>
+    stations, you can therefore set this option. OGG starts to sound well with 96 kbit/s (whereas
+    MP3 often requires 148 or 192 at least).</p>
   </item>
 </terms>
 

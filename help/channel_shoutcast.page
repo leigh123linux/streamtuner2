@@ -19,7 +19,7 @@
 		<item><p>Station entries usually provide current playing information.</p></item>
 		<item><p>Stream links are plain PLS files.</p></item>
 		<item><p>Genres are subcategorized, so the main groups in the category
-		list must often be expanded to see the interesting entries.</p></item>
+		list must be expanded to see the interesting entries.</p></item>
         </list>
 
         <p>Since being sold from AOL to Radionomy, the directory got cut down. There are no longer
@@ -32,11 +32,6 @@
     <title><code>PyQuery parsing</code></title>
     <p>Uses an XML parser to extract station data from within HTML &lt;tags&gt; of the shoutcast.com site. This is
     slower, but often more reliable than regular expressions, which look for plain text markers.</p>
-  </item>
-  <item>
-    <title><code>debug output</code></title>
-    <p>Prints verbose messages to the console. This option is used while developing extensions for Streamtuner2.
-    And it actually ought to be a global option by now.</p>
   </item>
 </terms>
 

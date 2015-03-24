@@ -30,8 +30,8 @@
     <title><code>My Channels</code></title>
     <p>You can edit the list of YT channel names to fetch some of your favourite artists/uploaders.
     To apply this setting, and have new categories show up in the genre pane, use
-    <guiseq><gui>Channel</gui> <gui>Update category tree</gui></guiseq> first.
-    </p>
+    <guiseq><gui>Channel</gui> <gui>Update category tree</gui></guiseq> first.</p>
+    <p>It's not an exact map, but utilizes the search function to find channels.</p>
   </item>
 </terms>
 

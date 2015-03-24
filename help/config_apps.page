@@ -29,8 +29,8 @@
 	<p>Some audio players open a second instance when you actually want to switch radios.
 	In this case it's a common workaround to write <code>pkill vlc ; vlc %u</code> instead,
 	which ends the previous player process and starts it anew.
-        For VLC there's however also the option <code>--one-instance</code>, which sometimes
-        works better.</p>
+        For VLC there's however also the <code>--one-instance</code> option, which sometimes
+        works better. (And sometimes not.)</p>
 
 	<p>Some applications, like Rhythmbox or Banshee, are primarily audio browsers, not players,
         and cannot be invoked with a play URL by other apps. This makes them less suitable for use with
@@ -38,16 +38,21 @@
 
 	<section id="abbr">
 	<title>URL placeholders</title>
-	<p>Any listed application can be invoked with a different kind of URL or filename.be invoked with a play URL by other apps.
-	Which to use often depends on the application.</p>
+
+	<p>Any listed application can be invoked with a different kind of
+	URL or filename.be invoked with a play URL by other apps.  Which to
+	use often depends on the application.</p>
+
 	<table shade="rows" rules="rows cols">
 		<tr><td>Placeholder</td><td>Alternatives</td><td>URL/Filename type</td></tr>
 		<tr><td>%m3u</td><td>%f %g %m</td><td>Provides a local .m3u file for the streaming station</td></tr>
 		<tr><td>%pls</td><td>%url %u %r</td><td>Either a remote .pls resource, or a local .pls file (if converted)</td></tr>
 		<tr><td>%srv</td><td>%d %s</td><td>Direct link to first streaming address, e.g. http://72.5.9.33:7500</td></tr>
 	</table>
-	<p>You sould preferrably use the long forms. Most audio players like %m3u most, while
-	streamripper needs %srv for recording.</p>
+
+	<p>You sould preferrably use the long forms. Most audio players like
+	%m3u most, while streamripper needs %srv for recording.</p>
+
 	</section>
 
 </page>

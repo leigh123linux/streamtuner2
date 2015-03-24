@@ -22,7 +22,7 @@
           <item>
             <title><code>streamtuner2 play "station"</code></title>
             <p>This command looks through all channel plugins, and finds a station containing the
-	    mentioned title. In the shell you must put the station title in quotes, if it contains
+	    mentioned title. You must put the station title in quotes in shell calls, if it contains
 	    e.g. spaces. You can optionally specify a channelname before the station title.</p>
           </item>
           <item>

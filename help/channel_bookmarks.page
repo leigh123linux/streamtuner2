@@ -11,14 +11,15 @@
 
 	<title>Bookmarks</title>
 
-	<p>It's easy to lose the overview when you browse through the various channel tabs, genres
-        and internet radio stations. Therefore streamtuner2 allows to create bookmarks. This way
-        you can collect favoured streams in a single place.</p>
+	<p>It's easy to lose overview when you browse across channel tabs,
+        genres and internet radio stations.  Therefore streamtuner2 allows
+        to bookmark stations.  This way you can collect favoured streams in
+        a single place.</p>
 
         <p>Just right click a station you want to bookmark, and choose bookmark in the context
         menu. Alternatively you can use the Streams entry in the application menu. Once bookmarked
         you can see the station entry in the (!) "bookmarks" tab, under "favourite". That's where
-        they all go.</p>
+        they go.</p>
 
 	<section id="editing">
 	<title>Editing</title>
@@ -33,6 +34,7 @@
 	<p>The bookmarks tab can display other categories besides "favourite". For example the
 	search feature creates a "search", while the "timer" and "links" plugins also display
 	lists here.</p>
+	<p>However the favourite list itself can not yet be categorized further.</p>
 	</section>
 
 </page>

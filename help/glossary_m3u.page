@@ -9,7 +9,7 @@
 
 	<title>.M3U files</title>
 
-	<p>M3U files also contain playlists, like .pls files. But they are often used by locally installed audio players.</p>
+	<p>M3U files also contain playlists, like .pls files. They're often used by desktop audio players.</p>
 	<p>The MIME type of these files is audio/x-mpegurl and they often look like: </p>
 
 <p><code>
