@@ -5,26 +5,25 @@
 # title: streamtuner2
 # description: Directory browser for internet radio / audio streams
 # depends: pygtk | pygi, threading, pyquery, python-lxml, requests
-# version: 2.1.3-3
-# author: mario salzer
+# version: 2.1.4
+# author: Mario Salzer <milky@users.sf.net>
 # license: public domain
 # url: http://freshcode.club/projects/streamtuner2
 # config: <env name="http_proxy" value="" description="proxy for HTTP access" />  <env name="XDG_CONFIG_HOME" description="relocates user .config subdirectory" />
-# category: multimedia
+# category: sound
 # id: streamtuner2
 # pack:
-#   gtk*.xml,
-#   *.py,
+#   *.py, gtk*.xml,
 #   st2.py=/usr/bin/streamtuner2,
 #   channels/__init__.py,
-#   bundle,
+#   bundle/*.py,
 #   streamtuner2.desktop=/usr/share/applications/,
 #   README=/usr/share/doc/streamtuner2/,
 #   help/streamtuner2.1=/usr/share/man/man1/,
-#   help=/usr/share/doc/streamtuner2/,
+#   help/*page=/usr/share/doc/streamtuner2/help/,
+#   help/img/*=/usr/share/doc/streamtuner2/help/img/,
 #   streamtuner2.png,
 #   logo.png=/usr/share/pixmaps/streamtuner2.png,
-# epoch:
 # architecture: all
 #
 #
@@ -105,7 +104,7 @@ from channels import *
 import favicon
 
 
-__version__ = "2.1.3-3"
+__version__ = "2.1.4"
 
 
 # this represents the main window
