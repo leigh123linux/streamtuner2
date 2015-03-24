@@ -13,9 +13,8 @@
 # However useful station information (homepage, etc.) only
 # with extraneous requests. So just for testing as of now.
 #
-# Uh, and API is appearently becoming for-pay (two days
-# after writing this plugin;). So ST2 users may have to
-# request their own Dirble.com key probably.
+# ST2 users may have to get a custom Dirble.com key;
+# last one got disabled.
 #
 
 
@@ -47,13 +46,13 @@ class dirble (ChannelPlugin):
         {"name": "dirble_fetch_homepage",
          "value": 0,
          "type": "boolean",
-         "description": "Also fetch homepages when updating stations. (This is slow, as it requires one extra request for each.)"
+         "description": "Also fetch homepages when updating stations. (This is super slow, as it requires one extra request for each station.)"
         }
     ]    
     catmap = {}
     
     base = "http://api.dirble.com/v1/%s/apikey/%s/"
-    cid = "84be582567ff418c9ba94d90d075d7fee178ad60"
+    cid = "a0bdd7b8efc2f5d1ebdf1728b65a07ece4c73de5"
 
 
     # Retrieve cat list and map
