@@ -19,6 +19,7 @@
 #   bundle/*.py,
 #   streamtuner2.desktop=/usr/share/applications/,
 #   README=/usr/share/doc/streamtuner2/,
+#   NEWS.gz=/usr/share/doc/streamtuner2/changelog.gz,
 #   help/streamtuner2.1=/usr/share/man/man1/,
 #   help/*page=/usr/share/doc/streamtuner2/help/,
 #   help/img/*=/usr/share/doc/streamtuner2/help/img/,
