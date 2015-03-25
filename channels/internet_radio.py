@@ -63,9 +63,11 @@ class internet_radio (ChannelPlugin):
     def update_categories(self):
     
         html = http.get(self.homepage)
-        rx = re.compile("""<option[^>]+value="/stations/[-+&.\w\s%]+/">([^<]+)</option>""")
-        
-        self.categories = rx.findall(html)
+        rx = re.compile("""="/stations/[-+&.\w\s%]+/">([^<]+)<""")
+        cats = rx.findall(html)
+        cats = list(set(cats))
+        cats = [s.capitalize() for s in cats]
+        self.categories = sorted(cats)
 
 
     # fetch station lists
@@ -90,7 +92,7 @@ class internet_radio (ChannelPlugin):
                     "/" + ("page"+str(page) if page>1 else "")
                 )
             )
-            
+
             # Is there a next page?
             if str(page+1) not in rx_pages.findall(html[-1]):
                 break
