@@ -77,7 +77,7 @@ class jamendo (ChannelPlugin):
          "description": "Preview images size (height and width) for albums or tracks."
         },
         {"name": "jamendo_count",
-         "value": "1",
+         "value": "1",     # "offset": in API is broken, so leave this at 1
          "type":"text",
          "description": "How many result sets (200 entries each) to retrieve."
         }
