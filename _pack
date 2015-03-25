@@ -4,13 +4,14 @@
 #-- meta data
 NAME=streamtuner2
 VERSION=$(version --get:plugin st2.py --write:python st2.py)
+gzip -9c NEWS > NEWS.gz
 
 #-- bundle
-fpm -s src -t deb -p "$NAME-$VERSION.deb" --prefix=/usr/share/streamtuner2 --deb-compression xz -f st2.py
-#fpm -s src -t rpm -p "$NAME-$VERSION.rpm" --prefix=/usr/share/streamtuner2 --rpm-compression xz -f st2.py
-#fpm -s src -t exe -p "$NAME-$VERSION.exe" --prefix=c:/usr/share/streamtuner2 --exe-autoextract -f st2.py
+fpm -s src -t deb -u man,fixperms -d python -p "$NAME-$VERSION.deb" --prefix=/usr/share/streamtuner2 --deb-compression xz -f st2.py
+fpm -s src -t rpm -p "$NAME-$VERSION.rpm" --prefix=/usr/share/streamtuner2 --rpm-compression xz -f st2.py
+fpm -s src -t exe -p "$NAME-$VERSION.exe" --prefix=c:/usr/share/streamtuner2 --exe-autoextract -f st2.py
 #fpm -s src -t tar -p "$NAME-$VERSION.bin.tar.xz" --prefix=/usr/local/share/streamtuner2 --verbose -f st2.py
-exit
+#exit
 
 #dpkg-deb -I streamtuner2*deb
 #dpkg-deb -c streamtuner2*deb
@@ -21,7 +22,7 @@ pax -wvJf streamtuner2-$VERSION.src.txz \
 	streamtuner2/*.py streamtuner2/*.xml streamtuner2/channels/*.{py,png} \
 	streamtuner2/*.png streamtuner2/*.svg streamtuner2/*.desktop \
 	streamtuner2/README streamtuner2/help/* streamtuner2/contrib/* \
-	streamtuner2/bundle/* streamtuner2/bundle/*/* streamtuner2/bundle/*/*/* streamtuner2/bundle/*/*/*/* \
+	streamtuner2/bundle/* \
 	streamtuner2/PKG-INFO streamtuner2/version streamtuner2/_pack streamtuner2/*.epm
 cd -
 
