@@ -1,0 +1,24 @@
+<page	xmlns="http://projectmallard.org/1.0/"
+	type="guide"
+	id="modarchive">
+
+<info>
+	<link type="guide" xref="index#channels"/>
+	<link type="guide" xref="channels#list"/>
+        <desc>MOD files.</desc>
+</info>
+
+	<title>The MOD Archive</title>
+
+	<p>MODArchive is a collection of module/tracker files. It's a community project, and
+        categorizes individual audio files. You'll need a MOD-capable audio player.</p>
+
+        <list>
+             <item><p>XMP/libxmp</p></item>
+             <item><p>MikMod</p></item>
+             <item><p>MODPlug for XMMS</p></item>
+             <item><p>GModplay</p></item>
+             <item><p>VLC (built-in support)</p></item>
+        </list>
+
+</page>

@@ -11,11 +11,11 @@
 
 	<title>Internet-Radio.com</title>
 
-	<p>Internet-Radio.com is a broad alternative to Shoutcast. It also
-	lacks station homepages in most cases, but is a likewise
-	encyclopedical.  Genres are similiar to Shoutcast.</p>
+	<p>Internet-Radio.com is a broad alternative to Shoutcast. It
+	has regained station homepages for most entries again.
+	Genres are similiar to Shoutcast.</p>
 
-	<note><p>Note that this plugin has its own setting for how many
+	<note><p>Note that this plugin has its own setting on how many
 	links to retrieve.  Instead of stream numbers, it only counts pages
 	(which however speeds up processing now).</p></note>
 

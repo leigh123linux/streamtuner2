@@ -19,13 +19,13 @@
 	<p>Go into settings <key>F12</key> for plugins to define a keyboard shortcut:</p>
 
 	<table shade="rows" rules="rows cols">
-		<tr><td>keyspec:</td><td>corresponds to:</td></tr>
-		<tr><td>F9</td><td>Responds to only <key>F9</key>. (too generic)</td></tr>
-		<tr><td>&lt;Meta&gt;R</td><td>often the 'Windows'-key and R</td></tr>
-		<tr><td>&lt;Ctrl&gt;N</td><td>Control and <key>N</key></td></tr>
-		<tr><td>&lt;Shift&gt;F1</td><td>Shift and F1</td></tr>
-		<tr><td>&lt;Alt&gt;SPACE</td><td>Use Alt and <key>Space</key>. (too generic)</td></tr>
-		<tr><td>XF86Forward</td><td>Uses a "forward" function key. (default)</td></tr>
+	<thead>	<tr><td><p>keyspec</p></td>                   <td><p>corresponds to</p></td></tr> </thead>
+		<tr><td><p><input>F9</input></p></td>              <td><p>Responds to only <key>F9</key>. (too generic)</p></td></tr>
+		<tr><td><p><input>&lt;Meta&gt;R</input></p></td>   <td><p>often the 'Windows'-key and R</p></td></tr>
+		<tr><td><p><input>&lt;Ctrl&gt;N</input></p></td>   <td><p>Control and <key>N</key></p></td></tr>
+		<tr><td><p><input>&lt;Shift&gt;F1</input></p></td> <td><p>Shift and F1</p></td></tr>
+		<tr><td><p><input>&lt;Alt&gt;SPACE</input></p></td> <td><p>Use Alt and <key>Space</key>. (too generic)</p></td></tr>
+		<tr><td><p><input>XF86Forward</input></p></td>     <td><p>Uses a "forward" function key. (default)</p></td></tr>
 	</table>
 
 	<p>To define another channel as source, enter its module name in the according field. Also

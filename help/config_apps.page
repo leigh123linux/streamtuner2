@@ -15,15 +15,15 @@
 	by a generic player, like vlc.</p>
 
 	<table shade="rows" rules="rows cols">
-		<tr><td>Audacious</td><td>audacious %m3u</td><td>audio</td></tr>
-		<tr><td>XMMS2</td><td>xmms2 %m3u</td><td>audio</td></tr>
-		<tr><td>Amarok</td><td>amarok -l %pls</td><td>audio</td></tr>
-		<tr><td>Exaile</td><td>exaile %m3u</td><td>audio</td></tr>
-		<tr><td>Amarok</td><td>amarok -l %pls</td><td>audio</td></tr>
-		<tr><td>mplayer</td><td>mplayer %srv</td><td>console</td></tr>
-		<tr><td>VLC</td><td>vlc %u</td><td>video/*</td></tr>
-		<tr><td>Totem</td><td>totem %u</td><td>video/*</td></tr>
-		<tr><td>Media Player</td><td>mplayer2.exe %pls</td><td>Win32</td></tr>
+		<tr><td><app>Audacious</app></td>     <td><cmd>audacious %m3u</cmd></td>  <td>audio</td></tr>
+		<tr><td><app>XMMS2</td>               <td><cmd>xmms2 %m3u</cmd></td>      <td>audio</td></tr>
+		<tr><td><app>Amarok</app></td>        <td><cmd>amarok -l %pls</cmd></td>  <td>audio</td></tr>
+		<tr><td><app>Exaile</app></td>        <td><cmd>exaile %m3u</cmd></td>     <td>audio</td></tr>
+		<tr><td><app>Amarok</app></td>        <td><cmd>amarok -l %pls</cmd></td>  <td>audio</td></tr>
+		<tr><td><app>mplayer</app></td>       <td><cmd>mplayer %srv</cmd></td>    <td>console</td></tr>
+		<tr><td><app>VLC</app></td>           <td><cmd>vlc %u</cmd></td>          <td>video/*</td></tr>
+		<tr><td><app>Totem</app></td>         <td><cmd>totem %u</cmd></td>        <td>video/*</td></tr>
+		<tr><td><app>Media Player</app></td>  <td><cmd>mplayer2.exe %pls</cmd></td>  <td>Win32</td></tr>
 	</table>
 
 	<p>Some audio players open a second instance when you actually want to switch radios.

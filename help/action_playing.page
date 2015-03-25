@@ -18,7 +18,7 @@
         media player (like VLC).</p>
 
         <note><p>Note however that some audio players will run multiple instance and won't
-        allow simple station switching. In these circumstance it might be sensible to write
+        allow simple station switching. In such situations it might be sensible to write
         a wrapper script, or configure special commandline arguments to your favoured audio
         player (e.g. "vlc --one-instance").</p></note>
 

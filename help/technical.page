@@ -31,32 +31,32 @@
   	  <title>Configuration files</title>
         <terms>
           <item>
-            <title>/home/$USER/.config/streamtuner2/</title>
+            <title><file>/home/$USER/.config/streamtuner2/</file></title>
             <p>Corresponds to the XDG_CONFIG_HOME setting. All ST2 configuration settings
             are contained within here and are in JSON format.</p>
           </item>
           <item>
-            <title>~/.config/streamtuner2/settings.json</title>
+            <title><file>~/.config/streamtuner2/settings.json</file></title>
             <p>General runtime options, plugin settings, and configured audio players.</p>
           </item>
           <item>
-            <title>~/.config/streamtuner2/window.json</title>
+            <title><file>~/.config/streamtuner2/window.json</file></title>
             <p>Saved window sizes, list widths.</p>
           </item>
           <item>
-            <title>~/.config/streamtuner2/state.json</title>
+            <title><file>~/.config/streamtuner2/state.json</file></title>
             <p>Last category in each channel tab.</p>
           </item>
           <item>
-            <title>~/.config/streamtuner2/bookmarks.json</title>
+            <title><file>~/.config/streamtuner2/bookmarks.json</file></title>
             <p>Is a separate cache file for your bookmarked/favourite radio stations.</p>
           </item>
           <item>
-            <title>~/.config/streamtuner2/cache/***.json</title>
+            <title><file>~/.config/streamtuner2/cache/***.json</file></title>
             <p>JSON files for stream lists in each channel.</p>
           </item>
           <item>
-            <title>~/.config/streamtuner2/icons/*.png</title>
+            <title><file>~/.config/streamtuner2/icons/*.png</file></title>
             <p>Holds downloaded favicons for station homepages.</p>
           </item>
 	</terms>
@@ -67,15 +67,15 @@
   	  <title>Installation spread</title>
         <terms>
           <item>
-            <title>/usr/bin/streamtuner2</title>
+            <title><file>/usr/bin/streamtuner2</file></title>
             <p>Is the main binary.</p>
           </item>
           <item>
-            <title>/usr/share/streamtuner2/</title>
+            <title><file>/usr/share/streamtuner2/</file></title>
             <p>Contains the individual ST2 python modules, and plugins in channels/. Also packages in pyquery/, but which is only used if the according modules aren't installed by the distribution.</p>
           </item>
           <item>
-            <title>/usr/share/doc/streamtuner2/</title>
+            <title><file>/usr/share/doc/streamtuner2/</file></title>
             <p>Contains the README, and Mallard/gnome-help/yelp files under help/.</p>
           </item>
 	</terms>

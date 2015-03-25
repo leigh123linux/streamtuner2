@@ -13,7 +13,7 @@
 
 	<p><link href="http://ehm.homelinux.org/MyOggRadio/">MyOggRadio</link> is an open
         source internet radio directory project. Since it provides its station list as
-	JSON, it is very well supported.</p>
+	JSON it's very well supported.</p>
 
         <p>Because the directory is currently still rather small,
 	streamtuner2 provides the option to share radion station links.  Use
@@ -21,10 +21,12 @@
 	<gui>Share...</gui></guiseq> menu entry to upload the currently
 	selected radio (from your favourite bookmarks).</p>
 
-        <p>The personal section is empty, unless you specify an user account in the settings
-	and actually bookmarks stations on the MyOggRadio web site. Shared entries are not
-	automatically in the MOR favorite list.</p>
+        <p>The personal section is empty per default. You need to specify an user account
+	in the settings dialog, and actually bookmark stations in MyOggRadio web site.
+	Shared entries are not automatically in the MOR favorite list.</p>
 
+	<p>There's also <a href="http://freshcode.club/projects/jmorp">JMyOggRadioPlayer</a>
+	as specific frontend and player for MyOggRadio.</p>
 
 <terms>
   <title>Channel options.</title>

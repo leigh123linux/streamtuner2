@@ -1,0 +1,17 @@
+<page	xmlns="http://projectmallard.org/1.0/"
+	type="guide"
+	id="tunein">
+
+<info>
+	<link type="guide" xref="index#channels"/>
+	<link type="guide" xref="channels#list"/>
+        <desc>Radio and Podcast directory.</desc>
+</info>
+
+	<title>TuneIn</title>
+
+	<p>TuneIn hosts a major radio, show and podcast directory. It also provides the
+        RadioTime/AIR interface for listener feedback or something. ST2 queries the OPML
+        lists only for radio stations currently.</p>
+
+</page>

@@ -1,0 +1,18 @@
+<page	xmlns="http://projectmallard.org/1.0/"
+	type="guide"
+	id="icast">
+
+<info>
+	<link type="guide" xref="index#channels"/>
+	<link type="guide" xref="channels#list"/>
+        <desc>iCast</desc>
+</info>
+
+	<title>iCast.io</title>
+
+	<p>iCast is another huge collaborative radio station directory.</p>
+
+	<p>Its support in Streamtuner2 is quite robust, as it provides a JSON API.
+	It lacks in meta data information though (homepages, currently playing, listeners, etc.)</p>
+
+</page>

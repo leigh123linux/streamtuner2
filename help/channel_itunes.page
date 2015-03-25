@@ -1,0 +1,16 @@
+<page	xmlns="http://projectmallard.org/1.0/"
+	type="guide"
+	id="itunes">
+
+<info>
+	<link type="guide" xref="index#channels"/>
+	<link type="guide" xref="channels#list"/>
+        <desc>iTunes (RoliSoft Playlists)</desc>
+</info>
+
+	<title>iTunes Radios via RS</title>
+
+	<p>iTunes radio is indirectly supported through the RoliSoft Radio Playlist
+        APIs.</p>
+
+</page>

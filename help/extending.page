@@ -14,7 +14,7 @@
 
 	<p>The basic layout of every channel plugin is as follows:</p>
 
-	<p><code type="text/python">
+	<code type="text/python">
 
 from channels import *
 
@@ -43,7 +43,7 @@ class myplugin (ChannelPlugin):
 
         return entries
         
-	</code></p>
+	</code>
 
 	<p>There are some self-explanatory description fields, and two important methods. Sometimes you
         don't need categories even. The update_streams() function often downloads a website, parses it
