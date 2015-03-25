@@ -14,13 +14,16 @@
 <div class="region">
 <div class="contents"></div>
 <div id="dependecies" class="sect"><div class="inner">
-<div class="hgroup"><h2 class="title"><span class="title">Dependencies</span></h2></div>
+<div class="hgroup"></div>
 <div class="region"><div class="contents">
-<div class="terms"><div class="inner"><div class="region"><dl class="terms">
+<div class="terms"><div class="inner">
+<div class="title title-terms"><h3><span class="title">Dependencies</span></h3></div>
+<div class="region"><dl class="terms">
 <dd class="terms"><p class="p">Python 2.7 or 3.x</p></dd>
 <dd class="terms"><p class="p">PyGtk or PyGI</p></dd>
 <dd class="terms"><p class="p">Gtk2 or Gtk3</p></dd>
-</dl></div></div></div>
+</dl></div>
+</div></div>
 <div class="terms"><div class="inner">
 <div class="title title-terms"><h3><span class="title">Soft dependencies</span></h3></div>
 <div class="region"><dl class="terms">
@@ -35,38 +38,42 @@
 <div id="config_files" class="sect"><div class="inner">
 <div class="hgroup"><h2 class="title"><span class="title">Configuration files</span></h2></div>
 <div class="region"><div class="contents"><div class="terms"><div class="inner"><div class="region"><dl class="terms">
-<dt class="terms">/home/$USER/.config/streamtuner2/</dt>
+<dt class="terms"><span class="file">/home/$USER/.config/streamtuner2/</span></dt>
 <dd class="terms"><p class="p">Corresponds to the XDG_CONFIG_HOME setting. All ST2 configuration settings
             are contained within here and are in JSON format.</p></dd>
-<dt class="terms">~/.config/streamtuner2/settings.json</dt>
+<dt class="terms"><span class="file">~/.config/streamtuner2/settings.json</span></dt>
 <dd class="terms"><p class="p">General runtime options, plugin settings, and configured audio players.</p></dd>
-<dt class="terms">~/.config/streamtuner2/window.json</dt>
+<dt class="terms"><span class="file">~/.config/streamtuner2/window.json</span></dt>
 <dd class="terms"><p class="p">Saved window sizes, list widths.</p></dd>
-<dt class="terms">~/.config/streamtuner2/state.json</dt>
+<dt class="terms"><span class="file">~/.config/streamtuner2/state.json</span></dt>
 <dd class="terms"><p class="p">Last category in each channel tab.</p></dd>
-<dt class="terms">~/.config/streamtuner2/bookmarks.json</dt>
-<dd class="terms"><p class="p">Is a separate cahce file for your bookmarked/favourite radio stations.</p></dd>
-<dt class="terms">~/.config/streamtuner2/cache/***.json</dt>
+<dt class="terms"><span class="file">~/.config/streamtuner2/bookmarks.json</span></dt>
+<dd class="terms"><p class="p">Is a separate cache file for your bookmarked/favourite radio stations.</p></dd>
+<dt class="terms"><span class="file">~/.config/streamtuner2/cache/***.json</span></dt>
 <dd class="terms"><p class="p">JSON files for stream lists in each channel.</p></dd>
-<dt class="terms">~/.config/streamtuner2/icons/*.png</dt>
+<dt class="terms"><span class="file">~/.config/streamtuner2/icons/*.png</span></dt>
 <dd class="terms"><p class="p">Holds downloaded favicons for station homepages.</p></dd>
 </dl></div></div></div></div></div>
 </div></div>
 <div id="install_dirs" class="sect"><div class="inner">
 <div class="hgroup"><h2 class="title"><span class="title">Installation spread</span></h2></div>
 <div class="region"><div class="contents"><div class="terms"><div class="inner"><div class="region"><dl class="terms">
-<dt class="terms">/usr/bin/streamtuner2</dt>
+<dt class="terms"><span class="file">/usr/bin/streamtuner2</span></dt>
 <dd class="terms"><p class="p">Is the main binary.</p></dd>
-<dt class="terms">/usr/share/streamtuner2/</dt>
+<dt class="terms"><span class="file">/usr/share/streamtuner2/</span></dt>
 <dd class="terms"><p class="p">Contains the individual ST2 python modules, and plugins in channels/. Also packages in pyquery/, but which is only used if the according modules aren't installed by the distribution.</p></dd>
-<dt class="terms">/usr/share/doc/streamtuner2/</dt>
+<dt class="terms"><span class="file">/usr/share/doc/streamtuner2/</span></dt>
 <dd class="terms"><p class="p">Contains the README, and Mallard/gnome-help/yelp files under help/.</p></dd>
 </dl></div></div></div></div></div>
 </div></div>
 <div id="license" class="sect"><div class="inner">
 <div class="hgroup"><h2 class="title"><span class="title">Public Domain</span></h2></div>
-<div class="region"><div class="contents"><p class="p">There is no licensing requirement with this application. All code can be copied, modified
-	and distributed unrestrictively.</p></div></div>
+<div class="region"><div class="contents">
+<p class="p">The majority of code distributed with ST2 is placed into the Public Domain; meaning
+        no licensing requirement and all code can be copied, modified
+	and distributed unrestrictively.</p>
+<p class="p">The bundled kronos.py and requests/ library are NOT however.</p>
+</div></div>
 </div></div>
 <div class="sect sect-links" role="navigation">
 <div class="hgroup"></div>

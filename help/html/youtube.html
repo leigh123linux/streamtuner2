@@ -2,7 +2,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>Xiph.org</title>
+<title>Youtube</title>
 <link rel="stylesheet" type="text/css" href="C.css">
 <script type="text/javascript" src="jquery.js"></script><script type="text/javascript" src="jquery.syntax.js"></script><script type="text/javascript" src="yelp.js"></script>
 </head>
@@ -16,25 +16,27 @@
 <a class="trail" href="index.html" title="♪ Streamtuner2"><span class="media"><span class="media media-image"><img src="img/logo.png" class="media media-inline" alt="♪"></span></span> Streamtuner2 </a> › <a class="trail" href="index.html#configuration" title="Configuration">Configuration</a> » <a class="trail" href="configuration.html" title="Settings dialog">Settings dialog</a> › <a class="trail" href="configuration.html#plugins" title="Plugin and Channel settings">Plugin and Channel settings</a> » </div>
 </div></div>
 <div class="body">
-<div class="hgroup"><h1 class="title"><span class="title">Xiph.org</span></h1></div>
+<div class="hgroup"><h1 class="title"><span class="title">Youtube</span></h1></div>
 <div class="region">
 <div class="contents">
-<p class="p">Xiph.org is a non-profit organization, which develops and promotes the OGG audio format.
-        It also hosts a list of ICEcast streaming stations (ICEcast is the non-commercial pendant
-        to the SHOUTcast server.)</p>
-<p class="p">This channel is somehwat easy to read for Streamtuner2, because the source data is already
-        provided as &lt;XML&gt; file. (Internally we're using a caching service, which pre-converts
-        that into JSON lists. The Xiph-org JSON API isn't really working yet).</p>
-<p class="p">However, it lacks some essential informations like station homepages and listener numbers.</p>
-<p class="p">Xiph also uses the .xspf format, instead of .pls stream links</p>
+<p class="p">Googles <span class="link"><a href="https://youtube.com/" title="https://youtube.com/">Youtube</a></span> provides a quirky
+        JSON API that makes browsing channels and genres feasible. This beta plugin
+        provides a little overview, and usually retrieves recent video uploads.</p>
+<p class="p">VLC can directly play Youtube URLs. For other players the default application
+        setting wraps <span class="link"><a href="http://youtube-dl.org/" title="http://youtube-dl.org/">youtube-dl</a></span>, which is also
+        used for recording.</p>
 <div class="terms"><div class="inner">
 <div class="title title-terms"><h2><span class="title">Channel options.</span></h2></div>
 <div class="region"><dl class="terms">
-<dt class="terms"><span class="code">Filter by minimum bitrate</span></dt>
-<dd class="terms"><p class="p">The bitrate of an audio stream determines the music quality. Many Xiph streams have simple
-    and low quality microphone sources. To filter these out, and only leave high quality music
-    stations, you can therefore set this option. OGG starts to sound well with 96 kbit/s (whereas
-    MP3 often requires 148 or 192 at least).</p></dd>
+<dt class="terms"><span class="code">Region</span></dt>
+<dd class="terms"><p class="p">With the country dropdown you can predefine which mostPopular listins are returned.</p></dd>
+<dt class="terms"><span class="code">My Channels</span></dt>
+<dd class="terms">
+<p class="p">You can edit the list of YT channel names to fetch some of your favourite artists/uploaders.
+    To apply this setting, and have new categories show up in the genre pane, use
+    <span class="guiseq"><span class="gui">Channel</span> ▸ <span class="gui">Update category tree</span></span> first.</p>
+<p class="p">It's not an exact map, but utilizes the search function to find channels.</p>
+</dd>
 </dl></div>
 </div></div>
 </div>

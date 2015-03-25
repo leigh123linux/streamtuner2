@@ -23,7 +23,7 @@
 <div class="region"><dl class="terms">
 <dt class="terms"><span class="code">streamtuner2 play "station"</span></dt>
 <dd class="terms"><p class="p">This command looks through all channel plugins, and finds a station containing the
-	    mentioned title. In the shell you must put the station title in quotes, if it contains
+	    mentioned title. You must put the station title in quotes in shell calls, if it contains
 	    e.g. spaces. You can optionally specify a channelname before the station title.</p></dd>
 <dt class="terms"><span class="code">streamtuner2 url [channel] "station"</span></dt>
 <dd class="terms"><p class="p">Just looks up the streaming URL for a given station. If no channel name is given,
@@ -39,6 +39,8 @@
 </div></div>
 <p class="p">Specifying a channel name is often optional. If you add one, it should be all-lowercase.
 	You can also give a list, like "shoutcast,xiph" which would be searched then.</p>
+<p class="p">GUI mode: There are also --gtk3 and --gtk2 command line options. Usually the right toolkit
+	is picked depending on Python version. But you can manually override this.</p>
 </div>
 <div class="sect sect-links" role="navigation">
 <div class="hgroup"></div>

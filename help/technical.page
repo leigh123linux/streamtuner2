@@ -11,8 +11,8 @@
 
 
 	<section id="dependecies">
-  	  <title>Dependencies</title>
         <terms>
+  	  <title>Dependencies</title>
           <item><p>Python 2.7 or 3.x</p></item>
           <item><p>PyGtk or PyGI</p></item>
           <item><p>Gtk2 or Gtk3</p></item>

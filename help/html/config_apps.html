@@ -19,87 +19,90 @@
 	by a generic player, like vlc.</p>
 <div class="table"><div class="inner"><div class="region"><table class="table">
 <tr>
-<td></td>
-<td style="border-left-style: solid;"></td>
-<td style="border-left-style: solid;"></td>
+<td><p class="p"><span class="app">Audacious</span></p></td>
+<td style="border-left-style: solid;"><p class="p"><span class="cmd">audacious %m3u</span></p></td>
+<td style="border-left-style: solid;"><p class="p">audio</p></td>
 </tr>
 <tr class="shade">
-<td style="border-top-style: solid;"></td>
-<td style="border-top-style: solid;border-left-style: solid;"></td>
-<td style="border-top-style: solid;border-left-style: solid;"></td>
+<td style="border-top-style: solid;"><p class="p"><span class="app">XMMS2</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">xmms2 %m3u</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">audio</p></td>
 </tr>
 <tr>
-<td style="border-top-style: solid;"></td>
-<td style="border-top-style: solid;border-left-style: solid;"></td>
-<td style="border-top-style: solid;border-left-style: solid;"></td>
+<td style="border-top-style: solid;"><p class="p"><span class="app">Amarok</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">amarok -l %pls</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">audio</p></td>
 </tr>
 <tr class="shade">
-<td style="border-top-style: solid;"></td>
-<td style="border-top-style: solid;border-left-style: solid;"></td>
-<td style="border-top-style: solid;border-left-style: solid;"></td>
+<td style="border-top-style: solid;"><p class="p"><span class="app">Exaile</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">exaile %m3u</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">audio</p></td>
 </tr>
 <tr>
-<td style="border-top-style: solid;"></td>
-<td style="border-top-style: solid;border-left-style: solid;"></td>
-<td style="border-top-style: solid;border-left-style: solid;"></td>
+<td style="border-top-style: solid;"><p class="p"><span class="app">Amarok</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">amarok -l %pls</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">audio</p></td>
 </tr>
 <tr class="shade">
-<td style="border-top-style: solid;"></td>
-<td style="border-top-style: solid;border-left-style: solid;"></td>
-<td style="border-top-style: solid;border-left-style: solid;"></td>
+<td style="border-top-style: solid;"><p class="p"><span class="app">mplayer</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">mplayer %srv</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">console</p></td>
 </tr>
 <tr>
-<td style="border-top-style: solid;"></td>
-<td style="border-top-style: solid;border-left-style: solid;"></td>
-<td style="border-top-style: solid;border-left-style: solid;"></td>
+<td style="border-top-style: solid;"><p class="p"><span class="app">VLC</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">vlc %u</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">video/*</p></td>
 </tr>
 <tr class="shade">
-<td style="border-top-style: solid;"></td>
-<td style="border-top-style: solid;border-left-style: solid;"></td>
-<td style="border-top-style: solid;border-left-style: solid;"></td>
+<td style="border-top-style: solid;"><p class="p"><span class="app">Totem</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">totem %u</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">video/*</p></td>
 </tr>
 <tr>
-<td style="border-top-style: solid;"></td>
-<td style="border-top-style: solid;border-left-style: solid;"></td>
-<td style="border-top-style: solid;border-left-style: solid;"></td>
+<td style="border-top-style: solid;"><p class="p"><span class="app">Media Player</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">mplayer2.exe %pls</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">Win32</p></td>
 </tr>
 </table></div></div></div>
 <p class="p">Some audio players open a second instance when you actually want to switch radios.
-	In this case it's a common workaround to write <span class="code">pkill vlc ; vlc %u</span> instead.
-	This ends the previous player and starts it anew.</p>
-<p class="p">Some applications, like Rhythmbox or Banshee, are pure GUI applications and cannot
-	be invoked with a play URL by other apps. This makes them unsuitable for use with
+	In this case it's a common workaround to write <span class="code">pkill vlc ; vlc %u</span> instead,
+	which ends the previous player process and starts it anew.
+        For VLC there's however also the <span class="code">--one-instance</span> option, which sometimes
+        works better. (And sometimes not.)</p>
+<p class="p">Some applications, like Rhythmbox or Banshee, are primarily audio browsers, not players,
+        and cannot be invoked with a play URL by other apps. This makes them less suitable for use with
 	streamtuner2.</p>
 </div>
 <div id="abbr" class="sect"><div class="inner">
 <div class="hgroup"><h2 class="title"><span class="title">URL placeholders</span></h2></div>
 <div class="region"><div class="contents">
-<p class="p">Any listed application can be invoked with a different kind of URL or filename.be invoked with a play URL by other apps.
-	Which to use often depends on the application.</p>
+<p class="p">Any listed application can be invoked with a different kind of
+	URL or filename.be invoked with a play URL by other apps.  Which to
+	use often depends on the application.</p>
 <div class="table"><div class="inner"><div class="region"><table class="table">
+<thead><tr>
+<td><p class="p">Placeholder</p></td>
+<td style="border-left-style: solid;"><p class="p">Alternatives</p></td>
+<td style="border-left-style: solid;"><p class="p">URL/Filename type</p></td>
+</tr></thead>
 <tr>
-<td></td>
-<td style="border-left-style: solid;"></td>
-<td style="border-left-style: solid;"></td>
+<td><p class="p">%m3u</p></td>
+<td style="border-left-style: solid;"><p class="p">%f %g %m</p></td>
+<td style="border-left-style: solid;"><p class="p">Provides a local .m3u file for the streaming station</p></td>
 </tr>
 <tr class="shade">
-<td style="border-top-style: solid;"></td>
-<td style="border-top-style: solid;border-left-style: solid;"></td>
-<td style="border-top-style: solid;border-left-style: solid;"></td>
+<td style="border-top-style: solid;"><p class="p">%pls</p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">%url %u %r</p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">Either a remote .pls resource, or a local .pls file (if converted)</p></td>
 </tr>
 <tr>
-<td style="border-top-style: solid;"></td>
-<td style="border-top-style: solid;border-left-style: solid;"></td>
-<td style="border-top-style: solid;border-left-style: solid;"></td>
-</tr>
-<tr class="shade">
-<td style="border-top-style: solid;"></td>
-<td style="border-top-style: solid;border-left-style: solid;"></td>
-<td style="border-top-style: solid;border-left-style: solid;"></td>
+<td style="border-top-style: solid;"><p class="p">%srv</p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">%d %s</p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">Direct link to first streaming address, e.g. http://72.5.9.33:7500</p></td>
 </tr>
 </table></div></div></div>
-<p class="p">You sould preferrably use the long forms. Most audio players like %m3u most, while
-	streamripper needs %srv for recording.</p>
+<p class="p">You sould preferrably use the long forms. Most audio players like
+	%m3u most, while streamripper needs %srv for recording.</p>
 </div></div>
 </div></div>
 <div class="sect sect-links" role="navigation">

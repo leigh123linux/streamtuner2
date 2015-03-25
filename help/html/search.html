@@ -20,40 +20,31 @@
 <div class="body">
 <div class="hgroup"><h1 class="title"><span class="title">Searching</span></h1></div>
 <div class="region">
-<div class="contents"><p class="p">There are two search functions. The quick search field is in the toolbar, and allows
-	to highlight search terms in the current station list. The cache search is available
-	through the <span class="guiseq"><span class="gui">Edit</span> ▸ <span class="gui">Search</span></span> menu instead and provides more details.</p></div>
-<div id="cachesearch" class="sect"><div class="inner">
-<div class="hgroup"><h2 class="title"><span class="title">Dialog options</span></h2></div>
-<div class="region"><div class="contents">
-<p class="p">You can get to the search dialog via <span class="guiseq"><span class="gui">Edit</span> ▸ <span class="gui">Find</span></span> or <span class="key"><kbd>Ctrl</kbd></span>+<span class="key"><kbd>F</kbd></span>. Centrally to this dialog is the
-	text field, where you can specify the phrase to scan for.</p>
-<p class="p">Above you can check which channel plugins to inspect for the search term. Using this
-	allows to limit the search to specific radio station directories, but usually you want
-	to search them all.</p>
-<p class="p">Below the search phrase text box, you can specifiy which station fields to look
-	into. Often you just want to search the titles of radio stations. But you can also
-	have the search occour in the description/playing fields. Alternatively you could
-	just search the homepage links.</p>
-</div></div>
-</div></div>
-<div id="methods" class="sect"><div class="inner">
-<div class="hgroup"><h2 class="title"><span class="title">Search methods</span></h2></div>
-<div class="region"><div class="contents">
-<p class="p">Lastly, there are three search methods. You mostly want to use the <span class="gui">cache search</span>,
-	which just scans through the station lists streamtuner2 has downloaded. Since you are mostly
-	looking for something you had already seen, this will give you the desired results.</p>
-<p class="p">The <span class="gui">server search</span> would try to do a live search on the directory servers,
-	providing you with the most recent data. However, it's not implemented for all channel
-	plugins, and therefore brings limited output.</p>
-<p class="p">Use the button <span class="gui">google it</span> as last resort, if streamtuner2 didn't find anything.</p>
-</div></div>
-</div></div>
+<div class="contents"><p class="p">There are two search functions.</p></div>
 <div id="quicksearch" class="sect"><div class="inner">
 <div class="hgroup"><h2 class="title"><span class="title">Quick search</span></h2></div>
-<div class="region"><div class="contents"><p class="p">Just enter text into the quick search box. Streamtuner2 will instantly highlight
+<div class="region"><div class="contents"><p class="p">Just enter text into the quick search box atop. Streamtuner2 will instantly highlight
 	any matches in the current stations view. If you switch tabs, just click the glass icon
 	to reapply the highlighting.</p></div></div>
+</div></div>
+<div id="cachesearch" class="sect"><div class="inner">
+<div class="hgroup"><h2 class="title"><span class="title">Search window</span></h2></div>
+<div class="region"><div class="contents">
+<p class="p">You can get to the search dialog via <span class="guiseq"><span class="gui">Edit</span> ▸ <span class="gui">Find</span></span> or <span class="key"><kbd>Ctrl</kbd></span>+<span class="key"><kbd>F</kbd></span>.  Centrally
+	to this dialog is the text field, where you can specify the phrase
+	to scan for.</p>
+<p class="p">It either will search in all channels, or just the last active
+        channel/service.</p>
+<p class="p">Then there are two search methods.  You mostly want to use
+        the live <span class="gui">Server search</span>.  It passes your search terms to
+        the actual directory services, and loads the most recent data into a
+        result list (this might take a few seconds).  It's not implemented
+        for all channel plugins however.</p>
+<p class="p">With <span class="gui">Cache find</span> would just look up entries in your
+        already downloaded channel/genre lists.  Since often you are just
+        looking for something you had already seen, this will give you the
+        desired results.</p>
+</div></div>
 </div></div>
 <div class="sect sect-links" role="navigation">
 <div class="hgroup"></div>

@@ -14,7 +14,7 @@
         and radio station data files.</p>
 	<p>The MIME type of these files is application/json and they often look like: </p>
 
-<p><code>
+<code>
 [
   {
     "title": "Station title..",
@@ -23,6 +23,6 @@
   },
   { "title": "second" }
 ]
-</code></p>
+</code>
 
 </page>

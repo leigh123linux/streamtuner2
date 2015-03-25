@@ -15,7 +15,7 @@
 <div class="contents">
 <p class="p">Streamtuner2 is a simple browser for internet radios. It aquires its radio lists
 	from various directory services. These are represented as "channel" tabs in the main
-	window. Below are the category/genre lists (left) and the stations for a genre (right).</p>
+	window. Below are the category/genre lists (left) and all stations for a genre (right).</p>
 <div class="media media-image"><div class="inner"><img src="img/mainwindow2.svg" class="media media-block" alt=""></div></div>
 </div>
 <div id="play" class="sect"><div class="inner">
@@ -28,10 +28,7 @@
 <li class="steps"><p class="p">Double click one of the radio streams or use the <span class="key"><kbd>play</kbd></span> toolbar button.</p></li>
 </ol></div></div></div>
 <p class="p">Note that some categories can and should be exanded. In a few plugins (modarchive),
-	the expandable genre/category brings up no station list on its own, while in Shoutcast
-	and most others it's a valid genre in itself.</p>
-<p class="p">Some radio stations cannot be played, because they just have a homepage. (That's the
-	case for all listings in the Google Stations channel.)</p>
+	the grouping genre/categories are empty, while in other channels they're valid genres themselves.</p>
 </div></div>
 </div></div>
 <div id="actions" class="sect"><div class="inner">
@@ -42,42 +39,42 @@
 	or access the context menu with a right click.</p>
 <div class="table"><div class="inner"><div class="region"><table class="table">
 <tr>
-<td></td>
-<td style="border-left-style: solid;"></td>
+<td><p class="p">Play</p></td>
+<td style="border-left-style: solid;"><p class="p">Starts the radio in a configured audio player</p></td>
 </tr>
 <tr class="shade">
-<td style="border-top-style: solid;"></td>
-<td style="border-top-style: solid;border-left-style: solid;"></td>
+<td style="border-top-style: solid;"><p class="p">Record</p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">Opens a terminal window and streamripper, which cuts the radio broadcast into individual mp3 songs.</p></td>
 </tr>
 <tr>
-<td style="border-top-style: solid;"></td>
-<td style="border-top-style: solid;border-left-style: solid;"></td>
+<td style="border-top-style: solid;"><p class="p">Bookmarks</p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">Copy radio entry over into the <span class="gui">bookmarks</span> channel.</p></td>
 </tr>
 <tr class="shade">
-<td style="border-top-style: solid;"></td>
-<td style="border-top-style: solid;border-left-style: solid;"></td>
+<td style="border-top-style: solid;"><p class="p">Homepage</p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">Most radio stations have a homepage. Open this in a web browser.</p></td>
 </tr>
 <tr>
-<td style="border-top-style: solid;"></td>
-<td style="border-top-style: solid;border-left-style: solid;"></td>
+<td style="border-top-style: solid;"><p class="p">Saving</p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">A radio entry can be exported as .m3u or .pls file.</p></td>
 </tr>
 <tr class="shade">
-<td style="border-top-style: solid;"></td>
-<td style="border-top-style: solid;border-left-style: solid;"></td>
+<td style="border-top-style: solid;"><p class="p">Extensions<span class="guiseq"><span class="gui"></span> ▸ <span class="gui"></span></span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">Some plugins add other features in this submenu.</p></td>
 </tr>
 <tr>
-<td style="border-top-style: solid;"></td>
-<td style="border-top-style: solid;border-left-style: solid;"></td>
+<td style="border-top-style: solid;"><p class="p">Editing</p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">This command is in the <span class="gui">Edit</span> and context menu, allows to inspect and modify radio descriptions.</p></td>
 </tr>
 <tr class="shade">
-<td style="border-top-style: solid;"></td>
-<td style="border-top-style: solid;border-left-style: solid;"></td>
+<td style="border-top-style: solid;"><p class="p">Searching</p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">You can get a radio list according to search criteria.</p></td>
 </tr>
 </table></div></div></div>
 <p class="p"> Play, Record and Homepage also have buttons in the toolbar.</p>
 </div></div>
 </div></div>
-<div id="" class="sect"><div class="inner">
+<div id="none" class="sect"><div class="inner">
 <div class="hgroup"><h2 class="title"><span class="title">Radio lists get stale</span></h2></div>
 <div class="region"><div class="contents"><p class="p">After some time, stream informations become obsolete. Therefore you should regularily
 	refresh the lists. The <span class="gui">Reload</span> button in the toolbar (or <span class="key"><kbd>F5</kbd></span>) is your friend. You can

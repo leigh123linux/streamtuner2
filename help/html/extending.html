@@ -16,8 +16,7 @@
 <p class="p">Streamtuner2 is written in Python, a rather easy programming language. And it's also rather simple
 	to write a new channel plugin.</p>
 <p class="p">The basic layout of every channel plugin is as follows:</p>
-<p class="p"><span class="code">
-
+<div class="code"><pre class="contents ">
 from channels import *
 
 class myplugin (ChannelPlugin):
@@ -45,7 +44,7 @@ class myplugin (ChannelPlugin):
 
         return entries
         
-	</span></p>
+	</pre></div>
 <p class="p">There are some self-explanatory description fields, and two important methods. Sometimes you
         don't need categories even. The update_streams() function often downloads a website, parses it
 	with regular expressions or PyQuery / DOM methods, and packs into into a result list.</p>

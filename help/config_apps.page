@@ -15,15 +15,15 @@
 	by a generic player, like vlc.</p>
 
 	<table shade="rows" rules="rows cols">
-		<tr><td><app>Audacious</app></td>     <td><cmd>audacious %m3u</cmd></td>  <td>audio</td></tr>
-		<tr><td><app>XMMS2</td>               <td><cmd>xmms2 %m3u</cmd></td>      <td>audio</td></tr>
-		<tr><td><app>Amarok</app></td>        <td><cmd>amarok -l %pls</cmd></td>  <td>audio</td></tr>
-		<tr><td><app>Exaile</app></td>        <td><cmd>exaile %m3u</cmd></td>     <td>audio</td></tr>
-		<tr><td><app>Amarok</app></td>        <td><cmd>amarok -l %pls</cmd></td>  <td>audio</td></tr>
-		<tr><td><app>mplayer</app></td>       <td><cmd>mplayer %srv</cmd></td>    <td>console</td></tr>
-		<tr><td><app>VLC</app></td>           <td><cmd>vlc %u</cmd></td>          <td>video/*</td></tr>
-		<tr><td><app>Totem</app></td>         <td><cmd>totem %u</cmd></td>        <td>video/*</td></tr>
-		<tr><td><app>Media Player</app></td>  <td><cmd>mplayer2.exe %pls</cmd></td>  <td>Win32</td></tr>
+		<tr><td><p><app>Audacious</app></p></td>     <td><p><cmd>audacious %m3u</cmd></p></td>  <td><p>audio</p></td></tr>
+		<tr><td><p><app>XMMS2</app></p></td>         <td><p><cmd>xmms2 %m3u</cmd></p></td>      <td><p>audio</p></td></tr>
+		<tr><td><p><app>Amarok</app></p></td>        <td><p><cmd>amarok -l %pls</cmd></p></td>  <td><p>audio</p></td></tr>
+		<tr><td><p><app>Exaile</app></p></td>        <td><p><cmd>exaile %m3u</cmd></p></td>     <td><p>audio</p></td></tr>
+		<tr><td><p><app>Amarok</app></p></td>        <td><p><cmd>amarok -l %pls</cmd></p></td>  <td><p>audio</p></td></tr>
+		<tr><td><p><app>mplayer</app></p></td>       <td><p><cmd>mplayer %srv</cmd></p></td>    <td><p>console</p></td></tr>
+		<tr><td><p><app>VLC</app></p></td>           <td><p><cmd>vlc %u</cmd></p></td>          <td><p>video/*</p></td></tr>
+		<tr><td><p><app>Totem</app></p></td>         <td><p><cmd>totem %u</cmd></p></td>        <td><p>video/*</p></td></tr>
+		<tr><td><p><app>Media Player</app></p></td>  <td><p><cmd>mplayer2.exe %pls</cmd></p></td>  <td><p>Win32</p></td></tr>
 	</table>
 
 	<p>Some audio players open a second instance when you actually want to switch radios.
@@ -44,10 +44,10 @@
 	use often depends on the application.</p>
 
 	<table shade="rows" rules="rows cols">
-		<tr><td>Placeholder</td><td>Alternatives</td><td>URL/Filename type</td></tr>
-		<tr><td>%m3u</td><td>%f %g %m</td><td>Provides a local .m3u file for the streaming station</td></tr>
-		<tr><td>%pls</td><td>%url %u %r</td><td>Either a remote .pls resource, or a local .pls file (if converted)</td></tr>
-		<tr><td>%srv</td><td>%d %s</td><td>Direct link to first streaming address, e.g. http://72.5.9.33:7500</td></tr>
+	<thead>	<tr><td><p>Placeholder</p></td><td><p>Alternatives</p></td><td><p>URL/Filename type</p></td></tr> </thead>
+		<tr><td><p>%m3u</p></td><td><p>%f %g %m</p></td><td><p>Provides a local .m3u file for the streaming station</p></td></tr>
+		<tr><td><p>%pls</p></td><td><p>%url %u %r</p></td><td><p>Either a remote .pls resource, or a local .pls file (if converted)</p></td></tr>
+		<tr><td><p>%srv</p></td><td><p>%d %s</p></td><td><p>Direct link to first streaming address, e.g. http://72.5.9.33:7500</p></td></tr>
 	</table>
 
 	<p>You sould preferrably use the long forms. Most audio players like
