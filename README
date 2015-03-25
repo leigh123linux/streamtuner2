@@ -12,13 +12,24 @@ written in Python now instead of C.
 installation howto
 ------------------
 
-You can just execute the main binary "st2.py". All the other files
-need to be copied into /usr/share/streamtuner2/ however. If it
-doesn't work, make sure you have Python and gtk/pygtk installed:
+You can just execute the main binary "st2.py".
+All the other files need to be copied into /usr/share/streamtuner2/ however.
+In particular the channel/ directory needs to reside there, so ST2 can find
+all its plugins.
+
+If it doesn't work, make sure you have Python and gtk/pygtk installed:
 
   sudo apt-get install python python-gtk2 python-glade2 python-xdg
 
-The gtk*.xml file represents the GUI.  So with glade installed, you
+And a few modules like:
+
+  sudo apt-get install python-requests python-pyquery python-keybinder
+
+You can also install Python modules per `pip` with
+
+  sudo pip install requests
+
+The gtk*.xml file represents the GUI, btw.  So with glade installed, you
 can inspect and adapt the interface.
 
 
@@ -30,15 +41,6 @@ alternatives
 * http://tunapie.sourceforge.net/
 * VLC also has a few directory discovery services built-in
 * Rythmbox comes with last.fm, libre.fm, radio lookups
-
-
-Streamtuner2 CLI can also be used as proxy server for streamtuner1.
-There is a wrapper available. But there was nobody yet to be found who
-wanted it set up globally.
-It's available as st1proxy.tgz and cli-mode-only.tgz from
-http://milki.include-once.org/streamtuner2/ext/
-Contact me for setup help. Requires a webserver with unrestrained
-vhost support.
 
 
 license
