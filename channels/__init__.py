@@ -3,15 +3,14 @@
 # api: streamtuner2
 # title: Plugin handling
 # description: Channels and feature plugins reside in channels/
-# api: python
 # type: R
 # category: core
 # priority: core
 # pack:
 #   file.py, _generic.py, global_key.py, history.py, icast.py,
 #   internet_radio.py, itunes.py, jamendo.py, links.py, live365.py,
-#   modarchive.py, musicgoal.py, myoggradio.py, punkcast.py, shoutcast.py,
-#   surfmusik.py, timer.py, xiph.py, youtube.py, *.png
+#   modarchive.py, myoggradio.py, punkcast.py, shoutcast.py,
+#   surfmusik.py, tunein.py, timer.py, xiph.py, youtube.py, *.png
 # obsolete:
 #   dirble.py 
 #
