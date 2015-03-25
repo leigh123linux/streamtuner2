@@ -105,12 +105,17 @@ class shoutcast(channels.ChannelPlugin):
         url = "http://www.shoutcast.com/Home/BrowseByGenre"
         params = { "genrename": cat }
         referer = None
-        json = http.get(url, params=params, referer=referer, post=1, ajax=1)
+        try:
+            json = http.get(url, params=params, referer=referer, post=1, ajax=1)
+            json = json_decode(json)
+        except:
+            __print__(db.ERR, "HTTP request or JSON decoding failed. Outdated python/requests perhaps.")
+            return []
         self.parent.status(0.75)
 
         # remap JSON
         entries = []
-        for e in json_decode(json):
+        for e in json:
             entries.append({
                 "id": int(e.get("ID", 0)),
                 "genre": str(e.get("Genre", "")),
