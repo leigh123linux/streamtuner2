@@ -15,11 +15,19 @@
     },
     "releases": [
         {
+            "version": "2.1.4",
+            "state": "stable",
+            "scope": "minor feature",
+            "changes": "Fixed Internet-Radio extraction. Added basic TuneIn channel. Removed Dirble and MusicGoal channels. Fix desktop and packaging infos according to Debian guidelines. Switch to fpm/xml for package building. Remove bundled requests library. Update icon and fix path to application logo. Minor documentation updates.",
+            "download": "http://sourceforge.net/projects/streamtuner2/files/",
+            "published": "2015-03-25T00:30:00+0000"
+        },
+        {
             "version": "2.1.3",
             "state": "stable",
             "scope": "minor bugfix",
             "changes": "A new plugin for Dirble.com radio listings was introduced. Channel tabs can now be rearranged from notebook top to left side. The Live365 plugin was fixed again, as was the Xiph.org cache service. Shorter Youtube homepage URLs are now presented.",
-            "download": "http://sourceforge.net/projects/streamtuner2/files/?source=navbar",
+            "download": "http://sourceforge.net/projects/streamtuner2/files/",
             "published": "2014-08-15T01:00:00+0000"
         },
         {
@@ -27,7 +35,7 @@
             "state": "stable",
             "scope": "minor feature",
             "changes": "Radio list retrieval from Radionomys renewed Shoutcast have been fixed. The Live365 plugin however was disabled. There's also support for iTunes Radio stations (via RoliSoft Radio Playlist API), and a new channel module \"iCast.io\" as seen in VLC. SurfMusic.de is now available in a localized English display. Shorter Youtube URLs are now used and the Wadsworth constant available. MyOggRadio.org API interaction was fixed. More online music services have been added in the links list. The new and slimmer search dialog offers scanning all channels or just current and doesn't overwrite categories anymore.",
-            "download": "http://sourceforge.net/projects/streamtuner2/files/?source=navbar",
+            "download": "http://sourceforge.net/projects/streamtuner2/files/",
             "published": "2014-07-31T01:00:00+0000"
         },
         {
@@ -35,7 +43,7 @@
             "state": "stable",
             "scope": "major feature",
             "changes": "YouTube and SurfMusik channels were added, MODarchive included, but Google/DMOZ removed. The Jamendo API now allows browsing genres and shows cover images. Internet-Radio extraction was fixed, and a custom caching API introduced for Xiph/ICEcast. The configuration dialog visualizes plugins and options more coherently now. A new logo was introduced, and many bugfixes applied.",
-            "download": "http://sourceforge.net/projects/streamtuner2/files/?source=navbar",
+            "download": "http://sourceforge.net/projects/streamtuner2/files/",
             "published": "2014-05-28T16:31:00+0000"
         },
         {
@@ -43,7 +51,7 @@
             "state": "stable",
             "scope": "major feature",
             "changes": "Now supports running on Python3 and Python2, and can utilize either PyGI with GTk3 or PyGtk for Gtk2. Shoutcast, DMOZ and Live365 channels were fixed. Jamendo only lists radio stations for now. Basic.ch and Shoutcast TV channels were removed. HTTP downloading now uses requests and urllib3. Only real JSON is generated for config files now. Debugging output now is colorized, and ListStore references have finally been fixed.",
-            "download": "http://sourceforge.net/projects/streamtuner2/files/?source=navbar",
+            "download": "http://sourceforge.net/projects/streamtuner2/files/",
             "published": "2014-04-28T02:13:00+0000"
         },
         {
@@ -51,7 +59,7 @@
             "state": "stable",
             "scope": "major bugfix",
             "changes": "Fixes for sys.path merging, Gtk.main_quit were applied. Stream editing now provides a [new] button. Transitioned glade UI to gtk.Builder, and made configuration window resizable, and stations lists are no longer sortable. Pixbuf typecasting has been fixed in the mygtk handler.",
-            "download": "http://sourceforge.net/projects/streamtuner2/files/?source=navbar",
+            "download": "http://sourceforge.net/projects/streamtuner2/files/",
             "published": "2014-01-05T01:23:00+0000"
         }
     ]
