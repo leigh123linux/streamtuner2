@@ -32,10 +32,10 @@
     	</section>
 
 	<section id="footer">
-	<p>You can get additional help from the online forum. See help menu for the link.</p>
+	<p>You can get additional help from the online forum. See <guiseq><gui>Help</gui> <gui>Forum</gui></guiseq>.</p>
 
-	<p>Update status: This documentation is based on available functions in streamtuner2
-	version 2.1.4 of February 2015. It's still incomplete however.</p>
+	<p>This documentation was last updated for available functions in streamtuner2
+	version 2.1.4, as of March 2015.</p>
 	</section>
 
 </page>

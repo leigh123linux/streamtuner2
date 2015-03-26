@@ -16,6 +16,7 @@
           <item><p>Python 2.7 or 3.x</p></item>
           <item><p>PyGtk or PyGI</p></item>
           <item><p>Gtk2 or Gtk3</p></item>
+          <item><p>Requests/urllib3</p></item>
 	</terms>
         <terms>
   	  <title>Soft dependencies</title>

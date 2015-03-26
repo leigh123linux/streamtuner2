@@ -10,8 +10,8 @@
 
 <title>Settings dialog</title>
 
-<p>There are various options for streamtuner2.
-You can find the settings dialog in the edit menu as "Preferences" (last entry).
+<p>There are various options for streamtuner2, available under <guiseq><gui>Edit</gui>
+<gui>Preferences</gui></guiseq> or via <key>F12</key>.
 </p>
 
 <terms>
@@ -52,9 +52,8 @@ You can find the settings dialog in the edit menu as "Preferences" (last entry).
 
     <p>Application names are always lowercase binary names. Double click an entry to edit it.</p>
 
-    <p>After the application name, you can use a placeholder like "<var>%pls</var>" (which is the default,
-    and returns a direct URL often) or "<var>%m3u</var>" (where streamtuner creates local MP3 playlist file first)
-    and "<var>%src</var>" (a direct streaming server link, e.g. for VLC).</p>
+    <p>After the application name, you can use a placeholder like "<var>%pls</var>" (default),
+    or "<var>%m3u</var>" and "<var>%src</var>". See <link xref="config_apps#placeholders">placeholders</link>.</p>
 
     <p>Catch-all entries like <var>*/*</var> or a generic <var>audio/*</var> entry allow to configure a default player.
     While <var>video/youtube</var> is specific to the Youtube channel. And <var>url/http</var> a psdeudo MIME type
@@ -80,39 +79,109 @@ You can find the settings dialog in the edit menu as "Preferences" (last entry).
 
 
 <section id="gui">
-    <title>Display/GUI options</title>
 
-    <p>Most options here a self-explanatory. The options for the favicons define if station entries should
-    show little icons. Not all stations have one, so you might as well turn this off to conserve a little
-    memory.</p>
+  <title>Display/GUI options</title>
+  <terms>
+    <title>Display settings</title>
+    <item>
+      <title>Display favicons</title>
+      <p>The options for the favicons define if station entries should show little icons.
+      Not all stations have one, so you might as well turn this off to conserve a little memory.</p>
+    </item>
+    <item>
+      <title>Load favicons</title>
+      <p>When starting to play a station, its homepage favicon is automatically retrieved in the
+      background. It's not going to be displayed right away, but after you reload the category/station list.
+      Alternatively use <guiseq><gui>Channel</gui> <gui>Update favicons...</gui></guiseq> to update all
+      station icons at once.</p>
+    </item>
+    <item>
+      <title>Show bookmark star</title>
+      <p>Bookmarked stations will be marked with a ★ star in all other station lists / categories.
+      That doesn't often work for the same station entry from two different channel services / tabs though.</p>
+    </item>
+    <item>
+      <title>Gtk+ theme</title>
+      <p>Be careful. While Gtk allows to select a different theme per application, not all themes
+      work right away. Switching the theme might hang streamtuner2. Just restart if that happens.</p>
+    </item>
+    <item>
+      <title>Save window states</title>
+      <p>Automatically remember window size, selected channel tab, categories, or selected station.
+      Also keeps the width of station list columns. If disabled, you can manually save the current
+      layout/selections via <guiseq><gui>Edit</gui> <gui>Save States</gui></guiseq>.</p>
+    </item>
+ </terms>
 
-    <p>The number of stations setting is not honored by all channel plugins. Often it's not possible to
-    load more or fewer station entries. Some plugins have own settings (in the 'Plugins' section) even.
-    For the major plugins this however limits how much scroll text appears in the stream lists.</p>
+  <terms>
+    <title>Station loading</title>
+    <item>
+      <title>Prefer HTML traversing (PyQuery) over regex</title>
+      <p>Some channels provide proper APIs to fetch station lists. Others are just websites, that
+      require scraping listings out. Most channel tabs provide two alternative methods for that.
+      The DOM/HTML selection method is sometimes more reliable. As fallback streamtuner2 plugins
+      often use a regex to match text. Occassionally the regex method is actually more reliable,
+      because directory services often use frightful unstructured HTML. If available, both methods
+      are tried. You can influence the order with this setting.</p>
+    </item>
+    <item>
+      <title>[<input>250</input>] Limit stream number</title>
+      <p> Constraints the length of station lists per category.
+      The number of stations setting is not honored by all channel plugins. Often it's not possible to
+      load more or fewer station entries. Some plugins have own settings (in the 'Plugins' section) even.
+      For the major plugins this however limits how much scroll text appears in the stream lists.</p>
+    </item>
+    <item>
+      <title>Retain deleted stations</title> <p>When enabled, keeps old station entries when
+      updating/reloading a category/genre.  Services often forget stations or throws them out when inavailable.
+      With this option enabled, these entries are kept in streamtuner2 as strikethrough entries (often
+      at the end of the list).</p>
+    </item>
+    <item>
+      <title>Update favouries from freshened URLs</title>
+      <p>Streaming URLs in bookmarked stations get renewed on category reloads/updates. This isn't
+      very reliable, as often station titles change together with the streaming URLs.</p>
+    </item>
+    <item>
+      <title>google station homepages</title>
+      <p>When playing a station that doesn't have a homepage entry, streamtuner2 tries to google
+      the station title. The found URL is then used/kept as station homepage. (Btw, station titles
+      like www.mymusicstation.com are automatically mapped to homepage URLs already.)</p>
+    </item>
+ </terms>
 
-    <p>"Retain deleted stations" keeps old entries, when you reload a category/genre. Shoutcast often
-    forgets stations or throws them out. If you keep this option enabled, these entries are kept in
-    streamtuner2. Browse down in the stations list to still see them.</p>
+  <terms>
+    <title>System</title>
+    <item>
+      <title>Temporary files</title>
+      <p>Streamtuner2 creates temporary .m3u files, if an audio player is configured to use %m3u files
+      instead of %pls or %srv URLs. For archival purposes, you might want to set a dedicated directory
+      for this. Leave this to the default /tmp else.</p>
+    </item>
+    <item>
+      <title>Config directory</title>
+      <p>Is where streamtuner2 keeps its settings.json and channel caches, favicons, etc.
+      You can't set this in the config dialog. This is just for display. Set the XDG_CONFIG_HOME
+      environment variable to adapt.</p>
+    </item>
+    <item>
+      <title>Enable debug messages</title>
+      <p>If you start streamtuner2 from a terminal window (xterm/rxvt), you can get a load of state
+      and processing or debug infos. Enable this only for testing, as it might slow down station
+      rendering.</p>
+    </item>
+ </terms>
 
-    <p>It's possible to select a Gtk+ theme. But not all themes work with all Gtk display engines, and
-    not all themes work with streamtuner2. You'll have to try.</p>
-
-    <p>Remembering window states allows streamtuner2 to reconstruct which channel and category was last
-    selected. You can however disable this option, and instead manually save the window states/layout
-    in the edit menu, if you want.</p>
-
-    <p>Setting another temporary directory might be useful, if you want to keep the temporary .m3u cache
-    files. They are created whenever you hit play. For archival or speed-up porposes you might want to keep
-    them elsewhere. They don't take a lot of space.</p>
 </section>
 
 <section id="plugins">
     <title>Plugin and Channel settings</title>
 
-    <p>Each channel plugin can bring its own list of configuration settings. These are collected here.</p>
+    <p>This tab lists all available channel and feature plugins. Mark checkboxes for those plugins
+    you want to enable. You have to restart Streamtuner2 for any changes here to take effect.</p>
 
-    <p>The heading for each plugin allows to enable or disable it. To apply changed states you need to restart
-    streamtuner2 however.</p>
+    <p>Each channel plugin may come with its own set of addition configuration settings
+    below.</p>
 
     <p>If you want to find out more about the short option descriptions (most settings are checkboxes),
     please have a look into the channels directory /usr/share/streamtuner2/channels/ and corresponding

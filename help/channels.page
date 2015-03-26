@@ -10,10 +10,12 @@
 	<title>Channels</title>
 
 	<p>The tabs in the main window represent the music directory
-        channels/services.  Each lists categories and streams from a
-        specific radio directory/website.</p>
+        channels/services.  Each lists categories/genres and their associated radios/streams.</p>
 
 	<media type="image" mime="image/png" src="img/channels.png">Tabs</media>
+
+        <p>The notebook tabs can also be repositioned with
+        <guiseq><gui>Edit</gui> <gui>Channel tab position</gui> <gui>Left</gui></guiseq>.</p>
 
         <p>If you first select a channel tab, the categories should appear or be loading.
         Otherwise:</p>
@@ -25,8 +27,8 @@
 	</steps>
 
 	<p>Individual channels provide different music/radio information. The table
-        views are mostly identical in each tab. (You could modify the <code>datamap[]</code>
-        in the plugin files if you wanted to adapt this.)</p>
+        views are mostly identical in each tab. Some views may rename columns, or remove
+        them alltogether.</p>
 
 	<section id="list">
 		<title>Available channels</title>

@@ -22,8 +22,8 @@
 		<tr><td><p><app>Exaile</app></p></td>        <td><p><cmd>exaile %m3u</cmd></p></td>     <td><p>audio</p></td></tr>
 		<tr><td><p><app>Amarok</app></p></td>        <td><p><cmd>amarok -l %pls</cmd></p></td>  <td><p>audio</p></td></tr>
 		<tr><td><p><app>mplayer</app></p></td>       <td><p><cmd>mplayer %srv</cmd></p></td>    <td><p>console</p></td></tr>
-		<tr><td><p><app>VLC</app></p></td>           <td><p><cmd>vlc %u</cmd></p></td>          <td><p>video/*</p></td></tr>
-		<tr><td><p><app>Totem</app></p></td>         <td><p><cmd>totem %u</cmd></p></td>        <td><p>video/*</p></td></tr>
+		<tr><td><p><app>VLC</app></p></td>           <td><p><cmd>vlc %u</cmd></p></td>          <td><p>video</p></td></tr>
+		<tr><td><p><app>Totem</app></p></td>         <td><p><cmd>totem %u</cmd></p></td>        <td><p>video</p></td></tr>
 		<tr><td><p><app>Media Player</app></p></td>  <td><p><cmd>mplayer2.exe %pls</cmd></p></td>  <td><p>Win32</p></td></tr>
 	</table>
 
@@ -37,7 +37,7 @@
         and cannot be invoked with a play URL by other apps. This makes them less suitable for use with
 	streamtuner2.</p>
 
-	<section id="abbr">
+	<section id="placeholders">
 	<title>URL placeholders</title>
 
 	<p>Any listed application can be invoked with a different kind of

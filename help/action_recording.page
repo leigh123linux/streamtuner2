@@ -12,7 +12,7 @@
 <title>Recording</title>
 
 <p>Most stations that stream MP3 or OGG music can be recorded. This is accomplished through
-the commandline tool "streamripper". If you select a station a press the [record] button,
+the command-line tool "streamripper". If you select a station and press <gui style="button">● record</gui>,
 a console window should appear, where streamripper shows its progress.</p>
 
 
@@ -28,8 +28,8 @@ progress. Remove that for silent downloads.</p>
 </table>
 
 <p>To configure a default download directory, use the <cmd>-d</cmd> option to streamripper.
-For example <cmd>xterm -e "streamripper -d /media/music/"</cmd> would use an absolute path
-instead of your home directory (or the current working directory).</p>
+For example <cmd>xterm -e "streamripper -d /media/music/"</cmd> would use an absolute path.
+Else it downloads to the current working directory (often your HOME path).</p>
 </section>
 
 
@@ -49,6 +49,18 @@ for recording ICEcast/SHOUTcast streaming servers.</p>
 <p>The recording settings have a specific entry for "video/youtube" URLs. To configure a specific download
 directory, use <cmd>xterm -e "cd /media/music ; youtube-dl %srv"</cmd> for example. (The <cmd>cd</cmd>
 trick works with streamripper too.)</p>
+</section>
+
+
+<section>
+<title>Wget for MOD files</title>
+
+<p>To download audio files from The MOD Archive directly, you can define a
+few custom handlers.  Scroll/click on the empty row in the recording apps
+table.  There create a new recording MIME type <var>audio/mod+zip</var> with
+a command like <cmd>xterm -e wget %srv</cmd>.  Copy it alike for
+<var>audio/it+zip</var> and <var>audio/xm+zip</var> to cover the most common
+file types.  Using <cmd>curl</cmd> would also work of course.  </p>
 </section>
 
 

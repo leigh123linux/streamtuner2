@@ -37,12 +37,11 @@
 
 	  <item>
 	    <title>URL</title> <p>URL stands for "Uniform Resource Locator"
-	    and simply means hyperlinks and web addresses like
-	    http://www.example.org/.  There is also the hipster term "URI",
-	    which is technically more general (but superseeded by "IRI" and
-	    "IRL" anyway).  In streamtuner2 the audio streaming link often
-	    is an URL, as is the radio station homepage of course.  (ISBN or
-	    Mailto URIs don't make much sense for either.)</p>
+	    and simply refers to something retrievable hyperlinks or web addresses like
+	    http://www.example.org/.  Radio stations/streams are stored as URLs internally.
+            The more generic hipster term "URI" (long superseded by "IRI" anyway)
+            makes less sense in this context, because ISBN: or MailTo: references aren't
+            overly useful for such purposes.</p>
 	  </item>
 
 	  <item>
