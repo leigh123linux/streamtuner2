@@ -4,29 +4,52 @@
 
 <info>
 	<link type="guide" xref="streams#actions"/>
-	<link type="guide" xref="configuration#apps"/>
+	<link type="guide" xref="configuration#recording"/>
 	<link type="guide" xref="index#functions"/>
 	<desc>Save radio songs as MP3 files via streamripper.</desc>
 </info>
 
-	<title>Recording</title>
+<title>Recording</title>
 
-	<p>Most stations that stream MP3 or OGG music can be recorded. This is accomplished by
-        the commandline tool "streamripper". If you select a station a press the [record] button,
-        a console window should appear. Within that streamripper outputs its current activity.</p>
+<p>Most stations that stream MP3 or OGG music can be recorded. This is accomplished through
+the commandline tool "streamripper". If you select a station a press the [record] button,
+a console window should appear, where streamripper shows its progress.</p>
 
-        <p>Per default recorded streams are written into the current directory. Often this is your
-        home directory. And streamripper automatically creates a directory with the recorded
-        radio station title as name. Within that directory the individual music titles are split
-        into separate .mp3 files.</p>
 
-        <p>You can influence all these behaviours with -arguments to the streamripper program.
-        Please refer to the manpage of streamripper. The options are too broad to list here.
-        You can set default arguments (e.g. another default save directory) in the Config &gt; Apps
-        dialog.</p>
+<section>
+<title>Streamripper</title>
 
-        <p>As alternative check out <link href="http://freshcode.club/projects/ficy">fIcy/fPls</link>
-	for recording ICEcast/SHOUTcast streaming servers.</p>
+<p>The <cmd>xterm -e</cmd> prefix brings up the terminal popup, to follow streamrippers
+progress. Remove that for silent downloads.</p>
+
+<table shade="rows" rules="rows cols">
+  <thead>  <tr><td><p>Format</p></td>     <td><p>Application</p></td></tr> </thead>
+  <tr><td><p><var>audio/*</var></p></td>  <td><p><cmd>xterm -e streamripper %srv</cmd></p></td></tr>
+</table>
+
+<p>To configure a default download directory, use the <cmd>-d</cmd> option to streamripper.
+For example <cmd>xterm -e "streamripper -d /media/music/"</cmd> would use an absolute path
+instead of your home directory (or the current working directory).</p>
+</section>
+
+
+<section>
+<title>fIcy/fPls</title>
+
+<p>As alternative to streamripper, check out <link href="http://freshcode.club/projects/ficy">fIcy/fPls</link>
+for recording ICEcast/SHOUTcast streaming servers.</p>
+
+<p>It can be configured with <cmd>xterm -e "fPls %srv"</cmd> simply.</p>
+</section>
+
+
+<section>
+<title>Youtube-DL</title>
+
+<p>The recording settings have a specific entry for "video/youtube" URLs. To configure a specific download
+directory, use <cmd>xterm -e "cd /media/music ; youtube-dl %srv"</cmd> for example. (The <cmd>cd</cmd>
+trick works with streamripper too.)</p>
+</section>
 
 
 </page>

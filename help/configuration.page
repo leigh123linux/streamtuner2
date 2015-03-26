@@ -1,90 +1,124 @@
-<page	xmlns="http://projectmallard.org/1.0/"
-	type="guide"
-	id="configuration">
+<page
+    xmlns="http://projectmallard.org/1.0/"
+    type="guide" group="first"
+    id="configuration">
 
 <info>
-	<link type="guide" xref="index#configuration"/>
-        <desc><key>F12</key> brings up the options window with the Player, Display, System and Plugin sections.</desc>
+    <link type="guide" xref="index#configuration"/>
+    <desc><key>F12</key> brings up the options window with the Player, Display, System and Plugin sections.</desc>
 </info>
 
-	<title>Settings dialog</title>
+<title>Settings dialog</title>
 
-	<p>There are various options for streamtuner2.
-        You can find the settings dialog in the edit menu as "Preferences" (last entry).
-        </p>
+<p>There are various options for streamtuner2.
+You can find the settings dialog in the edit menu as "Preferences" (last entry).
+</p>
 
-        <terms>
-          <title>It's separated into three main areas.</title>
-          <item>
-            <title>Player</title>
-            <p>Lists audio formats and the audio player applications, or recording tools below.
-            It's a file type to application table. Double click an entry for editing.</p>
-          </item>
-          <item>
-            <title>Options</title>
-            <p>Influences the display of all stream/station lists, and contains some system settings.</p>
-          </item>
-          <item>
-            <title>Channel Plugins</title>
-            <p>Every channel tab can have specific options. These are configured here.
-            Also you can disable channels you don't need.</p>
-          </item>
-        </terms>
-
-
-	<section id="apps">
-		<title>Player application settings</title>
-		<p>MIME types are elaborate identifiers for file types; audio/mp3 for example represents MP3 files, and audio/ogg
-		means just OGG.</p>
-		<p>The text entry fields can hold the application name of an audio player. Often the application name
-		is just a lower case version of the program title.</p>
-		<p>Behind application names a placeholder can be used. On invocation such placeholders
-		get replaced with an URL (a http://..-Link) or filename for the selected radio stream.</p>
-		<p>Placeholders are introduced by a percent sign, and followed by letters. %m3u for example generates a .m3u file,
-                which most audio players understand. Otherwise try %pls, which might even be faster because streamtuner2 doesn't
-		have to download and preprocess it. Alternatively %srv instead gives a direct stream link.</p>
-		<p>Catch-all entries like */* or a generic audio/* entry allow to configure a default player.
-		</p>
-		<p><title>Recording</title></p>
-		<p>The second block of entries in the 'Apps' section specifies recording applications.
-                Here streamripper is preconfigured for audio streams, and youtube-dl for Youtube videos for instance.
-                To define a target directory, you can add commandline arguments to each. Also it's typically
-                helpful to leave the xterm prefix on, so you can follow the processing state. (Alternatively to
-                xterm there is x-terminal-emulator, or rxvt, gnome-terminal, xfce4-terminal, etc.)</p>
-	</section>
+<terms>
+  <title>It's separated into three main areas.</title>
+  <item>
+    <title>Player</title>
+    <p>Lists audio formats and the audio player applications, or recording tools below.
+    It's a file type to application table. Double click an entry for editing.</p>
+  </item>
+  <item>
+    <title>Options</title>
+    <p>Influences the display of all stream/station lists, and contains some system settings.</p>
+  </item>
+  <item>
+    <title>Channel Plugins</title>
+    <p>Every channel tab can have specific options. These are configured here.
+    Also you can disable channels you don't need.</p>
+  </item>
+</terms>
 
 
-	<section id="gui">
-		<title>Display/GUI options</title>
-		<p>Most options here a self-explanatory. The options for the favicons define if station entries should
-		show little icons. Not all stations have one, so you might as well turn this off to conserve a little
-		memory.</p>
-		<p>The number of stations setting is not honored by all channel plugins. Often it's not possible to
-		load more or fewer station entries. Some plugins have own settings (in the 'Plugins' section) even.
-		For the major plugins this however limits how much scroll text appears in the stream lists.</p>
-		<p>"Retain deleted stations" keeps old entries, when you reload a category/genre. Shoutcast often
-		forgets stations or throws them out. If you keep this option enabled, these entries are kept in
-		streamtuner2. Browse down in the stations list to still see them.</p>
-		<p>It's possible to select a Gtk+ theme. But not all themes work with all Gtk display engines, and
-		not all themes work with streamtuner2. You'll have to try.</p>
-		<p>Remembering window states allows streamtuner2 to reconstruct which channel and category was last
-		selected. You can however disable this option, and instead manually save the window states/layout
-		in the edit menu, if you want.</p>
-		<p>Setting another temporary directory might be useful, if you want to keep the temporary .m3u cache
-		files. They are created whenever you hit play. For archival or speed-up porposes you might want to keep
-		them elsewhere. They don't take a lot of space.</p>
-	</section>
+<section id="apps">
 
-	<section id="plugins">
-		<title>Plugin and Channel settings</title>
-		<p>Each channel plugin can bring its own list of configuration settings. These are collected here.</p>
-		<p>The heading for each plugin allows to enable or disable it. To apply changed states you need to restart
-                streamtuner2 however.</p>
-		<p>If you want to find out more about the short option descriptions (most settings are checkboxes),
-		please have a look into the channels directory /usr/share/streamtuner2/channels/ and corresponding
-		*.py files. These are readable, and sometimes contain more information.</p>
-	</section>
-	
-	
-	
+    <title>Player application settings</title>
+
+    <p>MIME types are categorzied identifiers for file types. <var>Audio/mpeg</var> for example represents MP3 files,
+    and <var>audio/ogg</var> means just OGG. And the player setting dialog simply associates an audio type with a
+    playback application:</p>
+
+<table shade="rows" rules="rows cols">
+  <thead>  <tr><td><p>Format</p></td>     <td><p>Application</p></td></tr> </thead>
+    <tr><td><p><var>audio/mpeg</var></p></td>     <td><p><cmd>audacious</cmd></p></td></tr>
+    <tr><td><p><var>audio/ogg</var></p></td>      <td><p><cmd>audacious</cmd></p></td></tr>
+    <tr><td><p><var>audio/*</var></p></td>        <td><p><cmd>vlc --one-instance</cmd></p></td></tr>
+    <tr><td><p><var>video/*</var></p></td>        <td><p><cmd>totem</cmd></p></td></tr>
+    <tr><td><p><var>video/youtube</var></p></td>  <td><p><cmd>vlc %srv</cmd></p></td></tr>
+</table>
+
+    <p>Application names are always lowercase binary names. Double click an entry to edit it.</p>
+
+    <p>After the application name, you can use a placeholder like "<var>%pls</var>" (which is the default,
+    and returns a direct URL often) or "<var>%m3u</var>" (where streamtuner creates local MP3 playlist file first)
+    and "<var>%src</var>" (a direct streaming server link, e.g. for VLC).</p>
+
+    <p>Catch-all entries like <var>*/*</var> or a generic <var>audio/*</var> entry allow to configure a default player.
+    While <var>video/youtube</var> is specific to the Youtube channel. And <var>url/http</var> a psdeudo MIME type
+    to configure a web browser (for station homepages).</p>
+
+</section>
+<section id="recording">
+
+    <title>Recording Apps</title>
+
+    <p>The second block of entries in the 'Apps' section specifies recording applications.
+    Here streamripper is preconfigured for audio streams, and youtube-dl for Youtube videos for instance.</p>
+
+<table shade="rows" rules="rows cols">
+    <tr><td><p><var>audio/*</var></p></td>         <td><p><cmd>xterm -e streamripper %srv</cmd></p></td></tr>
+    <tr><td><p><var>video/youtube</var></p></td>   <td><p><cmd>xterm -e "youtube-dl %srv"</cmd></p></td></tr>
+</table>
+
+    <p>To define a target directory, you can add commandline arguments to each. Also it's typically
+    helpful to leave the xterm prefix on, so you can follow the processing state. (Alternatively to
+    xterm there is x-terminal-emulator, or rxvt, gnome-terminal, xfce4-terminal, etc.)</p>
+</section>
+
+
+<section id="gui">
+    <title>Display/GUI options</title>
+
+    <p>Most options here a self-explanatory. The options for the favicons define if station entries should
+    show little icons. Not all stations have one, so you might as well turn this off to conserve a little
+    memory.</p>
+
+    <p>The number of stations setting is not honored by all channel plugins. Often it's not possible to
+    load more or fewer station entries. Some plugins have own settings (in the 'Plugins' section) even.
+    For the major plugins this however limits how much scroll text appears in the stream lists.</p>
+
+    <p>"Retain deleted stations" keeps old entries, when you reload a category/genre. Shoutcast often
+    forgets stations or throws them out. If you keep this option enabled, these entries are kept in
+    streamtuner2. Browse down in the stations list to still see them.</p>
+
+    <p>It's possible to select a Gtk+ theme. But not all themes work with all Gtk display engines, and
+    not all themes work with streamtuner2. You'll have to try.</p>
+
+    <p>Remembering window states allows streamtuner2 to reconstruct which channel and category was last
+    selected. You can however disable this option, and instead manually save the window states/layout
+    in the edit menu, if you want.</p>
+
+    <p>Setting another temporary directory might be useful, if you want to keep the temporary .m3u cache
+    files. They are created whenever you hit play. For archival or speed-up porposes you might want to keep
+    them elsewhere. They don't take a lot of space.</p>
+</section>
+
+<section id="plugins">
+    <title>Plugin and Channel settings</title>
+
+    <p>Each channel plugin can bring its own list of configuration settings. These are collected here.</p>
+
+    <p>The heading for each plugin allows to enable or disable it. To apply changed states you need to restart
+    streamtuner2 however.</p>
+
+    <p>If you want to find out more about the short option descriptions (most settings are checkboxes),
+    please have a look into the channels directory /usr/share/streamtuner2/channels/ and corresponding
+    *.py files. These are readable, and sometimes contain more information.</p>
+</section>
+
+
+
 </page>

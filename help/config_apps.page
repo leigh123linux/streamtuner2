@@ -4,13 +4,14 @@
 
 <info>
 	<link type="guide" xref="configuration#apps"/>
+	<link type="guide" xref="index#configuration"/>
 	<desc>Common applications to use as players.</desc>
 </info>
 
 	<title>Audio players</title>
 
 	<p>On BSD/Linux systems there are a plethora of audio players. In streamtuner2 you can
-	configure most of them as target application. Mostly it makes sense to use a single
+	<link xref="configuration">configure</link> most of them as target application. Mostly it makes sense to use a single
 	application for all audio formats. But at least the */* media type should be handled
 	by a generic player, like vlc.</p>
 
