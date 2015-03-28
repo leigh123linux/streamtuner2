@@ -14,7 +14,7 @@
 # While it's not an open source project, most entries are user contributed.
 #
 # They do have a Windows client, hencewhy it's even more important for
-# streamtuner2 to support it on other plattforms.
+# streamtuner2 to support it on other platforms.
 #
 # TV stations don't seem to work mostly. And loading the webtv/ pages would
 # be somewhat slow (for querying the actual mms:// streams).

@@ -20,7 +20,7 @@
 #
 
 
-from config import __print__, dbg
+from config import *
 from channels import *
 import kronos
 from mygtk import mygtk
@@ -36,6 +36,7 @@ class timer:
     # plugin info
     module = "timer"
     title = "Timer"
+    meta = plugin_meta()
     
     
     # configuration settings

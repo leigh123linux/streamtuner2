@@ -14,6 +14,7 @@
 #
 
 
+from config import *
 from channels import *
 import copy
 
@@ -26,6 +27,7 @@ class links (object):
     module = "links"
     title = "Links"
     version = 0.1
+    meta = plugin_meta()
     
     
     # configuration settings

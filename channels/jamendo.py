@@ -7,6 +7,9 @@
 # category: radio
 # depends: json
 # priority: default
+# config: 
+#    { name: "jamendo_stream_format", type: "select", value: "ogg", select: "ogg=Ogg Vorbis|mp32=MP3, 192vbr|mp31=MP3, 96kbps|flac=Xiph FLAC", description: "Default streaming audio format. Albums and playlists still return Vorbis mostly for best quality." }
+#
 #
 # Now utilizes the Jamendo /v3.0/ API.
 #

@@ -4,9 +4,12 @@
 # description: Displays mp3/oggs or m3u/pls files from local media file directories.
 # type: channel
 # category: media
-# version: 0.0
+# version: 0.1
 # priority: optional
 # depends: mutagen
+# config:  
+#   {name:"file_browser_dir", "type":"text", "value": "~/Music, /media/music", "description":"list of directories to scan for audio files"},
+#   {name:"file_browser_ext", "type":"text", "value":"mp3,ogg, m3u,pls,xspf, avi,flv,mpg,mp4", "description":"file type filter"},
 #
 #
 # Local file browser.
@@ -20,18 +23,18 @@ import os
 import re
 
 from channels import *
-from config import conf
+from config import *
 
 # ID3 libraries
 try:
     from mutagen import File as get_meta
 except:
     try:
-        print("just basic ID3 support")
         from ID3 import ID3
+        __print__(dbg.INFO, "Just basic ID3 support")
         get_meta = lambda fn: dict([(k.lower(),v) for k,v in ID3(fn).iteritems()])
     except:
-        print("you are out of luck in regards to mp3 browsing")
+        __print__(dbg.INIT, "You are out of luck in regards to mp3 browsing. No ID3 support.")
         get_meta = lambda *x: {}
 
 
@@ -56,18 +59,11 @@ def mutagen_postprocess(d):
 class file (ChannelPlugin):
 
     # info
-    api = "streamtuner2"
     module = "file"
     title = "file browser"
-    version = -0.5
     listtype = "url/file"
     
-    
     # data
-    config = [
-        {"name":"file_browser_dir", "type":"text", "value":os.environ["HOME"]+"/Music, /media/music", "description":"list of directories to scan for audio files"},
-        {"name":"file_browser_ext", "type":"text", "value":"mp3,ogg, m3u,pls,xspf, avi,flv,mpg,mp4", "description":"file type filter"},
-    ]
     streams = {}
     categories = []
     dir = []
@@ -77,7 +73,7 @@ class file (ChannelPlugin):
     datamap = [ # coltitle   width	[ datasrc key, type, renderer, attrs ]	[cellrenderer2], ...
            ["",		20,	["state",	str,  "pixbuf",	{}],	],
            ["Genre",	65,	['genre',	str,	"t",	{"editable":8}],	],
-           ["File",	160,	["filename",	str,	"t",	{"strikethrough":11, "cell-background":12, "cell-background-set":13}],	],
+           ["File",	160,	["filename",	str,	"t",	{"strikethrough":10, "cell-background":11, "cell-background-set":12}],	],
            ["Title",	205,	["title",	str,    "t",	{"editable":8}], ],
            ["Artist",	125,	["artist",	str,	"t",	{"editable":8}],	],
            ["Album", 	125,	["album",	str,	"t",	{"editable":8}],	],

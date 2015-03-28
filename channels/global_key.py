@@ -29,6 +29,7 @@ class global_key(object):
 
     module = "global_key"
     title = "keyboard shortcut"
+    meta = plugin_meta()
     
     config = [
         dict(name="switch_key", type="text", value="XF86Forward", description="global key for switching radio"),

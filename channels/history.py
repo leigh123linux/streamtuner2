@@ -6,6 +6,8 @@
 # type: category
 # category: ui
 # priority: optional
+# config:  { name: history,  type: int,  value: 20,  description: Number of last played streams to keep in history list.,  category: limit }
+#
 # 
 # Lists last activated streams in a new [history] tab in the favourites
 # channel.
@@ -15,7 +17,7 @@
 
 
 
-from config import conf, __print__, dbg
+from config import *
 from channels import *
 
 
@@ -25,18 +27,8 @@ class history:
     # plugin info
     module = "history"
     title = "History"
-    
-    
-    # configuration settings
-    config = [
-        {
-            "name": "history",
-            "type": "int",
-            "value": "20",
-            "description": "Number of last played streams to keep in history list.",
-            "category": "limit"
-        }
-    ]
+    meta = plugin_meta()
+
     
     # store
     bm = None
@@ -44,6 +36,7 @@ class history:
 
     # hook up to main tab
     def __init__(self, parent):
+        self.config = self.meta["config"]
 
         # keep reference to main window    
         self.bm = parent.channels["bookmarks"]

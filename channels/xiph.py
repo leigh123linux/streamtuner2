@@ -1,4 +1,4 @@
-#
+# encoding: UTF-8
 # api: streamtuner2
 # title: Xiph.org
 # description: ICEcast radio directory. Now utilizes a cached JSON API.
@@ -7,13 +7,21 @@
 # version: 0.3
 # priority: standard
 #
-#
 # Xiph.org maintains the Ogg streaming standard and Vorbis audio compression
 # format, amongst others. The ICEcast server is an alternative to SHOUTcast.
 #
 # It meanwhile provides a JSOL dump, which is faster to download and process.
 # So we'll use that over the older yp.xml. (Sadly it also doesn't output
 # homepage URLs, listeners, etc.)
+#
+# Xiphs JSON is a horrible mysqldump concatenation, not parseable. Thus it's
+# refurbished on api.io for consumption. Which also provides compressed HTTP
+# transfers and category slicing.
+#
+# Xiph won't be updating the directory for another while. The original feature
+# request is now further delayed as summer of code project:
+# · https://trac.xiph.org/ticket/1958
+# · https://wiki.xiph.org/Summer_of_Code_2015#Stream_directory_API
 #
 #
 
@@ -43,7 +51,7 @@ class xiph (ChannelPlugin):
         module = "xiph"
         title = "Xiph.org"
         homepage = "http://dir.xiph.org/"
-        #base_url = "http://api.dir.xiph.org/"
+        #xml_url = "http://dir.xiph.org/yp.xml"
         json_url = "http://api.include-once.org/xiph/cache.php"
         listformat = "url/http"
         config = [
