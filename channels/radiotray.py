@@ -1,7 +1,7 @@
 # api: dbus
-# title: RadioTray interface
+# title: RadioTray hook
 # description: Allows to bookmark stations to RadioTray
-# version: 0.1
+# version: 0.2
 # type: feature
 # category: bookmarks
 # depends: deb:python-dbus, deb:streamtuner2, deb:python-xdg
@@ -9,17 +9,24 @@
 # id: streamtuner2-radiotray
 # pack: radiotray.py=/usr/share/streamtuner2/channels/
 #
-# Adds a context menu "Share in RadioTray.." to bookmark a station
-# in RadioTray.  Currently just starts playing.  RT doesn't expose
-# its addRadio() method yet.
+# Adds a context menu "Keep in RadioTray.." to bookmark streams
+# in RadioTray.  Until a newer version exposes addRadio(), this
+# plugin will fall back to just playUrl().
 #
-# Supposed to read RadioTrays bookmarks as well, and make them available
-# in bookmarks>radiotray channel.
+# The patch for radiotray/DbusFacade.py would be:
+#   +
+#   +    @dbus.service.method('net.sourceforge.radiotray')
+#   +    def addRadio(self, title, url, group="root"):
+#   +        self.dataProvider.addRadio(title, url, group)
 #
-# Can be packaged up separately.
+# Displays existing radiotray stations in ST2 bookmarks category
+# as read from ~/.local/share/radiotray/bookmarks.xml. They're not
+# refetched during runtime.
+#
+# This plugin may be packaged up separately.
 #
 
-from config import conf, __print__, dbg
+from config import *
 from channels import *
 from mygtk import mygtk
 
@@ -34,6 +41,7 @@ class radiotray:
     # plugin info
     module = "radiotray"
     title = "RadioTray"
+    meta = plugin_meta()
     # configuration settings
     config = [
     ]
@@ -51,7 +59,7 @@ class radiotray:
                 "net.sourceforge.radiotray",
                 "/net/sourceforge/radiotray"
             ),
-            "net.sourceforge.radiotry"
+            "net.sourceforge.radiotray"
         )
 
 
@@ -63,20 +71,20 @@ class radiotray:
         self.bm = parent.channels["bookmarks"]
 
         # create category
-        self.bm.add_category("radiotray");
+        self.bm.add_category("radiotray", plugin=self);
         self.bm.streams["radiotray"] = self.update_streams(cat="radiotray")
         self.bm.reload_if_current(self.module)
 
         # add context menu
         if parent:
-            mygtk.add_menu(parent.extensions, "Share in RadioTray", self.share)
+            mygtk.add_menu(parent.extensions, "Keep in RadioTray", self.share)
         
 
     # load RadioTray bookmarks
     def update_streams(self, cat):
         r = []
         try:
-            for group in ElementTree.parse(self.rt_xml).findall("//group"):
+            for group in ElementTree.parse(self.rt_xml).findall(".//group"):
                 for bookmark in group.findall("bookmark"):
                     r.append({
                         "genre": group.attrib["name"],
@@ -85,7 +93,7 @@ class radiotray:
                         "playing": "",
                     })
         except:
-            r
+            pass
         return r
 
 
@@ -95,7 +103,7 @@ class radiotray:
         if row:
             # RadioTray doesn't have an addRadio method yet, so just fall back to play the stream URL
             try:
-                self.radiotray().addRadio(row["title"], row["url"])
+                self.radiotray().addRadio(row["title"], row["url"], row.get("genre", d="root"))
             except:
                 self.radiotray().playUrl(row["url"])
         pass
