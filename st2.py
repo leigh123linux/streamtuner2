@@ -1,44 +1,39 @@
 #!/usr/bin/env python
+#
 # encoding: UTF-8
 # api: python
 # type: application
 # title: streamtuner2
 # description: Directory browser for internet radio / audio streams
-# depends: pygtk | pygi, threading, pyquery, python-lxml, requests
+# depends: pygtk | gi, threading, requests, pyquery, lxml, deb:python-pyquery, deb:python-requests, deb:python-gtk2
 # version: 2.1.4
 # author: Mario Salzer <milky@users.sf.net>
 # license: public domain
 # url: http://freshcode.club/projects/streamtuner2
-# config: <env name="http_proxy" value="" description="proxy for HTTP access" />  <env name="XDG_CONFIG_HOME" description="relocates user .config subdirectory" />
+# config:  
+#   { type: env, name: http_proxy, description: proxy for HTTP access }
+#   { type: env, name: XDG_CONFIG_HOME, description: relocates user .config subdirectory }
 # category: sound
 # id: streamtuner2
-# pack:
-#   *.py, gtk*.xml,
-#   st2.py=/usr/bin/streamtuner2,
-#   channels/__init__.py,
-#   bundle/*.py,
-#   streamtuner2.desktop=/usr/share/applications/,
-#   README=/usr/share/doc/streamtuner2/,
-#   NEWS.gz=/usr/share/doc/streamtuner2/changelog.gz,
-#   help/streamtuner2.1=/usr/share/man/man1/,
-#   help/*page=/usr/share/doc/streamtuner2/help/,
-#   help/img/*=/usr/share/doc/streamtuner2/help/img/,
-#   streamtuner2.png,
-#   logo.png=/usr/share/pixmaps/streamtuner2.png,
+# pack: *.py, gtk*.xml, st2.py=/usr/bin/streamtuner2, channels/__init__.py, bundle/*.py,
+#   streamtuner2.desktop=/usr/share/applications/, README=/usr/share/doc/streamtuner2/,
+#   NEWS.gz=/usr/share/doc/streamtuner2/changelog.gz, help/streamtuner2.1=/usr/share/man/man1/,
+#   help/*page=/usr/share/doc/streamtuner2/help/, help/img/*=/usr/share/doc/streamtuner2/help/img/,
+#   streamtuner2.png, logo.png=/usr/share/pixmaps/streamtuner2.png,
 # architecture: all
-#
 #
 # Streamtuner2 is a GUI browser for internet radio directories. Various
 # providers can be added, and streaming stations are usually grouped into
 # music genres or categories. It starts external audio players for stream
-# playing and streamripper for recording broadcasts.
+# playing, and defaults to streamripper for recording broadcasts.
 #
-# It's an independent rewrite of streamtuner1 in a scripting language. So
-# it can be more easily extended and fixed. The mix of JSON APIs, regex
-# or PyQuery extraction simplifies processing many sources.
+# It's an independent rewrite of streamtuner1. Being written in Python,
+# can be more easily extended and fixed. The mix of JSON APIs, regex
+# or PyQuery extraction makes list generation simpler and more robust.
 #
 # Primarily radio stations are displayed, some channels however are music
 # collections. Commercial and sign-up services are not the target purpose.
+#
 
 """ project status """
 #
@@ -93,7 +88,7 @@ sys.path.append(   "/usr/share/streamtuner2/bundle")   # external libraries
 sys.path.insert(0, ".")   # development module path
 
 # gtk modules
-from mygtk import pygtk, gtk, gobject, ui_file, mygtk, ver as GTK_VER, ComboBoxText
+from mygtk import pygtk, gtk, gobject, ui_file, mygtk, ver as GTK_VER, ComboBoxText, gui_startup
 
 # custom modules
 from config import conf   # initializes itself, so all conf.vars are available right away
@@ -103,7 +98,7 @@ import action  # needs workaround... (action.main=main)
 import channels
 from channels import *
 import favicon
-
+import channels.bookmarks
 
 __version__ = "2.1.4"
 
@@ -146,7 +141,7 @@ class StreamTunerTwo(gtk.Builder):
 
             # initialize channels
             self.channels = {
-              "bookmarks": bookmarks(parent=self),   # this the remaining built-in channel
+              "bookmarks": channels.bookmarks.bookmarks(parent=self),   # this the remaining built-in channel
               #"shoutcast": None,#shoutcast(parent=self),
             }
             gui_startup(3/20.0)
@@ -457,18 +452,19 @@ class StreamTunerTwo(gtk.Builder):
                 try:
                     plugin = __import__("channels."+module, None, None, [""])
                     plugin_class = plugin.__dict__[module]
-                
+                    plugin_obj = plugin_class(parent=self)
+                    
                     # load .config settings from plugin
-                    conf.add_plugin_defaults(plugin_class.config, module)
+                    conf.add_plugin_defaults(plugin_obj.meta["config"], module)
 
                     # add and initialize channel
                     if issubclass(plugin_class, GenericChannel):
-                        self.channels[module] = plugin_class(parent=self)
+                        self.channels[module] = plugin_obj
                         if module not in self.channel_names:  # skip (glade) built-in channels
                             self.channel_names.append(module)
                     # other plugin types
                     else:
-                        self.features[module] = plugin_class(parent=self)
+                        self.features[module] = plugin_obj
                     
                 except Exception as e:
                     __print__(dbg.INIT, "load_plugin_channels: error initializing:", module, ", exception:")
@@ -832,39 +828,38 @@ class config_dialog (auxiliary_window):
             main.load_theme()
 
 
-        # add configuration setting definitions from plugins
+        # iterate over channel and feature plugins
         def add_plugins(self):
+            for name,plugin in main.channels.iteritems():
+                self.add_plg(name, plugin, plugin.meta)
+            self.plugin_options.pack_start(mygtk.label("\n<b>Feature</b> plugins add categories, submenu entries, or other extensions.\n", 500, 1))
+            for name,plugin in main.features.iteritems():
+                self.add_plg(name, plugin, plugin.meta)
 
-            for name,meta in channels.module_meta().items():
+        # add configuration setting definitions from plugins
+        def add_plg(self, name, c, meta):
+            # add plugin load entry
+            cb = gtk.CheckButton(name)
+            cb.get_children()[0].set_markup("<b>%s</b> <i>(%s)</i> %s\n<small>%s</small>" % (meta["title"], meta["type"], meta.get("version", ""), meta["description"]))
+            self.add_( "config_plugins_"+name, cb )
 
-                # add plugin load entry
-                if name:
-                    cb = gtk.CheckButton(name)
-                    cb.get_children()[0].set_markup("<b>%s</b> <i>(%s)</i> %s\n<small>%s</small>" % (meta["title"], meta["type"], meta.get("version", ""), meta["description"]))
-                    self.add_( "config_plugins_"+name, cb )
+            # default values are already in conf[] dict (now done in conf.add_plugin_defaults)
+            for opt in meta["config"]:
+                color = opt.get("color", None)
+                # display checkbox
+                if opt["type"] == "boolean":
+                    cb = gtk.CheckButton(opt["description"])
+                    self.add_( "config_"+opt["name"], cb, color=color )
+                # drop down list
+                elif opt["type"] == "select":
+                    cb = ComboBoxText(ComboBoxText.parse_options(opt["select"])) # custom mygtk widget
+                    self.add_( "config_"+opt["name"], cb, opt["description"], color )
+                # text entry
+                else:
+                    self.add_( "config_"+opt["name"], gtk.Entry(), opt["description"], color )
 
-                # look up individual plugin options, if loaded
-                if self.channels.get(name) or self.features.get(name):
-                    c = self.channels.get(name) or self.features.get(name)
-                    for opt in c.config:
-
-                        # default values are already in conf[] dict (now done in conf.add_plugin_defaults)
-                        color = opt.get("color", None)
-                            
-                        # display checkbox
-                        if opt["type"] == "boolean":
-                            cb = gtk.CheckButton(opt["description"])
-                            self.add_( "config_"+opt["name"], cb, color=color )
-                        # drop down list
-                        elif opt["type"] == "select":
-                            cb = ComboBoxText(ComboBoxText.parse_options(opt["select"])) # custom mygtk widget
-                            self.add_( "config_"+opt["name"], cb, opt["description"], color )
-                        # text entry
-                        else:
-                            self.add_( "config_"+opt["name"], gtk.Entry(), opt["description"], color )
-
-                # spacer 
-                self.add_( "filler_pl_"+name, gtk.HSeparator() )
+            # spacer 
+            self.add_( "filler_pl_"+name, gtk.HSeparator() )
 
 
         # Put config widgets into config dialog notebook
@@ -891,263 +886,6 @@ class config_dialog (auxiliary_window):
 config_dialog = config_dialog()
 # instantiates itself
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# class GenericChannel:
-#
-#   is in channels/__init__.py
-#
-
-
-
-
-
-#-- favourite lists                                            ------------------------------------------
-#
-# This module lists static content from ~/.config/streamtuner2/bookmarks.json;
-# its data list is queried by other plugins to add 'star' icons.
-#
-# Some feature extensions inject custom categories[] into streams{}
-# e.g. "search" adds its own category once activated, as does the "timer" plugin.
-#
-class bookmarks(GenericChannel):
-
-
-        # desc
-        module = "bookmarks"
-        title = "bookmarks"
-        version = 0.4
-        base_url = "file:.config/streamtuner2/bookmarks.json"
-        listformat = "*/*"
-
-        
-        # i like this
-        config = [
-            {"name":"like_my_bookmarks", "type":"boolean", "value":0, "description":"I like my bookmarks"},
-        ]
-
-
-        # content
-        categories = ["favourite", ]  # timer, links, search, and links show up as needed
-        current = "favourite"
-        default = "favourite"
-        streams = {"favourite":[], "search":[], "scripts":[], "timer":[], "history":[], }
-        
-
-        # cache list, to determine if a PLS url is bookmarked
-        urls = []
-
-
-        # this channel does not actually retrieve/parse data from anywhere
-        def update_categories(self):
-            pass
-        def update_streams(self, cat):
-            return self.streams.get(cat, [])
-
-            
-        # streams are already loaded at instantiation
-        def first_show(self):
-            pass
-
-
-        # all entries just come from "bookmarks.json"
-        def cache(self):
-            # stream list
-            cache = conf.load(self.module)
-            if (cache):
-                __print__(dbg.PROC, "load bookmarks.json")
-                self.streams = cache
-            
-
-
-        # save to cache file
-        def save(self):
-            conf.save(self.module, self.streams, nice=1)
-
-
-        # checks for existence of an URL in bookmarks store,
-        # this method is called by other channel modules' display() method
-        def is_in(self, url, once=1):
-            if (not self.urls):
-                self.urls = [row.get("url","urn:x-streamtuner2:no") for row in self.streams["favourite"]]
-            return url in self.urls
-
-
-        # called from main window / menu / context menu,
-        # when bookmark is to be added for a selected stream entry
-        def add(self, row):
-        
-            # normalize data (this row originated in a gtk+ widget)
-            row["favourite"] = 1
-            if row.get("favicon"):
-               row["favicon"] = favicon.file(row.get("homepage"))
-            if not row.get("listformat"):
-                row["listformat"] = main.channel().listformat
-               
-            # append to storage
-            self.streams["favourite"].append(row)
-            self.save()
-            self.load(self.default)
-            self.urls.append(row["url"])
-
-
-        # simplified gtk TreeStore display logic (just one category for the moment, always rebuilt)
-        def load(self, category, force=False):
-            #self.liststore[category] = \
-            __print__(dbg.UI, category, self.streams.keys())
-            mygtk.columns(self.gtk_list, self.datamap, self.prepare(self.streams.get(category,[])))
-
-
-        # select a category in treeview
-        def add_category(self, cat):
-            if cat not in self.categories: # add category if missing
-                self.categories.append(cat)
-                self.display_categories()
-
-
-        # change cursor
-        def set_category(self, cat):
-            self.add_category(cat)
-            self.gtk_cat.get_selection().select_path(str(self.categories.index(cat)))
-            return self.currentcat()
-            
-            
-        # update bookmarks from freshly loaded streams data
-        def heuristic_update(self, updated_channel, updated_category):
-
-            if not conf.heuristic_bookmark_update: return
-            __print__(dbg.ERR, "heuristic bookmark update")
-            save = 0
-            fav = self.streams["favourite"]
-        
-            # First we'll generate a list of current bookmark stream urls, and then
-            # remove all but those from the currently UPDATED_channel + category.
-            # This step is most likely redundant, but prevents accidently re-rewriting
-            # stations that are in two channels (=duplicates with different PLS urls).
-            check = {"http//": "[row]"}
-            check = dict((row.get("url", "http//"),row) for row in fav)
-            # walk through all channels/streams
-            for chname,channel in main.channels.items():
-                for cat,streams in channel.streams.items():
-
-                    # keep the potentially changed rows
-                    if (chname == updated_channel) and (cat == updated_category):
-                        freshened_streams = streams
-
-                    # remove unchanged urls/rows
-                    else:
-                        unchanged_urls = (row.get("url") for row in streams)
-                        for url in unchanged_urls:
-                            if url in check:
-                                del check[url]
-                                # directory duplicates could unset the check list here,
-                                # so we later end up doing a deep comparison
-
-
-            # now the real comparison,
-            # where we compare station titles and homepage url to detect if a bookmark is an old entry
-            for row in freshened_streams:
-                url = row.get("url")
-                
-                # empty entry (google stations), or stream still in current favourites
-                if not url or url in check:
-                    pass
-
-                # need to search
-                else:
-                    title = row.get("title")
-                    homepage = row.get("homepage")
-                    for i,old in enumerate(fav):
-
-                        # skip if new url already in streams
-                        if url == old.get("url"):
-                            pass   # This is caused by channel duplicates with identical PLS links.
-                        
-                        # on exact matches (but skip if url is identical anyway)
-                        elif title == old["title"] and homepage == old.get("homepage",homepage):
-                            # update stream url
-                            fav[i]["url"] = url
-                            save = 1
-                            
-                        # more text similarity heuristics might go here
-                        else:
-                            pass
-            
-            # if there were changes
-            if save: self.save()
-
-
-
-
-
-
-
-
-
-
-
-
-
-#-- startup progress bar
-progresswin, progressbar = 0, 0
-def gui_startup(p=0/100.0, msg="streamtuner2 is starting"):
-
-    global progresswin,progressbar
-    if not progresswin:
-
-        # GtkWindow "progresswin"
-        progresswin = gtk.Window()
-        progresswin.set_property("title", "streamtuner2")
-        progresswin.set_property("default_width", 300)
-        progresswin.set_property("width_request", 300)
-        progresswin.set_property("default_height", 30)
-        progresswin.set_property("height_request", 30)
-        #progresswin.set_property("window_position", "center")
-        progresswin.set_property("decorated", False)
-        progresswin.set_property("visible", True)
-
-        # GtkProgressBar "progressbar"
-        progressbar = gtk.ProgressBar()
-        progressbar.set_property("visible", True)
-        progressbar.set_property("show_text", True)
-        progressbar.set_property("text", msg)
-        progresswin.add(progressbar)
-        progresswin.show_all()
-
-    try:
-      if p<1:
-        progressbar.set_fraction(p)
-        progressbar.set_property("text", msg)
-        while gtk.events_pending(): gtk.main_iteration(False)
-      else:
-        progresswin.hide()
-    except: return
 
 
 
