@@ -10,12 +10,15 @@
 #   file.py, _generic.py, global_key.py, history.py, icast.py,
 #   internet_radio.py, itunes.py, jamendo.py, links.py, live365.py,
 #   modarchive.py, myoggradio.py, punkcast.py, shoutcast.py,
-#   surfmusik.py, tunein.py, timer.py, xiph.py, youtube.py, *.png
-# obsolete:
-#   dirble.py 
+#   surfmusik.py, tunein.py, timer.py, xiph.py, youtube.py,
+#   radiotray.py, *.png
 #
 #
-
+# Just exports GenericChannel and ChannelPlugin. Makes module
+# scanning and meta data parsing available.  Currently just for
+# globally-installed /usr/share/streamtuner2/channel/*.py plugins.
+#
+#
 
 from channels._generic import *
 
@@ -40,26 +43,4 @@ def module_list():
     ls = [module for module in (order) if (module in ls)] + [module for module in (ls) if (module not in order)]
 
     return ls
-
-
-# Parse plugin comment blocks.
-#
-def module_meta():
-    meta = {}
-
-    rx_meta = re.compile(r"""^#\s*(\w+):\s*(.+)$""", re.M)
-
-    # Loop through all existing module.py scripts
-    for name in module_list():
-       meta[name] = dict(title="", type="", description="")
-
-       # Read and regex-extract into dict
-       with open("%s/channels/%s.py" % (conf.share, name)) as f:
-           for field in re.findall(rx_meta, f.read(1024)):
-               meta[name][field[0]] = field[1]
-
-    return meta
-
-
-
 
