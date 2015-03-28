@@ -48,7 +48,10 @@
 	<p>Specifying a channel name is often optional. If you add one, it should be all-lowercase.
 	You can also give a list, like "shoutcast,xiph" which would be searched then.</p>
 
-	<p>GUI mode: There are also --gtk3 and --gtk2 command line options. Usually the right toolkit
+        <section>
+        <title>GUI options</title>
+	<p>There are also --gtk3 and --gtk2 command line options. Usually the right toolkit
 	is picked depending on Python version. But you can manually override this.</p>
+	</section>
 
 </page>

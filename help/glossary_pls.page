@@ -11,9 +11,10 @@
 
 	<p>Playlist files often have the extension .pls</p>
 
-	<p>It's the primary station stream link format of SHOUTcast.</p>
+	<p>It's the primary station stream link format of SHOUTcast, and was
+	popularized by WinAmp.</p>
 
-	<p>The MIME type of these files is audio/x-scpls and they often look like: </p>
+	<p>The MIME type of these files is <sys>audio/x-scpls</sys> and they often look like: </p>
 
 <code mime="audio/x-scpls">
 [playlist]

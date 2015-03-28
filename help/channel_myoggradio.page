@@ -15,15 +15,15 @@
         source internet radio directory project. Since it provides its station list as
 	JSON it's very well supported.</p>
 
-        <p>Because the directory is currently still rather small,
-	streamtuner2 provides the option to share radion station links.  Use
-	the <guiseq><gui>Station</gui> <gui>Extensions</gui>
-	<gui>Share...</gui></guiseq> menu entry to upload the currently
-	selected radio (from your favourite bookmarks).</p>
+        <p>To help with populating the directory further,
+	streamtuner2 provides an option to share radion station links.
+	Use <guiseq><gui>Station</gui> <gui>Extensions</gui>
+	<gui>Share on MyOggRadio...</gui></guiseq> menu entry to upload the currently
+	selected radio (e.g. from your favourite bookmarks).</p>
 
         <p>The personal section is empty per default. You need to specify an user account
-	in the settings dialog, and actually bookmark stations in MyOggRadio web site.
-	Shared entries are not automatically in the MOR favorite list.</p>
+	in the settings dialog, and actually bookmark stations in the MyOggRadio web site.
+	Shared entries aren't automatically in the MOR favorite list.</p>
 
 	<p>There's also <link href="http://freshcode.club/projects/jmorp">JMyOggRadioPlayer</link>
 	as specific frontend and player for MyOggRadio.</p>

@@ -41,8 +41,8 @@
 	Alternatively there is an entry in the <gui>Channel</gui> menu.</p>
 	</section>
 
-	<section id="homepage">
-	<title>Channel menu options</title>
+	<section id="actions">
+	<title>Channel menu actions</title>
 	<terms>
 		<item>
 			<title>Homepage of directory service</title>
@@ -61,7 +61,7 @@
 			<title>Reload category tree</title>
 			<p>Updates the genre list in the left category pane.
 			For most channels the category list is already complete, but it might
-			change over time. So this option often only is used for initializing streamtuner2
+			change over time. So this option is often only used for initializing streamtuner2
 			channels when the list is empty.</p>
 		</item>
 	</terms>

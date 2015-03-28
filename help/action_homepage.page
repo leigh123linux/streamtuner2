@@ -10,7 +10,7 @@
 
 	<title>Radio homepages</title>
 
-	<p>Most radio stations are listed with a homepage URL. Use the <gui>house</gui> symbol in the
+	<p>Most radio stations are listed with a homepage URL. Use the <gui style="button">house</gui> symbol in the
 	toolbar or <guiseq><gui>right click</gui> <gui>homepage</gui></guiseq> to open it in a web browser.</p>
 
         <p>Some homepage links are guessed, because some channels (e.g. Shoutcast) don't provide them (anymore).

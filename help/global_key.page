@@ -1,5 +1,5 @@
 <page	xmlns="http://projectmallard.org/1.0/"
-	type="topic"
+	type="guide"
 	id="global_key">
 
 <info>
@@ -13,8 +13,8 @@
 	a list of favourite radio stations. Per default it uses your bookmarks list, but it can be
 	configured to alternate in any other channel.</p>
 
-	<p>This is useful if you don't want to keep the streamtuner2 window in the foreground
-	all the time, but still want to switch radios easily.</p>
+	<p>This is useful if you don't want to keep streamtuner2 atop your
+	desktop all the time, but still want to switch radios easily.</p>
 
 	<p>Go into settings <key>F12</key> for plugins to define a keyboard shortcut:</p>
 

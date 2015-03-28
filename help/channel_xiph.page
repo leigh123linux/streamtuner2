@@ -30,7 +30,7 @@
     <title><code>Filter by minimum bitrate</code></title>
     <p>The bitrate of an audio stream determines the music quality. Many Xiph streams have simple
     and low quality microphone sources. To filter these out, and only leave high quality music
-    stations, you can therefore set this option. OGG starts to sound well with 96 kbit/s (whereas
+    stations, you can therefore change this option. OGG starts to sound well with 96 kbit/s (whereas
     MP3 often requires 148 or 192 at least).</p>
   </item>
 </terms>

@@ -21,4 +21,8 @@
              <item><p>VLC (built-in support)</p></item>
         </list>
 
+	<note><p>See <link xref="recording">recording
+	configuration</link> if you want to enable the download mode. (Audio
+	files are packaged up in ZIP files on MODArchive.)</p></note>
+
 </page>

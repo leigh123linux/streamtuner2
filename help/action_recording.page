@@ -11,16 +11,19 @@
 
 <title>Recording</title>
 
-<p>Most stations that stream MP3 or OGG music can be recorded. This is accomplished through
-the command-line tool "streamripper". If you select a station and press <gui style="button">● record</gui>,
-a console window should appear, where streamripper shows its progress.</p>
+<p>Most stations that stream MP3 or OGG music can be recorded. This is
+accomplished through the command-line tool <app>streamripper</app>.  If you
+select a station and press <gui style="button">● record</gui>, a console
+window should appear, where streamripper shows its progress.</p>
 
+<p>You can <link xref="configuration">configure the recording tool</link> according to audio types again.</p>
 
 <section>
 <title>Streamripper</title>
 
-<p>The <cmd>xterm -e</cmd> prefix brings up the terminal popup, to follow streamrippers
-progress. Remove that for silent downloads.</p>
+<p>The <cmd>xterm -e</cmd> prefix brings up the terminal popup. If you want
+silent downloads in the background instead of seeing its progress, remove
+the xterm call.</p>
 
 <table shade="rows" rules="rows cols">
   <thead>  <tr><td><p>Format</p></td>     <td><p>Application</p></td></tr> </thead>
@@ -29,7 +32,8 @@ progress. Remove that for silent downloads.</p>
 
 <p>To configure a default download directory, use the <cmd>-d</cmd> option to streamripper.
 For example <cmd>xterm -e "streamripper -d /media/music/"</cmd> would use an absolute path.
-Else it downloads to the current working directory (often your HOME path).</p>
+Else it downloads to the current working directory (often your HOME path),
+and creates one directory per radio station there.</p>
 </section>
 
 

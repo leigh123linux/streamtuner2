@@ -17,7 +17,7 @@
 
         <list>
 		<item><p>Station entries usually provide current playing information.</p></item>
-		<item><p>Stream links are plain PLS files.</p></item>
+		<item><p>Stream links are plain <link xref="gloassry_pls">PLS files</link>.</p></item>
 		<item><p>Genres are subcategorized, so the main groups in the category
 		list must be expanded to see the interesting entries.</p></item>
         </list>
@@ -26,13 +26,5 @@
         entries for currently played songs, and homepage links are largely gone. Hencewhy the
         Shoutcast channel is no longer considered a primary feature.</p>
 
-<terms>
-  <title>There are a few plugin options for this channel.</title>
-  <item>
-    <title><code>PyQuery parsing</code></title>
-    <p>Uses an XML parser to extract station data from within HTML &lt;tags&gt; of the shoutcast.com site. This is
-    slower, but often more reliable than regular expressions, which look for plain text markers.</p>
-  </item>
-</terms>
 
 </page>

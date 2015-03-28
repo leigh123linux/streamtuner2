@@ -11,21 +11,26 @@
 
 	<title>Bookmarks</title>
 
-	<p>It's easy to lose oversight when switching across channel tabs,
-        genres and internet radio stations.  Therefore streamtuner2 allows
-        to bookmark stations to collect favoured streams in a single place.</p>
+	<p>Streamtuner2 allows to bookmark favoured streams/stations.
+	Which is what the <gui style="menu">bookmarks</gui> tab is for, of course.</p>
 
-        <p>Just right click a station you want to bookmark, and choose bookmark in the context
-        menu. Alternatively you can use the Streams entry in the application menu. Once bookmarked
-        you can see the station entry in the (!) "bookmarks" tab, under "favourite". That's where
-        they go.</p>
+        <p>Use the right click a stations <guiseq><gui>context menu</gui> <gui>bookmark</gui></guiseq>
+        or <key>F8</key>.</p>
+
+        <p>Once bookmarked the station is listed under
+        <guiseq><gui style="menu">bookmarks</gui> <gui>favourite</gui></guiseq>.
+        Additionally every appearance of the station in channel tabs gets a ★
+        star icon.</p>
 
 	<section id="editing">
 	<title>Editing</title>
-        <p>Entries can be removed from the bookmark list again. Use the edit menu for that.</p>
+        <p>Entries can be removed from the bookmark list again. Use
+        <guiseq><gui>Edit</gui> <gui>Delete</gui></guiseq> or the <key>DEL</key>
+	key for that.</p>
 
-	<p>Bookmarked stations are shown with a star in all other channel tabs. If you delete the
-        entry there, it won't remove it from the real bookmarks list.</p>
+        <p>You can also manually adapt an entry via <guiseq><gui>Station</gui> <gui>Edit</gui></guiseq> or <key>F3</key>.
+	</p>
+
 	</section>
 
 	<section id="other">
@@ -33,7 +38,8 @@
 	<p>The bookmarks tab can display other categories besides "favourite". For example the
 	search feature creates a "search", while the "timer" and "links" plugins also display
 	lists here.</p>
-	<p>However the favourite list itself can not yet be categorized further.</p>
+	<note style="bug"><p>However the favourite list itself can not yet be categorized
+	further.</p></note>
 	</section>
 
 </page>

@@ -3,7 +3,7 @@
 	id="technical">
 
 <info>
-	<link type="guide" xref="index#extra"/>
+	<link type="topic" xref="index#extra"/>
         <desc>Filenames, Directories, Dependencies</desc>
 </info>
 
@@ -13,15 +13,15 @@
 	<section id="dependecies">
         <terms>
   	  <title>Dependencies</title>
-          <item><p>Python 2.7 or 3.x</p></item>
-          <item><p>PyGtk or PyGI</p></item>
+          <item><p><link action="install:python">Python 2.7 or 3.x</link></p></item>
+          <item><p><link action="install:python-gtk2">PyGtk or PyGI</link></p></item>
           <item><p>Gtk2 or Gtk3</p></item>
-          <item><p>Requests/urllib3</p></item>
+          <item><p><link action="install:python-requests">Requests/urllib3</link></p></item>
 	</terms>
         <terms>
   	  <title>Soft dependencies</title>
-          <item><p>Python-LXML</p></item>
-          <item><p>Python-PyQuery</p></item>
+          <item><p><link action="install:python-lxml">Python-LXML</link></p></item>
+          <item><p><link action="install:python-pyquery">Python-PyQuery</link></p></item>
           <item><p>Python-Kronos</p></item>
           <item><p>Audacious</p></item>
 	</terms>

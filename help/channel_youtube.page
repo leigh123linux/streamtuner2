@@ -15,9 +15,17 @@
         JSON API that makes browsing channels and genres feasible. This beta plugin
         provides a little overview, and usually retrieves recent video uploads.</p>
 
-        <p>VLC can directly play Youtube URLs. For other players the default application
-        setting wraps <link href="http://youtube-dl.org/">youtube-dl</link>, which is also
-        used for recording.</p>
+        <p>VLC can directly play Youtube URLs. For other players one can use
+        <link href="http://youtube-dl.org/">youtube-dl</link> as wrapper.
+        For example <cmd>totem $(youtube-dl %srv)</cmd> as configured player
+        command.</p>
+        
+        <p>Youtube-dl is preconfigued as "recording"/download tool for this channel
+        tab.</p>
+
+        <p>Of course you could also just invoke a specific YT video by
+        opening it in your web browser - click the station <key>home</key>
+        button simply.</p>
 
 
 <terms>
@@ -32,6 +40,10 @@
     To apply this setting, and have new categories show up in the genre pane, use
     <guiseq><gui>Channel</gui> <gui>Update category tree</gui></guiseq> first.</p>
     <p>It's not an exact map, but utilizes the search function to find channels.</p>
+  </item>
+  <item>
+    <title><code>Wadsworth constant</code></title>
+    <p>Only influences the video homepage link.</p>
   </item>
 </terms>
 

@@ -10,7 +10,8 @@
 
 <title>Settings dialog</title>
 
-<p>There are various options for streamtuner2, available under <guiseq><gui>Edit</gui>
+<p>
+There are various options for streamtuner2, available under <guiseq><gui>Edit</gui>
 <gui>Preferences</gui></guiseq> or via <key>F12</key>.
 </p>
 
@@ -102,7 +103,7 @@
     </item>
     <item>
       <title>Gtk+ theme</title>
-      <p>Be careful. While Gtk allows to select a different theme per application, not all themes
+      <p><em style="bug">Be careful</em>. While Gtk allows to select a different theme per application, not all themes
       work right away. Switching the theme might hang streamtuner2. Just restart if that happens.</p>
     </item>
     <item>
@@ -154,14 +155,14 @@
     <title>System</title>
     <item>
       <title>Temporary files</title>
-      <p>Streamtuner2 creates temporary .m3u files, if an audio player is configured to use %m3u files
-      instead of %pls or %srv URLs. For archival purposes, you might want to set a dedicated directory
+      <p>Streamtuner2 creates temporary .m3u files - for audio players that are configured to use %m3u files
+      instead of %pls or %srv URLs. For archival purposes you might want to set a dedicated directory
       for this. Leave this to the default /tmp else.</p>
     </item>
     <item>
       <title>Config directory</title>
-      <p>Is where streamtuner2 keeps its settings.json and channel caches, favicons, etc.
-      You can't set this in the config dialog. This is just for display. Set the XDG_CONFIG_HOME
+      <p>Is where streamtuner2 keeps its <file>settings.json</file> and channel caches, favicons, etc.
+      You can't set this in the config dialog. This is just for display. Set the <sys>XDG_CONFIG_HOME</sys>
       environment variable to adapt.</p>
     </item>
     <item>
@@ -183,9 +184,9 @@
     <p>Each channel plugin may come with its own set of addition configuration settings
     below.</p>
 
-    <p>If you want to find out more about the short option descriptions (most settings are checkboxes),
+    <note style="note"><p>If you want to find out more about the short option descriptions (most settings are checkboxes),
     please have a look into the channels directory /usr/share/streamtuner2/channels/ and corresponding
-    *.py files. These are readable, and sometimes contain more information.</p>
+    *.py files. These are readable, and sometimes contain more information.</p></note>
 </section>
 
 
