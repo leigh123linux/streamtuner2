@@ -35,37 +35,6 @@
 # collections. Commercial and sign-up services are not the target purpose.
 #
 
-""" project status """
-#
-# The application runs mostly stable. The GUI interfaces are workable.
-# It's supposed to run on Gtk2 and Gtk3. Python3 support is still WIP.
-# There haven't been any optimizations regarding memory usage and
-# performance. The current internal API is vastly undocumented.
-#
-#  current bugs:
-#   - audio- and list-format support is not very robust / needs better API
-#   - not all keyboard shortcuts work
-#
-#  features:
-#   - treeview lists are created from datamap[] structure and stream{} dicts
-#   - channel categories are built-in defaults (can be freshened up however)
-#   - config vars and cache data get stored as JSON in ~/.config/streamtuner2/
-#
-#  missing:
-#   - localization
-#
-#  security notes:
-#   - directory scrapers use fragile regular expressions - which is probably
-#     not a security risk, but might lead to faulty data
-#   - MEDIUM: little integrity checking for .pls / .m3u references and files
-#   - minimal XML/SGML entity decoding (-> faulty data)
-#   - MEDIUM: if system json module is not available, pseudo-json uses eval()
-#     to read the config data -> limited risk, since it's only local files
-#   - HIGH RISK: no verification of downloaded favicon image files (ico/png),
-#     as they are passed to gtk.gdk.Pixbuf (OTOH data pre-filtered by Google)
-#   - MEDIUM: audio players / decoders are easily affected by buffer overflows
-#     from corrupt mp3/stream data, and streamtuner2 just passes them on
-
 
 
 # standard modules
