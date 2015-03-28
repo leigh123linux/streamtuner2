@@ -4,7 +4,7 @@
 # type: functions
 # title: mygtk helper functions
 # description: simplify usage of some gtk widgets
-# version: 1.7
+# version: 1.8
 # author: mario
 # license: public domain
 #
@@ -158,8 +158,8 @@ class mygtk:
                             rowmap.append(desc[var][0])    # dict{} column keys in entries[] list
                 # create gtk array storage
                 ls = gtk.ListStore(*vartypes)   # could be a TreeStore, too
-                __print__(dbg.UI, vartypes, len(vartypes))
-                __print__(dbg.DATA, rowmap, len(rowmap))
+                #__print__(dbg.UI, vartypes, len(vartypes))
+                #__print__(dbg.DATA, rowmap, len(rowmap))
 
                 # prepare for missing values, and special variable types
                 defaults = {
@@ -198,8 +198,8 @@ class mygtk:
                         # brute-force typecast
                         ls.append( [va  if ty==gtk.gdk.Pixbuf  else ty(va)   for va,ty in zip(row,vartypes)]  )
 
-                if entries:
-                     __print__("[37m→[0m", row, len(row))
+                #if entries:
+                     #__print__("[37m→[0m", row, len(row))
                 
                 # apply array to widget
                 widget.set_model(ls)
@@ -405,11 +405,13 @@ class mygtk:
 
         # Create GtkLabel
         @staticmethod
-        def label(text):
+        def label(text, size=400, markup=0):
             label = gtk.Label(text)
+            if markup:
+                label.set_markup(text)
             label.set_property("visible", True)
             label.set_line_wrap(True) 
-            label.set_size_request(400, -1)
+            label.set_size_request(size, -1)
             return label
 
         # Wrap two widgets in horizontal box
@@ -501,4 +503,44 @@ class ComboBoxText(gtk.ComboBox):
             return [ (k,v) for k,v in (x.split(assoc, 1) for x in opts.split(sep)) ]
         else:
             return opts.split(sep) #dict( (v,v) for v in opts.split(sep) )
+
+
+
+
+
+#-- startup progress bar
+progresswin, progressbar = None, None
+def gui_startup(p=0/100.0, msg="streamtuner2 is starting"):
+    global progresswin, progressbar
+    
+    if not progresswin:
+
+        # GtkWindow "progresswin"
+        progresswin = gtk.Window()
+        progresswin.set_property("title", "streamtuner2")
+        progresswin.set_property("default_width", 300)
+        progresswin.set_property("width_request", 300)
+        progresswin.set_property("default_height", 30)
+        progresswin.set_property("height_request", 30)
+        #progresswin.set_property("window_position", "center")
+        progresswin.set_property("decorated", False)
+        progresswin.set_property("visible", True)
+
+        # GtkProgressBar "progressbar"
+        progressbar = gtk.ProgressBar()
+        progressbar.set_property("visible", True)
+        progressbar.set_property("show_text", True)
+        progressbar.set_property("text", msg)
+        progresswin.add(progressbar)
+        progresswin.show_all()
+
+    try:
+      if p<1:
+        progressbar.set_fraction(p)
+        progressbar.set_property("text", msg)
+        while gtk.events_pending(): gtk.main_iteration(False)
+      else:
+        progresswin.hide()
+    except: return
+
 
