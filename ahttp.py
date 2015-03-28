@@ -71,9 +71,9 @@ def get(url, params={}, referer="", post=0, ajax=0, binary=0, feedback=None, con
     
     # read
     if post:
-        r = session.post(url, params=params, headers=headers)
+        r = session.post(url, params=params, headers=headers, timeout=7.5)
     else:    
-        r = session.get(url, params=params, headers=headers)
+        r = session.get(url, params=params, headers=headers, timeout=9.75)
 
     __print__( dbg.HTTP, r.request.headers );
     __print__( dbg.HTTP, r.headers );
