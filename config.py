@@ -1,9 +1,11 @@
 #
 # encoding: UTF-8
 # api: streamtuner2
+#  .2
 # type: class
 # title: global config object
 # description: reads ~/.config/streamtuner/*.json files
+# config: {type:var, name:z, description:v}
 #
 # In the main application or module files which need access
 # to a global conf object, just import this module as follows:
@@ -20,10 +22,13 @@ import sys
 import json
 import gzip
 import platform
+import re
+import zipfile
+import inspect
 
 
 # export symbols
-__all__ = ["conf", "__print__", "dbg"]
+__all__ = ["conf", "__print__", "dbg", "plugin_meta"]
 
 
 
@@ -46,8 +51,7 @@ class ConfigDict(dict):
             self.xdg()
             
             # runtime
-            dirs = ["/usr/share/streamtuner2", "/usr/local/share/streamtuner2", sys.path[0], "."]
-            self.share = [d for d in dirs if os.path.exists(d)][0]
+            self.share = os.path.dirname(__file__)
             
             # settings from last session
             last = self.load("settings")
@@ -205,6 +209,53 @@ class ConfigDict(dict):
 
 
 
+# Plugin meta data extraction
+#
+# Extremely crude version for Python and streamtuner2 plugin usage.
+# Doesn't check top-level comment coherency.
+# But supports plugins within python zip archives.
+#
+rx_zipfn  = re.compile(r"""^(.+\.(?:zip|pyz|pyzw|pyzip)(?:\.py)?)/(\w.*)$""")
+rx_meta   = re.compile(r"""^ {0,4}# *([\w-]+): *(.+(\n *#  +(?![\w-]+:).+)*)$""", re.M)  # Python comments only
+rx_lines  = re.compile(r"""\n *# """)        # strip multi-line prefixes
+rx_config = re.compile(r"""[\{\<](.+?)[\}\>]""")     # extract only from JSOL/YAML scheme
+rx_fields = re.compile(r"""["']?(\w+)["']?\s*[:=]\s*["']?([^,]+)(?<!["'])""")  # simple key: value entries
+#
+def plugin_meta(fn=None, frame=1, src=""):
+
+    # filename of caller
+    if not fn:
+        fn = inspect.getfile(sys._getframe(frame))
+
+    # within zip archive?
+    zip = rx_zipfn.match(fn)
+    if zip and zipfile.is_zipfile(zip.group(1)):
+        src = zipfile.ZipFile(zip.group(1), "r").read(zip.group(2))
+    else:
+        src = open(fn).read(4096)
+
+    # defaults
+    meta = {
+        "fn": fn,
+        "id": os.path.basename(fn).replace(".py", "")
+    }
+    # extraction
+    for field in rx_meta.findall(src):
+        meta[field[0]] = rx_lines.sub("", field[1])
+
+    # unpack config: structures
+    meta["config"] = [
+        dict([field for field in rx_fields.findall(entry)])
+        for entry in rx_config.findall(meta.get("config", ""))
+    ]
+        
+    return meta
+
+
+
+
+
+
 
 # wrapper for all print statements
 def __print__(*args):
@@ -231,7 +282,4 @@ dbg = type('obj', (object,), {
 conf = ConfigDict()
 if conf:
     __print__(dbg.PROC, "ConfigDict() initialized")
-
-
-
 

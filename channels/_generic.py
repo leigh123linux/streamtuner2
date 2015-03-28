@@ -24,7 +24,7 @@
 
 import gtk
 from mygtk import mygtk
-from config import conf, __print__, dbg
+from config import *
 import ahttp as http
 import action
 import favicon
@@ -32,6 +32,7 @@ import os.path
 import xml.sax.saxutils
 import re
 import copy
+import inspect
 
 
 # dict==object
@@ -48,6 +49,7 @@ class GenericChannel(object):
 
         # desc
         module = "generic"
+        meta = {}
         title = "GenericChannel"
         homepage = "http://fossil.include-once.org/streamtuner2/"
         base_url = ""
@@ -100,6 +102,8 @@ class GenericChannel(object):
             #self.streams = {}
             self.gtk_list = None
             self.gtk_cat = None
+            self.meta = plugin_meta(inspect.getsourcefile(inspect.getmodule(self)))
+            self.config = self.meta["config"]
 
             # only if streamtuner2 is run in graphical mode        
             if (parent):
