@@ -1,7 +1,6 @@
 #
 # encoding: UTF-8
 # api: streamtuner2
-#  .2
 # type: class
 # title: global config object
 # description: reads ~/.config/streamtuner/*.json files
@@ -31,9 +30,10 @@ import inspect
 __all__ = ["conf", "__print__", "dbg", "plugin_meta"]
 
 
-
-#-- create a single instance of config object
+#-- create a stub instance of config object
 conf = object()
+
+
 
 
 #-- global configuration data               ---------------------------------------------
@@ -181,7 +181,7 @@ class ConfigDict(dict):
                 f.close()
                 return r
             except Exception as e:
-                print(dbg.ERR, "PSON parsing error (in "+name+")", e)
+                print(dbg.ERR, "JSON parsing error (in "+name+")", e)
             
 
         # recursive dict update
@@ -212,54 +212,88 @@ class ConfigDict(dict):
 # Plugin meta data extraction
 #
 # Extremely crude version for Python and streamtuner2 plugin usage.
-# Doesn't check top-level comment coherency.
-# But supports plugins within python zip archives.
-#
-rx_zipfn  = re.compile(r"""^(.+\.(?:zip|pyz|pyzw|pyzip)(?:\.py)?)/(\w.*)$""")
-rx_meta   = re.compile(r"""^ {0,4}# *([\w-]+): *(.+(\n *#  +(?![\w-]+:).+)*)$""", re.M)  # Python comments only
-rx_lines  = re.compile(r"""\n *# """)        # strip multi-line prefixes
-rx_config = re.compile(r"""[\{\<](.+?)[\}\>]""")     # extract only from JSOL/YAML scheme
-rx_fields = re.compile(r"""["']?(\w+)["']?\s*[:=]\s*["']?([^,]+)(?<!["'])""")  # simple key: value entries
-#
-def plugin_meta(fn=None, frame=1, src=""):
+# Fetches module source, or reads from filename / out of zip package.
+def plugin_meta(fn=None, src=None, frame=1):
 
-    # filename of caller
-    if not fn:
-        fn = inspect.getfile(sys._getframe(frame))
+    # get source directly from caller
+    if not src and not fn:
+        module = inspect.getmodule(sys._getframe(frame))
+        fn = inspect.getsourcefile(module)
+        src = inspect.getcomments(module)
 
-    # within zip archive?
-    zip = rx_zipfn.match(fn)
-    if zip and zipfile.is_zipfile(zip.group(1)):
-        src = zipfile.ZipFile(zip.group(1), "r").read(zip.group(2))
-    else:
-        src = open(fn).read(4096)
+    # within zip archive or dir?
+    elif fn:
+        zip = rx.zipfn.match(fn)
+        if zip and zipfile.is_zipfile(zip.group(1)):
+            src = zipfile.ZipFile(zip.group(1), "r").read(zip.group(2))
+        else:
+            src = open(fn).read(4096)
 
     # defaults
     meta = {
+        "id": re.sub("\.\w+$", "", os.path.basename(fn or "")),
         "fn": fn,
-        "id": os.path.basename(fn).replace(".py", "")
+        "title": fn, "description": "no description", "config": [],
+        "type": "module", "api": "python", "doc": ""
     }
-    # extraction
-    for field in rx_meta.findall(src):
-        meta[field[0]] = rx_lines.sub("", field[1])
 
-    # unpack config: structures
-    meta["config"] = [
-        dict([field for field in rx_fields.findall(entry)])
-        for entry in rx_config.findall(meta.get("config", ""))
-    ]
-        
+    # extract coherent comment block, split doc section
+    src = rx.comment.search(src)
+    if not src:
+        __print__(dbg.ERR, "Couldn't read source meta information", fn)
+        return meta
+    src = src.group(0)
+    src = rx.hash.sub("", src).strip()
+    if src.find("\n\n") > 0:
+        src, meta["doc"] = src.split("\n\n", 1)
+    
+
+    # split into dict
+    for field in rx.keyval.findall(src):
+        meta[field[0]] = field[1].strip()
+    meta["config"] = plugin_meta_config(meta.get("config") or "")
+
     return meta
 
+# unpack config: structures
+def plugin_meta_config(str):
+    config = []
+    for entry in rx.config.findall(str):
+        opt = { "type": None, "name": None, "description": "", "value": None }
+        for field in rx.options.findall(entry):
+            opt[field[0]] = (field[1] or field[2] or field[3] or "").strip()
+        config.append(opt)
+    return config
 
-
+# Comment extraction regexps
+class rx:
+    zipfn   = re.compile(r"""
+        ^ (.+  \.(?:zip|pyz|pyzw|pyzip)        # zip-wrapping extensions
+        (?:\.py)? ) /(\w.*) $
+    """, re.X)
+    comment = re.compile(r"""(^ {0,4}#.*\n)+""", re.M)
+    hash    = re.compile(r"""(^ {0,4}# *)""", re.M)
+    keyval  = re.compile(r"""
+        ^([\w-]+):(.*$(?:\n(?![\w-]+:).+$)*)      # plain key:value lines
+    """, re.M|re.X)
+    config  = re.compile(r"""
+        [\{\<] (.+?) [\}\>]                    # JSOL/YAML scheme {...} dicts
+    """, re.X)
+    options = re.compile(r"""
+        ["':$]?   (\w+)  ["']?                 # key or ":key" or '$key'
+        \s* [:=] \s*                           # "=" or ":"
+     (?:  "  ([^"]*)  " 
+       |  '  ([^']*)  '                        #  "quoted" or 'singl' values
+       |     ([^,]*)                           #  or unquoted literals
+     )
+    """, re.X)
 
 
 
 
 # wrapper for all print statements
 def __print__(*args):
-    if conf.debug:
+    if "debug" in conf:
         print(" ".join([str(a) for a in args]))
 
 
@@ -277,9 +311,10 @@ dbg = type('obj', (object,), {
 })
 
 
-   
-#-- actually fill global conf instance
-conf = ConfigDict()
-if conf:
-    __print__(dbg.PROC, "ConfigDict() initialized")
 
+
+   
+
+#-- populate global conf instance
+conf = ConfigDict()
+__print__(dbg.PROC, "ConfigDict() initialized")
