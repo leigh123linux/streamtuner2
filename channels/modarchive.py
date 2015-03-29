@@ -7,7 +7,7 @@
 # url: http://www.modarchive.org/
 # priority: extra
 # config: -
-# category: music
+# category: collection
 #
 #
 # Just a genre browser.

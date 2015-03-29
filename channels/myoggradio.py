@@ -26,7 +26,7 @@
 from channels import *
 from config import conf
 from action import action
-from mygtk import mygtk
+from uikit import uikit
 import ahttp as http
 
 import re
@@ -61,7 +61,7 @@ class myoggradio(ChannelPlugin):
     def __init__(self, parent):
         ChannelPlugin.__init__(self, parent)
         if parent:
-            mygtk.add_menu(parent.extensions, "Share in MyOggRadio", self.share)
+            uikit.add_menu(parent.extensions, "Share in MyOggRadio", self.share)
 
 
 

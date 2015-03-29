@@ -1,10 +1,10 @@
 # encoding: UTF-8
 # api: streamtuner2
-# title: bookmarks
+# title: Bookmarks
 # description: For collecting favourites. And provides some feature/category plugins.
 # type: channel
 # version: 1.5
-# category: channel
+# category: builtin
 # priority: core
 # config: { name: like_my_bookmarks,  type: boolean, value: 0, description: "I like my bookmarks" }
 # 
@@ -19,7 +19,7 @@
 #
 
 from config import *
-from mygtk import mygtk
+from uikit import uikit
 from channels import *
 
 
@@ -117,7 +117,7 @@ class bookmarks(GenericChannel):
             __print__(dbg.UI, category, self.streams.keys())
             self.streams[category] = self.update_streams(category)
             #self.liststore[category] = \
-            mygtk.columns(self.gtk_list, self.datamap, self.prepare(self.streams[category]))
+            uikit.columns(self.gtk_list, self.datamap, self.prepare(self.streams[category]))
 
 
         # add a categories[]/streams{} subcategory, update treeview

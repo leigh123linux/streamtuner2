@@ -3,7 +3,7 @@
 # title: History
 # description: List recently played stations under favourites > history.
 # version: 1.0
-# type: category
+# type: group
 # category: ui
 # config:
 #     { name: history,  type: int,  value: 20,  description: Number of last played streams to keep in history list.,  category: limit }

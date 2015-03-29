@@ -3,7 +3,7 @@
 # title: Recording timer
 # description: Schedules play/record events for bookmarked radio stations.
 # type: feature
-# category: ui
+# category: hook
 # depends: kronos
 # version: 0.5
 # config: -
@@ -23,8 +23,8 @@
 
 from config import *
 from channels import *
-import kronos  # Doesn't work with Python3
-from mygtk import mygtk
+import bundle.kronos as kronos  # Doesn't work with Python3
+from uikit import uikit
 from action import action
 import copy
 import re
@@ -59,7 +59,7 @@ class timer:
         self.bookmarks = parent.bookmarks
         
         # add menu
-        mygtk.add_menu(self.parent.extensions, "Add timer for station", self.edit_timer)
+        uikit.add_menu(self.parent.extensions, "Add timer for station", self.edit_timer)
         
         # target channel
         if not self.bookmarks.streams.get("timer"):

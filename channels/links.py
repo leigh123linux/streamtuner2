@@ -2,7 +2,7 @@
 # api: streamtuner2
 # title: Links to directory services
 # description: Static list of various music directory websites.
-# type: category
+# type: group
 # category: web
 # version: 0.2
 # priority: default

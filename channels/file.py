@@ -3,7 +3,7 @@
 # title: File browser
 # description: Displays mp3/oggs or m3u/pls files from local media file directories.
 # type: channel
-# category: media
+# category: local
 # version: 0.1
 # priority: optional
 # depends: mutagen

@@ -22,7 +22,7 @@
 
 # streamtuner2 modules
 from config import conf
-from mygtk import mygtk
+from uikit import uikit
 import ahttp as http
 from channels import *
 from config import __print__, dbg
