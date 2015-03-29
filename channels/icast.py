@@ -1,11 +1,13 @@
 # encoding: UTF-8
 # api: streamtuner2
-# title: iCast
+# title: iCast.io
 # description: Open collaborative stream directory
 # version: 0.1
 # type: channel
+# url: http://www.icast.io/
 # category: radio
 # priority: optional
+# config: -
 # documentation: http://api.icast.io/
 #
 # A modern alternative to ShoutCast/ICEcast.
@@ -37,8 +39,6 @@ class icast (ChannelPlugin):
     titles = dict(listeners=False, bitrate=False, playing=False)
 
     categories = []
-    config = [
-    ]    
     
     base = "http://api.icast.io/1/"
     

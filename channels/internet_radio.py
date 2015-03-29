@@ -1,10 +1,13 @@
 #
 # api: streamtuner2
-# title: Internet-Radio.com
+# title: Internet-Radio
 # description: Broad list of webradios from all genres.
 # type: channel
 # category: radio
 # version: 1.2
+# url: http://www.internet-radio.org.uk/
+# config:
+#    { name: internetradio_max_pages,  type: int,  value: 5,  category: limit,  description: How many pages to fetch and read. }
 # priority: standard
 #
 # Internet-Radio.co.uk/.com is one of the largest directories of streams.
@@ -41,18 +44,6 @@ class internet_radio (ChannelPlugin):
     homepage = "http://www.internet-radio.org.uk/"
     listformat = "audio/x-scpls"
     
-    # settings
-    config = [
-        {
-            "name": "internetradio_max_pages",
-            "type": "int",
-            "value": 5,
-            "category": "limit",
-            "description": "How many pages to fetch and read.",
-        },
-    ]
-    
-
     # category map
     categories = []
     current = ""

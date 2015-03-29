@@ -5,6 +5,8 @@
 # type: channel
 # category: video
 # version: 0.1
+# url: http://www.punkcast.com/
+# config: -
 # priority: rare
 #
 #

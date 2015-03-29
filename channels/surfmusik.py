@@ -2,10 +2,13 @@
 # api: streamtuner2
 # title: SurfMusik
 # description: User collection of streams categorized by region and genre.
+# author: gorgonz123
 # version: 0.5
 # type: channel
 # category: radio
-# author: gorgonz123
+# config:
+#   { name: surfmusik_lang,  value: EN,  type: select,  select: "DE=German|EN=English",  description: "Switching to a new category title language requires reloading the category tree.",  category: language  }
+# priority: default
 # source: http://forum.ubuntuusers.de/topic/streamtuner2-zwei-internet-radios-anhoeren-au/3/
 # recognizes: max_streams
 #
@@ -46,18 +49,6 @@ class surfmusik (ChannelPlugin):
 
     categories = []
     titles = dict( genre="Genre", title="Station", playing="Location", bitrate=False, listeners=False )
- 
-    config = [
-        {
-            "name": "surfmusik_lang",
-            "value": "EN",
-            "type": "select",
-            "select":"DE=German|EN=English",
-            "description": "Switching to a new category title language requires reloading the category tree.",
-            "category": "language",
-        }
-    ]    
-    
     
     # Set channel title
     def __init__(self, parent=None):

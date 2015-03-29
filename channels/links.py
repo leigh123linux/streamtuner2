@@ -6,11 +6,10 @@
 # category: web
 # version: 0.2
 # priority: default
+# config: -
 #
-#
-# Simply adds a "links" entry in bookmarks tab, where known channels
-# and some others are listed with homepage links.
-#
+# Simply adds a "links" entry in bookmarks tab, where known services
+# are listed with homepage links.
 #
 
 
@@ -28,10 +27,6 @@ class links (object):
     title = "Links"
     version = 0.1
     meta = plugin_meta()
-    
-    
-    # configuration settings
-    config = [    ]
     
     # list
     streams = [    ]

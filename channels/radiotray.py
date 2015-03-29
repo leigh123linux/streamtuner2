@@ -5,6 +5,8 @@
 # type: feature
 # category: bookmarks
 # depends: deb:python-dbus, deb:streamtuner2, deb:python-xdg
+# config: -
+# url: http://radiotray.sourceforge.net/
 # priority: extra
 # id: streamtuner2-radiotray
 # pack: radiotray.py=/usr/share/streamtuner2/channels/
@@ -42,9 +44,6 @@ class radiotray:
     module = "radiotray"
     title = "RadioTray"
     meta = plugin_meta()
-    # configuration settings
-    config = [
-    ]
     # bookmarks cat
     parent = None
     bm = None

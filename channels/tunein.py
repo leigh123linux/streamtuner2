@@ -5,6 +5,8 @@
 # version: 0.1
 # type: channel
 # category: radio
+# url: http://tunein.com/
+# config: -
 # priority: optional
 # documentation: http://opml.radiotime.com/
 #
@@ -35,13 +37,12 @@ class tunein (ChannelPlugin):
     title = "TuneIn"
     module = "tunein"
     homepage = "http://tunein.com/"
-    has_search = True
+    has_search = False
     listformat = "audio/x-scpls"
     titles = dict(listeners=False)
     base = "http://opml.radiotime.com/"
 
     categories = ["local", "60's", "70's", "80's", "90's", "Adult Contemporary", "Alternative Rock", "Ambient", "Bluegrass", "Blues", "Bollywood", "Children's Music", "Christmas", "Classic Hits", "Classic Rock", "Classical", "College Radio", "Country", "Decades", "Disco", "Easy Listening", "Eclectic", "Electronic", "Folk", "Hip Hop", "Indie", "Internet Only", "Jazz", "Live Music", "Oldies", "Polka", "Reggae", "Reggaeton", "Religious", "Rock", "Salsa", "Soul and R&B", "Spanish Music", "Specialty", "Tango", "Top 40/Pop", "World"]
-    config = []
     catmap = {"60's": "g407", "Live Music": "g2778", "Children's Music": "c530749", "Polka": "g84", "Tango": "g3149", "Top 40/Pop": "c57943", "90's": "g2677", "Eclectic": "g78", "Decades": "c481372", "Christmas": "g375", "Reggae": "g85", "Reggaeton": "g2771", "Oldies": "c57947", "Jazz": "c57944", "Specialty": "c418831", "Hip Hop": "c57942", "College Radio": "c100000047", "Salsa": "g124", "Bollywood": "g2762", "70's": "g92", "Country": "c57940", "Classic Hits": "g2755", "Internet Only": "c417833", "Disco": "g385", "Rock": "c57951", "Soul and R&B": "c1367173", "Blues": "g106", "Classic Rock": "g54", "Alternative Rock": "c57936", "Adult Contemporary": "c57935", "Classical": "c57939", "World": "c57954", "Indie": "g2748", "Religious": "c57950", "Bluegrass": "g63", "Spanish Music": "c57945", "Easy Listening": "c10635888", "Ambient": "g2804", "80's": "g42", "Electronic": "c57941", "Folk": "g79"}
 
 

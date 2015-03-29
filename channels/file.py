@@ -8,12 +8,10 @@
 # priority: optional
 # depends: mutagen
 # config:  
-#   {name:"file_browser_dir", "type":"text", "value": "~/Music, /media/music", "description":"list of directories to scan for audio files"},
-#   {name:"file_browser_ext", "type":"text", "value":"mp3,ogg, m3u,pls,xspf, avi,flv,mpg,mp4", "description":"file type filter"},
-#
+#   { name: file_browser_dir, type: text, value: "~/Music, /media/music", description: "List of directories to scan for audio files." },
+#   { name: file_browser_ext, type: text, value: "mp3,ogg, m3u,pls,xspf, avi,flv,mpg,mp4", description: "File type/extension filter." },
 #
 # Local file browser.
-#
 #
 
 

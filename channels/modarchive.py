@@ -4,7 +4,9 @@
 # description: Collection of module / tracker audio files (MOD, S3M, XM, etc.)
 # type: channel
 # version: 0.2
+# url: http://www.modarchive.org/
 # priority: extra
+# config: -
 # category: music
 #
 #

@@ -6,6 +6,7 @@
 # category: ui
 # depends: kronos
 # version: 0.5
+# config: -
 # priority: optional
 # support: unsupported
 #
@@ -22,7 +23,7 @@
 
 from config import *
 from channels import *
-import kronos
+import kronos  # Doesn't work with Python3
 from mygtk import mygtk
 from action import action
 import copy
@@ -40,8 +41,6 @@ class timer:
     
     
     # configuration settings
-    config = [
-    ]
     timefield = "playing"
     
     

@@ -5,7 +5,11 @@
 # version: 0.2
 # type: channel
 # category: radio
+# config:
+#    { name: dirble_api_key,  value: "",  type: text,  description: Custom API access key. },
+#    { name: dirble_fetch_homepage,  value: 0,  type: boolean,  description: Also fetch homepages when updating stations. (Rather slow.) }
 # priority: optional
+# url: http://dirble.com/
 # documentation: http://dirble.com/developer/api
 #
 # Provides a nice JSON API, so is easy to support.
@@ -31,24 +35,11 @@ class dirble (ChannelPlugin):
     # description
     title = "Dirble"
     module = "dirble"
-    homepage = "http://dirble.com/"
     has_search = True
     listformat = "audio/x-scpls"
     titles = dict(listeners=False, playing="Location")
 
     categories = []
-    config = [
-        {"name": "dirble_api_key",
-         "value": "",
-         "type": "text",
-         "description": "Custom API access key."
-        },
-        {"name": "dirble_fetch_homepage",
-         "value": 0,
-         "type": "boolean",
-         "description": "Also fetch homepages when updating stations. (This is super slow, as it requires one extra request for each station.)"
-        }
-    ]    
     catmap = {}
     
     base = "http://api.dirble.com/v1/%s/apikey/%s/"

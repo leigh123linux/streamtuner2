@@ -6,7 +6,7 @@
 # version: 1.5
 # category: channel
 # priority: core
-# config: {"name":"like_my_bookmarks", "type":"boolean", "value":0, "description":"I like my bookmarks", color: "#f7e7d7"}
+# config: { name: like_my_bookmarks,  type: boolean, value: 0, description: "I like my bookmarks" }
 # 
 # Favourite lists.
 #

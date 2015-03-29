@@ -3,8 +3,11 @@
 # title: Xiph.org
 # description: ICEcast radio directory. Now utilizes a cached JSON API.
 # type: channel
-# category: radio
+# url: http://dir.xiph.org/
 # version: 0.3
+# category: radio
+# config: 
+#    { name: xiph_min_bitrate,  value: 64,  type: int,  description: "minimum bitrate, filter anything below",  category: filter }
 # priority: standard
 #
 # Xiph.org maintains the Ogg streaming standard and Vorbis audio compression
@@ -54,9 +57,6 @@ class xiph (ChannelPlugin):
         #xml_url = "http://dir.xiph.org/yp.xml"
         json_url = "http://api.include-once.org/xiph/cache.php"
         listformat = "url/http"
-        config = [
-           {"name":"xiph_min_bitrate", "value":64, "type":"int", "description":"minimum bitrate, filter anything below", "category":"filter"}
-        ]
         has_search = True
 
         # content

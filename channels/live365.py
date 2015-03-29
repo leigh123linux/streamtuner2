@@ -2,11 +2,12 @@
 # api: streamtunter2
 # title: Live365
 # description: Around 5000 categorized internet radio streams, some paid ad-free ones.
+# version: 0.3
 # type: channel
 # category: radio
-# version: 0.3
+# url: http://www.live365.com/
+# config: -
 # priority: optional
-#
 # 
 #
 # We're currently extracting from the JavaScript;
@@ -16,8 +17,6 @@
 # And using a HTML5 player direct URL now:
 #
 #    /cgi-bin/play.pls?stationid=%s&direct=1&file=%s.pls
-#
-#
 #
 
 

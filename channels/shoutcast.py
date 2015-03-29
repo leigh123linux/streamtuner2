@@ -4,11 +4,13 @@
 # description: Primary list of shoutcast servers (now managed by radionomy).
 # type: channel
 # category: radio
-# priority: default
-# version: 1.5
-# depends: pq, re, http
 # author: Mario
 # original: Jean-Yves Lefort
+# version: 1.5
+# url: http://www.shoutcast.com/
+# config: -
+# priority: default
+# depends: pq, re, http
 #
 # Shoutcast is a server software for audio streaming. It automatically spools
 # station information on shoutcast.com
@@ -46,16 +48,10 @@ from compat2and3 import urllib
 class shoutcast(channels.ChannelPlugin):
 
     # desc
-    api = "streamtuner2"
     module = "shoutcast"
     title = "SHOUTcast"
-    homepage = "http://www.shoutcast.com/" 
     base_url = "http://shoutcast.com/"
     listformat = "audio/x-scpls"
-
-    # settings
-    config = [
-    ]
     
     # categories
     categories = []

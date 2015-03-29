@@ -5,8 +5,12 @@
 # type: channel
 # category: radio
 # version: 0.5
-# priority: standard
+# url: http://www.myoggradio.org/
 # depends: json, StringIO
+# config:
+#    { name: myoggradio_login,  type: text,  value: "user:password", description: "Account for storing personal favourites." }
+#    { name: myoggradio_morph,  type: boolean, value: 0,  description: "Convert pls/m3u into direct shoutcast url." }
+# priority: standard
 #
 # MyOggRadio is an open source radio station directory. Because this matches
 # well with streamtuner2, there's now a project partnership. Shared streams can easily
@@ -41,12 +45,6 @@ class myoggradio(ChannelPlugin):
     homepage = "http://www.myoggradio.org/"
     api = "http://www.myoggradio.org/"
     listformat = "url/direct"
-    
-    # config data
-    config = [
-        {"name":"myoggradio_login", "type":"text", "value":"user:password", "description":"Account for storing personal favourites."},
-        {"name":"myoggradio_morph", "type":"boolean", "value":0, "description":"Convert pls/m3u into direct shoutcast url."},
-    ]
     
     # hide unused columns
     titles = dict(playing=False, listeners=False, bitrate=False)

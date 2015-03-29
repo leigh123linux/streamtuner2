@@ -1,11 +1,13 @@
 # encoding: UTF-8
 # api: streamtuner2
-# title: iTunes Radio (via RS)
+# title: iTunes Radio
 # description: iTunes unsorted station list via RoliSoft Radio Playlist caching webservice.
 # version: 0.1
 # type: channel
 # category: radio
+# url: http://www.itunes.com?
 # priority: optional
+# config: -
 # documentation: http://lab.rolisoft.net/playlists.html
 #
 # Provides pre-parsed radio station playlists for various services
@@ -67,8 +69,6 @@ class itunes (ChannelPlugin):
         "'80s Flashback",
         "'90s Hits",
     ]
-    config = [
-    ]    
     
     base = "http://lab.rolisoft.net/playlists/itunes.php"
     #base = "http://aws-eu.rolisoft.net/playlists/itunes.php"

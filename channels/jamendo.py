@@ -5,11 +5,13 @@
 # type: channel
 # version: 2.2
 # category: radio
+# url: http://jamendo.com/
 # depends: json
-# priority: default
 # config: 
-#    { name: "jamendo_stream_format", type: "select", value: "ogg", select: "ogg=Ogg Vorbis|mp32=MP3, 192vbr|mp31=MP3, 96kbps|flac=Xiph FLAC", description: "Default streaming audio format. Albums and playlists still return Vorbis mostly for best quality." }
-#
+#    { name: jamendo_stream_format, value: ogg,  type: select,  select: "ogg=Ogg Vorbis|mp32=MP3, 192vbr|mp31=MP3, 96kbps|flac=Xiph FLAC",  description: "Default streaming audio format. Albums and playlists still return Vorbis mostly for best quality." }
+#    { name: jamendo_image_size,    value: 50,   type: select,  select: "25=25px|35=35px|50=50px|55=55px|60=60px|65=65px|70=70px|75=75px|85=85px|100=100px|130=130px|150=150px|200=200px|300=300px",  description: "Preview images size (height and width) for albums or tracks." }
+#    { name: jamendo_count,         value: 1,    type:text,     description: "How many result sets (200 entries each) to retrieve." }
+# priority: default
 #
 # Now utilizes the Jamendo /v3.0/ API.
 #
@@ -65,27 +67,6 @@ class jamendo (ChannelPlugin):
     categories = []
 
     titles = dict( title="Title", playing="Album/Artist/User", bitrate=False, listeners=False )
- 
-    config = [
-        {"name":"jamendo_stream_format",
-         "value":"ogg",
-         "type": "select",
-         "select": "ogg=Ogg Vorbis|mp32=MP3, 192vbr|mp31=MP3, 96kbps|flac=Xiph FLAC",
-         "description": "Default streaming audio format. Albums and playlists still return Vorbis mostly for best quality."
-        },
-        {"name": "jamendo_image_size",
-         "value": "50",
-         "type": "select",
-         "select": "25=25px|35=35px|50=50px|55=55px|60=60px|65=65px|70=70px|75=75px|85=85px|100=100px|130=130px|150=150px|200=200px|300=300px",
-         "description": "Preview images size (height and width) for albums or tracks."
-        },
-        {"name": "jamendo_count",
-         "value": "1",     # "offset": in API is broken, so leave this at 1
-         "type":"text",
-         "description": "How many result sets (200 entries each) to retrieve."
-        }
-    ]    
-    
 
 
     # refresh category list

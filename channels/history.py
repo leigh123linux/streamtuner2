@@ -5,14 +5,13 @@
 # version: 1.0
 # type: category
 # category: ui
+# config:
+#     { name: history,  type: int,  value: 20,  description: Number of last played streams to keep in history list.,  category: limit }
 # priority: optional
-# config:  { name: history,  type: int,  value: 20,  description: Number of last played streams to keep in history list.,  category: limit }
 #
 # 
 # Lists last activated streams in a new [history] tab in the favourites
 # channel.
-#
-#
 #
 
 

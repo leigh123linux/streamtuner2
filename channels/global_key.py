@@ -5,6 +5,10 @@
 # type: feature
 # category: ui
 # version: 0.2
+# config:
+#    { name="switch_key", type="text", value="XF86Forward", description="Global key shortcut for switching radio." },
+#    { name="switch_channel", type="text", value="bookmarks:favourite", description="Station list and channels to alternate in." },
+#    { name="switch_random", type="boolean", value=0, description="Pick random channel, instead of next." },
 # priority: extra
 # depends: python-keybinder
 #
@@ -30,12 +34,6 @@ class global_key(object):
     module = "global_key"
     title = "keyboard shortcut"
     meta = plugin_meta()
-    
-    config = [
-        dict(name="switch_key", type="text", value="XF86Forward", description="global key for switching radio"),
-        dict(name="switch_channel", type="text", value="bookmarks:favourite", description="station list to alternate in"),
-        dict(name="switch_random", type="boolean", value=0, description="pick random channel, instead of next"),
-    ]
     last = 0
 
 
