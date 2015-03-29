@@ -43,7 +43,7 @@ http://www.opensource.org/licenses/mit-license.php
 
 """
 
-__version__="2.0"
+__version__="2.1"
 
 __all__ = [
     "DayTaskRescheduler",
@@ -275,10 +275,10 @@ class Scheduler:
             try:
                 self.sched.run()
             except Exception as x:
-                print >>sys.stderr, "ERROR DURING SCHEDULER EXECUTION",x
-                print >>sys.stderr, "".join(
-                    traceback.format_exception(*sys.exc_info()))
-                print >>sys.stderr, "-" * 20
+                print("ERROR DURING SCHEDULER EXECUTION",x, file=sys.stderr)
+                print("".join(
+                    traceback.format_exception(*sys.exc_info())), file=sys.stderr)
+                print("-" * 20, file=sys.stderr)
             # queue is empty; sleep a short while before checking again
             if self.running:
                 time.sleep(5)
@@ -313,9 +313,9 @@ class Task:
 
     def handle_exception(self, exc):
         """Handle any exception that occured during task execution."""
-        print >>sys.stderr, "ERROR DURING TASK EXECUTION", exc
-        print >>sys.stderr, "".join(traceback.format_exception(*sys.exc_info()))
-        print >>sys.stderr, "-" * 20
+        print("ERROR DURING TASK EXECUTION", exc, file=sys.stderr)
+        print("".join(traceback.format_exception(*sys.exc_info())), file=sys.stderr)
+        print("-" * 20, file=sys.stderr)
 
 
 class SingleTask(Task):
@@ -561,18 +561,18 @@ if hasattr(os, "fork"):
 
 if __name__=="__main__":
     def testaction(arg):
-        print ">>>TASK",arg,"sleeping 3 seconds"
+        print(">>>TASK",arg,"sleeping 3 seconds")
         time.sleep(3)
-        print "<<<END_TASK",arg
+        print("<<<END_TASK",arg)
 
     s=ThreadedScheduler()
     s.add_interval_task( testaction, "test action 1", 0, 4, method.threaded, ["task 1"], None )
     s.start()
     
-    print "Scheduler started, waiting 15 sec...."
+    print("Scheduler started, waiting 15 sec....")
     time.sleep(15)
     
-    print "STOP SCHEDULER"
+    print("STOP SCHEDULER")
     s.stop()
     
-    print "EXITING"
+    print("EXITING")
