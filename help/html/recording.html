@@ -11,7 +11,7 @@
 <div class="trail">
 <a class="trail" href="index.html" title="♪ Streamtuner2"><span class="media"><span class="media media-image"><img src="img/logo.png" class="media media-inline" alt="♪"></span></span> Streamtuner2 </a> › <a class="trail" href="index.html#browsing" title="Browsing channels and radio stations">Browsing channels and radio stations</a> » <a class="trail" href="streams.html" title="Streams / Stations">Streams / Stations</a> › <a class="trail" href="streams.html#actions" title="Actions">Actions</a> » </div>
 <div class="trail">
-<a class="trail" href="index.html" title="♪ Streamtuner2"><span class="media"><span class="media media-image"><img src="img/logo.png" class="media media-inline" alt="♪"></span></span> Streamtuner2 </a> › <a class="trail" href="index.html#configuration" title="Configuration">Configuration</a> » <a class="trail" href="configuration.html" title="Settings dialog">Settings dialog</a> › <a class="trail" href="configuration.html#apps" title="Player application settings">Player application settings</a> » </div>
+<a class="trail" href="index.html" title="♪ Streamtuner2"><span class="media"><span class="media media-image"><img src="img/logo.png" class="media media-inline" alt="♪"></span></span> Streamtuner2 </a> › <a class="trail" href="index.html#configuration" title="Configuration">Configuration</a> » <a class="trail" href="configuration.html" title="Settings dialog">Settings dialog</a> › <a class="trail" href="configuration.html#recording" title="Recording Apps">Recording Apps</a> » </div>
 <div class="trail">
 <a class="trail" href="index.html" title="♪ Streamtuner2"><span class="media"><span class="media media-image"><img src="img/logo.png" class="media media-inline" alt="♪"></span></span> Streamtuner2 </a> › <a class="trail" href="index.html#functions" title="Functions">Functions</a> » </div>
 </div></div>
@@ -19,20 +19,57 @@
 <div class="hgroup"><h1 class="title"><span class="title">Recording</span></h1></div>
 <div class="region">
 <div class="contents">
-<p class="p">Most stations that stream MP3 or OGG music can be recorded. This is accomplished by
-        the commandline tool "streamripper". If you select a station a press the [record] button,
-        a console window should appear. Within that streamripper outputs its current activity.</p>
-<p class="p">Per default recorded streams are written into the current directory. Often this is your
-        home directory. And streamripper automatically creates a directory with the recorded
-        radio station title as name. Within that directory the individual music titles are split
-        into separate .mp3 files.</p>
-<p class="p">You can influence all these behaviours with -arguments to the streamripper program.
-        Please refer to the manpage of streamripper. The options are too broad to list here.
-        You can set default arguments (e.g. another default save directory) in the Config &gt; Apps
-        dialog.</p>
-<p class="p">As alternative check out <span class="link"><a href="http://freshcode.club/projects/ficy" title="http://freshcode.club/projects/ficy">fIcy/fPls</a></span>
-	for recording ICEcast/SHOUTcast streaming servers.</p>
+<p class="p">Most stations that stream MP3 or OGG music can be recorded. This is
+accomplished through the command-line tool <span class="app">streamripper</span>.  If you
+select a station and press <span class="gui">● record</span>, a console
+window should appear, where streamripper shows its progress.</p>
+<p class="p">You can <span class="link"><a href="configuration.html" title="Settings dialog">configure the recording tool</a></span> according to audio types again.</p>
 </div>
+<div id="" class="sect"><div class="inner">
+<div class="hgroup"><h2 class="title"><span class="title">Streamripper</span></h2></div>
+<div class="region"><div class="contents">
+<p class="p">The <span class="cmd">xterm -e</span> prefix brings up the terminal popup. If you want
+silent downloads in the background instead of seeing its progress, remove
+the xterm call.</p>
+<div class="table"><div class="inner"><div class="region"><table class="table">
+<thead><tr>
+<td><p class="p">Format</p></td>
+<td style="border-left-style: solid;"><p class="p">Application</p></td>
+</tr></thead>
+<tr>
+<td><p class="p"><span class="var">audio/*</span></p></td>
+<td style="border-left-style: solid;"><p class="p"><span class="cmd">xterm -e streamripper %srv</span></p></td>
+</tr>
+</table></div></div></div>
+<p class="p">To configure a default download directory, use the <span class="cmd">-d</span> option to streamripper.
+For example <span class="cmd">xterm -e "streamripper -d /media/music/"</span> would use an absolute path.
+Else it downloads to the current working directory (often your HOME path),
+and creates one directory per radio station there.</p>
+</div></div>
+</div></div>
+<div id="" class="sect"><div class="inner">
+<div class="hgroup"><h2 class="title"><span class="title">fIcy/fPls</span></h2></div>
+<div class="region"><div class="contents">
+<p class="p">As alternative to streamripper, check out <span class="link"><a href="http://freshcode.club/projects/ficy" title="http://freshcode.club/projects/ficy">fIcy/fPls</a></span>
+for recording ICEcast/SHOUTcast streaming servers.</p>
+<p class="p">It can be configured with <span class="cmd">xterm -e "fPls %srv"</span> simply.</p>
+</div></div>
+</div></div>
+<div id="" class="sect"><div class="inner">
+<div class="hgroup"><h2 class="title"><span class="title">Youtube-DL</span></h2></div>
+<div class="region"><div class="contents"><p class="p">The recording settings have a specific entry for "video/youtube" URLs. To configure a specific download
+directory, use <span class="cmd">xterm -e "cd /media/music ; youtube-dl %srv"</span> for example. (The <span class="cmd">cd</span>
+trick works with streamripper too.)</p></div></div>
+</div></div>
+<div id="" class="sect"><div class="inner">
+<div class="hgroup"><h2 class="title"><span class="title">Wget for MOD files</span></h2></div>
+<div class="region"><div class="contents"><p class="p">To download audio files from The MOD Archive directly, you can define a
+few custom handlers.  Scroll/click on the empty row in the recording apps
+table.  There create a new recording MIME type <span class="var">audio/mod+zip</span> with
+a command like <span class="cmd">xterm -e wget %srv</span>.  Copy it alike for
+<span class="var">audio/it+zip</span> and <span class="var">audio/xm+zip</span> to cover the most common
+file types.  Using <span class="cmd">curl</span> would also work of course.  </p></div></div>
+</div></div>
 <div class="sect sect-links" role="navigation">
 <div class="hgroup"></div>
 <div class="contents"><div class="links guidelinks"><div class="inner">
@@ -40,7 +77,7 @@
 <div class="region"><ul>
 <li class="links "><a href="streams.html#actions" title="Actions">Actions</a></li>
 <li class="links "><a href="index.html#functions" title="Functions">Functions</a></li>
-<li class="links "><a href="configuration.html#apps" title="Player application settings">Player application settings</a></li>
+<li class="links "><a href="configuration.html#recording" title="Recording Apps">Recording Apps</a></li>
 </ul></div>
 </div></div></div>
 </div>

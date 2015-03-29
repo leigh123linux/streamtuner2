@@ -13,80 +13,169 @@
 <div class="hgroup"><h1 class="title"><span class="title">Settings dialog</span></h1></div>
 <div class="region">
 <div class="contents">
-<p class="p">There are various options for streamtuner2.
-        You can find the settings dialog in the edit menu as "Preferences" (last entry).
-        </p>
+<p class="p">
+There are various options for streamtuner2, available under <span class="guiseq"><span class="gui">Edit</span> ▸ <span class="gui">Preferences</span></span> or via <span class="key"><kbd>F12</kbd></span>.
+</p>
 <div class="terms"><div class="inner">
 <div class="title title-terms"><h2><span class="title">It's separated into three main areas.</span></h2></div>
 <div class="region"><dl class="terms">
 <dt class="terms">Player</dt>
 <dd class="terms"><p class="p">Lists audio formats and the audio player applications, or recording tools below.
-            It's a file type to application table. Double click an entry for editing.</p></dd>
+    It's a file type to application table. Double click an entry for editing.</p></dd>
 <dt class="terms">Options</dt>
 <dd class="terms"><p class="p">Influences the display of all stream/station lists, and contains some system settings.</p></dd>
 <dt class="terms">Channel Plugins</dt>
 <dd class="terms"><p class="p">Every channel tab can have specific options. These are configured here.
-            Also you can disable channels you don't need.</p></dd>
+    Also you can disable channels you don't need.</p></dd>
 </dl></div>
 </div></div>
 </div>
 <div id="apps" class="sect"><div class="inner">
 <div class="hgroup"><h2 class="title"><span class="title">Player application settings</span></h2></div>
 <div class="region"><div class="contents">
-<p class="p">MIME types are elaborate identifiers for file types; audio/mp3 for example represents MP3 files, and audio/ogg
-		means just OGG.</p>
-<p class="p">The text entry fields can hold the application name of an audio player. Often the application name
-		is just a lower case version of the program title.</p>
-<p class="p">Behind application names a placeholder can be used. On invocation such placeholders
-		get replaced with an URL (a http://..-Link) or filename for the selected radio stream.</p>
-<p class="p">Placeholders are introduced by a percent sign, and followed by letters. %m3u for example generates a .m3u file,
-                which most audio players understand. Otherwise try %pls, which might even be faster because streamtuner2 doesn't
-		have to download and preprocess it. Alternatively %srv instead gives a direct stream link.</p>
-<p class="p">Catch-all entries like */* or a generic audio/* entry allow to configure a default player.
-		</p>
-<p class="p">Recording</p>
+<p class="p">MIME types are categorzied identifiers for file types. <span class="var">Audio/mpeg</span> for example represents MP3 files,
+    and <span class="var">audio/ogg</span> means just OGG. And the player setting dialog simply associates an audio type with a
+    playback application:</p>
+<div class="table"><div class="inner"><div class="region"><table class="table">
+<thead><tr>
+<td><p class="p">Format</p></td>
+<td style="border-left-style: solid;"><p class="p">Application</p></td>
+</tr></thead>
+<tr>
+<td><p class="p"><span class="var">audio/mpeg</span></p></td>
+<td style="border-left-style: solid;"><p class="p"><span class="cmd">audacious</span></p></td>
+</tr>
+<tr class="shade">
+<td style="border-top-style: solid;"><p class="p"><span class="var">audio/ogg</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">audacious</span></p></td>
+</tr>
+<tr>
+<td style="border-top-style: solid;"><p class="p"><span class="var">audio/*</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">vlc --one-instance</span></p></td>
+</tr>
+<tr class="shade">
+<td style="border-top-style: solid;"><p class="p"><span class="var">video/*</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">totem</span></p></td>
+</tr>
+<tr>
+<td style="border-top-style: solid;"><p class="p"><span class="var">video/youtube</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">vlc %srv</span></p></td>
+</tr>
+</table></div></div></div>
+<p class="p">Application names are always lowercase binary names. Double click an entry to edit it.</p>
+<p class="p">After the application name, you can use a placeholder like "<span class="var">%pls</span>" (default),
+    or "<span class="var">%m3u</span>" and "<span class="var">%src</span>". See <span class="link"><a href="config_apps.html#placeholders" title="URL placeholders">placeholders</a></span>.</p>
+<p class="p">Catch-all entries like <span class="var">*/*</span> or a generic <span class="var">audio/*</span> entry allow to configure a default player.
+    While <span class="var">video/youtube</span> is specific to the Youtube channel. And <span class="var">url/http</span> a psdeudo MIME type
+    to configure a web browser (for station homepages).</p>
+<div class="links topiclinks"><div class="inner"><div class="region"><div class="linkdiv "><a class="linkdiv" href="config_apps.html" title="Audio players"><span class="title">Audio players</span><span class="linkdiv-dash"> — </span><span class="desc">Common applications to use as players.</span></a></div></div></div></div>
+</div></div>
+</div></div>
+<div id="recording" class="sect"><div class="inner">
+<div class="hgroup"><h2 class="title"><span class="title">Recording Apps</span></h2></div>
+<div class="region"><div class="contents">
 <p class="p">The second block of entries in the 'Apps' section specifies recording applications.
-                Here streamripper is preconfigured for audio streams, and youtube-dl for Youtube videos for instance.
-                To define a target directory, you can add commandline arguments to each. Also it's typically
-                helpful to leave the xterm prefix on, so you can follow the processing state. (Alternatively to
-                xterm there is x-terminal-emulator, or rxvt, gnome-terminal, xfce4-terminal, etc.)</p>
-<div class="links topiclinks"><div class="inner"><div class="region">
-<div class="linkdiv "><a class="linkdiv" href="config_apps.html" title="Audio players"><span class="title">Audio players</span><span class="linkdiv-dash"> — </span><span class="desc">Common applications to use as players.</span></a></div>
-<div class="linkdiv "><a class="linkdiv" href="recording.html" title="Recording"><span class="title">Recording</span><span class="linkdiv-dash"> — </span><span class="desc">Save radio songs as MP3 files via streamripper.</span></a></div>
-</div></div></div>
+    Here streamripper is preconfigured for audio streams, and youtube-dl for Youtube videos for instance.</p>
+<div class="table"><div class="inner"><div class="region"><table class="table">
+<tr>
+<td><p class="p"><span class="var">audio/*</span></p></td>
+<td style="border-left-style: solid;"><p class="p"><span class="cmd">xterm -e streamripper %srv</span></p></td>
+</tr>
+<tr class="shade">
+<td style="border-top-style: solid;"><p class="p"><span class="var">video/youtube</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">xterm -e "youtube-dl %srv"</span></p></td>
+</tr>
+</table></div></div></div>
+<p class="p">To define a target directory, you can add commandline arguments to each. Also it's typically
+    helpful to leave the xterm prefix on, so you can follow the processing state. (Alternatively to
+    xterm there is x-terminal-emulator, or rxvt, gnome-terminal, xfce4-terminal, etc.)</p>
+<div class="links topiclinks"><div class="inner"><div class="region"><div class="linkdiv "><a class="linkdiv" href="recording.html" title="Recording"><span class="title">Recording</span><span class="linkdiv-dash"> — </span><span class="desc">Save radio songs as MP3 files via streamripper.</span></a></div></div></div></div>
 </div></div>
 </div></div>
 <div id="gui" class="sect"><div class="inner">
 <div class="hgroup"><h2 class="title"><span class="title">Display/GUI options</span></h2></div>
 <div class="region"><div class="contents">
-<p class="p">Most options here a self-explanatory. The options for the favicons define if station entries should
-		show little icons. Not all stations have one, so you might as well turn this off to conserve a little
-		memory.</p>
-<p class="p">The number of stations setting is not honored by all channel plugins. Often it's not possible to
-		load more or fewer station entries. Some plugins have own settings (in the 'Plugins' section) even.
-		For the major plugins this however limits how much scroll text appears in the stream lists.</p>
-<p class="p">"Retain deleted stations" keeps old entries, when you reload a category/genre. Shoutcast often
-		forgets stations or throws them out. If you keep this option enabled, these entries are kept in
-		streamtuner2. Browse down in the stations list to still see them.</p>
-<p class="p">It's possible to select a Gtk+ theme. But not all themes work with all Gtk display engines, and
-		not all themes work with streamtuner2. You'll have to try.</p>
-<p class="p">Remembering window states allows streamtuner2 to reconstruct which channel and category was last
-		selected. You can however disable this option, and instead manually save the window states/layout
-		in the edit menu, if you want.</p>
-<p class="p">Setting another temporary directory might be useful, if you want to keep the temporary .m3u cache
-		files. They are created whenever you hit play. For archival or speed-up porposes you might want to keep
-		them elsewhere. They don't take a lot of space.</p>
+<div class="terms"><div class="inner">
+<div class="title title-terms"><h3><span class="title">Display settings</span></h3></div>
+<div class="region"><dl class="terms">
+<dt class="terms">Display favicons</dt>
+<dd class="terms"><p class="p">The options for the favicons define if station entries should show little icons.
+      Not all stations have one, so you might as well turn this off to conserve a little memory.</p></dd>
+<dt class="terms">Load favicons</dt>
+<dd class="terms"><p class="p">When starting to play a station, its homepage favicon is automatically retrieved in the
+      background. It's not going to be displayed right away, but after you reload the category/station list.
+      Alternatively use <span class="guiseq"><span class="gui">Channel</span> ▸ <span class="gui">Update favicons...</span></span> to update all
+      station icons at once.</p></dd>
+<dt class="terms">Show bookmark star</dt>
+<dd class="terms"><p class="p">Bookmarked stations will be marked with a ★ star in all other station lists / categories.
+      That doesn't often work for the same station entry from two different channel services / tabs though.</p></dd>
+<dt class="terms">Gtk+ theme</dt>
+<dd class="terms"><p class="p"><span class="em">Be careful</span>. While Gtk allows to select a different theme per application, not all themes
+      work right away. Switching the theme might hang streamtuner2. Just restart if that happens.</p></dd>
+<dt class="terms">Save window states</dt>
+<dd class="terms"><p class="p">Automatically remember window size, selected channel tab, categories, or selected station.
+      Also keeps the width of station list columns. If disabled, you can manually save the current
+      layout/selections via <span class="guiseq"><span class="gui">Edit</span> ▸ <span class="gui">Save States</span></span>.</p></dd>
+</dl></div>
+</div></div>
+<div class="terms"><div class="inner">
+<div class="title title-terms"><h3><span class="title">Station loading</span></h3></div>
+<div class="region"><dl class="terms">
+<dt class="terms">Prefer HTML traversing (PyQuery) over regex</dt>
+<dd class="terms"><p class="p">Some channels provide proper APIs to fetch station lists. Others are just websites, that
+      require scraping listings out. Most channel tabs provide two alternative methods for that.
+      The DOM/HTML selection method is sometimes more reliable. As fallback streamtuner2 plugins
+      often use a regex to match text. Occassionally the regex method is actually more reliable,
+      because directory services often use frightful unstructured HTML. If available, both methods
+      are tried. You can influence the order with this setting.</p></dd>
+<dt class="terms">[<span class="input">250</span>] Limit stream number</dt>
+<dd class="terms"><p class="p"> Constraints the length of station lists per category.
+      The number of stations setting is not honored by all channel plugins. Often it's not possible to
+      load more or fewer station entries. Some plugins have own settings (in the 'Plugins' section) even.
+      For the major plugins this however limits how much scroll text appears in the stream lists.</p></dd>
+<dt class="terms">Retain deleted stations</dt>
+<dd class="terms"><p class="p">When enabled, keeps old station entries when
+      updating/reloading a category/genre.  Services often forget stations or throws them out when inavailable.
+      With this option enabled, these entries are kept in streamtuner2 as strikethrough entries (often
+      at the end of the list).</p></dd>
+<dt class="terms">Update favouries from freshened URLs</dt>
+<dd class="terms"><p class="p">Streaming URLs in bookmarked stations get renewed on category reloads/updates. This isn't
+      very reliable, as often station titles change together with the streaming URLs.</p></dd>
+<dt class="terms">google station homepages</dt>
+<dd class="terms"><p class="p">When playing a station that doesn't have a homepage entry, streamtuner2 tries to google
+      the station title. The found URL is then used/kept as station homepage. (Btw, station titles
+      like www.mymusicstation.com are automatically mapped to homepage URLs already.)</p></dd>
+</dl></div>
+</div></div>
+<div class="terms"><div class="inner">
+<div class="title title-terms"><h3><span class="title">System</span></h3></div>
+<div class="region"><dl class="terms">
+<dt class="terms">Temporary files</dt>
+<dd class="terms"><p class="p">Streamtuner2 creates temporary .m3u files - for audio players that are configured to use %m3u files
+      instead of %pls or %srv URLs. For archival purposes you might want to set a dedicated directory
+      for this. Leave this to the default /tmp else.</p></dd>
+<dt class="terms">Config directory</dt>
+<dd class="terms"><p class="p">Is where streamtuner2 keeps its <span class="file">settings.json</span> and channel caches, favicons, etc.
+      You can't set this in the config dialog. This is just for display. Set the <span class="sys">XDG_CONFIG_HOME</span>
+      environment variable to adapt.</p></dd>
+<dt class="terms">Enable debug messages</dt>
+<dd class="terms"><p class="p">If you start streamtuner2 from a terminal window (xterm/rxvt), you can get a load of state
+      and processing or debug infos. Enable this only for testing, as it might slow down station
+      rendering.</p></dd>
+</dl></div>
+</div></div>
 </div></div>
 </div></div>
 <div id="plugins" class="sect"><div class="inner">
 <div class="hgroup"><h2 class="title"><span class="title">Plugin and Channel settings</span></h2></div>
 <div class="region"><div class="contents">
-<p class="p">Each channel plugin can bring its own list of configuration settings. These are collected here.</p>
-<p class="p">The heading for each plugin allows to enable or disable it. To apply changed states you need to restart
-                streamtuner2 however.</p>
-<p class="p">If you want to find out more about the short option descriptions (most settings are checkboxes),
-		please have a look into the channels directory /usr/share/streamtuner2/channels/ and corresponding
-		*.py files. These are readable, and sometimes contain more information.</p>
+<p class="p">This tab lists all available channel and feature plugins. Mark checkboxes for those plugins
+    you want to enable. You have to restart Streamtuner2 for any changes here to take effect.</p>
+<p class="p">Each channel plugin may come with its own set of addition configuration settings
+    below.</p>
+<div class="note" title="Note"><div class="inner"><div class="region"><div class="contents"><p class="p">If you want to find out more about the short option descriptions (most settings are checkboxes),
+    please have a look into the channels directory /usr/share/streamtuner2/channels/ and corresponding
+    *.py files. These are readable, and sometimes contain more information.</p></div></div></div></div>
 <div class="links topiclinks"><div class="inner"><div class="region">
 <div class="linkdiv "><a class="linkdiv" href="internet_radio_org_uk.html" title="Internet-Radio.com"><span class="title">Internet-Radio.com</span><span class="linkdiv-dash"> — </span><span class="desc">Large radio directory from the UK.</span></a></div>
 <div class="linkdiv "><a class="linkdiv" href="myoggradio.html" title="MyOggRadio"><span class="title">MyOggRadio</span><span class="linkdiv-dash"> — </span><span class="desc">Open source stream directory.</span></a></div>

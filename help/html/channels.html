@@ -14,9 +14,10 @@
 <div class="region">
 <div class="contents">
 <p class="p">The tabs in the main window represent the music directory
-        channels/services.  Each lists categories and streams from a
-        specific radio directory/website.</p>
+        channels/services.  Each lists categories/genres and their associated radios/streams.</p>
 <div class="media media-image"><div class="inner"><img src="img/channels.png" class="media media-block" alt=""></div></div>
+<p class="p">The notebook tabs can also be repositioned with
+        <span class="guiseq"><span class="gui">Edit</span> ▸ <span class="gui">Channel tab position</span> ▸ <span class="gui">Left</span></span>.</p>
 <p class="p">If you first select a channel tab, the categories should appear or be loading.
         Otherwise:</p>
 <div class="steps"><div class="inner"><div class="region"><ol class="steps">
@@ -25,8 +26,8 @@
 <li class="steps"><p class="p">Pick a category/genre from the overview, left.</p></li>
 </ol></div></div></div>
 <p class="p">Individual channels provide different music/radio information. The table
-        views are mostly identical in each tab. (You could modify the <span class="code">datamap[]</span>
-        in the plugin files if you wanted to adapt this.)</p>
+        views are mostly identical in each tab. Some views may rename columns, or remove
+        them alltogether.</p>
 </div>
 <div id="list" class="sect"><div class="inner">
 <div class="hgroup"><h2 class="title"><span class="title">Available channels</span></h2></div>
@@ -51,8 +52,8 @@
 <div class="region"><div class="contents"><p class="p">You can dobule click the channel tab to visit the channel/directory homepage.
 	Alternatively there is an entry in the <span class="gui">Channel</span> menu.</p></div></div>
 </div></div>
-<div id="homepage" class="sect"><div class="inner">
-<div class="hgroup"><h2 class="title"><span class="title">Channel menu options</span></h2></div>
+<div id="actions" class="sect"><div class="inner">
+<div class="hgroup"><h2 class="title"><span class="title">Channel menu actions</span></h2></div>
 <div class="region"><div class="contents">
 <div class="terms"><div class="inner"><div class="region"><dl class="terms">
 <dt class="terms">Homepage of directory service</dt>
@@ -65,7 +66,7 @@
 <dt class="terms">Reload category tree</dt>
 <dd class="terms"><p class="p">Updates the genre list in the left category pane.
 			For most channels the category list is already complete, but it might
-			change over time. So this option often only is used for initializing streamtuner2
+			change over time. So this option is often only used for initializing streamtuner2
 			channels when the list is empty.</p></dd>
 </dl></div></div></div>
 <p class="p">The channel menu also contains a list of available channels. Select an entry to switch

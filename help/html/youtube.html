@@ -22,9 +22,15 @@
 <p class="p">Googles <span class="link"><a href="https://youtube.com/" title="https://youtube.com/">Youtube</a></span> provides a quirky
         JSON API that makes browsing channels and genres feasible. This beta plugin
         provides a little overview, and usually retrieves recent video uploads.</p>
-<p class="p">VLC can directly play Youtube URLs. For other players the default application
-        setting wraps <span class="link"><a href="http://youtube-dl.org/" title="http://youtube-dl.org/">youtube-dl</a></span>, which is also
-        used for recording.</p>
+<p class="p">VLC can directly play Youtube URLs. For other players one can use
+        <span class="link"><a href="http://youtube-dl.org/" title="http://youtube-dl.org/">youtube-dl</a></span> as wrapper.
+        For example <span class="cmd">totem $(youtube-dl %srv)</span> as configured player
+        command.</p>
+<p class="p">Youtube-dl is preconfigued as "recording"/download tool for this channel
+        tab.</p>
+<p class="p">Of course you could also just invoke a specific YT video by
+        opening it in your web browser - click the station <span class="key"><kbd>home</kbd></span>
+        button simply.</p>
 <div class="terms"><div class="inner">
 <div class="title title-terms"><h2><span class="title">Channel options.</span></h2></div>
 <div class="region"><dl class="terms">
@@ -37,6 +43,8 @@
     <span class="guiseq"><span class="gui">Channel</span> ▸ <span class="gui">Update category tree</span></span> first.</p>
 <p class="p">It's not an exact map, but utilizes the search function to find channels.</p>
 </dd>
+<dt class="terms"><span class="code">Wadsworth constant</span></dt>
+<dd class="terms"><p class="p">Only influences the video homepage link.</p></dd>
 </dl></div>
 </div></div>
 </div>
