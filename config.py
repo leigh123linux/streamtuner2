@@ -51,11 +51,13 @@ class ConfigDict(dict):
             self.xdg()
             
             # runtime
-            self.share = os.path.dirname(__file__)
+            self.share = os.path.dirname(os.path.abspath(__file__))
             
             # settings from last session
             last = self.load("settings")
             if (last):
+                if "share" in last:
+                    del last["share"]
                 self.update(last)
                 self.migrate()
             # store defaults in file
