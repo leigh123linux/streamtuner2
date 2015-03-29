@@ -7,7 +7,7 @@
 # description: Directory browser for internet radio / audio streams
 # depends: pygtk | gi, threading, requests, pyquery, lxml, deb:python-pyquery, deb:python-requests, deb:python-gtk2
 # version: 2.1.4
-# author: Mario Salzer <milky@users.sf.net>
+# author: Mario Salzer <mario@include-once.org>
 # license: public domain
 # url: http://freshcode.club/projects/streamtuner2
 # config:  
@@ -61,7 +61,7 @@ from mygtk import pygtk, gtk, gobject, ui_file, mygtk, ver as GTK_VER, ComboBoxT
 
 # custom modules
 from config import conf   # initializes itself, so all conf.vars are available right away
-from config import __print__, dbg
+from config import __print__, dbg, plugin_meta
 import ahttp
 import action  # needs workaround... (action.main=main)
 import channels
@@ -405,10 +405,8 @@ class StreamTunerTwo(gtk.Builder):
         # load plugins from /usr/share/streamtuner2/channels/
         def load_plugin_channels(self):
 
-            # find and order plugin files
+            # initialize plugin modules (pre-ordered)
             ls = channels.module_list()
-
-            # step through
             for module in ls:
                 gui_startup(2/10.0 + 7/10.0 * float(ls.index(module))/len(ls), "loading module "+module)
                                 
@@ -548,7 +546,7 @@ class search (auxiliary_window):
             self.search_dialog.show();
             if not self.current or main.current_channel != "bookmarks":
                 self.current = main.current_channel
-                self.search_dialog_current.set_label("just %s" % main.channels[self.current].title)
+                self.search_dialog_current.set_label("just %s" % main.channels[self.current].meta["title"])
 
 
         # hide dialog box again
@@ -608,7 +606,7 @@ class search (auxiliary_window):
                     try:
                         add = cn.update_streams(cat=None, search=self.q)
                         for row in add:
-                            row["genre"] = cn.title + " " + row.get("genre", "")
+                            row["genre"] = cn.meta["title"] + " " + row.get("genre", "")
                         entries += add
                     except:
                         continue
@@ -799,17 +797,24 @@ class config_dialog (auxiliary_window):
 
         # iterate over channel and feature plugins
         def add_plugins(self):
-            for name,plugin in main.channels.iteritems():
-                self.add_plg(name, plugin, plugin.meta)
-            self.plugin_options.pack_start(mygtk.label("\n<b>Feature</b> plugins add categories, submenu entries, or other extensions.\n", 500, 1))
-            for name,plugin in main.features.iteritems():
-                self.add_plg(name, plugin, plugin.meta)
+            ls = {}
+            for name in channels.module_list():
+                if name in main.channels:
+                    ls[name] = main.channels[name].meta
+                elif name in main.features:
+                    ls[name] = main.features[name].meta
+                else:
+                    ls[name] = plugin_meta(conf.share+"/channels/"+name+".py")
+            for name,meta in sorted(ls.items(), key=lambda e: e[1]["type"]+e[1]["title"].lower(), reverse=False):
+                self.add_plg(name, meta)
+            #self.plugin_options.pack_start(mygtk.label("\n<b>Feature</b> plugins add categories, submenu entries, or other extensions.\n", 500, 1))
 
         # add configuration setting definitions from plugins
-        def add_plg(self, name, c, meta):
+        def add_plg(self, name, meta):
             # add plugin load entry
             cb = gtk.CheckButton(name)
-            cb.get_children()[0].set_markup("<b>%s</b> <i>(%s)</i> %s\n<small>%s</small>" % (meta["title"], meta["type"], meta.get("version", ""), meta["description"]))
+            cb.get_children()[0].set_markup("<b>%s</b> <i>(%s)</i> %s\n<small>%s</small>" % (meta.get("title", name), meta.get("type", "unknown"), meta.get("version", "./."), meta.get("description", "no description")))
+            cb.set_tooltip_text(meta.get("doc", "").strip())
             self.add_( "config_plugins_"+name, cb )
 
             # default values are already in conf[] dict (now done in conf.add_plugin_defaults)
