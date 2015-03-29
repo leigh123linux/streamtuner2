@@ -3,11 +3,12 @@
 # api: streamtuner2
 # type: base
 # category: ui
-# title: Channel plugin handling
+# title: Channel plugins
 # description: Base implementation for channels and feature plugins
 # version: 1.1
 # license: public domain
 # author: mario
+# url: http://fossil.include-once.org/streamtuner2/
 # pack:
 #   file.py  global_key.py  history.py  icast.py  internet_radio.py 
 #   itunes.py  jamendo.py  links.py  live365.py  modarchive.py 
@@ -44,6 +45,7 @@ import xml.sax.saxutils
 import re
 import copy
 import inspect
+import pkgutil
 
 
 # Only export plugin classes
@@ -58,9 +60,9 @@ __all__ = [
 #
 def module_list():
 
-    # find plugin files
-    ls = os.listdir(conf.share + "/channels/")
-    ls = [fn[:-3] for fn in ls if re.match("^[a-z][\w\d_]+\.py$", fn)]
+    # Should list plugins within zips as well as local paths
+    ls = pkgutil.iter_modules(["channels"])
+    ls = [name for loader,name,ispkg in ls]
     
     # resort with tab order
     order = [module.strip() for module in conf.channel_order.lower().replace(".","_").replace("-","_").split(",")]
@@ -70,22 +72,11 @@ def module_list():
 
 
 
-# dict==object
-#class struct(dict):
-#        def __init__(self, *xargs, **kwargs):
-#                self.__dict__ = self
-#                self.update(kwargs)
-#                [self.update(x) for x in xargs]
-#        pass
-
-
 # generic channel module                            ---------------------------------------
 class GenericChannel(object):
 
         # desc
-        module = "generic"
-        meta = {}
-        title = "GenericChannel"
+        meta = { "config": [] }
         homepage = "http://fossil.include-once.org/streamtuner2/"
         base_url = ""
         listformat = "audio/x-scpls"
@@ -137,8 +128,9 @@ class GenericChannel(object):
             #self.streams = {}
             self.gtk_list = None
             self.gtk_cat = None
-            self.meta = plugin_meta(inspect.getsourcefile(inspect.getmodule(self)))
-            self.config = self.meta["config"]
+            self.meta = plugin_meta(None, inspect.getcomments(inspect.getmodule(self)))
+            self.config = self.meta.get("config", [])
+            self.title = self.meta.get("title", self.module)
 
             # only if streamtuner2 is run in graphical mode        
             if (parent):
@@ -152,6 +144,16 @@ class GenericChannel(object):
         def shutdown(self):
             pass
         #__del__ = shutdown
+        
+
+        # get class name
+        @property
+        def module(self):
+            return self.__class__.__name__
+        # get title
+        @property
+        def title(self):
+            return self.meta.get("title", self.module)
             
             
         # returns station entries from streams[] for .current category
@@ -210,7 +212,7 @@ class GenericChannel(object):
                 mygtk.columns(self.gtk_list, self.datamap, [])
                 
             # add to main menu
-            mygtk.add_menu(parent.channelmenuitems, self.title, lambda w: parent.channel_switch(w, self.module) or 1)
+            mygtk.add_menu(parent.channelmenuitems, self.meta["title"], lambda w: parent.channel_switch(w, self.module) or 1)
             
             
         # make private copy of .datamap and modify field (title= only ATM)
@@ -577,8 +579,8 @@ class ChannelPlugin(GenericChannel):
                     icon.set_property("icon-size", 1)
                     icon.set_property("visible", True)
                     label.pack_start(icon, expand=False, fill=True)
-                if self.title:
-                    text = gtk.Label(self.title)
+                if self.meta["title"]:
+                    text = gtk.Label(self.meta["title"])
                     text.set_property("visible", True)
                     label.pack_start(text, expand=True, fill=True)
                     
