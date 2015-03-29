@@ -2,7 +2,7 @@
 # encoding: UTF-8
 # api: python
 # type: functions
-# title: mygtk helper functions
+# title: uikit helper functions
 # description: simplify usage of some gtk widgets
 # version: 1.8
 # author: mario
@@ -27,13 +27,13 @@
 
 
 # debug
-from config import __print__, dbg
+from config import __print__, dbg, plugin_meta
 
 # filesystem
 import os.path
 import copy
 import sys
-
+import inspect
 from compat2and3 import unicode, xrange, PY3
 
 
@@ -65,7 +65,7 @@ else:
 
 
 # simplified gtk constructors               ---------------------------------------------
-class mygtk:
+class uikit:
 
 
              
@@ -264,7 +264,7 @@ class mygtk:
         #-- save window size and widget properties
         #
         # needs a list of widgetnames
-        # e.g. pickle.dump(mygtk.app_state(...), open(os.environ["HOME"]+"/.config/app_winstate", "w"))
+        # e.g. pickle.dump(uikit.app_state(...), open(os.environ["HOME"]+"/.config/app_winstate", "w"))
         #
         @staticmethod
         def app_state(wTree, widgetnames=["window1", "treeview2", "vbox17"]):
@@ -544,3 +544,42 @@ def gui_startup(p=0/100.0, msg="streamtuner2 is starting"):
     except: return
 
 
+
+
+# Encapsulates references to gtk objects AND properties in main window,
+# which allows to use self. and main. almost interchangably.
+#
+# This is a kludge to keep gtkBuilder widgets accessible; so just one
+# instance has to be built. Also ties main.channels{} or .features{}
+# dicts together for feature windows. Used by search, config, streamedit.
+#
+class AuxiliaryWindow(object):
+
+    def __init__(self, parent):
+        self.main = parent
+        self.meta = plugin_meta(None, inspect.getcomments(inspect.getmodule(self)))
+        
+    def __getattr__(self, name):
+        if name in self.main.__dict__:
+            return self.main.__dict__[name]
+        elif name in self.main.__class__.__dict__:
+            return self.main.__class__.__dict__[name]
+        else:
+            return self.main.get_widget(name)
+
+
+
+
+# Auxiliary window: about dialog
+#
+class AboutStreamtuner2(AuxiliaryWindow):
+    def __init__(self, parent):
+        a = gtk.AboutDialog()
+        a.set_version(parent.__version__)
+        a.set_name("streamtuner2")
+        a.set_license("Public Domain\n\nNo Strings Attached.\nUnrestricted distribution,\nmodification, use.")
+        a.set_authors(["Mario Salzer <http://mario.include-once.org/>\n\nConcept based on streamtuner 0."+"99."+"99 from\nJean-Yves Lefort, of which some code remains\nin the Google stations plugin.\n<http://www.nongnu.org/streamtuner/>\n\nMyOggRadio plugin based on cooperation\nwith Christian Ehm. <http://ehm-edv.de/>"])
+        a.set_website("http://milki.include-once.org/streamtuner2/")
+        a.connect("response", lambda a, ok: ( a.hide(), a.destroy() ) )
+        a.show()
+            
