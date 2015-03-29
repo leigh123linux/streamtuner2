@@ -1,19 +1,20 @@
 # api: dbus
 # title: RadioTray hook
 # description: Allows to bookmark stations to RadioTray
-# version: 0.2
+# version: 0.3
 # type: feature
 # category: bookmarks
 # depends: deb:python-dbus, deb:streamtuner2, deb:python-xdg
-# config: -
+# config:
+#   { name: radiotray_map, type: select, value: 1, select: '0=root|1=group', description: 'Map genres to default RadioTray groups, or just "root".' }
 # url: http://radiotray.sourceforge.net/
 # priority: extra
 # id: streamtuner2-radiotray
 # pack: radiotray.py=/usr/share/streamtuner2/channels/
 #
-# Adds a context menu "Keep in RadioTray.." to bookmark streams
-# in RadioTray.  Until a newer version exposes addRadio(), this
-# plugin will fall back to just playUrl().
+# Adds a context menu "Keep in RadioTray.." for bookmarking.
+# Until a newer version exposes addRadio(), this plugin
+# will fall back to just playUrl().
 #
 # The patch for radiotray/DbusFacade.py would be:
 #   +
@@ -21,16 +22,15 @@
 #   +    def addRadio(self, title, url, group="root"):
 #   +        self.dataProvider.addRadio(title, url, group)
 #
-# Displays existing radiotray stations in ST2 bookmarks category
-# as read from ~/.local/share/radiotray/bookmarks.xml. They're not
-# refetched during runtime.
+# Displays existing radiotray stations in ST2 bookmarks
+# category as read from ~/.local/share/radiotray/bookmarks.xml.
 #
 # This plugin may be packaged up separately.
 #
 
 from config import *
 from channels import *
-from mygtk import mygtk
+from uikit import uikit
 
 import dbus
 from xdg.BaseDirectory import xdg_data_home
@@ -76,7 +76,7 @@ class radiotray:
 
         # add context menu
         if parent:
-            mygtk.add_menu(parent.extensions, "Keep in RadioTray", self.share)
+            uikit.add_menu(parent.extensions, "Keep in RadioTray", self.share)
         
 
     # load RadioTray bookmarks
@@ -102,9 +102,29 @@ class radiotray:
         if row:
             # RadioTray doesn't have an addRadio method yet, so just fall back to play the stream URL
             try:
-                self.radiotray().addRadio(row["title"], row["url"], row.get("genre", d="root"))
+                self.radiotray().addRadio(row["title"], row["url"], self.map_group(row.get("genre")))
             except:
                 self.radiotray().playUrl(row["url"])
         pass
 
+    # match genre to RT groups
+    def map_group(self, genre):
+        if not genre or not len(genre) or not int(conf.radiotray_map) == 0:
+            return "root"
+        map = {
+            "Jazz": "jazz|fusion|swing",
+            "Pop / Rock": "top|pop|rock|metal",
+            "Latin": "latin|flamenco|tango|salsa|samba",
+            "Classical": "classic|baroque|opera|symphony|piano|violin",
+            "Oldies": "20s|50s|60s|70s|oldie",
+            "Chill": "chill|easy|listening",
+            "Techno / Electronic": "techno|electro|dance|house|beat|dubstep|progressive|trance",
+            "Country": "country|bluegrass|western",
+            "Community": "community|talk|sports|spoken|educational",
+        }
+        #for str in (genre,title):
+        for cat,rx in map.items():
+            if re.match(rx, genre, re.I):
+                return cat
+        return "root"
 
