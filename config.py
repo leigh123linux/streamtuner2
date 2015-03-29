@@ -80,6 +80,9 @@ class ConfigDict(dict):
             }
             self.plugins = {
                 "bookmarks": 1, # built-in plugin, cannot be disabled
+                "search": 1,
+                "streamedit": 1,
+                "configwin": 1,
                 "shoutcast": 1,
                 "xiph": 1,
                 "modarchive": 0, # disable per default
