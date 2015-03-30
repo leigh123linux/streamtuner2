@@ -6,11 +6,12 @@
 # category: bookmarks
 # depends: deb:python-dbus, deb:streamtuner2, deb:python-xdg
 # config:
-#   { name: radiotray_map, type: select, value: 1, select: '0=root|1=group', description: 'Map genres to default RadioTray groups, or just "root".' }
+#   { name: radiotray_map, type: select, value: "group", select: 'root|group|asis', description: 'Map genres to default RadioTray groups, or just "root".' }
 # url: http://radiotray.sourceforge.net/
 # priority: extra
 # id: streamtuner2-radiotray
-# pack: radiotray.py=/usr/share/streamtuner2/channels/
+# pack: radiotray.py
+# fpm-prefix: /usr/share/streamtuner2/channels/
 #
 # Adds a context menu "Keep in RadioTray.." for bookmarking.
 # Until a newer version exposes addRadio(), this plugin
@@ -31,7 +32,7 @@
 from config import *
 from channels import *
 from uikit import uikit
-
+import re
 import dbus
 from xdg.BaseDirectory import xdg_data_home
 from xml.etree import ElementTree
@@ -42,7 +43,6 @@ class radiotray:
 
     # plugin info
     module = "radiotray"
-    title = "RadioTray"
     meta = plugin_meta()
     # bookmarks cat
     parent = None
@@ -102,15 +102,19 @@ class radiotray:
         if row:
             # RadioTray doesn't have an addRadio method yet, so just fall back to play the stream URL
             try:
-                self.radiotray().addRadio(row["title"], row["url"], self.map_group(row.get("genre")))
+                group = self.map_group(row.get("genre"))
+                __print__(dbg.PROC, "mapping genre '%s' to RT group '%s'" % (row["genre"], group))
+                self.radiotray().addRadio(row["title"], row["url"], group)
             except:
                 self.radiotray().playUrl(row["url"])
         pass
 
     # match genre to RT groups
     def map_group(self, genre):
-        if not genre or not len(genre) or not int(conf.radiotray_map) == 0:
+        if not genre or not len(genre) or conf.radiotray_map == "root":
             return "root"
+        if conf.radiotray_map == "asis":
+            return genre  # if RadioTray itself can map arbitrary genres to its folders
         map = {
             "Jazz": "jazz|fusion|swing",
             "Pop / Rock": "top|pop|rock|metal",
@@ -124,7 +128,7 @@ class radiotray:
         }
         #for str in (genre,title):
         for cat,rx in map.items():
-            if re.match(rx, genre, re.I):
+            if re.search(rx, genre, re.I):
                 return cat
         return "root"
 
