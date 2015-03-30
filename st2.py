@@ -38,10 +38,10 @@
 
 # standard modules
 import sys
-import os, os.path
+import os
 import re
-from collections import namedtuple
 from copy import copy
+import inspect
 import traceback
 from threading import Thread
 
@@ -82,7 +82,7 @@ class StreamTunerTwo(gtk.Builder):
         "config_load": [],
         "config_save": [],
     }
-    __version__ = "2.1.5"
+    meta = plugin_meta()
 
     # status variables
     channel_names = ["bookmarks"]    # order of channel notebook tabs
@@ -91,7 +91,7 @@ class StreamTunerTwo(gtk.Builder):
 
     # constructor
     def __init__(self):
-
+        
         # gtkrc stylesheet
         self.load_theme(), gui_startup(1/20.0)
 
@@ -418,7 +418,8 @@ class StreamTunerTwo(gtk.Builder):
             
             # load plugin
             try:
-                plugin = __import__("channels."+module, None, None, [""])
+                plugin = __import__("channels."+module, globals(), None, [""])
+                #print [name for name,c in inspect.getmembers(plugin) if inspect.isclass(c)]
                 plugin_class = plugin.__dict__[module]
                 plugin_obj = plugin_class(parent=self)
                 
