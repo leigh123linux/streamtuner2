@@ -23,18 +23,32 @@
 
         <p>The personal section is empty per default. You need to specify an user account
 	in the settings dialog, and actually bookmark stations in the MyOggRadio web site.
-	Shared entries aren't automatically in the MOR favorite list.</p>
+	Shared entries aren't automatically in the <gui style="button">personal</gui> list.</p>
 
-	<p>There's also <link href="http://freshcode.club/projects/jmorp">JMyOggRadioPlayer</link>
-	as specific frontend and player for MyOggRadio.</p>
+	<note style="tip"><p>MyOggRadio also has a neat cross-platform player:
+	<link href="http://freshcode.club/projects/jmorp">JMyOggRadioPlayer</link>.</p></note>
 
 <terms>
   <title>Channel options.</title>
   <item>
     <title><code>Login settings</code></title>
-    <p>If you want to upload station infos to MyOggRadio, you need an account there. Registration
-    is free and doesn't require personal information nor email address. Specify username and
-    password separated with a : colon in this field.</p>
+    <p>If you want to upload station infos to MyOggRadio, you need an account there.
+    Registration is free and doesn't require personal information nor email address.
+    Specify it as <input>username:</input> separated with a : colon in this field.</p>
+    <note style="advanced">
+      <p>Alternatively you can store your account settings in the central
+      <file>~/.netrc</file> config file. Or in <file>~/.config/netc</file> even.</p>
+      <p>Your entry for MyOggRadio should follow the common format:</p>
+<code>
+machine myoggradio.org
+    login usr123
+    password pw123
+</code>
+      <p>Which is useful because it's a standard format, and prevents
+      leaking authorization data into per-application config stores.
+      Note that a user:pw setting in streamtuner takes precedence
+      though.</p>
+    </note>
   </item>
   <item>
     <title><code>stream URL format</code></title>

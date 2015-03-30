@@ -4,7 +4,7 @@
 # description: Open source internet radio directory.
 # type: channel
 # category: radio
-# version: 0.5
+# version: 0.6
 # url: http://www.myoggradio.org/
 # depends: json, StringIO
 # config:
@@ -39,21 +39,22 @@ import copy
 # open source radio sharing stie
 class myoggradio(ChannelPlugin):
 
-    # description
-    title = "MyOggRadio"
+    # settings
+    title ="MOR"
     module = "myoggradio"
-    homepage = "http://www.myoggradio.org/"
     api = "http://www.myoggradio.org/"
     listformat = "url/direct"
     
     # hide unused columns
     titles = dict(playing=False, listeners=False, bitrate=False)
     
-
     # category map
     categories = ['common', 'personal']
     default = 'common'
     current = 'common'
+    
+    # netrc instance
+    netrc = None
     
     
     
@@ -173,10 +174,13 @@ class myoggradio(ChannelPlugin):
 
     # returns login (user,pw)
     def user_pw(self):
-        if conf.myoggradio_login != "user:password":
+        if len(conf.myoggradio_login) and conf.myoggradio_login != "user:password":
             return conf.myoggradio_login.split(":")
-        else: pass
-        
+        else:
+            lap =  conf.netrc(["myoggradio", "myoggradio.org", "www.myoggradio.org"])
+            if lap:
+                return [lap[0] or lap[1], lap[2]]
+        pass        
 
 
 
