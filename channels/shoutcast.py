@@ -86,8 +86,10 @@ class shoutcast(channels.ChannelPlugin):
                 self.categories.append(current)
             else:
                 current.append(title)
-        self.save()
 
+        # .categories/.catmap get saved by reload_categories()
+        pass
+        
 
     # downloads stream list from shoutcast for given category
     def update_streams(self, cat):
@@ -126,15 +128,4 @@ class shoutcast(channels.ChannelPlugin):
 
         #__print__(dbg.DATA, entries)
         return entries
-
-
-    # saves .streams and .catmap
-    def save(self):
-        channels.ChannelPlugin.save(self)
-        conf.save("cache/catmap_" + self.module, self.catmap)
-
-    # read previous channel/stream data, if there is any
-    def cache(self):
-        channels.ChannelPlugin.cache(self)
-        self.catmap = conf.load("cache/catmap_" + self.module) or {}
 
