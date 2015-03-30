@@ -62,8 +62,9 @@ __all__ = [
 def module_list():
 
     # Should list plugins within zips as well as local paths
-    ls = pkgutil.iter_modules(["channels"])
+    ls = pkgutil.iter_modules([conf.share+"/channels", "channels"])
     ls = [name for loader,name,ispkg in ls]
+    print ls
     
     # resort with tab order
     order = [module.strip() for module in conf.channel_order.lower().replace(".","_").replace("-","_").split(",")]
