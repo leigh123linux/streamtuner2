@@ -130,6 +130,7 @@ class GenericChannel(object):
         #self.streams = {}
         self.gtk_list = None
         self.gtk_cat = None
+        self.module = self.__class__.__name__
         self.meta = plugin_meta(None, inspect.getcomments(inspect.getmodule(self)))
         self.config = self.meta.get("config", [])
         self.title = self.meta.get("title", self.module)
@@ -141,24 +142,7 @@ class GenericChannel(object):
         pass
         
         
-    # called before application shutdown
-    # some plugins might override this, to save their current streams[] data
-    def shutdown(self):
-        pass
-    #__del__ = shutdown
-    
-
-    # get class name
-    @property
-    def module(self):
-        return self.__class__.__name__
-    # get title
-    @property
-    def title(self):
-        return self.meta.get("title", self.module)
-        
-        
-    # returns station entries from streams[] for .current category
+    # These are all implemented in main (where they don't belong!)
     def stations(self):
         return self.streams.get(self.current, [])
     def rowno(self):
@@ -568,10 +552,15 @@ class ChannelPlugin(GenericChannel):
             # prepare label
             label = gtk.HBox()
             label.set_property("visible", True)
-            fn = "/usr/share/streamtuner2/channels/" + self.module + ".png"
-            if os.path.exists(fn):
+            fn = conf.share + "/channels/" + self.module + ".png"
+            pixbuf = None
+            if "png" in self.meta:
+                pixbuf = uikit.pixbuf(self.meta["png"])
+            elif os.path.exists(fn):
+                pixbuf = gtk.gdk.pixbuf_new_from_file(fn)
+            if pixbuf:
                 icon = gtk.Image()
-                icon.set_property("pixbuf", gtk.gdk.pixbuf_new_from_file(fn))
+                icon.set_from_pixbuf(pixbuf)
                 icon.set_property("icon-size", 1)
                 icon.set_property("visible", True)
                 label.pack_start(icon, expand=False, fill=True)
@@ -584,6 +573,7 @@ class ChannelPlugin(GenericChannel):
             ev_label = gtk.EventBox()
             ev_label.add(label)
             ev_label.connect('event', parent.on_homepage_channel_clicked)
+            plain_label = gtk.Label(self.module)
 
 
 
@@ -602,7 +592,7 @@ class ChannelPlugin(GenericChannel):
 
 
             # add notebook tab
-            tab = parent.notebook_channels.append_page(vbox, ev_label)
+            tab = parent.notebook_channels.insert_page_menu(child=vbox, tab_label=ev_label, menu_label=plain_label)
             
             
             
