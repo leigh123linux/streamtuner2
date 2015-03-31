@@ -8,14 +8,26 @@
 # category: radio
 # priority: optional
 # config: -
+# png:
+#   iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAcVQTFRF
+#   ////8PDw5OTk9/f3z9fYW3qnKFmLC0N9K1qVYYay2N7hl6zAHU6BYIqaqdDN4vvt9fzstuPeV42+JVmWn7TKi6XBFE+Og62t+/6f7/2MoMmMs+OPpdPDns/7ir/YGlehjqjE0tnfGFGTQXWuncmX6/tt
+#   4vlvvfBv6vtsreGNbaXhdrTyXJXCY4m2JWStM2aZ4PhjtOhjy/FpeKioZaDoRYTAOXSpLGGgMXK/GlONlcxG1fZZfqyEX5XRY6TqPobZI2zCWJKqGVWbMHTHH12hT4BMt+0tgrFTfKt3XpG4WZfYR4vY
+#   NHrTK3TMRYTCIlmdM3bNKmy8KGGWgrs3UYRXSHp0TISKS4WaPXq4OXrENHrNO3zRPnitXpZ/aqJrRnd5Y5VPWYVXNGeTNnO1M2OiLmy+PYPdSo3eUZHaU5DLg7cxtOwNntIaYpVrMGittLvEKV+lQofd
+#   UZXoXp7rY6HfVoutsOUMQnOHdIurM2q2Y6TvbarqZJvFYpBlp9sSs+gMboag3t/dfZCqPWysSoLNYJvgYZSxfq5NNmF6MlmCcoab19nXqKyyZoSwTnawN2OfRGqXXXqanKKjzMzMt7e3o6SjsLKvtVfy
+#   AwAAAAFiS0dEBxZhiOsAAAAJcEhZcwAAAEgAAABIAEbJaz4AAADxSURBVBjTY2AAAUYmIGBkZoACRhZWNnZ2Dk4uqAgjNw8vH7+AoJCwCCOIzywqJi4hKSUtIysnrwBSo6ikrKKqpq6hqaWto6QIVKCr
+#   p69uYGBoZGxiYmrGyczAaG5haWVtbW1ja2fv4GjOyMDo5Ozi6ubu4enl7ePr5w8U8A8IDAoOCQ0Lj4iMigYJmDtHRcbExsUnJCYlR6YwMjCzpqalZ2SGZ2Vn5+TmsTIzMOcXFBYVl5TmZGeXlXPkgxxa
+#   UZleVV1TW1efyNYAdmpjU3NLq1Zbe0dnVzfEM0w9vX3N/RMmTmqEeZd58pSpU6dNBnsWAEP5Nco3FJZfAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE0LTA2LTAxVDAxOjI4OjA3KzAyOjAw7O+A+AAAACV0
+#   RVh0ZGF0ZTptb2RpZnkAMjAxNC0wNi0wMVQwMToyODowNyswMjowMJ2yOEQAAAAASUVORK5CYII=
 # documentation: http://api.icast.io/
 #
 # A modern alternative to ShoutCast/ICEcast.
-# Streams are user-contributed, but often lack meta data (homepage) and
-# there's no ordering by listeneres/popularity.
+# Streams are user-contributed, but often lack
+# meta data (homepage) and there's no ordering
+# by listeneres/popularity.
 #
-# OTOH it's every easy to interface with. Though the repeated API queries
-# due to 10-entries-per-query results make fetching slow.
+# OTOH it's every easy to interface with. Though
+# the repeated API queries due to only 10 entries
+# per query results make fetching slow.
 #
 #
 #
@@ -31,8 +43,6 @@ import ahttp as http
 class icast (ChannelPlugin):
 
     # description
-    title = "iCast"
-    module = "icast"
     homepage = "http://www.icast.io/"
     has_search = True
     listformat = "audio/x-scpls"
