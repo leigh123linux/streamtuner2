@@ -20,7 +20,7 @@
 #   streamtuner2.desktop=/usr/share/applications/, README=/usr/share/doc/streamtuner2/,
 #   NEWS.gz=/usr/share/doc/streamtuner2/changelog.gz, help/streamtuner2.1=/usr/share/man/man1/,
 #   help/*page=/usr/share/doc/streamtuner2/help/, help/img/*=/usr/share/doc/streamtuner2/help/img/,
-#   streamtuner2.png, logo.png=/usr/share/pixmaps/streamtuner2.png,
+#   logo.png=/usr/share/pixmaps/streamtuner2.png,
 # architecture: all
 #
 # Streamtuner2 is a GUI for browsing internet radio directories, music
@@ -95,7 +95,7 @@ class StreamTunerTwo(gtk.Builder):
     def __init__(self):
         
         # Load stylesheet, instantiate GtkBuilder in self, menu and logo hooks
-        gui_startup(0/20.0), self.load_theme()
+        gui_startup(0/20.0), uikit.load_theme(conf.get("theme"))
         gui_startup(1/20.0), gtk.Builder.__init__(self)
         gui_startup(1/20.0), gtk.Builder.add_from_string(self, ui_xml)
         gui_startup(3/20.0), self.extensionsCTM.set_submenu(self.extensions)  # duplicates Station>Extension menu into stream context menu
@@ -456,16 +456,6 @@ class StreamTunerTwo(gtk.Builder):
             if (self.channels[id]):
                 channelopts[id] = {"current":self.channels[id].current}
         conf.save("state", channelopts, nice=1)
-
-
-    # apply gtkrc stylesheet
-    def load_theme(self):
-        if conf.get("theme"):
-            for dir in (conf.dir, conf.share, "/usr/share"):
-                f = dir + "/themes/" + conf.theme + "/gtk-2.0/gtkrc"
-                if os.path.exists(f):
-                    gtk.rc_parse(f)
-            pass
 
 
     # end application and gtk+ main loop

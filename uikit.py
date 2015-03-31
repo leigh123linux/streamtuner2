@@ -440,6 +440,17 @@ class uikit:
         m.show()
         m.connect("response", lambda *w: m.destroy())
         
+
+    # apply gtkrc stylesheet
+    @staticmethod
+    def load_theme(theme=None):
+        if theme:
+            for dir in (conf.dir, conf.share, "/usr/share"):
+                f = dir + "/themes/" + theme + "/gtk-2.0/gtkrc"
+                if os.path.exists(f):
+                    gtk.rc_parse(f)
+            pass
+
         
     # Pixbug loader (from inline string, as in `logo.png`)
     @staticmethod
