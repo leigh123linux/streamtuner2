@@ -6,6 +6,7 @@
 # title: streamtuner2
 # description: Directory browser for internet radio, audio and video streams
 # version: 2.1.5
+# state: beta
 # author: Mario Salzer <mario@include-once.org>
 # license: Public Domain
 # url: http://freshcode.club/projects/streamtuner2
@@ -24,7 +25,7 @@
 #
 # Streamtuner2 is a GUI for browsing internet radio directories, music
 # collections, and video services - grouped by genres or categories.
-# It utilizes installed audio players, and streamripper for recording.
+# It runs your preferred audio player, and streamripper for recording.
 #
 # It's an independent rewrite of streamtuner1. Being written in Python,
 # can be more easily extended and fixed. The mix of JSON APIs, regex
@@ -50,12 +51,13 @@ sys.path.insert(0, "/usr/share/streamtuner2")   # pre-defined directory for modu
 sys.path.insert(0, ".")   # development module path
 
 # gtk modules
-from uikit import pygtk, gtk, gobject, ui_file, uikit, gui_startup, AboutStreamtuner2
+from uikit import pygtk, gtk, gobject, uikit, ui_xml, gui_startup, AboutStreamtuner2
 
 # custom modules
 from config import *   # initializes itself, so all conf.vars are available right away
 import ahttp
 import action
+import logo
 import favicon
 import channels
 import channels.bookmarks
@@ -92,14 +94,12 @@ class StreamTunerTwo(gtk.Builder):
     # constructor
     def __init__(self):
         
-        # gtkrc stylesheet
-        self.load_theme(), gui_startup(1/20.0)
-
-        # instantiate gtk/glade widgets in current object
-        gtk.Builder.__init__(self)
-        gtk.Builder.add_from_file(self, conf.find_in_dirs([".", conf.share], ui_file)), gui_startup(2/20.0)
-        # manual gtk operations
-        self.extensionsCTM.set_submenu(self.extensions)  # duplicates Station>Extension menu into stream context menu
+        # Load stylesheet, instantiate GtkBuilder in self, menu and logo hooks
+        gui_startup(0/20.0), self.load_theme()
+        gui_startup(1/20.0), gtk.Builder.__init__(self)
+        gui_startup(1/20.0), gtk.Builder.add_from_string(self, ui_xml)
+        gui_startup(3/20.0), self.extensionsCTM.set_submenu(self.extensions)  # duplicates Station>Extension menu into stream context menu
+        self.img_logo.set_from_pixbuf(uikit.pixbuf(logo.png))
 
         # initialize built-in plugins
         self.channels = {
@@ -111,7 +111,7 @@ class StreamTunerTwo(gtk.Builder):
           "configwin": channels.configwin.configwin(self),
           "streamedit": channels.streamedit.streamedit(self),
         }
-        gui_startup(3/20.0)
+        gui_startup(4/20.0)
         # append other channel modules and plugins
         self.load_plugin_channels()
 
@@ -142,7 +142,7 @@ class StreamTunerTwo(gtk.Builder):
 
   
         # bind gtk/glade event names to functions
-        gui_startup(19/20.0)
+        gui_startup(19.75/20.0)
         self.connect_signals(dict({
             "gtk_main_quit" : self.gtk_main_quit,                # close window
             # treeviews / notebook
@@ -206,8 +206,8 @@ class StreamTunerTwo(gtk.Builder):
         }, **self.add_signals))
         
         # actually display main window
-        gui_startup(98.9/100.0)
         self.win_streamtuner2.show()
+        gui_startup(1.0)
         
 
     #-- Shortcut for glade.get_widget()
@@ -406,7 +406,7 @@ class StreamTunerTwo(gtk.Builder):
         # initialize plugin modules (pre-ordered)
         ls = channels.module_list()
         for module in ls:
-            gui_startup(2/10.0 + 7/10.0 * float(ls.index(module))/len(ls), "loading module "+module)
+            gui_startup(4/20.0 + 13.5/20.0 * float(ls.index(module))/len(ls), "loading module "+module)
                             
             # skip module if disabled
             if conf.plugins.get(module, 1) == False:
@@ -502,13 +502,11 @@ class StreamTunerTwo(gtk.Builder):
 #-- run main
 if __name__ == "__main__":
 
-
     # graphical
     if len(sys.argv) < 2 or "--gtk3" in sys.argv:
 
         # prepare for threading in Gtk+ callbacks
         gobject.threads_init()
-        gui_startup(1/100.0)
 
         # prepare main window
         main = StreamTunerTwo()
@@ -524,7 +522,6 @@ if __name__ == "__main__":
             del conf.firstrun
 
         # run
-        gui_startup(100/100.0)
         gtk.main()
         __print__(dbg.PROC, r"[31m gtk_main_quit [0m")
         
