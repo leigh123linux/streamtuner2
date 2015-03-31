@@ -6,7 +6,7 @@
 # category: bookmarks
 # depends: deb:python-dbus, deb:streamtuner2, deb:python-xdg
 # config:
-#   { name: radiotray_map, type: select, value: "group", select: 'root|group|asis', description: 'Map genres to default RadioTray groups, or just "root".' }
+#   { name: radiotray_map, type: select, value: "group", select: 'root|group|asis|play', description: 'Map genres to default RadioTray groups, or just "root".' }
 # url: http://radiotray.sourceforge.net/
 # priority: extra
 # id: streamtuner2-radiotray
@@ -115,6 +115,8 @@ class radiotray:
             return "root"
         if conf.radiotray_map == "asis":
             return genre  # if RadioTray itself can map arbitrary genres to its folders
+        if conf.radiotray_map == "play":
+            raise NotImplementedError("just call .playUrl()")
         map = {
             "Jazz": "jazz|fusion|swing",
             "Pop / Rock": "top|pop|rock|metal",
