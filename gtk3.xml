@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.1 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
+  <!-- interface-naming-policy toplevel-contextual -->
   <object class="GtkListStore" id="config_play">
     <columns>
       <!-- column-name type -->
@@ -92,9 +92,6 @@
                                     <property name="search_column">0</property>
                                     <property name="level_indentation">8</property>
                                     <property name="enable_grid_lines">both</property>
-                                    <child internal-child="selection">
-                                      <object class="GtkTreeSelection" id="treeview-selection1"/>
-                                    </child>
                                     <child>
                                       <object class="GtkTreeViewColumn" id="tvc_config_player_type">
                                         <property name="spacing">10</property>
@@ -180,9 +177,6 @@
                                 <property name="search_column">0</property>
                                 <property name="level_indentation">8</property>
                                 <property name="enable_grid_lines">both</property>
-                                <child internal-child="selection">
-                                  <object class="GtkTreeSelection" id="treeview-selection2"/>
-                                </child>
                                 <child>
                                   <object class="GtkTreeViewColumn" id="tvc_config_record_type">
                                     <property name="spacing">10</property>
@@ -464,6 +458,8 @@ the website extraction method can fix some station list update errors.&lt;/small
                                     <property name="shadow_type">out</property>
                                     <property name="primary_icon_activatable">False</property>
                                     <property name="secondary_icon_activatable">False</property>
+                                    <property name="primary_icon_sensitive">True</property>
+                                    <property name="secondary_icon_sensitive">True</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -615,6 +611,8 @@ the website extraction method can fix some station list update errors.&lt;/small
                                     <property name="primary_icon_stock">gtk-save-as</property>
                                     <property name="primary_icon_activatable">False</property>
                                     <property name="secondary_icon_activatable">False</property>
+                                    <property name="primary_icon_sensitive">True</property>
+                                    <property name="secondary_icon_sensitive">True</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -639,7 +637,6 @@ the website extraction method can fix some station list update errors.&lt;/small
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="xalign">0.5</property>
                                 <property name="draw_indicator">True</property>
                               </object>
                               <packing>
@@ -683,6 +680,8 @@ the website extraction method can fix some station list update errors.&lt;/small
                                     <property name="primary_icon_stock">gtk-home</property>
                                     <property name="primary_icon_activatable">False</property>
                                     <property name="secondary_icon_activatable">False</property>
+                                    <property name="primary_icon_sensitive">True</property>
+                                    <property name="secondary_icon_sensitive">True</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -708,7 +707,6 @@ the website extraction method can fix some station list update errors.&lt;/small
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="use_underline">True</property>
-                                <property name="xalign">0.5</property>
                                 <property name="draw_indicator">True</property>
                               </object>
                               <packing>
@@ -798,6 +796,8 @@ or internal functions. Changes take effect after restarting streamtuner2.</prope
                                     <property name="invisible_char">●</property>
                                     <property name="primary_icon_activatable">False</property>
                                     <property name="secondary_icon_activatable">False</property>
+                                    <property name="primary_icon_sensitive">True</property>
+                                    <property name="secondary_icon_sensitive">True</property>
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
@@ -1071,241 +1071,26 @@ Plugins</property>
   <object class="GtkDialog" id="search_dialog">
     <property name="width_request">325</property>
     <property name="can_focus">False</property>
-    <property name="opacity">0.94999999999999996</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">station search</property>
     <property name="window_position">center-on-parent</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
     <property name="gravity">center</property>
+    <property name="opacity">0.94999999999999996</property>
     <signal name="close" handler="search_cancel" swapped="no"/>
     <signal name="delete-event" handler="search_cancel" swapped="no"/>
     <child internal-child="vbox">
-      <object class="GtkBox" id="dialog-vbox1">
-        <property name="visible">True</property>
+      <object class="GtkVBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
-        <property name="spacing">2</property>
         <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog-action_area1">
-            <property name="visible">True</property>
+          <object class="GtkHButtonBox" id="dialog-action_area1">
             <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="pack_type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkVBox" id="vbox1">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="spacing">20</property>
-            <child>
-              <object class="GtkLabel" id="label2">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">&lt;b&gt;&lt;big&gt;search&lt;/big&gt;&lt;/b&gt;</property>
-                <property name="use_markup">True</property>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <object class="GtkHBox" id="hbox1">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <child>
-                  <object class="GtkLabel" id="label1sd">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="ypad">10</property>
-                    <property name="label" translatable="yes">for</property>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="search_full">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="has_focus">True</property>
-                    <property name="is_focus">True</property>
-                    <property name="tooltip_text" translatable="yes">A single word to search for in all stations.</property>
-                    <property name="invisible_char">●</property>
-                    <property name="activates_default">True</property>
-                    <property name="primary_icon_activatable">False</property>
-                    <property name="secondary_icon_activatable">False</property>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label4sd">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkHBox" id="hbox2">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <child>
-                  <object class="GtkLabel" id="label3sd">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="xpad">10</property>
-                    <property name="ypad">10</property>
-                    <property name="label" translatable="yes">in</property>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkRadioButton" id="search_dialog_all">
-                    <property name="label" translatable="yes">all channels</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="xalign">0.5</property>
-                    <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
-                    <property name="group">search_dialog_current</property>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkRadioButton" id="search_dialog_current">
-                    <property name="label" translatable="yes">just current</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="xalign">0.5</property>
-                    <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
-                    <property name="group">search_dialog_all</property>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">3</property>
-              </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <object class="GtkHBox" id="hbox3">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="spacing">20</property>
-                <child>
-                  <object class="GtkButton" id="cache_search">
-                    <property name="label" translatable="yes">Cache _find</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Start searching for above search term in the currently loaded station lists. Doesn't find *new* information, just looks through the known data.</property>
-                    <property name="image">image1</property>
-                    <property name="relief">half</property>
-                    <property name="use_underline">True</property>
-                    <signal name="clicked" handler="search_go" swapped="no"/>
-                    <accelerator key="Return" signal="activate"/>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="server_search">
-                    <property name="label" translatable="yes">Server _search</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="has_focus">True</property>
-                    <property name="is_focus">True</property>
-                    <property name="can_default">True</property>
-                    <property name="has_default">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes">Instead of doing a cache search, go through the search functions on the directory service homepages. (UNIMPLEMENTED)</property>
-                    <property name="image">image2</property>
-                    <property name="use_underline">True</property>
-                    <signal name="clicked" handler="search_srv" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">5</property>
-              </packing>
-            </child>
           </object>
           <packing>
             <property name="expand">True</property>
             <property name="fill">True</property>
-            <property name="position">1</property>
+            <property name="position">0</property>
           </packing>
         </child>
       </object>
@@ -1396,680 +1181,20 @@ Plugins</property>
     <signal name="close" handler="timer_cancel" swapped="no"/>
     <signal name="delete-event" handler="timer_cancel" swapped="no"/>
     <child internal-child="vbox">
-      <object class="GtkBox" id="dialog-vbox2">
-        <property name="visible">True</property>
+      <object class="GtkVBox" id="dialog-vbox2">
         <property name="can_focus">False</property>
-        <property name="spacing">2</property>
         <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog-action_area2">
-            <property name="visible">True</property>
+          <object class="GtkHButtonBox" id="dialog-action_area2">
             <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="timer_cancel">
-                <property name="label" translatable="yes">cancel</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <signal name="clicked" handler="timer_cancel" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="timer_ok">
-                <property name="label" translatable="yes">ok</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <signal name="clicked" handler="timer_ok" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack_type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkTable" id="table2">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="n_rows">3</property>
-            <property name="n_columns">3</property>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <object class="GtkEntry" id="timer_value">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="invisible_char">●</property>
-                <property name="text" translatable="yes">Fri,Sat 20:00-21:00</property>
-                <property name="primary_icon_activatable">False</property>
-                <property name="secondary_icon_activatable">False</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
           </object>
           <packing>
             <property name="expand">True</property>
             <property name="fill">True</property>
-            <property name="position">1</property>
+            <property name="position">0</property>
           </packing>
         </child>
       </object>
     </child>
-    <action-widgets>
-      <action-widget response="0">timer_cancel</action-widget>
-      <action-widget response="0">timer_ok</action-widget>
-    </action-widgets>
   </object>
   <object class="GtkWindow" id="url_action_container">
     <property name="can_focus">False</property>
@@ -2118,12 +1243,12 @@ Plugins</property>
   </object>
   <object class="GtkWindow" id="win_streamedit">
     <property name="can_focus">False</property>
-    <property name="opacity">0.94999999999999996</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">inspect/edit stream data</property>
     <property name="window_position">center-on-parent</property>
     <property name="destroy_with_parent">True</property>
     <property name="skip_pager_hint">True</property>
+    <property name="opacity">0.94999999999999996</property>
     <signal name="delete-event" handler="streamedit_cancel" swapped="no"/>
     <child>
       <object class="GtkTable" id="table6">
@@ -2157,6 +1282,8 @@ Plugins</property>
             <property name="invisible_char">●</property>
             <property name="primary_icon_activatable">False</property>
             <property name="secondary_icon_activatable">False</property>
+            <property name="primary_icon_sensitive">True</property>
+            <property name="secondary_icon_sensitive">True</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -2172,6 +1299,8 @@ Plugins</property>
             <property name="invisible_char">●</property>
             <property name="primary_icon_activatable">False</property>
             <property name="secondary_icon_activatable">False</property>
+            <property name="primary_icon_sensitive">True</property>
+            <property name="secondary_icon_sensitive">True</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -2187,6 +1316,8 @@ Plugins</property>
             <property name="invisible_char">●</property>
             <property name="primary_icon_activatable">False</property>
             <property name="secondary_icon_activatable">False</property>
+            <property name="primary_icon_sensitive">True</property>
+            <property name="secondary_icon_sensitive">True</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -2202,6 +1333,8 @@ Plugins</property>
             <property name="invisible_char">●</property>
             <property name="primary_icon_activatable">False</property>
             <property name="secondary_icon_activatable">False</property>
+            <property name="primary_icon_sensitive">True</property>
+            <property name="secondary_icon_sensitive">True</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -2217,6 +1350,8 @@ Plugins</property>
             <property name="invisible_char">●</property>
             <property name="primary_icon_activatable">False</property>
             <property name="secondary_icon_activatable">False</property>
+            <property name="primary_icon_sensitive">True</property>
+            <property name="secondary_icon_sensitive">True</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -2232,6 +1367,8 @@ Plugins</property>
             <property name="invisible_char">●</property>
             <property name="primary_icon_activatable">False</property>
             <property name="secondary_icon_activatable">False</property>
+            <property name="primary_icon_sensitive">True</property>
+            <property name="secondary_icon_sensitive">True</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -2391,6 +1528,8 @@ Plugins</property>
             <property name="invisible_char">●</property>
             <property name="primary_icon_activatable">False</property>
             <property name="secondary_icon_activatable">False</property>
+            <property name="primary_icon_sensitive">True</property>
+            <property name="secondary_icon_sensitive">True</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -2430,6 +1569,8 @@ Plugins</property>
             <property name="invisible_char">●</property>
             <property name="primary_icon_activatable">False</property>
             <property name="secondary_icon_activatable">False</property>
+            <property name="primary_icon_sensitive">True</property>
+            <property name="secondary_icon_sensitive">True</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -2450,6 +1591,11 @@ Plugins</property>
     <property name="default_height">775</property>
     <property name="icon">/usr/share/pixmaps/streamtuner2.png</property>
     <property name="icon_name">applications-multimedia</property>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="win_streamtuner2-atkobject">
+        <property name="AtkObject::accessible-name" translatable="yes">streamtuner2</property>
+      </object>
+    </child>
     <signal name="delete-event" handler="gtk_main_quit" swapped="no"/>
     <child>
       <object class="GtkVBox" id="vbox2">
@@ -2483,9 +1629,9 @@ Plugins</property>
                                 <property name="can_focus">False</property>
                                 <property name="label" translatable="yes">bookmark</property>
                                 <property name="use_underline">True</property>
-                                <signal name="activate" handler="bookmark" swapped="no"/>
                                 <accelerator key="d" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                                 <accelerator key="F8" signal="activate"/>
+                                <signal name="activate" handler="bookmark" swapped="no"/>
                               </object>
                             </child>
                             <child>
@@ -2495,9 +1641,9 @@ Plugins</property>
                                 <property name="can_focus">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
-                                <signal name="activate" handler="save_as" swapped="no"/>
                                 <accelerator key="F2" signal="activate"/>
                                 <accelerator key="s" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+                                <signal name="activate" handler="save_as" swapped="no"/>
                               </object>
                             </child>
                             <child>
@@ -2507,10 +1653,10 @@ Plugins</property>
                                 <property name="can_focus">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
-                                <signal name="activate" handler="streamedit_open" swapped="no"/>
                                 <accelerator key="F3" signal="activate"/>
                                 <accelerator key="space" signal="activate" modifiers="GDK_MOD1_MASK"/>
                                 <accelerator key="Return" signal="activate" modifiers="GDK_MOD1_MASK"/>
+                                <signal name="activate" handler="streamedit_open" swapped="no"/>
                               </object>
                             </child>
                             <child>
@@ -2546,8 +1692,8 @@ Plugins</property>
                                 <property name="can_focus">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
-                                <signal name="activate" handler="gtk_main_quit" swapped="no"/>
                                 <accelerator key="F4" signal="activate" modifiers="GDK_MOD1_MASK"/>
+                                <signal name="activate" handler="gtk_main_quit" swapped="no"/>
                               </object>
                             </child>
                           </object>
@@ -2582,9 +1728,9 @@ Plugins</property>
                                 <property name="can_focus">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
-                                <signal name="activate" handler="delete_entry" swapped="no"/>
                                 <accelerator key="Delete" signal="activate"/>
                                 <accelerator key="x" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+                                <signal name="activate" handler="delete_entry" swapped="no"/>
                               </object>
                             </child>
                             <child>
@@ -2594,8 +1740,8 @@ Plugins</property>
                                 <property name="can_focus">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
-                                <signal name="activate" handler="search_open" swapped="no"/>
                                 <accelerator key="f" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+                                <signal name="activate" handler="search_open" swapped="no"/>
                               </object>
                             </child>
                             <child>
@@ -2750,8 +1896,8 @@ Plugins</property>
                                 <property name="can_focus">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
-                                <signal name="activate" handler="menu_properties" swapped="no"/>
                                 <accelerator key="F12" signal="activate"/>
+                                <signal name="activate" handler="menu_properties" swapped="no"/>
                               </object>
                             </child>
                           </object>
@@ -2783,8 +1929,8 @@ Plugins</property>
                                 <property name="can_focus">False</property>
                                 <property name="label" translatable="yes">Reload</property>
                                 <property name="use_underline">True</property>
-                                <signal name="activate" handler="on_reload_clicked" swapped="no"/>
                                 <accelerator key="F5" signal="activate"/>
+                                <signal name="activate" handler="on_reload_clicked" swapped="no"/>
                               </object>
                             </child>
                             <child>
@@ -2977,6 +2123,8 @@ Plugins</property>
                         <property name="secondary_icon_stock">gtk-find</property>
                         <property name="primary_icon_activatable">False</property>
                         <property name="secondary_icon_activatable">False</property>
+                        <property name="primary_icon_sensitive">True</property>
+                        <property name="secondary_icon_sensitive">True</property>
                         <signal name="changed" handler="quicksearch_set" swapped="no"/>
                         <signal name="icon-press" handler="quicksearch_set" swapped="no"/>
                       </object>
@@ -3002,12 +2150,13 @@ Plugins</property>
               </packing>
             </child>
             <child>
-              <object class="GtkImage" id="img_logo_streamtuner2">
+              <object class="GtkImage" id="img_logo">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="events">GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK | GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK | GDK_PROPERTY_CHANGE_MASK | GDK_VISIBILITY_NOTIFY_MASK | GDK_PROXIMITY_IN_MASK | GDK_PROXIMITY_OUT_MASK | GDK_SUBSTRUCTURE_MASK | GDK_SCROLL_MASK</property>
                 <property name="xpad">15</property>
-                <property name="pixbuf">streamtuner2.png</property>
+                <property name="stock">gtk-media-play</property>
+                <property name="pixel_size">100</property>
                 <signal name="button-press-event" handler="double_click_channel_tab" swapped="no"/>
               </object>
               <packing>
@@ -3046,9 +2195,6 @@ Plugins</property>
                         <property name="can_focus">True</property>
                         <property name="enable_tree_lines">True</property>
                         <signal name="button-release-event" handler="on_category_clicked" swapped="no"/>
-                        <child internal-child="selection">
-                          <object class="GtkTreeSelection" id="treeview-selection3"/>
-                        </child>
                       </object>
                     </child>
                   </object>
@@ -3068,9 +2214,6 @@ Plugins</property>
                         <property name="can_focus">True</property>
                         <signal name="button-press-event" handler="station_context_menu" swapped="no"/>
                         <signal name="row-activated" handler="on_stream_row_activated" swapped="no"/>
-                        <child internal-child="selection">
-                          <object class="GtkTreeSelection" id="treeview-selection4"/>
-                        </child>
                       </object>
                     </child>
                   </object>
@@ -3102,7 +2245,7 @@ Plugins</property>
                   <object class="GtkLabel" id="l_bookmarks">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">bookmarks</property>
+                    <property name="label" translatable="yes">Bookmarks</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -3112,6 +2255,7 @@ Plugins</property>
                 </child>
               </object>
               <packing>
+                <property name="menu_label">bookmarks</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -3172,11 +2316,6 @@ Plugins</property>
             <property name="position">2</property>
           </packing>
         </child>
-      </object>
-    </child>
-    <child internal-child="accessible">
-      <object class="AtkObject" id="win_streamtuner2-atkobject">
-        <property name="AtkObject::accessible-name" translatable="yes">streamtuner2</property>
       </object>
     </child>
   </object>
