@@ -51,6 +51,12 @@ class bookmarks(GenericChannel):
 
         # cache list, to determine if a PLS url is bookmarked
         urls = []
+        
+        
+        
+        def gui(self, parent):
+            GenericChannel.gui(self, parent)
+            parent.notebook_channels.set_menu_label_text(parent.v_bookmarks, "bookmarks")
 
 
         # this channel does not actually retrieve/parse data from anywhere
