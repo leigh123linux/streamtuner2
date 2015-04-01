@@ -1,3 +1,7 @@
+2.1.5 (unreleased)
+- Rewrite, cleanup, new PYZ package.
+- Plugin meta data, embedded PNGs.
+- Notebook tabs now on the left per default.
 
 2.1.4 (2015-03-25)
 - Fixed Internet-Radio extraction.

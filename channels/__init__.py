@@ -46,30 +46,12 @@ import xml.sax.saxutils
 import re
 import copy
 import inspect
-import pkgutil
 
 
 # Only export plugin classes
 __all__ = [
-    "GenericChannel", "ChannelPlugin", "module_list"
+    "GenericChannel", "ChannelPlugin"
 ]
-
-
-
-# Search through ./channels/ and get module basenames.
-# Also order them by conf.channel_order
-#
-def module_list():
-
-    # Should list plugins within zips as well as local paths
-    ls = pkgutil.iter_modules([conf.share+"/channels", "channels"])
-    ls = [name for loader,name,ispkg in ls]
-    
-    # resort with tab order
-    order = [module.strip() for module in conf.channel_order.lower().replace(".","_").replace("-","_").split(",")]
-    ls = [module for module in (order) if (module in ls)] + [module for module in (ls) if (module not in order)]
-
-    return ls
 
 
 
@@ -130,7 +112,7 @@ class GenericChannel(object):
         self.gtk_list = None
         self.gtk_cat = None
         self.module = self.__class__.__name__
-        self.meta = plugin_meta(None, inspect.getcomments(inspect.getmodule(self)))
+        self.meta = plugin_meta(src = inspect.getcomments(inspect.getmodule(self)))
         self.config = self.meta.get("config", [])
         self.title = self.meta.get("title", self.module)
 
@@ -556,7 +538,7 @@ class ChannelPlugin(GenericChannel):
             if "png" in self.meta:
                 pixbuf = uikit.pixbuf(self.meta["png"])
             else:
-                png = pkgutil.get_data("config",  "channels/" + self.module + ".png")
+                png = get_data("channels/" + self.module + ".png")
                 pixbuf = uikit.pixbuf(png)
             if pixbuf:
                 icon = gtk.image_new_from_pixbuf(pixbuf)

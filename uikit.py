@@ -21,7 +21,7 @@
 
 
 # debug
-from config import __print__, dbg, plugin_meta
+from config import *
 
 # system
 import os.path
@@ -32,7 +32,6 @@ import base64
 import zlib
 import inspect
 from compat2and3 import unicode, xrange, PY3
-import pkgutil
 
 
 # gtk version (2=gtk2, 3=gtk3, 7=tk;)
@@ -60,7 +59,7 @@ else:
     empty_pixbuf.fill(0xFFFFFFFF)
 
 # prepare gtkbuilder data
-ui_xml = pkgutil.get_data("config", "gtk3.xml").decode("utf-8")
+ui_xml = get_data("gtk3.xml", decode=True)
 if ver == 2:
     ui_xml = ui_xml.replace('version="3.0"', 'version="2.16"')
 
@@ -615,7 +614,7 @@ class AboutStreamtuner2(AuxiliaryWindow):
         a.set_name(parent.meta["id"])
         a.set_version(parent.meta["version"])
         a.set_license(parent.meta["license"])
-        a.set_authors((pkgutil.get_data("config", "CREDITS") or parent.meta["author"]).split("\n"))
+        a.set_authors((get_data("CREDITS") or parent.meta["author"]).split("\n"))
         a.set_website(parent.meta["url"])
         a.connect("response", lambda a, ok: ( a.hide(), a.destroy() ) )
         a.show_all()

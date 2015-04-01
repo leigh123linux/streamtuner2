@@ -409,7 +409,7 @@ class StreamTunerTwo(gtk.Builder):
     def load_plugin_channels(self):
 
         # initialize plugin modules (pre-ordered)
-        ls = channels.module_list()
+        ls = module_list()
         for module in ls:
             gui_startup(4/20.0 + 13.5/20.0 * float(ls.index(module))/len(ls), "loading module "+module)
                             

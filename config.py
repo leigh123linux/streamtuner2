@@ -7,12 +7,16 @@
 # config: {type:var, name:z, description:v}
 #
 # In the main application or module files which need access
-# to a global conf object, just import this module as follows:
+# to a global conf.* object, just import this module as follows:
 #
-#   from config import conf
+#   from config import *
 #
 # Here conf is already an instantiation of the underlying
-# Config class.
+# ConfigDoct class.
+#
+# Also provides the logging function __print__, and basic
+# plugin handling code: plugin_meta() and module_list(),
+# and the relative get_data() alias (files from pyzip/path).
 #
 
 
@@ -24,10 +28,11 @@ import platform
 import re
 import zipfile
 import inspect
+import pkgutil
 
 
 # export symbols
-__all__ = ["conf", "__print__", "dbg", "plugin_meta"]
+__all__ = ["conf", "__print__", "dbg", "plugin_meta", "module_list", "get_data"]
 
 
 #-- create a stub instance of config object
@@ -39,7 +44,11 @@ netrc = None
 
 
 
-#-- global configuration data               ---------------------------------------------
+# Global configuration store
+#
+# Autointializes itself on startup, makes conf.vars available.
+# Also provides .load() and .save() for JSON data/cache files.
+#
 class ConfigDict(dict):
 
 
@@ -235,10 +244,41 @@ class ConfigDict(dict):
         
 
 
+# Retrieve content from install path or pyzip archive (alias for pkgutil.get_data)
+#
+def get_data(fn, decode=False):
+    try:
+        bin = pkgutil.get_data("config", fn)
+        if decode:
+            return bin.decode("utf-8")
+        else:
+            return str(bin)
+    except:
+        pass
+
+
+# Search through ./channels/ and get module basenames.
+# Also order them by conf.channel_order
+#
+def module_list():
+
+    # Should list plugins within zips as well as local paths
+    ls = pkgutil.iter_modules([conf.share+"/channels", "channels"])
+    ls = [name for loader,name,ispkg in ls]
+    
+    # resort with tab order
+    order = [module.strip() for module in conf.channel_order.lower().replace(".","_").replace("-","_").split(",")]
+    ls = [module for module in (order) if (module in ls)] + [module for module in (ls) if (module not in order)]
+
+    return ls
+
+
+
 # Plugin meta data extraction
 #
 # Extremely crude version for Python and streamtuner2 plugin usage.
 # Fetches module source, or reads from filename / out of zip package.
+#
 def plugin_meta(fn=None, src=None, frame=1):
 
     # get source directly from caller
