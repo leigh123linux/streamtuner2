@@ -16,7 +16,7 @@
 # category: sound
 # depends: pygtk | gi, threading, requests, pyquery, lxml
 # id: streamtuner2
-# pack: *.py, gtk*.xml, st2.py=/usr/bin/streamtuner2, channels/__init__.py, bundle/*.py,
+# pack: *.py, gtk*.xml, bin=/usr/bin/streamtuner2, channels/__init__.py, bundle/*.py,
 #   streamtuner2.desktop=/usr/share/applications/, README=/usr/share/doc/streamtuner2/,
 #   NEWS.gz=/usr/share/doc/streamtuner2/changelog.gz, help/streamtuner2.1=/usr/share/man/man1/,
 #   help/*page=/usr/share/doc/streamtuner2/help/, help/img/*=/usr/share/doc/streamtuner2/help/img/,
@@ -33,8 +33,6 @@
 #
 # Primarily radio stations are displayed, some channels however are music
 # collections. Commercial and sign-up services are not an objective.
-#
-
 
 
 # standard modules
@@ -46,15 +44,17 @@ import inspect
 import traceback
 from threading import Thread
 
-# add library path
-sys.path.insert(0, "/usr/share/streamtuner2")   # pre-defined directory for modules
-sys.path.insert(0, ".")   # development module path
+# add library path (either global setup, or pyzip basename)
+if not os.path.dirname(__file__) in sys.path:
+    sys.path.insert(0, os.path.dirname(__file__))
+
+# initializes itself, so all conf.vars are available right away
+from config import *
 
 # gtk modules
 from uikit import pygtk, gtk, gobject, uikit, ui_xml, gui_startup, AboutStreamtuner2
 
 # custom modules
-from config import *   # initializes itself, so all conf.vars are available right away
 import ahttp
 import action
 import logo
@@ -67,9 +67,8 @@ import channels.search
 
 
 
-# this represents the main window
-# and also contains most application behaviour
-main = None
+# This represents the main window, dispatches Gtk events,
+# and shares most application behaviour with the channel modules.
 class StreamTunerTwo(gtk.Builder):
 
     # object containers
@@ -85,6 +84,7 @@ class StreamTunerTwo(gtk.Builder):
         "config_save": [],
     }
     meta = plugin_meta()
+
 
     # status variables
     channel_names = ["bookmarks"]    # order of channel notebook tabs
@@ -112,6 +112,12 @@ class StreamTunerTwo(gtk.Builder):
           "streamedit": channels.streamedit.streamedit(self),
         }
         gui_startup(4/20.0)
+
+        # early module coupling
+        action.main = self            # action (play/record) module needs a reference to main window for gtk interaction and some URL/URI callbacks
+        self.action = action.action   # shorter name (could also become a features. entry...)
+        ahttp.feedback = self.status  # http module gives status feedbacks too
+        
         # append other channel modules and plugins
         self.load_plugin_channels()
 
@@ -184,10 +190,10 @@ class StreamTunerTwo(gtk.Builder):
             "bookmark": self.bookmark,
             "save_as": self.save_as,
             "menu_about": lambda w: AboutStreamtuner2(self),
-            "menu_help": action.action.help,
-            "menu_onlineforum": lambda w: action.browser("http://sourceforge.net/projects/streamtuner2/forums/forum/1173108"),
-            "menu_fossilwiki": lambda w: action.browser("http://fossil.include-once.org/streamtuner2/"),
-            "menu_projhomepage": lambda w: action.browser("http://milki.include-once.org/streamtuner2/"),
+            "menu_help": self.action.help,
+            "menu_onlineforum": lambda w: self.action.browser("http://sourceforge.net/projects/streamtuner2/forums/forum/1173108"),
+            "menu_fossilwiki": lambda w: self.action.browser("http://fossil.include-once.org/streamtuner2/"),
+            "menu_projhomepage": lambda w: self.action.browser("http://milki.include-once.org/streamtuner2/"),
            # "menu_bugreport": lambda w: BugReport(),
             "menu_copy": self.menu_copy,
             "delete_entry": self.delete_entry,
@@ -206,7 +212,7 @@ class StreamTunerTwo(gtk.Builder):
         }, **self.add_signals))
         
         # actually display main window
-        self.win_streamtuner2.show()
+        self.win_streamtuner2.show_all()
         gui_startup(1.0)
         
 
@@ -286,18 +292,18 @@ class StreamTunerTwo(gtk.Builder):
     # Recording: invoke streamripper for current stream URL
     def on_record_clicked(self, widget):
         row = self.row()
-        action.record(row.get("url"), row.get("format", "audio/mpeg"), "url/direct", row=row)
+        self.action.record(row.get("url"), row.get("format", "audio/mpeg"), "url/direct", row=row)
 
     # Open stream homepage in web browser
     def on_homepage_stream_clicked(self, widget):
         url = self.selected("homepage")             
-        action.browser(url)
+        self.action.browser(url)
 
     # Browse to channel homepage (double click on notebook tab)
     def on_homepage_channel_clicked(self, widget, event=2):
         if event == 2 or event.type == gtk.gdk._2BUTTON_PRESS:
             __print__(dbg.UI, "dblclick")
-            action.browser(self.channel().homepage)            
+            self.action.browser(self.channel().homepage)            
 
     # Reload stream list in current channel-category
     def on_reload_clicked(self, widget=None, reload=1):
@@ -354,7 +360,7 @@ class StreamTunerTwo(gtk.Builder):
         default_fn = row["title"] + ".m3u"
         fn = uikit.save_file("Save Stream", None, default_fn, [(".m3u","*m3u"),(".pls","*pls"),(".xspf","*xspf"),(".smil","*smil"),(".asx","*asx"),("all files","*")])
         if fn:
-            action.save(row, fn)
+            self.action.save(row, fn)
         pass
 
     # Save current stream URL into clipboard
@@ -390,7 +396,7 @@ class StreamTunerTwo(gtk.Builder):
             if (text >= 999.0/1000):  # completed
                 uikit.do(lambda:self.progress.hide())
             else:  # show percentage
-                uikit.do(lambda:self.progress.show() or self.progress.set_fraction(text))
+                uikit.do(lambda:self.progress.show_all() or self.progress.set_fraction(text))
                 if (text <= 0):  # unknown state
                     uikit.do(lambda:self.progress.pulse())
         # add text
@@ -474,7 +480,7 @@ class StreamTunerTwo(gtk.Builder):
             path = treeview.get_path_at_pos(int(event.x), int(event.y))[0]
             treeview.grab_focus()
             treeview.set_cursor(path, None, False)
-            main.streamactions.popup(
+            self.streamactions.popup(
                   parent_menu_shell=None, parent_menu_item=None, func=None,
                   button=event.button, activate_time=event.time,
                   data=None
@@ -488,9 +494,8 @@ class StreamTunerTwo(gtk.Builder):
 
 
 
-
-#-- run main
-if __name__ == "__main__":
+# startup procedure
+def main():
 
     # graphical
     if len(sys.argv) < 2 or "--gtk3" in sys.argv:
@@ -500,11 +505,6 @@ if __name__ == "__main__":
 
         # prepare main window
         main = StreamTunerTwo()
-
-        # module coupling
-        action.main = main      # action (play/record) module needs a reference to main window for gtk interaction and some URL/URI callbacks
-        action = action.action  # shorter name
-        ahttp.feedback = main.status  # http module gives status feedbacks too
 
         # first invocation
         if (conf.get("firstrun")):
@@ -520,4 +520,7 @@ if __name__ == "__main__":
         import cli
         cli.StreamTunerCLI()
 
+# run
+if __name__ == "__main__":
+    main()
 
