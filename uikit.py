@@ -60,7 +60,7 @@ else:
     empty_pixbuf.fill(0xFFFFFFFF)
 
 # prepare gtkbuilder data
-ui_xml = pkgutil.get_data("config", "gtk3.xml")
+ui_xml = pkgutil.get_data("config", "gtk3.xml").decode("utf-8")
 if ver == 2:
     ui_xml = ui_xml.replace('version="3.0"', 'version="2.16"')
 
@@ -429,10 +429,11 @@ class uikit:
     # Attach textual menu entry and callback
     @staticmethod
     def add_menu(menuwidget, label, action):
-        m = gtk.MenuItem(label)
-        m.connect("activate", action)
-        m.show()
-        menuwidget.add(m)
+        for where in list(menuwidget):
+            m = gtk.MenuItem(label)
+            m.connect("activate", action)
+            m.show()
+            where.add(m)
         
 
     # gtk.messagebox
@@ -457,12 +458,18 @@ class uikit:
     # Pixbug loader (from inline string, as in `logo.png`)
     @staticmethod
     def pixbuf(buf, fmt="png", decode=True, gzip=False):
-        p = GdkPixbuf.PixbufLoader(*[fmt] if fmt else [])
-        if decode and re.match("^[\w+/=\s]+$", buf):
+        if fmt and ver==3:
+            p = GdkPixbuf.PixbufLoader.new_with_type(fmt)
+        elif fmt:
+            p = GdkPixbuf.PixbufLoader(fmt)
+        else:
+            p = GdkPixbuf.PixbufLoader()
+        if decode and re.match("^[\w+/=\s]+$", str(buf)):
             buf = base64.b64decode(buf)  # inline encoding
         if gzip:
             buf = zlib.decompress(buf)
-        p.write(buf, len(buf))
+        if buf:
+            p.write(buf)
         pix = p.get_pixbuf()
         p.close()
         return pix
@@ -563,7 +570,9 @@ def gui_startup(p=0/100.0, msg="streamtuner2 is starting"):
         progresswin.show_all()
 
     try:
-      if p<1:
+      if p <= 0.0:
+        pass
+      elif p < 1.0:
         progressbar.set_fraction(p)
         progressbar.set_property("text", msg)
         while gtk.events_pending(): gtk.main_iteration(False)
