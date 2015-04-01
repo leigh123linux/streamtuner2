@@ -1,4 +1,4 @@
-#
+
 # encoding: UTF-8
 # api: streamtuner2
 # type: functions
@@ -6,22 +6,17 @@
 # description: Starts audio applications, guesses MIME types for URLs
 # version: 0.7
 #
+# Multimedia interface for starting audio players, recording app,
+# or web browser (listed as "url/http" association in players).
 #
-#  Multimedia interface for starting audio players, recording app,
-#  or web browser (listed as "url/http" association in players).
+# Each channel plugin has a .listtype which describes the linked
+# audio playlist format. It's audio/x-scpls mostly, seldomly m3u,
+# but sometimes url/direct if the entry[url] directly leads to the
+# streaming server.
 #
-#
-#  Each channel plugin has a .listtype which describes the linked
-#  audio playlist format. It's audio/x-scpls mostly, seldomly m3u,
-#  but sometimes url/direct if the entry[url] directly leads to the
-#  streaming server.
-#
-#  As fallback there is a regex which just looks for URLs in the
-#  given resource (works for m3u/pls/xspf/asx/...). There is no
-#  actual url "filename" extension guessing.
-#
-#
-#
+# As fallback there is a regex which just looks for URLs in the
+# given resource (works for m3u/pls/xspf/asx/...). There is no
+# actual url "filename" extension guessing.
 
 
 import re

@@ -9,28 +9,88 @@ It mimics the original streamtuner 1 to some extend. It's however
 written in Python now instead of C.
 
 
-installation howto
+Installation howto
 ------------------
 
-You can just execute the main binary "st2.py".
-All the other files need to be copied into /usr/share/streamtuner2/ however.
-In particular the channel/ directory needs to reside there, so ST2 can find
-all its plugins.
+If possible, prefer the package directly from your BSD/Linux distribution.
+Due to an excessive maintenance break, some still have older 2.0.8 version
+however - which barely works anymore.
+If so, you should use a manually installed version.
 
-If it doesn't work, make sure you have Python and gtk/pygtk installed:
+Dependencies
+------------
 
-  sudo apt-get install python python-gtk2 python-glade2 python-xdg
+Running streamtuner2 requires Python and Gtk packages. Which nowadays are
+installed per default. There's a few more Python packages required though:
 
-And a few modules like:
+ · python | python3
+ · pygtk | python-gi
+ · python-requests
+ · python-pyquery
+ · python-lxml
+ · python-keybinder (optional)
+ · python-xdg (optional)
 
-  sudo apt-get install python-requests python-pyquery python-keybinder
+Use your distro package manager with e.g.:
 
-You can also install Python modules per `pip` with
+  sudo apt-get install python python-gtk2 python-xdg python-requests ...
+
+Or utilize Pythons local package installer even:
 
   sudo pip install requests
 
-The gtk*.xml file represents the GUI, btw.  So with glade installed, you
-can inspect and adapt the interface.
+
+DEB / RPM
+---------
+
+There are rudimentary packages built as .DEB and .RPM version. Install
+those if feasible. The dependencies may not match with your package
+manger, and are somewhat incomplete. (See "Dependencies" section.)
+
+
+PYZ
+---
+
+Other users may wish to try the new Python archive (.PYZ) instead. Which
+requires little installation, but can just be run in-place:
+
+    python streamtuner-2.1.5.pyz
+
+You could even make this Python ZIP executable, and copy it in your PATH.
+
+
+Manual installation
+-------------------
+
+If you've checked out the source code repository, or did download the
+*.src.txz archive, then you can just run it right there:
+
+   ./st2.py
+
+To install it manually:
+
+  · Create a /usr/share/streamtuner2/
+  · Copy all *.py files there.
+  · Also copy the "gtk3.xml" file into /usr/share/streamtuner2/
+  · Copy the channels/ subdir into /usr/share/streamtuner2/channels/
+  · Install "bin" as /usr/bin/streamtuner2.
+  · If you want to use another target, just edit the "bin" wrapper.
+  · Optionally copy the help/ folder to /usr/share/docs/streamtuner2/
+  · And the logo.png into the system pixmaps/,
+    as well as the *.desktop file into /usr/share/applications/
+
+That's pretty much what the binary packages extract to.
+
+
+Hacking
+-------
+
+If you want to edit a channel plugin, just have a look into the
+channels/*.py files. It's often rather easy to adapt things.
+
+Moreover you can also edit the user interface. You need glade-3
+installed, and open the "gtk3.xml" file. There it's easy to
+rename or rearrange things.
 
 
 alternatives
@@ -46,6 +106,9 @@ alternatives
 license
 -------
 
-Public Domain.
-(no rules: unrestricted copying, modification, distribution, etc.)
+Public Domain. (Unrestricted copying, modification, etc.)
+
+If you wish you could thus redistribute it under a BSD/MIT
+or even GNU-style license.
+
 

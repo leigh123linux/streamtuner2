@@ -1,0 +1,123 @@
+
+This is a short summary for distribution package maintainers.
+For regular end-user documentation see the help/ pages.
+
+
+Structural changes in 2.1.5 (2015-04-xx)
+----------------------------------------
+
+ → There's a new `bin` script. It's a lightweight invocation
+   wrapper, intended to be installed as /usr/bin/streamtuner2
+   now.
+
+ → The previous `st2.py` still exists, but is now supposed to
+   reside in `/usr/share/streamtuner2/st2.py` along with all
+   other modules.
+
+ → Theoretically it's now possible to change the target path
+   even (just edit `bin`).
+
+I'd still advise to use /usr/share/streamtuner2/ as main target
+directory though. It's not yet practical to extract into Python
+site-package directories.
+
+The channel PNG files still need to reside alongside the Python
+modules. Later versions may complete soak the images into the
+source code (meta data section) for simpicity.
+
+
+Aux files
+---------
+
+ → Help files still need to go to share/docs/streamtuner2/help/
+   unless you patch the source.
+
+ → *.desktop as usual
+
+ → and `logo.png` is the pixmap/app icon
+
+
+Removed
+-------
+
+Some plugin PNGs may have been removed already.
+
+And the streamtuner2.png logo is now source-embedded instead
+(`logo.py` provides a `logo.png`).
+
+The old `gtk2.xml` file is gone. It probably became obsolete
+a long while back. The gtk3.xml is instead runtime-patched
+to work with PyGTK/gtk2.
+
+
+Dependencies
+------------
+
+If possible, make ST2 dependend on Python2 -or- Python3.
+It's not yet practical, and probably against distro standards,
+and only APT could so anyway. But if feasible...
+
+Also, hard dependencies are meanwhile:
+
+  - gtk (>= 2.16)
+  - pygtk || python-gi
+  - python-requests (>> 1.2.0)
+  - python-pyquery     [though most plugins would work without]
+  - and its implied python-lxml
+
+Optional dependencies (just affects a single plugin, which
+semi-gracefully disables itself):
+
+  - python-keybinder   [for global_key]
+  - python-dbus        [for radiotray]
+
+Very optional dependencies (everything should work without):
+
+  - python-xdg
+
+Strongly suggest:
+
+  - Streamripper
+
+Suggest:
+
+  - any audio player of course
+  - youtube-dl
+
+
+Lazy installation
+-----------------
+
+The new .PYZ archive bundles everything into a ZIP file. Which,
+given the right shebang, could just be "installed" as literal
+/usr/bin/streamtuner2 even.
+I'm sure nobody is going to do so. But you know, it's at least
+a theoretical option now..
+
+
+FPM/XPM packaging
+-----------------
+
+You may have noticed (and scoffed at ;) the newer packaging
+method. It's now using http://fossil.include-once.org/xpm/
+with the `src` filter. (That's what the meta comment blocks
+in the source modules were always meant for.)
+
+
+Repo
+----
+
+The source code is hosted in a Fossil repo.
+
+You can get a Git export however easily even per web interface:
+
+  http://fossil.include-once.org/streamtuner2/git-fast-export
+
+Git may or may not choke on its own export format though..
+
+
+Fin
+---
+
+Thanks guys!
+
