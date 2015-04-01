@@ -1,0 +1,11 @@
+#!/usr/bin/env python
+# api: cli
+# type: wrapper
+# title: streamtuner2
+#
+# Invocation script for /usr/share/streamtuner2/streamtunertwo.py
+
+import sys
+sys.path.insert(0, "/usr/share/streamtuner2")
+import st2
+st2.main()
