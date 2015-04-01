@@ -27,7 +27,9 @@ from config import __print__, dbg, plugin_meta
 import os.path
 import copy
 import sys
+import re
 import base64
+import zlib
 import inspect
 from compat2and3 import unicode, xrange, PY3
 import pkgutil
@@ -389,7 +391,7 @@ class uikit:
             if not isinstance(w, gtk.Window):
                 wrap = gtk.EventBox()
                 wrap.add(w)
-                wrap.set_property("visible", True)
+                ##########wrap.set_property("visible", True)
                 w = wrap
             # copy style object, modify settings
             s = w.get_style().copy()
@@ -409,7 +411,7 @@ class uikit:
         label = gtk.Label(text)
         if markup:
             label.set_markup(text)
-        label.set_property("visible", True)
+        #######label.set_property("visible", True)
         label.set_line_wrap(True) 
         label.set_size_request(size, -1)
         return label
@@ -418,7 +420,7 @@ class uikit:
     @staticmethod
     def hbox(w1, w2):
         b = gtk.HBox(homogeneous=False, spacing=10)
-        b.set_property("visible", True)
+        ######b.set_property("visible", True)
         b.pack_start(w1, expand=False, fill=False)
         b.pack_start(w2, expand=True, fill=True)
         return b
@@ -454,18 +456,15 @@ class uikit:
         
     # Pixbug loader (from inline string, as in `logo.png`)
     @staticmethod
-    def pixbuf(buf, fmt="png"):
-        p = GdkPixbuf.PixbufLoader(fmt)
-        try: # inline encoding
-            buf = base64.b64decode(buf)
-        except:
-            None
-        #print "PNG: %s" % len(buf)
+    def pixbuf(buf, fmt="png", decode=True, gzip=False):
+        p = GdkPixbuf.PixbufLoader(*[fmt] if fmt else [])
+        if decode and re.match("^[\w+/=\s]+$", buf):
+            buf = base64.b64decode(buf)  # inline encoding
+        if gzip:
+            buf = zlib.decompress(buf)
         p.write(buf, len(buf))
-        #print "FMT: %s" % p.get_format()
         pix = p.get_pixbuf()
         p.close()
-        #print "PIX: %s" % pix
         return pix
             
             
@@ -490,7 +489,7 @@ class ComboBoxText(gtk.ComboBox):
 
         # prepare widget
         gtk.ComboBox.__init__(self)
-        self.set_property("visible", True)
+        ########self.set_property("visible", True)
         cell = gtk.CellRendererText()
         self.pack_start(cell, True)
         self.add_attribute(cell, "text", 1)
@@ -553,11 +552,11 @@ def gui_startup(p=0/100.0, msg="streamtuner2 is starting"):
         progresswin.set_property("height_request", 30)
         #progresswin.set_property("window_position", "center")
         progresswin.set_property("decorated", False)
-        progresswin.set_property("visible", True)
+        #######progresswin.set_property("visible", True)
 
         # GtkProgressBar "progressbar"
         progressbar = gtk.ProgressBar()
-        progressbar.set_property("visible", True)
+        #########progressbar.set_property("visible", True)
         progressbar.set_property("show_text", True)
         progressbar.set_property("text", msg)
         progresswin.add(progressbar)
@@ -607,8 +606,8 @@ class AboutStreamtuner2(AuxiliaryWindow):
         a.set_name(parent.meta["id"])
         a.set_version(parent.meta["version"])
         a.set_license(parent.meta["license"])
-        a.set_authors(parent.meta["author"].split(","))
+        a.set_authors((pkgutil.get_data("config", "CREDITS") or parent.meta["author"]).split("\n"))
         a.set_website(parent.meta["url"])
         a.connect("response", lambda a, ok: ( a.hide(), a.destroy() ) )
-        a.show()
+        a.show_all()
             
