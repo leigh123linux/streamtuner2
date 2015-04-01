@@ -98,8 +98,7 @@ class StreamTunerTwo(gtk.Builder):
         gui_startup(0/20.0), uikit.load_theme(conf.get("theme"))
         gui_startup(1/20.0), gtk.Builder.__init__(self)
         gui_startup(1/20.0), gtk.Builder.add_from_string(self, ui_xml)
-        gui_startup(3/20.0), self.extensionsCTM.set_submenu(self.extensions)  # duplicates Station>Extension menu into stream context menu
-        self.img_logo.set_from_pixbuf(uikit.pixbuf(logo.png))
+        gui_startup(3/20.0), self.img_logo.set_from_pixbuf(uikit.pixbuf(logo.png))
 
         # initialize built-in plugins
         self.channels = {
@@ -213,8 +212,8 @@ class StreamTunerTwo(gtk.Builder):
         
         # actually display main window
         self.win_streamtuner2.show_all()
-        gui_startup(1.0)
-        
+        gui_startup(100.0)
+
 
     #-- Shortcut for glade.get_widget()
     # Allows access to widgets as direct attributes instead of using .get_widget()
@@ -393,7 +392,7 @@ class StreamTunerTwo(gtk.Builder):
             uikit.do(lambda:self.statusbar.pop(sbar_cid))
         # progressbar
         if (type(text)==float):
-            if (text >= 999.0/1000):  # completed
+            if text >= 0.999 or text < 0.0:  # completed
                 uikit.do(lambda:self.progress.hide())
             else:  # show percentage
                 uikit.do(lambda:self.progress.show_all() or self.progress.set_fraction(text))
@@ -428,25 +427,19 @@ class StreamTunerTwo(gtk.Builder):
                 #print [name for name,c in inspect.getmembers(plugin) if inspect.isclass(c)]
                 plugin_class = plugin.__dict__[module]
                 plugin_obj = plugin_class(parent=self)
-                
-                # load .config settings from plugin
-                conf.add_plugin_defaults(plugin_obj.meta["config"], module)
 
-                # add and initialize channel
+                # add to .channels{}
                 if issubclass(plugin_class, channels.GenericChannel):
                     self.channels[module] = plugin_obj
                     if module not in self.channel_names:  # skip (glade) built-in channels
                         self.channel_names.append(module)
-                # other plugin types
+                # or .features{} for other plugin types
                 else:
                     self.features[module] = plugin_obj
                 
             except Exception as e:
                 __print__(dbg.INIT, "load_plugin_channels: error initializing:", module, ", exception:")
                 traceback.print_exc()
-
-        # default plugins
-        conf.add_plugin_defaults(self.channels["bookmarks"].config, "bookmarks")
 
 
     # store window/widget states (sizes, selections, etc.)

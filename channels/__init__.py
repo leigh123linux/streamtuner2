@@ -134,6 +134,9 @@ class GenericChannel(object):
         self.config = self.meta.get("config", [])
         self.title = self.meta.get("title", self.module)
 
+        # add default options values to config.conf.* dict
+        conf.add_plugin_defaults(self.meta["config"], self.module)
+
         # only if streamtuner2 is run in graphical mode        
         if (parent):
             self.cache()
@@ -197,7 +200,7 @@ class GenericChannel(object):
             uikit.columns(self.gtk_list, self.datamap, [])
             
         # add to main menu
-        uikit.add_menu(parent.channelmenuitems, self.meta["title"], lambda w: parent.channel_switch(w, self.module) or 1)
+        uikit.add_menu([parent.channelmenuitems], self.meta["title"], lambda w: parent.channel_switch(w, self.module) or 1)
         
         
     # make private copy of .datamap and modify field (title= only ATM)
@@ -588,7 +591,7 @@ class ChannelPlugin(GenericChannel):
 
 
             # add notebook tab
-            tab = parent.notebook_channels.insert_page_menu(child=vbox, tab_label=ev_label, menu_label=plain_label)
+            tab = parent.notebook_channels.insert_page_menu(vbox, ev_label, plain_label, -1)
             
             
             
