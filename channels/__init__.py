@@ -64,7 +64,6 @@ def module_list():
     # Should list plugins within zips as well as local paths
     ls = pkgutil.iter_modules([conf.share+"/channels", "channels"])
     ls = [name for loader,name,ispkg in ls]
-    print ls
     
     # resort with tab order
     order = [module.strip() for module in conf.channel_order.lower().replace(".","_").replace("-","_").split(",")]
@@ -550,24 +549,19 @@ class ChannelPlugin(GenericChannel):
             vbox.pack2(sw2, resize=True, shrink=True)
 
             # prepare label
-            label = gtk.HBox()
-            label.set_property("visible", True)
-            fn = conf.share + "/channels/" + self.module + ".png"
             pixbuf = None
             if "png" in self.meta:
                 pixbuf = uikit.pixbuf(self.meta["png"])
-            elif os.path.exists(fn):
-                pixbuf = gtk.gdk.pixbuf_new_from_file(fn)
+            else:
+                png = pkgutil.get_data("config",  "channels/" + self.module + ".png")
+                pixbuf = uikit.pixbuf(png)
             if pixbuf:
-                icon = gtk.Image()
-                icon.set_from_pixbuf(pixbuf)
-                icon.set_property("icon-size", 1)
-                icon.set_property("visible", True)
-                label.pack_start(icon, expand=False, fill=True)
-            if self.meta["title"]:
-                text = gtk.Label(self.meta["title"])
-                text.set_property("visible", True)
-                label.pack_start(text, expand=True, fill=True)
+                icon = gtk.image_new_from_pixbuf(pixbuf)
+            else:
+                icon = gtk.image_new_from_stock(gtk.STOCK_DIRECTORY, size=1)
+            label = gtk.HBox()
+            label.pack_start(icon, expand=False, fill=True)
+            label.pack_start(gtk.Label(self.meta.get("title", self.module)), expand=True, fill=True)
                 
             # pack it into an event container to catch double-clicks
             ev_label = gtk.EventBox()
@@ -582,6 +576,8 @@ class ChannelPlugin(GenericChannel):
             parent.widgets[module + "_cat"] = tv1
             self.gtk_list = tv2
             parent.widgets[module + "_list"] = tv2
+            ev_label.show_all()
+            vbox.show_all()
             parent.widgets["v_" + module] = vbox
             parent.widgets["c_" + module] = ev_label
             tv2.connect('button-press-event', parent.station_context_menu)
