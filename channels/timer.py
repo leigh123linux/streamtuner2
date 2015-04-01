@@ -59,7 +59,7 @@ class timer:
         self.bookmarks = parent.bookmarks
         
         # add menu
-        uikit.add_menu(self.parent.extensions, "Add timer for station", self.edit_timer)
+        uikit.add_menu([parent.extensions, parent.extensions_context], "Add timer for station", self.edit_timer)
         
         # target channel
         if not self.bookmarks.streams.get("timer"):

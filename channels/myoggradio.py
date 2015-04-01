@@ -41,7 +41,7 @@ class myoggradio(ChannelPlugin):
 
     # settings
     title ="MOR"
-    module = "myoggradio"
+    #module = "myoggradio"
     api = "http://www.myoggradio.org/"
     listformat = "url/direct"
     
@@ -62,7 +62,7 @@ class myoggradio(ChannelPlugin):
     def __init__(self, parent):
         ChannelPlugin.__init__(self, parent)
         if parent:
-            uikit.add_menu(parent.extensions, "Share in MyOggRadio", self.share)
+            uikit.add_menu([parent.extensions, parent.extensions_context], "Share in MyOggRadio", self.share)
 
 
 
