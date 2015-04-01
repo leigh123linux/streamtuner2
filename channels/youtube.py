@@ -8,11 +8,11 @@
 # category: video
 # config:
 #    { name: youtube_channels,  type: text,  value: "Key Of Awesome, Pentatonix",  description: "Preferred channels to list videos from.",  category: select }
-#    { name: youtube_region,  type: select,  select: "=No Region|AR=Argentina|AU=Australia|AT=Austria|BE=Belgium|BR=Brazil|CA=Canada|CL=Chile|CO=Colombia|CZ=Czech Republic|EG=Egypt|FR=France|DE=Germany|GB=Great Britain|HK=Hong Kong|HU=Hungary|IN=India|IE=Ireland|IL=Israel|IT=Italy|JP=Japan|JO=Jordan|MY=Malaysia|MX=Mexico|MA=Morocco|NL=Netherlands|NZ=New Zealand|PE=Peru|PH=Philippines|PL=Poland|RU=Russia|SA=Saudi Arabia|SG=Singapore|ZA=South Africa|KR=South Korea|ES=Spain|SE=Sweden|CH=Switzerland|TW=Taiwan|AE=United Arab Emirates|US=United States",  value: UK,  description: "Filter by region id.,  category: auth }
+#    { name: youtube_region,  type: select,  select: "=No Region|AR=Argentina|AU=Australia|AT=Austria|BE=Belgium|BR=Brazil|CA=Canada|CL=Chile|CO=Colombia|CZ=Czech Republic|EG=Egypt|FR=France|DE=Germany|GB=Great Britain|HK=Hong Kong|HU=Hungary|IN=India|IE=Ireland|IL=Israel|IT=Italy|JP=Japan|JO=Jordan|MY=Malaysia|MX=Mexico|MA=Morocco|NL=Netherlands|NZ=New Zealand|PE=Peru|PH=Philippines|PL=Poland|RU=Russia|SA=Saudi Arabia|SG=Singapore|ZA=South Africa|KR=South Korea|ES=Spain|SE=Sweden|CH=Switzerland|TW=Taiwan|AE=United Arab Emirates|US=United States",  value: UK,  description: "Filter by region id.",  category: auth }
 #    { name: youtube_wadsworth,  type: boolean,  value: 0,  description: "Apply Wadsworth constant.",  category: filter }
 # priority: optional
 # depends: bin:youtube-dl
-# 
+#
 # 
 # Lists recently popular youtube videos by category or channels.
 #
@@ -22,6 +22,17 @@
 #
 # For now custom channel names must be configured in the settings dialog
 # text entry, and applied using Channel > Update categories..
+
+
+from config import *
+from channels import *
+
+import ahttp
+import json
+
+
+
+# Youtube
 #
 #
 # INTERNA
@@ -49,17 +60,6 @@
 #   guideCat  Music  id= GCTXVzaWM   channelid= UCBR8-60-B28hp2BmDPdntcQ
 #   topicId   Music  mid= /m/0kpv0g
 #
-#
-
-from config import *
-from channels import *
-
-import ahttp
-import json
-
-
-
-# Youtube
 class youtube (ChannelPlugin):
 
     # description

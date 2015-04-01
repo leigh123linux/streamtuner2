@@ -1,13 +1,11 @@
-#
 # encoding: UTF-8
 # api: python 
 # type: functions
 # title: Python2 and Python3 compatibility
 # version: 0.1
 #
-#  Renames some Python3 modules into their Py2 equivalent.
-#  Slim local alternative to `six` module.
-#
+# Renames some Python3 modules into their Py2 equivalent.
+# Slim local alternative to `six` module.
 
 
 import sys
