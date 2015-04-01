@@ -125,6 +125,7 @@ class ConfigDict(dict):
         # plugin state
         if module and module not in conf.plugins:
              conf.plugins[module] = 1
+             #@TODO: use meta["priority"] in ("core", "builtin", "default") etc.
 
     
         
@@ -189,7 +190,7 @@ class ConfigDict(dict):
             f.close()
             return r
         except Exception as e:
-            print(dbg.ERR, "JSON parsing error (in "+name+")", e)
+            __print__(dbg.ERR, "JSON parsing error (in "+name+")", e)
         
 
     # recursive dict update
@@ -305,7 +306,7 @@ class rx:
         [\{\<] (.+?) [\}\>]                    # JSOL/YAML scheme {...} dicts
     """, re.X)
     options = re.compile(r"""
-        ["':$]?   (\w+)  ["']?                 # key or ":key" or '$key'
+        ["':$]?   (\w*)  ["']?                 # key or ":key" or '$key'
         \s* [:=] \s*                           # "=" or ":"
      (?:  "  ([^"]*)  " 
        |  '  ([^']*)  '                        #  "quoted" or 'singl' values
@@ -318,7 +319,7 @@ class rx:
 
 # wrapper for all print statements
 def __print__(*args):
-    if "debug" in conf:
+    if "debug" in conf and conf.debug:
         print(" ".join([str(a) for a in args]))
 
 
