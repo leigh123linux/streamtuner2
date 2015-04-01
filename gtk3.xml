@@ -28,7 +28,7 @@
     <property name="title" translatable="yes">streamtuner settings</property>
     <property name="window_position">center</property>
     <property name="destroy_with_parent">True</property>
-    <property name="icon">/usr/share/streamtuner2/streamtuner2.png</property>
+    <property name="icon">/usr/share/pixmaps/streamtuner2.png</property>
     <signal name="delete-event" handler="config_cancel" swapped="no"/>
     <child>
       <object class="GtkFrame" id="frame1">
@@ -1127,11 +1127,23 @@ Plugins</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="extensionsCTM">
+      <object class="GtkSeparatorMenuItem" id="separatormenuitem5">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="extensions_subctx">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Extensions</property>
         <property name="use_underline">True</property>
+        <child type="submenu">
+          <object class="GtkMenu" id="extensions_context">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+          </object>
+        </child>
       </object>
     </child>
     <child>
@@ -1629,8 +1641,8 @@ Plugins</property>
                                 <property name="can_focus">False</property>
                                 <property name="label" translatable="yes">bookmark</property>
                                 <property name="use_underline">True</property>
-                                <accelerator key="d" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                                 <accelerator key="F8" signal="activate"/>
+                                <accelerator key="d" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                                 <signal name="activate" handler="bookmark" swapped="no"/>
                               </object>
                             </child>
@@ -1641,8 +1653,8 @@ Plugins</property>
                                 <property name="can_focus">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
-                                <accelerator key="F2" signal="activate"/>
                                 <accelerator key="s" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+                                <accelerator key="F2" signal="activate"/>
                                 <signal name="activate" handler="save_as" swapped="no"/>
                               </object>
                             </child>
@@ -1653,14 +1665,14 @@ Plugins</property>
                                 <property name="can_focus">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
-                                <accelerator key="F3" signal="activate"/>
-                                <accelerator key="space" signal="activate" modifiers="GDK_MOD1_MASK"/>
                                 <accelerator key="Return" signal="activate" modifiers="GDK_MOD1_MASK"/>
+                                <accelerator key="space" signal="activate" modifiers="GDK_MOD1_MASK"/>
+                                <accelerator key="F3" signal="activate"/>
                                 <signal name="activate" handler="streamedit_open" swapped="no"/>
                               </object>
                             </child>
                             <child>
-                              <object class="GtkMenuItem" id="extensions0">
+                              <object class="GtkMenuItem" id="extensions_main">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="label" translatable="yes">Extensions</property>
@@ -1669,12 +1681,6 @@ Plugins</property>
                                   <object class="GtkMenu" id="extensions">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <child>
-                                      <object class="GtkSeparatorMenuItem" id="extensions1">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                      </object>
-                                    </child>
                                   </object>
                                 </child>
                               </object>
@@ -1728,8 +1734,8 @@ Plugins</property>
                                 <property name="can_focus">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
-                                <accelerator key="Delete" signal="activate"/>
                                 <accelerator key="x" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+                                <accelerator key="Delete" signal="activate"/>
                                 <signal name="activate" handler="delete_entry" swapped="no"/>
                               </object>
                             </child>
@@ -2176,6 +2182,7 @@ Plugins</property>
           <object class="GtkNotebook" id="notebook_channels">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="tab_pos">left</property>
             <property name="scrollable">True</property>
             <property name="enable_popup">True</property>
             <signal name="switch-page" handler="on_notebook_channels_switch_page" swapped="no"/>
