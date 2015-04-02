@@ -4,15 +4,23 @@
 # description: Online video site that covered NYC artists. Not updated anymore.
 # type: channel
 # category: video
-# version: 0.1
+# version: 0.2
 # url: http://www.punkcast.com/
-# config: -
-# priority: rare
+# png:
+#   iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAyxJREFUOI0FwUlvG2UAgOH3++abxfsy2dtmcRsnghpBKyKhQA7lgsShPwEk/gVcKn4HN+6AynKIkEgFUkFF
+#   okrlpEkap2nqxHFsx/bYHs/m4XmE0s1Yyhjf8/niy6/49utv+PPf57x4sk3083cUzZgwZWElE9hL60yyc1zU39A8PsRxhijLMBFahO/5dFotwvGIeDxkOHJwNYvCwgyRYeElslTPu7ivTnFaTU6dkG4E
+#   ytANoskYgMb5W64b51jEuJ6Lq3Rmy2tEUcz1WR1pGGiyiIhMDOlQGHZRQRAQRR4CqJ2eUNvbJcAiEYz45NMtKrdvkc8a1G5M81e1RuiGjDpt1CTASKeQytDxowmmZdLpdDl8+QJLBqTxKSYkc0afbOyz
+#   OD/F/fIynhA0wwChazhIpOuNYCJI6hpxPOHiqk1K8+ldthDumFhXnLUHjEZj9DggKyWfbWywPpXHVqBEOKayXubDyl1qx0f0eh1E6GLaRX7aO8NLJjG9PvNLt0kpuJWeMHPTxnan6V81UWmpYacTVN57
+#   H9uewu01+OPJDle9AY//O+Dj++9yr3wHUnl8PyCTyzL2PE5aPUgYaFlNPDKigGe7VW6U1iDwcXuXzBbz+K5PThMEvQ6xjJjEAi2Z4Wn1mP03FyR1DaU0jUbnGj81IZXLkckoSpUV7JTB0HF4urvH3IMN
+#   jG6XbGGWemeAkc+hNEE0DtCSmngUCkFSixn321iWyVzGImEIVssllAh5e9kkCDV2T05pD4dMTeWpv6ohwghp6opCOOHh1kfcXZzm8S/bPNs/ZOC4mELj4eYGWiT54Z896qMJ9vws4XBE3lRIBeqmDmk/
+#   Qmnw+YNNlsur/PrbDqv5NFm7SHMwpNbuMggClmYL5JWkqytErKGPPVQmilhLSpbtBE1nxMFhjedHrymkNUrv3KHTuqLvjWl7MQevL+gNXaqNLlGzSyUvUVuEzMzkWVhZYqd6xPc//o6MBfWrAZcdBxnH
+#   zOcy/F1rsf3yFFmtEcWwOZ2h1R8hP5jATGmRQE+wXz0gjiMWihnO2z1qjS6ZQoF76yuU7DSxFFhJC10phmHIhVT8D1yefHn5PzXrAAAAAElFTkSuQmCC
+# -off-config: { name: punkcast_img, type: boolean, value: 0, desciption: Load banners. (Channel > Update favicons) }
+# priority: obsolete
 #
-#
-# Disables itself per default.
-# ST1 looked prettier with random images within.
-#
+# Punkcast is no longer updated. This plugin is kept for
+# historic reasons. It was one of the default streamtuner1
+# channels.
 
 
 import re
@@ -21,21 +29,6 @@ from config import conf
 import action
 from channels import *
 from config import __print__, dbg
-
-
-
-
-
-# disable plugin per default
-if "punkcast" not in vars(conf): 
-    conf.plugins["punkcast"] = 0
-
-
-
-
-
-
-
 
 
 # basic.ch broadcast archive
@@ -51,7 +44,7 @@ class punkcast (ChannelPlugin):
     categories = ["list"]
     default = "list"
     current = "list"
- 
+    titles = dict(playing=False, listeners=False, bitrate=False, homepage=False) 
 
 
     # don't do anything
@@ -64,20 +57,23 @@ class punkcast (ChannelPlugin):
 
         rx_link = re.compile("""
             <a\shref="(http://punkcast.com/(\d+)/index.html)">
-            \s+<img[^>]+ALT="([^<">]+)"
+            .*? ALT="([^<">]+)"
         """, re.S|re.X)
 
         entries = []
- 
+        
         #-- all from frontpage
-        for uu in rx_link.findall(http.get(self.homepage)):
+        html = http.get(self.homepage)
+        for uu in rx_link.findall(html):
             (homepage, id, title) = uu
             entries.append({
-                    "genre": "?",
+                    "genre": "%s" % id,
                     "title": title,
-                    "playing": "PUNKCAST #"+id,
+                    "playing": "PUNKCAST #%s" % id,
                     "format": "audio/mpeg",
+                    "url": "none:",
                     "homepage": homepage,
+                    "img": "http://punkcast.com/%s/PUNK%s.jpg" % (id, id),
             })
 
         # done    
@@ -99,10 +95,4 @@ class punkcast (ChannelPlugin):
         
         # or just open webpage
         action.action.browser(row["homepage"])
-            
-        
-
-
-
-
 
