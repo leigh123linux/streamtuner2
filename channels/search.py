@@ -34,7 +34,7 @@ class search (AuxiliaryWindow):
 
     # show search dialog   
     def menu_search(self, w):
-        self.search_dialog.show();
+        self.search_dialog.show_all();
         if not self.current or self.main.current_channel != "bookmarks":
             self.current = self.main.current_channel
             self.search_dialog_current.set_label("just %s" % self.main.channels[self.current].meta["title"])

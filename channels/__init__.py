@@ -574,10 +574,3 @@ class ChannelPlugin(GenericChannel):
         # add notebook tab
         tab = parent.notebook_channels.insert_page_menu(vbox, ev_label, plain_label, -1)
 
-        # double-click catch
-
-        # add module to list            
-        #parent.channels[module] = None
-        #parent.channel_names.append(module)
-            """ -> already taken care of in main.load_plugins() """
-
