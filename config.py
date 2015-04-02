@@ -30,9 +30,17 @@ import zipfile
 import inspect
 import pkgutil
 
+# find_executable() is only needed by channels/configwin
+try:
+    from distutils.spawn import find_executable
+except:
+    def find_executable(bin):
+        exists = [os.path.exists(dir+"/"+bin) for dir in os.environ.get("PATH").split(":")+["/"]]
+        return exists[0] if len(exists) else None
+
 
 # export symbols
-__all__ = ["conf", "__print__", "dbg", "plugin_meta", "module_list", "get_data"]
+__all__ = ["conf", "__print__", "dbg", "plugin_meta", "module_list", "get_data", "find_executable"]
 
 
 #-- create a stub instance of config object
