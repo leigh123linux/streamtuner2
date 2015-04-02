@@ -42,6 +42,7 @@ class links (object):
         ("stream", "Pirateradio Network", "http://www.pirateradionetwork.com/"),
         ("stream", "radio-locator", "http://www.radio-locator.com/"),
         ("stream", "Radio Station World", "http://radiostationworld.com/"),
+        ("stream", "MusicGOAL", "http://www.musicgoal.com/"),
         ("download", "Live Music Archive(.org)", "https://archive.org/details/etree"),
         ("download", "FMA, free music archive", "http://freemusicarchive.org/"),
         ("download", "Audiofarm", "http://audiofarm.org/"),
@@ -58,7 +59,6 @@ class links (object):
         ("commercial", "Google Play Music", "https://play.google.com/about/music/"),
         ("commercial", "Deezer", "http://www.deezer.com/features/music.html"),
        #("stream", "SurfMusik.de", "http://www.surfmusic.de/"),
-       #("stream", "MusicGOAL", "http://www.musicgoal.com/"),
     ]
     
     
