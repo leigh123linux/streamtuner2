@@ -20,6 +20,7 @@
 #   RVh0ZGF0ZTptb2RpZnkAMjAxNC0wNi0wMVQwMToyODowNyswMjowMJ2yOEQAAAAASUVORK5CYII=
 # documentation: http://api.icast.io/
 #
+#
 # A modern alternative to ShoutCast/ICEcast.
 # Streams are user-contributed, but often lack
 # meta data (homepage) and there's no ordering
@@ -28,9 +29,7 @@
 # OTOH it's every easy to interface with. Though
 # the repeated API queries due to only 10 entries
 # per query results make fetching slow.
-#
-#
-#
+
 
 import re
 import json

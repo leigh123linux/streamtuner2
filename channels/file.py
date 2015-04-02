@@ -1,4 +1,3 @@
-#
 # api: streamtuner2
 # title: File browser
 # description: Displays mp3/oggs or m3u/pls files from local media file directories.
@@ -11,8 +10,7 @@
 #   { name: file_browser_dir, type: text, value: "~/Music, /media/music", description: "List of directories to scan for audio files." },
 #   { name: file_browser_ext, type: text, value: "mp3,ogg, m3u,pls,xspf, avi,flv,mpg,mp4", description: "File type/extension filter." },
 #
-# Local file browser.
-#
+# Local file browser. Presents files from configured directories.
 
 
 
@@ -123,6 +121,8 @@ class file (ChannelPlugin):
     
         # add main directory
         for main in self.dir:
+          main = re.sub("^~", os.environ.get("HOME"))
+          main = re.sub("[$]([A-Z_]+)", lambda m: os.environ.get(m.group(1)), main)
           if os.path.exists(main):
             self.categories.append(main)
             

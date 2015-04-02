@@ -1,4 +1,3 @@
-#
 # encoding: UTF-8
 # api: streamtuner2
 # type: base
@@ -504,88 +503,81 @@ class ChannelPlugin(GenericChannel):
     module = "abstract"
 
     def gui(self, parent):
-        if parent:
-            module = self.__class__.__name__
-            # two panes
-            vbox = gtk.HPaned()
-            vbox.show()
-            # category treeview
-            sw1 = gtk.ScrolledWindow()
-            sw1.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-            sw1.set_property("width_request", 150)
-            sw1.show()
-            tv1 = gtk.TreeView()
-            tv1.set_property("width_request", 75)
-            tv1.set_property("enable_tree_lines", True)
-            tv1.connect("button_release_event", parent.on_category_clicked)
-            tv1.show()
-            sw1.add(tv1)
-            vbox.pack1(sw1, resize=False, shrink=True)
-            # stream list
-            sw2 = gtk.ScrolledWindow()
-            sw2.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-            sw2.show()
-            tv2 = gtk.TreeView()
-            tv2.set_property("width_request", 200)
-            tv2.set_property("enable_tree_lines", True)
-            tv2.connect("row_activated", parent.on_play_clicked)
-            tv2.show()
-            sw2.add(tv2)
-            vbox.pack2(sw2, resize=True, shrink=True)
 
-            # prepare label
-            pixbuf = None
-            if "png" in self.meta:
-                pixbuf = uikit.pixbuf(self.meta["png"])
-            else:
-                png = get_data("channels/" + self.module + ".png")
-                pixbuf = uikit.pixbuf(png)
-            if pixbuf:
-                icon = gtk.image_new_from_pixbuf(pixbuf)
-            else:
-                icon = gtk.image_new_from_stock(gtk.STOCK_DIRECTORY, size=1)
-            label = gtk.HBox()
-            label.pack_start(icon, expand=False, fill=True)
-            label.pack_start(gtk.Label(self.meta.get("title", self.module)), expand=True, fill=True)
-                
-            # pack it into an event container to catch double-clicks
-            ev_label = gtk.EventBox()
-            ev_label.add(label)
-            ev_label.connect('event', parent.on_homepage_channel_clicked)
-            plain_label = gtk.Label(self.module)
+        if not parent:
+            return
 
+        module = self.__class__.__name__
+        # two panes
+        vbox = gtk.HPaned()
+        vbox.show()
+        # category treeview
+        sw1 = gtk.ScrolledWindow()
+        sw1.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+        sw1.set_property("width_request", 150)
+        sw1.show()
+        tv1 = gtk.TreeView()
+        tv1.set_property("width_request", 75)
+        tv1.set_property("enable_tree_lines", True)
+        tv1.connect("button_release_event", parent.on_category_clicked)
+        tv1.show()
+        sw1.add(tv1)
+        vbox.pack1(sw1, resize=False, shrink=True)
+        # stream list
+        sw2 = gtk.ScrolledWindow()
+        sw2.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+        sw2.show()
+        tv2 = gtk.TreeView()
+        tv2.set_property("width_request", 200)
+        tv2.set_property("enable_tree_lines", True)
+        tv2.connect("row_activated", parent.on_play_clicked)
+        tv2.show()
+        sw2.add(tv2)
+        vbox.pack2(sw2, resize=True, shrink=True)
 
-
-            # to widgets
-            self.gtk_cat = tv1
-            parent.widgets[module + "_cat"] = tv1
-            self.gtk_list = tv2
-            parent.widgets[module + "_list"] = tv2
-            ev_label.show_all()
-            vbox.show_all()
-            parent.widgets["v_" + module] = vbox
-            parent.widgets["c_" + module] = ev_label
-            tv2.connect('button-press-event', parent.station_context_menu)
-
-
-            # try to initialize superclass now, before adding to channel tabs
-            GenericChannel.gui(self, parent)
-
-
-            # add notebook tab
-            tab = parent.notebook_channels.insert_page_menu(vbox, ev_label, plain_label, -1)
+        # prepare label
+        pixbuf = None
+        if "png" in self.meta:
+            pixbuf = uikit.pixbuf(self.meta["png"])
+        else:
+            png = get_data("channels/" + self.module + ".png")
+            pixbuf = uikit.pixbuf(png)
+        if pixbuf:
+            icon = gtk.image_new_from_pixbuf(pixbuf)
+        else:
+            icon = gtk.image_new_from_stock(gtk.STOCK_DIRECTORY, size=1)
+        label = gtk.HBox()
+        label.pack_start(icon, expand=False, fill=True)
+        label.pack_start(gtk.Label(self.meta.get("title", self.module)), expand=True, fill=True)
             
-            
-            
-            # double-click catch
+        # pack it into an event container to catch double-clicks
+        ev_label = gtk.EventBox()
+        ev_label.add(label)
+        ev_label.connect('event', parent.on_homepage_channel_clicked)
+        plain_label = gtk.Label(self.module)
+
+        # to widgets
+        self.gtk_cat = tv1
+        parent.widgets[module + "_cat"] = tv1
+        self.gtk_list = tv2
+        parent.widgets[module + "_list"] = tv2
+        ev_label.show_all()
+        vbox.show_all()
+        parent.widgets["v_" + module] = vbox
+        parent.widgets["c_" + module] = ev_label
+        tv2.connect('button-press-event', parent.station_context_menu)
 
 
-            # add module to list            
-            #parent.channels[module] = None
-            #parent.channel_names.append(module)
+        # try to initialize superclass now, before adding to channel tabs
+        GenericChannel.gui(self, parent)
+
+        # add notebook tab
+        tab = parent.notebook_channels.insert_page_menu(vbox, ev_label, plain_label, -1)
+
+        # double-click catch
+
+        # add module to list            
+        #parent.channels[module] = None
+        #parent.channel_names.append(module)
             """ -> already taken care of in main.load_plugins() """
-
-
-
-
 

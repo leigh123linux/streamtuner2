@@ -23,6 +23,16 @@
 #
 # Per default Ogg Vorbis is used as streaming format. Playlists and albums
 # return as XSPF playlists.
+
+
+import re
+import ahttp as http
+from config import conf, __print__, dbg
+from channels import *
+import json
+
+
+# jamendo CC music sharing site
 #
 #
 # The v3.0 streaming URLs don't seem to work. Therefore some /get2 URLs will
@@ -35,21 +45,6 @@
 #
 # Seem to resolve to OGG Vorbis each.
 #
-
-
-
-import re
-import ahttp as http
-from config import conf, __print__, dbg
-from channels import *
-import json
-
-
-
-
-
-
-# jamendo CC music sharing site
 class jamendo (ChannelPlugin):
 
     # description

@@ -9,17 +9,13 @@
 # config: -
 # category: collection
 #
-#
-# Just a genre browser.
+# A genre browser for tracker music files from the MOD Archive.
 #
 # MOD files dodn't work with all audio players. And with the default
 # download method, it'll receive a .zip archive with embeded .mod file.
-# VLC in */* seems to work fine however.
 #
-# Modarchive actually provides an API
-# http://modarchive.org/index.php?xml-api
-# (If only it wasn't XML based..)
-#
+# Configuring VLC for */* is the best option. See the help on how to
+# setup wget/curl to download them.
 
 
 import re
@@ -29,9 +25,12 @@ from channels import *
 from config import __print__, dbg
 
 
-
-
-# MODs
+# The MOD Archive
+#
+# Modarchive actually provides an API
+# http://modarchive.org/index.php?xml-api
+# (If only it wasn't XML based..)
+#
 class modarchive (ChannelPlugin):
 
     # description

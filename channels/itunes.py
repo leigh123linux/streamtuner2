@@ -10,7 +10,9 @@
 # config: -
 # documentation: http://lab.rolisoft.net/playlists.html
 #
-# Provides pre-parsed radio station playlists for various services
+#
+# API provides pre-parsed radio station playlists for various services
+#
 #  → Shoutcast
 #  → Xiph/ICEcast
 #  → Tunein
@@ -21,7 +23,6 @@
 #  → BBC
 #
 # In this module only iTunes will be queried for now.
-#
 #
 
 import re

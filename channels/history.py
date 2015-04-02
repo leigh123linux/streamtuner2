@@ -9,16 +9,12 @@
 #     { name: history,  type: int,  value: 20,  description: Number of last played streams to keep in history list.,  category: limit }
 # priority: optional
 #
-# 
-# Lists last activated streams in a new [history] tab in the favourites
-# channel.
-#
-
+# Lists recently played streams in a new [history] tab in the
+# bookmarks channel.
 
 
 from config import *
 from channels import *
-
 
 
 class history:

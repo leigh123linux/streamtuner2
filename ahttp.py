@@ -6,16 +6,16 @@
 # description: http utility
 # version: 1.4
 #
-#  Provides a http GET method with gtk.statusbar() callback.
-#  And a function to add trailings slashes on http URLs.
+# Utility code for HTTP requests, used by all channel plugins.
 #
-#
+# Provides a http "GET" method, but also does POST and AJAX-
+# simulating requests too. Hooks into mains gtk.statusbar().
+# And can normalize URLs to always carry a trailing slash
+# after the domain name.
 
 
 from config import conf, __print__, dbg
 import requests
-
-
 
 
 #-- hooks to progress meter and status bar in main window
@@ -37,19 +37,16 @@ def progress_feedback(*args):
     except: pass
 
 
-
-
 # prepare default query object
 session = requests.Session()
 # default HTTP headers for requests
 session.headers.update({
-    "User-Agent": "streamtuner2/2.1 (X11; U; Linux AMD64; en; rv:1.5.0.1) like WinAmp/2.1",
+    "User-Agent": "streamtuner2/2.1 (X11; Linux amd64; rv:33.0) like WinAmp/2.1",
     "Accept": "*/*",
     "Accept-Language": "en-US,en,de,es,fr,it,*;q=0.1",
     "Accept-Encoding": "gzip, deflate",
     "Accept-Charset": "UTF-8, ISO-8859-1;q=0.5, *;q=0.1",
 })
-
 
 
 #-- Retrieve data via HTTP
@@ -92,8 +89,6 @@ def get(url, params={}, referer="", post=0, ajax=0, binary=0, feedback=None, con
         return r.text
 
 
-
-
 #-- Append missing trailing slash to URLs
 def fix_url(url):
     if url is None:
@@ -108,7 +103,4 @@ def fix_url(url):
         if (url.find("/", 10) < 0):
             url = url + "/"
     return url
-
-
-
 

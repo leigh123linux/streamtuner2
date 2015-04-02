@@ -11,6 +11,9 @@
 # general settings, and plugin activation and
 # associated options.
 #
+# Some plugins hook into the saving method. Most
+# require a restart of streamtuner2 for changes
+# to take effect.
 
 
 from uikit import *

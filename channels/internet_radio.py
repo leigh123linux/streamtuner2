@@ -1,4 +1,3 @@
-#
 # api: streamtuner2
 # title: Internet-Radio
 # description: Broad list of webradios from all genres.
@@ -10,7 +9,7 @@
 #    { name: internetradio_max_pages,  type: int,  value: 5,  category: limit,  description: How many pages to fetch and read. }
 # priority: standard
 #
-# Internet-Radio.co.uk/.com is one of the largest directories of streams.
+# Internet-Radio.co.uk/.com is one of the largest stream directories.
 # Available music genre classifications are mirrored verbatim and flatly.
 #
 # The new version of this plugin alternates between PyQuery and Regex
@@ -18,11 +17,6 @@
 # HTTP retrieval happens in one batch, determined by the number of pages
 # setting, rather than the global max_streams option.
 #
-#
-#
-#
-#
-
 
 
 from channels import *

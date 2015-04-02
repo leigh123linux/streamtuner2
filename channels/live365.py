@@ -9,15 +9,9 @@
 # config: -
 # priority: optional
 # 
-#
-# We're currently extracting from the JavaScript;
-#
-#    stn.set("param", "value");
-#
-# And using a HTML5 player direct URL now:
-#
-#    /cgi-bin/play.pls?stationid=%s&direct=1&file=%s.pls
-#
+# Live365 lists around 5000 radio stations. Some are paid
+# entries and require a logon. This plugins tries to filter
+# thoise out.
 
 
 # streamtuner2 modules
@@ -41,6 +35,15 @@ from xml.dom.minidom import parseString
 
 
 # channel live365
+#
+# We're currently extracting from the JavaScript;
+#
+#    stn.set("param", "value");
+#
+# And using a HTML5 player direct URL now:
+#
+#    /cgi-bin/play.pls?stationid=%s&direct=1&file=%s.pls
+#
 class live365(ChannelPlugin):
 
     # desc

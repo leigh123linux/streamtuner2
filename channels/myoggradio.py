@@ -1,4 +1,4 @@
-#
+
 # api: streamtuner2
 # title: MyOggRadio
 # description: Open source internet radio directory.
@@ -20,7 +20,6 @@
 # Beforehand an account needs to be configured in the settings. (Registration
 # on myoggradio doesn't require an email address or personal information.)
 #
-
 
 
 from channels import *
@@ -181,7 +180,6 @@ class myoggradio(ChannelPlugin):
             if lap:
                 return [lap[0] or lap[1], lap[2]]
         pass        
-
 
 
 

@@ -14,11 +14,25 @@
 #
 # Shoutcast is a server software for audio streaming. It automatically spools
 # station information on shoutcast.com
+#
 # It has been aquired by Radionomy in 2014, since then significant changes
-# took place. The former YP got deprecated, now seemingly undeprecated.
+# took place. The former yellow pages API got deprecated.
+
+
+import ahttp as http
+from json import loads as json_decode
+import re
+from config import conf, __print__, dbg
+from pq import pq
+from channels import *    # works everywhere but in this plugin(???!)
+import channels
+from compat2and3 import urllib
+
+
+
+# SHOUTcast data module
 #
-#   http://wiki.winamp.com/wiki/SHOUTcast_Radio_Directory_API 
-#
+# Former API doc: http://wiki.winamp.com/wiki/SHOUTcast_Radio_Directory_API 
 # But neither their Wiki nor Bulletin Board provide concrete information on
 # the eligibility of open source desktop apps for an authhash.
 #
@@ -30,21 +44,6 @@
 # We do need a catmap now too, but that's easy to aquire and will be kept
 # within the cache dirs.
 #
-#
-#
-
-import ahttp as http
-from json import loads as json_decode
-import re
-from config import conf, __print__, dbg
-from pq import pq
-#from channels import *    # works everywhere but in this plugin(???!)
-import channels
-from compat2and3 import urllib
-
-
-
-# SHOUTcast data module                                          ----------------------------------------
 class shoutcast(channels.ChannelPlugin):
 
     # desc

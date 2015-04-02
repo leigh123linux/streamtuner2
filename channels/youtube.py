@@ -46,7 +46,6 @@ import json
 # a lot of uneeded data. (Clever idea, but probably incurs more processing
 # effort on Googles servers than it actually saves bandwidth, but hey..)
 #
-#
 # EXAMPLES
 #
 #  api("videos", chart="mostPopular")
