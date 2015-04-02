@@ -2,20 +2,23 @@
 streamtuner2
 ============
 
-ST2 is a internet radio browser. It queries online directories like
-shoutcast and xiph.org for music stations.
+ST2 is a browser for internet radio/streaming stations. It queries
+directories like Shoutcast, TuneIn, MyOggRadio, Xiph.org. SurfMusic,
+Jamendo etc. for music/video streams/collections.
 
-It mimics the original streamtuner 1 to some extend. It's however
-written in Python now instead of C.
+It mimics the original streamtuner 1 to some extend.
+It's however written in Python now instead of C.
 
 
 Installation howto
 ------------------
 
 If possible, prefer the package directly from your BSD/Linux distribution.
-Due to an excessive maintenance break, some still have older 2.0.8 version
-however - which barely works anymore.
-If so, you should use a manually installed version.
+
+Due to a longer maintenance and release break, some still have older 2.0.x
+versions however - whose channel plugins barely work anymore. If so, you
+should install a newer version / manually.
+
 
 Dependencies
 ------------
@@ -38,6 +41,7 @@ Use your distro package manager with e.g.:
 Or utilize Pythons local package installer even:
 
   sudo pip install requests
+  sudo pip install pyquery
 
 
 DEB / RPM
@@ -93,14 +97,41 @@ installed, and open the "gtk3.xml" file. There it's easy to
 rename or rearrange things.
 
 
+Sources
+-------
+
+You'll find the current source files under 
+http://fossil.include-once.org/streamtuner2/
+
+That's a fossil DVCS repository. Which is miles easier to use than
+git. You can download the single binary from http://fossil-scm.org/
+or from your distro, then check out the repo:
+
+  fossil clone http://fossil.include-once.org/streamtuner2/ st2.fossil
+  fossil open st2.fossil
+
+Or browse the contents
+
+  fossil ui
+
+Alternatively there are git and svn exports.
+
+  fossil export --svn
+  http://fossil.include-once.org/streamtuner2/git-fast-export
+
+You can send in patches, a fossil bundle, or set up your cloned
+repo publically `fossil cgi`. Else just create an account on
+fossil.include-once.org, and send a mail, so I can elevate that
+account to developer/commit/push permissions quickly. (Fossil
+repos don't break. So dealing out sync access is a no-brainer.)
+
+
 alternatives
 ------------
 
-* http://sourceforge.net/projects/radiotray/
-* https://sites.google.com/site/glrpgreatlittleradioplayer/
-* http://tunapie.sourceforge.net/
-* VLC also has a few directory discovery services built-in
-* Rythmbox comes with last.fm, libre.fm, radio lookups
+See http://fossil.include-once.org/streamtuner2/wiki/alternatives
+for a list of recommended alternatives. Future ST2 versions will
+try to interface and share more with them.
 
 
 license

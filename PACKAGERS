@@ -9,6 +9,7 @@ Structural changes in 2.1.5 (2015-04-xx)
  → There's a new `bin` script. It's a lightweight invocation
    wrapper, intended to be installed as /usr/bin/streamtuner2
    now.
+   Which hopefully avoids lengthy patches in the future.
 
  → The previous `st2.py` still exists, but is now supposed to
    reside in `/usr/share/streamtuner2/st2.py` along with all
@@ -22,9 +23,17 @@ directory though. It's not yet practical to extract into Python
 site-package directories.
 
 The channel PNG files still need to reside alongside the Python
-modules. Later versions may complete soak the images into the
+modules. Later versions may completely soak the images into the
 source code (meta data section) for simpicity.
 
+
+Renames
+-------
+
+ · bookmarks, configdialog, streamedit were extracted into
+   channels/ - which is why the main module got lighter.
+ · uikit.py is the new mygtk
+ 
 
 Aux files
 ---------
@@ -40,10 +49,12 @@ Aux files
 Removed
 -------
 
-Some plugin PNGs may have been removed already.
+Some plugin PNGs may have been removed already. (Embedded
+binary data may violate some distro guidelines(?), but hey,
+fewer files are fewer files.)
 
-And the streamtuner2.png logo is now source-embedded instead
-(`logo.py` provides a `logo.png`).
+And the streamtuner2.png logo is now source-embedded instead,
+the`logo.py` module provides a `logo.png` string.
 
 The old `gtk2.xml` file is gone. It probably became obsolete
 a long while back. The gtk3.xml is instead runtime-patched
@@ -60,9 +71,9 @@ and only APT could so anyway. But if feasible...
 Also, hard dependencies are meanwhile:
 
   - gtk (>= 2.16)
-  - pygtk || python-gi
+  - pygtk                           [or python-gi for python3]
   - python-requests (>> 1.2.0)
-  - python-pyquery     [though most plugins would work without]
+  - python-pyquery    [though most plugins would work without]
   - and its implied python-lxml
 
 Optional dependencies (just affects a single plugin, which
@@ -77,12 +88,12 @@ Very optional dependencies (everything should work without):
 
 Strongly suggest:
 
-  - Streamripper
+  - streamripper       [or ficy/fpls etc.]
+  - any audio player of course
 
 Suggest:
 
-  - any audio player of course
-  - youtube-dl
+  - youtube-dl   [technically not required, as VLC works without]
 
 
 Lazy installation
