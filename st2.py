@@ -295,14 +295,16 @@ class StreamTunerTwo(gtk.Builder):
 
     # Open stream homepage in web browser
     def on_homepage_stream_clicked(self, widget):
-        url = self.selected("homepage")             
-        self.action.browser(url)
+        url = self.selected("homepage")
+        if url and len(url): self.action.browser(url)
+        else: self.status("No homepage URL present.")
 
     # Browse to channel homepage (double click on notebook tab)
     def on_homepage_channel_clicked(self, widget, event=2):
         if event == 2 or event.type == gtk.gdk._2BUTTON_PRESS:
             __print__(dbg.UI, "dblclick")
-            self.action.browser(self.channel().homepage)            
+            url = self.channel().meta.get("url", "https://duckduckgo.com/?q=" + self.channel().module)
+            self.action.browser(self.channel().url)
 
     # Reload stream list in current channel-category
     def on_reload_clicked(self, widget=None, reload=1):

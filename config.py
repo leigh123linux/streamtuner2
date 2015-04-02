@@ -124,17 +124,17 @@ class ConfigDict(dict):
 
         
     # each plugin has a .config dict list, we add defaults here
-    def add_plugin_defaults(self, config, module=""):
+    def add_plugin_defaults(self, meta, module=""):
     
         # options
+        config = meta.get("config", [])
         for opt in config:
             if ("name" in opt) and ("value" in opt) and (opt["name"] not in vars(self)):
                 self.__dict__[opt["name"]] = opt["value"]
 
         # plugin state
         if module and module not in conf.plugins:
-             conf.plugins[module] = 1
-             #@TODO: use meta["priority"] in ("core", "builtin", "default") etc.
+             conf.plugins[module] = meta.get("priority") in ("core", "builtin", "default", "standard")
 
     
         

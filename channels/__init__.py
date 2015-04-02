@@ -117,7 +117,7 @@ class GenericChannel(object):
         self.title = self.meta.get("title", self.module)
 
         # add default options values to config.conf.* dict
-        conf.add_plugin_defaults(self.meta["config"], self.module)
+        conf.add_plugin_defaults(self.meta, self.module)
 
         # only if streamtuner2 is run in graphical mode        
         if (parent):
