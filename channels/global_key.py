@@ -38,7 +38,7 @@ class global_key(object):
     # register
     def __init__(self, parent):
         self.parent = parent
-        conf.add_plugin_defaults(self.meta["config"], self.module)
+        conf.add_plugin_defaults(self.meta, self.module)
         try:
             for i,keyname in enumerate(conf.switch_key.split(",")):    # allow multiple keys
                 keybinder.bind(keyname, self.switch, ((-1 if i else +1)))   # forward +1 or backward -1
