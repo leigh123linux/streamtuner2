@@ -417,11 +417,11 @@ class uikit:
 
     # Wrap two widgets in horizontal box
     @staticmethod
-    def hbox(w1, w2):
+    def hbox(w1, w2, exr=True):
         b = gtk.HBox(homogeneous=False, spacing=10)
         ######b.set_property("visible", True)
-        b.pack_start(w1, expand=False, fill=False)
-        b.pack_start(w2, expand=True, fill=True)
+        b.pack_start(w1, expand=not exr, fill=not exr)
+        b.pack_start(w2, expand=exr, fill=exr)
         return b
 
 
@@ -457,6 +457,8 @@ class uikit:
     # Pixbug loader (from inline string, as in `logo.png`)
     @staticmethod
     def pixbuf(buf, fmt="png", decode=True, gzip=False):
+        if not buf or len(buf) < 16:
+            return None
         if fmt and ver==3:
             p = GdkPixbuf.PixbufLoader.new_with_type(fmt)
         elif fmt:
