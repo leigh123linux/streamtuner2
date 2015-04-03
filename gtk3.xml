@@ -1215,7 +1215,7 @@ Plugins</property>
                     <property name="xalign">0.5</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">search_dialog_current</property>
+                    <!--property name="group">search_dialog_current</property-->
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -3079,6 +3079,7 @@ Plugins</property>
           <object class="GtkNotebook" id="notebook_channels">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="tab_pos">left</property>
             <property name="scrollable">True</property>
             <property name="enable_popup">True</property>
             <signal name="switch-page" handler="on_notebook_channels_switch_page" swapped="no"/>
