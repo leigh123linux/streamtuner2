@@ -92,7 +92,6 @@ class StreamTunerTwo(gtk.Builder):
     def __init__(self):
         
         # Load stylesheet, instantiate GtkBuilder in self, menu and logo hooks
-        gui_startup(0/20.0), uikit.load_theme(conf.get("theme"))
         gui_startup(1/20.0), gtk.Builder.__init__(self)
         gui_startup(1/20.0), gtk.Builder.add_from_string(self, ui_xml)
         gui_startup(3/20.0), self.img_logo.set_from_pixbuf(uikit.pixbuf(logo.png))

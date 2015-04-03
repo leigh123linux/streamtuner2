@@ -30,7 +30,6 @@ class configwin (AuxiliaryWindow):
     def open(self, widget):
         if self.first_open:
             self.add_plugins()
-            self.combobox_theme()
             self.first_open = 0
             self.win_config.resize(565, 625)
         self.load_config(conf.__dict__, "config_")
@@ -106,24 +105,6 @@ class configwin (AuxiliaryWindow):
             return gtk.STOCK_CANCEL
         
 
-    # list of Gtk themes in dropdown
-    def combobox_theme(self):
-        # find themes
-        themedirs = (conf.share+"/themes", conf.dir+"/themes", "/usr/share/themes")
-        themes = ["no theme"]
-        [[themes.append(e) for e in os.listdir(dir)] for dir in themedirs if os.path.exists(dir)]
-        __print__(dbg.STAT, themes)
-        # add dropdown
-        self.widgets["theme"] = ComboBoxText(themes)
-        self.theme_cb_placeholder.pack_start(self.theme)
-        self.theme_cb_placeholder.pack_end(uikit.label(""))
-
-
-    # retrieve currently selected value
-    def apply_theme(self):
-        conf.theme = self.theme.get_active_text()
-        uikit.load_theme(conf.theme)
-
 
     # iterate over channel and feature plugins
     def add_plugins(self):
@@ -189,7 +170,6 @@ class configwin (AuxiliaryWindow):
         self.save_config(conf.__dict__, "config_")
         self.save_config(conf.plugins, "config_plugins_")
         [callback() for callback in self.hooks["config_save"]]
-        self.apply_theme()
         conf.save(nice=1)
         self.hide()
 

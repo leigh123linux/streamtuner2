@@ -355,38 +355,6 @@ and &lt;b&gt;%srv&lt;/b&gt; to use direct streaming URLs.</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="label45">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="tooltip_text" translatable="yes">needs restart</property>
-                                <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Use specific Gtk+ theme for Streamtuner2.</property>
-                              </object>
-                              <packing>
-                                <property name="expand">True</property>
-                                <property name="fill">True</property>
-                                <property name="padding">5</property>
-                                <property name="position">4</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkHBox" id="theme_cb_placeholder">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                                <property name="position">5</property>
-                              </packing>
-                            </child>
-                            <child>
                               <object class="GtkCheckButton" id="config_auto_save_appstate">
                                 <property name="label" translatable="yes">Save window state, sizes and selections automatically.</property>
                                 <property name="visible">True</property>
@@ -399,8 +367,14 @@ and &lt;b&gt;%srv&lt;/b&gt; to use direct streaming URLs.</property>
                                 <property name="expand">True</property>
                                 <property name="fill">True</property>
                                 <property name="padding">5</property>
-                                <property name="position">6</property>
+                                <property name="position">4</property>
                               </packing>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
                             </child>
                             <child>
                               <placeholder/>
