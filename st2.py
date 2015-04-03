@@ -16,11 +16,10 @@
 # category: sound
 # depends: pygtk | gi, threading, requests, pyquery, lxml
 # id: streamtuner2
-# pack: *.py, gtk*.xml, bin=/usr/bin/streamtuner2, channels/__init__.py, bundle/*.py,
+# pack: *.py, gtk*.xml, bin, channels/__init__.py, bundle/*.py, CREDITS, help/index.page,
 #   streamtuner2.desktop=/usr/share/applications/, README=/usr/share/doc/streamtuner2/,
-#   NEWS.gz=/usr/share/doc/streamtuner2/changelog.gz, help/streamtuner2.1=/usr/share/man/man1/,
-#   help/*page=/usr/share/doc/streamtuner2/help/, help/img/*=/usr/share/doc/streamtuner2/help/img/,
-#   logo.png=/usr/share/pixmaps/streamtuner2.png,
+#   help/streamtuner2.1=/usr/share/man/man1/, NEWS.gz=/usr/share/doc/streamtuner2/changelog.gz,
+#   logo.png=/usr/share/pixmaps/streamtuner2.png
 # architecture: all
 #
 # Streamtuner2 is a GUI for browsing internet radio directories, music
@@ -87,9 +86,7 @@ class StreamTunerTwo(gtk.Builder):
 
 
     # status variables
-    channel_names = ["bookmarks"]    # order of channel notebook tabs
     current_channel = "bookmarks"    # currently selected channel name (as index in self.channels{})
-
 
     # constructor
     def __init__(self):
@@ -232,34 +229,37 @@ class StreamTunerTwo(gtk.Builder):
             return self.widgets[name]
         else:
             return gtk.Builder.get_object(self, name)
+
             
-    # returns the currently selected directory/channel object (remembered position)
+    # Returns the currently selected directory/channel object (remembered position)
     def channel(self):
         return self.channels[self.current_channel]
 
-    # returns the currently selected directory/channel object (from gtk)
+    # List of module titles for channel tabs
+    @property
+    def channel_names(self):
+        n = self.notebook_channels
+        return [n.get_menu_label_text(n.get_nth_page(i)) for i in xrange(0, n.get_n_pages())]
+
+    # Returns the currently selected directory/channel object (from gtk)
     def current_channel_gtk(self):
-        i = self.notebook_channels.get_current_page()
-        try: return self.channel_names[i]
-        except: return "bookmarks"
-
-    # Notebook tab clicked
+        return self.channel_names[self.notebook_channels.get_current_page()]
+    
+        
+    # Notebook tab has been clicked (receives numeric page_num), but *NOT* yet changed (visually).
     def channel_switch(self, notebook, page, page_num=0, *args):
-
-        # can be called from channelmenu as well:
-        if type(page) == str:
-            self.current_channel = page
-            self.notebook_channels.set_current_page(self.channel_names.index(page))
-        # notebook invocation:
-        else: #if type(page_num) == int:
-            self.current_channel = self.channel_names[page_num]
+        self.current_channel = notebook.get_menu_label_text(notebook.get_nth_page(page_num))
+        __print__(dbg.UI, "main.channel_switch():", "set current_channel :=", self.current_channel)
         
         # if first selected, load current category
-        try:
-            __print__(dbg.PROC, "channel_switch: try .first_show", self.channel().module);
-            self.channel().first_show()
-        except:
-            __print__(dbg.INIT, "channel .first_show() initialization error")
+        __print__(dbg.STAT, "TRY", "main.channel_switch(): ", self.current_channel + ".first_show()")
+        try: self.channel().first_show()
+        except: __print__(dbg.INIT, ".first_show() initialization error")
+
+    # Invoked from the menu instead, uses module name instead of numeric tab id
+    def channel_switch_by_name(self, name):
+        self.notebook_channels.set_current_page(self.channel_names.index(name))
+
 
     # Convert ListStore iter to row number
     def rowno(self):
@@ -414,7 +414,7 @@ class StreamTunerTwo(gtk.Builder):
         ls = module_list()
         for module in ls:
             gui_startup(4/20.0 + 13.5/20.0 * float(ls.index(module))/len(ls), "loading module "+module)
-                            
+
             # skip module if disabled
             if conf.plugins.get(module, 1) == False:
                 __print__(dbg.STAT, "disabled plugin:", module)
@@ -433,8 +433,6 @@ class StreamTunerTwo(gtk.Builder):
                 # add to .channels{}
                 if issubclass(plugin_class, channels.GenericChannel):
                     self.channels[module] = plugin_obj
-                    if module not in self.channel_names:  # skip (glade) built-in channels
-                        self.channel_names.append(module)
                 # or .features{} for other plugin types
                 else:
                     self.features[module] = plugin_obj

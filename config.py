@@ -89,30 +89,48 @@ class ConfigDict(dict):
     # some defaults
     def defaults(self):
         self.play = {
-           "audio/mpeg": "audacious ",	# %u for url to .pls, %g for downloaded .m3u
-           "audio/ogg": "audacious ",
-           "audio/*": "audacious ",
-           "video/youtube": "totem $(youtube-dl -g %srv)",
-           "video/*": "vlc --one-instance %srv",
-           "url/http": "sensible-browser",
+           "audio/mpeg": self.find_player(),
+           "audio/ogg": self.find_player(),
+           "audio/*": self.find_player(),
+           "video/youtube": self.find_player(typ="video") + " $(youtube-dl -g %srv)",
+           "video/*": self.find_player(typ="video", default="vlc"),
+           "url/http": self.find_player(typ="browser"),
         }
         self.record = {
-           "audio/*": "xterm -e streamripper %srv",   # -d /home/***USERNAME***/Musik
-           "video/youtube": "xterm -e \"youtube-dl %srv\"",
+           "audio/*": self.find_player(typ="xterm") + " -e streamripper %srv",   # -d /home/***USERNAME***/Musik
+           "video/youtube": self.find_player(typ="xterm") + " -e \"youtube-dl %srv\"",
         }
+        # these presets are a temporary workaround, until `priority:` is checked before module loading
         self.plugins = {
-            "bookmarks": 1, # built-in plugin, cannot be disabled
+             # core plugins, cannot be disabled anyway
+            "bookmarks": 1,
             "search": 1,
             "streamedit": 1,
             "configwin": 1,
+            # standard channels
             "shoutcast": 1,
             "xiph": 1,
-            "modarchive": 0, # disable per default
-            "file": 0,      # disable per default
-            "punkcast": 0,  # disable per default
+            "myoggradio": 1,
+            "internet_radio": 1,
+            "surfmusik": 1,
+            "jamendo": 1,
+            "icast": 1,
+            "itunes": 1,
+            # disabled per default
+            "radiobrowser": 0,
+            "youtube": 0,
+            "modarchive": 0,
+            "live365": 0,
+            "radiotray": 0,
+            "timer": 0,
             "history": 0,
-            "basicch": 0,   # ceased
-            "tv": 0,        # ceased
+            "global_key": 0,
+            "useragentswitcher": 0,
+            # obsolete / removed
+            "file": 0,
+            "punkcast": 0,
+            "basicch": 0,
+            "tv": 0,
         }
         self.tmp = os.environ.get("TEMP", "/tmp")
         self.max_streams = "500"
@@ -144,7 +162,18 @@ class ConfigDict(dict):
         if module and module not in conf.plugins:
              conf.plugins[module] = meta.get("priority") in ("core", "builtin", "default", "standard")
 
-    
+    # look at system binaries for standard audio players
+    def find_player(self, typ="audio", default="xdg-open"):
+        players = {
+           "audio": ["audacious %g", "audacious2", "exaile %p", "xmms2", "banshee", "amarok %g", "clementine", "qmmp", "quodlibet", "aqualung", "mp3blaster %g", "vlc --one-instance %srv", "totem"],
+           "video": ["parole", "umplayer", "xnoise", "gxine", "totem", "vlc --one-instance", "smplayer", "gnome-media-player", "xine", "bangarang"],
+           "browser": ["opera", "midori", "sensible-browser"],
+           "xterm": ["xfce4-terminal", "x-termina-emulator", "gnome-terminal", "xterm", "rxvt"],
+        }
+        for bin in players[typ]:
+            if find_executable(bin.split()[0]):
+                return bin
+        return default
         
     # http://standards.freedesktop.org/basedir-spec/basedir-spec-0.6.html
     def xdg(self, path="/streamtuner2"):
@@ -274,8 +303,8 @@ def module_list():
     ls = pkgutil.iter_modules([conf.share+"/channels", "channels"])
     ls = [name for loader,name,ispkg in ls]
     
-    # resort with tab order
-    order = [module.strip() for module in conf.channel_order.lower().replace(".","_").replace("-","_").split(",")]
+    # resort according to configured channel tab order
+    order = re.findall("\w+", conf.channel_order.lower())
     ls = [module for module in (order) if (module in ls)] + [module for module in (ls) if (module not in order)]
 
     return ls

@@ -181,8 +181,8 @@ class GenericChannel(object):
             uikit.columns(self.gtk_list, self.datamap, [])
             
         # add to main menu
-        uikit.add_menu([parent.channelmenuitems], self.meta["title"], lambda w: parent.channel_switch(w, self.module) or 1)
-        
+        uikit.add_menu([parent.channelmenuitems], self.meta["title"], lambda w: parent.channel_switch_by_name(self.module) or 1)
+
         
     # make private copy of .datamap and modify field (title= only ATM)
     def update_datamap(self, search="name", title=None):
