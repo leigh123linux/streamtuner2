@@ -2,6 +2,7 @@
 # api: cli
 # type: wrapper
 # title: streamtuner2
+# pack: bin=/usr/bin/streamtuner2
 #
 # Invocation script for /usr/share/streamtuner2/streamtunertwo.py
 
