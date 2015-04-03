@@ -301,8 +301,9 @@ class uikit:
                 r[wn]["style"] = int(w.get_style())
             # gtk.Notebook
             if t == gtk.Notebook:
-                r[wn]["page"] = w.get_current_page()
                 r[wn]["tab_pos"] = int(w.get_tab_pos())
+                r[wn]["tab_order"] = [w.get_menu_label_text(w.get_nth_page(i)) for i in xrange(0, w.get_n_pages())]
+                r[wn]["tab_current"] = w.get_menu_label_text(w.get_nth_page(w.get_current_page()))
         #print(r)
         return r
 
@@ -343,11 +344,19 @@ class uikit:
                 if method == "style":
                     w.set_style(args)
                 # gtk.Notebook
-                if method == "page":
-                    w.set_current_page(args)
                 if method == "tab_pos":
                     w.set_tab_pos(r[wn]["tab_pos"])
-
+                if method == "tab_order":
+                    tab_current = r[wn].get("tab_current")
+                    for pos,ord_tabname in enumerate(args):
+                        # compare current label list on each reordering round
+                        for i in range(0, w.get_n_pages()):
+                            w_tab = w.get_nth_page(i)
+                            w_label = w.get_menu_label_text(w_tab)
+                            if w_label == ord_tabname:
+                                w.reorder_child(w_tab, pos)
+                            if tab_current == ord_tabname:
+                                w_set_current_page(pos)
         pass
 
 

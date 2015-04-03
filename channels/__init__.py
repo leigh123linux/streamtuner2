@@ -573,4 +573,5 @@ class ChannelPlugin(GenericChannel):
 
         # add notebook tab
         tab = parent.notebook_channels.insert_page_menu(vbox, ev_label, plain_label, -1)
+        parent.notebook_channels.set_tab_reorderable(vbox, True)
 

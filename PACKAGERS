@@ -1,10 +1,10 @@
 
 This is a short summary for distribution package maintainers.
-For regular end-user documentation see the help/ pages.
+For regular end-user documentation please see the help/ pages.
 
 
-Structural changes in 2.1.5 (2015-04-xx)
-----------------------------------------
+Structural changes from 2.1.5 onwards (2015-04-xx)
+--------------------------------------------------
 
  → There's a new `bin` script. It's a lightweight invocation
    wrapper, intended to be installed as /usr/bin/streamtuner2
@@ -22,9 +22,9 @@ I'd still advise to use /usr/share/streamtuner2/ as main target
 directory though. It's not yet practical to extract into Python
 site-package directories.
 
-The channel PNG files still need to reside alongside the Python
-modules. Later versions may completely soak the images into the
-source code (meta data section) for simpicity.
+The channel PNG files have been soaked into the .py includes.
+Though one could still package any static *.png alongside.
+(Both will remain supported, for simplicity.)
 
 
 Renames
@@ -49,12 +49,12 @@ Aux files
 Removed
 -------
 
-Some plugin PNGs may have been removed already. (Embedded
+Most plugin PNGs may have been removed already. (Embedded
 binary data may violate some distro guidelines(?), but hey,
-fewer files are fewer files.)
+fewer files are fewer files!)
 
 And the streamtuner2.png logo is now source-embedded instead,
-the`logo.py` module provides a `logo.png` string.
+the `logo.py` module provides a `logo.png` base64-string.
 
 The old `gtk2.xml` file is gone. It probably became obsolete
 a long while back. The gtk3.xml is instead runtime-patched
@@ -102,8 +102,13 @@ Lazy installation
 The new .PYZ archive bundles everything into a ZIP file. Which,
 given the right shebang, could just be "installed" as literal
 /usr/bin/streamtuner2 even.
+
 I'm sure nobody is going to do so. But you know, it's at least
 a theoretical option now..
+
+And this PYZ-packaging scheme is the main reason for the
+restructuring, and embedded PNGs for example. (Albeit that
+wasn't strictly necessary.)
 
 
 FPM/XPM packaging
@@ -113,6 +118,10 @@ You may have noticed (and scoffed at ;) the newer packaging
 method. It's now using http://fossil.include-once.org/xpm/
 with the `src` filter. (That's what the meta comment blocks
 in the source modules were always meant for.)
+
+Simplifies DEB and RPM packaging, as well as PYZ generation.
+(They're all workable, but decidedly rather crude packages.
+So yes, proper distro packages are very much still needed.)
 
 
 Repo

@@ -77,7 +77,7 @@ def get(url, params={}, referer="", post=0, ajax=0, binary=0, feedback=None, con
             
     # finish, clean statusbar
     #progress_feedback(0.9)
-    progress_feedback("")
+    #progress_feedback("")
 
     # result
     __print__( dbg.INFO, "Content-Length", len(r.content) )

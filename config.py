@@ -141,7 +141,6 @@ class ConfigDict(dict):
         self.retain_deleted = 0
         self.auto_save_appstate = 1
         self.theme = "" #"MountainDew"
-        self.channel_order = "shoutcast, xiph, internet_radio, jamendo, myoggradio, .."
         self.reuse_m3u = 1
         self.google_homepage = 0
         self.windows = platform.system()=="Windows"

@@ -197,7 +197,7 @@ class StreamTunerTwo(gtk.Builder):
             "quicksearch_set": self.search.quicksearch_set,
             "search_open": self.search.menu_search,
             "search_go": self.search.cache_search,
-            "search_srv": self.search.server_search,
+            "search_srv": lambda *w: self.thread(lambda: self.search.server_search(None)),
             "search_cancel": self.search.cancel,
             "true": lambda w,*args: True,
             # win_streamedit
@@ -386,6 +386,7 @@ class StreamTunerTwo(gtk.Builder):
     # shortcut to statusbar
     # (hacked to work from within threads, circumvents the statusbar msg pool actually)
     def status(self, text="", sbar_msg=[]):
+        __print__(dbg.ERR, "status(", text, ")")
         # init
         sbar_cid = self.get_widget("statusbar").get_context_id("messages")
         # remove text
@@ -397,7 +398,7 @@ class StreamTunerTwo(gtk.Builder):
             if text >= 0.999 or text < 0.0:  # completed
                 uikit.do(lambda:self.progress.hide())
             else:  # show percentage
-                uikit.do(lambda:self.progress.show_all() or self.progress.set_fraction(text))
+                uikit.do(lambda:self.progress.show() or self.progress.set_fraction(text))
                 if (text <= 0):  # unknown state
                     uikit.do(lambda:self.progress.pulse())
         # add text
