@@ -9,6 +9,12 @@
 # config: 
 #    { name: xiph_min_bitrate,  value: 64,  type: int,  description: "minimum bitrate, filter anything below",  category: filter }
 # priority: standard
+# png:
+#   iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAg5JREFUOI2lk1tIE2AUx3+7CG1tlmlG1rSEHrKgEUF7yO40taQiRj10I4qKkOaT4hIUItuTkC8hpJAQtJCICrFpzEKw
+#   h61eQorGNBOTzbEt16ZrnR5Wq3mZD/3heziX//983znngyyov+eSbHEA5WKBhs4BKVy9gsqajqwiCwo0dA5IQX5u2s4moliMPPV1nCeDzxgNBFDHE2wsKMPzsGVefobjcnO7RMfeMuL341ZBrNEGRmPqqjdvsbbf
+#   w7irO4Oj+rdywNNNucmERsLUVndR8uYRU13PCew6hpgP8W02xMpIsik++qk5oweW6y3yob8WnXacZDKJWh1Cp4OtRUHsh19TUlUGViv09RGqKAenU5QnLKm+rK88LjgcUnxmr/h8iNO5XYJBRAQZ/qiVeptGWjty
+#   5cClDWLwugQRIRiU5UdPCoD6S89jhV6pks9WG6fuwtBtF5v72vC1v+B86SsM+jD56hjnyiM0lRrAbofeXjQJLdE/78jbXSU5166I6f5VeeDdKdq6GtlSd0QkVU+8XsQhlt9W6izbZ5aMKWgtp2WT/yUHd0xSYU7i
+#   dsPQ+1WMKIsJD08wEV2HGLeRyNMjawqRxhuKBfdgz1m7fI/4mVX+ZGxmgniOoJv+QZHGAMC7p60ZnHkC8HfzZmLTBCd9af9ccnqMc9HTdmFe4kLkJbH/4h0xVtcu+SP/C78AL6btab6woPcAAAAASUVORK5CYII=
 #
 # Xiph.org maintains the Ogg streaming standard and Vorbis
 # audio compression format, amongst others.  The ICEcast

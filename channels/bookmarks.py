@@ -7,6 +7,7 @@
 # category: builtin
 # priority: core
 # config: { name: like_my_bookmarks,  type: boolean, value: 0, description: "I like my bookmarks" }
+# url: http://freshcode.club/projects/streamtuner2
 # 
 # Favourite lists.
 #
@@ -45,7 +46,8 @@ class bookmarks(GenericChannel):
     categories = ["favourite", ]  # timer, links, search, and links show up as needed
     current = "favourite"
     default = "favourite"
-    streams = {"favourite":[], "search":[], "scripts":[], "timer":[], "history":[], }
+    finder_song = { "genre": "Youtube ", "format": "video/youtube", "playing": "current_", "title": "The Finder song", "url": "http://youtube.com/v/omyZy4H8y9M", "homepage": "http://youtu.be/omyZy4H8y9M" }
+    streams = {"favourite":[finder_song], "search":[], "scripts":[], "timer":[], "history":[], }
 
 
     # cache list, to determine if a PLS url is bookmarked

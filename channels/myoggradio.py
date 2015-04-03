@@ -11,6 +11,11 @@
 #    { name: myoggradio_login,  type: text,  value: "user:password", description: "Account for storing personal favourites." }
 #    { name: myoggradio_morph,  type: boolean, value: 0,  description: "Convert pls/m3u into direct shoutcast url." }
 # priority: standard
+# png:
+#   iVBORw0KGgoAAAANSUhEUgAAAAsAAAAQCAYAAADAvYV+AAAABHNCSVQICAgIfAhkiAAAARdJREFUKJGt0U8rhFEUx/HP3AfjT9QQJo80CyzGG1A2UspL8k4s
+#   7G2lvAlLC0skEWliMJTHM2Nx72iSjfJb3Xv6/n7ndA5/UIWz/jtDGZ9rqXQGAT30+vAE6njA80DYCObQxe1QTFdPhlFc4D0lzmMGn3gJGEtQhipFg80a53Uq
+#   syksoBYiIMRiNeMw5+GA3S0m+50rqIY0T1LZY6kga5N34v9b3ZDmK6Op7JI/Eu6ZvqMsEthDJ+ADTxEeLth/o5jheIjJdgr6QCsk531cWeOWo0W06KwycYcX
+#   3KAI6QAlzSvWX/ncwDWaTNVoXiaDyo+LbmMHp2jEDvb6S8gGwBVs4SRBN1jAOC5/hMrF0w5qHMu/TPDP+gI3M01h2io9UwAAAABJRU5ErkJggg==
 #
 # MyOggRadio is an open source radio station directory. Because this matches
 # well with streamtuner2, there's now a project partnership. Shared streams can easily

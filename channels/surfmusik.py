@@ -10,7 +10,14 @@
 #   { name: surfmusik_lang,  value: EN,  type: select,  select: "DE=German|EN=English",  description: "Switching to a new category title language requires reloading the category tree.",  category: language  }
 # priority: default
 # source: http://forum.ubuntuusers.de/topic/streamtuner2-zwei-internet-radios-anhoeren-au/3/
+# png:
+#   iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAA3NCSVQICAjb4U/gAAACmklEQVQokWXSy0tUYRgG8Pe7zBnzWk06RFGhoNAmBJuBbFDcNEoK4k5cxUQbYQYZBtok2L7NuGrpIlSkQNI004g8Ss1GuqAILjSkmNKD45k53+XM97aQpOj3FzzPwwNKKfkv
+#   ISVKiYjT6+uJx48Lvl/WWgihlFJKgfyPL+UPKWefPPlaXz/JefbRI4kohZBSKqUoAJA/DKL0PMX52vh41ciIF48Xurtrx8ZezM5almWMAURKCDlJpbUGxGAg8FNKnJ7Ww8NkYqKyWLxLSGB5uQRAjQFCKAAwxjjnjDFKKTAW0nrm4sVgJvMplepdWfkFUBePVwAgIb7v
+#   c0SklBrEsu8HOWfB4BfHqXGcbwMD8Vwux5gaHb0djxutgTGKCEopz/PcQsFTal+ImZmZifb2XYBdgFex2OziYgHxdEetNUilpOdJxDXbnr5z5wPARij0oKXl1cuXRURELCvlFosnPYUQRHueDAZzT59eSyYLUr7u6fkYDr+37ZvXr19uaGhqbu7q6mptbdVaI6Lv+5Ra
+#   1tuFhWAqdcWYz/fuPa+qCjFWWy7Xnzv3bnU1nU53dnZms1lKqTEmEAjAMeJkOu0AfGxre7O/v72xoYTo6e7e2tpCxEwmAwA1NTV7e3vlclkIQSt9/0Yymevvt7a3ry4tVV66dCylYezw4GBnZ2dzc5NznslkwuGw1poQQoque6ai4oixQ9tumJr6VSjU1tU9XFo6ikaL
+#   +fzZ8+cTiURHR4fW2hhDKeUIIJRC191wnHwkEmtqutDY6H7/fn9oKBqNVldXA4AQglJKCAEAcBxHKTU3NwcAAHArFns2NdXb15fP540xpVKpVCqd/lIpRbTWAICI8/PzrutalmXb9uDgYCQS8TyPcw5/IYT8BpJoukMEtogaAAAAAElFTkSuQmCC
 # recognizes: max_streams
+# url: http://surfmusic.de/
 #
 # This plugin comes in German (SurfMusik) and English (SurfMusic) variations.
 # It provides a vast collection of international stations and genres.

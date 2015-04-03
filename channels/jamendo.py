@@ -12,6 +12,13 @@
 #    { name: jamendo_image_size,    value: 50,   type: select,  select: "25=25px|35=35px|50=50px|55=55px|60=60px|65=65px|70=70px|75=75px|85=85px|100=100px|130=130px|150=150px|200=200px|300=300px",  description: "Preview images size (height and width) for albums or tracks." }
 #    { name: jamendo_count,         value: 1,    type:text,     description: "How many result sets (200 entries each) to retrieve." }
 # priority: default
+# png:
+#   iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAwNJREFUOI1lk0toXGUYhp/v/8+ZzDQzmdZMZ8YSkxIQCWTTYsALLsQsUsWFQgJeEJQqIigUvBK0FBQULIJKMEKrFjdOW9xoW1AbRdRCEYtd2GCxxUQbk8bMrTNnzpn//1xMLYLv6l2877N7oBcB0GMY
+#   IAUY/p9w/glCrVzby3+LVqaxM4dx+inQV7KIHcKYAbzG4FYgqcmudYBAF+jKnT2QAExPYysVHCdKRQgewwRT0B1FfQboYsLLeE7hk4Oo/iD3rFit4GQGRCsYwJMt7yQVfrS6Go3HUQtvskiwCWM82qlijGdbaUsbTV5G/X65+y+rCzgBRI+VbsSmvvltqVkuX78t6rvpKWtvuMsgOfHtJia66OPz
+#   86564UtDkA2Lm/VJYF6mLgXo50X0xNAHy4cK2jk+diVe+1FVVX/57oIuL66qqmriVF23rZ1TjyTLH2YT/WJ4TY+XRgAMKqNgJ41vebbvTgeFneo6Tb567zPmHn+LxdPnCIxHTFrt2CtB/8BWqtVOAewDWgGDmHG0u1VtztjC7SLqRSUkM5Clsd5ibs/7nDzyLd51xfQPq82PKS5SsHfQAEMsIZG3
+#   khgvJqUqBhFBnSeTS1O/XOPou0eoVxuIsfgkRDsqxBIQgaEVXyIyTVdvGFdbQlD1LibpJDTWG9w8NcHsgRfIb8ni4qbIxhISGU87+Z00BMTuDPhfg47b4X4+oHZ4VxiksxRHi9x3y71M7p5EjAWE6OxBkj/OaSqTgyvJUUIQncuDDx6qRsHHLqpHuR0PW3vbbCj5EYyAAq7dgMVPfHRytt2Kkv7i
+#   5vAw0n1wZuFvFcDq/kGP5/X1tnm+2aiTLQy59MiE00wZ49okK2fNxsWfgnRfmvJA8D3E98tztTWdBtG9IPuw+tqgI+RRTLin1miNJ3EkRhQFxIRcl8+tgj9EN35VXqrV9G2MPIPvWfgv5I1Bh/pNBOGtYCeALEKM6nlc52uUP+XFDfRpRN7psa/ZeBWSAmJ99qrQGaANeJA3AUjpXhLZ1zsD+g+5
+#   Cnd9pANrngAAAABJRU5ErkJggg==
 #
 # Now utilizes the Jamendo /v3.0/ API.
 #

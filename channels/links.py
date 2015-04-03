@@ -86,8 +86,8 @@ class links (object):
             self.streams.append({
                 "favourite": 1,
                 "genre": "channel",
-                "title": channel.title,
-                "homepage": channel.homepage,
+                "title": channel.meta.get("title", channel.module),
+                "homepage": channel.meta.get("url", ""),
                 "type": "text/html",
             })
           except: pass

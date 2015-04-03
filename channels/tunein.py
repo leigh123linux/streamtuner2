@@ -9,6 +9,11 @@
 # config:
 #   { name: radiotime_group, value: music, type: select, select: music|genres, description: Catalogue type as categories. (→ Reload Category Tree) }
 # priority: optional
+# png:
+#   iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAbpJREFUOI2Nkk9PE1EUxc+ZuTMIaP+KqClxx4dA0jRVgwFM/JPIRv0CunDnxsQ1G4NGvgD7LkiExG5IDHFhDDEmblwRQJG2AVuwMNOZd91QAuUR
+#   e1bvnnfeLzf3PsKioq6Dtf25xsq3Kdf3gkxh9OUis29tWcdm9iPxuvHl62MNQz/a+3uhVl56M647d7sGHOxU8hpFR7Uag9+l+UddAySdWuv0soWR710DXOj93mtDWxQBRTBwq7AcZfte2bK0mQCQ11X0I5lzEW2858BZMXBkZWkGqk8Atk7c
+#   mBhqVCWV2E0MDz9dYLo8ptWbwdrP2aC6nSYhIOck2PiVdDwvfXxox9WqVAcPVtc/jOkm68uf56M/9T4AoAhMq5V06NCc2d+hNAzhwBttPz5q36FxchOT0xT5HwMEvRO1CHITk9MEgHHdfED4z4La9nmQqiY2dNywHY6b++d6h65OhVvVElw3
+#   7rmY2VOE7xZ5pWTdwh2t52NEzwEeQtgTIXhR5uUfnVlr783m7vXGx0/32oOlCC7dLs4COAWwfiTH9+PTrrFnbWan6LkA/HLXAFckaJ+9bKYyeKP4cIEpK/wffVOh5FvT8j8AAAAASUVORK5CYII=
 # documentation: http://opml.radiotime.com/
 #
 # RadioTime API uses OPML for station/podcast entries.

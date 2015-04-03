@@ -8,6 +8,13 @@
 # config:
 #    { name: internetradio_max_pages,  type: int,  value: 5,  category: limit,  description: How many pages to fetch and read. }
 # priority: standard
+# png:
+#   iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAaZJREFUOI2N0j1PlEEUBeBnlsVoRJcCPwINxIJGAoWVFbVK4g8w
+#   oUUTFRNbG3+FhVErK36BhcYCrTR8FS4mRGUXFEKCUizRwLXgnfV1Awk3mUzmnHPvPXNnUkSE40RKFYxhHKMYxFb1GIlnMLVN/etBUjuGWDm6wEHHyQbLW/Qd
+#   JTu8QEq9mJlnogz3sHOJV3iHz2iKzuDiH+bm+J3XD74EU5Gc7pSn/4aYUi14s8BIhkZ5puKhvdgpNFVccaA5oaP7TO66SCuYKnG9weMmjaz5yadqqfvkPE/z
+#   8TLTIp4U3I01ljY5f/gQu1LPGvWS7Rel5NtLzOzRlfk+Ngd4i48Ke9PZVpNGUCvwawvsZm6db8GtoLt9s4iIFotZFEwXybU1VjO+z4egv/MVKlIaqTMMJ2nh
+#   eeH0wQYX4BwbiQkRTSmdktJ1KY3lGYznuw3zWsS2lLo2WMl4P49ycjCbn3k0pfuVg5m1432e4zr9UGMbLwv8avmP/OJOBQOlAsvF3hYNMititzg2Kuxn7iyr
+#   VbSG/tltFHt3CVvATRBRH0lpEvfwXXL3L9zE/NEe0EfHAAAAAElFTkSuQmCC
 #
 # Internet-Radio.co.uk/.com is one of the largest stream directories.
 # Available music genre classifications are mirrored verbatim and flatly.
