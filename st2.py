@@ -16,7 +16,7 @@
 # category: sound
 # depends: pygtk | gi, threading, requests, pyquery, lxml
 # id: streamtuner2
-# pack: *.py, gtk*.xml, bin, channels/__init__.py, bundle/*.py, CREDITS, help/index.page,
+# pack: *.py, gtk3.xml.zlib, bin, channels/__init__.py, bundle/*.py, CREDITS, help/index.page,
 #   streamtuner2.desktop=/usr/share/applications/, README=/usr/share/doc/streamtuner2/,
 #   help/streamtuner2.1=/usr/share/man/man1/, NEWS.gz=/usr/share/doc/streamtuner2/changelog.gz,
 #   logo.png=/usr/share/pixmaps/streamtuner2.png
@@ -237,7 +237,7 @@ class StreamTunerTwo(gtk.Builder):
     @property
     def channel_names(self):
         n = self.notebook_channels
-        return [n.get_menu_label_text(n.get_nth_page(i)) for i in xrange(0, n.get_n_pages())]
+        return [n.get_menu_label_text(n.get_nth_page(i)) for i in range(0, n.get_n_pages())]
 
     # Returns the currently selected directory/channel object (from gtk)
     def current_channel_gtk(self):
@@ -306,9 +306,10 @@ class StreamTunerTwo(gtk.Builder):
 
     # Reload stream list in current channel-category
     def on_reload_clicked(self, widget=None, reload=1):
-        __print__(dbg.UI, "reload", reload, self.current_channel, self.channels[self.current_channel], self.channel().current)
+        __print__(dbg.UI, "on_reload_clicked()", "reload=", reload, "current_channel=", self.current_channel, "c=", self.channels[self.current_channel], "cat=", self.channel().current)
         category = self.channel().current
         self.thread(
+                       #@TODO: should get a wrapper, for HTTP errors, and optionalize bookamrks
             lambda: (  self.channel().load(category,reload), reload and self.bookmarks.heuristic_update(self.current_channel,category)  )
         )
 

@@ -59,7 +59,7 @@ else:
     empty_pixbuf.fill(0xFFFFFFFF)
 
 # prepare gtkbuilder data
-ui_xml = get_data("gtk3.xml", decode=True)
+ui_xml = get_data("gtk3.xml.zlib", decode=True, z=True) or get_data("gtk3.xml", decode=True)
 if ver == 2:
     ui_xml = ui_xml.replace('version="3.0"', 'version="2.16"')
 

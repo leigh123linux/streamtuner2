@@ -26,6 +26,7 @@ import json
 import gzip
 import platform
 import re
+import zlib
 import zipfile
 import inspect
 import pkgutil
@@ -281,9 +282,11 @@ class ConfigDict(dict):
 
 # Retrieve content from install path or pyzip archive (alias for pkgutil.get_data)
 #
-def get_data(fn, decode=False):
+def get_data(fn, decode=False, z=False):
     try:
         bin = pkgutil.get_data("config", fn)
+        if z:
+            bin = zlib.decompress(bin)
         if decode:
             return bin.decode("utf-8")
         else:
