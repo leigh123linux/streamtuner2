@@ -17,9 +17,8 @@
 # depends: pygtk | gi, threading, requests, pyquery, lxml
 # id: streamtuner2
 # pack: *.py, gtk3.xml.zlib, bin, channels/__init__.py, bundle/*.py, CREDITS, help/index.page,
-#   streamtuner2.desktop=/usr/share/applications/, README=/usr/share/doc/streamtuner2/,
-#   help/streamtuner2.1=/usr/share/man/man1/, NEWS.gz=/usr/share/doc/streamtuner2/changelog.gz,
-#   logo.png=/usr/share/pixmaps/streamtuner2.png
+#   streamtuner2.desktop, README, help/streamtuner2.1=/usr/share/man/man1/,
+#   NEWS.gz=/usr/share/doc/streamtuner2/changelog.gz, logo.png=/usr/share/pixmaps/streamtuner2.png
 # architecture: all
 #
 # Streamtuner2 is a GUI for browsing internet radio directories, music
@@ -405,33 +404,37 @@ class StreamTunerTwo(gtk.Builder):
 
         # initialize plugin modules (pre-ordered)
         ls = module_list()
-        for module in ls:
-            gui_startup(4/20.0 + 13.5/20.0 * float(ls.index(module))/len(ls), "loading module "+module)
+        for name in ls:
+            gui_startup(4/20.0 + 13.5/20.0 * float(ls.index(name))/len(ls), "loading module "+name)
 
+            # load defaults on first startup
+            if not name in conf.plugins:
+                conf.add_plugin_defaults(plugin_meta(module=name), name)
+            
             # skip module if disabled
-            if conf.plugins.get(module, 1) == False:
-                __print__(dbg.STAT, "disabled plugin:", module)
+            if conf.plugins.get(name, 1) == False:
+                __print__(dbg.STAT, "disabled plugin:", name)
                 continue
             # or if it's a built-in (already imported)
-            elif module in self.features or module in self.channels:
+            elif name in self.features or name in self.channels:
                 continue
             
             # load plugin
             try:
-                plugin = __import__("channels."+module, globals(), None, [""])
+                plugin = __import__("channels."+name, globals(), None, [""])
                 #print [name for name,c in inspect.getmembers(plugin) if inspect.isclass(c)]
-                plugin_class = plugin.__dict__[module]
+                plugin_class = plugin.__dict__[name]
                 plugin_obj = plugin_class(parent=self)
 
                 # add to .channels{}
                 if issubclass(plugin_class, channels.GenericChannel):
-                    self.channels[module] = plugin_obj
+                    self.channels[name] = plugin_obj
                 # or .features{} for other plugin types
                 else:
-                    self.features[module] = plugin_obj
+                    self.features[name] = plugin_obj
                 
             except Exception as e:
-                __print__(dbg.INIT, "load_plugin_channels: error initializing:", module, ", exception:")
+                __print__(dbg.INIT, "load_plugin_channels: error initializing:", name, ", exception:")
                 traceback.print_exc()
 
 

@@ -101,37 +101,13 @@ class ConfigDict(dict):
            "audio/*": self.find_player(typ="xterm") + " -e streamripper %srv",   # -d /home/***USERNAME***/Musik
            "video/youtube": self.find_player(typ="xterm") + " -e \"youtube-dl %srv\"",
         }
-        # these presets are a temporary workaround, until `priority:` is checked before module loading
+        # Presets are redundant now. On first startup the `priority:` field of each plugin is checked.
         self.plugins = {
              # core plugins, cannot be disabled anyway
             "bookmarks": 1,
             "search": 1,
             "streamedit": 1,
             "configwin": 1,
-            # standard channels
-            "shoutcast": 1,
-            "xiph": 1,
-            "myoggradio": 1,
-            "internet_radio": 1,
-            "surfmusik": 1,
-            "jamendo": 1,
-            "icast": 1,
-            "itunes": 1,
-            # disabled per default
-            "radiobrowser": 0,
-            "youtube": 0,
-            "modarchive": 0,
-            "live365": 0,
-            "radiotray": 0,
-            "timer": 0,
-            "history": 0,
-            "global_key": 0,
-            "useragentswitcher": 0,
-            # obsolete / removed
-            "file": 0,
-            "punkcast": 0,
-            "basicch": 0,
-            "tv": 0,
         }
         self.tmp = os.environ.get("TEMP", "/tmp")
         self.max_streams = "500"
@@ -159,7 +135,8 @@ class ConfigDict(dict):
 
         # plugin state
         if module and module not in conf.plugins:
-             conf.plugins[module] = meta.get("priority") in ("core", "builtin", "default", "standard")
+             conf.plugins[module] = meta.get("priority") in ("core", "builtin", "always", "default", "standard")
+
 
     # look at system binaries for standard audio players
     def find_player(self, typ="audio", default="xdg-open"):
@@ -173,6 +150,7 @@ class ConfigDict(dict):
             if find_executable(bin.split()[0]):
                 return bin
         return default
+
         
     # http://standards.freedesktop.org/basedir-spec/basedir-spec-0.6.html
     def xdg(self, path="/streamtuner2"):
@@ -247,6 +225,7 @@ class ConfigDict(dict):
                 self[key] = value
         # descends into sub-dicts instead of wiping them with subkeys
 
+
     # update old setting names
     def migrate(self):
         # 2.1.1
@@ -260,6 +239,7 @@ class ConfigDict(dict):
         for d in dirs:
             if os.path.exists(d+"/"+file):
                 return d+"/"+file
+
 
     # standard user account storage in ~/.netrc or less standard but contemporarily in ~/.config/netrc
     def netrc(self, varhosts=("shoutcast.com")):
@@ -282,9 +262,9 @@ class ConfigDict(dict):
 
 # Retrieve content from install path or pyzip archive (alias for pkgutil.get_data)
 #
-def get_data(fn, decode=False, z=False):
+def get_data(fn, decode=False, z=False, file_base="config"):
     try:
-        bin = pkgutil.get_data("config", fn)
+        bin = pkgutil.get_data(file_base, fn)
         if z:
             bin = zlib.decompress(bin)
         if decode:
@@ -298,10 +278,10 @@ def get_data(fn, decode=False, z=False):
 # Search through ./channels/ and get module basenames.
 # (Reordering channel tabs is now done by uikit.apply_state.)
 #
-def module_list():
+def module_list(plugin_base="channels"):
 
     # Should list plugins within zips as well as local paths
-    ls = pkgutil.iter_modules([conf.share+"/channels", "channels"])
+    ls = pkgutil.iter_modules([plugin_base, conf.share+"/"+plugin_base, conf.dir+"/plugins"])
     return [name for loader,name,ispkg in ls]
 
 
@@ -315,12 +295,12 @@ def module_list():
 #  · module= utilizes pkgutil to read 
 #  · frame= automatically extract comment header from caller
 #
-def plugin_meta(fn=None, src=None, module=None, frame=1):
+def plugin_meta(fn=None, src=None, module=None, frame=1, plugin_base="channels"):
 
     # try via pkgutil first
     if module:
        fn = module
-       src = pkgutil.get_data("channels", fn+".py")
+       src = pkgutil.get_data(plugin_base, fn+".py")
 
     # get source directly from caller
     elif not src and not fn:

@@ -89,20 +89,23 @@ class configwin (AuxiliaryWindow):
             __print__(dbg.CONF, "config save", prefix+key, val)
     
     
-    # Generic Gtk callback to update ListStore when entries get edited
+    # Generic Gtk callback to update ListStore when entries get edited.
+    # (The main signal_connect() dict prepares individual lambda funcs
+    # for each ListStore column id.)
     def list_edit(self, liststore, path, column, new_text):
         liststore[path][column] = new_text
         liststore[path][3] = self.app_bin_check(new_text)
-        # The signal_connect() dict actually prepares individual lambda functions
-        # to bind the correct ListStore and column id.
 
     # return OK or CANCEL depending on availability of app
     def app_bin_check(self, v):
         m = re.search("(?![$(`])\S+", v)
-        if m and m.group(0) and find_executable(m.group(0)):
-            return gtk.STOCK_MEDIA_PLAY
+        if m and m.group(0):
+            if find_executable(m.group(0)):
+                return gtk.STOCK_MEDIA_PLAY
+            else:
+                return gtk.STOCK_CANCEL
         else:
-            return gtk.STOCK_CANCEL
+            return gtk.STOCK_NEW
         
 
 
@@ -117,6 +120,8 @@ class configwin (AuxiliaryWindow):
         #    else:
         #        ls[name] = plugin_meta(module=name)
         for name,meta in sorted(ls.items(), key=lambda e: e[1]["type"]+e[1]["title"].lower(), reverse=False):
+            if not name in conf.plugins:
+                conf.plugins[name] = False
             self.add_plg(name, meta)
 
 
