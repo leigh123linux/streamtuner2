@@ -59,7 +59,7 @@ class internet_radio (ChannelPlugin):
         cats = rx.findall(html)
         cats = list(set(cats))
         cats = [s.capitalize() for s in cats]
-        self.categories = sorted(cats)
+        self.categories = sorted(list(set(cats)))
 
 
     # fetch station lists
