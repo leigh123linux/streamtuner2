@@ -178,10 +178,10 @@ class youtube (ChannelPlugin):
 
         # Most Popular
         elif cat == "mostPopular":
-            #for row in self.api("feeds/api/standardfeeds/%s/most_popular"%conf.youtube_region, ver=2):
-            #    entries.append(self.wrap2(row))
-            for row in self.api("videos", chart="mostPopular", regionCode=conf.youtube_region):
-                entries.append( self.wrap3(row, {"genre": "mostPopular"}) )
+            for row in self.api("feeds/api/standardfeeds/%s/most_popular"%conf.youtube_region, ver=2):
+                entries.append(self.wrap2(row))
+            #for row in self.api("videos", chart="mostPopular", regionCode=conf.youtube_region):
+            #    entries.append( self.wrap3(row, {"genre": "mostPopular"}) )
 
         # Categories
         elif cat in self.videocat_id:
@@ -214,7 +214,7 @@ class youtube (ChannelPlugin):
         
         # empty entries
         else:
-            entries = [dict(title="Placeholder for subcategories", genre="./.", playing="./.", url="http://youtube.com/")]
+            return self.placeholder
  
         # done    
         return entries
