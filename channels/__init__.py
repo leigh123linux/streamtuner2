@@ -9,11 +9,10 @@
 # author: mario
 # url: http://fossil.include-once.org/streamtuner2/
 # pack:
-#    bookmarks.py  configwin.py  global_key.py  history.py
-#    icast.py  internet_radio.py  itunes.py  jamendo.py links.py  live365.py
-#    modarchive.py  myoggradio.py  punkcast.py  radiotray.py  search.py
-#    shoutcast.py  streamedit.py  surfmusik.py  timer.py  tunein.py  xiph.py
-#    youtube.py  *.png
+#    bookmarks.py configwin.py streamedit.py history.py search.py links.py 
+#    icast.py internet_radio.py itunes.py jamendo.py live365.py global_key.py
+#    modarchive.py myoggradio.py punkcast.py radiobrowser.py radiotray.py
+#    shoutcast.py surfmusik.py timer.py tunein.py xiph.py youtube.py
 # config: -
 # priority: core
 #
@@ -99,6 +98,10 @@ class GenericChannel(object):
     ]
     rowmap = []   # [state,genre,title,...] field enumeration still needed separately
     titles = {}   # for easier adapting of column titles in datamap
+
+    # for empty grouping / categories
+    placeholder = [dict(genre="./.", title="Subcategory placeholder", playing="./.", url="none:", listeners=0, bitrate=0, homepage="", state="gtk-folder")]
+    empty_stub = [dict(genre="./.", title="No categories found (HTTP error)", playing="Try Channel→Reload Categories later..", url="none:", listeners=0, bitrate=0, homepage="", state="gtk-stop")]
     
     # regex            
     rx_www_url = re.compile("""(www(\.\w+[\w-]+){2,}|(\w+[\w-]+[ ]?\.)+(com|FM|net|org|de|PL|fr|uk))""", re.I)
@@ -197,13 +200,16 @@ class GenericChannel(object):
     # load data,
     # update treeview content
     def load(self, category, force=False):
-    
+
         # get data from cache or download
         if (force or not category in self.streams):
             __print__(dbg.PROC, "load", "update_streams")
             self.parent.status("Updating streams...")
             self.parent.status(-0.1)
-            new_streams = self.update_streams(category)
+            if category == "empty":
+                new_streams = self.empty_stub
+            else:
+                new_streams = self.update_streams(category)
   
             if new_streams:
 
@@ -356,28 +362,32 @@ class GenericChannel(object):
         
     # display .current category, once notebook/channel tab is first opened
     def first_show(self):
-        __print__(dbg.PROC, "first_show ", self.module, self.shown)
 
         if (self.shown != 55555):
+            __print__(dbg.PROC, self.module+".first_show()")
         
             # if category tree is empty, initialize it
             if not self.categories:
-                __print__(dbg.PROC, "first_show: reload_categories");
+                __print__(dbg.PROC, self.module+"first_show: reload_categories");
                 #self.parent.thread(self.reload_categories)
-                self.reload_categories()
+                try:
+                    self.reload_categories()
+                except:
+                    __print__(dbg.ERR, "HTTP Error or something")
+                    self.categories = ["empty"]
                 self.display_categories()
                 self.current = self.categories.keys()[0]
-                __print__(dbg.STAT, self.current)
+                __print__(dbg.STAT, "Use first category as current =", self.current)
                 self.load(self.current)
         
             # load current category
             else:
-                __print__(dbg.STAT, "first_show: load current category");
+                __print__(dbg.STAT, self.module+".first_show(): load current category =", self.current);
                 self.load(self.current)
             
             # put selection/cursor on last position
             try:
-                __print__(dbg.STAT, "first_show: select last known category treelist position")
+                __print__(dbg.STAT, self.module+".first_show()", "select last known category treelist position =", self.shown)
                 self.gtk_list.get_selection().select_path(self.shown)
             except:
                 pass
@@ -398,6 +408,7 @@ class GenericChannel(object):
 
         # display outside of this non-main thread            
         uikit.do(self.display_categories)
+
 
     # insert content into gtk category list
     def display_categories(self):

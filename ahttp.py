@@ -65,6 +65,10 @@ def get(url, params={}, referer="", post=0, ajax=0, binary=0, feedback=None, con
         headers["X-Requested-With"] = "XMLHttpRequest"
     if referer:
         headers["Referer"] = (referer if referer else url)
+
+#ifdef BLD_DEBUG
+#srcout    raise Exception("Simulated HTTP error")
+#endif
     
     # read
     if post:

@@ -16,7 +16,7 @@
 #   Qmnw+YNNlsur/PrbDqv5NFm7SHMwpNbuMggClmYL5JWkqytErKGPPVQmilhLSpbtBE1nxMFhjedHrymkNUrv3KHTuqLvjWl7MQevL+gNXaqNLlGzSyUvUVuEzMzkWVhZYqd6xPc//o6MBfWrAZcdBxnH
 #   zOcy/F1rsf3yFFmtEcWwOZ2h1R8hP5jATGmRQE+wXz0gjiMWihnO2z1qjS6ZQoF76yuU7DSxFFhJC10phmHIhVT8D1yefHn5PzXrAAAAAElFTkSuQmCC
 # priority: obsolete
-# config: { name: punkcast_img, type: boolean, value: 0, desciption: Load banners. (Channel > Update favicons) }
+# config: { name: punkcast_img, type: boolean, value: 0, description: Load banners. (Channel - Update favicons) }
 #
 # Punkcast is no longer updated. This plugin is kept for
 # historic reasons. It was one of the default streamtuner1

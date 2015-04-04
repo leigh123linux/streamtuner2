@@ -114,7 +114,7 @@ class surfmusik (ChannelPlugin):
         
         # placeholder category
         if cat in ["Genres"]:
-            path = None
+            return self.placeholder
         # separate
         elif cat in ["Poli", "Flug"]:
             path = ""
