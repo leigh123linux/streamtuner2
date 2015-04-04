@@ -108,17 +108,17 @@ class configwin (AuxiliaryWindow):
 
     # iterate over channel and feature plugins
     def add_plugins(self):
-        ls = {}
-        for name in module_list():
-            if name in self.channels:
-                ls[name] = self.channels[name].meta
-            elif name in self.features:
-                ls[name] = self.features[name].meta
-            else:
-                ls[name] = plugin_meta(conf.share+"/channels/"+name+".py")
+        ls = dict([(name, plugin_meta(module=name)) for name in module_list()])
+        #for name in module_list():
+        #    if name in self.channels:
+        #        ls[name] = self.channels[name].meta
+        #    elif name in self.features:
+        #        ls[name] = self.features[name].meta
+        #    else:
+        #        ls[name] = plugin_meta(module=name)
         for name,meta in sorted(ls.items(), key=lambda e: e[1]["type"]+e[1]["title"].lower(), reverse=False):
             self.add_plg(name, meta)
-        #self.plugin_options.pack_start(uikit.label("\n<b>Feature</b> plugins add categories, submenu entries, or other extensions.\n", 500, 1))
+
 
     # add configuration setting definitions from plugins
     plugin_text = "<span size='larger' weight='heavy'>%s</span> <span style='italic' foreground='slate blue'>(%s/%s)</span> <span weight='bold' foreground='orange'>%s</span>\n<span size='smaller' stretch='ultraexpanded'>%s</span>"
