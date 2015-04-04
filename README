@@ -1,3 +1,6 @@
+# type: doc
+# pack: README=/usr/share/doc/streamtuner2/
+
 
 Streamtuner2
 ============
@@ -141,5 +144,4 @@ Public Domain. (Unrestricted copying, modification, etc.)
 
 If you wish you could thus redistribute it under a BSD/MIT
 or even GNU-style license.
-
 

@@ -1,14 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
-# Value=1.0
 Type=Application
-
 Exec=streamtuner2
 Icon=streamtuner2.png
-
 Name=streamtuner2
 Name[en]=streamtuner2
 GenericName=Internet radio browser
 Comment=Listen to shoutcast/xiph/live365 music stations
-
 Categories=AudioVideo
+# pack: streamtuner2.desktop=/usr/share/applications/
