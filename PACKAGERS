@@ -124,16 +124,31 @@ Simplifies DEB and RPM packaging, as well as PYZ generation.
 So yes, proper distro packages are very much still needed.)
 
 
-Repo
-----
+Fossil Repo
+-----------
 
 The source code is hosted in a Fossil repo.
+A few special pages of interest:
 
-You can get a Git export however easily even per web interface:
+ · DETAILED CHANGELOG 
+   http://fossil.include-once.org/streamtuner2/changelog
 
-  http://fossil.include-once.org/streamtuner2/git-fast-export
+ · Raw tarball/zip, by version or tip/trunk
+   http://fossil.include-once.org/streamtuner2/tar/2.1.5/st.tgz
+   http://fossil.include-once.org/streamtuner2/zip/trunk/st.zip
 
-Git may or may not choke on its own export format though..
+ · Literal file download
+   http://fossil.include-once.org/streamtuner2/cat/config.py
+
+ · Doc browsing/download
+   http://fossil.include-once.org/streamtuner2/doc/trunk/help/html/index.html
+
+ · Trunk filerefs
+   http://fossil.include-once.org/streamtuner2/uri-list
+
+ · DIRECT GIT EXPORT
+   http://fossil.include-once.org/streamtuner2/git-fast-export
+   (Git may or may not choke on its own export format though..)
 
 
 Fin

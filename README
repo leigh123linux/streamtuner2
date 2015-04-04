@@ -1,5 +1,5 @@
 
-streamtuner2
+Streamtuner2
 ============
 
 ST2 is a browser for internet radio/streaming stations. It queries
@@ -92,7 +92,7 @@ Hacking
 If you want to edit a channel plugin, just have a look into the
 channels/*.py files. It's often rather easy to adapt things.
 
-Moreover you can also edit the user interface. You need glade-3
+Moreover you can also edit the user interface. You need glade
 installed, and open the "gtk3.xml" file. There it's easy to
 rename or rearrange things.
 
@@ -120,13 +120,13 @@ Alternatively there are git and svn exports.
   http://fossil.include-once.org/streamtuner2/git-fast-export
 
 You can send in patches, a fossil bundle, or set up your cloned
-repo publically `fossil cgi`. Else just create an account on
+repo publically per `fossil cgi`. Else just create an account on
 fossil.include-once.org, and send a mail, so I can elevate that
 account to developer/commit/push permissions quickly. (Fossil
 repos don't break. So dealing out sync access is a no-brainer.)
 
 
-alternatives
+Alternatives
 ------------
 
 See http://fossil.include-once.org/streamtuner2/wiki/alternatives
@@ -134,7 +134,7 @@ for a list of recommended alternatives. Future ST2 versions will
 try to interface and share more with them.
 
 
-license
+License
 -------
 
 Public Domain. (Unrestricted copying, modification, etc.)
