@@ -293,31 +293,34 @@ def get_data(fn, decode=False):
 
 
 # Search through ./channels/ and get module basenames.
-# Also order them by conf.channel_order
+# (Reordering channel tabs is now done by uikit.apply_state.)
 #
 def module_list():
 
     # Should list plugins within zips as well as local paths
     ls = pkgutil.iter_modules([conf.share+"/channels", "channels"])
-    ls = [name for loader,name,ispkg in ls]
-    
-    # resort according to configured channel tab order
-    order = re.findall("\w+", conf.channel_order.lower())
-    ls = [module for module in (order) if (module in ls)] + [module for module in (ls) if (module not in order)]
-
-    return ls
+    return [name for loader,name,ispkg in ls]
 
 
 
 # Plugin meta data extraction
 #
 # Extremely crude version for Python and streamtuner2 plugin usage.
-# Fetches module source, or reads from filename / out of zip package.
+# But can fetch from different sources:
+#  · fn= to read from literal files, out of a .pyzip package
+#  · src= to extract from pre-read script code
+#  · module= utilizes pkgutil to read 
+#  · frame= automatically extract comment header from caller
 #
-def plugin_meta(fn=None, src=None, frame=1):
+def plugin_meta(fn=None, src=None, module=None, frame=1):
+
+    # try via pkgutil first
+    if module:
+       fn = module
+       src = pkgutil.get_data("channels", fn+".py")
 
     # get source directly from caller
-    if not src and not fn:
+    elif not src and not fn:
         module = inspect.getmodule(sys._getframe(frame))
         fn = inspect.getsourcefile(module)
         src = inspect.getcomments(module)
@@ -330,33 +333,41 @@ def plugin_meta(fn=None, src=None, frame=1):
         else:
             src = open(fn).read(4096)
 
+    return plugin_meta_extract(src, fn)
+
+
+# Actual comment extraction logic
+def plugin_meta_extract(src="", fn="", literal=False):
+
     # defaults
     meta = {
-        "id": re.sub("\.\w+$", "", os.path.basename(fn or "")),
+        "id": os.path.basename(fn or "").split(".")[0],
         "fn": fn,
         "title": fn, "description": "no description", "config": [],
         "type": "module", "api": "python", "doc": ""
     }
 
     # extract coherent comment block, split doc section
-    src = rx.comment.search(src)
-    if not src:
-        __print__(dbg.ERR, "Couldn't read source meta information", fn)
-        return meta
-    src = src.group(0)
-    src = rx.hash.sub("", src).strip()
+    if not literal:
+        src = rx.comment.search(src)
+        if not src:
+            __print__(dbg.ERR, "Couldn't read source meta information", fn)
+            return meta
+        src = src.group(0)
+        src = rx.hash.sub("", src).strip()
+    
+    # split comment block
     if src.find("\n\n") > 0:
         src, meta["doc"] = src.split("\n\n", 1)
-    
 
-    # split into dict
+    # key:value fields into dict
     for field in rx.keyval.findall(src):
         meta[field[0]] = field[1].strip()
     meta["config"] = plugin_meta_config(meta.get("config") or "")
 
     return meta
 
-# unpack config: structures
+# Unpack config: structures
 def plugin_meta_config(str):
     config = []
     for entry in rx.config.findall(str):
