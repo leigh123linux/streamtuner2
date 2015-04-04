@@ -156,7 +156,6 @@ class StreamTunerTwo(gtk.Builder):
             "on_record_clicked": self.on_record_clicked,
             "on_homepage_stream_clicked": self.on_homepage_stream_clicked,
             "on_reload_clicked": self.on_reload_clicked,
-            "on_stop_clicked": self.on_stop_clicked, #@TODO: button is long gone
             "on_homepage_channel_clicked" : self.on_homepage_channel_clicked,
             "double_click_channel_tab": self.on_homepage_channel_clicked,
             # menu
@@ -303,7 +302,7 @@ class StreamTunerTwo(gtk.Builder):
         if event == 2 or event.type == gtk.gdk._2BUTTON_PRESS:
             __print__(dbg.UI, "dblclick")
             url = self.channel().meta.get("url", "https://duckduckgo.com/?q=" + self.channel().module)
-            self.action.browser(self.channel().url)
+            self.action.browser(url)
 
     # Reload stream list in current channel-category
     def on_reload_clicked(self, widget=None, reload=1):
@@ -319,12 +318,6 @@ class StreamTunerTwo(gtk.Builder):
         thread.start()
         self.working.append(thread)
 
-    # Stop reload/update threads
-    def on_stop_clicked(self, widget):
-        __print__(dbg.ERR, "STOP is no longer available")
-        #while self.working:
-            #thread = self.working.pop()
-            #thread.stop()
 
     # Click in category list
     def on_category_clicked(self, widget, event, *more):
@@ -385,7 +378,6 @@ class StreamTunerTwo(gtk.Builder):
     # shortcut to statusbar
     # (hacked to work from within threads, circumvents the statusbar msg pool actually)
     def status(self, text="", sbar_msg=[]):
-        __print__(dbg.ERR, "status(", text, ")")
         # init
         sbar_cid = self.get_widget("statusbar").get_context_id("messages")
         # remove text

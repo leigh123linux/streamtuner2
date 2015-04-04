@@ -2984,7 +2984,6 @@ Plugins</property>
                             <property name="visible_horizontal">False</property>
                             <property name="label" translatable="yes">stop</property>
                             <property name="stock_id">gtk-cancel</property>
-                            <signal name="clicked" handler="on_stop_clicked" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
