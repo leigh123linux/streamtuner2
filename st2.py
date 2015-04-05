@@ -16,9 +16,9 @@
 # category: sound
 # depends: pygtk | gi, threading, requests, pyquery, lxml
 # id: streamtuner2
-# pack: *.py, gtk3.xml.zlib, bin, channels/__init__.py, bundle/*.py, CREDITS, help/index.page,
+# pack: *.py, gtk3.xml.gz, bin, channels/__init__.py, bundle/*.py, CREDITS, help/index.page,
 #   streamtuner2.desktop, README, help/streamtuner2.1=/usr/share/man/man1/,
-#   NEWS.gz=/usr/share/doc/streamtuner2/changelog.gz, logo.png=/usr/share/pixmaps/streamtuner2.png
+#   NEWS.gz=/usr/share/doc/streamtuner2/changelog.gz, icon.png=/usr/share/pixmaps/streamtuner2.png
 # architecture: all
 #
 # Streamtuner2 is a GUI for browsing internet radio directories, music
@@ -74,7 +74,6 @@ class StreamTunerTwo(gtk.Builder):
     channels = {}    # channel modules
     features = {}    # non-channel plugins
     working = []     # threads
-    add_signals = {} # channel gtk-handler signals
     hooks = {
         "play": [favicon.download_playing],  # observers queue here
         "init": [],
@@ -93,7 +92,7 @@ class StreamTunerTwo(gtk.Builder):
         # Load stylesheet, instantiate GtkBuilder in self, menu and logo hooks
         gui_startup(1/20.0), gtk.Builder.__init__(self)
         gui_startup(1/20.0), gtk.Builder.add_from_string(self, ui_xml)
-        gui_startup(3/20.0), self.img_logo.set_from_pixbuf(uikit.pixbuf(logo.png))
+        gui_startup(3/20.0), self.img_logo.set_from_pixbuf(uikit.pixbuf(logo.png, decode=1, fmt="png"))
 
         # initialize built-in plugins
         self.channels = {
@@ -143,7 +142,7 @@ class StreamTunerTwo(gtk.Builder):
   
         # bind gtk/glade event names to functions
         gui_startup(19.75/20.0)
-        self.connect_signals(dict({
+        self.connect_signals({
             "gtk_main_quit" : self.gtk_main_quit,                # close window
             # treeviews / notebook
             "on_stream_row_activated" : self.on_play_clicked,    # double click in a streams list
@@ -202,9 +201,10 @@ class StreamTunerTwo(gtk.Builder):
             "streamedit_save": self.streamedit.save,
             "streamedit_new": self.streamedit.new,
             "streamedit_cancel": self.streamedit.cancel,
-        }, **self.add_signals))
+        })
         
         # actually display main window
+        self.update_title()
         self.win_streamtuner2.show_all()
         gui_startup(100.0)
 
@@ -247,6 +247,7 @@ class StreamTunerTwo(gtk.Builder):
     def channel_switch(self, notebook, page, page_num=0, *args):
         self.current_channel = notebook.get_menu_label_text(notebook.get_nth_page(page_num))
         __print__(dbg.UI, "main.channel_switch():", "set current_channel :=", self.current_channel)
+        self.update_title()
         
         # if first selected, load current category
         __print__(dbg.STAT, "TRY", "main.channel_switch(): ", self.current_channel + ".first_show()")
@@ -256,6 +257,10 @@ class StreamTunerTwo(gtk.Builder):
     # Invoked from the menu instead, uses module name instead of numeric tab id
     def channel_switch_by_name(self, name):
         self.notebook_channels.set_current_page(self.channel_names.index(name))
+
+    # Mirror selected channel tab into main window title
+    def update_title(self):
+        self.win_streamtuner2.set_title("Streamtuner2 - %s" % self.channel().meta.get("title"))
 
 
     # Convert ListStore iter to row number
