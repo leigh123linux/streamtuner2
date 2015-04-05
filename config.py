@@ -300,23 +300,28 @@ def plugin_meta(fn=None, src=None, module=None, frame=1, plugin_base="channels")
         fn = inspect.getsourcefile(module)
         src = inspect.getcomments(module)
 
-    # within zip archive or dir?
-    elif fn:
-        zip = rx.zipfn.match(fn)
-        if zip and zipfile.is_zipfile(zip.group(1)):
-            src = zipfile.ZipFile(zip.group(1), "r").read(zip.group(2))
-        else:
-            src = open(fn).read(4096)
+    # real filename/path
+    elif fn and os.path.exists(fn):
+        src = open(fn).read(4096)
 
-    return plugin_meta_extract(src, fn)
+    # assume it's within a zip
+    elif fn:
+        intfn = ""
+        while fn and len(fn) and not os.path.exists(fn):
+            fn, add = os.path.split(fn)
+            intfn = add + "/" + intfn
+        if len(fn) >= 3 and intfn and zipfile.is_zipfile(fn):
+            src = zipfile.ZipFile(fn, "r").read(intfn.strip("/"))
+
+    return plugin_meta_extract(src or "", fn)
 
 
 # Actual comment extraction logic
-def plugin_meta_extract(src="", fn="", literal=False):
+def plugin_meta_extract(src="", fn=None, literal=False):
 
     # defaults
     meta = {
-        "id": os.path.basename(fn or "").split(".")[0],
+        "id": os.path.splitext(os.path.basename(fn or "")),
         "fn": fn,
         "title": fn, "description": "no description", "config": [],
         "type": "module", "api": "python", "doc": ""
@@ -354,10 +359,6 @@ def plugin_meta_config(str):
 
 # Comment extraction regexps
 class rx:
-    zipfn   = re.compile(r"""
-        ^ (.+  \.(?:zip|pyz|pyzw|pyzip)        # zip-wrapping extensions
-        (?:\.py)? ) /(\w.*) $
-    """, re.X)
     comment = re.compile(r"""(^ {0,4}#.*\n)+""", re.M)
     hash    = re.compile(r"""(^ {0,4}# *)""", re.M)
     keyval  = re.compile(r"""
