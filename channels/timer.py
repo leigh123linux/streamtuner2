@@ -5,19 +5,19 @@
 # type: feature
 # category: hook
 # depends: kronos
-# version: 0.5
+# version: 0.6
 # config: -
 # priority: optional
 # support: unsupported
 #
-# Okay, while programming this, I missed the broadcast I wanted to hear. Again(!)
-# But still this is a useful extension, as it allows recording and playing specific
-# stations at a programmed time and interval. It accepts a natural language time
-# string when registering a stream. (Via streams menu > extension > add timer)
+# Provides an internal timer, to configure recording and playback times/intervals
+# for stations. It accepts a natural language time string when registering a stream.
+#
+# Context menu > Extension > Add timer
 #
 # Programmed events are visible in "timer" under the "bookmarks" channel. Times
 # are stored in the description field, and can thus be edited. However, after editing
-# times manually, streamtuner2 must be restarted for the changes to take effect.
+# times manually, streamtuner2 must be restarted for any changes to take effect.
 #
 
 
@@ -39,14 +39,11 @@ class timer:
     title = "Timer"
     meta = plugin_meta()
     
-    
     # configuration settings
     timefield = "playing"
     
-    
     # kronos scheduler list
     sched = None
-    
     
     
     
@@ -68,9 +65,11 @@ class timer:
         self.streams = self.bookmarks.streams["timer"]
         
         # widgets
-        parent.add_signals.update({
-            "timer_ok": self.add_timer,
-            "timer_cancel": lambda w,*a: self.parent.timer_dialog.hide() or 1,
+        uikit.add_signals(parent, {
+            ("timer_ok", "clicked"): self.add_timer,
+            ("timer_cancel", "clicked"): self.hide,
+            ("timer_dialog", "close"): self.hide,
+            ("timer_dialog", "delete-event"): self.hide,
         })
         
         # prepare spool
@@ -85,6 +84,10 @@ class timer:
     def edit_timer(self, *w):
         self.parent.timer_dialog.show()
         self.parent.timer_value.set_text("Fri,Sat 20:00-21:00 play")
+
+    # done        
+    def hide(self, *w):
+        return self.parent.timer_dialog.hide()
 
     # close dialog,get data
     def add_timer(self, *w):

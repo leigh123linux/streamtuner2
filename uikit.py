@@ -29,9 +29,8 @@ import copy
 import sys
 import re
 import base64
-import zlib
 import inspect
-from compat2and3 import unicode, xrange, PY3
+from compat2and3 import unicode, xrange, PY3, gzip_decode
 
 
 # gtk version (2=gtk2, 3=gtk3, 7=tk;)
@@ -59,7 +58,7 @@ else:
     empty_pixbuf.fill(0xFFFFFFFF)
 
 # prepare gtkbuilder data
-ui_xml = get_data("gtk3.xml.zlib", decode=True, z=True) or get_data("gtk3.xml", decode=True)
+ui_xml = get_data("gtk3.xml.gz", decode=True, gz=True) #or get_data("gtk3.xml", decode=True)
 if ver == 2:
     ui_xml = ui_xml.replace('version="3.0"', 'version="2.16"')
 
@@ -451,6 +450,13 @@ class uikit:
         m.show()
         m.connect("response", lambda *w: m.destroy())
         
+
+    # manual signal binding with a dict of { (widget, signal): callback }
+    @staticmethod
+    def add_signals(builder, map):
+        for (widget,signal),func in map.items():
+            builder.get_widget(widget).connect(signal, func)
+
         
     # Pixbug loader (from inline string, as in `logo.png`)
     @staticmethod
@@ -466,7 +472,7 @@ class uikit:
         if decode and re.match("^[\w+/=\s]+$", str(buf)):
             buf = base64.b64decode(buf)  # inline encoding
         if gzip:
-            buf = zlib.decompress(buf)
+            buf = gzip_decode(buf)
         if buf:
             p.write(buf)
         pix = p.get_pixbuf()
