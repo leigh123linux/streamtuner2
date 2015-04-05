@@ -312,8 +312,13 @@ def plugin_meta(fn=None, src=None, module=None, frame=1, plugin_base="channels")
             intfn = add + "/" + intfn
         if len(fn) >= 3 and intfn and zipfile.is_zipfile(fn):
             src = zipfile.ZipFile(fn, "r").read(intfn.strip("/"))
+            
+    if not src:
+        src = ""
+    if type(src) is not str:
+        src = src.decode("utf-8")
 
-    return plugin_meta_extract(src or "", fn)
+    return plugin_meta_extract(src, fn)
 
 
 # Actual comment extraction logic
