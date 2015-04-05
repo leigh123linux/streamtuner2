@@ -2,7 +2,7 @@
 # api: python 
 # type: functions
 # title: Python2 and Python3 compatibility
-# version: 0.1
+# version: 0.2
 #
 # Renames some Python3 modules into their Py2 equivalent.
 # Slim local alternative to `six` module.
@@ -32,6 +32,10 @@ if sys.version_info < (3,0):
     
     # filesys
     from StringIO import StringIO
+    from gzip import GzipFile
+    def gzip_decode(bytes):
+        return GzipFile(fileobj=StringIO(bytes)).read()
+        # return zlib.decompress(bytes, 16 + zlib.MAX_WBITS)    # not fully compatible
 
 
 # Python 3
@@ -54,5 +58,17 @@ else:
     
     # filesys
     from io import StringIO
+    from gzip import decompress as gzip_decode
+
+
+# Both
+
+# find_executable() is only needed by channels/configwin
+try:
+    from distutils.spawn import find_executable
+except:
+    def find_executable(bin):
+        exists = [os.path.exists(dir+"/"+bin) for dir in os.environ.get("PATH").split(":")+["/"]]
+        return exists[0] if len(exists) else None
 
     

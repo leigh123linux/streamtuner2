@@ -26,19 +26,11 @@ import json
 import gzip
 import platform
 import re
+from compat2and3 import gzip_decode, find_executable
 import zlib
 import zipfile
 import inspect
 import pkgutil
-
-# find_executable() is only needed by channels/configwin
-try:
-    from distutils.spawn import find_executable
-except:
-    def find_executable(bin):
-        exists = [os.path.exists(dir+"/"+bin) for dir in os.environ.get("PATH").split(":")+["/"]]
-        return exists[0] if len(exists) else None
-
 
 # export symbols
 __all__ = ["conf", "__print__", "dbg", "plugin_meta", "module_list", "get_data", "find_executable"]
@@ -262,11 +254,11 @@ class ConfigDict(dict):
 
 # Retrieve content from install path or pyzip archive (alias for pkgutil.get_data)
 #
-def get_data(fn, decode=False, z=False, file_base="config"):
+def get_data(fn, decode=False, gz=False, file_base="config"):
     try:
         bin = pkgutil.get_data(file_base, fn)
-        if z:
-            bin = zlib.decompress(bin)
+        if gz:
+            bin = gzip_decode(bin)
         if decode:
             return bin.decode("utf-8")
         else:
