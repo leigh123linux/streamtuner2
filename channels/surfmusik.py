@@ -1,6 +1,6 @@
 # encoding: UTF-8
 # api: streamtuner2
-# title: SurfMusik
+# title: SurfMusic
 # description: User collection of streams categorized by region and genre.
 # author: gorgonz123
 # version: 0.5
@@ -59,8 +59,10 @@ class surfmusik (ChannelPlugin):
     
     # Set channel title
     def __init__(self, parent=None):
-        self.title = ("SurfMusik", "SurfMusic")[conf.get("surfmusik_lang", "EN") == "EN"]
         ChannelPlugin.__init__(self, parent)
+        # title updating is a workaround, because the fixed .meta attribute are read first
+        self.title = ("SurfMusik", "SurfMusic")[conf.get("surfmusik_lang", "EN") == "EN"]
+        self.meta["title"] = self.title
 
 
     # just a static list for now
