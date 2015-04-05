@@ -148,7 +148,7 @@ class bookmarks(GenericChannel):
     def heuristic_update(self, updated_channel, updated_category):
 
         if not conf.heuristic_bookmark_update: return
-        __print__(dbg.ERR, "heuristic bookmark update")
+        __print__(dbg.PROC, "heuristic bookmark update")
         save = 0
         fav = self.streams["favourite"]
 

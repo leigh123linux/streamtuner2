@@ -386,7 +386,7 @@ class rx:
 
 # wrapper for all print statements
 def __print__(*args):
-    if "debug" in conf and conf.debug:
+    if "debug" in conf and conf.debug or args[0] == dbg.ERR:
         print(" ".join([str(a) for a in args]))
 
 

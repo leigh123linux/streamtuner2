@@ -222,7 +222,7 @@ class GenericChannel(object):
                     try:
                         modified.append( self.postprocess(row) )
                     except Exception as e:
-                        __print__(e, dbg.ERR, row)
+                        __print__(e, dbg.DATA, "Missing title or url. Postprocessing failed:", row)
                 new_streams = modified
   
                 # don't lose forgotten streams
@@ -242,7 +242,7 @@ class GenericChannel(object):
                 # parse error
                 self.parent.status("category parsed empty.")
                 self.streams[category] = [{"title":"no contents found on directory server","bitrate":0,"max":0,"listeners":0,"playing":"error","favourite":0,"deleted":0}]
-                __print__(dbg.ERR, "Oooops, parser returned nothing for category " + category)
+                __print__(dbg.INFO, "Oooops, parser returned nothing for category " + category)
                 
         # assign to treeview model
         #self.streams[self.default] = []
@@ -373,7 +373,7 @@ class GenericChannel(object):
                 try:
                     self.reload_categories()
                 except:
-                    __print__(dbg.ERR, "HTTP Error or something")
+                    __print__(dbg.ERR, "HTTP error or extraction failure.")
                     self.categories = ["empty"]
                 self.display_categories()
                 self.current = self.categories.keys()[0]

@@ -1,6 +1,6 @@
 <!--
 # title: streamtuner2 mallard help pages
-# pack: *.page, img/*
+# pack: *.page=../../doc/streamtuner2/help/, img=../../doc/streamtuner2/help/
 -->
 <page	xmlns="http://projectmallard.org/1.0/"
 	type="guide"

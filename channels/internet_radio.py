@@ -142,7 +142,7 @@ class internet_radio (ChannelPlugin):
                         "format": "audio/mpeg", # there is no stream info on that, but internet-radio.org.uk doesn't seem very ogg-friendly anyway, so we assume the default here
                     })
                 else:
-                    __print__(dbg.ERR, "rx missed", div)
+                    __print__(dbg.DATA, "Regex couldn't decipher entry:", div)
         return r
 
 

@@ -98,7 +98,7 @@ class shoutcast(channels.ChannelPlugin):
     def update_streams(self, cat):
 
         if (cat not in self.catmap):
-            __print__( dbg.ERR, "nocat" )
+            __print__( dbg.ERR, "Category not in known map.", cat )
             return []
         id = self.catmap[cat]
 
@@ -110,7 +110,7 @@ class shoutcast(channels.ChannelPlugin):
             json = http.get(url, params=params, referer=referer, post=1, ajax=1)
             json = json_decode(json)
         except:
-            __print__(db.ERR, "HTTP request or JSON decoding failed. Outdated python/requests perhaps.")
+            __print__(dbg.ERR, "HTTP request or JSON decoding failed. Outdated python/requests perhaps.")
             return []
         self.parent.status(0.75)
 
