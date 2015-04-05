@@ -22,7 +22,7 @@ window should appear, where streamripper shows its progress.</p>
 <title>Streamripper</title>
 
 <p>The <cmd>xterm -e</cmd> prefix brings up the terminal popup. If you want
-silent downloads in the background instead of seeing its progress, remove
+silent downloads in the background (instead of seeing its progress), remove
 the xterm call.</p>
 
 <table shade="rows" rules="rows cols">

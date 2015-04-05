@@ -33,16 +33,17 @@
         For VLC there's however also the <code>--one-instance</code> option, which sometimes
         works better. (And sometimes not.)</p>
 
-	<p>Some applications, like Rhythmbox or Banshee, are primarily audio browsers, not players,
+	<p>Some applications, like Rhythmbox or Banshee, are primarily playlist managers, not players,
         and cannot be invoked with a play URL by other apps. This makes them less suitable for use with
-	streamtuner2.</p>
+	streamtuner2. (Same goes for streamtuner2 of course. It's not a player, just a playlist tool.)</p>
 
 	<section id="placeholders">
 	<title>URL placeholders</title>
 
 	<p>Any listed application can be invoked with a different kind of
-	URL or filename.be invoked with a play URL by other apps.  Which to
-	use often depends on the application.</p>
+	URL or filename. Most are rather flexible, but some depend on
+	specific playlist file types or URLs. You can control this by adding
+	a placeholder after the configured application name:</p>
 
 	<table shade="rows" rules="rows cols">
 	<thead>	<tr><td><p>Placeholder</p></td><td><p>Alternatives</p></td><td><p>URL/Filename type</p></td></tr> </thead>

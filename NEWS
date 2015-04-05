@@ -8,9 +8,11 @@
   share bookmarks via DBUS once RadioTray implements it.
 - Notebook tabs are now on the left per default, and can be rearranged
   directly in the GUI.
+- The configuration dialog now indicates the availability of selected
+  audio players. Default audio players are now automatically configured
+  during the first startup.
 - Gtk properties are now utilized more over internal UI state vars.
-  And the GtkBuilder UI file is now compressed.
-- The Gtk2 fallback file became redundant.
+- The the GtkBuilder UI file is now compressed, the Gtk2 fallback removed.
 - The former channel icon PNGs are now embedded.
 - Theme configuration was removed.
 - Category retrieval became more resilient.
@@ -22,7 +24,7 @@
 - Minor fixes to youtube, internet_radio, punkcast, timer and other plugins.
 - Help pages have been updated further, as well as CREDITS, README and
   general PACKAGING infos, and most plugin short descriptions.
-- The project fossil wiki now contains a more details on plugin APIs.
+- The project wiki now contains a more details on plugin APIs.
 
 2.1.4 (2015-03-25)
 - Fixed Internet-Radio extraction.

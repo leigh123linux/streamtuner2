@@ -12,10 +12,12 @@
 	<p>The tabs in the main window represent the music directory
         channels/services.  Each lists categories/genres and their associated radios/streams.</p>
 
-	<media type="image" mime="image/png" src="img/channels.png">Tabs</media>
+	<media type="image" mime="image/png" src="img/channels-left.png">Tabs</media>
 
         <p>The notebook tabs can also be repositioned with
-        <guiseq><gui>Edit</gui> <gui>Channel tab position</gui> <gui>Left</gui></guiseq>.</p>
+        <guiseq><gui>Edit</gui> <gui>Channel tab position</gui> <gui>Left</gui></guiseq>.
+        And since 2.1.5 you can directly reorder the channel tabs themselves,
+        by dragging them around.</p>
 
         <p>If you first select a channel tab, the categories should appear or be loading.
         Otherwise:</p>
@@ -46,7 +48,8 @@
 	<terms>
 		<item>
 			<title>Homepage of directory service</title>
-			<p>Opens a webbrowser with the current channels website.</p>
+			<p>Opens the website of the currently selected channel
+			in your configured web browser.</p>
 		</item>
 		<item>
 			<title>Reload</title>

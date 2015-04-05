@@ -8,9 +8,11 @@
 </info>
 
 	<title>Reloading</title>
+	
         <p>Station information can get stale. Especially Shoutcast invalidates old information
-        frequently. Therefore you have to <guiseq><gui></gui> <gui>Reload</gui></guiseq> the lists. There is an action button below
-        the menu bar for this. It retrieves the current data from the directory service.</p>
+        frequently. Therefore you have to <guiseq><gui></gui> <gui>Reload</gui></guiseq> the lists.
+        There is an action button below the menu bar for this.
+        It retrieves the current data from the directory service.</p>
 
 	<p>Favicons aren't loaded automatically. There is a menu entry in Channels for that, which
         works in the background and doesn't display the new icons automatically either. Simply

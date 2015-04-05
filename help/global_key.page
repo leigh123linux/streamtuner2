@@ -10,7 +10,7 @@
 	<title>Global_key</title>
 
 	<p>Using the global_key extension you can define a keyboard shortcut for switching within
-	a list of favourite radio stations. Per default it uses your bookmarks list, but it can be
+	a list of favourited radio stations. Per default it uses your bookmarks list, but it can be
 	configured to alternate in any other channel.</p>
 
 	<p>This is useful if you don't want to keep streamtuner2 atop your
@@ -31,7 +31,8 @@
 	<p>To define another channel as source, enter its module name in the according field. Also
 	add a category separated by : colon here.</p>
 
-	<note><p>If the configured keyboard shortcut conflicts with another application,
-	it won't work. And if you choose it too generic, you won't be able to type longer
-	documents. Also found out: key names are case sensitive.</p></note>
+	<note style="bug"><p>If the configured keyboard shortcut conflicts
+	with another application, it won't work.  And if you choose it too
+	generic, you won't be able to type longer documents.  Also found
+	out: key names are case sensitive.</p></note>
 </page>

@@ -1,0 +1,34 @@
+<page	xmlns="http://projectmallard.org/1.0/"
+	type="guide"
+	id="edit">
+
+<info>
+	<link type="guide" xref="index#functions"/>
+	<link type="guide" xref="streams#actions"/>
+	<desc>Edit or inspect a station entry.</desc>
+</info>
+
+	<title>Edit</title>
+
+	<p>You probably don't often need this. But there's an
+	<guiseq><gui></gui> <gui>Edit/Details</gui></guiseq> context menu
+	which brings up a station editor:
+	</p>
+	
+	<media type="image" src="img/streamedit.png" mime="image/png" />
+
+	<p>You can see the standard title and genre fields here. But also a
+	few internally kept infos. For example the "url" field contains the
+	actual pls/m3u/server address. While the "format" can list a
+	non-standard audio compression type.</p>
+
+	<note>
+	<p>This dialog is primarily useful for your personal bookmarks.
+	It allows to shorten or rename things. You can even use
+	<gui style="button">new</gui> to add new entries this way.
+	(Which doesn't make sense in regular channel categories, because
+	changes will be lost once you hit Reload.)</p>
+	</note>
+
+
+</page>

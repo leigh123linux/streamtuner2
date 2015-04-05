@@ -28,6 +28,8 @@
 	to this dialog is the text field, where you can specify the phrase
 	to scan for.</p>
 
+	<media src="img/search.png" type="image" mime="image/png" />
+
         <p>It either will search in all channels, or just the last active
         channel/service.</p>
 
