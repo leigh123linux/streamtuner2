@@ -8,7 +8,7 @@
 # url: http://tunein.com/
 # config:
 #   { name: radiotime_group, value: music, type: select, select: music|genres, description: Catalogue type as categories. (→ Reload Category Tree) }
-# priority: optional
+# priority: default
 # png:
 #   iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAbpJREFUOI2Nkk9PE1EUxc+ZuTMIaP+KqClxx4dA0jRVgwFM/JPIRv0CunDnxsQ1G4NGvgD7LkiExG5IDHFhDDEmblwRQJG2AVuwMNOZd91QAuUR
 #   e1bvnnfeLzf3PsKioq6Dtf25xsq3Kdf3gkxh9OUis29tWcdm9iPxuvHl62MNQz/a+3uhVl56M647d7sGHOxU8hpFR7Uag9+l+UddAySdWuv0soWR710DXOj93mtDWxQBRTBwq7AcZfte2bK0mQCQ11X0I5lzEW2858BZMXBkZWkGqk8Atk7c
@@ -71,10 +71,9 @@ class tunein (ChannelPlugin):
         elif cat in self.catmap and cat != "local":
             url = "Browse.ashx?id=%s" % self.catmap[cat]
         else:
-            url = "Browse.ashx&c=%s" % cat
+            url = "Browse.ashx?c=%s" % cat
         # fetch
         for row in self.api(url):
-          __print__(row)
           if "URL" in row and "bitrate" in row and "subtext" in row:
             r.append({
                "genre": "radio",
