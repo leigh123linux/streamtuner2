@@ -15,6 +15,14 @@
     },
     "releases": [
         {
+            "version": "2.1.5",
+            "state": "beta",
+            "scope": "major cleanup",
+            "changes": "This is a beta release, with lots of cleanups and various bugfixes. Adds a self-contained PYZ package, which Python can run directly. Now fully utilizes the plugin meta data scheme for default settings, discovery, and to reduce internal complexity. A new channel plugin for Radio-Browser.info has been bundled. Another plugin for interfacing with RadioTray was introduced, to share bookmarks via DBUS once RadioTray implements it. Notebook tabs are now on the left per default, and can be rearranged directly in the GUI. The configuration dialog now indicates the availability of selected audio players. Default audio players are now automatically configured during the first startup. Gtk properties are now utilized more over internal UI state vars. The the GtkBuilder UI file is now compressed, the Gtk2 fallback removed. The former channel icon PNGs are now embedded. Theme configuration was removed. Category retrieval became more resilient. HTTP timeouts have been added. The bookmarks tab, settings window, search dialog, stream inspector/editor have been externalized into plugins; yet remain core features. The packaging layout has been slightly restructured - to support relocatable installations (for PyZIP package). Minor fixes to youtube, internet_radio, punkcast, timer and other plugins. Help pages have been updated further, as well as CREDITS, README and general PACKAGING infos, and most plugin short descriptions. The project wiki now contains a more details on plugin APIs.",
+            "download": "http://sourceforge.net/projects/streamtuner2/files/",
+            "published": "2015-04-05T22:30:00+0000"
+        },
+        {
             "version": "2.1.4",
             "state": "stable",
             "scope": "minor feature",

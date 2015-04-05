@@ -94,6 +94,31 @@ To install it manually:
 That's pretty much what the binary packages extract to.
 
 
+Startup errors
+--------------
+
+If streamtuner2 hangs at startup, you can manually enable the
+debugging mode for more information.
+
+Open a terminal window to start it. And use the `-D` flag to
+enable extra output:
+
+   streamtuner2 -D
+
+Take note of any red error messages.
+
+If it's just one channel plugin that hangs at startup, you
+can alternatively disable it once:
+
+   streamtuner2 -d xiph
+
+Use [save] in the settings dialog (via F12) if you wish to
+permanently disable it.
+
+You can also manually edit the configuration file, located
+in ~/.config/streamtuner2/settings.json
+
+
 Hacking
 -------
 

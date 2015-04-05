@@ -6,7 +6,7 @@ SHELL   := /bin/bash #(for brace expansion)
 NAME    := streamtuner2
 VERSION := $(shell version get:plugin st2.py || echo 2.1dev)
 DEST    := /usr/share/streamtuner2
-INST    := install -v
+INST    := install -m 644
 PACK    := xpm
 DEPS    := -n $(NAME) -d python-pyquery -d python-gtk2 -d python-requests -d python-keybinder
 OPTS    := -s src -u man,fixperms -f --prefix=$(DEST) --deb-compression xz --rpm-compression xz --exe-autoextract
@@ -60,16 +60,19 @@ check:
 
 # manual installation
 install:
-	$(INST)		bin		/usr/bin/streamtuner2
-	$(INST)		*.py		-d -t $(DEST)
-	$(INST)		channels/	-d -t $(DEST)
-	$(INST)		CREDITS		-d -t $(DEST)
-	$(INST)		gtk3.*		-d -t $(DEST)
-	$(INST)		help/		-d -t /usr/share/doc/streamtuner2/
+	mkdir	-p				$(DEST)/channels
+	mkdir	-p				/usr/share/doc/streamtuner2/help/img
+	install -m 755		bin		/usr/bin/streamtuner2
+	$(INST)		*py		-t $(DEST)
+	$(INST)		gtk3*		-t $(DEST)
+	$(INST)		channels/*py	-t $(DEST)/channels
+	$(INST)		help/*page	-t /usr/share/doc/streamtuner2/help
+	$(INST)		help/img/*	-t /usr/share/doc/streamtuner2/help/img
+	$(INST)		CREDITS		-t $(DEST)
+	$(INST)		README		-t /usr/share/doc/streamtuner2
 	$(INST)		*.desktop	-t /usr/share/applications/
+	$(INST)		icon.png	/usr/share/pixmaps/streamtuner2.png
 	$(INST)		help/str*2.1	-t /usr/share/man/man1/
-	$(INST)		icon.png	-t /usr/share/pixmaps/streamtuner2.png
-	$(INST)		README		-d -t /usr/share/doc/streamtuner2/
 
 # start locally
 st2: run
