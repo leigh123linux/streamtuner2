@@ -491,6 +491,17 @@ class StreamTunerTwo(gtk.Builder):
 # startup procedure
 def main():
 
+    # process a few command line flags (needs a rewrite)
+    argv = sys.argv[1:]
+    while len(argv) and argv[0] in ("-d", "-D"):
+        opt = argv.pop(0)
+        if opt == "-D":
+            conf.debug = 1
+        elif opt == "-d":
+            conf.plugins[argv.pop(0)] = 0
+            sys.argv.pop(1)
+        sys.argv.pop(1)
+
     # graphical
     if len(sys.argv) < 2 or "--gtk3" in sys.argv:
 
