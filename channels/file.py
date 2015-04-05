@@ -121,8 +121,7 @@ class file (ChannelPlugin):
     
         # add main directory
         for main in self.dir:
-          main = re.sub("^~", os.environ.get("HOME"))
-          main = re.sub("[$]([A-Z_]+)", lambda m: os.environ.get(m.group(1)), main)
+          main = os.path.expanduser(os.path.expandvars(main))
           if os.path.exists(main):
             self.categories.append(main)
             
