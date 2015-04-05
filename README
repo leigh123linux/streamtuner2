@@ -74,6 +74,11 @@ If you've checked out the source code repository, or did download the
 
    ./st2.py
 
+The easy way:
+
+ · Run `sudo make install`
+   which installs into the default location (/usr/share/streamtuner2).
+
 To install it manually:
 
   · Create a /usr/share/streamtuner2/
@@ -98,6 +103,10 @@ channels/*.py files. It's often rather easy to adapt things.
 Moreover you can also edit the user interface. You need glade
 installed, and open the "gtk3.xml" file. There it's easy to
 rename or rearrange things.
+
+Note that newer releases expect a compressed version of that
+ui description. Use `make glade` simply, or `make gtk3` to
+update the compressed version from the plain gtk.xml afterwards.
 
 
 Sources
