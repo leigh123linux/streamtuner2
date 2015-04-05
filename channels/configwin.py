@@ -126,7 +126,10 @@ class configwin (AuxiliaryWindow):
 
 
     # add configuration setting definitions from plugins
-    plugin_text = "<span size='larger' weight='heavy'>%s</span> <span style='italic' foreground='slate blue'>(%s/%s)</span> <span weight='bold' foreground='orange'>%s</span>\n<span size='smaller' stretch='ultraexpanded'>%s</span>"
+    plugin_text = "<span size='larger' weight='heavy'>%s</span> "\
+                + "<span style='italic' foreground='slate blue'>(%s/%s)</span> "\
+                + "<span weight='bold' foreground='#777777'>%s</span>\n"\
+                + "<span size='smaller' stretch='ultraexpanded'>%s</span>"
     def add_plg(self, name, meta):
         # add plugin load entry
         cb = gtk.CheckButton(name)
