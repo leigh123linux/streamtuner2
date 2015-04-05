@@ -10,7 +10,7 @@
 #    { name: youtube_channels,  type: text,  value: "Key Of Awesome, Pentatonix",  description: "Preferred channels to list videos from.",  category: select }
 #    { name: youtube_region,  type: select,  select: "=No Region|AR=Argentina|AU=Australia|AT=Austria|BE=Belgium|BR=Brazil|CA=Canada|CL=Chile|CO=Colombia|CZ=Czech Republic|EG=Egypt|FR=France|DE=Germany|GB=Great Britain|HK=Hong Kong|HU=Hungary|IN=India|IE=Ireland|IL=Israel|IT=Italy|JP=Japan|JO=Jordan|MY=Malaysia|MX=Mexico|MA=Morocco|NL=Netherlands|NZ=New Zealand|PE=Peru|PH=Philippines|PL=Poland|RU=Russia|SA=Saudi Arabia|SG=Singapore|ZA=South Africa|KR=South Korea|ES=Spain|SE=Sweden|CH=Switzerland|TW=Taiwan|AE=United Arab Emirates|US=United States",  value: UK,  description: "Filter by region id.",  category: auth }
 #    { name: youtube_wadsworth,  type: boolean,  value: 0,  description: "Apply Wadsworth constant.",  category: filter }
-# priority: optional
+# priority: default
 # png:
 #   iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAYNJREFUOI3Fks9LVFEUxz/nzrPx+WN0xhAUgoT6A6y/wFb+C4IbIQhcBm36H1obVNtoGYS0TFoIQstazBgNBaELQdTx
 #   vea9uffbwufw3mTRzi8cLnzv955z7vccuG7YXmtyBlgBbgFTQB3Q3/RAHzgD9oHdyMNTg01gshD8DwScCJ7bx+bEN7Cl0Xt5D2aYc//Iq67LYDFHXEamgGZmmd94SHzvPoMoIguerKQZamExykS9kjQIN3eThcdP

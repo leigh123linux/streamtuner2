@@ -5,7 +5,7 @@
 # type: group
 # category: web
 # version: 0.2
-# priority: default
+# priority: standard
 # config: -
 #
 # Simply adds a "links" entry in bookmarks tab, where known services
