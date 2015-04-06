@@ -41,22 +41,26 @@ class StreamTunerCLI (object):
     
     
     # start
-    def __init__(self):
+    def __init__(self, actions):
 
         # fake init    
         action.action.main = empty_parent()
         action.action.main.current_channel = self.current_channel
 
         # check if enough arguments, else  help
-        if len(sys.argv)<3:
+        if not actions:
             a = self.help
         # first cmdline arg == action
         else:
-            command = sys.argv[1]
-            a = self.__getattribute__(command)
+            command = actions[0]
+            if command in self.__dict__:
+                cmd = self.__getattribute__(command)
+            else:
+                print "No such command:", command
+                return
 
         # run
-        result = a(*sys.argv[2:])
+        result = cmd(*actions[1:])
         if result:
             self.json(result)
         

@@ -36,7 +36,7 @@ from compat2and3 import unicode, xrange, PY3, gzip_decode
 # gtk version (2=gtk2, 3=gtk3, 7=tk;)
 ver = 2
 # if running on Python3 or with commandline flag
-if PY3 or "--gtk3" in sys.argv:
+if PY3 or conf.args.gtk3:
     ver = 3
 # load gtk modules
 if ver==3:

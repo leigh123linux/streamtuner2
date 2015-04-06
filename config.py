@@ -4,7 +4,12 @@
 # type: class
 # title: global config object
 # description: reads ~/.config/streamtuner/*.json files
-# config: {type:var, name:z, description:v}
+# config:
+#    { arg: -d,     type: str,      name: plugin[],  description: omit plugin from initialization  }
+#    { arg: --gtk3, type: boolean,  name: gtk3,      description: use gtk3 interface }
+#    { arg: -D,     type: boolean,  name: debug,     description: enable debug messages on console }
+#    { arg: action, type: str*,     name: action[],  description: commandline actions }
+#    { arg: -x,     type: boolean,  name: exit,      description: terminate right away }
 #
 # In the main application or module files which need access
 # to a global conf.* object, just import this module as follows:
@@ -31,6 +36,7 @@ import zlib
 import zipfile
 import inspect
 import pkgutil
+import argparse
 
 # export symbols
 __all__ = ["conf", "__print__", "dbg", "plugin_meta", "module_list", "get_data", "find_executable"]
@@ -52,6 +58,7 @@ netrc = None
 #
 class ConfigDict(dict):
 
+    args = {}
 
     # start
     def __init__(self):
@@ -77,6 +84,9 @@ class ConfigDict(dict):
         else:
             self.save("settings")
             self.firstrun = 1
+        
+        # add argv
+        self.args = self.init_args(argparse.ArgumentParser())
 
 
     # some defaults
@@ -249,7 +259,46 @@ class ConfigDict(dict):
         for server in varhosts:
             if server in netrc:
                 return netrc[server]
-        
+
+    # Use config: definitions for argv extraction
+    def init_args(self, ap):
+        for opt in plugin_meta(frame=0).get("config"):
+            kwargs = self.argparse_map(opt)
+            #print kwargs
+            if kwargs:
+                args = kwargs["args"]
+                del kwargs["args"]
+                ap.add_argument(*args, **kwargs)
+        return ap.parse_args()
+
+    # Transform config: description into quirky ArgumentParser list
+    def argparse_map(self, opt):
+        if not ("arg" in opt and opt["name"] and opt["type"]):
+            return {}
+
+        # Extract --flag names
+        args = opt["arg"].split() + re.findall("-+\w+", opt["name"])
+
+        # Prepare mapping options
+        typing = re.findall("bool|str|\[\]|store|append|const", opt["type"])
+        naming = re.findall("\[\]", opt["name"])
+        name   = re.findall("(?<!-)\\b\\w+", opt["name"])
+        nargs  = re.findall("\\b\d+\\b|\?|\*", opt["type"]) or [None]
+
+        # Populate partially - ArgumentParser is highly fragile with combinations of named params
+        kwargs = {
+            "args": args,
+            "dest": name[0] if not name[0] in args else None,
+            "action": "append" if "[]" in (naming+typing) else ("store_true" if "bool" in typing else "store"),
+            "nargs": nargs[0],
+            "default": opt["value"],
+           # "type":  int if "int" in typing else bool if "bool" in typing else str,
+            "choices": opt["select"].split("|") if "select" in opt else None,
+           # "required": "required" in opt,
+            "help": opt["description"] or "",
+        }
+        return dict((k,w) for k,w in kwargs.items() if w is not None)
+
 
 
 # Retrieve content from install path or pyzip archive (alias for pkgutil.get_data)

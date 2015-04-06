@@ -8,7 +8,7 @@ VERSION := $(shell version get:plugin st2.py || echo 2.1dev)
 DEST    := /usr/share/streamtuner2
 INST    := install -m 644
 PACK    := xpm
-DEPS    := -n $(NAME) -d python-pyquery -d python-gtk2 -d python-requests -d python-keybinder
+DEPS    := -n $(NAME) -d python -d python-pyquery -d python-gtk2 -d python-requests -d python-keybinder
 OPTS    := -s src -u man,fixperms -f --prefix=$(DEST) --deb-compression xz --rpm-compression xz --exe-autoextract
 .PHONY:  bin
 all:  gtk3 #(most used)

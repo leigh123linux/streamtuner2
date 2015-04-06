@@ -491,19 +491,17 @@ class StreamTunerTwo(gtk.Builder):
 # startup procedure
 def main():
 
-    # process a few command line flags (needs a rewrite)
-    argv = sys.argv[1:]
-    while len(argv) and argv[0] in ("-d", "-D"):
-        opt = argv.pop(0)
-        if opt == "-D":
-            conf.debug = 1
-        elif opt == "-d":
-            conf.plugins[argv.pop(0)] = 0
-            sys.argv.pop(1)
-        sys.argv.pop(1)
+    # process a few command line flags
+    if conf.args.plugin:
+        for p_id in conf.args.plugin:
+            conf.plugins[p_id] = 0
+    if conf.args.debug
+        conf.debug = conf.args.debug
+    if conf.args.exit:
+        return
 
     # graphical
-    if len(sys.argv) < 2 or "--gtk3" in sys.argv:
+    if not len(conf.args.action[0]):
 
         # prepare for threading in Gtk+ callbacks
         gobject.threads_init()
@@ -523,7 +521,7 @@ def main():
     # invoke command-line interface
     else:
         import cli
-        cli.StreamTunerCLI()
+        cli.StreamTunerCLI(conf.args.action[0])
 
 # run
 if __name__ == "__main__":
