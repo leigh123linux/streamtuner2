@@ -1,25 +1,21 @@
-#
 # api: streamtuner2
 # title: CLI interface
 # description: allows to call streamtuner2 from the commandline
 # status: experimental
 # version: 0.3
 #
-#  Returns JSON data when queried. Usually returns cache data, but the
-#  "category" module always loads fresh info from the directory servers.
+# Returns JSON data when queried. Usually returns cache data, but the
+# "category" module always loads fresh info from the directory servers.
 #
-#  Not all channel plugins are gtk-free yet. And some workarounds are
-#  used here to not upset channel plugins about a missing parent window.
-#
-#
-#
+# Not all channel plugins are gtk-free yet. And some workarounds are
+# used here to not upset channel plugins about a missing parent window.
 
 
 import sys
 #from channels import *
 import ahttp
 import action
-from config import conf
+from config import *
 import json
 
 
@@ -35,7 +31,7 @@ class StreamTunerCLI (object):
 
     
     # channel plugins
-    channel_modules = ["shoutcast", "xiph", "internet_radio", "jamendo", "myoggradio", "live365"]
+    channel_modules = ["shoutcast", "xiph", "icast", "jamendo", "radiobrowser"]# module_list()
     current_channel = "cli"
     plugins = {} # only populated sparsely by .stream()
     
@@ -53,7 +49,7 @@ class StreamTunerCLI (object):
         # first cmdline arg == action
         else:
             command = actions[0]
-            if command in self.__dict__:
+            if command in dir(self):
                 cmd = self.__getattribute__(command)
             else:
                 print "No such command:", command
@@ -156,7 +152,7 @@ syntax:  streamtuner2 action [channel] "stream title"
             channels = channels.split(",")
         else:
             channels = self.channel_modules
-        return (self.channel(module) for module in channels)
+        return channels#(self.channel(module) for module in channels)
     
     # pretty print json
     def json(self, dat):    
@@ -170,8 +166,8 @@ syntax:  streamtuner2 action [channel] "stream title"
 class empty_parent (object):    
     channel = {}
     null = lambda *a: None
-    status = null
-    thread = null
+    status = lambda *a: None
+    thread = lambda *a: None
 
 
     

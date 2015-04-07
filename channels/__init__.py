@@ -4,7 +4,7 @@
 # category: ui
 # title: Channel plugins
 # description: Base implementation for channels and feature plugins
-# version: 1.1
+# version: 1.2
 # license: public domain
 # author: mario
 # url: http://fossil.include-once.org/streamtuner2/
@@ -120,6 +120,9 @@ class GenericChannel(object):
 
         # add default options values to config.conf.* dict
         conf.add_plugin_defaults(self.meta, self.module)
+        
+        # stub for ST2 main window / dispatcher
+        self.parent = stub_parent(None)
 
         # only if streamtuner2 is run in graphical mode        
         if (parent):
@@ -586,3 +589,14 @@ class ChannelPlugin(GenericChannel):
         tab = parent.notebook_channels.insert_page_menu(vbox, ev_label, plain_label, -1)
         parent.notebook_channels.set_tab_reorderable(vbox, True)
 
+
+# WORKAROUND for direct channel module imports,
+# eases instantiations without GUI a little,
+# reducing module dependencies (conf. / ahttp. / channels. / parent.) would be better
+def stub_parent(object):
+    def __setattr__(self, name, value):
+        pass
+    def __getattr__(self, name):
+        return lambda *x: None
+    def status(self, *x):
+        pass
