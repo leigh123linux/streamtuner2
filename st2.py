@@ -491,17 +491,8 @@ class StreamTunerTwo(gtk.Builder):
 # startup procedure
 def main():
 
-    # process a few command line flags
-    if conf.args.plugin:
-        for p_id in conf.args.plugin:
-            conf.plugins[p_id] = 0
-    if conf.args.debug
-        conf.debug = conf.args.debug
-    if conf.args.exit:
-        return
-
     # graphical
-    if not len(conf.args.action[0]):
+    if not len(conf.args.action):
 
         # prepare for threading in Gtk+ callbacks
         gobject.threads_init()
@@ -521,7 +512,7 @@ def main():
     # invoke command-line interface
     else:
         import cli
-        cli.StreamTunerCLI(conf.args.action[0])
+        cli.StreamTunerCLI(conf.args.action)
 
 # run
 if __name__ == "__main__":

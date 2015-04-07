@@ -5,11 +5,14 @@
 # title: global config object
 # description: reads ~/.config/streamtuner/*.json files
 # config:
-#    { arg: -d,     type: str,      name: plugin[],  description: omit plugin from initialization  }
-#    { arg: --gtk3, type: boolean,  name: gtk3,      description: use gtk3 interface }
-#    { arg: -D,     type: boolean,  name: debug,     description: enable debug messages on console }
-#    { arg: action, type: str*,     name: action[],  description: commandline actions }
-#    { arg: -x,     type: boolean,  name: exit,      description: terminate right away }
+#    { arg: -d,     type: str,      name: disable[], description: Omit plugin from initialization.  }
+#    { arg: -e,     type: str,      name: enable[],  description: Add channel plugin.  }
+#    { arg: --gtk3, type: boolean,  name: gtk3,      description: Start with Gtk3 interface. }
+#    { arg: -D,     type: boolean,  name: debug,     description: Enable debug messages on console }
+#    { arg: action, type: str *,    name: action[],  description: CLI interface commands. }
+#    { arg: -x,     type: boolean,  name: exit,      hidden: 1 }
+# version: 2.5
+# priority: core
 #
 # In the main application or module files which need access
 # to a global conf.* object, just import this module as follows:
@@ -24,7 +27,7 @@
 # and the relative get_data() alias (files from pyzip/path).
 #
 
-
+from __future__ import print_function
 import os
 import sys
 import json
@@ -87,6 +90,7 @@ class ConfigDict(dict):
         
         # add argv
         self.args = self.init_args(argparse.ArgumentParser())
+        self.apply_args(self.args)
 
 
     # some defaults
@@ -171,7 +175,9 @@ class ConfigDict(dict):
     def save(self, name="settings", data=None, gz=0, nice=0):
         name = name + ".json"
         if (data is None):
-            data = dict(self.__dict__)  # ANOTHER WORKAROUND: typecast to plain dict(), else json filter_data sees it as object and str()s it
+            data = vars(self)
+            if "args" in data:
+                data.pop("args")
             nice = 1
         # check for subdir
         if (name.find("/") > 0):
@@ -260,18 +266,41 @@ class ConfigDict(dict):
             if server in netrc:
                 return netrc[server]
 
-    # Use config: definitions for argv extraction
+
+    # Use config:-style definitions for argv extraction,
+    # such as: { arg: -D, name: debug, type: bool }
     def init_args(self, ap):
         for opt in plugin_meta(frame=0).get("config"):
-            kwargs = self.argparse_map(opt)
-            #print kwargs
-            if kwargs:
-                args = kwargs["args"]
-                del kwargs["args"]
-                ap.add_argument(*args, **kwargs)
+            if [kwargs for kwargs in [self.argparse_map(opt)]]:
+                #print kwargs
+                ap.add_argument(*kwargs.pop("args"), **kwargs)
         return ap.parse_args()
 
-    # Transform config: description into quirky ArgumentParser list
+
+    # Copy args fields into conf. dict
+    def apply_args(self, args):
+        self.debug = args.debug
+        if args.exit:
+            sys.exit(1)
+        for p_id in (args.disable or []):
+            self.plugins[p_id] = 0
+        for p_id in (args.enable or []):
+            self.plugins[p_id] = 1
+
+
+    # Transform config: description into quirky ArgumentParser args.
+    #
+    # · An option entry requires an arg: parameter - unlike regular plugin options:
+    #     { arg: -i, name: input[], type: str, description: input files }
+    # · Where list elements are indicated by appending `[]` to names, or `*`onto type
+    #   specifiers (alternatively `?`, `+` or a numeric count).
+    # · Types `str` or `int` and `bool` are recognized (bool with false/true optionals).
+    # · Entries can also carry a `hidden: 1` or `required: 1` attribute.
+    # · And `help:` is an alias to `description:`
+    # · Same for `default:` instead of the normal `value:`
+    # · And `type: select` utilizes the `select: a|b|c` format as uaual.
+    # · ArgParsers const=, metavar= flag, or type=file are not aliased here.
+    #
     def argparse_map(self, opt):
         if not ("arg" in opt and opt["name"] and opt["type"]):
             return {}
@@ -280,25 +309,36 @@ class ConfigDict(dict):
         args = opt["arg"].split() + re.findall("-+\w+", opt["name"])
 
         # Prepare mapping options
-        typing = re.findall("bool|str|\[\]|store|append|const", opt["type"])
+        typing = re.findall("bool|str|\[\]|const|false|true", opt["type"])
         naming = re.findall("\[\]", opt["name"])
         name   = re.findall("(?<!-)\\b\\w+", opt["name"])
-        nargs  = re.findall("\\b\d+\\b|\?|\*", opt["type"]) or [None]
+        nargs  = re.findall("\\b\d+\\b|[\?\*\+]", opt["type"]) or [None]
+        is_arr = "[]" in (naming + typing) and nargs == [None]
+        is_bool= "bool" in typing
+        false_b = "false" in typing or opt["value"] in ("0", "false")
+        #print "\nname=", name, "is_arr=", is_arr, "is_bool=", is_bool, "bool_d=", false_b, "naming=", naming, "typing=", typing
 
-        # Populate partially - ArgumentParser is highly fragile with combinations of named params
+        # Populate partially - ArgumentParser has aversions to many parameter combinations
         kwargs = {
             "args": args,
             "dest": name[0] if not name[0] in args else None,
-            "action": "append" if "[]" in (naming+typing) else ("store_true" if "bool" in typing else "store"),
+            "action": self.sw( {is_arr: "append"}, {is_bool and false_b: "store_false"}, {is_bool: "store_true"}, {1: "store"} ),
             "nargs": nargs[0],
-            "default": opt["value"],
-           # "type":  int if "int" in typing else bool if "bool" in typing else str,
+            "default": opt.get("default") or opt["value"],
+            "type":  self.sw( {is_bool: None}, {"int" in typing: int}, {"bool" in typing: bool}, {1: str} ),
             "choices": opt["select"].split("|") if "select" in opt else None,
-           # "required": "required" in opt,
-            "help": opt["description"] or "",
+            "required": "required" in opt or None,
+            "help": opt["description"] if not "hidden" in opt else argparse.SUPPRESS,
         }
-        return dict((k,w) for k,w in kwargs.items() if w is not None)
+        return {k:w for k,w in kwargs.items() if w is not None}
 
+
+    # Shorthand switch, returns first value for cond==true from list of {cond:val} arguments
+    def sw(self, *args):
+        for pair in args:
+            [(cond,val)] = pair.items()
+            if cond:
+                return val
 
 
 # Retrieve content from install path or pyzip archive (alias for pkgutil.get_data)
@@ -436,7 +476,7 @@ class rx:
 # wrapper for all print statements
 def __print__(*args):
     if "debug" in conf and conf.debug or args[0] == dbg.ERR:
-        print(" ".join([str(a) for a in args]))
+        print(" ".join([str(a) for a in args]), file=sys.stderr)
 
 
 # error colorization
