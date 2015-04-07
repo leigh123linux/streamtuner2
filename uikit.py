@@ -435,12 +435,15 @@ class uikit:
 
     # Attach textual menu entry and callback
     @staticmethod
-    def add_menu(menuwidget, label, action):
+    def add_menu(menuwidget, label, action, insert=None):
         for where in list(menuwidget):
             m = gtk.MenuItem(label)
             m.connect("activate", action)
             m.show()
-            where.add(m)
+            if insert:
+                where.insert(m, insert)
+            else:
+                where.add(m)
         
 
     # gtk.messagebox

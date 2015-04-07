@@ -4,7 +4,7 @@
 # description: Open source internet radio directory.
 # type: channel
 # category: radio
-# version: 0.6
+# version: 0.7
 # url: http://www.myoggradio.org/
 # depends: json, StringIO
 # config:
@@ -28,7 +28,7 @@
 
 
 from channels import *
-from config import conf
+from config import *
 from action import action
 from uikit import uikit
 import ahttp as http
@@ -37,7 +37,7 @@ import re
 import json
 from compat2and3 import StringIO
 import copy
-
+from uikit import gtk
 
 
 # open source radio sharing stie
@@ -66,7 +66,8 @@ class myoggradio(ChannelPlugin):
     def __init__(self, parent):
         ChannelPlugin.__init__(self, parent)
         if parent:
-            uikit.add_menu([parent.extensions, parent.extensions_context], "Share in MyOggRadio", self.share)
+            #uikit.add_menu([parent.extensions, parent.extensions_context], "Share in MyOggRadio", self.share)
+            uikit.add_menu([parent.streammenu, parent.streamactions], "Share in MyOggRadio", self.share, insert=4)
 
 
 
@@ -184,6 +185,8 @@ class myoggradio(ChannelPlugin):
             lap =  conf.netrc(["myoggradio", "myoggradio.org", "www.myoggradio.org"])
             if lap:
                 return [lap[0] or lap[1], lap[2]]
+            else:
+                self.parent.status("No login data for MyOggRadio configured. See F12 for setup, or F1 for help.");
         pass        
 
 

@@ -49,14 +49,15 @@ class timer:
     
     # prepare gui
     def __init__(self, parent):
-      if parent:
+        if not parent:
+            return
           
         # keep reference to main window
         self.parent = parent
         self.bookmarks = parent.bookmarks
         
         # add menu
-        uikit.add_menu([parent.extensions, parent.extensions_context], "Add timer for station", self.edit_timer)
+        uikit.add_menu([parent.streammenu, parent.streamactions], "Add timer for station", self.edit_timer, insert=4)
         
         # target channel
         if not self.bookmarks.streams.get("timer"):

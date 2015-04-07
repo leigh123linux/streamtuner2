@@ -75,8 +75,7 @@ class radiotray:
         self.bm.reload_if_current(self.module)
 
         # add context menu
-        if parent:
-            uikit.add_menu([parent.extensions, parent.extensions_context], "Keep in RadioTray", self.share)
+        uikit.add_menu([parent.streammenu, parent.streamactions], "Keep in RadioTray", self.share, insert=4)
         
 
     # load RadioTray bookmarks
