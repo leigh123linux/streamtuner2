@@ -319,26 +319,18 @@ class ConfigDict(dict):
         #print "\nname=", name, "is_arr=", is_arr, "is_bool=", is_bool, "bool_d=", false_b, "naming=", naming, "typing=", typing
 
         # Populate partially - ArgumentParser has aversions to many parameter combinations
-        kwargs = {
-            "args": args,
-            "dest": name[0] if not name[0] in args else None,
-            "action": self.sw( {is_arr: "append"}, {is_bool and false_b: "store_false"}, {is_bool: "store_true"}, {1: "store"} ),
-            "nargs": nargs[0],
-            "default": opt.get("default") or opt["value"],
-            "type":  self.sw( {is_bool: None}, {"int" in typing: int}, {"bool" in typing: bool}, {1: str} ),
-            "choices": opt["select"].split("|") if "select" in opt else None,
-            "required": "required" in opt or None,
-            "help": opt["description"] if not "hidden" in opt else argparse.SUPPRESS,
-        }
+        kwargs = dict(
+            args     = args,
+            dest     = name[0] if not name[0] in args else None,
+            action   = is_arr and "append"  or  is_bool and false_b and "store_false"  or  is_bool and "store_true"  or  "store",
+            nargs    = nargs[0],
+            default  = opt.get("default") or opt["value"],
+            type     = None if is_bool  else  ("int" in typing and int  or  "bool" in typing and bool  or  str),
+            choices  = opt["select"].split("|") if "select" in opt else None,
+            required = "required" in opt or None,
+            help     = opt["description"] if not "hidden" in opt else argparse.SUPPRESS
+        )
         return {k:w for k,w in kwargs.items() if w is not None}
-
-
-    # Shorthand switch, returns first value for cond==true from list of {cond:val} arguments
-    def sw(self, *args):
-        for pair in args:
-            [(cond,val)] = pair.items()
-            if cond:
-                return val
 
 
 # Retrieve content from install path or pyzip archive (alias for pkgutil.get_data)
