@@ -16,8 +16,9 @@
 <p class="p">
 There are various options for streamtuner2, available under <span class="guiseq"><span class="gui">Edit</span> ▸ <span class="gui">Preferences</span></span> or via <span class="key"><kbd>F12</kbd></span>.
 </p>
+<p class="p"><span class="media"><span class="media media-image"><img src="img/configtabs.png" class="media media-inline" alt=""></span></span></p>
 <div class="terms"><div class="inner">
-<div class="title title-terms"><h2><span class="title">It's separated into three main areas.</span></h2></div>
+<div class="title title-terms"><h2><span class="title">It's separated into three main sections / tabs.</span></h2></div>
 <div class="region"><dl class="terms">
 <dt class="terms">Player</dt>
 <dd class="terms"><p class="p">Lists audio formats and the audio player applications, or recording tools below.
@@ -62,12 +63,17 @@ There are various options for streamtuner2, available under <span class="guiseq"
 <td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">vlc %srv</span></p></td>
 </tr>
 </table></div></div></div>
-<p class="p">Application names are always lowercase binary names. Double click an entry to edit it.</p>
+<p class="p">Application names are most always lowercase binary names. Double click an entry to edit it.
+    After editing the icon next to the application name will be updated. If it stays green, it's
+    likely to work. If it turns red / into a stop symbol, then the entered name is likely incorrect.</p>
+<p class="p"><span class="media"><span class="media media-image"><img src="img/configapps.png" class="media media-inline" alt=""></span></span></p>
 <p class="p">After the application name, you can use a placeholder like "<span class="var">%pls</span>" (default),
     or "<span class="var">%m3u</span>" and "<span class="var">%src</span>". See <span class="link"><a href="config_apps.html#placeholders" title="URL placeholders">placeholders</a></span>.</p>
 <p class="p">Catch-all entries like <span class="var">*/*</span> or a generic <span class="var">audio/*</span> entry allow to configure a default player.
     While <span class="var">video/youtube</span> is specific to the Youtube channel. And <span class="var">url/http</span> a psdeudo MIME type
     to configure a web browser (for station homepages).</p>
+<p class="p">You can remove default entries by clearing both the Format field and its associated Application.
+    Add completely new associations through the emtpy line. (Reopen the dialog to add another one.)</p>
 <div class="links topiclinks"><div class="inner"><div class="region"><div class="linkdiv "><a class="linkdiv" href="config_apps.html" title="Audio players"><span class="title">Audio players</span><span class="linkdiv-dash"> — </span><span class="desc">Common applications to use as players.</span></a></div></div></div></div>
 </div></div>
 </div></div>
@@ -86,7 +92,7 @@ There are various options for streamtuner2, available under <span class="guiseq"
 <td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">xterm -e "youtube-dl %srv"</span></p></td>
 </tr>
 </table></div></div></div>
-<p class="p">To define a target directory, you can add commandline arguments to each. Also it's typically
+<p class="p">To define a target directory, you can often add commandline arguments to each. Also it's typically
     helpful to leave the xterm prefix on, so you can follow the processing state. (Alternatively to
     xterm there is x-terminal-emulator, or rxvt, gnome-terminal, xfce4-terminal, etc.)</p>
 <div class="links topiclinks"><div class="inner"><div class="region"><div class="linkdiv "><a class="linkdiv" href="recording.html" title="Recording"><span class="title">Recording</span><span class="linkdiv-dash"> — </span><span class="desc">Save radio songs as MP3 files via streamripper.</span></a></div></div></div></div>
@@ -109,9 +115,6 @@ There are various options for streamtuner2, available under <span class="guiseq"
 <dt class="terms">Show bookmark star</dt>
 <dd class="terms"><p class="p">Bookmarked stations will be marked with a ★ star in all other station lists / categories.
       That doesn't often work for the same station entry from two different channel services / tabs though.</p></dd>
-<dt class="terms">Gtk+ theme</dt>
-<dd class="terms"><p class="p"><span class="em">Be careful</span>. While Gtk allows to select a different theme per application, not all themes
-      work right away. Switching the theme might hang streamtuner2. Just restart if that happens.</p></dd>
 <dt class="terms">Save window states</dt>
 <dd class="terms"><p class="p">Automatically remember window size, selected channel tab, categories, or selected station.
       Also keeps the width of station list columns. If disabled, you can manually save the current
@@ -122,17 +125,17 @@ There are various options for streamtuner2, available under <span class="guiseq"
 <div class="title title-terms"><h3><span class="title">Station loading</span></h3></div>
 <div class="region"><dl class="terms">
 <dt class="terms">Prefer HTML traversing (PyQuery) over regex</dt>
-<dd class="terms"><p class="p">Some channels provide proper APIs to fetch station lists. Others are just websites, that
+<dd class="terms"><p class="p">Some channels provide proper APIs to fetch station lists. Others are just websites that
       require scraping listings out. Most channel tabs provide two alternative methods for that.
-      The DOM/HTML selection method is sometimes more reliable. As fallback streamtuner2 plugins
-      often use a regex to match text. Occassionally the regex method is actually more reliable,
+      The DOM/HTML selection method is sometimes slower, but more reliable. As fallback streamtuner2
+      plugins often use a regex to match text. Occassionally the regex method is surprisingly more exact,
       because directory services often use frightful unstructured HTML. If available, both methods
-      are tried. You can influence the order with this setting.</p></dd>
+      are tried. You can influence the order with this setting, and thus speed it up.</p></dd>
 <dt class="terms">[<span class="input">250</span>] Limit stream number</dt>
 <dd class="terms"><p class="p"> Constraints the length of station lists per category.
-      The number of stations setting is not honored by all channel plugins. Often it's not possible to
+      The number of stations option is not honored by all channel plugins. Often it's not possible to
       load more or fewer station entries. Some plugins have own settings (in the 'Plugins' section) even.
-      For the major plugins this however limits how much scroll text appears in the stream lists.</p></dd>
+      For the major plugins this however limits how many scrollable entries appear in the stream lists.</p></dd>
 <dt class="terms">Retain deleted stations</dt>
 <dd class="terms"><p class="p">When enabled, keeps old station entries when
       updating/reloading a category/genre.  Services often forget stations or throws them out when inavailable.
@@ -171,6 +174,7 @@ There are various options for streamtuner2, available under <span class="guiseq"
 <div class="region"><div class="contents">
 <p class="p">This tab lists all available channel and feature plugins. Mark checkboxes for those plugins
     you want to enable. You have to restart Streamtuner2 for any changes here to take effect.</p>
+<p class="p"><span class="media"><span class="media media-image"><img src="img/configplugins.png" class="media media-inline" alt=""></span></span></p>
 <p class="p">Each channel plugin may come with its own set of addition configuration settings
     below.</p>
 <div class="note" title="Note"><div class="inner"><div class="region"><div class="contents"><p class="p">If you want to find out more about the short option descriptions (most settings are checkboxes),

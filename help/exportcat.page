@@ -1,0 +1,27 @@
+<page	xmlns="http://projectmallard.org/1.0/"
+	type="guide"
+	id="exportcat">
+
+<info>
+	<link type="guide" xref="index#extra"/>
+        <desc>Exporting a whole category as .pls.</desc>
+</info>
+
+	<title>Export all stations</title>
+
+	<p>There's an "Export All" plugin available. It adds an entry under
+	<guiseq><gui>Main menu</gui> <gui>Extensions</gui> <gui>Export all stations</gui></guiseq>.
+	Which allows to export all stations from the currently visible channel category.</p>
+	
+	<p>This is of course intended primarily for saving your bookmarks.
+	And it allows to import radio lists into any other music player
+	or playlist collection/management app (such as Rhythmbox).</p>
+
+	<section id="configuration">
+	<title>Configuration option</title>
+	<p>You can set the default export format in the settings dialog
+	<key>F12</key>.</p>
+	<p>Currently it only supports .PLS playlist exports however.</p>
+	</section>
+
+</page>

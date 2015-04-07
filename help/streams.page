@@ -4,6 +4,7 @@
 
 <info>
 	<link type="guide" xref="index#browsing"/>
+	<link type="topic" xref="index#functions"/>
         <desc>Radio streams lists, station information columns, entry actions.</desc>
 </info>
 
@@ -30,9 +31,11 @@
         <p>Additionally most actions are available in a context menu. Right click
         a station entry to display it.</p>
 
-	<p>You can always click the current category in the left list, to have the current
-	station list redisplayed. Which is useful after updating favicons, or accidental
-	dragging of entries.</p>
+	<media type="image" mime="image/png" src="img/streamactions.png">Station list</media>
+
+        <p>You can reach them in the <guiseq><gui>Main menu</gui> <gui>Stations</gui></guiseq>
+        as well. The <guiseq><gui>Extensions</gui> <gui></gui></guiseq> submenu there will
+        list a few other plugin extensions.</p>
 </section>
 
 </page>
