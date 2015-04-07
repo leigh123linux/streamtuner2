@@ -109,7 +109,7 @@ class bookmarks(GenericChannel):
         if row.get("favicon"):
            row["favicon"] = favicon.file(row.get("homepage"))
         if not row.get("listformat"):
-            row["listformat"] = main.channel().listformat
+            row["listformat"] = self.main.channel().listformat
            
         # append to storage
         self.streams["favourite"].append(row)
@@ -158,7 +158,7 @@ class bookmarks(GenericChannel):
         check = {"http//": "[row]"}
         check = dict((row.get("url", "http//"),row) for row in fav)
         # walk through all channels/streams
-        for chname,channel in main.channels.items():
+        for chname,channel in self.main.channels.items():
             for cat,streams in channel.streams.items():
 
                 # keep the potentially changed rows
