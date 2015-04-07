@@ -120,7 +120,6 @@ class bookmarks(GenericChannel):
 
     # simplified gtk TreeStore display logic (just one category for the moment, always rebuilt)
     def load(self, category, force=False):
-        __print__(dbg.UI, category, self.streams.keys())
         self.streams[category] = self.update_streams(category)
         #self.liststore[category] = \
         uikit.columns(self.gtk_list, self.datamap, self.prepare(self.streams[category]))
