@@ -108,7 +108,6 @@ class StreamTunerTwo(gtk.Builder):
 
         # early module coupling
         action.main = self            # action (play/record) module needs a reference to main window for gtk interaction and some URL/URI callbacks
-        self.action = action.action   # shorter name (could also become a features. entry...)
         ahttp.feedback = self.status  # http module gives status feedbacks too
         
         # append other channel modules and plugins
@@ -182,10 +181,10 @@ class StreamTunerTwo(gtk.Builder):
             "bookmark": self.bookmark,
             "save_as": self.save_as,
             "menu_about": lambda w: AboutStreamtuner2(self),
-            "menu_help": self.action.help,
-            "menu_onlineforum": lambda w: self.action.browser("http://sourceforge.net/projects/streamtuner2/forums/forum/1173108"),
-            "menu_fossilwiki": lambda w: self.action.browser("http://fossil.include-once.org/streamtuner2/"),
-            "menu_projhomepage": lambda w: self.action.browser("http://milki.include-once.org/streamtuner2/"),
+            "menu_help": action.help,
+            "menu_onlineforum": lambda w: action.browser("http://sourceforge.net/projects/streamtuner2/forums/forum/1173108"),
+            "menu_fossilwiki": lambda w: action.browser("http://fossil.include-once.org/streamtuner2/"),
+            "menu_projhomepage": lambda w: action.browser("http://milki.include-once.org/streamtuner2/"),
            # "menu_bugreport": lambda w: BugReport(),
             "menu_copy": self.menu_copy,
             "delete_entry": self.delete_entry,
@@ -293,12 +292,12 @@ class StreamTunerTwo(gtk.Builder):
     # Recording: invoke streamripper for current stream URL
     def on_record_clicked(self, widget):
         row = self.row()
-        self.action.record(row.get("url"), row.get("format", "audio/mpeg"), "url/direct", row=row)
+        action.record(row.get("url"), row.get("format", "audio/mpeg"), "url/direct", row=row)
 
     # Open stream homepage in web browser
     def on_homepage_stream_clicked(self, widget):
         url = self.selected("homepage")
-        if url and len(url): self.action.browser(url)
+        if url and len(url): action.browser(url)
         else: self.status("No homepage URL present.")
 
     # Browse to channel homepage (double click on notebook tab)
@@ -306,7 +305,7 @@ class StreamTunerTwo(gtk.Builder):
         if event == 2 or event.type == gtk.gdk._2BUTTON_PRESS:
             __print__(dbg.UI, "dblclick")
             url = self.channel().meta.get("url", "https://duckduckgo.com/?q=" + self.channel().module)
-            self.action.browser(url)
+            action.browser(url)
 
     # Reload stream list in current channel-category
     def on_reload_clicked(self, widget=None, reload=1):
@@ -358,7 +357,7 @@ class StreamTunerTwo(gtk.Builder):
         default_fn = row["title"] + ".m3u"
         fn = uikit.save_file("Save Stream", None, default_fn, [(".m3u","*m3u"),(".pls","*pls"),(".xspf","*xspf"),(".smil","*smil"),(".asx","*asx"),("all files","*")])
         if fn:
-            self.action.save(row, fn)
+            action.save(row, fn)
         pass
 
     # Save current stream URL into clipboard

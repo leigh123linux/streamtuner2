@@ -61,7 +61,7 @@ class radiobrowser (ChannelPlugin):
     # description
     homepage = "http://www.radio-browser.info/"
     has_search = True
-    listformat = "audio/x-scpls"
+    listformat = "pls"
     titles = dict(listeners="Votes+", bitrate="Votes-", playing="Country")
 
     categories = []

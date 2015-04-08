@@ -90,9 +90,9 @@ class punkcast (ChannelPlugin):
         for uu in rx_sound.findall(html):
             __print__( dbg.DATA, uu )
             (url, fmt) = uu
-            action.action.play(url, self.mime_fmt(fmt), "url/direct")
+            action.play(url, self.mime_fmt(fmt), "srv")
             return
         
         # or just open webpage
-        action.action.browser(row["homepage"])
+        action.browser(row["homepage"])
 

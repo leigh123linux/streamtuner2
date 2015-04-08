@@ -59,7 +59,7 @@ class live365(ChannelPlugin):
     homepage = "http://www.live365.com/"
     base_url = "http://www.live365.com/"
     has_search = True
-    listformat = "url/http"
+    listformat = "pls"
     mediatype = "audio/mpeg"
     has_search = False
 
@@ -134,33 +134,5 @@ class live365(ChannelPlugin):
             self.gi += 1
         return self.gi
 
-
-    # inject session id etc. into direct audio url
-    def UNUSED_play(self, row):
-        if row.get("url"):
-
-            # params
-            id = row["id"]
-            name = row["name"]
-
-            # get mini.cgi station resource
-            mini_url = "http://www.live365.com/cgi-bin/mini.cgi?version=3&templateid=xml&from=web&site=web" \
-                 + "&caller=&tag=web&station_name=%s&_=%i111" % (name, time())
-            mini_r = http.get(mini_url, content=False)
-            mini_xml = parseString(mini_r.text).getElementsByTagName("LIVE365_PLAYER_WINDOW")[0]
-            mini = lambda name: mini_xml.getElementsByTagName(name)[0].childNodes[0].data
-            
-            # authorize with play.cgi
-            play_url = ""
-
-            # mk audio url
-            play =  "http://%s/play" % mini("STREAM_URL") \
-                 + "?now=0&" \
-                 + mini("NANOCASTER_PARAMS") \
-                 + "&token=" + mini("TOKEN") \
-                 + "&AuthType=NORMAL&lid=276006-deu&SaneID=178.24.130.71-1406763621701"
-            
-            # let's see what happens
-            action.action.play(play, self.mediatype, self.listformat)
 
 

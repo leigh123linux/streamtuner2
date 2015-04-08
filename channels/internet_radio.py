@@ -43,7 +43,7 @@ class internet_radio (ChannelPlugin):
     title = "InternetRadio"
     module = "internet_radio"
     homepage = "http://www.internet-radio.org.uk/"
-    listformat = "audio/x-scpls"
+    listformat = "pls"
     
     # category map
     categories = []

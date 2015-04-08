@@ -44,7 +44,7 @@ class icast (ChannelPlugin):
     # description
     homepage = "http://www.icast.io/"
     has_search = True
-    listformat = "audio/x-scpls"
+    listformat = "pls"
     titles = dict(listeners=False, bitrate=False, playing=False)
 
     categories = []

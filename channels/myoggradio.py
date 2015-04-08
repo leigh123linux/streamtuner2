@@ -29,7 +29,7 @@
 
 from channels import *
 from config import *
-from action import action
+import action
 from uikit import uikit
 import ahttp as http
 
@@ -47,7 +47,7 @@ class myoggradio(ChannelPlugin):
     title ="MOR"
     #module = "myoggradio"
     api = "http://www.myoggradio.org/"
-    listformat = "url/direct"
+    listformat = "srv"
     
     # hide unused columns
     titles = dict(playing=False, listeners=False, bitrate=False)
