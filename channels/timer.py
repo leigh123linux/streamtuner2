@@ -25,7 +25,7 @@ from config import *
 from channels import *
 import bundle.kronos as kronos  # Doesn't work with Python3
 from uikit import uikit
-from action import action
+import action
 import copy
 import re
 

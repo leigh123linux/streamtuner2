@@ -453,7 +453,7 @@ class GenericChannel(object):
             listformat = row.get("listformat", self.listformat)
 
             # invoke audio player
-            action.action.play(row["url"], audioformat, listformat)
+            action.play(row["url"], audioformat, listformat)
 
 
 
@@ -480,7 +480,7 @@ class GenericChannel(object):
             # yes, we do video
             "flv":"video/flv", "mp4":"video/mp4",
         }
-        map.update(action.action.lt)   # list type formats (.m3u .pls and .xspf)
+        map.update(action.lt)   # list type formats (.m3u .pls and .xspf)
         if map.get(s):
             s = map[s]
         # add prefix:

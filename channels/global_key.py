@@ -69,7 +69,7 @@ class global_key(object):
             
         # play
         i = self.last
-        action.action.play(streams[i]["url"], streams[i]["format"])
+        action.play(streams[i]["url"], streams[i]["format"])
 
         # set pointer in gtk.TreeView
         if self.parent.channels[channel].current == cat:

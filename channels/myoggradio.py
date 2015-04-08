@@ -29,7 +29,7 @@
 
 from channels import *
 from config import *
-from action import action
+import action
 from uikit import uikit
 import ahttp as http
 
