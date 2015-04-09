@@ -45,6 +45,7 @@ listfmt_t = {
     "application/smil":     "smil",
     "application/vnd.ms-wpl":"smil",
     "x-urn/st2-script":     "script", # unused
+    "application/x-shockwave-flash": "href",  # fallback
 }
 
 # Audio type MIME map
@@ -62,30 +63,32 @@ mediafmt_t = {
 
 # Player command placeholders for playlist formats
 placeholder_map = dict(
-    pls = "%url | %pls | %u | %l | %r",
-    m3u = "%m3u | %f | %g | %m",
-    srv = "%srv | %d | %s",
+    pls = "(%url | %pls | %u | %l | %r) \\b",
+    m3u = "(%m3u | %f | %g | %m) \\b",
+    srv = "(%srv | %d | %s) \\b",
 )
 
 # Playlist format content probing (assert type)
-playlist_content_map = {
-   "pls":  r""" (?i)\[playlist\].*numberofentries""",
-   "xspf": r""" <\?xml .* <playlist .* http://xspf\.org/ns/0/""",
-   "m3u":  r""" #M3U""",
-   "asx" : r""" <ASX\b""",
-   "smil": r""" <smil[^>]*> .* <seq>""",
-   "wpl":  r""" <\?wpl \s+ version="1\.0" \s* \?>""",
-   "jspf": r""" \{ \s* "playlist": \s* \{ """,
-   "json": r""" "url": \s* "\w+:// """,
-   "href": r""" .* """,
-}
+playlist_content_map = [
+   ("pls",  r""" (?i)\[playlist\].*numberofentries """),
+   ("xspf", r""" <\?xml .* <playlist .* http://xspf\.org/ns/0/ """),
+   ("m3u",  r""" ^ \s* #(EXT)?M3U """),
+   ("asx" , r""" <ASX\b """),
+   ("smil", r""" <smil[^>]*> .* <seq> """),
+   ("html", r""" <(audio|video)\b[^>]+\bsrc\s*=\s*["']?https?:// """),
+   ("wpl",  r""" <\?wpl \s+ version="1\.0" \s* \?> """),
+   ("b4s",  r""" <WinampXML> """),   # http://gonze.com/playlists/playlist-format-survey.html
+   ("jspf", r""" ^ \s* \{ \s* "playlist": \s* \{ """),
+   ("json", r""" "url": \s* "\w+:// """),
+   ("href", r""" .* """),
+]
 
 
 
 # Exec wrapper
 #
 def run(cmd):
-    if cmd: debug(dbg.PROC, "Exec:", cmd)
+    debug(dbg.PROC, "Exec:", cmd)
     try:    os.system("start \"%s\"" % cmd if conf.windows else cmd + " &")
     except: debug(dbg.ERR, "Command not found:", cmd)
 
@@ -131,11 +134,7 @@ def quote(ins):
 # Convert e.g. "text/x-scpls" MIME types to just "pls" monikers
 #
 def listfmt(t = "pls"):
-    if t in listfmt_t.values():
-       for short,mime in listfmt_t.items():
-           if mime == t:
-               return short
-    return t # "pls"
+    return listfmt_t.get(t, t) # e.g. "pls" or still "text/x-unknown"
 
 
 # Convert MIME type into list of ["audio/xyz", "audio/*", "*/*"]
@@ -170,7 +169,7 @@ def interpol(cmd, url, source="pls", row={}):
             # from .pls to .m3u
             urls = convert_playlist(url, listfmt(source), listfmt(dest))
             # insert quoted URL/filepath
-            return re.sub(rx, cmd, quote(urls), 2, re.X)
+            return re.sub(rx, quote(urls), cmd, 2, re.X)
 
     return "false"
 
@@ -180,14 +179,12 @@ def interpol(cmd, url, source="pls", row={}):
 #
 def convert_playlist(url, source, dest):
     urls = []
-    
-    print(dbg.PROC, "convert_playlist(", url, source, dest, ")")
+    debug(dbg.PROC, "convert_playlist(", url, source, dest, ")")
 
-    # Leave alone
-    is_url = re.search("\w+://", url)
-    if source == dest or source in ("srv", "href") or not is_url:
+    # Leave alone if format matches, or if "srv" URL class, or if it's a local path already
+    if source == dest or source in ("srv", "href") or not re.search("\w+://", url):
         return [url]
-        
+    
     # Retrieve from URL
     (mime, cnt) = http_probe_get(url)
     
@@ -197,27 +194,33 @@ def convert_playlist(url, source, dest):
         return [url]
 
     # Test URL path "extension" for ".pls" / ".m3u" etc.
-    ext = re.findall("\.(\w)$|($)", url)[0]
+    ext = re.findall("\.(\w)$", url)
+    ext = ext[0] if ext else ""
 
     # Probe MIME type and content per regex
     probe = None
-    for probe,rx in playlist_content_map.items():
+    print cnt
+    for probe,rx in playlist_content_map:
         if re.search(rx, cnt, re.X|re.S):
+            probe = listfmt(probe)
             break # with `probe` set
 
     # Check ambiguity (except pseudo extension)
     if len(set([source, mime, probe])) > 1:
-        print(dbg.ERR, "Possible playlist format mismatch:", (source, mime, probe, ext))
+        debug(dbg.ERR, "Possible playlist format mismatch:", (source, mime, probe, ext))
 
     # Extract URLs from content
     for fmt,extractor in [ ("pls",extract_playlist.pls), ("asx",extract_playlist.asx), ("raw",extract_playlist.raw) ]:
         if not urls and fmt in (source, mime, probe, ext):
             urls = extractor(cnt)
+            debug(fmt, extractor, urls)
             
-    # Return asis for srv targets
-    if dest in ("srv", "href", "any"):
+    # Return original, or asis for srv targets
+    if not urls:
+        return [url]
+    elif dest in ("srv", "href", "any"):
         return urls
-    print urls
+    debug( urls )
 
     # Otherwise convert to local file
     fn = tmp_fn(cnt)
@@ -237,9 +240,12 @@ def http_probe_get(url):
 
     # extract payload
     mime = r.headers.get("content-type", "any")
-    if mediafmt_t.get(mime):
-        mime = mediafmt_t.get(mime)
-    content = "".join(r.iter_lines())
+    if listfmt_t.get(mime):
+        mime = listfmt_t.get(mime)
+    elif mimefmt_t.get(mime):
+        mime = mimefmt_t.get(mime)
+        return (mime, url)
+    content = "\n".join(r.iter_lines())
     return (mime, content)
 
 
@@ -258,8 +264,8 @@ class extract_playlist(object):
 
     @staticmethod
     def raw(text):
-        print(dbg.WARN, "Raw playlist extraction")
-        return re.findall("(https?://[^\s]+)", content, re.I)
+        debug(dbg.WARN, "Raw playlist extraction")
+        return re.findall("([\w+]+://[^\s\"\'\>\#]+)", content)
 
 
 # Save row(s) in one of the export formats,
@@ -356,10 +362,5 @@ def tmp_fn(pls):
         channelname = "unknown"
     return (str(conf.tmp) + os.sep + "streamtuner2."+channelname+"."+stream_id+".m3u", len(stream_id) > 3 and stream_id != "XXXXXX")
 
-
-# check if there are any urls in a given file
-def has_urls(tmp_fn):
-    if os.path.exists(tmp_fn):
-        return open(tmp_fn, "r").read().find("http://") > 0
     
 
