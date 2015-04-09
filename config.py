@@ -271,7 +271,8 @@ class ConfigDict(dict):
     # such as: { arg: -D, name: debug, type: bool }
     def init_args(self, ap):
         for opt in plugin_meta(frame=0).get("config"):
-            if [kwargs for kwargs in [self.argparse_map(opt)]]:
+            kwargs = self.argparse_map(opt)
+            if kwargs:
                 #print kwargs
                 ap.add_argument(*kwargs.pop("args"), **kwargs)
         return ap.parse_args()
