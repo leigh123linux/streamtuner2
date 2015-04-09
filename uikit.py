@@ -363,7 +363,7 @@ class uikit:
     #-- Save-As dialog
     #
     @staticmethod
-    def save_file(title="Save As", parent=None, fn="", formats=[("*","*")]):
+    def save_file(title="Save As", parent=None, fn="", formats=[("*.pls", "*.pls"), ("*.xspf", "*.xpsf"), ("*.m3u", "*.m3u"), ("*.jspf", "*.jspf"), ("*.asx", "*.asx"), ("*.json", "*.json"), ("*.smil", "*.smil"), ("*.wpl", "*.wpl"), ("*","*")]):
         c = gtk.FileChooserDialog(title, parent, action=gtk.FILE_CHOOSER_ACTION_SAVE, buttons=(gtk.STOCK_CANCEL, 0, gtk.STOCK_SAVE, 1))
         # params
         if fn:
@@ -378,7 +378,14 @@ class uikit:
         if c.run():
             fn = c.get_filename()  # return filaname
         c.destroy()
-        return fn
+        # check if selected file exists, ask for confirmation
+        if os.path.exists(fn):
+            if uikit.msg("Overwrite existing file '%s' ?" % fn, gtk.MESSAGE_WARNING, gtk.BUTTONS_OK_CANCEL, yes=1):
+                return fn
+            else:
+                return None
+        else:
+            return fn
     
     
     
@@ -448,10 +455,16 @@ class uikit:
 
     # gtk.messagebox
     @staticmethod
-    def msg(text, style=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_CLOSE):
+    def msg(text, style=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_CLOSE, yes=None):
         m = gtk.MessageDialog(None, 0, style, buttons, message_format=text)
         m.show()
-        m.connect("response", lambda *w: m.destroy())
+        if yes:
+            response = m.run()
+            m.destroy()
+            return response in (gtk.RESPONSE_OK, gtk.RESPONSE_ACCEPT, gtk.RESPONSE_YES)
+        else:
+            m.connect("response", lambda *w: m.destroy())
+        pass
         
 
     # manual signal binding with a dict of { (widget, signal): callback }

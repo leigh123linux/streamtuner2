@@ -357,7 +357,9 @@ class StreamTunerTwo(gtk.Builder):
         default_fn = row["title"] + ".m3u"
         fn = uikit.save_file("Save Stream", None, default_fn, [(".m3u","*m3u"),(".pls","*pls"),(".xspf","*xspf"),(".smil","*smil"),(".asx","*asx"),("all files","*")])
         if fn:
-            action.save(row, fn)
+            source = row.get("listformat", self.channel().listformat)
+            dest = re.findall("\.(m3u|pls|xspf|jspf|json|smil|wpl)8?$", fn)[0]
+            action.save_playlist(source=source, multiply=True).store(rows=[row], fn=fn, dest=dest)
         pass
 
     # Save current stream URL into clipboard

@@ -4,7 +4,7 @@
 # type: functions
 # title: play/record actions
 # description: Starts audio applications, guesses MIME types for URLs
-# version: 0.8
+# version: 0.9
 #
 # Multimedia interface for starting audio players, recording app,
 # or web browser (listed as "url/http" association in players).
@@ -23,6 +23,8 @@ import os
 from ahttp import fix_url as http_fix_url, session
 from config import conf, __print__ as debug, dbg
 import platform
+import copy
+import json
 
 
 # Coupling to main window
@@ -37,7 +39,7 @@ listfmt_t = {
     "audio/x-mpegurl":      "m3u",
     "video/x-ms-asf":       "asx",
     "application/xspf+xml": "xspf",
-    "*/*":                  "href",
+    "*/*":                  "href",  # "href" for unknown responses
     "url/direct":           "srv",
     "url/youtube":          "href",
     "url/http":             "href",
@@ -108,15 +110,15 @@ def help(*args):
 
 # Calls player for stream url and format
 #
-def play(url, audioformat="audio/mpeg", listformat="href"):
+def play(url, audioformat="audio/mpeg", source="pls", row={}):
     cmd = mime_app(audioformat, conf.play)
-    cmd = interpol(cmd, url, listformat)
+    cmd = interpol(cmd, url, listformat, row)
     run(cmd)
 
 
 # Call streamripper
 #
-def record(url, audioformat="audio/mpeg", listformat="href", append="", row={}):
+def record(url, audioformat="audio/mpeg", source="href", row={}):
     cmd = mime_app(audioformat, conf.record)
     cmd = interpol(cmd, url, listformat, row)
     run(cmd)
@@ -161,23 +163,26 @@ def interpol(cmd, url, source="pls", row={}):
 
     # add default if cmd has no %url placeholder
     if cmd.find("%") < 0:
-        cmd = cmd + " %m3u"
+        cmd = cmd + " %pls"
+        # "pls" as default requires no conversion for most channels, and seems broadly supported by players
 
     # standard placeholders
     for dest, rx in placeholder_map.items():
         if re.search(rx, cmd, re.X):
             # from .pls to .m3u
-            urls = convert_playlist(url, listfmt(source), listfmt(dest))
+            fn_or_urls = convert_playlist(url, listfmt(source), listfmt(dest), local_file=True, title=row.get("title", ""))
             # insert quoted URL/filepath
-            return re.sub(rx, quote(urls), cmd, 2, re.X)
+            return re.sub(rx, quote(fn_or_urls), cmd, 2, re.X)
 
     return "false"
 
 
-# Substitute .pls URL with local .m3u,
-# or direct srv address, or leave as-is.
+# Substitute .pls URL with local .m3u, or direct srv addresses, or leaves URL asis.
+#  · Takes a single input `url`.
+#  · But returns a list of [urls] after playlist extraction.
+#  · If repackaging as .m3u/.pls/.xspf, returns the local [fn].
 #
-def convert_playlist(url, source, dest):
+def convert_playlist(url, source, dest, local_file=True, title=""):
     urls = []
     debug(dbg.PROC, "convert_playlist(", url, source, dest, ")")
 
@@ -195,11 +200,10 @@ def convert_playlist(url, source, dest):
 
     # Test URL path "extension" for ".pls" / ".m3u" etc.
     ext = re.findall("\.(\w)$", url)
-    ext = ext[0] if ext else ""
+    ext = ext[0] if ext else None
 
     # Probe MIME type and content per regex
     probe = None
-    print cnt
     for probe,rx in playlist_content_map:
         if re.search(rx, cnt, re.X|re.S):
             probe = listfmt(probe)
@@ -210,22 +214,25 @@ def convert_playlist(url, source, dest):
         debug(dbg.ERR, "Possible playlist format mismatch:", (source, mime, probe, ext))
 
     # Extract URLs from content
-    for fmt,extractor in [ ("pls",extract_playlist.pls), ("asx",extract_playlist.asx), ("raw",extract_playlist.raw) ]:
+    for fmt in [ "pls", "asx", "raw" ]:
         if not urls and fmt in (source, mime, probe, ext):
-            urls = extractor(cnt)
-            debug(fmt, extractor, urls)
+            urls = extract_playlist(source).format(fmt)
+            debug(dbg.DATA, "conversion from:", source, " to dest:", fmt, "got URLs=", urls)
             
     # Return original, or asis for srv targets
     if not urls:
         return [url]
-    elif dest in ("srv", "href", "any"):
+    elif dest in ("srv", "href"):
         return urls
     debug( urls )
 
     # Otherwise convert to local file
-    fn = tmp_fn(cnt)
-    save(urls[0], fn, dest)
-    return [fn]
+    if local_file:
+        fn = tmp_fn(cnt)
+        save_playlist(source="srv", multiply=True).export(urls=urls, fn=fn, dest=dest, title=title)
+        return [fn]
+    else:
+        return urls
 
 
 
@@ -233,18 +240,24 @@ def convert_playlist(url, source, dest):
 #
 def http_probe_get(url):
 
-    # possible streaming request
-    r = session.get(url, stream=True)
-    if not len(r.headers):
-        return ("srv", r)
+    # HTTP request, abort if streaming server hit (no HTTP/ header, but ICY/ response)
+    try:
+        r = session.get(url, stream=True, timeout=5.0)
+        if not len(r.headers):
+            return ("srv", r)
+    except:
+        return ("srv", None)
 
-    # extract payload
-    mime = r.headers.get("content-type", "any")
+    # Extract payload
+    mime = r.headers.get("content-type", "href")
+    # Map MIME to abbr type (pls, m3u, xspf)
     if listfmt_t.get(mime):
         mime = listfmt_t.get(mime)
+    # Raw content (mp3, flv)
     elif mimefmt_t.get(mime):
         mime = mimefmt_t.get(mime)
         return (mime, url)
+    # Rejoin body
     content = "\n".join(r.iter_lines())
     return (mime, content)
 
@@ -254,100 +267,143 @@ def http_probe_get(url):
 #
 class extract_playlist(object):
 
-    @staticmethod
-    def pls(text):
-        return re.findall("\s*File\d*\s*=\s*(\w+://[^\s]+)", text, re.I)
-
-    @staticmethod
-    def asx(text):
-        return re.findall("<Ref\s+href=\"(http://.+?)\"", text)
-
-    @staticmethod
-    def raw(text):
-        debug(dbg.WARN, "Raw playlist extraction")
-        return re.findall("([\w+]+://[^\s\"\'\>\#]+)", content)
-
-
-# Save row(s) in one of the export formats,
-# depending on file extension:
-#
-#  · m3u
-#  · pls
-#  · xspf
-#  · asx
-#  · json
-#  · smil
-#
-def save(row, fn, listformat="audio/x-scpls"):
-
-    # output format
-    format = re.findall("\.(m3u|pls|xspf|jspf|json|asx|smil)", fn)
-
-    # modify stream url
-    stream_urls = extract_urls(row["url"], listformat)
-
-    # M3U
-    if "m3u" in format:
-        txt = "#M3U\n"
-        for url in stream_urls:
-            txt += http_fix_url(url) + "\n"
+    # Content of playlist file
+    src = ""
+    def __init__(self, text):
+        self.src = text
+    def format(self, fmt):
+        cnv = getattr(self, fmt)
+        return cnv()
 
     # PLS
-    elif "pls" in format:
-        txt = "[playlist]\n" + "numberofentries=1\n"
-        for i,u in enumerate(stream_urls):
-            i = str(i + 1)
-            txt += "File"+i + "=" + u + "\n"
-            txt += "Title"+i + "=" + row["title"] + "\n"
-            txt += "Length"+i + "=-1\n"
+    def pls(self):
+        return re.findall("\s*File\d*\s*=\s*(\w+://[^\s]+)", self.src, re.I)
+
+    # ASX
+    def asx(self):
+        return re.findall("<Ref\s+href=\"(http://.+?)\"", self.src)
+
+    # Regexp out any URL
+    def raw(self):
+        debug(dbg.WARN, "Raw playlist extraction")
+        return re.findall("([\w+]+://[^\s\"\'\>\#]+)", self.src)
+
+
+# Save rows in one of the export formats.
+# Takes a few combinations of parameters (either rows[], or urls[]+title),
+# because it's used by playlist_convert() as well as the station saving.
+#
+class save_playlist(object):
+
+    # if converting
+    source = "pls"
+    # expand multiple server URLs into duplicate entries in target playlist
+    multiply = True
+    # constructor
+    def __init__(self, source, multiply):
+        self.source = source
+        self.multiply = multiply
+    
+
+    # Used by playlist_convert(), to transform a list of extracted URLs
+    # into a local .pls/.m3u collection again. Therefore injects the
+    # `title` back into each of the URL rows.
+    def export(self, urls=None, title=None, dest="pls"):
+        rows = [ { "url": url, "title": title } for url in urls ]
+        return self.store(rows, None, dest)
+
+
+    # Export a playlist
+    def store(self, rows=None, fn=None, dest="pls"):
+    
+        # can be just a single entry
+        rows = copy.deepcopy(rows)
+        if type(rows) is dict:
+            rows = [row]
+
+        # Expand contained stream urls
+        if not self.source in ("srv", "raw", "asis"):
+            new_rows = []
+            for i,row in enumerate(rows):
+                # Preferrably convert to direct server addresses
+                for url in convert_playlist(row["url"], self.source, "srv", local_file=False):
+                    row["url"] = url
+                    new_rows.append(row)
+                    # Or just allow one stream per station in a playlist entry
+                    if not self.multiply:
+                        break
+            rows = new_rows
+
+        debug(dbg.DATA, "conversion to:", dest, " from:", self.source, "with rows=", rows)
+
+        # call conversion schemes
+        converter = getattr(self, dest) or self.pls
+        txt = converter(rows)
+        
+        # save directly?
+        if fn:
+            with open(fn, "wb") as f:
+                f.write(txt)
+        else:
+            return txt
+
+
+    # M3U
+    def m3u(self, rows):
+        txt = "#EXTM3U\n"
+        for r in rows:
+            txt += "#EXTINF:-1,%s\n" % r["title"]
+            txt += "%s\n" % http_fix_url(r["url"])
+        return txt
+
+    # PLS
+    def pls(self, rows):
+        txt = "[playlist]\n" + "numberofentries=%s\n" % len(rows)
+        for i,r in enumerate(rows):
+            txt += "File%s=%s\nTitle%s=%s\nLength%s=%s\n" % (i, r["url"], i, r["title"], i, -1)
         txt += "Version=2\n"
+        return txt
+
+    # JSON (native lists of streamtuner2)
+    def json(self, rows):
+        return json.dumps(rows, indent=4)
+
+
+#-- all others need rework --
 
     # XSPF
-    elif "xspf" in format:
+    def xspf(self, rows):
         txt = '<?xml version="1.0" encoding="UTF-8"?>' + "\n"
         txt += '<?http header="Content-Type: application/xspf+xml" ?>' + "\n"
         txt += '<playlist version="1" xmlns="http://xspf.org/ns/0/">' + "\n"
-        for attr,tag in [("title","title"), ("homepage","info"), ("playing","annotation"), ("description","annotation")]:
-            if row.get(attr):
-                txt += "  <"+tag+">" + xmlentities(row[attr]) + "</"+tag+">\n"
         txt += "  <trackList>\n"
-        for u in stream_urls:
+        for row in rows:
+            for attr,tag in [("title","title"), ("homepage","info"), ("playing","annotation"), ("description","annotation")]:
+                if rows.get(attr):
+                    txt += "  <"+tag+">" + xmlentities(row[attr]) + "</"+tag+">\n"
+            u = row.get("url")
             txt += '	<track><location>' + xmlentities(u) + '</location></track>' + "\n"
         txt += "  </trackList>\n</playlist>\n"
 
     # JSPF
-    elif "jspf" in format:
+    def jspf(self, rows):
         pass
-
-    # JSON
-    elif "json" in format:
-        row["stream_urls"] = stream_urls
-        txt = str(row)   # pseudo-json (python format)
-    
     # ASX
-    elif "asx" in format:
-        txt = "<ASX version=\"3.0\">\n"			\
+    def asx(self, rows):
+        for row in rows:
+          txt = "<ASX version=\"3.0\">\n"			\
             + " <Title>" + xmlentities(row["title"]) + "</Title>\n"	\
             + " <Entry>\n"				\
             + "  <Title>" + xmlentities(row["title"]) + "</Title>\n"	\
             + "  <MoreInfo href=\"" + row["homepage"] + "\"/>\n"	\
             + "  <Ref href=\"" + stream_urls[0] + "\"/>\n"		\
             + " </Entry>\n</ASX>\n"
+        return txt
 
     # SMIL
-    elif "smil" in format:
-            txt = "<smil>\n<head>\n  <meta name=\"title\" content=\"" + xmlentities(row["title"]) + "\"/>\n</head>\n"	\
-                + "<body>\n  <seq>\n    <audio src=\"" + stream_urls[0] + "\"/>\n  </seq>\n</body>\n</smil>\n"
-
-    # unknown
-    else:
-        return
-
-    # write
-    if txt:
-        with open(fn, "wb") as f:
-            f.write(txt)
-    pass
+    def smil(self, rows):
+        return "<smil>\n<head>\n  <meta name=\"title\" content=\"" + xmlentities(row["title"]) + "\"/>\n</head>\n"	\
+             + "<body>\n  <seq>\n    <audio src=\"" + stream_urls[0] + "\"/>\n  </seq>\n</body>\n</smil>\n"
 
 
 
