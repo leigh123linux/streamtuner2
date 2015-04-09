@@ -364,8 +364,13 @@ class uikit:
     #
     @staticmethod
     def save_file(title="Save As", parent=None, fn="", formats=[("*.pls", "*.pls"), ("*.xspf", "*.xpsf"), ("*.m3u", "*.m3u"), ("*.jspf", "*.jspf"), ("*.asx", "*.asx"), ("*.json", "*.json"), ("*.smil", "*.smil"), ("*.wpl", "*.wpl"), ("*","*")]):
-        c = gtk.FileChooserDialog(title, parent, action=gtk.FILE_CHOOSER_ACTION_SAVE, buttons=(gtk.STOCK_CANCEL, 0, gtk.STOCK_SAVE, 1))
-        # params
+
+        # With overwrite confirmation
+        c = gtk.FileChooserDialog(title, parent, action=gtk.FILE_CHOOSER_ACTION_SAVE,
+                buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_SAVE, gtk.RESPONSE_OK))
+        c.set_do_overwrite_confirmation(True)
+
+        # Params
         if fn:
             c.set_current_name(fn)
             fn = ""
@@ -374,18 +379,14 @@ class uikit:
             f.set_name(fname)
             f.add_pattern(ftype)
             c.add_filter(f)
-        # display
+        
+        # Filter handlers don't work either.
+
+        # Display and wait
         if c.run():
             fn = c.get_filename()  # return filaname
         c.destroy()
-        # check if selected file exists, ask for confirmation
-        if os.path.exists(fn):
-            if uikit.msg("Overwrite existing file '%s' ?" % fn, gtk.MESSAGE_WARNING, gtk.BUTTONS_OK_CANCEL, yes=1):
-                return fn
-            else:
-                return None
-        else:
-            return fn
+        return fn
     
     
     
@@ -474,7 +475,7 @@ class uikit:
             builder.get_widget(widget).connect(signal, func)
 
         
-    # Pixbug loader (from inline string, as in `logo.png`)
+    # Pixbug loader (from inline string, as in `logo.png`, automatic base64 decoding, and gunzipping of raw data)
     @staticmethod
     def pixbuf(buf, fmt="png", decode=True, gzip=False):
         if not buf or len(buf) < 16:
