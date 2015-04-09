@@ -1,7 +1,8 @@
 # pack: PACKAGING=
 
 This is a short summary for distribution package maintainers.
-For regular end-user documentation please see the help/ pages.
+For regular end-user documentation please see the README and
+help/ pages.
 
 
 Structural changes from 2.1.5 onwards (2015-04-xx)
@@ -44,7 +45,7 @@ Aux files
 
  → *.desktop as usual
 
- → and `logo.png` is the pixmap/app icon
+ → and `icon.png` is the /share/pixmaps/ icon
 
 
 Removed
@@ -54,7 +55,7 @@ Most plugin PNGs may have been removed already. (Embedded
 binary data may violate some distro guidelines(?), but hey,
 fewer files are fewer files!)
 
-And the streamtuner2.png logo is now source-embedded instead,
+And the streamtuner2.png logo is now source-embedded instead;
 the `logo.py` module provides a `logo.png` base64-string.
 
 The old `gtk2.xml` file is gone. It probably became obsolete
@@ -73,7 +74,7 @@ Also, hard dependencies are meanwhile:
 
   - gtk (>= 2.16)
   - pygtk                           [or python-gi for python3]
-  - python-requests (>> 1.2.0)
+  - python-requests (>= 2.0.0)
   - python-pyquery    [though most plugins would work without]
   - and its implied python-lxml
 
@@ -117,7 +118,7 @@ FPM/XPM packaging
 
 You may have noticed (and scoffed at ;) the newer packaging
 method. It's now using http://fossil.include-once.org/xpm/
-with the `src` filter. (That's what the meta comment blocks
+with the `-s src` filter. (That's what the meta comment blocks
 in the source modules were always meant for.)
 
 Simplifies DEB and RPM packaging, as well as PYZ generation.
