@@ -355,7 +355,7 @@ class uikit:
                             if w_label == ord_tabname:
                                 w.reorder_child(w_tab, pos)
                             if tab_current == ord_tabname:
-                                w_set_current_page(pos)
+                                w.set_current_page(pos)
         pass
 
 

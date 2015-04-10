@@ -78,6 +78,7 @@ class StreamTunerTwo(gtk.Builder):
         "play": [favicon.download_playing],  # observers queue here
         "record": [],
         "init": [],
+        "quit": [action.cleanup_tmp_files],
         "config_load": [],
         "config_save": [],
     }
@@ -111,26 +112,11 @@ class StreamTunerTwo(gtk.Builder):
         action.main = self            # action (play/record) module needs a reference to main window for gtk interaction and some URL/URI callbacks
         ahttp.feedback = self.status  # http module gives status feedbacks too
         
-        # append other channel modules and plugins
+        # load plugins
         self.load_plugin_channels()
-
-
-        # load application state (widget sizes, selections, etc.)
-        try:
-            winlayout = conf.load("window")
-            if (winlayout):
-                uikit.app_restore(self, winlayout)
-            # selection values
-            winstate = conf.load("state")
-            if (winstate):
-                for id in winstate.keys():
-                    self.channels[id].current = winstate[id]["current"]
-                    self.channels[id].shown = winlayout[id+"_list"].get("row:selected", 0)   # actually just used as boolean flag (for late loading of stream list), selection bar has been positioned before already
-        except:
-            pass # fails for disabled/reordered plugin channels
-
-        # late plugin initializations
-        gui_startup(17/20.0)
+        # restore app/widget states
+        self.init_app_state()
+        # and late plugin initializations
         [callback(self) for callback in self.hooks["init"]]
 
         # display current open channel/notebook tab
@@ -431,6 +417,20 @@ class StreamTunerTwo(gtk.Builder):
                 __print__(dbg.INIT, "load_plugin_channels: error initializing:", name, ", exception:")
                 traceback.print_exc()
 
+    # load application state (widget sizes, selections, etc.)
+    def init_app_state(self):
+        try:
+            winlayout = conf.load("window")
+            if (winlayout):
+                uikit.app_restore(self, winlayout)
+            # selection values
+            winstate = conf.load("state")
+            if (winstate):
+                for id in winstate.keys():
+                    self.channels[id].current = winstate[id]["current"]
+                    self.channels[id].shown = winlayout[id+"_list"].get("row:selected", 0)   # actually just used as boolean flag (for late loading of stream list), selection bar has been positioned before already
+        except:
+            pass # fails for disabled/reordered plugin channels
 
     # store window/widget states (sizes, selections, etc.)
     def app_state(self, widget):
@@ -496,6 +496,7 @@ def main():
 
         # run
         gtk.main()
+        [callback() for callback in main.hooks["quit"]]
         __print__(dbg.PROC, r"[31m gtk_main_quit [0m")
         
     # invoke command-line interface
