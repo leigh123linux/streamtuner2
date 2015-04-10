@@ -47,7 +47,7 @@ class myoggradio(ChannelPlugin):
     title ="MOR"
     #module = "myoggradio"
     api = "http://www.myoggradio.org/"
-    listformat = "srv"
+    listformat = "mixed(pls/m3u/srv)"
     
     # hide unused columns
     titles = dict(playing=False, listeners=False, bitrate=False)
@@ -103,6 +103,7 @@ class myoggradio(ChannelPlugin):
         for i,e in enumerate(entries):
             entries[i]["homepage"] = self.api + "c_common_details.jsp?url="  + e["url"]
             entries[i]["genre"] = cat
+            entries[i]["format"] = "audio/mpeg"
         # send back
         return entries
         

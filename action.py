@@ -1,21 +1,31 @@
-
 # encoding: UTF-8
 # api: streamtuner2
 # type: functions
+# cagtegory: io
 # title: play/record actions
 # description: Starts audio applications, guesses MIME types for URLs
 # version: 0.9
+# priority: core
 #
 # Multimedia interface for starting audio players, recording app,
 # or web browser (listed as "url/http" association in players).
+# It maps audio MIME types, and extracts/converts playlist types
+# (PLS, M3U, XSPF, SMIL, JSPF, ASX, raw urls).
 #
-# Each channel plugin has a .listtype which describes the linked
-# audio playlist format. It's audio/x-scpls mostly, seldomly m3u,
-# but sometimes url/direct if the entry[url] directly leads to the
-# streaming server.
+# Each channel plugin has a .listtype which defines the linked
+# audio playlist format. It's "pls", seldomly "m3u", or "xspf".
+# Some channels list raw "srv" addresses, while Youtube "href"
+# entries to Flash videos.
 #
-# As fallback there is a regex which just looks for URLs in the
-# given resource (works for m3u/pls/xspf/asx/...).
+# As fallback the playlist URL is retrieved and its MIME type
+# checked, and its content regexped to guess the link format.
+# Lastly a playlist type suitable for audio players recreated.
+# Which is somewhat of a security feature, playlists get cleaned
+# up this way. The conversion is not strictly necessary for all
+# players, as basic PLS is supported by most.
+#
+# And finally this module is also used by exporting and (perhaps
+# in the future) playlist importing features.
 
 
 import re
@@ -37,6 +47,7 @@ main = None
 listfmt_t = {
     "audio/x-scpls":        "pls",
     "audio/x-mpegurl":      "m3u",
+    "audio/mpegurl":        "m3u",
     "video/x-ms-asf":       "asx",
     "application/xspf+xml": "xspf",
     "*/*":                  "href",  # "href" for unknown responses
@@ -46,6 +57,8 @@ listfmt_t = {
     "audio/x-pn-realaudio": "ram",
     "application/smil":     "smil",
     "application/vnd.ms-wpl":"smil",
+    "audio/x-ms-wax":       "asx",
+    "video/x-ms-asf":       "asx",
     "x-urn/st2-script":     "script", # unused
     "application/x-shockwave-flash": "href",  # fallback
 }
@@ -85,6 +98,7 @@ playlist_content_map = [
    ("wpl",  r""" <\?wpl \s+ version="1\.0" \s* \?> """),
    ("b4s",  r""" <WinampXML> """),   # http://gonze.com/playlists/playlist-format-survey.html
    ("jspf", r""" ^ \s* \{ \s* "playlist": \s* \{ """),
+   ("asf",  r""" ^ \[Reference\] .*? ^Ref\d+= """),
    ("json", r""" "url": \s* "\w+:// """),
    ("href", r""" .* """),
 ]
@@ -116,7 +130,7 @@ def help(*args):
 #
 def play(url, audioformat="audio/mpeg", source="pls", row={}):
     cmd = mime_app(audioformat, conf.play)
-    cmd = interpol(cmd, url, listformat, row)
+    cmd = interpol(cmd, url, source, row)
     run(cmd)
 
 
@@ -124,7 +138,7 @@ def play(url, audioformat="audio/mpeg", source="pls", row={}):
 #
 def record(url, audioformat="audio/mpeg", source="href", row={}):
     cmd = mime_app(audioformat, conf.record)
-    cmd = interpol(cmd, url, listformat, row)
+    cmd = interpol(cmd, url, source, row)
     run(cmd)
 
 
@@ -186,6 +200,9 @@ def interpol(cmd, url, source="pls", row={}):
 #  · But returns a list of [urls] after playlist extraction.
 #  · If repackaging as .m3u/.pls/.xspf, returns the local [fn].
 #
+# TODO: This still needs some rewrite to reuse the incoming row={},
+# and keep station titles for converted playlists.
+#
 def convert_playlist(url, source, dest, local_file=True, title=""):
     urls = []
     debug(dbg.PROC, "convert_playlist(", url, source, dest, ")")
@@ -218,10 +235,10 @@ def convert_playlist(url, source, dest, local_file=True, title=""):
         debug(dbg.ERR, "Possible playlist format mismatch:", (source, mime, probe, ext))
 
     # Extract URLs from content
-    for fmt in [ "pls", "xspf", "asx", "smil", "jspf", "m3u", "json", "raw" ]:
+    for fmt in ["pls", "xspf", "asx", "smil", "jspf", "m3u", "json", "asf", "raw"]:
         if not urls and fmt in (source, mime, probe, ext, "raw"):
-            urls = extract_playlist(source).format(fmt)
-            debug(dbg.DATA, "conversion from:", source, " to dest:", fmt, "got URLs=", urls)
+            urls = extract_playlist(cnt).format(fmt)
+            debug(dbg.DATA, "conversion from:", source, " with extractor:", fmt, "got URLs=", urls)
             
     # Return original, or asis for srv targets
     if not urls:
@@ -232,8 +249,10 @@ def convert_playlist(url, source, dest, local_file=True, title=""):
 
     # Otherwise convert to local file
     if local_file:
-        fn = tmp_fn(cnt)
-        save_playlist(source="srv", multiply=True).export(urls=urls, fn=fn, dest=dest, title=title)
+        fn, is_unique = tmp_fn(cnt)
+        with open(fn, "wb") as f:
+            debug(dbg.DATA, "exporting with format:", dest, " into filename:", fn)
+            f.write( save_playlist(source="srv", multiply=True).export(urls=urls, dest=dest, title=title) )
         return [fn]
     else:
         return urls
@@ -258,8 +277,9 @@ def http_probe_get(url):
     if listfmt_t.get(mime):
         mime = listfmt_t.get(mime)
     # Raw content (mp3, flv)
-    elif mimefmt_t.get(mime):
-        mime = mimefmt_t.get(mime)
+    elif mediafmt_t.get(mime):
+        debug(dbg.ERR, "Got media MIME type for expected playlist", mime, " on url=", url)
+        mime = mediafmt_t.get(mime)
         return (mime, url)
     # Rejoin body
     content = "\n".join(r.iter_lines())
@@ -278,25 +298,30 @@ class extract_playlist(object):
         
     # Extract only URLs from given source type
     def format(self, fmt):
-        debug(dbg.DATA, fmt)
+        debug(dbg.DATA, "input regex:", fmt, len(self.src))
         return re.findall(self.extr_urls[fmt], self.src, re.X);
 
     # Only look out for URLs, not local file paths
     extr_urls = {
-       "pls":  r" (?i) ^ \s*File\d* \s*=\s* (\w+://[^\s]+) ",
+       "pls":  r"(?im) ^ \s*File\d* \s*=\s* (\w+://[^\s]+) ",
        "m3u":  r" (?m) ^( \w+:// [^#\n]+ )",
        "xspf": r" (?x) <location> (\w+://[^<>\s]+) </location> ",
        "asx":  r" (?x) <ref \b[^>]+\b href \s*=\s* [\'\"] (\w+://[^\s\"\']+) [\'\"] ",
-       "smil": r" (?x) <(?:audio|video)\b [^>]+ \b src \s*=\s* [^\"\']? \s* (\w+://[^\"\'\s]+) ",
+       "smil": r" (?x) <(?:audio|video|media)\b [^>]+ \b src \s*=\s* [^\"\']? \s* (\w+://[^\"\'\s]+) ",
        "jspf": r" (?x) \"location\" \s*:\s* \"(\w+://[^\"\s]+)\" ",
        "json": r" (?x) \"url\" \s*:\s* \"(\w+://[^\"\s]+)\" ",
+       "asf":  r" (?m) ^ \s*Ref\d+ = (\w+://[^\s]+) ",
        "raw":  r" (?i) ( [\w+]+:// [^\s\"\'\>\#]+ ) ",
     }
 
 
 # Save rows in one of the export formats.
-# Takes a few combinations of parameters (either rows[], or urls[]+title),
-# because it's used by playlist_convert() as well as the station saving.
+#
+# The export() version uses urls[]+title= as input, converts it into a
+# list of rows{} beforehand.
+#
+# While store() requires rows{} to begin with, to perform a full
+# conversion. Can save directly to a file name.
 #
 class save_playlist(object):
 
@@ -315,11 +340,10 @@ class save_playlist(object):
     # `title` back into each of the URL rows.
     def export(self, urls=None, title=None, dest="pls"):
         rows = [ { "url": url, "title": title } for url in urls ]
-        return self.store(rows, None, dest)
+        return self.store(rows, dest)
 
-
-    # Export a playlist
-    def store(self, rows=None, fn=None, dest="pls"):
+    # Export a playlist from rows{}
+    def store(self, rows=None, dest="pls"):
     
         # can be just a single entry
         rows = copy.deepcopy(rows)
@@ -343,15 +367,14 @@ class save_playlist(object):
 
         # call conversion schemes
         converter = getattr(self, dest) or self.pls
-        txt = converter(rows)
-        
-        # save directly?
-        if fn:
-            with open(fn, "wb") as f:
-                f.write(txt)
-        else:
-            return txt
+        return converter(rows)
 
+    # save directly
+    def file(self, rows, dest, fn):
+        with open(fn, "wb") as f:
+            f.write(self.store(rows, dest))
+    
+    
 
     # M3U
     def m3u(self, rows):
