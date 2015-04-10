@@ -346,7 +346,7 @@ class StreamTunerTwo(gtk.Builder):
         if fn:
             source = row.get("listformat", self.channel().listformat)
             dest = (re.findall("\.(m3u|pls|xspf|jspf|json|smil|asx|wpl)8?$", fn) or ["pls"])[0]
-            action.save_playlist(source=source, multiply=True).save(rows=[row], fn=fn, dest=dest)
+            action.save_playlist(source=source, multiply=True).file(rows=[row], fn=fn, dest=dest)
         pass
 
     # Save current stream URL into clipboard

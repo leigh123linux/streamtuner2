@@ -379,6 +379,11 @@ class uikit:
             f.set_name(fname)
             f.add_pattern(ftype)
             c.add_filter(f)
+        # Yes, that's how to retrieve signals for changed filter selections
+        try:
+            filterbox = c.get_children()[0].get_children()[0]
+            filterbox.connect("notify::filter", lambda *w: uikit.save_file_filterchange(c))
+        except: pass
         
         # Filter handlers don't work either.
 
@@ -387,6 +392,15 @@ class uikit:
             fn = c.get_filename()  # return filaname
         c.destroy()
         return fn
+
+    # Callback for changed FileFilter, updates current filename extension
+    @staticmethod
+    def save_file_filterchange(c):
+        fn, ext = c.get_filename(), c.get_filter().get_name()
+        if fn and ext:
+            fn = os.path.basename(fn)
+            c.set_current_name(re.sub(r"\.(m3u|pls|xspf|jspf|asx|json|smil|wpl)$", ext, fn))
+        
     
     
     
