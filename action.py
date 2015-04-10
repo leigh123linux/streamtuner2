@@ -43,7 +43,6 @@ from datetime import datetime
 main = None
 
 
-
 # Streamlink/listformat mapping
 listfmt_t = {
     "audio/x-scpls":        "pls",
@@ -250,7 +249,7 @@ def convert_playlist(url, source, dest, local_file=True, row={}):
     # Otherwise convert to local file
     if local_file:
         fn, is_unique = tmp_fn(cnt, dest)
-        with open(fn, "wb") as f:
+        with open(fn, "w") as f:
             debug(dbg.DATA, "exporting with format:", dest, " into filename:", fn)
             f.write( save_playlist(source="srv", multiply=True).export(urls, row, dest) )
         return [fn]
@@ -376,7 +375,7 @@ class save_playlist(object):
 
     # save directly
     def file(self, rows, dest, fn):
-        with open(fn, "wb") as f:
+        with open(fn, "w") as f:
             f.write(self.store(rows, dest))
     
     
@@ -453,7 +452,7 @@ def xmlentities(s):
 
 
 
-# generate filename for temporary .m3u, if possible with unique id
+# Generate filename for temporary .m3u, if possible with unique id
 def tmp_fn(pls, ext="m3u"):
     # use shoutcast unique stream id if available
     stream_id = re.search("http://.+?/.*?(\d+)", pls, re.M)
@@ -462,7 +461,17 @@ def tmp_fn(pls, ext="m3u"):
         channelname = main.current_channel
     except:
         channelname = "unknown"
-    return (str(conf.tmp) + os.sep + "streamtuner2."+channelname+"."+stream_id+"."+ext, len(stream_id) > 3 and stream_id != "XXXXXX")
+    # return temp filename
+    fn = "%s/streamtuner2.%s.%s.%s" % (str(conf.tmp), channelname, stream_id, ext)
+    is_unique = len(stream_id) > 3 and stream_id != "XXXXXX"
+    tmp_files.append(fn)
+    return fn, is_unique
 
-    
+# Collect generated filenames
+tmp_files = []
+
+# Callback from main / after gtk_main_quit
+def cleanup_tmp_files():
+    if not int(conf.reuse_m3u):
+        [os.remove(fn) for fn in set(tmp_files)]
 
