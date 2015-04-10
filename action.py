@@ -48,6 +48,7 @@ listfmt_t = {
     "audio/x-scpls":        "pls",
     "audio/x-mpegurl":      "m3u",
     "audio/mpegurl":        "m3u",
+    "application/vnd.apple.mpegurl": "m3u",
     "video/x-ms-asf":       "asx",
     "application/xspf+xml": "xspf",
     "*/*":                  "href",  # "href" for unknown responses
@@ -100,6 +101,7 @@ playlist_content_map = [
    ("jspf", r""" ^ \s* \{ \s* "playlist": \s* \{ """),
    ("asf",  r""" ^ \[Reference\] .*? ^Ref\d+= """),
    ("json", r""" "url": \s* "\w+:// """),
+   ("gvp",  r""" ^gvp_version:1\.\d+$ """),
    ("href", r""" .* """),
 ]
 
@@ -249,7 +251,7 @@ def convert_playlist(url, source, dest, local_file=True, title=""):
 
     # Otherwise convert to local file
     if local_file:
-        fn, is_unique = tmp_fn(cnt)
+        fn, is_unique = tmp_fn(cnt, dest)
         with open(fn, "wb") as f:
             debug(dbg.DATA, "exporting with format:", dest, " into filename:", fn)
             f.write( save_playlist(source="srv", multiply=True).export(urls=urls, dest=dest, title=title) )
@@ -273,6 +275,7 @@ def http_probe_get(url):
 
     # Extract payload
     mime = r.headers.get("content-type", "href")
+    mime = mime.split(";")[0].strip()
     # Map MIME to abbr type (pls, m3u, xspf)
     if listfmt_t.get(mime):
         mime = listfmt_t.get(mime)
@@ -448,7 +451,7 @@ def xmlentities(s):
 
 
 # generate filename for temporary .m3u, if possible with unique id
-def tmp_fn(pls):
+def tmp_fn(pls, ext="m3u"):
     # use shoutcast unique stream id if available
     stream_id = re.search("http://.+?/.*?(\d+)", pls, re.M)
     stream_id = stream_id and stream_id.group(1) or "XXXXXX"
@@ -456,7 +459,7 @@ def tmp_fn(pls):
         channelname = main.current_channel
     except:
         channelname = "unknown"
-    return (str(conf.tmp) + os.sep + "streamtuner2."+channelname+"."+stream_id+".m3u", len(stream_id) > 3 and stream_id != "XXXXXX")
+    return (str(conf.tmp) + os.sep + "streamtuner2."+channelname+"."+stream_id+"."+ext, len(stream_id) > 3 and stream_id != "XXXXXX")
 
     
 
