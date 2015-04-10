@@ -54,7 +54,7 @@ class shoutcast(channels.ChannelPlugin):
     module = "shoutcast"
     title = "SHOUTcast"
     base_url = "http://shoutcast.com/"
-    listformat = "audio/x-scpls"
+    listformat = "pls"
     
     # categories
     categories = []

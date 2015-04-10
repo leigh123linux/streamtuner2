@@ -62,7 +62,7 @@ class xiph (ChannelPlugin):
   homepage = "http://dir.xiph.org/"
   #xml_url = "http://dir.xiph.org/yp.xml"
   json_url = "http://api.include-once.org/xiph/cache.php"
-  listformat = "url/http"
+  listformat = "srv"
   has_search = True
 
   # content

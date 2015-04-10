@@ -97,7 +97,7 @@ class timer:
         row = copy.copy(row)
         
         # add data
-        row["listformat"] = "url/direct" #self.parent.channel().listformat
+        row["listformat"] = "href" #self.parent.channel().listformat
         if row.get(self.timefield):
             row["title"] = row["title"] + " -- " + row[self.timefield]
         row[self.timefield] = self.parent.timer_value.get_text()
@@ -172,7 +172,7 @@ class timer:
         action.play(
             url = row["url"],
             audioformat = row.get("format","audio/mpeg"), 
-            listformat = row.get("listformat","url/direct"),
+            listformat = row.get("listformat","href"),
         )
 
     # action wrapper
@@ -190,7 +190,7 @@ class timer:
         action.record(
             url = row["url"],
             audioformat = row.get("format","audio/mpeg"), 
-            listformat = row.get("listformat","url/direct"),
+            listformat = row.get("listformat","href"),
             append = append,
         )
     

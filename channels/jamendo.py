@@ -62,7 +62,7 @@ class jamendo (ChannelPlugin):
     has_search = True
 
     base = "http://www.jamendo.com/en/"
-    listformat = "url/http"
+    listformat = "srv"
     api_base = "http://api.jamendo.com/v3.0/"
     cid = "49daa4f5"
 

@@ -46,7 +46,7 @@ class surfmusik (ChannelPlugin):
     title = "SurfMusik"
     module = "surfmusik"
     homepage = "http://www.surfmusik.de/"
-    listformat = "audio/x-scpls"
+    listformat = "m3u"
 
     lang = "DE"   # last configured categories
     base = {

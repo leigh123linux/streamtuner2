@@ -46,7 +46,7 @@ class itunes (ChannelPlugin):
     #module = "rs_playlist"
     homepage = "http://www.itunes.com?"
     has_search = False
-    listformat = "audio/x-scpls"
+    listformat = "pls"
     titles = dict(listeners=False, bitrate=False, playing=False)
 
     categories = [

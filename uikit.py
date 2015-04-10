@@ -363,9 +363,14 @@ class uikit:
     #-- Save-As dialog
     #
     @staticmethod
-    def save_file(title="Save As", parent=None, fn="", formats=[("*","*")]):
-        c = gtk.FileChooserDialog(title, parent, action=gtk.FILE_CHOOSER_ACTION_SAVE, buttons=(gtk.STOCK_CANCEL, 0, gtk.STOCK_SAVE, 1))
-        # params
+    def save_file(title="Save As", parent=None, fn="", formats=[("*.pls", "*.pls"), ("*.xspf", "*.xpsf"), ("*.m3u", "*.m3u"), ("*.jspf", "*.jspf"), ("*.asx", "*.asx"), ("*.json", "*.json"), ("*.smil", "*.smil"), ("*.wpl", "*.wpl"), ("*","*")]):
+
+        # With overwrite confirmation
+        c = gtk.FileChooserDialog(title, parent, action=gtk.FILE_CHOOSER_ACTION_SAVE,
+                buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_SAVE, gtk.RESPONSE_OK))
+        c.set_do_overwrite_confirmation(True)
+
+        # Params
         if fn:
             c.set_current_name(fn)
             fn = ""
@@ -374,11 +379,28 @@ class uikit:
             f.set_name(fname)
             f.add_pattern(ftype)
             c.add_filter(f)
-        # display
+        # Yes, that's how to retrieve signals for changed filter selections
+        try:
+            filterbox = c.get_children()[0].get_children()[0]
+            filterbox.connect("notify::filter", lambda *w: uikit.save_file_filterchange(c))
+        except: pass
+        
+        # Filter handlers don't work either.
+
+        # Display and wait
         if c.run():
             fn = c.get_filename()  # return filaname
         c.destroy()
         return fn
+
+    # Callback for changed FileFilter, updates current filename extension
+    @staticmethod
+    def save_file_filterchange(c):
+        fn, ext = c.get_filename(), c.get_filter().get_name()
+        if fn and ext:
+            fn = os.path.basename(fn)
+            c.set_current_name(re.sub(r"\.(m3u|pls|xspf|jspf|asx|json|smil|wpl)$", ext.strip("*"), fn))
+        
     
     
     
@@ -448,10 +470,16 @@ class uikit:
 
     # gtk.messagebox
     @staticmethod
-    def msg(text, style=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_CLOSE):
+    def msg(text, style=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_CLOSE, yes=None):
         m = gtk.MessageDialog(None, 0, style, buttons, message_format=text)
         m.show()
-        m.connect("response", lambda *w: m.destroy())
+        if yes:
+            response = m.run()
+            m.destroy()
+            return response in (gtk.RESPONSE_OK, gtk.RESPONSE_ACCEPT, gtk.RESPONSE_YES)
+        else:
+            m.connect("response", lambda *w: m.destroy())
+        pass
         
 
     # manual signal binding with a dict of { (widget, signal): callback }
@@ -461,7 +489,7 @@ class uikit:
             builder.get_widget(widget).connect(signal, func)
 
         
-    # Pixbug loader (from inline string, as in `logo.png`)
+    # Pixbug loader (from inline string, as in `logo.png`, automatic base64 decoding, and gunzipping of raw data)
     @staticmethod
     def pixbuf(buf, fmt="png", decode=True, gzip=False):
         if not buf or len(buf) < 16:

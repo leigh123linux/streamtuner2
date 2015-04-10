@@ -59,7 +59,7 @@ class live365(ChannelPlugin):
     homepage = "http://www.live365.com/"
     base_url = "http://www.live365.com/"
     has_search = True
-    listformat = "url/http"
+    listformat = "pls"
     mediatype = "audio/mpeg"
     has_search = False
 

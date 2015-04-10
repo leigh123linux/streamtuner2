@@ -16,15 +16,14 @@
 	by a generic player, like vlc.</p>
 
 	<table shade="rows" rules="rows cols">
-		<tr><td><p><app>Audacious</app></p></td>     <td><p><cmd>audacious %m3u</cmd></p></td>  <td><p>audio</p></td></tr>
+		<tr><td><p><app>Audacious</app></p></td>     <td><p><cmd>audacious</cmd></p></td>  <td><p>audio</p></td></tr>
 		<tr><td><p><app>XMMS2</app></p></td>         <td><p><cmd>xmms2 %m3u</cmd></p></td>      <td><p>audio</p></td></tr>
 		<tr><td><p><app>Amarok</app></p></td>        <td><p><cmd>amarok -l %pls</cmd></p></td>  <td><p>audio</p></td></tr>
-		<tr><td><p><app>Exaile</app></p></td>        <td><p><cmd>exaile %m3u</cmd></p></td>     <td><p>audio</p></td></tr>
-		<tr><td><p><app>Amarok</app></p></td>        <td><p><cmd>amarok -l %pls</cmd></p></td>  <td><p>audio</p></td></tr>
+		<tr><td><p><app>Exaile</app></p></td>        <td><p><cmd>exaile</cmd></p></td>     <td><p>audio</p></td></tr>
 		<tr><td><p><app>mplayer</app></p></td>       <td><p><cmd>mplayer %srv</cmd></p></td>    <td><p>console</p></td></tr>
 		<tr><td><p><app>VLC</app></p></td>           <td><p><cmd>vlc %u</cmd></p></td>          <td><p>video</p></td></tr>
 		<tr><td><p><app>Totem</app></p></td>         <td><p><cmd>totem %u</cmd></p></td>        <td><p>video</p></td></tr>
-		<tr><td><p><app>Media Player</app></p></td>  <td><p><cmd>mplayer2.exe %pls</cmd></p></td>  <td><p>Win32</p></td></tr>
+		<tr><td><p><app>Media Player</app></p></td>  <td><p><cmd>mplayer2.exe %asx</cmd></p></td>  <td><p>Win32</p></td></tr>
 	</table>
 
 	<p>Some audio players open a second instance when you actually want to switch radios.
@@ -47,13 +46,22 @@
 
 	<table shade="rows" rules="rows cols">
 	<thead>	<tr><td><p>Placeholder</p></td><td><p>Alternatives</p></td><td><p>URL/Filename type</p></td></tr> </thead>
+		<tr><td><p>%pls</p></td><td><p>%url %u %r</p></td><td><p>Either a remote .pls resource (fastest), or a local .pls file (if converted)</p></td></tr>
 		<tr><td><p>%m3u</p></td><td><p>%f %g %m</p></td><td><p>Provides a local .m3u file for the streaming station</p></td></tr>
-		<tr><td><p>%pls</p></td><td><p>%url %u %r</p></td><td><p>Either a remote .pls resource, or a local .pls file (if converted)</p></td></tr>
 		<tr><td><p>%srv</p></td><td><p>%d %s</p></td><td><p>Direct link to first streaming address, e.g. http://72.5.9.33:7500</p></td></tr>
+		<tr><td><p>%xspf</p></td><td><p>%x</p></td><td><p>Xiph.org shareable playlist format (for modern players)</p></td></tr>
+		<tr><td><p>%jspf</p></td><td><p>%j</p></td><td><p>JSON playlist format (widely unsupported)</p></td></tr>
+		<tr><td><p>%asx</p></td><td><p></p></td><td><p>Some obscure Windows playlist format (don't use that)</p></td></tr>
+		<tr><td><p>%smil</p></td><td><p></p></td><td><p>Standardized multimedia sequencing lists (which nobody uses either)</p></td></tr>
 	</table>
 
-	<p>You sould preferrably use the long forms. Most audio players like
-	%m3u most, while streamripper needs %srv for recording.</p>
+        <p>Preferrably use the long %abbr names for configuration.</p>
+        
+	<note style="info"><p>Most audio players like pls, yet sometimes the
+	older m3u format more.  Streamripper requires %srv for recording.</p>
+	
+	<p>Leave it to the default %pls to avoid Streamtuner2 doing unneeded
+	extra conversions (just delays playback).</p> </note>
 
 	</section>
 

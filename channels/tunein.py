@@ -40,7 +40,7 @@ class tunein (ChannelPlugin):
     module = "tunein"
     homepage = "http://tunein.com/"
     has_search = False
-    listformat = "audio/x-scpls"
+    listformat = "pls"
     titles = dict(listeners=False)
     base = "http://opml.radiotime.com/"
 

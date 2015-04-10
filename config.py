@@ -271,7 +271,8 @@ class ConfigDict(dict):
     # such as: { arg: -D, name: debug, type: bool }
     def init_args(self, ap):
         for opt in plugin_meta(frame=0).get("config"):
-            if [kwargs for kwargs in [self.argparse_map(opt)]]:
+            kwargs = self.argparse_map(opt)
+            if kwargs:
                 #print kwargs
                 ap.add_argument(*kwargs.pop("args"), **kwargs)
         return ap.parse_args()
@@ -341,7 +342,7 @@ def get_data(fn, decode=False, gz=False, file_base="config"):
         if gz:
             bin = gzip_decode(bin)
         if decode:
-            return bin.decode("utf-8")
+            return bin.decode("utf-8", errors='ignore')
         else:
             return str(bin)
     except:
@@ -397,7 +398,7 @@ def plugin_meta(fn=None, src=None, module=None, frame=1, plugin_base="channels")
     if not src:
         src = ""
     if type(src) is not str:
-        src = src.decode("utf-8")
+        src = src.decode("utf-8", errors='replace')
 
     return plugin_meta_extract(src, fn)
 

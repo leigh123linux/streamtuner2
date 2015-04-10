@@ -40,7 +40,7 @@ class bookmarks(GenericChannel):
     module = "bookmarks"
     title = "bookmarks"
     base_url = "file:.config/streamtuner2/bookmarks.json"
-    listformat = "*/*"
+    listformat = "any"
 
     # content
     categories = ["favourite", ]  # timer, links, search, and links show up as needed

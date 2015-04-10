@@ -24,6 +24,9 @@ from config import *
 from channels import *
 import ahttp
 from uikit import uikit
+import action
+import re
+
 
 # provides another export window, and custom file generation - does not use action.save()
 class exportcat():
@@ -31,20 +34,28 @@ class exportcat():
     module = ""
     meta = plugin_meta()
 
-    # register
+    # Register callback
     def __init__(self, parent):
         conf.add_plugin_defaults(self.meta, self.module)
         if parent:
             self.parent = parent
             uikit.add_menu([parent.extensions, parent.extensions_context], "Export all stations", self.savewindow)
 
-    # set new browser string in requests session
+    # Fetch streams from category, show "Save as" dialog, then convert URLs and export as playlist file
     def savewindow(self, *w):
         cn = self.parent.channel()
+        source = cn.listformat
         streams = cn.streams[cn.current]
         fn = uikit.save_file("Export category", None, "%s.%s.%s" % (cn.module, cn.current, conf.export_format))
         __print__(dbg.PROC, "Exporting category to", fn)
         if fn:
-            dest = re.findall("\.(m3u|pls|xspf|jspf|json|smil|wpl)8?$", fn)[0]
-            action.save_playlist(source="asis", multiply=False).save(rows=streams, fn=fn, dest=dest)
+            dest = re.findall("\.(m3u8?|pls|xspf|jspf|json|smil|asx)$", fn.lower())
+            if dest:
+                dest = dest[0]
+            else:
+                self.parent.status("Unsupported export playlist type (file extension).")
+                return
+            if dest == "m3u8":
+                dest = "m3u"
+            action.save_playlist(source="asis", multiply=False).file(rows=streams, fn=fn, dest=dest)
         pass            

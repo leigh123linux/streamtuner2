@@ -45,6 +45,7 @@ class modarchive (ChannelPlugin):
     module = "modarchive"
     homepage = "http://www.modarchive.org/"
     base = "http://modarchive.org/"
+    listformat = "href"
     titles = dict(genre="Genre", title="Song", playing="File", listeners="Rating", bitrate=0)
 
     # keeps category titles->urls    
