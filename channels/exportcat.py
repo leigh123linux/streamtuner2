@@ -42,21 +42,9 @@ class exportcat():
     def savewindow(self, *w):
         cn = self.parent.channel()
         streams = cn.streams[cn.current]
-        fn = uikit.save_file("Export category", None, "stationlist." + conf.export_format, formats=[("*.xspf", "*.xpsf"),("*.m3u", "*.m3u")])
-        with open(fn, "w") as f:
-            __print__(dbg.PROC, "Exporting category to", fn)
-            f.write(self.pls(streams))
-        return
-
-    # plain PLS file
-    def pls(self, streams):
-        txt = "[playlist]\n"
-        txt += "numberofentries=%s\n\n" % len(streams)
-        for i,row in enumerate(streams):
-            i = str(i)
-            txt += "File"+i + "=" + row["url"] + "\n"
-            txt += "Title"+i + "=" + row["title"] + "\n"
-            txt += "Length"+i + "=-1\n\n"
-        txt += "Version=2\n"
-        return txt
-           
+        fn = uikit.save_file("Export category", None, "%s.%s.%s" % (cn.module, cn.current, conf.export_format))
+        __print__(dbg.PROC, "Exporting category to", fn)
+        if fn:
+            dest = re.findall("\.(m3u|pls|xspf|jspf|json|smil|wpl)8?$", fn)[0]
+            action.save_playlist(source="asis", multiply=False).save(rows=streams, fn=fn, dest=dest)
+        pass            
