@@ -70,12 +70,13 @@ import channels.search
 class StreamTunerTwo(gtk.Builder):
 
     # object containers
-    widgets = {}     # non-glade widgets (the manually instantiated ones)
+    widgets = {}     # non-glade widgets (any manually instantiated ones)
     channels = {}    # channel modules
     features = {}    # non-channel plugins
     working = []     # threads
     hooks = {
         "play": [favicon.download_playing],  # observers queue here
+        "record": [],
         "init": [],
         "config_load": [],
         "config_save": [],
@@ -262,21 +263,11 @@ class StreamTunerTwo(gtk.Builder):
         self.win_streamtuner2.set_title("Streamtuner2 - %s" % self.channel().meta.get("title"))
 
 
-    # Convert ListStore iter to row number
-    def rowno(self):
-        (model, iter) = self.model_iter()
-        return model.get_path(iter)[0]
-
-    # Currently selected entry in stations list, return complete data dict
+    # Channel: row{} dict for current station
     def row(self):
-        return self.channel().stations() [self.rowno()]
-
+        return self.channel().row()
         
-    # return ListStore object and Iterator for currently selected row in gtk.TreeView station list
-    def model_iter(self):
-        return self.channel().gtk_list.get_selection().get_selected()
-        
-    # Fetches a single varname from currently selected station entry
+    # Channel: fetch single varname from station row{} dict
     def selected(self, name="url"):
         return self.row().get(name)
 
@@ -284,15 +275,16 @@ class StreamTunerTwo(gtk.Builder):
             
     # Play button
     def on_play_clicked(self, widget, event=None, *args):
-        row = self.row()
-        if row:
-            self.channel().play(row)
-            [callback(row) for callback in self.hooks["play"]]
+        self.status("Starting player...")
+        row = self.channel().play()
+        self.status("")
+        [callback(row) for callback in self.hooks["play"]]
 
     # Recording: invoke streamripper for current stream URL
     def on_record_clicked(self, widget):
-        row = self.row()
-        action.record(row.get("url"), row.get("format", "audio/mpeg"), "url/direct", row=row)
+        self.status("Recording station...")
+        row = self.channel().record()
+        [callback(row) for callback in self.hooks["record"]]
 
     # Open stream homepage in web browser
     def on_homepage_stream_clicked(self, widget):
@@ -333,12 +325,7 @@ class StreamTunerTwo(gtk.Builder):
     # Add current selection to bookmark store
     def bookmark(self, widget):
         self.bookmarks.add(self.row())
-        # code to update current list (set icon just in on-screen liststore, it would be updated with next display() anyhow - and there's no need to invalidate the ls cache, because that's referenced by model anyhow)
-        try:
-            (model,iter) = self.model_iter()
-            model.set_value(iter, 0, gtk.STOCK_ABOUT)
-        except:
-            pass
+        self.channel().row_icon(gtk.STOCK_ABOUT)
         # refresh bookmarks tab
         self.bookmarks.load(self.bookmarks.default)
 
@@ -359,7 +346,7 @@ class StreamTunerTwo(gtk.Builder):
         if fn:
             source = row.get("listformat", self.channel().listformat)
             dest = (re.findall("\.(m3u|pls|xspf|jspf|json|smil|asx|wpl)8?$", fn) or ["pls"])[0]
-            action.save_playlist(source=source, multiply=True).store(rows=[row], fn=fn, dest=dest)
+            action.save_playlist(source=source, multiply=True).save(rows=[row], fn=fn, dest=dest)
         pass
 
     # Save current stream URL into clipboard
@@ -368,10 +355,11 @@ class StreamTunerTwo(gtk.Builder):
 
     # Remove a stream entry
     def delete_entry(self, w):
-        n = self.rowno()
-        del self.channel().stations()[ n ]
-        self.channel().switch()
-        self.channel().save()
+        cn = self.channel()
+        n = cn.rowno()
+        del cn.stations()[ n ]
+        cn.switch()
+        cn.save()
 
     # Alternative Notebook channel tabs between TOP and LEFT position
     def switch_notebook_tabs_position(self, w, pos):

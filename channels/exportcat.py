@@ -46,10 +46,9 @@ class exportcat():
         cn = self.parent.channel()
         source = cn.listformat
         streams = cn.streams[cn.current]
-        fn = uikit.save_file("Export category", None, "stationlist." + conf.export_format)
+        fn = uikit.save_file("Export category", None, "%s.%s.%s" % (cn.module, cn.current, conf.export_format))
         __print__(dbg.PROC, "Exporting category to", fn)
         if fn:
             dest = re.findall("\.(m3u|pls|xspf|jspf|json|smil|wpl)8?$", fn)[0]
-            action.save_playlist(source="asis", multiply=False).store(rows=streams, fn=fn, dest=dest)
+            action.save_playlist(source="asis", multiply=False).file(rows=streams, fn=fn, dest=dest)
         pass            
-

@@ -32,7 +32,7 @@ from channels import *
 # Sub-plugins simply append a new category, and populate the streams
 # list themselves.
 #
-# It's accessible as `main.bookmarks` in the ST2 window and elsewhere.
+# It's accessible as `parent.bookmarks` in the ST2 window and elsewhere.
 #
 class bookmarks(GenericChannel):
 
@@ -109,7 +109,7 @@ class bookmarks(GenericChannel):
         if row.get("favicon"):
            row["favicon"] = favicon.file(row.get("homepage"))
         if not row.get("listformat"):
-            row["listformat"] = self.main.channel().listformat
+            row["listformat"] = self.parent.channel().listformat
            
         # append to storage
         self.streams["favourite"].append(row)
@@ -158,7 +158,7 @@ class bookmarks(GenericChannel):
         check = {"http//": "[row]"}
         check = dict((row.get("url", "http//"),row) for row in fav)
         # walk through all channels/streams
-        for chname,channel in self.main.channels.items():
+        for chname,channel in self.parent.channels.items():
             for cat,streams in channel.streams.items():
 
                 # keep the potentially changed rows
