@@ -67,6 +67,10 @@ mediafmt_t = {
 placeholder_map = dict(
     pls = "(%url | %pls | %u | %l | %r) \\b",
     m3u = "(%m3u | %f | %g | %m) \\b",
+    xspf= "(%xspf | %xpsf | %x) \\b",
+    jspf= "(%jspf | %j) \\b",
+    asx = "(%asx) \\b",
+    smil= "(%smil) \\b",
     srv = "(%srv | %d | %s) \\b",
 )
 
@@ -75,7 +79,7 @@ playlist_content_map = [
    ("pls",  r""" (?i)\[playlist\].*numberofentries """),
    ("xspf", r""" <\?xml .* <playlist .* http://xspf\.org/ns/0/ """),
    ("m3u",  r""" ^ \s* #(EXT)?M3U """),
-   ("asx" , r""" <ASX\b """),
+   ("asx" , r""" <asx\b """),
    ("smil", r""" <smil[^>]*> .* <seq> """),
    ("html", r""" <(audio|video)\b[^>]+\bsrc\s*=\s*["']?https?:// """),
    ("wpl",  r""" <\?wpl \s+ version="1\.0" \s* \?> """),
@@ -186,8 +190,8 @@ def convert_playlist(url, source, dest, local_file=True, title=""):
     urls = []
     debug(dbg.PROC, "convert_playlist(", url, source, dest, ")")
 
-    # Leave alone if format matches, or if "srv" URL class, or if it's a local path already
-    if source == dest or source in ("srv", "href") or not re.search("\w+://", url):
+    # Leave alone if format matches, or if "srv" URL class, or if not http (local path, mms:/rtsp:)
+    if source == dest or source in ("srv", "href") or not re.match("(https?|spdy)://", url):
         return [url]
     
     # Retrieve from URL
@@ -214,8 +218,8 @@ def convert_playlist(url, source, dest, local_file=True, title=""):
         debug(dbg.ERR, "Possible playlist format mismatch:", (source, mime, probe, ext))
 
     # Extract URLs from content
-    for fmt in [ "pls", "asx", "raw" ]:
-        if not urls and fmt in (source, mime, probe, ext):
+    for fmt in [ "pls", "xspf", "asx", "smil", "jspf", "m3u", "json", "raw" ]:
+        if not urls and fmt in (source, mime, probe, ext, "raw"):
             urls = extract_playlist(source).format(fmt)
             debug(dbg.DATA, "conversion from:", source, " to dest:", fmt, "got URLs=", urls)
             
@@ -271,22 +275,23 @@ class extract_playlist(object):
     src = ""
     def __init__(self, text):
         self.src = text
+        
+    # Extract only URLs from given source type
     def format(self, fmt):
-        cnv = getattr(self, fmt)
-        return cnv()
+        debug(dbg.DATA, fmt)
+        return re.findall(self.extr_urls[fmt], self.src, re.X);
 
-    # PLS
-    def pls(self):
-        return re.findall("\s*File\d*\s*=\s*(\w+://[^\s]+)", self.src, re.I)
-
-    # ASX
-    def asx(self):
-        return re.findall("<Ref\s+href=\"(http://.+?)\"", self.src)
-
-    # Regexp out any URL
-    def raw(self):
-        debug(dbg.WARN, "Raw playlist extraction")
-        return re.findall("([\w+]+://[^\s\"\'\>\#]+)", self.src)
+    # Only look out for URLs, not local file paths
+    extr_urls = {
+       "pls":  r" (?i) ^ \s*File\d* \s*=\s* (\w+://[^\s]+) ",
+       "m3u":  r" (?m) ^( \w+:// [^#\n]+ )",
+       "xspf": r" (?x) <location> (\w+://[^<>\s]+) </location> ",
+       "asx":  r" (?x) <ref \b[^>]+\b href \s*=\s* [\'\"] (\w+://[^\s\"\']+) [\'\"] ",
+       "smil": r" (?x) <(?:audio|video)\b [^>]+ \b src \s*=\s* [^\"\']? \s* (\w+://[^\"\'\s]+) ",
+       "jspf": r" (?x) \"location\" \s*:\s* \"(\w+://[^\"\s]+)\" ",
+       "json": r" (?x) \"url\" \s*:\s* \"(\w+://[^\"\s]+)\" ",
+       "raw":  r" (?i) ( [\w+]+:// [^\s\"\'\>\#]+ ) ",
+    }
 
 
 # Save rows in one of the export formats.
@@ -369,41 +374,53 @@ class save_playlist(object):
         return json.dumps(rows, indent=4)
 
 
-#-- all others need rework --
-
     # XSPF
     def xspf(self, rows):
-        txt = '<?xml version="1.0" encoding="UTF-8"?>' + "\n"
-        txt += '<?http header="Content-Type: application/xspf+xml" ?>' + "\n"
-        txt += '<playlist version="1" xmlns="http://xspf.org/ns/0/">' + "\n"
-        txt += "  <trackList>\n"
-        for row in rows:
-            for attr,tag in [("title","title"), ("homepage","info"), ("playing","annotation"), ("description","annotation")]:
-                if rows.get(attr):
-                    txt += "  <"+tag+">" + xmlentities(row[attr]) + "</"+tag+">\n"
-            u = row.get("url")
-            txt += '	<track><location>' + xmlentities(u) + '</location></track>' + "\n"
-        txt += "  </trackList>\n</playlist>\n"
+        return """<?xml version="1.0" encoding="UTF-8"?>\n"""					\
+            + """<?http header="Content-Type: application/xspf+xml" ?>\n"""			\
+            + """<playlist version="1" xmlns="http://xspf.org/ns/0/">\n\t<trackList>\n"""	\
+            + "".join("""\t\t<track>\n%s\t\t</track>\n""" % self.xspf_row(row, self.xspf_map) for row in rows)	\
+            + """\t</trackList>\n</playlist>\n"""
+    # individual tracks
+    def xspf_row(self, row, map):
+        return "".join("""\t\t\t<%s>%s</%s>\n""" % (tag, xmlentities(row[attr]), tag) for attr,tag in map.items() if row.get(attr))
+    # dict to xml tags
+    xspf_map = dict(title="title", url="location", homepage="info", playing="annotation", description="info")
+
 
     # JSPF
     def jspf(self, rows):
-        pass
+        tracks = []
+        for row in rows:
+            tracks.append( { tag: row[attr] for attr,tag in self.xspf_map.items() if row.get(attr) } )
+        return json.dumps({ "playlist": { "track": tracks } }, indent=4)
+
+
     # ASX
     def asx(self, rows):
+        txt = """<asx version="3.0">\n"""
         for row in rows:
-          txt = "<ASX version=\"3.0\">\n"			\
-            + " <Title>" + xmlentities(row["title"]) + "</Title>\n"	\
-            + " <Entry>\n"				\
-            + "  <Title>" + xmlentities(row["title"]) + "</Title>\n"	\
-            + "  <MoreInfo href=\"" + row["homepage"] + "\"/>\n"	\
-            + "  <Ref href=\"" + stream_urls[0] + "\"/>\n"		\
-            + " </Entry>\n</ASX>\n"
+            txt += """\t<entry>\n\t\t<title>%s</title>\n\t\t<ref href="%s"/>\n\t</entry>\n""" % (xmlentities(row["title"]), xmlentities(row["url"]))
+        txt += """</asx>\n"""
         return txt
+
 
     # SMIL
     def smil(self, rows):
-        return "<smil>\n<head>\n  <meta name=\"title\" content=\"" + xmlentities(row["title"]) + "\"/>\n</head>\n"	\
-             + "<body>\n  <seq>\n    <audio src=\"" + stream_urls[0] + "\"/>\n  </seq>\n</body>\n</smil>\n"
+        txt = """<smil>\n<head>\n\t<meta name="title" content="%s""/>\n</head>\n<body>\n\t<seq>\n""" % (rows[0]["title"])
+        for row in rows:
+            if row.get("url"):
+                txt += """\t\t<audio src="%s"/>\n""" % row["url"]
+        txt += """\t</seq>\n</body>\n</smil>\n"""
+        return txt
+
+
+
+# Stub import, only if needed
+def xmlentities(s):
+    global xmlentities
+    from xml.sax.saxutils import escape as xmlentities
+    return xmlentities(s)
 
 
 
