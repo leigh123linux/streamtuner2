@@ -107,6 +107,10 @@ class GenericChannel(object):
     rx_www_url = re.compile("""(www(\.\w+[\w-]+){2,}|(\w+[\w-]+[ ]?\.)+(com|FM|net|org|de|PL|fr|uk))""", re.I)
 
 
+
+    #--------------------------- initialization --------------------------------
+
+
     # constructor
     def __init__(self, parent=None):
     
@@ -128,32 +132,6 @@ class GenericChannel(object):
         if (parent):
             self.cache()
             self.gui(parent)
-        pass
-        
-        
-    # These are all implemented in main (where they don't belong!)
-    def stations(self):
-        return self.streams.get(self.current, [])
-    def rowno(self):
-        pass
-    def row(self):
-        pass
-    
-
-    # read previous channel/stream data, if there is any
-    def cache(self):
-        # stream list
-        cache = conf.load("cache/" + self.module)
-        if (cache):
-            self.streams = cache
-        # categories
-        cache = conf.load("cache/categories_" + self.module)
-        if (cache):
-            self.categories = cache
-        # catmap (optional)
-        cache = conf.load("cache/catmap_" + self.module)
-        if (cache):
-            self.catmap = cache
         pass
 
         
@@ -188,6 +166,68 @@ class GenericChannel(object):
             
         # add to main menu
         uikit.add_menu([parent.channelmenuitems], self.meta["title"], lambda w: parent.channel_switch_by_name(self.module) or 1)
+
+
+    # Statusbar stub (defers to parent/main window, if in GUI mode)
+    def status(self, *v):
+        if self.parent: self.parent.status(*v)
+        else: __print__(dbg.INFO, "status():", *v)
+
+
+        
+    #--------------------- streams/model data accesss ---------------------------
+        
+    # Get list of stations in current category
+    def stations(self):
+        return self.streams.get(self.current, [])
+
+    # Convert ListStore iter to row number
+    def rowno(self):
+        (model, iter) = self.model_iter()
+        return model.get_path(iter)[0]
+
+    # Return ListStore object and Iterator for currently selected row in gtk.TreeView station list
+    def model_iter(self):
+        return self.gtk_list.get_selection().get_selected()
+
+    # Currently selected entry in stations list, return complete data dict
+    def row(self):
+        return self.stations() [self.rowno()]
+        
+    # Fetches a single varname from currently selected station entry
+    def selected(self, name="url"):
+        return self.row().get(name)
+    
+    # Inject status icon into currently selected row (used by main.bookmark() call)
+    def row_icon(self, gtkIcon = gtk.STOCK_ABOUT):
+        try:
+            # Updates gtk_list store, set icon in current display.
+            # Since it is used by bookmarks, would be reshown with next display() anyhow,
+            # and there's no need to invalidate the ls cache, because that's referenced by model anyhow.
+            (model,iter) = self.model_iter()
+            model.set_value(iter, 0, gtkIcon)
+        except:
+             pass
+
+    
+
+    #------------------------ base implementations -----------------------------
+
+    # read previous channel/stream data, if there is any
+    def cache(self):
+        # stream list
+        cache = conf.load("cache/" + self.module)
+        if (cache):
+            self.streams = cache
+        # categories
+        cache = conf.load("cache/categories_" + self.module)
+        if (cache):
+            self.categories = cache
+        # catmap (optional)
+        cache = conf.load("cache/catmap_" + self.module)
+        if (cache):
+            self.catmap = cache
+        pass
 
         
     # make private copy of .datamap and modify field (title= only ATM)
@@ -443,18 +483,28 @@ class GenericChannel(object):
 
     #--------------------------- actions ---------------------------------
 
-    # invoke action.play,
-    # can be overridden to provide channel-specific "play" alternative
-    def play(self, row):
-        if row.get("url"):
-
-            # parameters
+    # Invoke action.play() for current station.
+    # Can be overridden to provide channel-specific "play" alternative
+    def play(self):
+        row = self.row()
+        if row:
+            # playlist and audio type
             audioformat = row.get("format", self.audioformat)
             listformat = row.get("listformat", self.listformat)
-
             # invoke audio player
-            action.play(row["url"], audioformat, listformat)
+            action.play(row["url"], audioformat, listformat, row)
+        else:
+            self.status("No station selected for playing.")
+        return row
 
+    # Start streamripper/youtube-dl/etc
+    def record(self):
+        row = self.row()
+        if row:
+            audioformat = row.get("format", self.audioformat)
+            listformat = row.get("listformat", self.listformat)
+            action.record(row.get("url"), audioformat, listformat, row=row)
+        return row
 
 
 
