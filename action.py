@@ -19,8 +19,8 @@
 #
 # As fallback the playlist URL is retrieved and its MIME type
 # checked, and its content regexped to guess the link format.
-# Lastly a playlist type suitable for audio players recreated.
-# Which is somewhat of a security feature, playlists get cleaned
+# Lastly a playlist format suitable for audio players recreated.
+# Which is somewhat of a security feature; playlists get cleaned
 # up this way. The conversion is not strictly necessary for all
 # players, as basic PLS is supported by most.
 #
@@ -35,6 +35,7 @@ from config import conf, __print__ as debug, dbg
 import platform
 import copy
 import json
+from datetime import datetime
 
 
 # Coupling to main window
@@ -130,17 +131,17 @@ def help(*args):
 
 # Calls player for stream url and format
 #
-def play(url, audioformat="audio/mpeg", source="pls", row={}):
+def play(row={}, audioformat="audio/mpeg", source="pls", url=None):
     cmd = mime_app(audioformat, conf.play)
-    cmd = interpol(cmd, url, source, row)
+    cmd = interpol(cmd, url or row["url"], source, row)
     run(cmd)
 
 
 # Call streamripper
 #
-def record(url, audioformat="audio/mpeg", source="href", row={}):
+def record(row={}, audioformat="audio/mpeg", source="href", url=None):
     cmd = mime_app(audioformat, conf.record)
-    cmd = interpol(cmd, url, source, row)
+    cmd = interpol(cmd, url or row["url"], source, row)
     run(cmd)
 
 
@@ -177,6 +178,7 @@ def mime_app(fmt, cmd_list):
 def interpol(cmd, url, source="pls", row={}):
 
     # inject other meta fields
+    row = copy.copy(row)
     if row:
         for field in row:
             cmd = cmd.replace("%"+field, "%r" % row.get(field))
@@ -190,7 +192,7 @@ def interpol(cmd, url, source="pls", row={}):
     for dest, rx in placeholder_map.items():
         if re.search(rx, cmd, re.X):
             # from .pls to .m3u
-            fn_or_urls = convert_playlist(url, listfmt(source), listfmt(dest), local_file=True, title=row.get("title", ""))
+            fn_or_urls = convert_playlist(url, listfmt(source), listfmt(dest), local_file=True, row=row)
             # insert quoted URL/filepath
             return re.sub(rx, quote(fn_or_urls), cmd, 2, re.X)
 
@@ -198,18 +200,15 @@ def interpol(cmd, url, source="pls", row={}):
 
 
 # Substitute .pls URL with local .m3u, or direct srv addresses, or leaves URL asis.
-#  · Takes a single input `url`.
+#  · Takes a single input `url` (and original row{} as template).
 #  · But returns a list of [urls] after playlist extraction.
 #  · If repackaging as .m3u/.pls/.xspf, returns the local [fn].
 #
-# TODO: This still needs some rewrite to reuse the incoming row={},
-# and keep station titles for converted playlists.
-#
-def convert_playlist(url, source, dest, local_file=True, title=""):
+def convert_playlist(url, source, dest, local_file=True, row={}):
     urls = []
     debug(dbg.PROC, "convert_playlist(", url, source, dest, ")")
 
-    # Leave alone if format matches, or if "srv" URL class, or if not http (local path, mms:/rtsp:)
+    # Leave alone if format matches, or if already "srv" URL, or if not http (local path, mms:/rtsp:)
     if source == dest or source in ("srv", "href") or not re.match("(https?|spdy)://", url):
         return [url]
     
@@ -247,14 +246,13 @@ def convert_playlist(url, source, dest, local_file=True, title=""):
         return [url]
     elif dest in ("srv", "href"):
         return urls
-    debug( urls )
 
     # Otherwise convert to local file
     if local_file:
         fn, is_unique = tmp_fn(cnt, dest)
         with open(fn, "wb") as f:
             debug(dbg.DATA, "exporting with format:", dest, " into filename:", fn)
-            f.write( save_playlist(source="srv", multiply=True).export(urls=urls, dest=dest, title=title) )
+            f.write( save_playlist(source="srv", multiply=True).export(urls, row, dest) )
         return [fn]
     else:
         return urls
@@ -285,7 +283,7 @@ def http_probe_get(url):
         mime = mediafmt_t.get(mime)
         return (mime, url)
     # Rejoin body
-    content = "\n".join(r.iter_lines())
+    content = "\n".join(str.decode(errors='replace') for str in r.iter_lines())
     return (mime, content)
 
 
@@ -320,8 +318,8 @@ class extract_playlist(object):
 
 # Save rows in one of the export formats.
 #
-# The export() version uses urls[]+title= as input, converts it into a
-# list of rows{} beforehand.
+# The export() version uses urls[]+row/title= as input, converts it into
+# a list of rows{} beforehand.
 #
 # While store() requires rows{} to begin with, to perform a full
 # conversion. Can save directly to a file name.
@@ -340,9 +338,13 @@ class save_playlist(object):
 
     # Used by playlist_convert(), to transform a list of extracted URLs
     # into a local .pls/.m3u collection again. Therefore injects the
-    # `title` back into each of the URL rows.
-    def export(self, urls=None, title=None, dest="pls"):
-        rows = [ { "url": url, "title": title } for url in urls ]
+    # `title` back into each of the URL rows / or uses row{} template.
+    def export(self, urls=[], row={}, dest="pls", title=None):
+        row["title"] = row.get("title", title or "unnamed stream")
+        rows = []
+        for url in urls:
+            row.update(url=url)
+            rows.append(row)
         return self.store(rows, dest)
 
     # Export a playlist from rows{}
@@ -402,9 +404,10 @@ class save_playlist(object):
 
     # XSPF
     def xspf(self, rows):
-        return """<?xml version="1.0" encoding="UTF-8"?>\n"""					\
-            + """<?http header="Content-Type: application/xspf+xml" ?>\n"""			\
-            + """<playlist version="1" xmlns="http://xspf.org/ns/0/">\n\t<trackList>\n"""	\
+        return """<?xml version="1.0" encoding="UTF-8"?>\n"""				\
+            + """<?http header="Content-Type: application/xspf+xml; x-ns='http://xspf.org/ns/0/'; x-gen=streamtuner2" ?>\n"""	\
+            + """<playlist version="1" xmlns="http://xspf.org/ns/0/">\n"""		\
+            + """\t<date>%s</date>\n\t<trackList>\n""" % datetime.now().isoformat()	\
             + "".join("""\t\t<track>\n%s\t\t</track>\n""" % self.xspf_row(row, self.xspf_map) for row in rows)	\
             + """\t</trackList>\n</playlist>\n"""
     # individual tracks
@@ -433,7 +436,7 @@ class save_playlist(object):
 
     # SMIL
     def smil(self, rows):
-        txt = """<smil>\n<head>\n\t<meta name="title" content="%s""/>\n</head>\n<body>\n\t<seq>\n""" % (rows[0]["title"])
+        txt = """<smil>\n<head>\n\t<meta name="title" content="%s"/>\n</head>\n<body>\n\t<seq>\n""" % (rows[0]["title"])
         for row in rows:
             if row.get("url"):
                 txt += """\t\t<audio src="%s"/>\n""" % row["url"]

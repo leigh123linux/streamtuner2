@@ -342,7 +342,7 @@ def get_data(fn, decode=False, gz=False, file_base="config"):
         if gz:
             bin = gzip_decode(bin)
         if decode:
-            return bin.decode("utf-8")
+            return bin.decode("utf-8", errors='ignore')
         else:
             return str(bin)
     except:
@@ -398,7 +398,7 @@ def plugin_meta(fn=None, src=None, module=None, frame=1, plugin_base="channels")
     if not src:
         src = ""
     if type(src) is not str:
-        src = src.decode("utf-8")
+        src = src.decode("utf-8", errors='replace')
 
     return plugin_meta_extract(src, fn)
 

@@ -399,7 +399,7 @@ class uikit:
         fn, ext = c.get_filename(), c.get_filter().get_name()
         if fn and ext:
             fn = os.path.basename(fn)
-            c.set_current_name(re.sub(r"\.(m3u|pls|xspf|jspf|asx|json|smil|wpl)$", ext, fn))
+            c.set_current_name(re.sub(r"\.(m3u|pls|xspf|jspf|asx|json|smil|wpl)$", ext.strip("*"), fn))
         
     
     

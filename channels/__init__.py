@@ -487,12 +487,12 @@ class GenericChannel(object):
     # Can be overridden to provide channel-specific "play" alternative
     def play(self):
         row = self.row()
-        if row:
+        if row and "url" in row:
             # playlist and audio type
             audioformat = row.get("format", self.audioformat)
             listformat = row.get("listformat", self.listformat)
             # invoke audio player
-            action.play(row["url"], audioformat, listformat, row)
+            action.play(row, audioformat, listformat)
         else:
             self.status("No station selected for playing.")
         return row
@@ -500,10 +500,10 @@ class GenericChannel(object):
     # Start streamripper/youtube-dl/etc
     def record(self):
         row = self.row()
-        if row:
+        if row and "url" in row:
             audioformat = row.get("format", self.audioformat)
             listformat = row.get("listformat", self.listformat)
-            action.record(row.get("url"), audioformat, listformat, row=row)
+            action.record(row, audioformat, listformat)
         return row
 
 
