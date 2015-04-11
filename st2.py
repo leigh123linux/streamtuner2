@@ -234,11 +234,8 @@ class StreamTunerTwo(gtk.Builder):
         self.current_channel = notebook.get_menu_label_text(notebook.get_nth_page(page_num))
         __print__(dbg.UI, "main.channel_switch():", "set current_channel :=", self.current_channel)
         self.update_title()
-        
         # if first selected, load current category
-        __print__(dbg.STAT, "TRY", "main.channel_switch(): ", self.current_channel + ".first_show()")
-        try: self.channel().first_show()
-        except: __print__(dbg.INIT, ".first_show() initialization error")
+        self.channel().first_show()
 
     # Invoked from the menu instead, uses module name instead of numeric tab id
     def channel_switch_by_name(self, name):
