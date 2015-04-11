@@ -46,8 +46,6 @@ if ver==3:
     from gi.repository import Gtk as gtk
     from gi.repository import GObject as gobject
     from gi.repository import GdkPixbuf
-    #empty_pixbuf =  GdkPixbuf.Pixbuf.new(GdkPixbuf.Colorspace.RGB, True, 8, 16, 16)#, 4, None, None)
-    empty_pixbuf =  GdkPixbuf.Pixbuf.new_from_data(b"\xFF\xFF\xFF\xFF", GdkPixbuf.Colorspace.RGB, True, 8, 1, 1, 4, None, None)
     __print__(dbg.STAT, gtk)
     __print__(dbg.STAT, gobject)
 else:
@@ -55,15 +53,11 @@ else:
     import gtk
     import gobject
     GdkPixbuf = gtk.gdk
-    empty_pixbuf = GdkPixbuf.Pixbuf(gtk.gdk.COLORSPACE_RGB,True,8,16,16)
-    #print empty_pixbuf.get_has_alpha()
-    #empty_pixbuf.fill(0xFFFFFFFF)
 
 # prepare gtkbuilder data
 ui_xml = get_data("gtk3.xml.gz", decode=True, gz=True) #or get_data("gtk3.xml", decode=True)
 if ver == 2:
     ui_xml = ui_xml.replace('version="3.0"', 'version="2.16"')
-
 
 
 # simplified gtk constructors               ---------------------------------------------
@@ -512,7 +506,13 @@ class uikit:
         p.close()
         return pix
             
-            
+
+# Transparent png            
+empty_pixbuf = uikit.pixbuf(
+    """iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAA
+    B6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAAAAB3RJTUU
+    H3wQLEAE6zgxuGAAAABFJREFUOBFjGAWjYBSMAigAAAQQAAFWMn04AAAAAElFTkSuQmCC"""
+)
 
 
 # Text-only dropdown list.
