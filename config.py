@@ -374,7 +374,8 @@ def plugin_meta(fn=None, src=None, module=None, frame=1, plugin_base="channels")
     # try via pkgutil first
     if module:
        fn = module
-       src = pkgutil.get_data(plugin_base, fn+".py")
+       try: src = pkgutil.get_data(plugin_base, fn+".py")
+       except: pass
 
     # get source directly from caller
     elif not src and not fn:
@@ -418,7 +419,7 @@ def plugin_meta_extract(src="", fn=None, literal=False):
     if not literal:
         src = rx.comment.search(src)
         if not src:
-            __print__(dbg.ERR, "Couldn't read source meta information", fn)
+            __print__(dbg.ERR, "Couldn't read source meta information:", fn)
             return meta
         src = src.group(0)
         src = rx.hash.sub("", src).strip()
