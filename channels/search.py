@@ -81,7 +81,7 @@ class search (AuxiliaryWindow):
     def show_results(self, entries):
         self.main.status(1.0)
         self.main.status("")
-        self.main.channel_switch(self.main.notebook_channels, "bookmarks", 0)
+        self.main.channel_switch_by_name("bookmarks")
         self.main.bookmarks.set_category("search")
         # insert data and show
         self.main.channels["bookmarks"].streams["search"] = entries   # we have to set it here, else .currentcat() might reset it 
