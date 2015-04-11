@@ -1,10 +1,10 @@
 # encoding: UTF-8
 # api: streamtuner2
-# type: base
+# type: class
 # category: ui
 # title: Channel plugins
 # description: Base implementation for channels and feature plugins
-# version: 1.2
+# version: 1.3
 # license: public domain
 # author: mario
 # url: http://fossil.include-once.org/streamtuner2/
@@ -17,22 +17,15 @@
 # config: -
 # priority: core
 #
-#
-# Just exports GenericChannel and ChannelPlugin.
 # GenericChannel implements the basic GUI functions and defines
-# the default channel data structure. It implements base and
-# fallback logic for all other channel implementations.
+# the default channel data structure. It implements fallback logic
+# for all other channel implementations. Only `bookmarks` uses it
+# directly.
 #
-# Built-in channels derive directly from generic. Additional
-# channels don't have a pre-defined Notebook tab in the glade
-# file. They derive from the ChannelPlugins class instead, which
-# adds the required gtk Widgets manually.
-#
-# Makes module scanning available.  Checks for conf.share, so
-# should pick up /usr/share/streamtuner2/channels/*.py plugins
-# as well as local ./channels/*.* - Needs rework for in-zip
-# searching.
-#
+# All other plugins don't have a pre-defined Notebook tab in the
+# GtkBuilder description. They derive from ChannelPlugins therefore,
+# which constructs and registers the required gtk widgets manually.
+
 
 import gtk
 from uikit import uikit
@@ -59,25 +52,23 @@ class GenericChannel(object):
 
     # desc
     meta = { "config": [] }
+    config = []
     homepage = "http://fossil.include-once.org/streamtuner2/"
     base_url = ""
     listformat = "pls"
     audioformat = "audio/mpeg" # fallback value
-    config = []
     has_search = False
 
     # categories
     categories = ["empty", ]
     catmap = {}
-    current = ""
-    default = "empty"
+    current = None
     shown = None     # last selected entry in stream list, also indicator if notebook tab has been selected once / stream list of current category been displayed yet
 
     # gui + data
-    streams = {}      #meta information dicts
-    liststore = {}    #gtk data structure
-    gtk_list = None   #gtk widget
-    gtk_cat = None    #gtk widget
+    streams = {}      # Station list dict, associates each genre to a list of stream rows
+    gtk_list = None   # Gtk widget for station treeview
+    gtk_cat = None    # Gtk widget for category columns
 
     # mapping of stream{} data into gtk treeview/treestore representation
     datamap = [
@@ -103,6 +94,7 @@ class GenericChannel(object):
     # for empty grouping / categories
     placeholder = [dict(genre="./.", title="Subcategory placeholder", playing="./.", url="none:", listeners=0, bitrate=0, homepage="", state="gtk-folder")]
     empty_stub = [dict(genre="./.", title="No categories found (HTTP error)", playing="Try Channel→Reload Categories later..", url="none:", listeners=0, bitrate=0, homepage="", state="gtk-stop")]
+    nothing_found = [dict(genre="./.", title="No contents found on directory server", playing="Notice", listeners=0, bitrate=0, state="gtk-info")]
     
     # regex            
     rx_www_url = re.compile("""(www(\.\w+[\w-]+){2,}|(\w+[\w-]+[ ]?\.)+(com|FM|net|org|de|PL|fr|uk))""", re.I)
@@ -126,19 +118,18 @@ class GenericChannel(object):
         # add default options values to config.conf.* dict
         conf.add_plugin_defaults(self.meta, self.module)
         
-        # stub for ST2 main window / dispatcher
-        self.parent = stub_parent(None)
-
-        # only if streamtuner2 is run in graphical mode        
+        # Only if streamtuner2 is run in graphical mode        
         if (parent):
             self.cache()
             self.gui(parent)
-        pass
+
+        # Stub for ST2 main window / dispatcher
+        else:
+            self.parent = stub_parent(None)
 
         
     # initialize Gtk widgets / data objects
     def gui(self, parent):
-        #print(self.module + ".gui()")
 
         # save reference to main window/glade API
         self.parent = parent
@@ -147,7 +138,6 @@ class GenericChannel(object):
         
         # category tree
         self.display_categories()
-        #uikit.tree(self.gtk_cat, self.categories, title="Category", icon=gtk.STOCK_OPEN);
         
         # update column names
         for field,title in list(self.titles.items()):
@@ -159,13 +149,9 @@ class GenericChannel(object):
                 for x in range(2, len(row)):
                     self.rowmap.append(row[x][0])
 
-        # load default category
-        #if (self.current):
-        #    self.load(self.current)
-        #else:
-        if True:
-            uikit.columns(self.gtk_list, self.datamap, [])
-            
+        # Initialize stations TreeView
+        uikit.columns(self.gtk_list, self.datamap, [])
+        
         # add to main menu
         uikit.add_menu([parent.channelmenuitems], self.meta["title"], lambda w: parent.channel_switch_by_name(self.module) or 1)
 
@@ -249,8 +235,8 @@ class GenericChannel(object):
         # get data from cache or download
         if (force or not category in self.streams):
             __print__(dbg.PROC, "load", "update_streams")
-            self.parent.status("Updating streams...")
-            self.parent.status(-0.1)
+            self.status("Updating streams...")
+            self.status(-0.1)
             if category == "empty":
                 new_streams = self.empty_stub
             else:
@@ -285,12 +271,11 @@ class GenericChannel(object):
   
             else:
                 # parse error
-                self.parent.status("category parsed empty.")
-                self.streams[category] = [{"title":"no contents found on directory server","bitrate":0,"max":0,"listeners":0,"playing":"error","favourite":0,"deleted":0}]
+                self.status("Category parsed empty.")
+                self.streams[category] = self.nothing_found
                 __print__(dbg.INFO, "Oooops, parser returned nothing for category " + category)
                 
         # assign to treeview model
-        #self.streams[self.default] = []
         #if (self.liststore.has_key(category)):  # was already loded before
         #    self.gtk_list.set_model(self.liststore[category])
         #else:   # currently list is new, had not been converted to gtk array before
@@ -299,8 +284,8 @@ class GenericChannel(object):
 
         # set pointer
         self.current = category
-        self.parent.status("")
-        self.parent.status(1.0)
+        self.status("")
+        self.status(1.0)
         pass
         
     # store current streams data
@@ -408,37 +393,48 @@ class GenericChannel(object):
     # display .current category, once notebook/channel tab is first opened
     def first_show(self):
 
-        if (self.shown != 55555):
-            __print__(dbg.PROC, self.module+".first_show()")
-        
-            # if category tree is empty, initialize it
-            if not self.categories:
-                __print__(dbg.PROC, self.module+"first_show: reload_categories");
-                #self.parent.thread(self.reload_categories)
-                try:
-                    self.reload_categories()
-                except:
-                    __print__(dbg.ERR, "HTTP error or extraction failure.")
-                    self.categories = ["empty"]
-                self.display_categories()
-                self.current = self.categories.keys()[0]
-                __print__(dbg.STAT, "Use first category as current =", self.current)
-                self.load(self.current)
-        
-            # load current category
-            else:
-                __print__(dbg.STAT, self.module+".first_show(): load current category =", self.current);
-                self.load(self.current)
-            
-            # put selection/cursor on last position
+        # Already processed
+        if (self.shown == 55555):
+            return
+        __print__(dbg.PROC, self.module, "→ first_show()", ", current=", self.current, ", categories=", len(self.categories))
+    
+        # if category tree is empty, initialize it
+        if not self.categories:
+            __print__(dbg.PROC, self.module, "→ first_show() → reload_categories()");
             try:
-                __print__(dbg.STAT, self.module+".first_show()", "select last known category treelist position =", self.shown)
-                self.gtk_list.get_selection().select_path(self.shown)
+                self.reload_categories()
             except:
-                pass
-                
-            # this method will only be invoked once
-            self.shown = 55555
+                __print__(dbg.ERR, "HTTP error or extraction failure.")
+                self.categories = ["empty"]
+            self.display_categories()
+
+        # Select first category
+        self.current = self.str_from_struct(self.categories) or None
+        __print__(dbg.STAT, self.module, "→ first_show(); use first category as current =", self.current)
+        try:
+            self.load(self.current)
+        except:
+            pass
+    
+        # put selection/cursor on last position
+        __print__(dbg.STAT, self.module+".first_show()", "select last known category treelist position =", self.shown)
+        try:
+            self.gtk_list.get_selection().select_path(self.shown)
+        except:
+            pass
+            
+        # Invoke only once
+        self.shown = 55555
+
+
+    # Retrieve first list value, or key from dict (-- used to get first category on init)
+    def str_from_struct(self, d):
+        if isinstance(d, (str)):
+            return d
+        elif isinstance(d, (dict)):
+            return self.str_from_struct(d.keys()) or self.str_from_struct(d.values())
+        elif isinstance(d, (list, tuple)):
+            return d[0] if len(d) else None
 
 
     # update categories, save, and display                
@@ -532,7 +528,7 @@ class GenericChannel(object):
             # yes, we do video
             "flv":"video/flv", "mp4":"video/mp4",
         }
-        map.update(action.lt)   # list type formats (.m3u .pls and .xspf)
+        #map.update(action.listfmt_t)   # list type formats (.m3u .pls and .xspf)
         if map.get(s):
             s = map[s]
         # add prefix:
