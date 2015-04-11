@@ -7,7 +7,7 @@
 # category: file
 # priority: optional
 # config:
-#   { name: export_format, value: pls, type: select, select: "pls|xspf|jspf", description: Export format. }
+#   { name: export_format, value: pls, type: select, select: "pls|xspf|m3u|jspf|smil|asx|json", description: Export format. }
 # hooks: config_save
 #
 # Use "Extensions > Export all" in the desired channel and category,
@@ -49,13 +49,11 @@ class exportcat():
         fn = uikit.save_file("Export category", None, "%s.%s.%s" % (cn.module, cn.current, conf.export_format))
         __print__(dbg.PROC, "Exporting category to", fn)
         if fn:
-            dest = re.findall("\.(m3u8?|pls|xspf|jspf|json|smil|asx)$", fn.lower())
+            dest = re.findall("\.(m3u8?|pls|xspf|jspf|json|smil|asx)8?$", fn.lower())
             if dest:
                 dest = dest[0]
             else:
                 self.parent.status("Unsupported export playlist type (file extension).")
                 return
-            if dest == "m3u8":
-                dest = "m3u"
             action.save_playlist(source="asis", multiply=False).file(rows=streams, fn=fn, dest=dest)
         pass            

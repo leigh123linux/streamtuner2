@@ -5,7 +5,7 @@
 # type: application
 # title: streamtuner2
 # description: Directory browser for internet radio, audio and video streams
-# version: 2.1.5
+# version: 2.1.6
 # state: beta
 # author: Mario Salzer <mario@include-once.org>
 # license: Public Domain
@@ -232,7 +232,7 @@ class StreamTunerTwo(gtk.Builder):
     # Notebook tab has been clicked (receives numeric page_num), but *NOT* yet changed (visually).
     def channel_switch(self, notebook, page, page_num=0, *args):
         self.current_channel = notebook.get_menu_label_text(notebook.get_nth_page(page_num))
-        __print__(dbg.UI, "main.channel_switch():", "set current_channel :=", self.current_channel)
+        __print__(dbg.UI, "main.channel_switch() :=", self.current_channel)
         self.update_title()
         # if first selected, load current category
         self.channel().first_show()

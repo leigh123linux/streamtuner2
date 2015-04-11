@@ -21,7 +21,8 @@
 	<title>Configuration option</title>
 	<p>You can set the default export format in the settings dialog
 	<key>F12</key>.</p>
-	<p>Currently it only supports .PLS playlist exports however.</p>
+	<p>It supports all common export formats now, with .PLS being the
+	default.</p>
 	</section>
 
 </page>
