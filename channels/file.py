@@ -7,7 +7,7 @@
 # priority: optional
 # depends: mutagen
 # config:  
-#   { name: file_browser_dir, type: text, value: "~/Music, /media/music", description: "List of directories to scan for audio files." },
+#   { name: file_browser_dir, type: text, value: "$XDG_MUSIC_DIR, ~/MP3", description: "List of directories to scan for audio files." },
 #   { name: file_browser_ext, type: text, value: "mp3,ogg, m3u,pls,xspf, avi,flv,mpg,mp4", description: "File type/extension filter." },
 #
 # Local file browser. Presents files from configured directories.
@@ -89,7 +89,7 @@ class file (ChannelPlugin):
     def __init__(self, parent):
     
         # data dirs
-        self.dir = [s.strip() for s in conf.file_browser_dir.split(",")]
+        self.dir = [self.env_dir(s) for s in conf.file_browser_dir.split(",")]
         self.ext = [s.strip() for s in conf.file_browser_ext.split(",")]
         # first run
         if not self.categories or not self.streams:
@@ -104,16 +104,27 @@ class file (ChannelPlugin):
         # add custom context menu
         #self.gtk_list.connect('button-press-event', self.context_menu)
 
-        
-        
-    # save list?
-    #save = lambda *x: None
-    # yeah, give it a try
+
+    # Interpolate $VARS and XDG_SPECIAL_DIRS
+    def env_dir(self, path):
+        path = path.strip()
+        env = self.fvars()
+        # Replace $XDG_ ourselfes and normal $ENV vars per expandvars (because os.environ.update() doesn't do)
+        path = re.sub("\$(XDG\w+)", lambda m: env.get(m.group(1), m.group(0)), path)
+        path = os.path.expandvars(path)
+        return os.path.expanduser(path)
+
+    # Read user-dirs config
+    def fvars(self, fn="$HOME/.config/user-dirs.dirs"):
+        fn = os.path.expandvars(fn)
+        src = open(fn, "r").read() if os.path.exists(fn) else ""
+        env = re.findall('^(\w+)=[\"\']?(.+?)[\"\']', src, re.M)
+        return dict(env)
+
     
     # don't load cache file
     cache = lambda *x: None
 
-        
 
     # read dirs
     def scan_dirs(self):
@@ -121,7 +132,6 @@ class file (ChannelPlugin):
     
         # add main directory
         for main in self.dir:
-          main = os.path.expanduser(os.path.expandvars(main))
           if os.path.exists(main):
             self.categories.append(main)
             
@@ -132,8 +142,10 @@ class file (ChannelPlugin):
             # look through            
             for dir, subdirs, files in os.walk(main):
                 name = os.path.basename(dir)
-                while name in self.categories:
-                    name = name + "2"
+                sfx = ""
+                while name+sfx in self.categories:
+                    sfx = str(int(sfx)+1) if sfx else "2"
+                name += sfx
         
                 # files in subdir
                 if files:
@@ -141,7 +153,9 @@ class file (ChannelPlugin):
                     self.streams[name] = [self.file_entry(fn, dir) for fn in files if self.we_like_that_extension(fn)]
                 
             # plant a maindir reference to shortname
-            self.streams[main] = self.streams[os.path.basename(main)]
+            main_base = os.path.basename(main)
+            if self.streams.get(main_base):
+                self.streams[main] = self.streams[main_base]
 
 
     # extract meta data
@@ -173,8 +187,6 @@ class file (ChannelPlugin):
     # same as init
     def update_streams(self, cat, x=0):
         self.scan_dirs()
-        print(self.streams)
-        print(self.categories)
         return self.streams.get(os.path.basename(cat))
 
 
