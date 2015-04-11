@@ -90,12 +90,12 @@ placeholder_map = dict(
 
 # Playlist format content probing (assert type)
 playlist_content_map = [
-   ("pls",  r""" (?i)\[playlist\].*numberofentries """),
-   ("xspf", r""" <\?xml .* <playlist .* http://xspf\.org/ns/0/ """),
+   ("pls",  r""" (?i)\[playlist\].*NumberOfEntries """),
+   ("xspf", r""" <\?xml .* <playlist .* ((?i)http://xspf\.org)/ns/0/ """),
    ("m3u",  r""" ^ \s* #(EXT)?M3U """),
    ("asx" , r""" <asx\b """),
    ("smil", r""" <smil[^>]*> .* <seq> """),
-   ("html", r""" <(audio|video)\b[^>]+\bsrc\s*=\s*["']?https?:// """),
+   ("html", r""" (?i)<(audio|video)\b[^>]+\bsrc\s*=\s*["']?https?:// """),
    ("wpl",  r""" <\?wpl \s+ version="1\.0" \s* \?> """),
    ("b4s",  r""" <WinampXML> """),   # http://gonze.com/playlists/playlist-format-survey.html
    ("jspf", r""" ^ \s* \{ \s* "playlist": \s* \{ """),
@@ -390,9 +390,9 @@ class save_playlist(object):
 
     # PLS
     def pls(self, rows):
-        txt = "[playlist]\n" + "numberofentries=%s\n" % len(rows)
+        txt = "[playlist]\n" + "NumberOfEntries=%s\n" % len(rows)
         for i,r in enumerate(rows):
-            txt += "File%s=%s\nTitle%s=%s\nLength%s=%s\n" % (i, r["url"], i, r["title"], i, -1)
+            txt += "File%s=%s\nTitle%s=%s\nLength%s=%s\n" % (i+1, r["url"], i+1, r["title"], i+1, -1)
         txt += "Version=2\n"
         return txt
 
