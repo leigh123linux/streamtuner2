@@ -73,8 +73,8 @@ class bookmarks(GenericChannel):
 
         
     # streams are already loaded at instantiation
-    def first_show(self):
-        pass
+    #def first_show(self):
+    #    pass
 
 
     # all entries just come from "bookmarks.json"

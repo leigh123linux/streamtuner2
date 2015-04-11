@@ -13,6 +13,7 @@
 #    icast.py internet_radio.py itunes.py jamendo.py live365.py global_key.py
 #    modarchive.py myoggradio.py punkcast.py radiobrowser.py radiotray.py
 #    shoutcast.py surfmusik.py timer.py tunein.py xiph.py youtube.py
+#    exportcat.py useragentswitcher.py
 # config: -
 # priority: core
 #
@@ -159,9 +160,10 @@ class GenericChannel(object):
                     self.rowmap.append(row[x][0])
 
         # load default category
-        if (self.current):
-            self.load(self.current)
-        else:
+        #if (self.current):
+        #    self.load(self.current)
+        #else:
+        if True:
             uikit.columns(self.gtk_list, self.datamap, [])
             
         # add to main menu
@@ -650,3 +652,4 @@ def stub_parent(object):
         return lambda *x: None
     def status(self, *x):
         pass
+
