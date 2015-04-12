@@ -1,3 +1,16 @@
+2.1.6 (2015-04-13)
+ * The action module has been completely restructured. It now supports
+   playlist rewriting, better heuristics, XSPF, JSPF, ASX, SMIL formats.
+ * Along with that a category playlist export function was bundled, and
+   the Save-As dialog reworked.
+ * A new SomaFM channel was bundled, and user agent switcher plugin added.
+ * Fixes for the bookmarks channel, cache search, plugin lookup code were
+   applied.
+ * Startup is faster again, but plugins now initialize on selection first.
+   Which makes the category association exacter after restarts. 
+ * More code cleanup and restructuring, GUI updates, command line flag
+   handling. Still a beta release.
+
 2.1.5 (2015-04-05)
 - This is a beta release, with lots of cleanups and various bugfixes.
 - Adds a self-contained PYZ package, which Python can run directly.

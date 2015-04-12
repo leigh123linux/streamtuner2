@@ -46,6 +46,7 @@ rpm:
 bin:
 	$(PACK) $(OPTS) $(DEPS) -t tar -p "$(NAME)-VERSION.bin.txz" st2.py
 pyz:
+        #@BUG: relative package references leave a /tmp/doc/ folder
 	$(PACK) -u preprocess=py -DPKG_PYZ -s src -t zip -p ".pyz" --prefix=./ --verbose -f .zip.py st2.py
 	echo "#!/usr/bin/env python" | cat - ".pyz" > "$(NAME)-$(VERSION).pyz"
 	chmod +x "$(NAME)-$(VERSION).pyz" ; rm ".pyz"

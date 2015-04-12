@@ -4,16 +4,26 @@
     "description": "Streamtuner2 is an internet radio browser. It utilizes various directory services like Shoutcast, Xiph, InternetRadio, SurfMusik, MyOggRadio, iCast, or Jamendo and Youtube to present categorized streaming stations. It chains to installed audio players like Audacious or VLC, uses streamripper for recording, but also allows bookmarking, exporting and easy searching.",
     "homepage": "http://milki.include-once.org/streamtuner2/",
     "license": "Public Domain",
-    "tags": "music, desktop, gtk, python",
+    "tags": "music, internet-radio, desktop, gtk, python",
     "image": "http://milki.include-once.org/streamtuner2/screenshot.mini.png",
     "urls": {
         "fossil": "http://fossil.include-once.org/streamtuner2/",
-        "homepage": "http://milki.include-once.org/streamtuner2/",
         "src": "http://milki.include-once.org/streamtuner2/streamtuner2-$version.src.txz",
         "deb": "http://milki.include-once.org/streamtuner2/streamtuner2-$version.deb",
-        "rpm": "http://milki.include-once.org/streamtuner2/streamtuner2-$version.rpm"
+        "rpm": "http://milki.include-once.org/streamtuner2/streamtuner2-$version.rpm",
+        "pyz": "http://milki.include-once.org/streamtuner2/streamtuner2-$version.pyz",
+        "bin": "http://milki.include-once.org/streamtuner2/streamtuner2-$version.bin.txz",
+        "exe": "http://milki.include-once.org/streamtuner2/streamtuner2-$version.exe"
     },
     "releases": [
+        {
+            "version": "2.1.6",
+            "state": "beta",
+            "scope": "minor bugfix",
+            "changes": "The action module has been completely restructured. It now supports playlist rewriting, better heuristics, XSPF, JSPF, ASX, SMIL formats. Along with that a category playlist export function was bundled, and the Save-As dialog reworked. A new SomaFM channel was bundled, and user agent switcher plugin added. Fixes for the bookmarks channel, cache search, plugin lookup code were applied. Startup is faster again, but plugins now initialize on selection first. Which makes the category association exacter after restarts. More code cleanup and restructuring, GUI updates, command line flag handling. Still a beta release.",
+            "download": "http://sourceforge.net/projects/streamtuner2/files/",
+            "published": "2015-04-13T01:30:00+0000"
+        },
         {
             "version": "2.1.5",
             "state": "beta",
