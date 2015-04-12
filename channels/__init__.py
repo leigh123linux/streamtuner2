@@ -13,7 +13,7 @@
 #    icast.py internet_radio.py itunes.py jamendo.py live365.py global_key.py
 #    modarchive.py myoggradio.py punkcast.py radiobrowser.py radiotray.py
 #    shoutcast.py surfmusik.py timer.py tunein.py xiph.py youtube.py
-#    exportcat.py useragentswitcher.py
+#    exportcat.py useragentswitcher.py somafm.py
 # config: -
 # priority: core
 #

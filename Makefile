@@ -9,12 +9,16 @@ DEST    := /usr/share/streamtuner2
 INST    := install -m 644
 PACK    := xpm
 DEPS    := -n $(NAME) -d python -d python-pyquery -d python-gtk2 -d python-requests -d python-keybinder
-OPTS    := -s src -u man,fixperms -f --prefix=$(DEST) --deb-compression xz --rpm-compression xz --exe-autoextract
-.PHONY:  bin
-all:  gtk3 #(most used)
-pack: all ver docs xpm src
-gtk3: gtk3.xml.gz
-zip:  pyz
+OPTS    := -s src -u man,fixperms,preprocess=py -f --prefix=$(DEST) --deb-compression xz --rpm-compression xz --exe-autoextract
+
+# targets
+.PHONY:	bin
+all:	gtk3 #(most used)
+pack:	all ver docs xpm src
+gtk3:	gtk3.xml.gz
+zip:	pyz
+print-%:
+	@echo $*=$($*)
 
 # Convert between internal GtkBuilder-gzipped file and uncompressed xml
 gtk3.xml.gz: gtk3.xml
@@ -42,7 +46,7 @@ rpm:
 bin:
 	$(PACK) $(OPTS) $(DEPS) -t tar -p "$(NAME)-VERSION.bin.txz" st2.py
 pyz:
-	$(PACK) -s src -t zip -p ".pyz" --prefix=./ --verbose -f .zip.py st2.py
+	$(PACK) -u preprocess=py -DPKG_PYZ -s src -t zip -p ".pyz" --prefix=./ --verbose -f .zip.py st2.py
 	echo "#!/usr/bin/env python" | cat - ".pyz" > "$(NAME)-$(VERSION).pyz"
 	chmod +x "$(NAME)-$(VERSION).pyz" ; rm ".pyz"
 exe:
