@@ -68,7 +68,9 @@ class search (AuxiliaryWindow):
         entries = []
         # which fields?
         fields = ["title", "playing", "homepage"]
-        for i,cn in enumerate([self.main.channels[c] for c in self.targets]):
+        # traverse all channels modules
+        for c in self.targets:
+            cn = self.main.channels[c]
             if cn.streams:  # skip disabled plugins
                 # categories
                 for cat in cn.streams.keys():
@@ -78,7 +80,7 @@ class search (AuxiliaryWindow):
                         text = " ".join([str(row.get(f, " ")) for f in fields])
                         if text.lower().find(self.q) >= 0:
                             row = copy(row)
-                            row["genre"] = c + " " + row.get("genre", "")
+                            row["genre"] = "%s %s" % (c or "", row.get("genre")  or "")
                             entries.append(row)
         self.show_results(entries)
 
@@ -196,5 +198,5 @@ class search (AuxiliaryWindow):
     Z3N1Xg6tI0McCeWTZ4089U9GbjhpVM8CYWMBVV8U6qFdnVliGlANkDo2J7OuVGTNqqpIokeVEid+EwInq1MagLGrk2h1hm51mtbVueiwxFoPrHwMGMn7PSBfg8bj0DgEnIGlKg5L/nEg5qVo7WMZIqLU1h8Ui3pRxNwO0g/KEVo8tyUisKqC1K1BpEMrbpuxqIVGWKsFISiPmL7uvKjV6fB4bgPe1eacQ8C9wGlsNlgdMM8zQrqtYlSerjcamw5D6SyEgV2dkWVbDKHgiFkMoWLgaKQC8trTojuVxa8DYAj4BPk1OzXgfwEnsJu7LwPh88zQ2joDUyJGKbWMncBO5z0rE+uYQWMTrX8TuKLNqV8DHgNOYnNq6zxd1vJzvK1a0vgcWEUBNvv+vW2OHwO+6v4/Lx1WaRdSEnm5NYV96MuvkMnywkqCv8aWWExiN1NrPs8M7duPA0MYrI2wD/g/ga+TPGrya8B+rO0w685rZ+M83wD1XF8syqYMlYABrLu5
     A7gFuAv4U+AwMIFliLrIRT7a98e8/TgwRBQzdU+IYSPW4+jC2gtnsTUmVZE2qVPPt7g95xkiak5SBLiNtLAGcxO7K2+N5w3JNbUfG4aAlLSId1XDlXE+zwxraz9WDBE15W0L9zwjrK/9/5E+GwnNO/pSAAAAAElFTkSuQmCC
     """
-    #endif
+    # #endif
     
