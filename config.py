@@ -147,7 +147,7 @@ class ConfigDict(dict):
     # look at system binaries for standard audio players
     def find_player(self, typ="audio", default="xdg-open"):
         players = {
-           "audio": ["audacious %g", "audacious2", "exaile %p", "xmms2", "banshee", "amarok %g", "clementine", "qmmp", "quodlibet", "aqualung", "mp3blaster %g", "vlc --one-instance %srv", "totem"],
+           "audio": ["audacious %m3u", "audacious2", "exaile %pls", "xmms2", "banshee", "amarok %pls", "clementine", "qmmp", "quodlibet", "aqualung", "mp3blaster %m3u", "vlc --one-instance", "totem"],
            "video": ["parole", "umplayer", "xnoise", "gxine", "totem", "vlc --one-instance", "smplayer", "gnome-media-player", "xine", "bangarang"],
            "browser": ["opera", "midori", "sensible-browser"],
            "xterm": ["xfce4-terminal", "x-termina-emulator", "gnome-terminal", "xterm", "rxvt"],

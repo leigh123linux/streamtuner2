@@ -118,7 +118,7 @@ class file (ChannelPlugin):
     def fvars(self, fn="$HOME/.config/user-dirs.dirs"):
         fn = os.path.expandvars(fn)
         src = open(fn, "r").read() if os.path.exists(fn) else ""
-        env = re.findall('^(\w+)=[\"\']?(.+?)[\"\']', src, re.M)
+        env = re.findall('^(\w+)=[\"\']?(.+?)[\"\']?', src, re.M)  # pyxdg: Your move.
         return dict(env)
 
     
