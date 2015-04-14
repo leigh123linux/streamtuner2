@@ -1,0 +1,33 @@
+#!/bin/sh
+#
+# This is a helper script for adding genre ID3 tags for recorded
+# radio stations. You have to change your player/recording settings
+# to:
+#      streamripper_addgenre %srv %genre
+#
+# for it to work. Install this script in $HOME/bin for example.
+# Don't forget to set the target DIR= parameter in here.
+# It needs the "id3" commandline tool installed, but you can
+# easily adapt it to "id3tag" or "mp3tag" or other utilities.
+#
+
+
+DIR=/home/$USER/Music/
+
+
+URL="$1"
+GENRE="$2"
+
+#-- time stamp
+touch /tmp/riptime
+
+#-- start recording
+xterm -e streamripper "$URL" -d "$DIR"
+
+
+#-- after terminal closes or streamripper ^C cancelled
+#   search for new files in target directory, and tag them
+
+find "$DIR" -anewer /tmp/riptime -type f \
+	-exec id3 -g "$GENRE" '{}' ';'
+
