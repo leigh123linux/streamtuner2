@@ -1,24 +1,23 @@
-#
 # encoding: utf-8
-# api: python
+# api: streamtuner2
 # title: favicon download
 # description: retrieves favicons for station homepages, plus utility code for display preparation
 # config:
-#    <var name="always_google" value="1" description="always use google favicon to png conversion service" />
-#    <var name="only_google" value="1" description="don't try other favicon retrieval methods, if google service fails" />
-#    <var name="delete_google_stub" value="1" description="delete placeholder favicons" />
-# type: module
+#    { name: favicon_google_first, type: bool, value: 1, description: "always use google favicon to png conversion service" }
+#    { name: favicon_google_only,  type: bool, value: 1, description: "don't try other favicon retrieval methods, if google service fails" }
+#    { name: favicon_delete_stub , type: bool, value: 1, description: "delete placeholder favicons" }
+# type: function
+# category: ui
+# priority: standard
 #
+# This module fetches favicon.ico files and prepares .png images for each domain
+# in the stations list. Homepage URLs are used for this.
 #
-#  This module fetches favicon.ico files and prepares .png images for each domain
-#  in the stations list. Homepage URLs are used for this.
+# Files end up in:
+#    /home/user/.config/streamtuner2/icons/www.example.org.png
 #
-#  Files end up in:
-#     /home/user/.config/streamtuner2/icons/www.example.org.png
-#
-#  Currently relies on Google conversion service, because urllib+PIL conversion
-#  method is still flaky, and a bit slower. Future version might use imagemagick.
-#
+# Currently relies on Google conversion service, because urllib+PIL conversion
+# method is still flaky, and a bit slower. Future version might use imagemagick.
 
 
 always_google = 1      # use favicon service for speed
@@ -31,8 +30,7 @@ import os, os.path
 from compat2and3 import xrange, urllib
 import re
 from config import conf
-try: from processing import Process as Thread
-except: from threading import Thread
+from threading import Thread
 import ahttp
 
 
