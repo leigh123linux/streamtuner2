@@ -1,0 +1,8 @@
+# The "Packfile" is just a make script, which is used as mid-packing
+# helper. It's run within fpm/xmp execution context in /tmp/staging123/,
+# where final distribution file arrangements are made.
+# Keeps the Makefile more „build“-related.
+
+
+all:	# complainy lintian needs a custom changelog.gz
+	gzip -9c usr/share/doc/streamtuner2/NEWS > usr/share/doc/streamtuner2/changelog.gz

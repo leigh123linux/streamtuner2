@@ -18,7 +18,7 @@
 # id: streamtuner2
 # pack: *.py, gtk3.xml.gz, bin, channels/__init__.py, bundle/*.py, CREDITS, help/index.page,
 #   streamtuner2.desktop, README, help/streamtuner2.1=/usr/share/man/man1/,
-#   NEWS.gz=/usr/share/doc/streamtuner2/changelog.gz, icon.png=/usr/share/pixmaps/streamtuner2.png
+#   NEWS=/usr/share/doc/streamtuner2/, icon.png=/usr/share/pixmaps/streamtuner2.png
 # architecture: all
 #
 # Streamtuner2 is a GUI for browsing internet radio directories, music
