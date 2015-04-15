@@ -235,7 +235,8 @@ class StreamTunerTwo(gtk.Builder):
         __print__(dbg.UI, "main.channel_switch() :=", self.current_channel)
         self.update_title()
         # if first selected, load current category
-        self.channel().first_show()
+        # (run in thread, to make it look speedy on first startup)
+        self.thread( self.channel().first_show )
 
     # Invoked from the menu instead, uses module name instead of numeric tab id
     def channel_switch_by_name(self, name):
