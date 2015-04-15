@@ -3,6 +3,12 @@
 # where final distribution file arrangements are made.
 # Keeps the Makefile more „build“-related.
 
+all:  preprocess  $(PACK_TYPE)
 
-all:	# complainy lintian needs a custom changelog.gz
+# More selective file rewriting
+preprocess: usr/share/streamtuner2/channels/search.pym
+%.pym: %.py
+	preprocess -D $(PKG_FLAG) -o $< $<
+
+deb:	# complainy lintian needs a custom changelog.gz
 	gzip -9c usr/share/doc/streamtuner2/NEWS > usr/share/doc/streamtuner2/changelog.gz

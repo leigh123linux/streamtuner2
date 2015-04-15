@@ -9,7 +9,7 @@ DEST    := /usr/share/streamtuner2
 INST    := install -m 644
 PACK    := xpm --verbose
 DEPS    := -n $(NAME) -d python -d python-pyquery -d python-gtk2 -d python-requests -d python-keybinder
-OPTS    := -s src -u man,packfile,fixperms,preprocess=py -f --prefix=$(DEST) --deb-compression xz --rpm-compression xz --exe-autoextract
+OPTS    := -s src -u packfile,man,fixperms -f --prefix=$(DEST) --deb-compression xz --rpm-compression xz --exe-autoextract
 
 # targets
 .PHONY:	bin
