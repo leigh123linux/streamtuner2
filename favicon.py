@@ -43,7 +43,7 @@ tried_urls = []
 
 
 # walk through entries
-def download_all(entries):
+def download_all(entries, treestore=None, pix_i=None):
   t = Thread(target= download_thread, args= ([entries]))
   t.start()
 def download_thread(entries):
@@ -63,7 +63,7 @@ def download_thread(entries):
     pass
 
 # download a single favicon for currently playing station
-def download_playing(row):
+def download_playing(row, treestore_pix=None):
     if conf.google_homepage and not row.get("homepage"):
         google_find_homepage(row)
     if conf.load_favicon and row.get("homepage"):
@@ -212,7 +212,7 @@ def direct_download(favicon, fn):
     # abort on
     if r.getcode() >= 300:
        raise Error("HTTP error" + r.getcode())
-    if not headers["Content-Type"].lower().find("image/"):
+    if not headers["Content-Type"].lower().find("image/") == 0:
        raise Error("can't use text/* content")
        
     # save file
@@ -262,6 +262,7 @@ def html_download(url):
 
 
 
+#@obsolete since Pillow 2.1.x
 
 #
 # title: workaround for PIL.Image to preserve the transparency for .ico import
