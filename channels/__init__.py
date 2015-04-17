@@ -50,10 +50,8 @@ __all__ = [
 # generic channel module                            ---------------------------------------
 class GenericChannel(object):
 
-    # desc
+    # control attributes
     meta = { "config": [] }
-    config = []
-    homepage = "http://fossil.include-once.org/streamtuner2/"
     base_url = ""
     listformat = "pls"
     audioformat = "audio/mpeg" # fallback value
@@ -62,8 +60,7 @@ class GenericChannel(object):
     # categories
     categories = ["empty", ]
     catmap = {}
-    current = None
-    shown = None     # last selected entry in stream list, also indicator if notebook tab has been selected once / stream list of current category been displayed yet
+    shown = None      # last selected entry in stream list, also indicator if notebook tab has been selected once / stream list of current category been displayed yet
 
     # gui + data
     streams = {}      # Station list dict, associates each genre to a list of stream rows
@@ -75,30 +72,39 @@ class GenericChannel(object):
        # coltitle   width	[ datasrc key, type, renderer, attrs ]	[cellrenderer2], ...
        ["",		20,	["state",	str,  "pixbuf",	{}],	],
        ["Genre",	65,	['genre',	str,	"t",	{}],	],
-       ["Station Title",275,["title",	str,    "text",	{"strikethrough":11, "cell-background":12, "cell-background-set":13}],  ["favicon", gtk.gdk.Pixbuf, "pixbuf", {}], ],
-       ["Now Playing",185,	["playing",	str,	"text",	{"strikethrough":11}],	],                                                                             #{"width":20}
-       ["Listeners", 45,	["listeners",	int,	"t",	{"strikethrough":11}],	],
-      #["Max",	45,	["max",		int,	"t",	{}],	],
+       ["Station Title",275,	["title",	str,    "text",	{"strikethrough":11, "cell-background":12, "cell-background-set":13}],  ["favicon", gtk.gdk.Pixbuf, "pixbuf", {}], ],
+       ["Now Playing",	185,	["playing",	str,	"text",	{"strikethrough":11}],	],                                                                             #{"width":20}
+       ["Listeners", 	45,	["listeners",	int,	"t",	{"strikethrough":11}],	],
+      #["Max",		45,	["max",		int,	"t",	{}],	],
        ["Bitrate",	35,	["bitrate",	int,	"t",	{}],	],
        ["Homepage",	160,	["homepage",	str,	"t",	{"underline":10}],	],
-       [False,	25,	["url",		str,	"t",	{"strikethrough":11}],	],
-       [False,	0,	["format",	str,	None,	{}],	],
-       [False,	0,	["favourite",	bool,	None,	{}],	],
-       [False,	0,	["deleted",	bool,	None,	{}],	],
-       [False,	0,	["search_col",	str,	None,	{}],	],
-       [False,	0,	["search_set",	bool,	None,	{}],	],
+       [False,		25,	["url",		str,	"t",	{"strikethrough":11}],	],
+       ["Format",	20,	["format",	str,	None,	{}],	],
+       [False,		0,	["favourite",	bool,	None,	{}],	],
+       [False,		0,	["deleted",	bool,	None,	{}],	],
+       [False,		0,	["search_col",	str,	None,	{}],	],
+       [False,		0,	["search_set",	bool,	None,	{}],	],
     ]
     rowmap = []   # [state,genre,title,...] field enumeration still needed separately
     titles = {}   # for easier adapting of column titles in datamap
 
     # for empty grouping / categories
-    placeholder = [dict(genre="./.", title="Subcategory placeholder", playing="./.", url="none:", listeners=0, bitrate=0, homepage="", state="gtk-folder")]
+    placeholder = [dict(genre="./.", title="Subcategory placeholder", playing="./.", url="none:", listeners=0, bitrate=0, homepage="", state="gtkfolder")]
     empty_stub = [dict(genre="./.", title="No categories found (HTTP error)", playing="Try Channel→Reload Categories later..", url="none:", listeners=0, bitrate=0, homepage="", state="gtk-stop")]
     nothing_found = [dict(genre="./.", title="No contents found on directory server", playing="Notice", listeners=0, bitrate=0, state="gtk-info")]
     
     # regex            
     rx_www_url = re.compile("""(www(\.\w+[\w-]+){2,}|(\w+[\w-]+[ ]?\.)+(com|FM|net|org|de|PL|fr|uk))""", re.I)
 
+    __current = None
+    @property
+    def current(self):
+        return self.__current
+    @current.setter
+    def current(self, newcat):
+        print "{}.current:={} ← from {}".format(self.module, newcat, [inspect.stack()[x][3] for x in range(1,4)])
+        self.__current = newcat
+        return self.__current
 
 
     #--------------------------- initialization --------------------------------
@@ -232,8 +238,13 @@ class GenericChannel(object):
     # update treeview content
     def load(self, category, force=False):
 
+        # called to early
+        if not category:
+            print "load(None)"
+            return
+
         # get data from cache or download
-        if (force or not category in self.streams):
+        if force or not category in self.streams:
             __print__(dbg.PROC, "load", "update_streams")
             self.status("Updating streams...")
             self.status(-0.1)
@@ -409,19 +420,20 @@ class GenericChannel(object):
             self.display_categories()
 
         # Select first category
-        self.current = self.str_from_struct(self.categories) or None
-        __print__(dbg.STAT, self.module, "→ first_show(); use first category as current =", self.current)
+        #self.current = self.str_from_struct(self.categories) or None
+        #__print__(dbg.STAT, self.module, "→ first_show(); use first category as current =", self.current)
         try:
             self.load(self.current)
         except:
             pass
     
         # put selection/cursor on last position
-        __print__(dbg.STAT, self.module+".first_show()", "select last known category treelist position =", self.shown)
-        try:
-            self.gtk_list.get_selection().select_path(self.shown)
-        except:
-            pass
+        if self.shown:
+            __print__(dbg.STAT, self.module+".first_show()", "select last known category treelist position =", self.shown)
+            try:
+                self.gtk_list.get_selection().select_path(self.shown)
+            except:
+                pass
             
         # Invoke only once
         self.shown = 55555
@@ -465,7 +477,7 @@ class GenericChannel(object):
             self.gtk_cat.expand_all()
             
         # select any first element
-        self.gtk_cat.get_selection().select_path("0") #set_cursor
+        #self.gtk_cat.get_selection().select_path("0") #set_cursor
         self.currentcat()
 
             
