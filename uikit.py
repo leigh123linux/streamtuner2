@@ -112,6 +112,7 @@ class uikit:
                     # cell renderer
                     if (cell[2] == "pixbuf"):
                         rend = gtk.CellRendererPixbuf()  # img cell
+                        #rend.set_fixed_size(24, 24)
                         if (cell[1] == str):
                             cell[3]["stock_id"] = datapos  # for stock icons
                             expand = False
@@ -632,6 +633,7 @@ class AuxiliaryWindow(object):
 
     def __init__(self, parent):
         self.main = parent
+        self.module = self.__class__.__name__
         self.meta = plugin_meta(None, inspect.getcomments(inspect.getmodule(self)))
         
     def __getattr__(self, name):
