@@ -54,20 +54,13 @@ import json
 #
 class jamendo (ChannelPlugin):
 
-    # description
-    title = "Jamendo"
-    module = "jamendo"
-    homepage = "http://www.jamendo.com/"
-    version = 0.3
+    # control flags
     has_search = True
-
     base = "http://www.jamendo.com/en/"
     listformat = "srv"
     api_base = "http://api.jamendo.com/v3.0/"
     cid = "49daa4f5"
-
     categories = []
-
     titles = dict( title="Title", playing="Album/Artist/User", bitrate=False, listeners=False )
 
 

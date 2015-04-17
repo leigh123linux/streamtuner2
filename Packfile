@@ -1,7 +1,5 @@
-# The "Packfile" is just a make script, which is used as mid-packing
-# helper. It's run within fpm/xmp execution context in /tmp/staging123/,
-# where final distribution file arrangements are made.
-# Keeps the Makefile more „build“-related.
+# See http://fossil.include-once.org/xpm/wiki/Packfile
+# Applies minor file tweaks right before -t package generation.
 
 all:  preprocess  $(PACK_TYPE)
 

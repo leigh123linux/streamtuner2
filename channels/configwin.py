@@ -25,6 +25,9 @@ import re
 #
 class configwin (AuxiliaryWindow):
 
+    # control flags
+    meta = plugin_meta()
+
 
     # Display win_config, pre-fill text fields from global conf. object
     def open(self, widget):

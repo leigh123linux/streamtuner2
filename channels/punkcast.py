@@ -34,16 +34,9 @@ from config import __print__, dbg
 # basic.ch broadcast archive
 class punkcast (ChannelPlugin):
 
-    # description
-    title = "punkcast"
-    module = "punkcast"
-    homepage = "http://www.punkcast.com/"
-
     # keeps category titles->urls    
     catmap = {}
     categories = ["list"]
-    default = "list"
-    current = "list"
     titles = dict(playing=False, listeners=False, bitrate=False, homepage=False) 
 
 

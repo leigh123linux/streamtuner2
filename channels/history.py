@@ -19,11 +19,9 @@ from channels import *
 
 class history:
 
-    # plugin info
+    # plugin attributes
     module = "history"
-    title = "History"
     meta = plugin_meta()
-
     
     # store
     bm = None

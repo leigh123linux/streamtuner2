@@ -43,22 +43,16 @@ from uikit import gtk
 # open source radio sharing stie
 class myoggradio(ChannelPlugin):
 
-    # settings
-    title ="MOR"
-    #module = "myoggradio"
-    api = "http://www.myoggradio.org/"
+    # control flags
     listformat = "mixed(pls/m3u/srv)"
+    has_search = False
+    api = "http://www.myoggradio.org/"
     
     # hide unused columns
     titles = dict(playing=False, listeners=False, bitrate=False)
     
     # category map
     categories = ['common', 'personal']
-    default = 'common'
-    current = 'common'
-    
-    # netrc instance
-    netrc = None
     
     
     

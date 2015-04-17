@@ -42,20 +42,18 @@ from channels import *
 # Surfmusik sharing site
 class surfmusik (ChannelPlugin):
 
-    # description
-    title = "SurfMusik"
+    # module attributes
     module = "surfmusik"
-    homepage = "http://www.surfmusik.de/"
     listformat = "m3u"
-
+    has_search = False
     lang = "DE"   # last configured categories
     base = {
        "DE": ("http://www.surfmusik.de/", "genre/", "land/"),
        "EN": ("http://www.surfmusic.de/", "format/", "country/"),
     }
-
     categories = []
     titles = dict( genre="Genre", title="Station", playing="Location", bitrate=False, listeners=False )
+
     
     # Set channel title
     def __init__(self, parent=None):

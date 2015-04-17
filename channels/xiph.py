@@ -56,20 +56,14 @@ import re
 #
 class xiph (ChannelPlugin):
 
-  # desc
-  module = "xiph"
-  title = "Xiph.org"
-  homepage = "http://dir.xiph.org/"
-  #xml_url = "http://dir.xiph.org/yp.xml"
-  json_url = "http://api.include-once.org/xiph/cache.php"
+  # attributes
   listformat = "srv"
   has_search = True
+  json_url = "http://api.include-once.org/xiph/cache.php"
+  #xml_url = "http://dir.xiph.org/yp.xml"
 
   # content
   categories = [ "pop", "top40" ]
-  current = ""
-  default = "pop"
-  empty = None
   
   
   # prepare category names

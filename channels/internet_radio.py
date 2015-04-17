@@ -38,17 +38,9 @@ from pq import pq
 # streams and gui
 class internet_radio (ChannelPlugin):
 
-
-    # description
-    title = "InternetRadio"
-    module = "internet_radio"
-    homepage = "http://www.internet-radio.org.uk/"
+    # control data
     listformat = "pls"
-    
-    # category map
     categories = []
-    current = ""
-    default = ""
 
 
     # load genres

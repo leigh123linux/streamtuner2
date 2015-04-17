@@ -36,7 +36,6 @@ class timer:
 
     # plugin info
     module = "timer"
-    title = "Timer"
     meta = plugin_meta()
     
     # configuration settings

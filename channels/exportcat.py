@@ -31,7 +31,6 @@ import re
 # provides another export window, and custom file generation - does not use action.save()
 class exportcat():
 
-    module = ""
     meta = plugin_meta()
 
     # Register callback

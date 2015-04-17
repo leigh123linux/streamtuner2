@@ -66,13 +66,10 @@ import json
 #
 class youtube (ChannelPlugin):
 
-    # description
-    title = "Youtube"
-    module = "youtube"
-    homepage = "http://www.youtube.com/"
+    # control attributes
     listformat = "url/youtube"
     has_search = True
-    fmt = "video/youtube"
+    audioformat = "video/youtube"
     titles = dict( genre="Channel", title="Title", playing="Playlist", bitrate=False, listeners=False )
 
     # API config
@@ -292,7 +289,7 @@ class youtube (ChannelPlugin):
         data.update(dict(
             url = "http://youtube.com/v/" + id,
             homepage = "http://youtu.be/" + id + ("?wadsworth=1" if conf.youtube_wadsworth else ""),
-            format = self.fmt,
+            format = self.audioformat,
             title = row["snippet"]["title"],
         ))
         
@@ -312,7 +309,7 @@ class youtube (ChannelPlugin):
             genre = row["category"][1]["term"],
             title = row["title"]["$t"],
             playing = row["author"][0]["name"]["$t"],
-            format = self.fmt,
+            format = self.audioformat,
             url = row["content"]["src"].split("?")[0],
             homepage = row["media$group"]["media$player"]["url"],
             image = row["media$group"]["media$thumbnail"][0]["url"],

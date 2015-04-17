@@ -35,10 +35,7 @@ from xml.etree import ElementTree
 # TuneIn radio directory
 class tunein (ChannelPlugin):
 
-    # description
-    title = "TuneIn"
-    module = "tunein"
-    homepage = "http://tunein.com/"
+    # control flags
     has_search = False
     listformat = "pls"
     titles = dict(listeners=False)

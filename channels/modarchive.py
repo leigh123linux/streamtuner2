@@ -40,11 +40,10 @@ from config import __print__, dbg
 #
 class modarchive (ChannelPlugin):
 
-    # description
-    title = "modarchive"
-    module = "modarchive"
-    homepage = "http://www.modarchive.org/"
+    # control attributes
+    has_search = False
     base = "http://modarchive.org/"
+    audioformat = "audio/mod+zip"
     listformat = "href"
     titles = dict(genre="Genre", title="Song", playing="File", listeners="Rating", bitrate=0)
 

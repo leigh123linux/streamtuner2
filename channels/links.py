@@ -24,8 +24,6 @@ class links (object):
 
     # plugin info
     module = "links"
-    title = "Links"
-    version = 0.1
     meta = plugin_meta()
     
     # list

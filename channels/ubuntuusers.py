@@ -31,7 +31,6 @@ import ahttp
 class ubuntuusers (ChannelPlugin):
 
     # description
-    module = "ubuntuusers"
     has_search = False
     listformat = "srv"
     titles = dict(playing=False, listeners=False, bitrate=False)

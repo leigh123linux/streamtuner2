@@ -29,8 +29,8 @@ import random
 # register a key
 class global_key(object):
 
+    # control attributes
     module = "global_key"
-    title = "keyboard shortcut"
     meta = plugin_meta()
     last = 0
 

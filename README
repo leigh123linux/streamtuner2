@@ -34,6 +34,7 @@ installed per default. There's a few more Python packages required though:
  · python-requests
  · python-pyquery
  · python-lxml
+ · python-imaging | pillow
  · python-keybinder (optional)
  · python-xdg (optional)
 
@@ -59,7 +60,7 @@ PYZ
 ---
 
 Other users may wish to try the new Python archive (.PYZ) instead. Which
-requires little installation, but can just be run in-place:
+requires little installation and can be run asis:
 
     python streamtuner-2.1.5.pyz
 
@@ -76,8 +77,8 @@ If you've checked out the source code repository, or did download the
 
 The easy way:
 
- · Run `sudo make install`
-   which installs into the default location (/usr/share/streamtuner2).
+  · Run `sudo make install`
+    which installs into the default location (/usr/share/streamtuner2).
 
 To install it manually:
 
@@ -112,8 +113,8 @@ can alternatively disable it once:
 
    streamtuner2 -d xiph
 
-Use [save] in the settings dialog (via F12) if you wish to
-permanently disable it.
+Start the settings dialog (via F12) and press [save] there
+if you wish to permanently disable it.
 
 You can also manually edit the configuration file, located
 in ~/.config/streamtuner2/settings.json
@@ -154,6 +155,9 @@ Or browse the contents
 Alternatively there are git and svn exports.
 
   fossil export --svn
+
+Or via
+
   http://fossil.include-once.org/streamtuner2/git-fast-export
 
 You can send in patches, a fossil bundle, or set up your cloned

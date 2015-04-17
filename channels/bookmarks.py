@@ -19,7 +19,7 @@
 
 
 from config import *
-from uikit import uikit
+from uikit import *
 from channels import *
 
 
@@ -36,16 +36,9 @@ from channels import *
 #
 class bookmarks(GenericChannel):
 
-    # desc
-    module = "bookmarks"
-    title = "bookmarks"
-    base_url = "file:.config/streamtuner2/bookmarks.json"
-    listformat = "any"
-
     # content
+    listformat = "any"
     categories = ["favourite", ]  # timer, links, search, and links show up as needed
-    current = "favourite"
-    default = "favourite"
     finder_song = { "genre": "Youtube ", "format": "video/youtube", "playing": "current_", "title": "The Finder song", "url": "http://youtube.com/v/omyZy4H8y9M", "homepage": "http://youtu.be/omyZy4H8y9M" }
     streams = {"favourite":[finder_song], "search":[], "scripts":[], "timer":[], "history":[], }
 
@@ -53,12 +46,33 @@ class bookmarks(GenericChannel):
     # cache list, to determine if a PLS url is bookmarked
     urls = []
 
+    drag_types = [
+      ("UTF8_STRING", 0, 5),
+      ("STRING", 0, 5),
+      ("text/plain", 0, 10),
+      ("text/uri-list", 0, 11),
+      ("application/x-scpls", 0, 21),
+      ("*/*", 0, 22),
+    ]
 
     def gui(self, parent):
         GenericChannel.gui(self, parent)
         parent.notebook_channels.set_menu_label_text(parent.v_bookmarks, "bookmarks")
 
+        #DND
+        w = self.gtk_list
+        #self.gtk_list.drag_source_set_icon_stock("gtk-folder")
+        w.enable_model_drag_source(gtk.gdk.BUTTON1_MASK, self.drag_types, gtk.gdk.ACTION_DEFAULT|gtk.gdk.ACTION_COPY|gtk.gdk.ACTION_MOVE)
+        w.enable_model_drag_dest(self.drag_types, gtk.gdk.ACTION_DEFAULT|gtk.gdk.ACTION_COPY)
+        w.connect('drag_drop', self.drop_cb)
 
+    # function to print out the mime type of the drop item
+    def drop_cb(self, wid, context, x, y, time, *e):
+        print '\n'.join([str(t) for t in context.targets])
+        # What should I put here to get the URL of the link?
+        context.finish(True, False, time)
+        return True
+                
     # this channel does not actually retrieve/parse data from anywhere
     def update_categories(self):
         pass
@@ -66,6 +80,7 @@ class bookmarks(GenericChannel):
     # but category sub-plugins might provide a hook
     category_plugins = {}
     def update_streams(self, cat):
+
         if cat in self.category_plugins:
             return self.category_plugins[cat].update_streams(cat) or []
         else:

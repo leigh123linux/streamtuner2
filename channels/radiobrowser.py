@@ -58,17 +58,14 @@ import ahttp as http
 #
 class radiobrowser (ChannelPlugin):
 
-    # description
-    homepage = "http://www.radio-browser.info/"
+    # control flags
     has_search = True
     listformat = "pls"
     titles = dict(listeners="Votes+", bitrate="Votes-", playing="Country")
-
+    base = "http://www.radio-browser.info/webservice/json/"
     categories = []
     pricat = ("topvote", "topclick")
     catmap = { "tags": "bytag", "countries": "bycountry", "languages": "bylanguage" }
-    
-    base = "http://www.radio-browser.info/webservice/json/"
     
 
     # votes, and tags, no countries or languages

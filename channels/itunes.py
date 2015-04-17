@@ -40,14 +40,13 @@ import ahttp as http
 # Surfmusik sharing site
 class itunes (ChannelPlugin):
 
-    # description
-    title = "iTunes RS"
-    module = "itunes"
-    #module = "rs_playlist"
-    homepage = "http://www.itunes.com?"
+    # control attribues
     has_search = False
     listformat = "pls"
     titles = dict(listeners=False, bitrate=False, playing=False)
+    base = "http://lab.rolisoft.net/playlists/itunes.php"
+    #base = "http://aws-eu.rolisoft.net/playlists/itunes.php"
+    #base = "http://aws-us.rolisoft.net/playlists/itunes.php"
 
     categories = [
         "Adult Contemporary",
@@ -76,10 +75,6 @@ class itunes (ChannelPlugin):
         "'80s Flashback",
         "'90s Hits",
     ]
-    
-    base = "http://lab.rolisoft.net/playlists/itunes.php"
-    #base = "http://aws-eu.rolisoft.net/playlists/itunes.php"
-    #base = "http://aws-us.rolisoft.net/playlists/itunes.php"
     
 
     # static list for iTunes

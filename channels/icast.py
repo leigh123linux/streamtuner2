@@ -41,14 +41,11 @@ import ahttp as http
 # Surfmusik sharing site
 class icast (ChannelPlugin):
 
-    # description
-    homepage = "http://www.icast.io/"
+    # control attributes
     has_search = True
     listformat = "pls"
     titles = dict(listeners=False, bitrate=False, playing=False)
-
     categories = []
-    
     base = "http://api.icast.io/1/"
     
 

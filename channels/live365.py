@@ -53,10 +53,7 @@ from xml.dom.minidom import parseString
 #
 class live365(ChannelPlugin):
 
-    # desc
-    module = "live365"
-    title = "Live365"
-    homepage = "http://www.live365.com/"
+    # control attributes
     base_url = "http://www.live365.com/"
     has_search = True
     listformat = "pls"
@@ -65,9 +62,6 @@ class live365(ChannelPlugin):
 
     # content
     categories = ['Alternative', 'Blues', 'Classical', 'Country', 'Easy Listening', 'Electronic/Dance', 'Folk', 'Freeform', 'Hip-Hop/Rap', 'Inspirational', 'International', 'Jazz', 'Latin', 'Metal', 'New Age', 'Oldies', 'Pop', 'R&B/Urban', 'Reggae', 'Rock', 'Seasonal/Holiday', 'Soundtracks', 'Talk']
-    current = "Alternative"
-    default = "Pop"
-    empty = None
     
     # redefine
     streams = {}

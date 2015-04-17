@@ -54,12 +54,8 @@ def mutagen_postprocess(d):
 # file browser / mp3 directory listings
 class file (ChannelPlugin):
 
-    # info
-    module = "file"
-    title = "file browser"
-    listtype = "url/file"
-    
     # data
+    listtype = "href"
     streams = {}
     categories = []
     dir = []
