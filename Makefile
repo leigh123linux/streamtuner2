@@ -20,6 +20,7 @@ zip:	pyz
 print-%:
 	@echo $*=$($*)
 
+
 # Convert between internal GtkBuilder-gzipped file and uncompressed xml
 gtk3.xml.gz: gtk3.xml
 	gzip -c9 < gtk3.xml > gtk3.xml.gz
@@ -38,20 +39,19 @@ clean:
 	rm -r __pycache__ */__pycache__
 
 #-- bundles
-xpm: deb pyz bin rpm exe
+xpm: deb pyz tar rpm exe
 deb:
-	$(PACK) $(OPTS) $(DEPS) -t deb -p "$(NAME)-VERSION.deb" st2.py
+	$(PACK) $(OPTS) $(DEPS) -t $@ -p "$(NAME)-VERSION.deb" st2.py
 rpm:
-	$(PACK) $(OPTS) $(DEPS) -t rpm -p "$(NAME)-VERSION.rpm" st2.py
-bin:
-	$(PACK) $(OPTS) $(DEPS) -t tar -p "$(NAME)-VERSION.bin.txz" st2.py
+	$(PACK) $(OPTS) $(DEPS) -t $@ -p "$(NAME)-VERSION.rpm" st2.py
+tar:
+	$(PACK) $(OPTS) $(DEPS) -t $@ -p "$(NAME)-VERSION.bin.txz" st2.py
+exe:
+	$(PACK) $(OPTS) $(DEPS) -t $@ -p "$(NAME)-VERSION.exe" st2.py
 pyz:
         #@BUG: relative package references leave a /tmp/doc/ folder
-	$(PACK) -u preprocess=py -DPKG_PYZ -s src -t zip -p ".pyz" --prefix=./ --verbose -f .zip.py st2.py
-	echo "#!/usr/bin/env python" | cat - ".pyz" > "$(NAME)-$(VERSION).pyz"
-	chmod +x "$(NAME)-$(VERSION).pyz" ; rm ".pyz"
-exe:
-	$(PACK) $(OPTS) $(DEPS) -t exe -p "$(NAME)-VERSION.exe" st2.py
+	$(PACK) -u packfile -s src -t zip --zip-shebang "/usr/bin/env python"	\
+		-f -p "$(NAME)-$(VERSION).pyz" --prefix=./ --verbose .zip.py st2.py
 src:
 	cd .. && pax -wvJf streamtuner2/streamtuner2-$(VERSION).src.txz \
 		streamtuner2/*.{py,png,svg,desktop} streamtuner2/channels/*.{py,png} \
