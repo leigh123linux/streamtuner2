@@ -5,7 +5,7 @@
 # type: application
 # title: streamtuner2
 # description: Directory browser for internet radio, audio and video streams
-# version: 2.1.6
+# version: 2.1.7
 # state: beta
 # author: Mario Salzer <mario@include-once.org>
 # license: Public Domain
@@ -417,18 +417,16 @@ class StreamTunerTwo(gtk.Builder):
 
     # load application state (widget sizes, selections, etc.)
     def init_app_state(self):
-        try:
-            winlayout = conf.load("window")
-            if (winlayout):
-                uikit.app_restore(self, winlayout)
-            # selection values
-            winstate = conf.load("state")
-            if (winstate):
-                for id in winstate.keys():
-                    self.channels[id].current = winstate[id]["current"]
-                    self.channels[id].shown = winlayout[id+"_list"].get("row:selected", 0)   # actually just used as boolean flag (for late loading of stream list), selection bar has been positioned before already
-        except:
-            pass # fails for disabled/reordered plugin channels
+
+        winlayout = conf.load("window")
+        if (winlayout):
+            try: uikit.app_restore(self, winlayout)
+            except: pass # may fail for disabled/reordered plugin channels
+
+        winstate = conf.load("state")
+        if (winstate):
+            for id,prev in winstate.items():
+                self.channels[id].current = prev["current"]
 
     # store window/widget states (sizes, selections, etc.)
     def app_state(self, widget):
@@ -457,8 +455,12 @@ class StreamTunerTwo(gtk.Builder):
 
     # Right clicking a stream/station in the treeview to make context menu pop out.
     def station_context_menu(self, treeview, event):
-        if event.button >= 3:
-            path = treeview.get_path_at_pos(int(event.x), int(event.y))[0]
+        if treeview and event and event.button >= 3:
+            path = treeview.get_path_at_pos(int(event.x), int(event.y))
+            if not path:
+                return False
+            else:
+                path = path[0]
             treeview.grab_focus()
             treeview.set_cursor(path, None, False)
             self.streamactions.popup(
