@@ -57,6 +57,7 @@ listfmt_t = {
     "url/youtube":          "href",
     "url/http":             "href",
     "audio/x-pn-realaudio": "ram",
+    "application/json":     "json",
     "application/smil":     "smil",
     "application/vnd.ms-wpl":"smil",
     "audio/x-ms-wax":       "asx",
@@ -93,7 +94,7 @@ placeholder_map = dict(
 playlist_content_map = [
    ("pls",  r""" (?i)\[playlist\].*NumberOfEntries """),
    ("xspf", r""" <\?xml .* <playlist .* ((?i)http://xspf\.org)/ns/0/ """),
-   ("m3u",  r""" ^ \s* #(EXT)?M3U """),
+   ("m3u",  r""" ^ \s* \#(EXT)?M3U """),
    ("asx" , r""" <asx\b """),
    ("smil", r""" <smil[^>]*> .* <seq> """),
    ("html", r""" (?i)<(audio|video)\b[^>]+\bsrc\s*=\s*["']?https?:// """),
@@ -121,6 +122,7 @@ def run(cmd):
 #
 def browser(url):
     bin = conf.play.get("url/http", "sensible-browser")
+    print url
     run(bin + " " + quote(url))
 
 
@@ -149,10 +151,10 @@ def record(row={}, audioformat="audio/mpeg", source="href", url=None):
 # OS shell command escaping
 #
 def quote(ins):
-    if type(ins) is str:
-        return "%r" % str(ins)
-    else:
+    if type(ins) is list:
         return " ".join(["%r" % str(s) for s in ins])
+    else:
+        return "%r" % str(ins)
 
 
 # Convert e.g. "text/x-scpls" MIME types to just "pls" monikers
@@ -234,10 +236,10 @@ def convert_playlist(url, source, dest, local_file=True, row={}):
 
     # Check ambiguity (except pseudo extension)
     if len(set([source, mime, probe])) > 1:
-        debug(dbg.ERR, "Possible playlist format mismatch:", (source, mime, probe, ext))
+        debug(dbg.ERR, "Possible playlist format mismatch:", "listformat={}, http_mime={}, rx_probe={}, ext={}".format(source, mime, probe, ext))
 
     # Extract URLs from content
-    for fmt in ["pls", "xspf", "asx", "smil", "jspf", "m3u", "json", "asf", "jamj", "raw"]:
+    for fmt in [id[0] for id in extract_playlist.extr_urls]:
         if not urls and fmt in (source, mime, probe, ext, "raw"):
             urls = extract_playlist(cnt).format(fmt)
             debug(dbg.DATA, "conversion from:", source, " with extractor:", fmt, "got URLs=", urls)
@@ -291,6 +293,10 @@ def http_probe_get(url):
 
 # Extract URLs from playlist formats:
 #
+# It's entirely regex-based at the moment, because that's more
+# resilient against mailformed XSPF or JSON.
+# Needs proper extractors later for real playlist *imports*.
+#
 class extract_playlist(object):
 
     # Content of playlist file
@@ -300,30 +306,36 @@ class extract_playlist(object):
         
     # Extract only URLs from given source type
     def format(self, fmt):
-        debug(dbg.DATA, "input regex:", fmt, len(self.src))
-        # regex
-        urls = re.findall(self.extr_urls[fmt], self.src, re.X)
-        # xml entities
-        urls = [xmlunescape(url) for url in urls]
-        # json escaping
-        urls = [url.replace("\\/", "/") for url in urls]
-        # uniques
-        urls = list(set(urls))
-        return urls
+        debug(dbg.DATA, "input extractor/regex:", fmt, len(self.src))
 
-    # Only look out for URLs, not local file paths
-    extr_urls = {
-       "pls":  r"(?im) ^ \s*File\d* \s*=\s* (\w+://[^\s]+) ",
-       "m3u":  r" (?m) ^( \w+:// [^#\n]+ )",
-       "xspf": r" (?x) <location> (\w+://[^<>\s]+) </location> ",
-       "asx":  r" (?x) <ref \b[^>]+\b href \s*=\s* [\'\"] (\w+://[^\s\"\']+) [\'\"] ",
-       "smil": r" (?x) <(?:audio|video|media)\b [^>]+ \b src \s*=\s* [^\"\']? \s* (\w+://[^\"\'\s]+) ",
-       "jspf": r" (?x) \"location\" \s*:\s* \"(\w+://[^\"\s]+)\" ",
-       "jamj": r" (?x) \"audio\" \s*:\s* \"(\w+:\\?/\\?/[^\"\s]+)\" ",
-       "json": r" (?x) \"url\" \s*:\s* \"(\w+://[^\"\s]+)\" ",
-       "asf":  r" (?m) ^ \s*Ref\d+ = (\w+://[^\s]+) ",
-       "raw":  r" (?i) ( [\w+]+:// [^\s\"\'\>\#]+ ) ",
-    }
+        # find extractor
+        if fmt in dir(self):
+            return self.__dict__[fmt]()
+
+        # regex scheme
+        rx, decode = dict(self.extr_urls)[fmt]
+        urls = re.findall(rx, self.src, re.X)
+        # decode urls
+        if decode in ("xml", "*"):
+            urls = [xmlunescape(url) for url in urls]
+        if decode in ("json", "*"):
+            urls = [url.replace("\\/", "/") for url in urls]
+        # only uniques
+        return list(set(urls))
+
+    # Only look out for URLs, not local file paths, nor titles
+    extr_urls = (
+       ("pls",  (r"(?im) ^ \s*File\d* \s*=\s* (\w+://[^\s]+) ", None)),
+       ("m3u",  (r" (?m) ^( \w+:// [^#\n]+ )", None)),
+       ("xspf", (r" (?x) <location> (\w+://[^<>\s]+) </location> ", "xml")),
+       ("asx",  (r" (?x) <ref \b[^>]+\b href \s*=\s* [\'\"] (\w+://[^\s\"\']+) [\'\"] ", "xml")),
+       ("smil", (r" (?x) <(?:audio|video|media)\b [^>]+ \b src \s*=\s* [^\"\']? \s* (\w+://[^\"\'\s]+) ", "xml")),
+       ("jspf", (r" (?x) \"location\" \s*:\s* \"(\w+://[^\"\s]+)\" ", "json")),
+       ("jamj", (r" (?x) \"audio\" \s*:\s* \"(\w+:\\?/\\?/[^\"\s]+)\" ", "json")),
+       ("json", (r" (?x) \"url\" \s*:\s* \"(\w+://[^\"\s]+)\" ", "json")),
+       ("asf",  (r" (?m) ^ \s*Ref\d+ = (\w+://[^\s]+) ", "xml")),
+       ("raw",  (r" (?i) ( [\w+]+:// [^\s\"\'\>\#]+ ) ", "*")),
+    )
 
 
 # Save rows in one of the export formats.
