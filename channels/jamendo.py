@@ -57,6 +57,7 @@ class jamendo (ChannelPlugin):
     # control flags
     has_search = True
     base = "http://www.jamendo.com/en/"
+    audioformat = "ogg"
     listformat = "srv"
     api_base = "http://api.jamendo.com/v3.0/"
     cid = "49daa4f5"
@@ -260,14 +261,14 @@ class jamendo (ChannelPlugin):
 
         entries = []
         fmt = self.stream_mime(conf.jamendo_stream_format)
-        
+                
         # Static list of Radios
         if cat == "radios":
             for radio in ["BestOf", "Pop", "Rock", "Lounge", "Electro", "HipHop", "World", "Jazz", "Metal", "Soundtrack", "Relaxation", "Classical"]:
                 entries.append({
                     "genre": radio,
                     "title": radio,
-                    "url": "http://streaming.radionomy.com/Jam" + radio,
+                    "url": "http://streaming.radionomy.com/Jam" + radio,  # optional +".m3u"
                     "playing": "various artists",
                     "format": "audio/mpeg",
                     "homepage": "http://www.jamendo.com/en/radios",
@@ -276,14 +277,21 @@ class jamendo (ChannelPlugin):
         
         # Playlist
         elif cat == "playlists":
-            for e in self.api(method = cat, order = "creationdate_desc"):
+            for e in self.api(method="playlists", order="creationdate_desc"):
                 entries.append({
                     "title": e["name"],
                     "playing": e["user_name"],
                     "homepage": e["shareurl"],
-                    #"url": "http://api.jamendo.com/v3.0/playlists/file?client_id=%s&id=%s" % (self.cid, e["id"]),
-                    "url": "http://api.jamendo.com/get2/stream/track/xspf/?playlist_id=%s&n=all&order=random&from=app-%s" % (e["id"], self.cid),
-                    "format": "application/xspf+xml",
+                    "extra": e["creationdate"],
+                    "format": "audio/mpeg",
+                    #"listformat": "xspf", # deprecated
+                    #"url": "http://api.jamendo.com/get2/stream/track/xspf/?playlist_id=%s&n=all&order=random&from=app-%s" % (e["id"], self.cid),
+                    #"listformat": "href", # raw ZIP redirect
+                    #"url": "http://api.jamendo.com/v3.0/playlists/file?client_id={}&audioformat=mp32&id={}".format(self.cid, e["id"]),
+                    #"listformat": "href", # raw ZIP direct
+                    #"url": e["zip"],
+                    "listformat": "jamj",
+                    "url": "http://api.jamendo.com/v3.0/playlists/tracks?client_id={}&audioformat=mp32&id={}".format(self.cid, e["id"]),
                 })
 
         # Albums
@@ -301,7 +309,8 @@ class jamendo (ChannelPlugin):
                     "homepage": e["shareurl"],
                     #"url": "http://api.jamendo.com/v3.0/playlists/file?client_id=%s&id=%s" % (self.cid, e["id"]),
                     "url": "http://api.jamendo.com/get2/stream/track/xspf/?album_id=%s&streamencoding=ogg2&n=all&from=app-%s" % (e["id"], self.cid),
-                    "format": "application/xspf+xml",
+                    "format": "audio/ogg",
+                    "listformat": "xspf",
                 })
 		
         # Genre list, or Search
@@ -325,7 +334,8 @@ class jamendo (ChannelPlugin):
                     "homepage": e["shareurl"],
                     #"url": e["audio"],
                     "url": "http://storage-new.newjamendo.com/?trackid=%s&format=ogg2&u=0&from=app-%s" % (e["id"], self.cid),
-                    "format": self.stream_mime(fmt),
+                    "format": fmt,
+                    "listformat": "srv",
                 })
  
         # done    
@@ -365,8 +375,5 @@ class jamendo (ChannelPlugin):
             "mp3": "audio/mpeg", "mp31": "audio/mpeg", "mp32": "audio/mpeg",
             "flac": "audio/flac"
         }
-        if name in map:
-            return map[name]
-        else:
-            return map["mp3"]
+        return map.get(name) or map["mp3"]
 

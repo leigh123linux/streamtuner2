@@ -7,7 +7,7 @@ NAME    := streamtuner2
 VERSION := $(shell version get:plugin st2.py || echo 2.1dev)
 DEST    := /usr/share/streamtuner2
 INST    := install -m 644
-PACK    := xpm --verbose
+PACK    := xpm
 DEPS    := -n $(NAME) -d python -d python-pyquery -d python-gtk2 -d python-requests -d python-keybinder
 OPTS    := -s src -u packfile,man,fixperms -f --prefix=$(DEST) --deb-compression xz --rpm-compression xz --exe-autoextract
 
@@ -51,7 +51,7 @@ exe:
 pyz:
         #@BUG: relative package references leave a /tmp/doc/ folder
 	$(PACK) -u packfile -s src -t zip --zip-shebang "/usr/bin/env python"	\
-		-f -p "$(NAME)-$(VERSION).pyz" --prefix=./ --verbose .zip.py st2.py
+		-f -p "$(NAME)-$(VERSION).pyz" --prefix=./  .zip.py st2.py
 src:
 	cd .. && pax -wvJf streamtuner2/streamtuner2-$(VERSION).src.txz \
 		streamtuner2/*.{py,png,svg,desktop} streamtuner2/channels/*.{py,png} \

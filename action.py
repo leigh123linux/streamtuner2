@@ -36,6 +36,7 @@ import platform
 import copy
 import json
 from datetime import datetime
+from xml.sax.saxutils import escape as xmlentities, unescape as xmlunescape
 
 
 # Coupling to main window
@@ -100,7 +101,8 @@ playlist_content_map = [
    ("b4s",  r""" <WinampXML> """),   # http://gonze.com/playlists/playlist-format-survey.html
    ("jspf", r""" ^ \s* \{ \s* "playlist": \s* \{ """),
    ("asf",  r""" ^ \[Reference\] .*? ^Ref\d+= """),
-   ("json", r""" "url": \s* "\w+:// """),
+   ("json", r""" "url": \s* "\w+:\\?/\\?/ """),
+   ("jamj", r""" "audio": \s* "\w+:\\?/\\?/ """),
    ("gvp",  r""" ^gvp_version:1\.\d+$ """),
    ("href", r""" .* """),
 ]
@@ -235,7 +237,7 @@ def convert_playlist(url, source, dest, local_file=True, row={}):
         debug(dbg.ERR, "Possible playlist format mismatch:", (source, mime, probe, ext))
 
     # Extract URLs from content
-    for fmt in ["pls", "xspf", "asx", "smil", "jspf", "m3u", "json", "asf", "raw"]:
+    for fmt in ["pls", "xspf", "asx", "smil", "jspf", "m3u", "json", "asf", "jamj", "raw"]:
         if not urls and fmt in (source, mime, probe, ext, "raw"):
             urls = extract_playlist(cnt).format(fmt)
             debug(dbg.DATA, "conversion from:", source, " with extractor:", fmt, "got URLs=", urls)
@@ -299,7 +301,15 @@ class extract_playlist(object):
     # Extract only URLs from given source type
     def format(self, fmt):
         debug(dbg.DATA, "input regex:", fmt, len(self.src))
-        return re.findall(self.extr_urls[fmt], self.src, re.X);
+        # regex
+        urls = re.findall(self.extr_urls[fmt], self.src, re.X)
+        # xml entities
+        urls = [xmlunescape(url) for url in urls]
+        # json escaping
+        urls = [url.replace("\\/", "/") for url in urls]
+        # uniques
+        urls = list(set(urls))
+        return urls
 
     # Only look out for URLs, not local file paths
     extr_urls = {
@@ -309,6 +319,7 @@ class extract_playlist(object):
        "asx":  r" (?x) <ref \b[^>]+\b href \s*=\s* [\'\"] (\w+://[^\s\"\']+) [\'\"] ",
        "smil": r" (?x) <(?:audio|video|media)\b [^>]+ \b src \s*=\s* [^\"\']? \s* (\w+://[^\"\'\s]+) ",
        "jspf": r" (?x) \"location\" \s*:\s* \"(\w+://[^\"\s]+)\" ",
+       "jamj": r" (?x) \"audio\" \s*:\s* \"(\w+:\\?/\\?/[^\"\s]+)\" ",
        "json": r" (?x) \"url\" \s*:\s* \"(\w+://[^\"\s]+)\" ",
        "asf":  r" (?m) ^ \s*Ref\d+ = (\w+://[^\s]+) ",
        "raw":  r" (?i) ( [\w+]+:// [^\s\"\'\>\#]+ ) ",
@@ -360,6 +371,7 @@ class save_playlist(object):
             for i,row in enumerate(rows):
                 # Preferrably convert to direct server addresses
                 for url in convert_playlist(row["url"], self.source, "srv", local_file=False):
+                    row = dict(row.items())
                     row["url"] = url
                     new_rows.append(row)
                     # Or just allow one stream per station in a playlist entry
@@ -442,13 +454,6 @@ class save_playlist(object):
         txt += """\t</seq>\n</body>\n</smil>\n"""
         return txt
 
-
-
-# Stub import, only if needed
-def xmlentities(s):
-    global xmlentities
-    from xml.sax.saxutils import escape as xmlentities
-    return xmlentities(s)
 
 
 
