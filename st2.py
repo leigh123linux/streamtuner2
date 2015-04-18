@@ -426,7 +426,8 @@ class StreamTunerTwo(gtk.Builder):
         winstate = conf.load("state")
         if (winstate):
             for id,prev in winstate.items():
-                self.channels[id].current = prev["current"]
+                try: self.channels[id].current = prev["current"]
+                except: pass
 
     # store window/widget states (sizes, selections, etc.)
     def app_state(self, widget):
