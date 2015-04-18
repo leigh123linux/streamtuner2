@@ -1,4 +1,4 @@
-
+# encoding: UTF-8
 # api: streamtuner2
 # title: Jamendo
 # description: A license-free music collection and artist hub.
@@ -8,7 +8,7 @@
 # url: http://jamendo.com/
 # depends: json
 # config: 
-#    { name: jamendo_stream_format, value: ogg,  type: select,  select: "ogg=Ogg Vorbis|mp32=MP3, 192vbr|mp31=MP3, 96kbps|flac=Xiph FLAC",  description: "Default streaming audio format. Albums and playlists still return Vorbis mostly for best quality." }
+#    { name: jamendo_stream_format, value: ogg,  type: select,  select: "ogg=Ogg Vorbis, 112kbit/s, (HD)|mp32=MP3, 192kbit/s VBR|mp31=MP3, 96kbit/s|flac=Xiph FLAC, ≳600kbit/s",  description: "Default streaming audio format for tracks, albums and playlists. Radios are just MP3." }
 #    { name: jamendo_image_size,    value: 50,   type: select,  select: "25=25px|35=35px|50=50px|55=55px|60=60px|65=65px|70=70px|75=75px|85=85px|100=100px|130=130px|150=150px|200=200px|300=300px",  description: "Preview images size (height and width) for albums or tracks." }
 #    { name: jamendo_count,         value: 1,    type:text,     description: "How many result sets (200 entries each) to retrieve." }
 # priority: default
@@ -20,16 +20,20 @@
 #   5vAw0n1wZuFvFcDq/kGP5/X1tnm+2aiTLQy59MiE00wZ49okK2fNxsWfgnRfmvJA8D3E98tztTWdBtG9IPuw+tqgI+RRTLin1miNJ3EkRhQFxIRcl8+tgj9EN35VXqrV9G2MPIPvWfgv5I1Bh/pNBOGtYCeALEKM6nlc52uUP+XFDfRpRN7psa/ZeBWSAmJ99qrQGaANeJA3AUjpXhLZ1zsD+g+5
 #   Cnd9pANrngAAAABJRU5ErkJggg==
 #
-# Now utilizes the Jamendo /v3.0/ API.
+# Utilizes the Jamendo /v3.0/ API now completely. That means all tracks will
+# be available as Ogg Vorbis per default.
 #
-# Radio station lists are fixed for now. Querying the API twice per station
-# doesn't seem overly sensible.
+# Radio stations are a fixed internal list. There's not much point in querying
+# the API for them. (They're really just automated playlists, and MP3-only.)
 #
-# Tracks are queried by genre, where currently there's just a small built-in
-# tag list in ST2
+# Genre lists for tracks are built-in, but give a good enough overview. There's
+# no "related" lookup possibility yet in our station lists. (Might be feasible
+# as plugin though, via [load more] button etc...)
 #
-# Per default Ogg Vorbis is used as streaming format. Playlists and albums
-# return as XSPF playlists.
+# Per default Ogg Vorbis is used as streaming format. Track URLs can be played
+# back directly. Playlists and albums now require a roundtrip over the action
+# module to extract the JAMJson format into pls/m3u/xspf. (The previous v2 API
+# retrieval is going to become inaccessible soon.)
 
 
 import re
@@ -57,7 +61,7 @@ class jamendo (ChannelPlugin):
     # control flags
     has_search = True
     base = "http://www.jamendo.com/en/"
-    audioformat = "ogg"
+    audioformat = "audio/ogg"
     listformat = "srv"
     api_base = "http://api.jamendo.com/v3.0/"
     cid = "49daa4f5"
@@ -71,6 +75,7 @@ class jamendo (ChannelPlugin):
         self.categories = [
             "radios",
             "playlists",
+                ["feeds"],  # should go below `albums`, but looks nicer here
             "albums",
                 ["newest"],
             "tracks",
@@ -260,7 +265,8 @@ class jamendo (ChannelPlugin):
     def update_streams(self, cat, search=None):
 
         entries = []
-        fmt = self.stream_mime(conf.jamendo_stream_format)
+        fmt = conf.jamendo_stream_format
+        fmt_mime = self.stream_mime(fmt)
                 
         # Static list of Radios
         if cat == "radios":
@@ -283,7 +289,7 @@ class jamendo (ChannelPlugin):
                     "playing": e["user_name"],
                     "homepage": e["shareurl"],
                     "extra": e["creationdate"],
-                    "format": "audio/mpeg",
+                    "format": fmt_mime,
                     #"listformat": "xspf", # deprecated
                     #"url": "http://api.jamendo.com/get2/stream/track/xspf/?playlist_id=%s&n=all&order=random&from=app-%s" % (e["id"], self.cid),
                     #"listformat": "href", # raw ZIP redirect
@@ -291,7 +297,7 @@ class jamendo (ChannelPlugin):
                     #"listformat": "href", # raw ZIP direct
                     #"url": e["zip"],
                     "listformat": "jamj",
-                    "url": "http://api.jamendo.com/v3.0/playlists/tracks?client_id={}&audioformat=mp32&id={}".format(self.cid, e["id"]),
+                    "url": "http://api.jamendo.com/v3.0/playlists/tracks?client_id={}&audioformat={}&id={}".format(self.cid, fmt, e["id"]),
                 })
 
         # Albums
@@ -308,19 +314,36 @@ class jamendo (ChannelPlugin):
                     "img": e["image"],
                     "homepage": e["shareurl"],
                     #"url": "http://api.jamendo.com/v3.0/playlists/file?client_id=%s&id=%s" % (self.cid, e["id"]),
-                    "url": "http://api.jamendo.com/get2/stream/track/xspf/?album_id=%s&streamencoding=ogg2&n=all&from=app-%s" % (e["id"], self.cid),
-                    "format": "audio/ogg",
-                    "listformat": "xspf",
+                    #"url": "http://api.jamendo.com/get2/stream/track/xspf/?album_id=%s&streamencoding=ogg2&n=all&from=app-%s" % (e["id"], self.cid),
+                    #"format": "audio/ogg",
+                    #"listformat": "xspf",
+                    "url": "http://api.jamendo.com/v3.0/tracks?client_id={}&audioformat={}&album_id={}".format(self.cid, fmt, e["id"]),
+                    "listformat": "jamj",
+                    "format": fmt_mime,
                 })
 		
+        # Feeds (News)
+        elif cat == "feeds":
+            for e in self.api(method="feeds", order="date_start_desc", target="notlogged"):
+              if e.get("joinid") and e.get("subtitle"):
+                print e
+                entries.append({
+                    "genre": e["type"],
+                    "title": e["title"]["en"],
+                    "playing": e["subtitle"]["en"],
+                    "extra": e["text"]["en"],
+                    "homepage": e["link"],
+                    "format": fmt_mime,
+                    "listformat": "jamj",
+                    "url": "http://api.jamendo.com/v3.0/tracks?client_id={}&audioformat={}&album_id={}".format(self.cid, fmt, e["joinid"]),
+                })
+
         # Genre list, or Search
         else:
             if cat:
-                data = self.api(method = "tracks", order = "popularity_week", include = "musicinfo",
-                                fuzzytags = cat, audioformat = conf.jamendo_stream_format)
+                data = self.api(method="tracks", order="popularity_week", include="musicinfo", fuzzytags=cat, audioformat=fmt)
             elif search:
-                data = self.api(method = "tracks", order = "popularity_week", include = "musicinfo",
-                                search = search, audioformat = conf.jamendo_stream_format)
+                data = self.api(method="tracks", order="popularity_week", include="musicinfo", search=search, audioformat=fmt)
             else:
                 data = []
             for e in data:
@@ -332,9 +355,9 @@ class jamendo (ChannelPlugin):
                     "playing": e["album_name"] + " / " + e["artist_name"],
                     "img": e["album_image"],
                     "homepage": e["shareurl"],
-                    #"url": e["audio"],
-                    "url": "http://storage-new.newjamendo.com/?trackid=%s&format=ogg2&u=0&from=app-%s" % (e["id"], self.cid),
-                    "format": fmt,
+                    "url": e["audio"],
+                    #"url": "http://storage-new.newjamendo.com/?trackid=%s&format=ogg2&u=0&from=app-%s" % (e["id"], self.cid),
+                    "format": fmt_mime,
                     "listformat": "srv",
                 })
  
