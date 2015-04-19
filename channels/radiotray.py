@@ -68,6 +68,7 @@ class radiotray:
         # keep reference to main window    
         self.parent = parent
         self.bm = parent.channels["bookmarks"]
+        conf.add_plugin_defaults(self.meta, self.module)
 
         # create category
         self.bm.add_category("radiotray", plugin=self);
