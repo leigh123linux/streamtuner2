@@ -44,7 +44,7 @@ class dnd(object):
     # Supported type map
     drag_types = [
       # internal
-      ("json/vnd.streamtuner2.station", 0, 51),
+      ("json/vnd.streamtuner2.station", gtk.TARGET_SAME_APP, 51),
       # literal exports
       ("audio/x-mpegurl", 0, 20),
       ("application/x-scpls", 0, 21),
@@ -93,7 +93,7 @@ class dnd(object):
         for cn,module in parent.channels.items():
             w = module.gtk_list
             # bind SOURCE events
-            w.enable_model_drag_source(gtk.gdk.BUTTON1_MASK, self.drag_types, gtk.gdk.ACTION_DEFAULT|gtk.gdk.ACTION_COPY|gtk.gdk.ACTION_MOVE)
+            w.enable_model_drag_source(gtk.gdk.BUTTON1_MASK, self.drag_types, gtk.gdk.ACTION_DEFAULT|gtk.gdk.ACTION_COPY)
             w.connect('drag-begin', self.begin)
             w.connect('drag-data-get', self.data_get)
             # bind DESTINATION events
@@ -110,6 +110,7 @@ class dnd(object):
         __print__(dbg.UI, "dnd←source: begin-drag, store current row")
         self.row = self.treelist_row()
         self.buf = {}
+#        uikit.do(context.set_icon_default)
         uikit.do(context.set_icon_stock, gtk.STOCK_ADD, 16, 16)
         return "url" in self.row
 
@@ -124,7 +125,7 @@ class dnd(object):
         
     # Target window/app requests data for offered drop
     def data_get(self, widget, context, selection, info, time):
-        __print__(dbg.UI, "dnd←source: data-get, send and convert to requested target type", info, selection.get_target())
+        __print__(dbg.UI, "dnd←source: data-get, send and convert to requested target type:", info, selection.get_target())
 
         # Start new converter if not buffered (because `data_get` gets called mercilessly along the dragging path)
         if not info in self.buf:
@@ -132,9 +133,9 @@ class dnd(object):
             cnv = action.save_playlist(source=r["listformat"], multiply=False)
 
             # internal JSON row
-            info = 5
             if info >= 51:
                 buf = 'text', json.dumps(r)
+                print buf
             # Pass M3U/PLS/XSPF as literal payload
             elif info >= 20:
                 buf = 'text', cnv.export(urls=[r["url"]], row=r, dest=self.cnv_types[info])
@@ -158,26 +159,56 @@ class dnd(object):
         # Return prepared data
         func, data = self.buf[info]
         if func.find("text") >= 0:
-            selection.set_text(data, len(data))
+            # Yay for trial and error. Nay for docs. PyGtks selection.set_text() doesn't actually work unless the requested target type is an Atom.
+            selection.set("STRING", 8, data)
         if func.find("uris") >= 0:
             selection.set_uris(data)
         return True
-
 
                 
     # -- DESTINATION, when playlist/url gets dragged in from other app --
 
     # Just a notification for incoming drop
     def drop(self, widget, context, x, y, time):
-        __print__(dbg.UI, "dnd→dest: drop-probing", context.targets, x, y, time, context.drag_get_selection())
-        widget.drag_get_data(context, "STRING", time)#context.targets[0], time)
-        context.drop_reply(True, time)
-        return True
+        __print__(dbg.UI, "dnd→dest: drop-probing, possible targets:", context.targets)
+#        context.drop_reply(True, time) #"STRING"
+        return widget.drag_get_data(context, context.targets[0], time) or True
 
     # Actual data is being passed,
     # now has to be converted and patched into stream rows and channel liststore
     def data_received(self, widget, context, x, y, selection, info, time):
-        __print__(dbg.UI, "dnd→dest: data-receival", info, selection.get_target(), selection.get_uris(), selection.get_text())
+        __print__(dbg.UI, "dnd→dest: data-receival", info, selection.get_text(), selection.get_uris())
+#        print selection.get_length()
+#        print selection.get_format()
+#        print selection.get_targets()
+#        print selection.get_target()
+        
+        # incoming data
+        data = selection.get_text()
+        urls = selection.get_uris()
+        if not data and not urls:
+            context.drop_finish(False, time)
+            context.drag_abort(time)
+            print "ABORT DROP"
+            return
+
+        # internal target dicts
+        cn = self.parent.channel()
+        
+        # direct/internal row import
+        if info >= 51:
+            print "ADD ROW"
+            cn.streams[cn.current].append(json.loads(data))
+        # convertible formats
+        elif info >= 10:
+            pass
+        elif info >= 5:
+            pass
+        else:
+            pass
+            #self.parent.streamedit()
+            
+        # finish drop
         context.drop_finish(True, time)
         context.finish(True, False, time)
         return True
