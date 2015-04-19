@@ -41,12 +41,13 @@ class internet_radio (ChannelPlugin):
     # control data
     listformat = "pls"
     categories = []
+    base_url = "http://www.internet-radio.com/"
 
 
     # load genres
     def update_categories(self):
     
-        html = http.get(self.homepage)
+        html = http.get(self.base_url)
         rx = re.compile("""="/stations/[-+&.\w\s%]+/">([^<]+)<""")
         cats = rx.findall(html)
         cats = list(set(cats))
@@ -71,7 +72,7 @@ class internet_radio (ChannelPlugin):
             # Append HTML source
             html.append(
                 http.get(
-                    self.homepage + "stations/" +
+                    self.base_url + "stations/" +
                     cat.lower().replace(" ", "%20") +
                     "/" + ("page"+str(page) if page>1 else "")
                 )
