@@ -82,7 +82,7 @@ class search (AuxiliaryWindow):
                             row = copy(row)
                             row["genre"] = "%s %s" % (c or "", row.get("genre")  or "")
                             entries.append(row)
-        self.show_results(entries)
+        uikit.do(self.show_results, entries)
 
     # display "search" in "bookmarks"
     def show_results(self, entries):
@@ -111,7 +111,7 @@ class search (AuxiliaryWindow):
                 except:
                     continue
             #main.status(main, 1.0 * i / 15)
-        self.show_results(entries)
+        uikit.do(self.show_results, entries)
 
 
     # search text edited in text entry box

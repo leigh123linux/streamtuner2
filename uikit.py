@@ -403,8 +403,8 @@ class uikit:
     
     # pass updates from another thread, ensures that it is called just once
     @staticmethod
-    def do(lambda_func):
-        gobject.idle_add(lambda: lambda_func() and False)
+    def do(callback, *args, **kwargs):
+        gobject.idle_add(lambda: callback(*args, **kwargs) and False)
 
 
     # adds background color to widget,
