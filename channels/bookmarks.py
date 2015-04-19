@@ -47,8 +47,8 @@ class bookmarks(GenericChannel):
     urls = []
 
     def gui(self, parent):
-        GenericChannel.gui(self, parent)
         parent.notebook_channels.set_menu_label_text(parent.v_bookmarks, "bookmarks")
+        GenericChannel.gui(self, parent)
 
     # this channel does not actually retrieve/parse data from anywhere
     def update_categories(self):
@@ -66,7 +66,8 @@ class bookmarks(GenericChannel):
         
     # streams are already loaded at instantiation
     #def first_show(self):
-    #    pass
+    #    print "first_show", len(self.streams["favourite"])
+    #    GenericChannel.first_show(self)
 
 
     # all entries just come from "bookmarks.json"

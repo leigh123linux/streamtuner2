@@ -96,6 +96,8 @@ class GenericChannel(object):
     # regex            
     rx_www_url = re.compile("""(www(\.\w+[\w-]+){2,}|(\w+[\w-]+[ ]?\.)+(com|FM|net|org|de|PL|fr|uk))""", re.I)
 
+
+    #-- keep track of currently selected genre/category
     __current = None
     @property
     def current(self):
@@ -420,18 +422,20 @@ class GenericChannel(object):
             self.display_categories()
 
         # Select first category
-        #self.current = self.str_from_struct(self.categories) or None
-        #__print__(dbg.STAT, self.module, "→ first_show(); use first category as current =", self.current)
-        try:
-            self.load(self.current)
-        except:
-            pass
+        if not self.current:
+            self.current = self.str_from_struct(self.categories) or None
+            __print__(dbg.STAT, self.module, "→ first_show(); use first category as current =", self.current)
+            self.shown = 0,
+
+        # Show current category in any case
+        __print__(dbg.UI, self.module, "→ first_show(); station list → load(", self.current, ")")
+        uikit.do(self.load, self.current)
     
         # put selection/cursor on last position
-        if self.shown:
+        if True:#self.shown != None:
             __print__(dbg.STAT, self.module+".first_show()", "select last known category treelist position =", self.shown)
             try:
-                self.gtk_list.get_selection().select_path(self.shown)
+                uikit.do(lambda:self.gtk_list.get_selection().select_path(self.shown))
             except:
                 pass
             
