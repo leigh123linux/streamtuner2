@@ -391,7 +391,7 @@ class save_playlist(object):
                         break
             rows = new_rows
 
-        debug(dbg.DATA, "conversion to:", dest, " from:", self.source, "with rows=", rows)
+        debug(dbg.DATA, "conversion to:", dest, "  with rows=", rows)
 
         # call conversion schemes
         converter = getattr(self, dest) or self.pls
@@ -462,7 +462,7 @@ class save_playlist(object):
         txt = """<smil>\n<head>\n\t<meta name="title" content="%s"/>\n</head>\n<body>\n\t<seq>\n""" % (rows[0]["title"])
         for row in rows:
             if row.get("url"):
-                txt += """\t\t<audio src="%s"/>\n""" % row["url"]
+                txt += """\t\t<{} src="{}"/>\n""".format(row.get("format", "audio").split("/")[0], row["url"])
         txt += """\t</seq>\n</body>\n</smil>\n"""
         return txt
 

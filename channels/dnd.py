@@ -5,7 +5,10 @@
 # depends: uikit
 # version: 0.1
 # type: interface
+# config:
+#   { name: dnd_format, type: select, value: pls, select: "pls|m3u|xspf|jspf|asx|smil", description: "Default temporary file format for copying a station entry." }
 # category: ui
+# priority: experimental
 #
 # Implements Gtk/X11 drag and drop support for station lists.
 # Should allow to export either just stream URLs, or complete
@@ -14,8 +17,15 @@
 # Also used by the bookmarks tab to move favourites around.
 
 
+# mousepad == ['GTK_TEXT_BUFFER_CONTENTS', 'application/x-gtk-text-buffer-rich-text',
+#   'UTF8_STRING', 'COMPOUND_TEXT', 'TEXT', 'STRING',
+#   'text/plain;charset=utf-8', 'text/plain']
+# libreoffice ==# ['text/plain;charset=utf-8', 'UTF8_STRING', 'application/x-openoffice-embed-source-xml;windows_formatname="Star Embed# Source (XML)"', 'text/richtext', 'text/html',
+#    'application/x-openoffice-objectdescriptor-xml;windows_formatname="Star Object Descriptor (XML)";classname="8BC6B165-B1B2-4EDD-aa47-dae2ee689dd6";typename="LibreOffice 4.4 Textdokument";viewaspect="1";width="16999";height="2995";posx="5347";posy="5347"']
+
+
 import copy
-from config import *
+from config import conf, __print__, dbg, json
 from uikit import *
 import action
 
@@ -33,19 +43,36 @@ class dnd(object):
 
     # Supported type map
     drag_types = [
+      # internal
       ("json/vnd.streamtuner2.station", 0, 51),
+      # literal exports
       ("audio/x-mpegurl", 0, 20),
       ("application/x-scpls", 0, 21),
       ("application/xspf+xml", 0, 22),
+      ("application/smil", 0, 23),
+      ("text/html", 0, 23),
+      ("text/richtext", 0, 23),
+      ("application/jspf+json", 0, 25),
+      # direct srv urls
+      ("text/url", 0, 15),  #@TODO: support in action.save_/convert_
+      ("message/external-body", 0, 15),
+      ("url/direct", 0, 15),
+      # url+comments
+      ("TEXT", 0, 5),
+      ("STRING", 0, 5),
+      ("UTF8_STRING", 0, 5),
+      ("text/plain", 0, 5),
+      # filename, file:// IRL
       ("FILE_NAME", 0, 3),
       ("text/uri-list", 0, 4),
-      ("STRING", 0, 5),
-      ("text/plain", 0, 5),
     ]
     cnv_types = {
        20: "m3u",
        21: "pls",
        22: "xspf",
+       23: "smil",
+       25: "jspf",
+       15: "srv",
         4: "temp",
         5: "srv",
        51: "json",
@@ -56,6 +83,7 @@ class dnd(object):
     def __init__(self, parent):
         self.parent = parent
         parent.hooks["init"].append(self.add_dnd)
+        conf.add_plugin_defaults(self.meta, self.module)
 
 
     # Attach drag and drop handlers to each channels´ station TreeView
@@ -70,7 +98,7 @@ class dnd(object):
             w.connect('drag-data-get', self.data_get)
             # bind DESTINATION events
             w.enable_model_drag_dest(self.drag_types, gtk.gdk.ACTION_DEFAULT|gtk.gdk.ACTION_COPY)
-            w.connect('drag-drop', self.drop)#self.drag_types
+            w.connect('drag-drop', self.drop)
             w.connect('drag-data-received', self.data_received)
 
 
@@ -82,9 +110,8 @@ class dnd(object):
         __print__(dbg.UI, "dnd←source: begin-drag, store current row")
         self.row = self.treelist_row()
         self.buf = {}
-        #context.set_icon_stock("gtk-add", 2, 2)
+        uikit.do(context.set_icon_stock, gtk.STOCK_ADD, 16, 16)
         return "url" in self.row
-
 
     # Keep currently selected row when source dragging starts
     def treelist_row(self):
@@ -92,42 +119,50 @@ class dnd(object):
         row = copy.copy(cn.row())
         row.setdefault("format", cn.audioformat)
         row.setdefault("listformat", cn.listformat)
+        row.setdefault("url", row.get("homepage"))
         return row
-
         
     # Target window/app requests data for offered drop
     def data_get(self, widget, context, selection, info, time):
-        __print__(dbg.UI, "dnd←source: data-get, send and convert to requested target type", info)
+        __print__(dbg.UI, "dnd←source: data-get, send and convert to requested target type", info, selection.get_target())
 
         # Start new converter if not buffered (because `data_get` gets called mercilessly along the dragging path)
         if not info in self.buf:
             r = self.row
             cnv = action.save_playlist(source=r["listformat"], multiply=False)
 
-            # Pass M3U/PLS/XSPF as direct content, or internal JSON even
-            if info >= 20:
-                buf = 'set_text', cnv.export(urls=[r["url"]], row=r, dest=self.cnv_types[info])
+            # internal JSON row
+            info = 5
+            if info >= 51:
+                buf = 'text', json.dumps(r)
+            # Pass M3U/PLS/XSPF as literal payload
+            elif info >= 20:
+                buf = 'text', cnv.export(urls=[r["url"]], row=r, dest=self.cnv_types[info])
+            # Direct server URL
+            elif info >= 10:
+                urls = action.convert_playlist(r["url"], r["listformat"], "srv", False, r)
+                #buf = 'uris', urls
+                buf = 'text', urls[0]
+            # Text sources are assumed to understand the literal URL or expect a description block
+            elif info >= 5:
+                buf = 'text', "{url}\n# Title: {title}\n# Homepage: {homepage}\n\n".format(**r)
             # Create temporary PLS file, because "text/uri-list" is widely misunderstood and just implemented for file:// IRLs
-            elif info <= 4:
-                fn = "{}/{}.pls".format(conf.tmp, re.sub("[^\w-]+", " ", r["title"]))
-                cnv.file(rows=[r], dest="pls", fn=fn)
-                if info == 4:
-                    fn = ["file://localhost{}".format(fn)]
-                buf = 'set_uris', fn
-            # Text sources are assumed to understand the literal URL, or expect a description
             else:
-                buf = 'set_text', "{url}\n# Title: {title}\n# Homepage: {homepage}".format(**r)
+                tmpfn = "{}/{}.{}".format(conf.tmp, re.sub("[^\w-]+", " ", r["title"]), conf.dnd_format)
+                cnv.file(rows=[r], dest=conf.dnd_format, fn=tmpfn)
+                buf = 'uris', ["file://{}".format(tmpfn)] if (info==4) else tmpfn
 
-            # Buffer
+            # Keep in type request buffer
             self.buf[info] = buf
-            
+        
         # Return prepared data
         func, data = self.buf[info]
-        if func in ('set_text'):
-            selection.set_text(data)
-        else:
+        if func.find("text") >= 0:
+            selection.set_text(data, len(data))
+        if func.find("uris") >= 0:
             selection.set_uris(data)
         return True
+
 
                 
     # -- DESTINATION, when playlist/url gets dragged in from other app --
@@ -135,13 +170,15 @@ class dnd(object):
     # Just a notification for incoming drop
     def drop(self, widget, context, x, y, time):
         __print__(dbg.UI, "dnd→dest: drop-probing", context.targets, x, y, time, context.drag_get_selection())
-        widget.drag_get_data(context, context.targets[0], time)
+        widget.drag_get_data(context, "STRING", time)#context.targets[0], time)
+        context.drop_reply(True, time)
         return True
 
     # Actual data is being passed,
     # now has to be converted and patched into stream rows and channel liststore
     def data_received(self, widget, context, x, y, selection, info, time):
-        __print__(dbg.UI, "dnd→dest: data-receival", x,y,selection, info, time, selection.get_uris(), selection.get_text())
+        __print__(dbg.UI, "dnd→dest: data-receival", info, selection.get_target(), selection.get_uris(), selection.get_text())
+        context.drop_finish(True, time)
         context.finish(True, False, time)
         return True
 
