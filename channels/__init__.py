@@ -4,7 +4,7 @@
 # category: ui
 # title: Channel plugins
 # description: Base implementation for channels and feature plugins
-# version: 1.3
+# version: 1.5
 # license: public domain
 # author: mario
 # url: http://fossil.include-once.org/streamtuner2/
@@ -13,7 +13,7 @@
 #    icast.py internet_radio.py itunes.py jamendo.py live365.py global_key.py
 #    modarchive.py myoggradio.py punkcast.py radiobrowser.py radiotray.py
 #    shoutcast.py surfmusik.py timer.py tunein.py xiph.py youtube.py
-#    exportcat.py useragentswitcher.py somafm.py
+#    exportcat.py useragentswitcher.py somafm.py dnd.py
 # config: -
 # priority: core
 #
@@ -104,7 +104,7 @@ class GenericChannel(object):
         return self.__current
     @current.setter
     def current(self, newcat):
-        print "{}.current:={} ← from {}".format(self.module, newcat, [inspect.stack()[x][3] for x in range(1,4)])
+        __print__(dbg.PROC, "{}.current:={} ← from {}".format(self.module, newcat, [inspect.stack()[x][3] for x in range(1,4)]))
         self.__current = newcat
         return self.__current
 
@@ -256,7 +256,6 @@ class GenericChannel(object):
                 new_streams = self.update_streams(category)
   
             if new_streams:
-
                 # check and modify entry;
                 # assert that title and url are present
                 modified = []
@@ -278,10 +277,6 @@ class GenericChannel(object):
                 # save in cache
                 self.save()
   
-                # invalidate gtk list cache
-                #if (self.liststore.has_key(category)):
-                #    del self.liststore[category]
-  
             else:
                 # parse error
                 self.status("Category parsed empty.")
@@ -289,17 +284,13 @@ class GenericChannel(object):
                 __print__(dbg.INFO, "Oooops, parser returned nothing for category " + category)
                 
         # assign to treeview model
-        #if (self.liststore.has_key(category)):  # was already loded before
-        #    self.gtk_list.set_model(self.liststore[category])
-        #else:   # currently list is new, had not been converted to gtk array before
-        #    self.liststore[category] = \
         uikit.do(lambda:uikit.columns(self.gtk_list, self.datamap, self.prepare(self.streams[category])))
 
         # set pointer
         self.current = category
         self.status("")
         self.status(1.0)
-        pass
+
         
     # store current streams data
     def save(self):
@@ -328,13 +319,7 @@ class GenericChannel(object):
     #  - or deleted icon
     #
     def prepare(self, streams):
-        #__print__(dbg.PROC, "prepare", streams)
-
         for i,row in enumerate(streams):
-                                        # oh my, at least it's working
-                                        # at start the bookmarks module isn't fully registered at instantiation in parent.channels{} - might want to do that step by step rather
-                                        # then display() is called too early to take effect - load() & co should actually be postponed to when a notebook tab gets selected first
-                                        # => might be fixed now, 1.9.8
             # state icon: bookmark star
             if (conf.show_bookmarks and "bookmarks" in self.parent.channels and self.parent.bookmarks.is_in(streams[i].get("url", "file:///tmp/none"))):
                 streams[i]["favourite"] = 1
@@ -345,13 +330,9 @@ class GenericChannel(object):
                     streams[i]["state"] = gtk.STOCK_ABOUT
                 if conf.retain_deleted and row.get("deleted"):
                     streams[i]["state"] = gtk.STOCK_DELETE
-                  
-            # guess homepage url  
-            #self.postprocess(row)
             
             # favicons?
             if conf.show_favicons:
-            
                 # entry provides its own image
                 if "img" in row:
                     favicon_url = row["img"]
@@ -363,7 +344,6 @@ class GenericChannel(object):
                     # check for availability of PNG file, inject local icons/ filename
                     if homepage_url and favicon.available(homepage_url):
                         streams[i]["favicon"] = favicon.file(homepage_url)
-            
         return streams
 
 
@@ -373,11 +353,6 @@ class GenericChannel(object):
     # - or find homepage name in title
     #
     def postprocess(self, row):
-
-        # remove non-homepages from shoutcast
-        if row.get("homepage") and row["homepage"].find("//yp.shoutcast.")>0:
-            row["homepage"] = ""
-            
         # deduce homepage URLs from title
         # by looking for www.xyz.com domain names
         if not row.get("homepage"):
@@ -386,7 +361,6 @@ class GenericChannel(object):
                 url = url.group(0).lower().replace(" ", "")
                 url = (url if url.find("www.") == 0 else "www."+url)
                 row["homepage"] = http.fix_url(url)
-        
         return row
 
         
