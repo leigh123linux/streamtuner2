@@ -42,7 +42,7 @@ import pkgutil
 import argparse
 
 # export symbols
-__all__ = ["conf", "__print__", "dbg", "plugin_meta", "module_list", "get_data", "find_executable"]
+__all__ = ["conf", "log", "__print__", "dbg", "plugin_meta", "module_list", "get_data", "find_executable"]
 
 
 #-- create a stub instance of config object
@@ -221,7 +221,7 @@ class ConfigDict(dict):
             f.close()
             return r
         except Exception as e:
-            __print__(dbg.ERR, "JSON parsing error (in "+name+")", e)
+            log.ERR("JSON parsing error (in "+name+")", e)
         
 
     # recursive dict update
@@ -419,7 +419,7 @@ def plugin_meta_extract(src="", fn=None, literal=False):
     if not literal:
         src = rx.comment.search(src)
         if not src:
-            __print__(dbg.ERR, "Couldn't read source meta information:", fn)
+            log.ERR("Couldn't read source meta information:", fn)
             return meta
         src = src.group(0)
         src = rx.hash.sub("", src).strip()
@@ -487,10 +487,47 @@ dbg = type('obj', (object,), {
 })
 
 
+# Simplified print wrapper: `log.err(...)`
+class log_printer(object):
+
+    # Wrapper
+    method = None
+    def __getattr__(self, name):
+        self.method = name
+        return self.__print__
+    
+    # Printer
+    def __print__(self, *args, **kwargs):
+        # debug level
+        method = self.method.upper()
+        if not method == "ERR":
+            if "debug" in conf and not conf.debug:
+                return
+        # color/prefix
+        method = r"[{}[{}][0m".format(self.colors.get(method, "47m"), method)
+        # output
+        print(method + " " + " ".join([str(a) for a in args]), file=sys.stderr)
+
+    # Colors
+    colors = {
+        "ERR":  "31m", # red    ERROR
+        "INIT": "31m", # red    INIT ERROR
+        "PROC": "32m", # green  PROCESS
+        "CONF": "33m", # brown  CONFIG DATA
+        "UI":   "34m", # blue   USER INTERFACE BEHAVIOUR
+        "HTTP": "35m", # magenta HTTP REQUEST
+        "DATA": "36m", # cyan   DATA
+        "INFO": "37m", # gray   INFO
+        "STAT": "37m", # gray   CONFIG STATE
+    }
+
+# instantiate right away
+log = log_printer()
+
 
 
    
 
 #-- populate global conf instance
 conf = ConfigDict()
-__print__(dbg.PROC, "ConfigDict() initialized")
+log.PROC("ConfigDict() initialized")
