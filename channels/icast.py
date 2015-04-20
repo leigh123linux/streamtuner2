@@ -26,9 +26,11 @@
 # meta data (homepage) and there's no ordering
 # by listeneres/popularity.
 #
-# OTOH it's every easy to interface with. Though
-# the repeated API queries due to only 10 entries
-# per query results make fetching slow.
+# However it's every easy and stable to interface
+# with over JSON. However it's also somewhat slow,
+# because each query result has only 10 entries.
+# Which is why reloading takes a few seconds to
+# collect 200 station entries (see main options).
 
 
 import re
