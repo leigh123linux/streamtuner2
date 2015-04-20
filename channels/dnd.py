@@ -1,9 +1,9 @@
 # encoding: UTF-8
 # api: streamtuner2
-# title: Drag and Drop
-# description: Move streams/stations from and to other applications.
+# title: Drag and Drop (experimental)
+# description: Copy streams/stations from and to other applications.
 # depends: uikit
-# version: 0.1
+# version: 0.5
 # type: interface
 # config:
 #   { name: dnd_format, type: select, value: xspf, select: "pls|m3u|xspf|jspf|asx|smil", description: "Default temporary file format for copying a station entry." }
@@ -15,7 +15,8 @@
 # PLS, XSPF collections.
 #
 # Also used by the bookmarks channel to copy favourites around.
-# Which perhaps should even be constrained to just the bookmarks tab.
+# Which perhaps should even be constrained to just the bookmarks
+# tab.
 
 
 import copy
@@ -84,6 +85,8 @@ class dnd(object):
       ("UTF8_STRING", 0, 5),
       ("text/plain", 0, 5),
     ]
+    
+    # Map target/`info` integers to action. module identifiers
     cnv_types = {
        20: "m3u",
        21: "pls",
@@ -139,8 +142,9 @@ class dnd(object):
         row.setdefault("format", cn.audioformat)
         row.setdefault("listformat", cn.listformat)
         row.setdefault("url", row.get("homepage"))
+        row.update({"_origin": [cn.module, cn.current, cn.rowno()]}) # internal: origin channel+genre+rowid
         return row
-        
+    
     # Target window/app requests data for offered drop
     def data_get(self, widget, context, selection, info, time):
         log.DND("source→out: data-get, send and convert to requested target type:", info, selection.get_target())
@@ -212,10 +216,8 @@ class dnd(object):
         any = (data or urls) and True
 
         # Convert/Add
-        if any:
-            self.import_row(info, urls, data, y)
-        else:
-            log.DND("abort, no urls/text")
+        if any: self.import_row(info, urls, data, y)
+        else: log.DND("Abort, no urls/text.")
         
         # Respond
         context.drop_finish(any, time)
@@ -227,7 +229,8 @@ class dnd(object):
         # Internal target dicts
         cn = self.parent.channel()
         rows = []
-        
+        print info
+                
         # Direct/internal row import
         if data and info >= 51:
             log.DND("Received row, append, reload")
@@ -237,26 +240,30 @@ class dnd(object):
         elif data and info >= 5:
             cnv = action.extract_playlist(data)
             urls = cnv.format(self.cnv_types[info] if info>=20 else "raw")
-            rows += [ self.imported_row(urls[0]) ]
+            rows += [ self.imported_row(urls[0], cnv.title()) ]
 
-        # Extract from playlist files (don't import mp3s into stream lists directly)
+        # Extract from playlist files, either passed as text/uri-list or FILE_NAME
         elif urls:
-            for fn in [re.sub("^\w+://[^/]*", "", fn) for fn in urls if re.match("^(scp|file)://(localhost)?/|/", fn)]:
+            for fn in [re.sub("^\w+://[^/]*", "", fn) for fn in urls or [data] if re.match("^(scp|file)://(localhost)?/|/", fn)]:
                 ext = action.probe_playlist_fn_ext(fn)
-                if ext:
+                if ext:  # don't import mp3s into stream lists directly
                     cnt = open(fn, "rt").read()
                     probe = action.probe_playlist_content(cnt)
                     if ext == probe:
                         cnv = action.extract_playlist(cnt)
                         urls = cnv.format(probe)
-                        rows += [ self.imported_row(urls[0], os.path.basename(fn)) ]
+                        rows += [ self.imported_row(urls[0], cnv.title() or os.path.basename(fn)) ]
         
         # Insert and update view
         if rows:
             # Inserting at correct row requires deducing index from dnd `y` position
-            cn.streams[cn.current] += rows
+            streams = cn.streams[cn.current]
+            i_pos = (cn.gtk_list.get_path_at_pos(10, y) or [[len(streams) + 1]])[0][0]
+            for row in rows:
+                streams.insert(i_pos - 1, row)
+                i_pos = i_pos + 1
             # Now appending to the liststore directly would be even nicer
-            uikit.do(cn.load, cn.current)
+            uikit.do(lambda *x: cn.load(cn.current))#, cn.gtk_list.scroll_to_point(0, y))
             if cn.module == "bookmarks":
                 cn.save()
             #self.parent.streamedit()
@@ -264,6 +271,8 @@ class dnd(object):
             self.parent.status("Unsupported station format. Not imported.")
 
 
+    # Stub row for dragged entries.
+    # Which is a workaround for the missing full playlist conversion and literal URL input
     def imported_row(self, url, title=None):
         return {
             "title": title or "",

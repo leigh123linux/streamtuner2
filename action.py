@@ -328,7 +328,22 @@ class extract_playlist(object):
         if decode in ("json", "*"):
             urls = [url.replace("\\/", "/") for url in urls]
         # only uniques
-        return list(set(urls))
+        uniq = []
+        urls = [uniq.append(u) for u in urls if not u in uniq]
+        return uniq
+
+    # Try to capture common title schemes 
+    def title(self):
+        t = re.search(r"""(?:
+              ^Title\d*=(.+)
+           |  ^\#EXTINF[-:\d,]*(.+)
+           |  <title>([^<>]+)
+           |  (?i)Title[\W]+(.+)
+        )""", self.src, re.X|re.M)
+        for i in range(1,10):
+            if t and t.group(i):
+                return t.group(i)
+        
 
     # Only look out for URLs, not local file paths, nor titles
     extr_urls = (
