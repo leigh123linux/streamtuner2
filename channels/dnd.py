@@ -6,7 +6,7 @@
 # version: 0.1
 # type: interface
 # config:
-#   { name: dnd_format, type: select, value: pls, select: "pls|m3u|xspf|jspf|asx|smil", description: "Default temporary file format for copying a station entry." }
+#   { name: dnd_format, type: select, value: xspf, select: "pls|m3u|xspf|jspf|asx|smil", description: "Default temporary file format for copying a station entry." }
 # category: ui
 # priority: experimental
 #
@@ -14,20 +14,38 @@
 # Should allow to export either just stream URLs, or complete
 # PLS, XSPF collections.
 #
-# Also used by the bookmarks tab to move favourites around.
-
-
-# mousepad == ['GTK_TEXT_BUFFER_CONTENTS', 'application/x-gtk-text-buffer-rich-text',
-#   'UTF8_STRING', 'COMPOUND_TEXT', 'TEXT', 'STRING',
-#   'text/plain;charset=utf-8', 'text/plain']
-# libreoffice ==# ['text/plain;charset=utf-8', 'UTF8_STRING', 'application/x-openoffice-embed-source-xml;windows_formatname="Star Embed# Source (XML)"', 'text/richtext', 'text/html',
-#    'application/x-openoffice-objectdescriptor-xml;windows_formatname="Star Object Descriptor (XML)";classname="8BC6B165-B1B2-4EDD-aa47-dae2ee689dd6";typename="LibreOffice 4.4 Textdokument";viewaspect="1";width="16999";height="2995";posx="5347";posy="5347"']
+# Also used by the bookmarks channel to copy favourites around.
+# Which perhaps should even be constrained to just the bookmarks tab.
 
 
 import copy
-from config import conf, __print__, dbg, json
+from config import conf, json, log
 from uikit import *
 import action
+
+
+# Welcome to my new blog.
+#
+# Now it's perhaps not even Gtks fault, but all the gory implementation
+# details of XDND are pretty gory. Neither match up to reality anymore.
+#
+# Pretty much only the ridiculous `TEXT/URI-LIST` is used in practice.
+# Without host names, of course, despite the spec saying otherwise. (It
+# perhaps leaked into the Gnome UI, and they decreed it banished). And
+# needless to say, there's no actual IRI/URI support in any file manager
+# or pairing apps beyond local paths.
+#
+# Supporting PLS, XSPF, M3U as direct payload was a pointless exercise.
+# It's not gonna get requested by anyone. Instead there's another config
+# option now, which predefines the exchange format for temporary file:///
+# dumps. Because, you know, there was never any point in type negotiation
+# due to all the API overhead.
+#
+# What works, and what's widely used in practice instead, is declaring
+# yet another custom type per application. Our row format is transferred
+# unfiltered over the selection buffer as JSON. However, it's decidedly
+# never exposed to other apps as x-special/x-custom whatever. (It's also
+# not using the MIME 1.0 application/* trash bin for that very reason.)
 
 
 # Drag and Drop support
@@ -57,14 +75,14 @@ class dnd(object):
       ("text/url", 0, 15),  #@TODO: support in action.save_/convert_
       ("message/external-body", 0, 15),
       ("url/direct", 0, 15),
+      # filename, file:// IRL
+      ("FILE_NAME", 0, 3),
+      ("text/uri-list", 0, 4),
       # url+comments
       ("TEXT", 0, 5),
       ("STRING", 0, 5),
       ("UTF8_STRING", 0, 5),
       ("text/plain", 0, 5),
-      # filename, file:// IRL
-      ("FILE_NAME", 0, 3),
-      ("text/uri-list", 0, 4),
     ]
     cnv_types = {
        20: "m3u",
@@ -84,6 +102,7 @@ class dnd(object):
         self.parent = parent
         parent.hooks["init"].append(self.add_dnd)
         conf.add_plugin_defaults(self.meta, self.module)
+        log.colors["DND"] = "1;33;41m"
 
 
     # Attach drag and drop handlers to each channels´ station TreeView
@@ -107,10 +126,9 @@ class dnd(object):
 
     # Starting to drag a row
     def begin(self, widget, context):
-        __print__(dbg.UI, "dnd←source: begin-drag, store current row")
+        log.DND("source→out: begin-drag, store current row")
         self.row = self.treelist_row()
         self.buf = {}
-#        uikit.do(context.set_icon_default)
         uikit.do(context.set_icon_stock, gtk.STOCK_ADD, 16, 16)
         return "url" in self.row
 
@@ -125,92 +143,136 @@ class dnd(object):
         
     # Target window/app requests data for offered drop
     def data_get(self, widget, context, selection, info, time):
-        __print__(dbg.UI, "dnd←source: data-get, send and convert to requested target type:", info, selection.get_target())
-
-        # Start new converter if not buffered (because `data_get` gets called mercilessly along the dragging path)
-        if not info in self.buf:
-            r = self.row
-            cnv = action.save_playlist(source=r["listformat"], multiply=False)
-
-            # internal JSON row
-            if info >= 51:
-                buf = 'text', json.dumps(r)
-                print buf
-            # Pass M3U/PLS/XSPF as literal payload
-            elif info >= 20:
-                buf = 'text', cnv.export(urls=[r["url"]], row=r, dest=self.cnv_types[info])
-            # Direct server URL
-            elif info >= 10:
-                urls = action.convert_playlist(r["url"], r["listformat"], "srv", False, r)
-                #buf = 'uris', urls
-                buf = 'text', urls[0]
-            # Text sources are assumed to understand the literal URL or expect a description block
-            elif info >= 5:
-                buf = 'text', "{url}\n# Title: {title}\n# Homepage: {homepage}\n\n".format(**r)
-            # Create temporary PLS file, because "text/uri-list" is widely misunderstood and just implemented for file:// IRLs
-            else:
-                tmpfn = "{}/{}.{}".format(conf.tmp, re.sub("[^\w-]+", " ", r["title"]), conf.dnd_format)
-                cnv.file(rows=[r], dest=conf.dnd_format, fn=tmpfn)
-                buf = 'uris', ["file://{}".format(tmpfn)] if (info==4) else tmpfn
-
-            # Keep in type request buffer
-            self.buf[info] = buf
-        
+        log.DND("source→out: data-get, send and convert to requested target type:", info, selection.get_target())
         # Return prepared data
-        func, data = self.buf[info]
+        func, data = self.export_row(info, self.row)
         if func.find("text") >= 0:
-            # Yay for trial and error. Nay for docs. PyGtks selection.set_text() doesn't actually work unless the requested target type is an Atom.
+            # Yay for trial and error. Nay for docs. PyGtks selection.set_text() doesn't
+            # actually work unless the requested target type is an Atom. Therefore "STRING".
             selection.set("STRING", 8, data)
         if func.find("uris") >= 0:
             selection.set_uris(data)
         return True
 
-                
-    # -- DESTINATION, when playlist/url gets dragged in from other app --
+    # Handles the conversion from the stored .row to the desired selection data
+    def export_row(self, info, r):
+
+        # Needs buffering because `data_get` gets called mercilessly along the dragging path
+        if info in self.buf:
+            return self.buf[info]
+        
+        # Prepare new converter
+        cnv = action.save_playlist(source=r["listformat"], multiply=False)
+
+        # internal JSON row
+        if info >= 51:
+            buf = 'text', json.dumps(r)
+        # Pass M3U/PLS/XSPF as literal payload
+        elif info >= 20:
+            buf = 'text', cnv.export(urls=[r["url"]], row=r, dest=self.cnv_types[info])
+        # Direct server URL
+        elif info >= 10:
+            urls = action.convert_playlist(r["url"], r["listformat"], "srv", False, r)
+            #buf = 'uris', urls
+            buf = 'text', urls[0]
+        # Text sources are assumed to understand the literal URL or expect a description block
+        elif info >= 5:
+            buf = 'text', "{url}\n# Title: {title}\n# Homepage: {homepage}\n\n".format(**r)
+        # Create temporary PLS file, because "text/uri-list" is widely misunderstood and just implemented for file:// IRLs
+        else:
+            tmpfn = "{}/{}.{}".format(conf.tmp, re.sub("[^\w-]+", " ", r["title"]), conf.dnd_format)
+            cnv.file(rows=[r], dest=conf.dnd_format, fn=tmpfn)
+            buf = 'uris', ["file://{}".format(tmpfn)] if (info==4) else tmpfn
+
+        # Keep in type request buffer
+        self.buf[info] = buf
+        return buf
+
+
+
+    # -- DESTINATION, when playlist/file gets dragged in from other app --
 
     # Just a notification for incoming drop
     def drop(self, widget, context, x, y, time):
-        __print__(dbg.UI, "dnd→dest: drop-probing, possible targets:", context.targets)
-#        context.drop_reply(True, time) #"STRING"
-        return widget.drag_get_data(context, context.targets[0], time) or True
+        log.DND("dest←in: drop-probing, possible targets:", context.targets)
+        # find a matching target
+        accept = [type[0] for type in self.drag_types if type[0] in context.targets]
+        context.drop_reply(len(accept) > 0, time)
+        if accept:
+                widget.drag_get_data(context, accept[0], time) or True
+        return True
 
     # Actual data is being passed,
-    # now has to be converted and patched into stream rows and channel liststore
     def data_received(self, widget, context, x, y, selection, info, time):
-        __print__(dbg.UI, "dnd→dest: data-receival", info, selection.get_text(), selection.get_uris())
-#        print selection.get_length()
-#        print selection.get_format()
-#        print selection.get_targets()
-#        print selection.get_target()
-        
+        log.DND("dest←in: data-receival", info, selection.get_text(), selection.get_uris())
+
         # incoming data
         data = selection.get_text()
         urls = selection.get_uris()
-        if not data and not urls:
-            context.drop_finish(False, time)
-            context.drag_abort(time)
-            print "ABORT DROP"
-            return
+        any = (data or urls) and True
 
-        # internal target dicts
-        cn = self.parent.channel()
-        
-        # direct/internal row import
-        if info >= 51:
-            print "ADD ROW"
-            cn.streams[cn.current].append(json.loads(data))
-        # convertible formats
-        elif info >= 10:
-            pass
-        elif info >= 5:
-            pass
+        # Convert/Add
+        if any:
+            self.import_row(info, urls, data, y)
         else:
-            pass
-            #self.parent.streamedit()
-            
-        # finish drop
-        context.drop_finish(True, time)
-        context.finish(True, False, time)
+            log.DND("abort, no urls/text")
+        
+        # Respond
+        context.drop_finish(any, time)
+        context.finish(any, False, time)
         return True
 
+    # Received files or payload has to be converted, copied into streams
+    def import_row(self, info, urls, data, y=5000):
+        # Internal target dicts
+        cn = self.parent.channel()
+        rows = []
+        
+        # Direct/internal row import
+        if data and info >= 51:
+            log.DND("Received row, append, reload")
+            rows += [ json.loads(data) ]
 
+        # Convertible formats
+        elif data and info >= 5:
+            cnv = action.extract_playlist(data)
+            urls = cnv.format(self.cnv_types[info] if info>=20 else "raw")
+            rows += [ self.imported_row(urls[0]) ]
+
+        # Extract from playlist files (don't import mp3s into stream lists directly)
+        elif urls:
+            for fn in [re.sub("^\w+://[^/]*", "", fn) for fn in urls if re.match("^(scp|file)://(localhost)?/|/", fn)]:
+                ext = action.probe_playlist_fn_ext(fn)
+                if ext:
+                    cnt = open(fn, "rt").read()
+                    probe = action.probe_playlist_content(cnt)
+                    if ext == probe:
+                        cnv = action.extract_playlist(cnt)
+                        urls = cnv.format(probe)
+                        rows += [ self.imported_row(urls[0], os.path.basename(fn)) ]
+        
+        # Insert and update view
+        if rows:
+            # Inserting at correct row requires deducing index from dnd `y` position
+            cn.streams[cn.current] += rows
+            # Now appending to the liststore directly would be even nicer
+            uikit.do(cn.load, cn.current)
+            if cn.module == "bookmarks":
+                cn.save()
+            #self.parent.streamedit()
+        else:
+            self.parent.status("Unsupported station format. Not imported.")
+
+
+    def imported_row(self, url, title=None):
+        return {
+            "title": title or "",
+            "url": url,
+            "homepage": "",
+            "playling": "",
+            "listformat": action.probe_playlist_fn_ext(url) or "href",
+            "format": ",".join(re.findall("ogg|mpeg|mp\d+", url)),
+            "genre": "copy",
+        }
+
+        

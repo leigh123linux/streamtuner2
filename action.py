@@ -223,16 +223,9 @@ def convert_playlist(url, source, dest, local_file=True, row={}):
         cnt = ""
         return [url]
 
-    # Test URL path "extension" for ".pls" / ".m3u" etc.
-    ext = re.findall("\.(\w)$", url)
-    ext = ext[0] if ext else None
-
-    # Probe MIME type and content per regex
-    probe = None
-    for probe,rx in playlist_content_map:
-        if re.search(rx, cnt, re.X|re.S):
-            probe = listfmt(probe)
-            break # with `probe` set
+    # Deduce likely content format
+    ext = probe_playlist_fn_ext(url)
+    probe = probe_playlist_content(cnt)
 
     # Check ambiguity (except pseudo extension)
     if len(set([source, mime, probe])) > 1:
@@ -260,6 +253,20 @@ def convert_playlist(url, source, dest, local_file=True, row={}):
     else:
         return urls
 
+
+# Test URL/path "extension" for ".pls" / ".m3u" etc.
+def probe_playlist_fn_ext(url):
+    e = re.findall("\.(pls|m3u|xspf|jspf|asx|wpl|wsf|smil|html|url|json)$", url)
+    if e: return e[0]
+    else: pass
+
+
+# Probe MIME type and content per regex
+def probe_playlist_content(cnt):
+    for probe,rx in playlist_content_map:
+        if re.search(rx, cnt, re.X|re.S):
+            return listfmt(probe)
+    return None
 
 
 # Tries to fetch a resource, aborts on ICY responses.
