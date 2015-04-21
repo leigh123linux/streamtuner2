@@ -29,9 +29,11 @@ google_placeholder_filesizes = (726,896)
 import os, os.path
 from compat2and3 import xrange, urllib
 import re
-from config import conf
+from config import *
 from threading import Thread
 import ahttp
+import compat2and3
+from PIL import Image
 
 
 
@@ -157,16 +159,16 @@ def download(url):
          return
 
   try:    # look for /favicon.ico first
-    #print("favicon.ico")
+    log.FAVICON("try /favicon.ico")
     direct_download("http://"+domain(url)+"/favicon.ico", file(url))
 
   except:
     try:    # extract facicon filename from website <link rel>
-      #print("html <rel favicon>")
+      log.FAVICON("html <rel favicon>")
       html_download(url)
 
-    except:    # fallback
-      #print("google ico2png")
+    except Exception as e:    # fallback
+      log.ERR(e)
       google_ico2png(url)
 
 
@@ -174,14 +176,14 @@ def download(url):
 
 # retrieve PNG via Google ico2png
 def google_ico2png(url):
+    log.FAVICON("google ico2png")
 
-  #try:
-     GOOGLE = "http://www.google.com/s2/favicons?domain="
-     (fn, headers) = urllib.urlretrieve(GOOGLE+domain(url), file(url))
+    GOOGLE = "http://www.google.com/s2/favicons?domain="
+    (fn, headers) = urllib.urlretrieve(GOOGLE+domain(url), file(url))
 
-     # test for stub image
-     if delete_google_stub and (filesize(fn) in google_placeholder_filesizes):
-        os.remove(fn)
+    # test for stub image
+    if delete_google_stub and (filesize(fn) in google_placeholder_filesizes):
+       os.remove(fn)
 
   
 def filesize(fn):
@@ -204,16 +206,16 @@ def filetype(fn):
 # favicon.ico
 def direct_download(favicon, fn):
 
-#  try: 
     # URL download
     r = urllib.urlopen(favicon)
     headers = r.info()
+    log.HTTP(headers)
     
     # abort on
     if r.getcode() >= 300:
-       raise Error("HTTP error" + r.getcode())
+       raise Exception("HTTP error %s" % r.getcode())
     if not headers["Content-Type"].lower().find("image/") == 0:
-       raise Error("can't use text/* content")
+       raise Exception("can't use text/* content")
        
     # save file
     fn_tmp = fn+".tmp"
@@ -229,9 +231,6 @@ def direct_download(favicon, fn):
        ico2png(fn_tmp, fn)
        os.remove(fn_tmp)
 
- # except:
-  #  "File not found" and False
-
 
   
 # peek at URL, download favicon.ico <link rel>
@@ -246,13 +245,15 @@ def html_download(url):
     r.close()
     rx = re.compile("""<link[^<>]+rel\s*=\s*"?\s*(?:shortcut\s+|fav)?icon[^<>]+href=["'](?P<href>[^<>"']+)["'<>\s].""")
     favicon = "".join(rx.findall(html))
+    log.DATA(favicon)
     
     # url or
     if favicon.startswith("http://"):
        None
     # just /pathname
     else:
-       favicon = ahttp.urlparse.urljoin(url, favicon)
+       favicon = compat2and3.urlparse.urljoin(url, favicon)
+       log.FAVICON(favicon)
        #favicon = "http://" + domain(url) + "/" + favicon
 
     # download
@@ -260,135 +261,23 @@ def html_download(url):
 
 
 
-
-
-#@obsolete since Pillow 2.1.x
-
-#
-# title: workaround for PIL.Image to preserve the transparency for .ico import
-#
-# http://stackoverflow.com/questions/987916/how-to-determine-the-transparent-color-index-of-ico-image-with-pil
-# http://djangosnippets.org/snippets/1287/
-#
-# Author: dc
-# Posted: January 17, 2009
-# Languag: Python
-# Django Version: 1.0
-# Tags: pil image ico 
-# Score: 2 (after 2 ratings)
-#
-         
-import operator
-import struct
-
-try:
-    from PIL import BmpImagePlugin, PngImagePlugin, Image
-except Exception as e:
-    print("no PIL", e)
-    always_google = 1
-    only_google = 1
-
-
-def load_icon(file, index=None):
-    '''
-    Load Windows ICO image.
-
-    See http://en.wikipedia.org/w/index.php?oldid=264332061 for file format
-    description.
-    '''
-    if isinstance(file, basestring):
-        file = open(file, 'rb')
-
-    try:
-        header = struct.unpack('<3H', file.read(6))
-    except:
-        raise IOError('Not an ICO file')
-
-    # Check magic
-    if header[:2] != (0, 1):
-        raise IOError('Not an ICO file')
-
-    # Collect icon directories
-    directories = []
-    for i in xrange(header[2]):
-        directory = list(struct.unpack('<4B2H2I', file.read(16)))
-        for j in xrange(3):
-            if not directory[j]:
-                directory[j] = 256
-
-        directories.append(directory)
-
-    if index is None:
-        # Select best icon
-        directory = max(directories, key=operator.itemgetter(slice(0, 3)))
-    else:
-        directory = directories[index]
-
-    # Seek to the bitmap data
-    file.seek(directory[7])
-
-    prefix = file.read(16)
-    file.seek(-16, 1)
-
-    if PngImagePlugin._accept(prefix):
-        # Windows Vista icon with PNG inside
-        image = PngImagePlugin.PngImageFile(file)
-    else:
-        # Load XOR bitmap
-        image = BmpImagePlugin.DibImageFile(file)
-        if image.mode == 'RGBA':
-            # Windows XP 32-bit color depth icon without AND bitmap
-            pass
-        else:
-            # Patch up the bitmap height
-            image.size = image.size[0], image.size[1] >> 1
-            d, e, o, a = image.tile[0]
-            image.tile[0] = d, (0, 0) + image.size, o, a
-
-            # Calculate AND bitmap dimensions. See
-            # http://en.wikipedia.org/w/index.php?oldid=264236948#Pixel_storage
-            # for description
-            offset = o + a[1] * image.size[1]
-            stride = ((image.size[0] + 31) >> 5) << 2
-            size = stride * image.size[1]
-
-            # Load AND bitmap
-            file.seek(offset)
-            string = file.read(size)
-            mask = Image.fromstring('1', image.size, string, 'raw',
-                                    ('1;I', stride, -1))
-
-            image = image.convert('RGBA')
-            image.putalpha(mask)
-
-    return image
-
-
-
-
 # convert .ico file to .png format
 def ico2png(ico, png_fn):
-  #print("ico2png", ico, png, image)
-  
-  try:  # .ico
-    image = load_icon(ico, None)
-  except:  # automatic img file type guessing
     image = Image.open(ico)
-       
-  # resize
-  if image.size[0] > 16:
-    image.resize((16, 16), Image.ANTIALIAS)
-
-  # .png format
-  image.save(png_fn, "PNG", quality=98)
+    log.ICO2PNG(ico, png, image)
+    # resize
+    if image.size[0] > 16:
+        image.resize((16, 16), Image.ANTIALIAS)
+    # .png format
+    image.save(png_fn, "PNG", quality=98)
 
 
 # resize an image
 def pngresize(fn, x=16, y=16):
-  image = Image.open(fn)
-  if image.size[0] > x:
-    image.resize((x, y), Image.ANTIALIAS)
-    image.save(fn, "PNG", quality=98)
+    image = Image.open(fn)
+    if image.size[0] > x:
+        image.resize((x, y), Image.ANTIALIAS)
+        image.save(fn, "PNG", quality=98)
 
 
 
