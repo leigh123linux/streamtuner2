@@ -15,17 +15,21 @@
 # Each channel plugin has a .listtype which defines the linked
 # audio playlist format. It's "pls", seldomly "m3u", or "xspf".
 # Some channels list raw "srv" addresses, while Youtube "href"
-# entries to Flash videos.
+# entries point to Flash videos.
 #
 # As fallback the playlist URL is retrieved and its MIME type
-# checked, and its content regexped to guess the link format.
+# checked, then its content regexped to guess the list format.
 # Lastly a playlist format suitable for audio players recreated.
 # Which is somewhat of a security feature; playlists get cleaned
 # up this way. The conversion is not strictly necessary for all
-# players, as basic PLS is supported by most.
+# players, as basic PLS/M3U is supported by most.
 #
 # And finally this module is also used by exporting and (perhaps
-# in the future) playlist importing features.
+# in the future) playlist importing features (e.g. in DND hooks).
+#
+# Still needs some rewrites to transition off the [url] lists,
+# and work with full [rows] primarily. (And perhaps it should be
+# renamed to "playlist" module now).
 
 
 import re
@@ -102,10 +106,17 @@ playlist_content_map = [
    ("b4s",  r""" <WinampXML> """),   # http://gonze.com/playlists/playlist-format-survey.html
    ("jspf", r""" ^ \s* \{ \s* "playlist": \s* \{ """),
    ("asf",  r""" ^ \[Reference\] .*? ^Ref\d+= """),
+   ("url",  r""" ^ \[InternetShortcut\] .*? ^URL= """),
+("desktop", r""" ^ \[Desktop Entry\] .*? ^Link= """),
    ("json", r""" "url": \s* "\w+:\\?/\\?/ """),
    ("jamj", r""" "audio": \s* "\w+:\\?/\\?/ """),
    ("gvp",  r""" ^gvp_version:1\.\d+$ """),
    ("href", r""" .* """),
+]
+
+# Preferred probing order of known formats
+playlist_fmt_prio = [
+   "pls", "xspf", "asx", "smil", "jamj", "json", "m3u", "asf", "raw"
 ]
 
 
@@ -224,17 +235,18 @@ def convert_playlist(url, source, dest, local_file=True, row={}):
         return [url]
 
     # Deduce likely content format
-    ext = probe_playlist_fn_ext(url)
-    probe = probe_playlist_content(cnt)
+    cnv = extract_playlist(cnt)
+    ext = cnv.probe_ext(url)
+    probe = cnv.probe_fmt()
 
     # Check ambiguity (except pseudo extension)
     if len(set([source, mime, probe])) > 1:
         log.ERR("Possible playlist format mismatch:", "listformat={}, http_mime={}, rx_probe={}, ext={}".format(source, mime, probe, ext))
 
     # Extract URLs from content
-    for fmt in [id[0] for id in extract_playlist.extr_urls]:
+    for fmt in playlist_fmt_prio:
         if not urls and fmt in (source, mime, probe, ext, "raw"):
-            urls = extract_playlist(cnt).format(fmt)
+            urls = cnv.urls(fmt)
             log.DATA("conversion from:", source, " with extractor:", fmt, "got URLs=", urls)
             
     # Return original, or asis for srv targets
@@ -254,20 +266,6 @@ def convert_playlist(url, source, dest, local_file=True, row={}):
         return urls
 
 
-# Test URL/path "extension" for ".pls" / ".m3u" etc.
-def probe_playlist_fn_ext(url):
-    e = re.findall("\.(pls|m3u|xspf|jspf|asx|wpl|wsf|smil|html|url|json)$", url)
-    if e: return e[0]
-    else: pass
-
-
-# Probe MIME type and content per regex
-def probe_playlist_content(cnt):
-    for probe,rx in playlist_content_map:
-        if re.search(rx, cnt, re.X|re.S):
-            return listfmt(probe)
-    return None
-
 
 # Tries to fetch a resource, aborts on ICY responses.
 #
@@ -284,6 +282,7 @@ def http_probe_get(url):
     # Extract payload
     mime = r.headers.get("content-type", "href")
     mime = mime.split(";")[0].strip()
+
     # Map MIME to abbr type (pls, m3u, xspf)
     if listfmt_t.get(mime):
         mime = listfmt_t.get(mime)
@@ -292,7 +291,8 @@ def http_probe_get(url):
         log.ERR("Got media MIME type for expected playlist", mime, " on url=", url)
         mime = mediafmt_t.get(mime)
         return (mime, url)
-    # Rejoin body
+
+    # Rejoin into string
     content = "\n".join(str.decode(errors='replace') for str in r.iter_lines())
     return (mime, content)
 
@@ -308,56 +308,182 @@ class extract_playlist(object):
 
     # Content of playlist file
     src = ""
-    def __init__(self, text):
-        self.src = text
+    fn = ""
+    def __init__(self, text=None, fn=None):
+        # Literal playlist source content
+        if text:
+            self.src = text
+        # Only read filename if it matches allowed extension
+        if fn and self.probe_ext(fn):
+            self.fn = fn
+            self.src = open(fn, "rt").read()
+
+
+    # Test URL/path "extension" for ".pls" / ".m3u" etc.
+    def probe_ext(self, url):
+        e = re.findall("\.(pls|m3u|xspf|jspf|asx|wpl|wsf|smil|html|url|json)$", url)
+        if e: return e[0]
+        else: pass
+
+
+    # Probe MIME type and content per regex
+    def probe_fmt(self):
+        for probe,rx in playlist_content_map:
+            if re.search(rx, self.src, re.X|re.S):
+                return listfmt(probe)
+        return None
+
+    # Return just URL list from extracted playlist
+    def urls(self, fmt):
+        return [row["url"] for row in self.rows(fmt)]
         
     # Extract only URLs from given source type
-    def format(self, fmt):
+    def rows(self, fmt=None):
+        if not fmt:
+            fmt = self.probe_fmt()
         log.DATA("input extractor/regex:", fmt, len(self.src))
 
-        # find extractor
-        if fmt in dir(self):
-            return self.__dict__[fmt]()
+        # specific extractor implementations
+        if fmt in self.__dict__:
+            return getattr(self, fmt)()
 
         # regex scheme
-        rx, decode = dict(self.extr_urls)[fmt]
-        urls = re.findall(rx, self.src, re.X)
-        # decode urls
-        if decode in ("xml", "*"):
-            urls = [xmlunescape(url) for url in urls]
-        if decode in ("json", "*"):
-            urls = [url.replace("\\/", "/") for url in urls]
-        # only uniques
-        uniq = []
-        urls = [uniq.append(u) for u in urls if not u in uniq]
-        return uniq
+        rules = self.extr_urls[fmt]
+        rows = []
+        fields = [name for name in ("url", "title", "homepage", "genre", "playing") if rules.get(name)]
 
-    # Try to capture common title schemes 
-    def title(self):
-        t = re.search(r"""(?:
-              ^Title\d*=(.+)
-           |  ^\#EXTINF[-:\d,]*(.+)
-           |  <title>([^<>]+)
-           |  (?i)Title[\W]+(.+)
-        )""", self.src, re.X|re.M)
-        for i in range(1,10):
-            if t and t.group(i):
-                return t.group(i)
+        # Block-wise processing
+        if rules.get("split"):
+            for part_src in re.split(rules["split"], self.src, re.X):
+                row = {}
+                for name in fields:
+                    val = self.field(name, rules, part_src)
+                    if val and val[0]:
+                        row[name] = val[0]
+                if row.get("url"):
+                    rows.append(row)
+            log.DATA("split-rx", rows)
         
+        # Just associate each found url+title in pairs
+        else:
+            for name in fields:
+                for i,val in enumerate(self.field(name, rules, self.src)):
+                    if len(rows) <= i:
+                        rows.append({"url":None})
+                    rows[i][name] = val;
+            log.DATA("pair-rx", rows)
 
-    # Only look out for URLs, not local file paths, nor titles
-    extr_urls = (
-       ("pls",  (r"(?im) ^ \s*File\d* \s*=\s* (\w+://[^\s]+) ", None)),
-       ("m3u",  (r" (?m) ^( \w+:// [^#\n]+ )", None)),
-       ("xspf", (r" (?x) <location> (\w+://[^<>\s]+) </location> ", "xml")),
-       ("asx",  (r" (?x) <ref \b[^>]+\b href \s*=\s* [\'\"] (\w+://[^\s\"\']+) [\'\"] ", "xml")),
-       ("smil", (r" (?x) <(?:audio|video|media)\b [^>]+ \b src \s*=\s* [^\"\']? \s* (\w+://[^\"\'\s]+) ", "xml")),
-       ("jspf", (r" (?x) \"location\" \s*:\s* \"(\w+://[^\"\s]+)\" ", "json")),
-       ("jamj", (r" (?x) \"audio\" \s*:\s* \"(\w+:\\?/\\?/[^\"\s]+)\" ", "json")),
-       ("json", (r" (?x) \"url\" \s*:\s* \"(\w+://[^\"\s]+)\" ", "json")),
-       ("asf",  (r" (?m) ^ \s*Ref\d+ = (\w+://[^\s]+) ", "xml")),
-       ("raw",  (r" (?i) ( [\w+]+:// [^\s\"\'\>\#]+ ) ", "*")),
-    )
+        return self.uniq(rows)
+
+    # Single field
+    def field(self, name, rules, src_part):
+        if name in rules:
+            vals = re.findall(rules[name], src_part, re.X)
+            #log.PLS_EXTR_FIELD(name, vals, src_part, rules[name])
+            return [self.decode(val, rules.get("unesc")) for val in vals]
+        return [None]
+
+    # Decoding
+    def decode(self, val, unesc):
+        if unesc in ("xml", "*"):
+            val = xmlunescape(val)
+        if unesc in ("json", "*"):
+            val = val.replace("\\/", "/")
+        return val
+
+    # filter out duplicate urls
+    def uniq(self, rows):
+        seen = []
+        filtered = []
+        for row in rows:
+            if not row or not row.get("url") or row.get("url") in seen:
+                continue;
+            seen.append(row.get("url"))
+            filtered.append(row)
+        return rows
+
+
+    # These regexps only look out for URLs, not local file paths.
+    extr_urls = {
+        "pls": dict(
+            url   = r"(?im) ^ \s*File\d* \s*=\s* (\w+://[^\s]+) ",
+            title = r"(?m) ^Title\d*=(.+)",
+            # Notably this extraction method assumes the entries are grouped in associative order
+        ),
+        "m3u": dict(
+            split = r"(?m) (?=^\#)",
+            url   = r"(?m) ^( \w+:// [^#\n]+ )",
+            title = r"(?m) ^ \#EXTINF [-:\d,]* (.+)",
+        ),
+        "xspf": dict(
+            split = r"(?x) <track[^>]*>",
+            url   = r"(?x) <location> (\w+://[^<>\s]+) </location> ",
+            title = r"(?x) <title> ([^<>]+) ",
+            homepage = r"(?x) <info> ([^<>]+) ",
+            playing  = r"(?x) <annotation> ([^<>]+) ",
+            unesc = "xml",
+        ),
+        "asx": dict(
+            split = r" (?x) <entry[^>]*> ",
+            url   = r" (?x) <ref \b[^>]+\b href \s*=\s* [\'\"] (\w+://[^\s\"\']+) [\'\"] ",
+            title = r"(?x) <title> ([^<>]+) ",
+            unesc = "xml",
+        ),
+        "smil": dict(
+            url   = r" (?x) <(?:audio|video|media)\b [^>]+ \b src \s*=\s* [^\"\']? \s* (\w+://[^\"\'\s]+) ",
+            unesc = "xml",
+        ),
+        "jspf": dict(
+            split = r"(?s) \"track\":\s*\{ >",
+            url   = r"(?s) \"location\" \s*:\s* \"(\w+://[^\"\s]+)\" ",
+            unesc = "json",
+        ),
+        "jamj": dict(
+            url   = r" (?x) \"audio\" \s*:\s* \"(\w+:\\?/\\?/[^\"\s]+)\" ",
+            title = r" (?x) \"name\" \s*:\s* \"([^\"]+)\" ",
+            unesc = "json",
+        ),
+        "json": dict(
+            url   = r" (?x) \"url\" \s*:\s* \"(\w+://[^\"\s]+)\" ",
+            title = r" (?x) \"title\" \s*:\s* \"([^\"]+)\" ",
+            unesc = "json",
+        ),
+        "asf": dict(
+            url   = r" (?m) ^ \s*Ref\d+ = (\w+://[^\s]+) ",
+            unesc = "xml",
+        ),
+        "url": dict(
+            url   = r"(?m) ^URL=(\w+://.+)",
+        ),
+        "desktop": dict(
+            url   = r"(?m) ^URL=(\w+://.+)",
+            title = r"(?m) ^Name=(.+)",
+            genre = r"(?m) ^Categories=(.+)",
+          playing = r"(?m) ^Comment=(.+)",
+        ),
+        "raw": dict(
+            url   = r" (?i) ( [\w+]+:// [^\s\"\'\>\#]+ ) ",
+            title = r"(?i)Title[\W]+(.+)",
+            unesc = "*",
+        ),
+    }
+
+
+    # Add placeholder fields to extracted row
+    def mkrow(self, row, title=None):
+        url = row.get("url", "")
+        comb = {
+            "title": title or re.sub("\.\w+$", "", os.path.basename(self.fn)),
+            "playing": "",
+            "url": None,
+            "homepage": "",
+            "listformat": self.probe_ext(url) or "href",
+            "format": ",".join(re.findall("ogg|mpeg|mp\d+", url)),
+            "genre": "copy",
+        }
+        comb.update(row)
+        return comb
+
 
 
 # Save rows in one of the export formats.
