@@ -104,7 +104,7 @@ class GenericChannel(object):
         return self.__current
     @current.setter
     def current(self, newcat):
-        __print__(dbg.PROC, "{}.current:={} ← from {}".format(self.module, newcat, [inspect.stack()[x][3] for x in range(1,4)]))
+        log.PROC("{}.current:={} ← from {}".format(self.module, newcat, [inspect.stack()[x][3] for x in range(1,4)]))
         self.__current = newcat
         return self.__current
 
@@ -167,7 +167,7 @@ class GenericChannel(object):
     # Statusbar stub (defers to parent/main window, if in GUI mode)
     def status(self, *v):
         if self.parent: self.parent.status(*v)
-        else: __print__(dbg.INFO, "status():", *v)
+        else: log.INFO("status():", *v)
 
 
         
@@ -247,7 +247,7 @@ class GenericChannel(object):
 
         # get data from cache or download
         if force or not category in self.streams:
-            __print__(dbg.PROC, "load", "update_streams")
+            log.PROC("load", "update_streams")
             self.status("Updating streams...")
             self.status(-0.1)
             if category == "empty":
@@ -265,7 +265,7 @@ class GenericChannel(object):
                     try:
                         modified.append( self.postprocess(row) )
                     except Exception as e:
-                        __print__(e, dbg.DATA, "Missing title or url. Postprocessing failed:", row)
+                        log.DATA(e, "Missing title or url. Postprocessing failed:", row)
                 new_streams = modified
   
                 # don't lose forgotten streams
@@ -281,7 +281,7 @@ class GenericChannel(object):
                 # parse error
                 self.status("Category parsed empty.")
                 self.streams[category] = self.nothing_found
-                __print__(dbg.INFO, "Oooops, parser returned nothing for category " + category)
+                log.INFO("Oooops, parser returned nothing for category " + category)
                 
         # assign to treeview model
         uikit.do(lambda:uikit.columns(self.gtk_list, self.datamap, self.prepare(self.streams[category])))
@@ -383,31 +383,31 @@ class GenericChannel(object):
         # Already processed
         if (self.shown == 55555):
             return
-        __print__(dbg.PROC, self.module, "→ first_show()", ", current=", self.current, ", categories=", len(self.categories))
+        log.PROC(self.module, "→ first_show()", ", current=", self.current, ", categories=", len(self.categories))
     
         # if category tree is empty, initialize it
         if not self.categories:
-            __print__(dbg.PROC, self.module, "→ first_show() → reload_categories()");
+            log.PROC(self.module, "→ first_show() → reload_categories()");
             try:
                 self.reload_categories()
             except:
-                __print__(dbg.ERR, "HTTP error or extraction failure.")
+                log.ERR("HTTP error or extraction failure.")
                 self.categories = ["empty"]
             self.display_categories()
 
         # Select first category
         if not self.current:
             self.current = self.str_from_struct(self.categories) or None
-            __print__(dbg.STAT, self.module, "→ first_show(); use first category as current =", self.current)
+            log.STAT(self.module, "→ first_show(); use first category as current =", self.current)
             self.shown = 0,
 
         # Show current category in any case
-        __print__(dbg.UI, self.module, "→ first_show(); station list → load(", self.current, ")")
+        log.UI(self.module, "→ first_show(); station list → load(", self.current, ")")
         uikit.do(self.load, self.current)
     
         # put selection/cursor on last position
         if True:#self.shown != None:
-            __print__(dbg.STAT, self.module+".first_show()", "select last known category treelist position =", self.shown)
+            log.STAT(self.module+".first_show()", "select last known category treelist position =", self.shown)
             try:
                 uikit.do(lambda:self.gtk_list.get_selection().select_path(self.shown))
             except:

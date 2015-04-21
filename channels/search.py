@@ -102,7 +102,7 @@ class search (AuxiliaryWindow):
         for i,cn in enumerate([self.main.channels[c] for c in self.targets]):
             if cn.has_search:  # "search" in cn.update_streams.func_code.co_varnames:
                 self.main.status("Server searching: " + cn.module)
-                __print__(dbg.PROC, "has_search:", cn.module)
+                log.PROC("has_search:", cn.module)
                 try:
                     add = cn.update_streams(cat=None, search=self.q)
                     for row in add:

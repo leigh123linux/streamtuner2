@@ -123,7 +123,7 @@ class StreamTunerTwo(gtk.Builder):
         gui_startup(18/20.0)
         self.current_channel = self.current_channel_gtk()
         try: self.channel().first_show()
-        except: __print__(dbg.INIT, "main.__init__: current_channel.first_show() initialization error")
+        except: log.INIT("main.__init__: current_channel.first_show() initialization error")
 
   
         # bind gtk/glade event names to functions
@@ -232,7 +232,7 @@ class StreamTunerTwo(gtk.Builder):
     # Notebook tab has been clicked (receives numeric page_num), but *NOT* yet changed (visually).
     def channel_switch(self, notebook, page, page_num=0, *args):
         self.current_channel = notebook.get_menu_label_text(notebook.get_nth_page(page_num))
-        __print__(dbg.UI, "main.channel_switch() :=", self.current_channel)
+        log.UI("main.channel_switch() :=", self.current_channel)
         self.update_title()
         # if first selected, load current category
         # (run in thread, to make it look speedy on first startup)
@@ -279,13 +279,13 @@ class StreamTunerTwo(gtk.Builder):
     # Browse to channel homepage (double click on notebook tab)
     def on_homepage_channel_clicked(self, widget, event=2):
         if event == 2 or event.type == gtk.gdk._2BUTTON_PRESS:
-            __print__(dbg.UI, "dblclick")
+            log.UI("dblclick")
             url = self.channel().meta.get("url", "https://duckduckgo.com/?q=" + self.channel().module)
             action.browser(url)
 
     # Reload stream list in current channel-category
     def on_reload_clicked(self, widget=None, reload=1):
-        __print__(dbg.UI, "on_reload_clicked()", "reload=", reload, "current_channel=", self.current_channel, "c=", self.channels[self.current_channel], "cat=", self.channel().current)
+        log.UI("on_reload_clicked()", "reload=", reload, "current_channel=", self.current_channel, "c=", self.channels[self.current_channel], "cat=", self.channel().current)
         category = self.channel().current
         self.thread(
                        #@TODO: should get a wrapper, for HTTP errors, and optionalize bookamrks
@@ -302,7 +302,7 @@ class StreamTunerTwo(gtk.Builder):
     # Click in category list
     def on_category_clicked(self, widget, event, *more):
         category = self.channel().currentcat()
-        __print__(dbg.UI, "on_category_clicked", category, self.current_channel)
+        log.UI("on_category_clicked", category, self.current_channel)
         self.on_reload_clicked(None, reload=0)
         pass
 
@@ -391,7 +391,7 @@ class StreamTunerTwo(gtk.Builder):
             
             # skip module if disabled
             if conf.plugins.get(name, 1) == False:
-                __print__(dbg.STAT, "disabled plugin:", name)
+                log.STAT("disabled plugin:", name)
                 continue
             # or if it's a built-in (already imported)
             elif name in self.features or name in self.channels:
@@ -412,7 +412,7 @@ class StreamTunerTwo(gtk.Builder):
                     self.features[name] = plugin_obj
                 
             except Exception as e:
-                __print__(dbg.INIT, "load_plugin_channels: error initializing:", name, ", exception:")
+                log.INIT("load_plugin_channels: error initializing:", name, ", exception:")
                 traceback.print_exc()
 
     # load application state (widget sizes, selections, etc.)
@@ -498,7 +498,7 @@ def main():
         # run
         gtk.main()
         [callback() for callback in main.hooks["quit"]]
-        __print__(dbg.PROC, r"[31m gtk_main_quit [0m")
+        log.PROC(r"[31m gtk_main_quit [0m")
         
     # invoke command-line interface
     else:

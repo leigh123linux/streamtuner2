@@ -33,15 +33,15 @@
         <p>It either will search in all channels, or just the last active
         channel/service.</p>
 
-	<p>Then there are two search methods.  You mostly want to use
+	<p>Then there are two search variants.  You mostly want to use
         the live <gui>Server search</gui>.  It passes your search terms to
         the actual directory services, and loads the most recent data into a
         result list. This might take a few seconds. And it's not implemented
-        for all channel plugins however.</p>
+        for all channel plugins. (Some websites/APIs don't have a search.)</p>
 
-	<p>With <gui>Cache find</gui> would just look up entries in your
+	<p>While <gui>Cache find</gui> would just look up entries in your
         already downloaded channel/genre lists.  This is sufficient when
-        you're just looking for something previously seen/listended to.</p>
+        you're just looking for something previously seen/listened to.</p>
 
 	</section>
 

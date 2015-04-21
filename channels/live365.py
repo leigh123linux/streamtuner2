@@ -26,7 +26,7 @@ from config import conf
 from uikit import uikit
 import ahttp as http
 from channels import *
-from config import __print__, dbg
+from config import *
 import action
 
 # python modules

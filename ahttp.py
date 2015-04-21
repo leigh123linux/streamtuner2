@@ -14,7 +14,7 @@
 # after the domain name.
 
 
-from config import conf, __print__, dbg
+from config import *
 import requests
 
 
@@ -54,7 +54,7 @@ session.headers.update({
 #  Well, it says "get", but it actually does POST and AJAXish GET requests too.
 #
 def get(url, params={}, referer="", post=0, ajax=0, binary=0, feedback=None, content=True):
-    __print__( dbg.HTTP, "GET", url, params )
+    log.HTTP("GET", url, params )
 
     # statusbar info
     progress_feedback(url)
@@ -76,15 +76,15 @@ def get(url, params={}, referer="", post=0, ajax=0, binary=0, feedback=None, con
     else:    
         r = session.get(url, params=params, headers=headers, timeout=9.75)
 
-    __print__( dbg.HTTP, r.request.headers );
-    __print__( dbg.HTTP, r.headers );
+    log.HTTP(r.request.headers );
+    log.HTTP(r.headers );
             
     # finish, clean statusbar
     #progress_feedback(0.9)
     #progress_feedback("")
 
     # result
-    __print__( dbg.INFO, "Content-Length", len(r.content) )
+    log.INFO("Content-Length", len(r.content) )
     if not content:
         return r
     elif binary:

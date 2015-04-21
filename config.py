@@ -11,7 +11,7 @@
 #    { arg: -D,     type: boolean,  name: debug,     description: Enable debug messages on console }
 #    { arg: action, type: str *,    name: action[],  description: CLI interface commands. }
 #    { arg: -x,     type: boolean,  name: exit,      hidden: 1 }
-# version: 2.5
+# version: 2.6
 # priority: core
 #
 # In the main application or module files which need access
@@ -22,7 +22,7 @@
 # Here conf is already an instantiation of the underlying
 # ConfigDoct class.
 #
-# Also provides the logging function __print__, and basic
+# Also provides the logging function log.TYPE(...) and basic
 # plugin handling code: plugin_meta() and module_list(),
 # and the relative get_data() alias (files from pyzip/path).
 #
@@ -42,7 +42,7 @@ import pkgutil
 import argparse
 
 # export symbols
-__all__ = ["conf", "log", "__print__", "dbg", "plugin_meta", "module_list", "get_data", "find_executable"]
+__all__ = ["conf", "log", "plugin_meta", "module_list", "get_data", "find_executable"]
 
 
 #-- create a stub instance of config object
@@ -466,27 +466,6 @@ class rx:
 
 
 
-
-# wrapper for all print statements
-def __print__(*args):
-    if "debug" in conf and conf.debug or args[0] == dbg.ERR:
-        print(" ".join([str(a) for a in args]), file=sys.stderr)
-
-
-# error colorization
-dbg = type('obj', (object,), {
-    "ERR":  r"[31m[ERR][0m",  # red    ERROR
-    "INIT": r"[31m[INIT][0m", # red    INIT ERROR
-    "PROC": r"[32m[PROC][0m", # green  PROCESS
-    "CONF": r"[33m[CONF][0m", # brown  CONFIG DATA
-    "UI":   r"[34m[UI][0m",   # blue   USER INTERFACE BEHAVIOUR
-    "HTTP": r"[35m[HTTP][0m", # magenta HTTP REQUEST
-    "DATA": r"[36m[DATA][0m", # cyan   DATA
-    "INFO": r"[37m[INFO][0m", # gray   INFO
-    "STAT": r"[37m[STATE][0m", # gray  CONFIG STATE
-})
-
-
 # Simplified print wrapper: `log.err(...)`
 class log_printer(object):
 
@@ -494,10 +473,10 @@ class log_printer(object):
     method = None
     def __getattr__(self, name):
         self.method = name
-        return self.__print__
+        return self.log_print
     
     # Printer
-    def __print__(self, *args, **kwargs):
+    def log_print(self, *args, **kwargs):
         # debug level
         method = self.method.upper()
         if not method == "ERR":

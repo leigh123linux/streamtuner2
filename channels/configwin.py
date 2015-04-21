@@ -67,7 +67,7 @@ class configwin (AuxiliaryWindow):
                     for k,v in val.items():
                         w.append([k, v, True, self.app_bin_check(v)])
                     w.append(["", "", True, gtk.STOCK_NEW])
-            __print__(dbg.CONF, "config load", prefix+key, val, type(w))
+            #log.CONF("config load", prefix+key, val, type(w))
 
     # Store gtk widget valus back into conf. dict
     def save_config(self, config, prefix="config_", save=0):
@@ -89,7 +89,7 @@ class configwin (AuxiliaryWindow):
                     for row in w:
                         if row[0] and row[1]:
                             config[key][row[0]] = row[1]
-            __print__(dbg.CONF, "config save", prefix+key, val)
+            log.CONF("config save", prefix+key, val)
     
     
     # Generic Gtk callback to update ListStore when entries get edited.

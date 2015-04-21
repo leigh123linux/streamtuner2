@@ -75,7 +75,7 @@ class bookmarks(GenericChannel):
         # stream list
         cache = conf.load(self.module)
         if (cache):
-            __print__(dbg.PROC, "load bookmarks.json")
+            log.PROC("load bookmarks.json")
             self.streams = cache
         
 
@@ -140,7 +140,7 @@ class bookmarks(GenericChannel):
     def heuristic_update(self, updated_channel, updated_category):
 
         if not conf.heuristic_bookmark_update: return
-        __print__(dbg.PROC, "heuristic bookmark update")
+        log.PROC("heuristic bookmark update")
         save = 0
         fav = self.streams["favourite"]
 

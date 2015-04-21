@@ -46,7 +46,7 @@ class exportcat():
         source = cn.listformat
         streams = cn.streams[cn.current]
         fn = uikit.save_file("Export category", None, "%s.%s.%s" % (cn.module, cn.current, conf.export_format))
-        __print__(dbg.PROC, "Exporting category to", fn)
+        log.PROC("Exporting category to", fn)
         if fn:
             dest = re.findall("\.(m3u8?|pls|xspf|jspf|json|smil|asx)8?$", fn.lower())
             if dest:

@@ -103,7 +103,7 @@ class radiotray:
             # RadioTray doesn't have an addRadio method yet, so just fall back to play the stream URL
             try:
                 group = self.map_group(row.get("genre"))
-                __print__(dbg.PROC, "mapping genre '%s' to RT group '%s'" % (row["genre"], group))
+                log.PROC("mapping genre '%s' to RT group '%s'" % (row["genre"], group))
                 self.radiotray().addRadio(row["title"], row["url"], group)
             except:
                 self.radiotray().playUrl(row["url"])

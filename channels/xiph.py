@@ -105,14 +105,14 @@ class xiph (ChannelPlugin):
       
       #-- get data
       data = http.get(self.json_url, params=params)
-      #__print__(dbg.DATA, data)
+      #log.DATA(data)
       
       #-- extract
       l = []
-      __print__( dbg.PROC, "processing api.dir.xiph.org JSON (via api.include-once.org cache)" )
+      log.PROC( "processing api.dir.xiph.org JSON (via api.include-once.org cache)" )
       data = json.loads(data)
       for e in data:
-          #__print__(dbg.DATA, e)
+          #log.DATA(e)
           bitrate = int(e["bitrate"])
           if conf.xiph_min_bitrate and bitrate and bitrate >= int(conf.xiph_min_bitrate):
               if not len(l) or l[-1]["title"] != e["stream_name"]:

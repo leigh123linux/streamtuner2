@@ -22,7 +22,7 @@
 
 
 import re
-from config import conf, dbg, __print__
+from config import *
 from channels import *
 import ahttp
 

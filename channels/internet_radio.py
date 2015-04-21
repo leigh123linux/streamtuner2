@@ -28,7 +28,7 @@
 
 from channels import *
 import re
-from config import conf, __print__, dbg
+from config import *
 import ahttp as http
 from pq import pq
 
@@ -84,14 +84,14 @@ class internet_radio (ChannelPlugin):
             self.parent.status(float(page)/float(max_pages+1))
 
         # Alternatively try regex or pyquery parsing
-        #__print__(dbg.HTTP, html)
+        #log.HTTP(html)
         for use_rx in [not conf.pyquery, conf.pyquery]:
             try:
                 entries = (self.with_regex(html) if use_rx else self.with_dom(html))
                 if len(entries):
                     break
             except Exception as e:
-                __print__(dbg.ERR, e)
+                log.ERR(e)
                 continue
             
         # fin
@@ -100,7 +100,7 @@ class internet_radio (ChannelPlugin):
 
     # Regex extraction
     def with_regex(self, html):
-        __print__(dbg.PROC, "internet-radio, regex")
+        log.PROC("internet-radio, regex")
         r = []
         html = "\n".join(html)
         
@@ -118,7 +118,7 @@ class internet_radio (ChannelPlugin):
 
         for div in rx_tr.findall(html):
             if div.find('id="pagination"') < 0:
-                #__print__(dbg.DATA, len(div))
+                #log.DATA(len(div))
                 uu = rx_data.search(div)
                 if uu:
                     (url, title, playing, homepage, genres, listeners, bitrate) = uu.groups()
@@ -135,13 +135,13 @@ class internet_radio (ChannelPlugin):
                         "format": "audio/mpeg", # there is no stream info on that, but internet-radio.org.uk doesn't seem very ogg-friendly anyway, so we assume the default here
                     })
                 else:
-                    __print__(dbg.DATA, "Regex couldn't decipher entry:", div)
+                    log.DATA("Regex couldn't decipher entry:", div)
         return r
 
 
     # DOM traversing
     def with_dom(self, html_list):
-        __print__(dbg.PROC, "internet-radio, dom")
+        log.PROC("internet-radio, dom")
         rx_numbers = re.compile("(\d+)")
         r = []
         for html in html_list:

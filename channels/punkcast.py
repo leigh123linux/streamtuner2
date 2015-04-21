@@ -28,7 +28,7 @@ import ahttp as http
 from config import conf
 import action
 from channels import *
-from config import __print__, dbg
+from config import *
 
 
 # basic.ch broadcast archive
@@ -81,7 +81,7 @@ class punkcast (ChannelPlugin):
         
         # look up ANY audio url
         for uu in rx_sound.findall(html):
-            __print__( dbg.DATA, uu )
+            log.DATA( uu )
             (url, fmt) = uu
             action.play(url, self.mime_fmt(fmt), "srv")
             return

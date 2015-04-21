@@ -26,7 +26,7 @@
 # but not all of them!
 
 
-from config import conf, dbg, __print__
+from config import *
 from channels import *
 import re
 import ahttp

@@ -29,7 +29,7 @@ import re
 import ahttp as http
 from config import conf
 from channels import *
-from config import __print__, dbg
+from config import *
 
 
 # The MOD Archive
@@ -99,7 +99,7 @@ class modarchive (ChannelPlugin):
         
         for uu in rx_mod.findall(html):
             (url, id, fmt, title, file, rating) = uu
-            #__print__( dbg.DATA, uu )
+            #log.DATA( uu )
             entries.append({
                 "genre": cat,
                 "url": url,

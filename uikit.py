@@ -46,8 +46,8 @@ if ver==3:
     from gi.repository import Gtk as gtk
     from gi.repository import GObject as gobject
     from gi.repository import GdkPixbuf
-    __print__(dbg.STAT, gtk)
-    __print__(dbg.STAT, gobject)
+    log.STAT(gtk)
+    log.STAT(gobject)
 else:
     import pygtk
     import gtk
@@ -131,7 +131,7 @@ class uikit:
                         col.add_attribute(rend, attr, val)
                     # next
                     datapos += 1
-                    #__print__(dbg.INFO, cell, len(cell))
+                    #log.INFO(cell, len(cell))
 
                 # add column to treeview
                 widget.append_column(col)
@@ -155,8 +155,8 @@ class uikit:
                         rowmap.append(desc[var][0])    # dict{} column keys in entries[] list
             # create gtk array storage
             ls = gtk.ListStore(*vartypes)   # could be a TreeStore, too
-            #__print__(dbg.UI, vartypes, len(vartypes))
-            #__print__(dbg.DATA, rowmap, len(rowmap))
+            #log.UI(vartypes, len(vartypes))
+            #log.DATA(rowmap, len(rowmap))
  
             # prepare for missing values, and special variable types
             defaults = {
@@ -196,7 +196,7 @@ class uikit:
                     ls.append( [va  if ty==gtk.gdk.Pixbuf  else ty(va)   for va,ty in zip(row,vartypes)]  )
 
             #if entries:
-                 #__print__("[37m→[0m", row, len(row))
+            #     log.ROWS(row, len(row))
             
             # apply array to widget
             widget.set_model(ls)
@@ -217,7 +217,7 @@ class uikit:
 
         # list types
         ls = gtk.TreeStore(str, str)
-        #__print__(dbg.DATA, ".tree", entries)
+        #log.DATA(".tree", entries)
 
         # add entries
         for entry in entries:

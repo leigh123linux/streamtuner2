@@ -243,7 +243,7 @@ class youtube (ChannelPlugin):
         # Retrieve data set
         while pages > 0:
             j = ahttp.get(base_url + method, params=params)
-            #__print__(dbg.DATA, j)
+            #log.DATA(j)
             if j:
                 # json decode
                 data = json.loads(j)
@@ -304,7 +304,7 @@ class youtube (ChannelPlugin):
 
     # API version 2.0s jsonified XML needs different unpacking:
     def wrap2(self, row):
-        #__print__(dbg.DATA, row)
+        #log.DATA(row)
         return dict(
             genre = row["category"][1]["term"],
             title = row["title"]["$t"],

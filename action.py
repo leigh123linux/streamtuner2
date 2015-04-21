@@ -31,7 +31,7 @@
 import re
 import os
 from ahttp import fix_url as http_fix_url, session
-from config import conf, __print__ as debug, dbg
+from config import *
 import platform
 import copy
 import json
@@ -113,9 +113,9 @@ playlist_content_map = [
 # Exec wrapper
 #
 def run(cmd):
-    debug(dbg.PROC, "Exec:", cmd)
+    log.PROC("Exec:", cmd)
     try:    os.system("start \"%s\"" % cmd if conf.windows else cmd + " &")
-    except: debug(dbg.ERR, "Command not found:", cmd)
+    except: log.ERR("Command not found:", cmd)
 
 
 # Start web browser
@@ -209,7 +209,7 @@ def interpol(cmd, url, source="pls", row={}):
 #
 def convert_playlist(url, source, dest, local_file=True, row={}):
     urls = []
-    debug(dbg.PROC, "convert_playlist(", url, source, dest, ")")
+    log.PROC("convert_playlist(", url, source, dest, ")")
 
     # Leave alone if format matches, or if already "srv" URL, or if not http (local path, mms:/rtsp:)
     if source == dest or source in ("srv", "href") or not re.match("(https?|spdy)://", url):
@@ -229,13 +229,13 @@ def convert_playlist(url, source, dest, local_file=True, row={}):
 
     # Check ambiguity (except pseudo extension)
     if len(set([source, mime, probe])) > 1:
-        debug(dbg.ERR, "Possible playlist format mismatch:", "listformat={}, http_mime={}, rx_probe={}, ext={}".format(source, mime, probe, ext))
+        log.ERR("Possible playlist format mismatch:", "listformat={}, http_mime={}, rx_probe={}, ext={}".format(source, mime, probe, ext))
 
     # Extract URLs from content
     for fmt in [id[0] for id in extract_playlist.extr_urls]:
         if not urls and fmt in (source, mime, probe, ext, "raw"):
             urls = extract_playlist(cnt).format(fmt)
-            debug(dbg.DATA, "conversion from:", source, " with extractor:", fmt, "got URLs=", urls)
+            log.DATA("conversion from:", source, " with extractor:", fmt, "got URLs=", urls)
             
     # Return original, or asis for srv targets
     if not urls:
@@ -247,7 +247,7 @@ def convert_playlist(url, source, dest, local_file=True, row={}):
     if local_file:
         fn, is_unique = tmp_fn(cnt, dest)
         with open(fn, "w") as f:
-            debug(dbg.DATA, "exporting with format:", dest, " into filename:", fn)
+            log.DATA("exporting with format:", dest, " into filename:", fn)
             f.write( save_playlist(source="srv", multiply=True).export(urls, row, dest) )
         return [fn]
     else:
@@ -289,7 +289,7 @@ def http_probe_get(url):
         mime = listfmt_t.get(mime)
     # Raw content (mp3, flv)
     elif mediafmt_t.get(mime):
-        debug(dbg.ERR, "Got media MIME type for expected playlist", mime, " on url=", url)
+        log.ERR("Got media MIME type for expected playlist", mime, " on url=", url)
         mime = mediafmt_t.get(mime)
         return (mime, url)
     # Rejoin body
@@ -313,7 +313,7 @@ class extract_playlist(object):
         
     # Extract only URLs from given source type
     def format(self, fmt):
-        debug(dbg.DATA, "input extractor/regex:", fmt, len(self.src))
+        log.DATA("input extractor/regex:", fmt, len(self.src))
 
         # find extractor
         if fmt in dir(self):
@@ -413,7 +413,7 @@ class save_playlist(object):
                         break
             rows = new_rows
 
-        debug(dbg.DATA, "conversion to:", dest, "  with rows=", rows)
+        log.DATA("conversion to:", dest, "  with rows=", rows)
 
         # call conversion schemes
         converter = getattr(self, dest) or self.pls

@@ -76,7 +76,7 @@ class timer:
         self.sched = kronos.ThreadedScheduler()
         for row in self.streams:
             try: self.queue(row)
-            except Exception as e: __print__(dbg.ERR, "queuing error", e)
+            except Exception as e: log.ERR("queuing error", e)
         self.sched.start()
 
 
@@ -136,7 +136,7 @@ class timer:
         # add
         task = self.sched.add_daytime_task(action_method, activity, days, None, time, kronos.method.threaded, [row], {})
 
-        #__print__( "queue",  act, self.sched, (action_method, act, days, None, time, kronos.method.threaded, [row], {}), task.get_schedule_time(True) )
+        #log.QUEUE( act, self.sched, (action_method, act, days, None, time, kronos.method.threaded, [row], {}), task.get_schedule_time(True) )
     
     
     

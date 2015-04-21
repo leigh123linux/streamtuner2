@@ -32,7 +32,7 @@
 #
 
 import re
-from config import conf, dbg, __print__
+from config import *
 from channels import *
 import ahttp as http
 
@@ -86,7 +86,7 @@ class itunes (ChannelPlugin):
     
         m3u = http.get(self.base, {"category": cat.lower()})
         if len(m3u) < 256:
-            __print__(dbg.ERR, m3u)
+            log.ERR(m3u)
         
         rx_m3u = re.compile(r"""
             ^File(\d+)\s*=\s*(http://[^\s]+)\s*$\s*

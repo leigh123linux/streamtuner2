@@ -34,7 +34,7 @@
 
 import re
 import ahttp as http
-from config import conf, dbg, __print__
+from config import *
 from channels import *
 
 

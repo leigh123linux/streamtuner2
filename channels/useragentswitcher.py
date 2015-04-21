@@ -43,7 +43,7 @@ class useragentswitcher():
     def apply(self):
         ua = self.map.get(conf.useragent.lower(), self.map["default"])
         if ua:
-            __print__(dbg.HTTP, "UserAgentSwitcher:", ua)
+            log.HTTP("UserAgentSwitcher:", ua)
             ahttp.session.headers.update({ "User-Agent": ua })
 
 

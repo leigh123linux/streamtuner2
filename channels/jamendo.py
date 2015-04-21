@@ -38,7 +38,7 @@
 
 import re
 import ahttp as http
-from config import conf, __print__, dbg
+from config import *
 from channels import *
 import json
 

@@ -43,7 +43,7 @@ class global_key(object):
             for i,keyname in enumerate(conf.switch_key.split(",")):    # allow multiple keys
                 keybinder.bind(keyname, self.switch, ((-1 if i else +1)))   # forward +1 or backward -1
         except:
-            __print__(dbg.ERR, "plugin global_key: Key `%s` could not be registered" % conf.switch_key)
+            log.ERR("plugin global_key: Key `%s` could not be registered" % conf.switch_key)
     
         
     # key event

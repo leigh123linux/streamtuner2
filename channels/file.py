@@ -27,10 +27,10 @@ try:
 except:
     try:
         from ID3 import ID3
-        __print__(dbg.INFO, "Just basic ID3 support")
+        log.INFO("Just basic ID3 support")
         get_meta = lambda fn: dict([(k.lower(),v) for k,v in ID3(fn).iteritems()])
     except:
-        __print__(dbg.INIT, "You are out of luck in regards to mp3 browsing. No ID3 support.")
+        log.INIT("You are out of luck in regards to mp3 browsing. No ID3 support.")
         get_meta = lambda *x: {}
 
 

@@ -6,9 +6,10 @@
 # version: 0.5
 # type: interface
 # config:
-#   { name: dnd_format, type: select, value: xspf, select: "pls|m3u|xspf|jspf|asx|smil", description: "Default temporary file format for copying a station entry." }
+#   { name: dnd_format, type: select, value: xspf, select: "pls|m3u|xspf|jspf|asx|smil", description: "Default temporary file format for copying a station." }
 # category: ui
-# priority: experimental
+# priority: default
+# support: experimental
 #
 # Implements Gtk/X11 drag and drop support for station lists.
 # Should allow to export either just stream URLs, or complete

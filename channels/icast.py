@@ -35,7 +35,7 @@
 
 import re
 import json
-from config import conf, dbg, __print__
+from config import *
 from channels import *
 import ahttp as http
 
@@ -91,6 +91,6 @@ class icast (ChannelPlugin):
             else:
                 params["page"] = int(data["meta"]["current_page"]) + 1
                 self.parent.status(params["page"] * 9.5 / float(conf.max_streams))
-            #__print__(dbg.DATA, data)
+            #log.DATA(data)
         return r
 

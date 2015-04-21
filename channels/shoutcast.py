@@ -26,9 +26,9 @@
 import ahttp as http
 from json import loads as json_decode
 import re
-from config import conf, __print__, dbg
+from config import *
+from channels import *
 from pq import pq
-from channels import *    # works everywhere but in this plugin(???!)
 import channels
 from compat2and3 import urllib
 
@@ -67,7 +67,7 @@ class shoutcast(channels.ChannelPlugin):
     # stores a catmap (title => id)
     def update_categories(self):
         html = http.get(self.base_url)
-        #__print__( dbg.DATA, html )
+        #log.DATA( html )
         self.categories = []
         
         # Genre list in sidebar
@@ -94,7 +94,7 @@ class shoutcast(channels.ChannelPlugin):
     def update_streams(self, cat):
 
         if (cat not in self.catmap):
-            __print__( dbg.ERR, "Category not in known map.", cat )
+            log.ERR( "Category not in known map.", cat )
             return []
         id = self.catmap[cat]
 
@@ -106,7 +106,7 @@ class shoutcast(channels.ChannelPlugin):
             json = http.get(url, params=params, referer=referer, post=1, ajax=1)
             json = json_decode(json)
         except:
-            __print__(dbg.ERR, "HTTP request or JSON decoding failed. Outdated python/requests perhaps.")
+            log.ERR("HTTP request or JSON decoding failed. Outdated python/requests perhaps.")
             return []
         self.parent.status(0.75)
 
@@ -125,6 +125,6 @@ class shoutcast(channels.ChannelPlugin):
                 "format": "audio/mpeg"
             })
 
-        #__print__(dbg.DATA, entries)
+        #log.DATA(entries)
         return entries
 

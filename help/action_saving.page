@@ -19,10 +19,10 @@
 	default a .m3u file is created, because that's what most audio players
 	understand.</p>
 
-	<note><p> But you can also save in <file>.pls</file> or <file>.xspf</file>
-	or <file>.asx</file> or <file>.smil</file> format.  Note that the
-	lower right dropdown has no effect.  You have to edit the extension
-	into the filename field.</p></note>
+	<note><p> You can also save in <file>.pls</file> or <file>.xspf</file>
+	or <file>.asx</file> or <file>.smil</file> format.  In current
+	releases the file extension is automatically adapted when changing
+	the filter dropdown (bottom right corner in the file dialog). </p></note>
 
 
 </page>
