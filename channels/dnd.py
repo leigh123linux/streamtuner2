@@ -24,6 +24,7 @@ import copy
 from config import conf, json, log
 from uikit import *
 import action
+import compat2and3
 
 
 # Welcome to my new blog.
@@ -237,23 +238,21 @@ class dnd(object):
             log.DND("Received row, append, reload")
             rows += [ json.loads(data) ]
 
-        # Convertible formats
+        # Convertible formats as direct payload
         elif data and info >= 5:
             cnv = action.extract_playlist(data)
-            urls = cnv.format(self.cnv_types[info] if info>=20 else "raw")
-            rows += [ self.imported_row(urls[0], cnv.title()) ]
+            add = cnv.rows(self.cnv_types[info] if info>=20 else cnv.probe_fmt() or "raw")
+            rows += [ cnv.mkrow(row) for row in add ]
 
-        # Extract from playlist files, either passed as text/uri-list or FILE_NAME
+        # Extract from playlist files, either passed as text/uri-list or single FILE_NAME
         elif urls:
-            for fn in [re.sub("^\w+://[^/]*", "", fn) for fn in urls or [data] if re.match("^(scp|file)://(localhost)?/|/", fn)]:
-                ext = action.probe_playlist_fn_ext(fn)
-                if ext:  # don't import mp3s into stream lists directly
-                    cnt = open(fn, "rt").read()
-                    probe = action.probe_playlist_content(cnt)
-                    if ext == probe:
-                        cnv = action.extract_playlist(cnt)
-                        urls = cnv.format(probe)
-                        rows += [ self.imported_row(urls[0], cnv.title() or os.path.basename(fn)) ]
+            for fn in urls or [data]:
+                if not re.match("^(scp|file)://(localhost)?/|/", fn):
+                    continue
+                fn = compat2and3.urldecode(re.sub("^\w+://[^/]*", "", fn))
+                cnv = action.extract_playlist(fn=fn)
+                if cnv.src:
+                    rows += [ cnv.mkrow(row) for row in cnv.rows() ]
         
         # Insert and update view
         if rows:
@@ -271,18 +270,5 @@ class dnd(object):
         else:
             self.parent.status("Unsupported station format. Not imported.")
 
-
-    # Stub row for dragged entries.
-    # Which is a workaround for the missing full playlist conversion and literal URL input
-    def imported_row(self, url, title=None):
-        return {
-            "title": title or "",
-            "url": url,
-            "homepage": "",
-            "playling": "",
-            "listformat": action.probe_playlist_fn_ext(url) or "href",
-            "format": ",".join(re.findall("ogg|mpeg|mp\d+", url)),
-            "genre": "copy",
-        }
 
         
