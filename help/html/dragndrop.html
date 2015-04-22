@@ -1,0 +1,77 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Drag'n'drop</title>
+<link rel="stylesheet" type="text/css" href="C.css">
+<script type="text/javascript" src="jquery.js"></script><script type="text/javascript" src="jquery.syntax.js"></script><script type="text/javascript" src="yelp.js"></script>
+</head>
+<body><div class="page" role="main">
+<div class="header"><div class="trails" role="navigation">
+<div class="trail">
+<a class="trail" href="glossary.html" title="Glossary">Glossary</a> » <a class="trail" href="index.html#extra" title="Additional features">Additional features</a> » </div>
+<div class="trail">
+<a class="trail" href="technical.html" title="Technical information">Technical information</a> » <a class="trail" href="index.html#extra" title="Additional features">Additional features</a> » </div>
+</div></div>
+<div class="body">
+<div class="hgroup"><h1 class="title"><span class="title">Drag'n'drop</span></h1></div>
+<div class="region">
+<div class="contents">
+<p class="p">With the DND feature plugin enabled, there's an even simpler
+	method now to export stations.  Simply click and hold the mouse on a
+	stream entry, then drag it out to the desktop, file manager or
+	directly into VLC or any running music player.  That'll usually
+	copy a stream/station address directly.</p>
+<p class="p">Now it's not guaranteed to work with all applications or file
+	managers, as X11/Gtk DND support is somewhat arcane and wonky.
+	You may specifically have to adapt the default export format for
+	this. Generally a XSPF or PLS file gets created for file managers.
+	While VLC is one of the few applications that understand direct
+	playlist URLs or literal M3U/PLS payloads even.</p>
+</div>
+<div id="import" class="sect"><div class="inner">
+<div class="hgroup"><h2 class="title"><span class="title">Importing</span></h2></div>
+<div class="region"><div class="contents">
+<p class="p">Playlist importing also works mostly. Here the action module
+	takes care to unpack PLS, XPSF or M3U files and a few other
+	formats. If you drag in streams/playlists from other applications,
+	it'll usually be expanded.</p>
+<p class="p">Take note that Streamtuner2 is not intended as playlist manager
+	though. It will only accept radio streaming lists and discard
+	local MP3/Ogg files.</p>
+<p class="p">The import capabilities also allow to move a station entry
+	from one of the channel tabs into your bookmarks list. Simply drag
+	an entry over the "bookmarks" notebook tab then further along into
+	the favourite list. - While this also works the other way round,
+	it doesn't make sense to add bookmarks to Shoutcast/Xiph/etc.
+	Because when their lists get refreshed (<span class="key"><kbd>F5</kbd></span>) all custom
+	entries are usually discarded.</p>
+</div></div>
+</div></div>
+<div id="configuration" class="sect"><div class="inner">
+<div class="hgroup"><h2 class="title"><span class="title">Export format configuration</span></h2></div>
+<div class="region"><div class="contents">
+<p class="p">Use <span class="key"><kbd>F12</kbd></span> and change the DND export format. Again
+	PLS is most universal, XSPF most complete, but other formats
+	still available. Use the "desktop" format only if you want to
+	bookmark direct playback links on your desktop.</p>
+<div class="note" title="Note"><div class="inner"><div class="region"><div class="contents"><p class="p">This is a workaround, because XDND is commonly just implemented
+	as dumb file transfer scheme. Hardly any application specifies the
+	actually desired formats, thus there's no auto-negotiation. ST2
+	therefore has to create temporary export files and hope for the
+	best.</p></div></div></div></div>
+</div></div>
+</div></div>
+<div class="sect sect-links" role="navigation">
+<div class="hgroup"></div>
+<div class="contents"><div class="links guidelinks"><div class="inner">
+<div class="title"><h2><span class="title">More Information</span></h2></div>
+<div class="region"><ul><li class="links "><a href="index.html#extra" title="Additional features">Additional features</a></li></ul></div>
+</div></div></div>
+</div>
+</div>
+<div class="clear"></div>
+</div>
+<div class="footer"></div>
+</div></body>
+</html>

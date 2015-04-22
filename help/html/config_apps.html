@@ -20,7 +20,7 @@
 <div class="table"><div class="inner"><div class="region"><table class="table">
 <tr>
 <td><p class="p"><span class="app">Audacious</span></p></td>
-<td style="border-left-style: solid;"><p class="p"><span class="cmd">audacious %m3u</span></p></td>
+<td style="border-left-style: solid;"><p class="p"><span class="cmd">audacious</span></p></td>
 <td style="border-left-style: solid;"><p class="p">audio</p></td>
 </tr>
 <tr class="shade">
@@ -35,32 +35,27 @@
 </tr>
 <tr class="shade">
 <td style="border-top-style: solid;"><p class="p"><span class="app">Exaile</span></p></td>
-<td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">exaile %m3u</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">exaile</span></p></td>
 <td style="border-top-style: solid;border-left-style: solid;"><p class="p">audio</p></td>
 </tr>
 <tr>
-<td style="border-top-style: solid;"><p class="p"><span class="app">Amarok</span></p></td>
-<td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">amarok -l %pls</span></p></td>
-<td style="border-top-style: solid;border-left-style: solid;"><p class="p">audio</p></td>
-</tr>
-<tr class="shade">
 <td style="border-top-style: solid;"><p class="p"><span class="app">mplayer</span></p></td>
 <td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">mplayer %srv</span></p></td>
 <td style="border-top-style: solid;border-left-style: solid;"><p class="p">console</p></td>
 </tr>
-<tr>
+<tr class="shade">
 <td style="border-top-style: solid;"><p class="p"><span class="app">VLC</span></p></td>
 <td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">vlc %u</span></p></td>
 <td style="border-top-style: solid;border-left-style: solid;"><p class="p">video</p></td>
 </tr>
-<tr class="shade">
+<tr>
 <td style="border-top-style: solid;"><p class="p"><span class="app">Totem</span></p></td>
 <td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">totem %u</span></p></td>
 <td style="border-top-style: solid;border-left-style: solid;"><p class="p">video</p></td>
 </tr>
-<tr>
+<tr class="shade">
 <td style="border-top-style: solid;"><p class="p"><span class="app">Media Player</span></p></td>
-<td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">mplayer2.exe %pls</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">mplayer2.exe %asx</span></p></td>
 <td style="border-top-style: solid;border-left-style: solid;"><p class="p">Win32</p></td>
 </tr>
 </table></div></div></div>
@@ -87,23 +82,48 @@
 <td style="border-left-style: solid;"><p class="p">URL/Filename type</p></td>
 </tr></thead>
 <tr>
-<td><p class="p">%m3u</p></td>
-<td style="border-left-style: solid;"><p class="p">%f %g %m</p></td>
-<td style="border-left-style: solid;"><p class="p">Provides a local .m3u file for the streaming station</p></td>
+<td><p class="p">%pls</p></td>
+<td style="border-left-style: solid;"><p class="p">%url %u %r</p></td>
+<td style="border-left-style: solid;"><p class="p">Either a remote .pls resource (fastest), or a local .pls file (if converted)</p></td>
 </tr>
 <tr class="shade">
-<td style="border-top-style: solid;"><p class="p">%pls</p></td>
-<td style="border-top-style: solid;border-left-style: solid;"><p class="p">%url %u %r</p></td>
-<td style="border-top-style: solid;border-left-style: solid;"><p class="p">Either a remote .pls resource, or a local .pls file (if converted)</p></td>
+<td style="border-top-style: solid;"><p class="p">%m3u</p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">%f %g %m</p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">Provides a local .m3u file for the streaming station</p></td>
 </tr>
 <tr>
 <td style="border-top-style: solid;"><p class="p">%srv</p></td>
 <td style="border-top-style: solid;border-left-style: solid;"><p class="p">%d %s</p></td>
 <td style="border-top-style: solid;border-left-style: solid;"><p class="p">Direct link to first streaming address, e.g. http://72.5.9.33:7500</p></td>
 </tr>
+<tr class="shade">
+<td style="border-top-style: solid;"><p class="p">%xspf</p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">%x</p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">Xiph.org shareable playlist format (for modern players)</p></td>
+</tr>
+<tr>
+<td style="border-top-style: solid;"><p class="p">%jspf</p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">%j</p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">JSON playlist format (widely unsupported)</p></td>
+</tr>
+<tr class="shade">
+<td style="border-top-style: solid;"><p class="p">%asx</p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p"></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">Some obscure Windows playlist format (don't use that)</p></td>
+</tr>
+<tr>
+<td style="border-top-style: solid;"><p class="p">%smil</p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p"></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">Standardized multimedia sequencing lists (which nobody uses either)</p></td>
+</tr>
 </table></div></div></div>
-<p class="p">You sould preferrably use the long forms. Most audio players like
-	%m3u most, while streamripper needs %srv for recording.</p>
+<p class="p">Preferrably use the long %abbr names for configuration.</p>
+<div class="note" title="Note"><div class="inner"><div class="region"><div class="contents">
+<p class="p">Most audio players like pls, yet sometimes the
+	older m3u format more.  Streamripper requires %srv for recording.</p>
+<p class="p">Leave it to the default %pls to avoid Streamtuner2 doing unneeded
+	extra conversions (just delays playback).</p>
+</div></div></div></div>
 </div></div>
 </div></div>
 <div class="sect sect-links" role="navigation">
