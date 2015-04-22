@@ -6,7 +6,7 @@
 # version: 0.5
 # type: interface
 # config:
-#   { name: dnd_format, type: select, value: xspf, select: "pls|m3u|xspf|jspf|asx|smil", description: "Default temporary file format for copying a station." }
+#   { name: dnd_format, type: select, value: xspf, select: "pls|m3u|xspf|jspf|asx|smil|desktop", description: "Default temporary file format for copying a station." }
 # category: ui
 # priority: default
 # support: experimental
@@ -74,6 +74,7 @@ class dnd(object):
       ("text/html", 0, 23),
       ("text/richtext", 0, 23),
       ("application/jspf+json", 0, 25),
+      ("application/x-desktop", 0, 26),
       # direct srv urls
       ("text/url", 0, 15),  #@TODO: support in action.save_/convert_
       ("message/external-body", 0, 15),
@@ -95,6 +96,7 @@ class dnd(object):
        22: "xspf",
        23: "smil",
        25: "jspf",
+       26: "desktop",
        15: "srv",
         4: "temp",
         5: "srv",
@@ -196,7 +198,7 @@ class dnd(object):
 
 
 
-    # -- DESTINATION, when playlist/file gets dragged in from other app --
+    # -- DESTINATION, when playlist/file gets dragged into ST2 from other app --
 
     # Just a notification for incoming drop
     def drop(self, widget, context, x, y, time):
@@ -231,21 +233,22 @@ class dnd(object):
         # Internal target dicts
         cn = self.parent.channel()
         rows = []
-        print info
                 
         # Direct/internal row import
         if data and info >= 51:
-            log.DND("Received row, append, reload")
+            log.DND("Received row in internal format, append+reload")
             rows += [ json.loads(data) ]
 
         # Convertible formats as direct payload
         elif data and info >= 5:
+            log.DND("Converting direct payload playlist")
             cnv = action.extract_playlist(data)
             add = cnv.rows(self.cnv_types[info] if info>=20 else cnv.probe_fmt() or "raw")
             rows += [ cnv.mkrow(row) for row in add ]
 
         # Extract from playlist files, either passed as text/uri-list or single FILE_NAME
         elif urls:
+            log.DND("Importing from playlist file")
             for fn in urls or [data]:
                 if not re.match("^(scp|file)://(localhost)?/|/", fn):
                     continue
@@ -256,17 +259,13 @@ class dnd(object):
         
         # Insert and update view
         if rows:
-            # Inserting at correct row requires deducing index from dnd `y` position
-            streams = cn.streams[cn.current]
-            i_pos = (cn.gtk_list.get_path_at_pos(10, y) or [[len(streams) + 1]])[0][0]
-            for row in rows:
-                streams.insert(i_pos - 1, row)
-                i_pos = i_pos + 1
-            # Now appending to the liststore directly would be even nicer
-            uikit.do(lambda *x: cn.load(cn.current))#, cn.gtk_list.scroll_to_point(0, y))
-            if cn.module == "bookmarks":
-                cn.save()
-            #self.parent.streamedit()
+            cn.insert_rows(rows, y)
+            # if cn.module == "bookmarks":
+            cn.save()
+            # Show streamedit window if title is empty
+            if not len(rows[0].get("title", "")):
+                self.parent.configwin.load_config(rows[0], "streamedit_")
+                self.parent.win_streamedit.show()
         else:
             self.parent.status("Unsupported station format. Not imported.")
 

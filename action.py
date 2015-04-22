@@ -321,7 +321,7 @@ class extract_playlist(object):
 
     # Test URL/path "extension" for ".pls" / ".m3u" etc.
     def probe_ext(self, url):
-        e = re.findall("\.(pls|m3u|xspf|jspf|asx|wpl|wsf|smil|html|url|json)$", url)
+        e = re.findall("\.(pls|m3u|xspf|jspf|asx|wpl|wsf|smil|html|url|json|desktop)$", url)
         if e: return e[0]
         else: pass
 
@@ -430,7 +430,7 @@ class extract_playlist(object):
             unesc = "xml",
         ),
         "smil": dict(
-            url   = r" (?x) <(?:audio|video|media)\b [^>]+ \b src \s*=\s* [^\"\']? \s* (\w+://[^\"\'\s]+) ",
+            url   = r" (?x) <(?:audio|video|media)\b [^>]+ \b src \s*=\s* [^\"\']? \s* (\w+://[^\"\'\s\>]+) ",
             unesc = "xml",
         ),
         "jspf": dict(
@@ -444,7 +444,7 @@ class extract_playlist(object):
             unesc = "json",
         ),
         "json": dict(
-            url   = r" (?x) \"url\" \s*:\s* \"(\w+://[^\"\s]+)\" ",
+            url   = r" (?x) \"url\" \s*:\s* \"(\w+:\\?/\\?/[^\"\s]+)\" ",
             title = r" (?x) \"title\" \s*:\s* \"([^\"]+)\" ",
             unesc = "json",
         ),
@@ -473,16 +473,27 @@ class extract_playlist(object):
     def mkrow(self, row, title=None):
         url = row.get("url", "")
         comb = {
-            "title": title or re.sub("\.\w+$", "", os.path.basename(self.fn)),
+            "title": row.get("title") or re.sub("\.\w+$", "", os.path.basename(self.fn)),
             "playing": "",
             "url": None,
             "homepage": "",
-            "listformat": self.probe_ext(url) or "href",
-            "format": ",".join(re.findall("ogg|mpeg|mp\d+", url)),
+            "listformat": self.probe_ext(url) or "href", # or srv?
+            "format": self.mime_guess(url),
             "genre": "copy",
         }
         comb.update(row)
         return comb
+
+    # Probe url "extensions" for common media types
+    # (only care about the common audio formats, don't need an exact match or pre-probing in practice)
+    def mime_guess(self, url):
+        audio = re.findall("(ogg|opus|spx|aacp|aac|mpeg|mp3|m4a|mp2|flac|midi|mod|kar|aiff|wma|ram|wav)", url)
+        if audio:
+            return "audio/{}".format(*audio)
+        video = re.findall("(mp4|flv|avi|mp2|theora|3gp|nsv|fli|ogv|webm|mng|mxu|wmv|mpv|mkv)", url)
+        if audio:
+            return "video/{}".format(*audio)
+        return "x-audio-video/unknown"
 
 
 
@@ -614,6 +625,10 @@ class save_playlist(object):
         txt += """\t</seq>\n</body>\n</smil>\n"""
         return txt
 
+    # .DESKTOP links
+    def desktop(self, rows):
+        row = rows[0]
+        return "[Desktop Entry]\nVersion=1.0\nIcon=media-playback-start\nType=Link\nName={title}\nComment={playing}\nURL={url}\n".format(**row)
 
 
 
