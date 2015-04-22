@@ -235,15 +235,15 @@ class GenericChannel(object):
                 row[0] = title
 
 
-    # switch stream category,
-    # load data,
-    # update treeview content
-    def load(self, category, force=False):
+    # Called on switching genre/category.
+    # Either fetches new stream data, or displays list from cache.
+    def load(self, category, force=False, y=None):
 
         # called to early
         if not category:
             print "load(None)"
             return
+        self.current = category
 
         # get data from cache or download
         if force or not category in self.streams:
@@ -283,11 +283,14 @@ class GenericChannel(object):
                 self.streams[category] = self.nothing_found
                 log.INFO("Oooops, parser returned nothing for category " + category)
                 
-        # assign to treeview model
-        uikit.do(lambda:uikit.columns(self.gtk_list, self.datamap, self.prepare(self.streams[category])))
+        # Update treeview/model (if category is still selected)
+        if self.current == category:
+            uikit.do(lambda:[
+                uikit.columns(self.gtk_list, self.datamap, self.prepare(self.streams[category])),
+                y and self.gtk_list.scroll_to_point(0, y)  # scroll to previous position
+            ])
 
         # set pointer
-        self.current = category
         self.status("")
         self.status(1.0)
 
@@ -455,7 +458,7 @@ class GenericChannel(object):
             self.gtk_cat.expand_all()
             
         # select any first element
-        #self.gtk_cat.get_selection().select_path("0") #set_cursor
+        self.gtk_cat.get_selection().select_path("0") #set_cursor
         self.currentcat()
 
             
@@ -465,6 +468,26 @@ class GenericChannel(object):
         if (type(iter) == gtk.TreeIter):
             self.current = model.get_value(iter, 0)
         return self.current
+
+    
+    # Insert/append new station rows - used by importing/drag'n'drop plugins
+    def insert_rows(self, rows, y=None):
+        streams = self.streams[self.current]
+        tv = self.gtk_list
+        
+        # Inserting at correct row requires deducing index from dnd `y` position
+        if y is not None:
+            i_pos = (tv.get_path_at_pos(10, y) or [[len(streams) + 1]])[0][0]
+            for row in rows:
+                streams.insert(i_pos - 1, row)
+                i_pos = i_pos + 1
+        else:
+            streams += rows
+
+        # Now appending to the liststore directly would be even nicer
+        y = int(tv.get_vadjustment().get_value())
+        uikit.do(self.load, self.current, y=y)
+
 
 
 
