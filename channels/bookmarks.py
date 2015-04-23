@@ -49,6 +49,7 @@ class bookmarks(GenericChannel):
     def gui(self, parent):
         parent.notebook_channels.set_menu_label_text(parent.v_bookmarks, "bookmarks")
         GenericChannel.gui(self, parent)
+        uikit.tree_column(self.gtk_cat, "Group")
 
     # this channel does not actually retrieve/parse data from anywhere
     def update_categories(self):
