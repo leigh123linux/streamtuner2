@@ -236,7 +236,9 @@ class StreamTunerTwo(gtk.Builder):
         self.update_title()
         # if first selected, load current category
         # (run in thread, to make it look speedy on first startup)
-        self.thread( self.channel().first_show )
+        self.thread( 
+        self.channel().first_show
+        )
 
     # Invoked from the menu instead, uses module name instead of numeric tab id
     def channel_switch_by_name(self, name):
@@ -361,19 +363,20 @@ class StreamTunerTwo(gtk.Builder):
         # remove text
         while ((not text) and (type(text)==str) and len(sbar_msg)):
             sbar_msg.pop()
-            uikit.do(lambda:self.statusbar.pop(sbar_cid))
+            uikit.do(self.statusbar.pop, sbar_cid, immediate=1)
         # progressbar
         if (type(text)==float):
             if text >= 0.999 or text < 0.0:  # completed
-                uikit.do(lambda:self.progress.hide())
+                uikit.do(self.progress.hide)
             else:  # show percentage
-                uikit.do(lambda:self.progress.show() or self.progress.set_fraction(text))
+                uikit.do(self.progress.show, immediate=1)
+                uikit.do(self.progress.set_fraction, text, immediate=1)
                 if (text <= 0):  # unknown state
-                    uikit.do(lambda:self.progress.pulse())
+                    uikit.do(self.progress.pulse, immediate=1)
         # add text
         elif (type(text)==str):
             sbar_msg.append(1)
-            uikit.do(lambda:self.statusbar.push(sbar_cid, text))
+            uikit.do(self.statusbar.push, sbar_cid, text, immediate=1)
         pass
 
 
