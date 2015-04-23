@@ -227,6 +227,19 @@ class uikit:
                 for sub_title in entry:
                     ls.append(main, [str(sub_title), icon])
 
+        # finalize
+        widget.set_model(ls)
+        widget.set_search_column(0)
+        #tvcolumn.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
+        #tvcolumn.set_fixed_width(125])
+        #widget.expand_all()
+        #widget.expand_row("3", False)
+        #print(widget.row_expanded("3"))
+        return ls
+
+
+    @staticmethod
+    def tree_column(widget, title="Category"):
         # just one column
         tvcolumn = gtk.TreeViewColumn(title);
         widget.append_column(tvcolumn)
@@ -242,19 +255,7 @@ class uikit:
         # select array content source in treestore
         tvcolumn.add_attribute(pix, "stock_id", 1)
         tvcolumn.add_attribute(txt, "text", 0)
-
-        # finalize
-        widget.set_model(ls)
         tvcolumn.set_sort_column_id(0)
-        widget.set_search_column(0)
-        #tvcolumn.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
-        #tvcolumn.set_fixed_width(125])
-        #widget.expand_all()
-        #widget.expand_row("3", False)
-        #print(widget.row_expanded("3"))
-
-        return ls
-
 
 
 
@@ -399,12 +400,37 @@ class uikit:
             c.set_current_name(re.sub(r"\.(m3u|pls|xspf|jspf|asx|json|smil|wpl)$", ext.strip("*"), fn))
         
     
-    
-    
-    # pass updates from another thread, ensures that it is called just once
+
+    # Spool gtk update calls from non-main threads (optional immediate=1 flag to run task next, not last)
     @staticmethod
     def do(callback, *args, **kwargs):
-        gobject.idle_add(lambda: callback(*args, **kwargs) and False)
+        pos = kwargs.get("immediate", -1)
+        if pos and pos >= 0:
+            del kwargs["immediate"]
+            pos = 0
+        if uikit.idle_run:
+            log.UIKIT_DORUN(str(callback))
+            callback(*args, **kwargs)
+        else:
+            log.UIKIT_SPOOL(str(callback))
+            uikit.idle_tasks.insert(pos, [lambda: callback(*args, **kwargs), str(callback)])
+            gobject.idle_add(uikit.idle_do)
+    
+    # Collect tasks to perform in gtk.main loop
+    idle_tasks = []
+    idle_run = False
+    
+    # Execute UI updating tasks in order
+    @staticmethod
+    def idle_do():
+        uikit.idle_run = True
+        if uikit.idle_tasks:
+            task, callback = uikit.idle_tasks.pop(0)
+            log.UIKIT_EXEC(callback)
+            task()
+        uikit.idle_run = False
+        return len(uikit.idle_tasks) > 0
+        
 
 
     # adds background color to widget,
