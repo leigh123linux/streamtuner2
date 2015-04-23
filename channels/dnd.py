@@ -188,7 +188,7 @@ class dnd(object):
             buf = 'text', "{url}\n# Title: {title}\n# Homepage: {homepage}\n\n".format(**r)
         # Create temporary PLS file, because "text/uri-list" is widely misunderstood and just implemented for file:// IRLs
         else:
-            tmpfn = "{}/{}.{}".format(conf.tmp, re.sub("[^\w-]+", " ", r["title"]), conf.dnd_format)
+            tmpfn = "{}/{}.{}".format(conf.tmp, re.sub("[^\w-]+", " ", r["title"]).strip(), conf.dnd_format)
             cnv.file(rows=[r], dest=conf.dnd_format, fn=tmpfn)
             buf = 'uris', ["file://{}".format(tmpfn)] if (info==4) else tmpfn
 

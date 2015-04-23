@@ -225,6 +225,11 @@ def convert_playlist(url, source, dest, local_file=True, row={}):
     # Leave alone if format matches, or if already "srv" URL, or if not http (local path, mms:/rtsp:)
     if source == dest or source in ("srv", "href") or not re.match("(https?|spdy)://", url):
         return [url]
+
+    # Reuse tempoary files?
+    if local_file and conf.reuse_m3u and os.path.exists(tmp_fn(row, dest)):
+        log.STAT("reuse temporary filename")
+        return [tmp_fn(row, dest)]
     
     # Retrieve from URL
     (mime, cnt) = http_probe_get(url)
@@ -257,7 +262,7 @@ def convert_playlist(url, source, dest, local_file=True, row={}):
 
     # Otherwise convert to local file
     if local_file:
-        fn, is_unique = tmp_fn(cnt, dest)
+        fn = tmp_fn(row, dest)
         with open(fn, "w") as f:
             log.DATA("exporting with format:", dest, " into filename:", fn)
             f.write( save_playlist(source="srv", multiply=True).export(urls, row, dest) )
@@ -632,20 +637,16 @@ class save_playlist(object):
 
 
 
-# Generate filename for temporary .m3u, if possible with unique id
-def tmp_fn(pls, ext="m3u"):
-    # use shoutcast unique stream id if available
-    stream_id = re.search("http://.+?/.*?(\d+)", pls, re.M)
-    stream_id = stream_id and stream_id.group(1) or "XXXXXX"
-    try:
-        channelname = main.current_channel
-    except:
-        channelname = "unknown"
+# Generate filename for temporary .pls/m3u, with unique id
+def tmp_fn(row, ext="pls"):
+    # use original url for generating a hash sum
+    stream_url_hash = abs(hash(str(row)))
+    try: channelname = main.current_channel
+    except: channelname = "unknown"
     # return temp filename
-    fn = "%s/streamtuner2.%s.%s.%s" % (str(conf.tmp), channelname, stream_id, ext)
-    is_unique = len(stream_id) > 3 and stream_id != "XXXXXX"
+    fn = "%s/%s.%s.%s" % (str(conf.tmp), channelname, stream_url_hash, ext)
     tmp_files.append(fn)
-    return fn, is_unique
+    return fn
 
 # Collect generated filenames
 tmp_files = []

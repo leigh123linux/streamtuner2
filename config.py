@@ -87,6 +87,10 @@ class ConfigDict(dict):
         else:
             self.save("settings")
             self.firstrun = 1
+
+        # temporary files
+        if not os.path.exists(self.tmp):
+            os.mkdir(self.tmp)
         
         # add argv
         self.args = self.init_args(argparse.ArgumentParser())
@@ -115,7 +119,7 @@ class ConfigDict(dict):
             "streamedit": 1,
             "configwin": 1,
         }
-        self.tmp = os.environ.get("TEMP", "/tmp")
+        self.tmp = os.environ.get("TEMP", "/tmp") + "/streamtuner2"
         self.max_streams = "500"
         self.show_bookmarks = 1
         self.show_favicons = 1
@@ -240,6 +244,8 @@ class ConfigDict(dict):
         if "audio/mp3" in self.play:
             self.play["audio/mpeg"] = self.play["audio/mp3"]
             del self.play["audio/mp3"]
+        if self.tmp == "/tmp":
+            self.tmp = "/tmp/streamtuner2"
 
          
     # check for existing filename in directory list
