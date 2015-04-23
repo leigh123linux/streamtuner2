@@ -285,12 +285,12 @@ class uikit:
                 # - Rows
                 r[wn]["rows:expanded"] = []
                 for i in xrange(0,50):
-                    if w.row_expanded(str(i)):
+                    if w.row_expanded(treepath(i)):   # Gtk.TreePath for Gtk3
                         r[wn]["rows:expanded"].append(i)
                 # - selected
                 (model, paths) = w.get_selection().get_selected_rows()
                 if paths:
-                    r[wn]["row:selected"] = paths[0]
+                    r[wn]["row:selected"] = treepath_to_str(paths[0])
             # gtk.Toolbar
             if t == gtk.Toolbar:
                 r[wn]["icon_size"] = int(w.get_icon_size())
@@ -330,10 +330,10 @@ class uikit:
                 if method == "rows:expanded":
                     w.collapse_all()
                     for i in args:
-                        w.expand_row(str(i), False)                        
+                        w.expand_row(treepath(i), False)
                 #  - selected
                 if method == "row:selected":
-                    w.get_selection().select_path(tuple(args))
+                    w.get_selection().select_path(treepath(args))
                 # gtk.Toolbar
                 if method == "icon_size":
                     w.set_icon_size(args)
@@ -514,6 +514,27 @@ empty_pixbuf = uikit.pixbuf(
     B6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAAAAB3RJTUU
     H3wQLEAE6zgxuGAAAABFJREFUOBFjGAWjYBSMAigAAAQQAAFWMn04AAAAAElFTkSuQmCC"""
 )
+
+
+
+#-- Gtk3 wrappers
+
+# Use a str of "1:2:3" as treepath,
+# literally in Gtk2, TreePath-wrapped for Gtk3
+def treepath(ls):
+    if isinstance(ls, (list,tuple)):
+        ls = ls[0]
+    if ver==2:
+        return str(ls)
+    else:
+        return gtk.TreePath.new_from_string(str(ls))
+#
+def treepath_to_str(tp):
+    if ver==2:
+        return tp
+    else:
+        return tp.to_string()
+        
 
 
 # Text-only dropdown list.

@@ -164,7 +164,7 @@ class StreamTunerTwo(gtk.Builder):
             # else
             "update_categories": self.update_categories,
             "update_favicons": self.update_favicons,
-            "app_state": self.app_state,
+            "app_state": self.save_app_state,
             "bookmark": self.bookmark,
             "save_as": self.save_as,
             "menu_about": lambda w: AboutStreamtuner2(self),
@@ -421,16 +421,16 @@ class StreamTunerTwo(gtk.Builder):
         winlayout = conf.load("window")
         if (winlayout):
             try: uikit.app_restore(self, winlayout)
-            except: pass # may fail for disabled/reordered plugin channels
+            except Exception as e: log.APPRESTORE(e) # may fail for disabled/reordered plugin channels
 
         winstate = conf.load("state")
         if (winstate):
             for id,prev in winstate.items():
                 try: self.channels[id].current = prev["current"]
-                except: pass
+                except Exception as e: log.APPSTATE(e)
 
     # store window/widget states (sizes, selections, etc.)
-    def app_state(self, widget):
+    def save_app_state(self, widget):
         # gtk widget states
         widgetnames = ["win_streamtuner2", "toolbar", "notebook_channels", ] \
                     + [id+"_list" for id in self.channel_names] \
@@ -448,9 +448,9 @@ class StreamTunerTwo(gtk.Builder):
     def gtk_main_quit(self, widget, *x):
         if conf.auto_save_appstate:
             try:  # doesn't work with gtk3 yet (probably just hooking at the wrong time)
-                self.app_state(widget)
-            except:
-                None
+                self.save_app_state(widget)
+            except Exception as e:
+                log.ERR(e)
         gtk.main_quit()
 
 
