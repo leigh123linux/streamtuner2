@@ -284,11 +284,11 @@ class GenericChannel(object):
                 log.INFO("Oooops, parser returned nothing for category " + category)
                 
         # Update treeview/model (if category is still selected)
+        log.UI("load columns datamap streams")
         if self.current == category:
-            uikit.do(lambda:[
-                uikit.columns(self.gtk_list, self.datamap, self.prepare(self.streams[category])),
-                y and self.gtk_list.scroll_to_point(0, y)  # scroll to previous position
-            ])
+            uikit.do(uikit.columns, self.gtk_list, self.datamap, self.prepare(self.streams[category]))
+            if y:
+                uikit.do(self.gtk_list.scroll_to_point, 0, y)  # scroll to previous position
 
         # set pointer
         self.status("")
@@ -302,7 +302,7 @@ class GenericChannel(object):
 
     # called occasionally while retrieving and parsing
     def update_streams_partially_done(self, entries):
-        uikit.do(lambda: uikit.columns(self.gtk_list, self.datamap, entries))
+        uikit.do(uikit.columns, self.gtk_list, self.datamap, entries)
 
         
     # finds differences in new/old streamlist, marks deleted with flag
@@ -406,7 +406,7 @@ class GenericChannel(object):
 
         # Show current category in any case
         log.UI(self.module, "→ first_show(); station list → load(", self.current, ")")
-        uikit.do(self.load, self.current)
+        self.load(self.current)
     
         # put selection/cursor on last position
         if True:#self.shown != None:
@@ -440,20 +440,19 @@ class GenericChannel(object):
         if self.catmap:
             conf.save("cache/catmap_" + self.module, self.catmap);
 
-        # display outside of this non-main thread            
+        # display outside of this non-main thread
         uikit.do(self.display_categories)
 
 
     # insert content into gtk category list
     def display_categories(self):
     
-        # remove any existing columns
-        if self.gtk_cat:
-            [self.gtk_cat.remove_column(c) for c in self.gtk_cat.get_columns()]
         # rebuild gtk.TreeView
-        uikit.tree(self.gtk_cat, self.categories, title="Category", icon=gtk.STOCK_OPEN);
+        log.UI("display_categoris: tree→gtk_cat")
+        uikit.tree(self.gtk_cat, self.categories, title="Category", icon=gtk.STOCK_OPEN)
 
         # if it's a short list of categories, there's probably subfolders
+        log.UI("display_categoris: expand_all")
         if len(self.categories) < 20:
             self.gtk_cat.expand_all()
             
@@ -486,7 +485,7 @@ class GenericChannel(object):
 
         # Now appending to the liststore directly would be even nicer
         y = int(tv.get_vadjustment().get_value())
-        uikit.do(self.load, self.current, y=y)
+        self.load(self.current, y=y)
 
 
 
@@ -594,6 +593,7 @@ class ChannelPlugin(GenericChannel):
         tv1 = gtk.TreeView()
         tv1.set_property("width_request", 75)
         tv1.set_property("enable_tree_lines", True)
+        uikit.tree_column(tv1, "Category")
         tv1.connect("button_release_event", parent.on_category_clicked)
         tv1.show()
         sw1.add(tv1)
