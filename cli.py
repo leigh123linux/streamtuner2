@@ -52,7 +52,7 @@ class StreamTunerCLI (object):
             if command in dir(self):
                 cmd = self.__getattribute__(command)
             else:
-                print "No such command:", command
+                log.ERR("No such command:", command)
                 return
 
         # run

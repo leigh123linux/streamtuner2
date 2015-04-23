@@ -326,7 +326,6 @@ class jamendo (ChannelPlugin):
         elif cat == "feeds":
             for e in self.api(method="feeds", order="date_start_desc", target="notlogged"):
               if e.get("joinid") and e.get("subtitle"):
-                print e
                 entries.append({
                     "genre": e["type"],
                     "title": e["title"]["en"],

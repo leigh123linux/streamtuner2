@@ -241,7 +241,7 @@ class GenericChannel(object):
 
         # called to early
         if not category:
-            print "load(None)"
+            log.ERR("load(None)")
             return
         self.current = category
 

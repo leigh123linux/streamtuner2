@@ -133,7 +133,7 @@ def run(cmd):
 #
 def browser(url):
     bin = conf.play.get("url/http", "sensible-browser")
-    print url
+    log.BROWSER(bin)
     run(bin + " " + quote(url))
 
 
