@@ -40,8 +40,8 @@ class StreamTunerCLI (object):
     def __init__(self, actions):
 
         # fake init    
-        action.action.main = empty_parent()
-        action.action.main.current_channel = self.current_channel
+        action.main = empty_parent()
+        action.main.current_channel = self.current_channel
 
         # check if enough arguments, else  help
         if not actions:

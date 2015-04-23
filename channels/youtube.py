@@ -74,7 +74,8 @@ class youtube (ChannelPlugin):
 
     # API config
     service = {
-        2: [ "http://gdata.youtube.com/",
+        2: [ "http://gdata.youtube.com/", 
+            # deprecated on 2015-04-20, no /v3/ alternative, pertains "mostPopular" category only
             {
                 "v": 2,
                 "alt": "json",

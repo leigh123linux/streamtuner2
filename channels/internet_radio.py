@@ -41,7 +41,7 @@ class internet_radio (ChannelPlugin):
     # control data
     listformat = "pls"
     categories = []
-    base_url = "http://www.internet-radio.com/"
+    base_url = "https://www.internet-radio.com/"
 
 
     # load genres
@@ -81,7 +81,7 @@ class internet_radio (ChannelPlugin):
             # Is there a next page?
             if str(page+1) not in rx_pages.findall(html[-1]):
                 break
-            self.parent.status(float(page)/float(max_pages+1))
+#            self.parent.status(float(page)/float(max_pages+1))
 
         # Alternatively try regex or pyquery parsing
         #log.HTTP(html)
@@ -95,6 +95,7 @@ class internet_radio (ChannelPlugin):
                 continue
             
         # fin
+        log.FINISHED("internet_radio.update_streams")
         return entries
 
 

@@ -74,10 +74,10 @@ def get(url, params={}, referer="", post=0, ajax=0, binary=0, feedback=None, con
     if post:
         r = session.post(url, params=params, headers=headers, timeout=7.5)
     else:    
-        r = session.get(url, params=params, headers=headers, timeout=9.75)
+        r = session.get(url, params=params, headers=headers, verify=False, timeout=9.75)
 
-    log.HTTP(r.request.headers );
-    log.HTTP(r.headers );
+    log.HTTP(">>>", r.request.headers );
+    log.HTTP("<<<", r.headers );
             
     # finish, clean statusbar
     #progress_feedback(0.9)

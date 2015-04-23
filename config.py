@@ -479,7 +479,7 @@ class log_printer(object):
     def log_print(self, *args, **kwargs):
         # debug level
         method = self.method.upper()
-        if not method == "ERR":
+        if method != "ERR":
             if "debug" in conf and not conf.debug:
                 return
         # color/prefix
