@@ -502,6 +502,7 @@ class log_printer(object):
         "INIT": "31m", # red    INIT ERROR
         "PROC": "32m", # green  PROCESS
         "CONF": "33m", # brown  CONFIG DATA
+        "DND":  "1;33;41m", #   DRAG'N'DROP
         "UI":   "34m", # blue   USER INTERFACE BEHAVIOUR
         "UIKIT":"38;5;222;48;5;235m", # THREAD/UIKIT/IDLE TASKS
         "HTTP": "35m", # magenta HTTP REQUEST

@@ -109,7 +109,6 @@ class dnd(object):
         self.parent = parent
         parent.hooks["init"].append(self.add_dnd)
         conf.add_plugin_defaults(self.meta, self.module)
-        log.colors["DND"] = "1;33;41m"
 
 
     # Attach drag and drop handlers to each channels´ station TreeView
@@ -126,6 +125,12 @@ class dnd(object):
             w.enable_model_drag_dest(self.drag_types, gtk.gdk.ACTION_DEFAULT|gtk.gdk.ACTION_COPY)
             w.connect('drag-drop', self.drop)
             w.connect('drag-data-received', self.data_received)
+            
+        # register bookmarks category as destination too
+        w = parent.bookmarks.gtk_cat
+        w.enable_model_drag_dest([self.drag_types[0]], gtk.gdk.ACTION_DEFAULT|gtk.gdk.ACTION_MOVE)
+        w.connect('drag-data-received', self.data_received)
+        
 
 
 
@@ -136,7 +141,8 @@ class dnd(object):
         log.DND("source→out: begin-drag, store current row")
         self.row = self.treelist_row()
         self.buf = {}
-        uikit.do(context.set_icon_stock, gtk.STOCK_ADD, 16, 16)
+        if "set_icon_stock" in dir(context):
+            uikit.do(context.set_icon_stock, gtk.STOCK_ADD, 16, 16)
         return "url" in self.row
 
     # Keep currently selected row when source dragging starts
@@ -154,10 +160,12 @@ class dnd(object):
         log.DND("source→out: data-get, send and convert to requested target type:", info, selection.get_target())
         # Return prepared data
         func, data = self.export_row(info, self.row)
+        log.DND("data==", func, data)
         if func.find("text") >= 0:
             # Yay for trial and error. Nay for docs. PyGtks selection.set_text() doesn't
             # actually work unless the requested target type is an Atom. Therefore "STRING".
             selection.set("STRING", 8, data)
+            # Neither gtk.gdk.TARGET_STRING nor selection.get_target() satisfy Gtk3 however
         if func.find("uris") >= 0:
             selection.set_uris(data)
         return True
@@ -188,9 +196,14 @@ class dnd(object):
             buf = 'text', "{url}\n# Title: {title}\n# Homepage: {homepage}\n\n".format(**r)
         # Create temporary PLS file, because "text/uri-list" is widely misunderstood and just implemented for file:// IRLs
         else:
-            tmpfn = "{}/{}.{}".format(conf.tmp, re.sub("[^\w-]+", " ", r["title"]).strip(), conf.dnd_format)
+            title = re.sub("[^\w-]+", "_", r["title"]).strip()
+            tmpfn = "{}/{}.{}".format(conf.tmp, title, conf.dnd_format)
+            log.DND("tmpfn", tmpfn)
             cnv.file(rows=[r], dest=conf.dnd_format, fn=tmpfn)
-            buf = 'uris', ["file://{}".format(tmpfn)] if (info==4) else tmpfn
+            if info == 4:
+                buf = 'uris', ["file://{}".format(tmpfn)]
+            else:
+                buf = 'text', tmpfn
 
         # Keep in type request buffer
         self.buf[info] = buf
