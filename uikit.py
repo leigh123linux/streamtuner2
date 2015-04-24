@@ -361,7 +361,7 @@ class uikit:
     #-- Save-As dialog
     #
     @staticmethod
-    def save_file(title="Save As", parent=None, fn="", formats=[("*.pls", "*.pls"), ("*.xspf", "*.xpsf"), ("*.m3u", "*.m3u"), ("*.jspf", "*.jspf"), ("*.asx", "*.asx"), ("*.json", "*.json"), ("*.smil", "*.smil"), ("*.wpl", "*.wpl"), ("*","*")]):
+    def save_file(title="Save As", parent=None, fn="", formats=[("*.pls", "*.pls"), ("*.xspf", "*.xpsf"), ("*.m3u", "*.m3u"), ("*.jspf", "*.jspf"), ("*.asx", "*.asx"), ("*.json", "*.json"), ("*.smil", "*.smil"), ("*.desktop", "*.desktop"), ("*","*")]):
 
         # With overwrite confirmation
         c = gtk.FileChooserDialog(title, parent, action=gtk.FILE_CHOOSER_ACTION_SAVE,
@@ -397,7 +397,7 @@ class uikit:
         fn, ext = c.get_filename(), c.get_filter().get_name()
         if fn and ext:
             fn = os.path.basename(fn)
-            c.set_current_name(re.sub(r"\.(m3u|pls|xspf|jspf|asx|json|smil|wpl)$", ext.strip("*"), fn))
+            c.set_current_name(re.sub(r"\.(m3u|pls|xspf|jspf|asx|json|smil|desktop|url|wpl)8?$", ext.strip("*"), fn))
         
     
 

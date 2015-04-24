@@ -1,23 +1,27 @@
 # encoding: UTF-8
 # api: streamtuner2
-# title: Export All
+# title: Export Category
 # description: Exports a complete channel category (all stations into one file).
-# version: -0.1
+# version: 0.2
 # type: feature
 # category: file
 # priority: optional
 # config:
-#   { name: export_format, value: pls, type: select, select: "pls|xspf|m3u|jspf|smil|asx|json", description: Export format. }
+#   { name: export_format, value: xspf, type: select, select: "pls|xspf|m3u|jspf|smil|asx|json", description: Default export format. }
 # hooks: config_save
 #
-# Use "Extensions > Export all" in the desired channel and category,
-# to export all station entries at once. Currently just export PLS,
-# which in turn references other .pls file).  Luckily most players
-# can cover up for this horrid misdesign.
+# Adds a context menu "Extensions > Export all", which can be used
+# in any channel and category to save all stations into one playlist.
+# Defaults to exporting as .PLS file, but meanwhile can be used for
+# XSPF or old M3U files as well.
+# Note that a .desktop link can only hold the very first entry.
+#
+# It won't convert the internal stream URLs though. Such that the
+# combined playlist file may reference further playlists from servers
+# of a directory provider.
 #
 # This is a workaround until the main GUI supports selecting multiple
-# rows at once, and the action.* module has been overhauled to export
-# a bit more deterministically.
+# rows at once. You can already save as
 
 
 from config import *
@@ -49,7 +53,7 @@ class exportcat():
         fn = uikit.save_file("Export category", None, "%s.%s.%s" % (cn.module, cn.current, conf.export_format))
         log.PROC("Exporting category to", fn)
         if fn:
-            dest = re.findall("\.(m3u8?|pls|xspf|jspf|json|smil|asx)8?$", fn.lower())
+            dest = re.findall("\.(m3u|pls|xspf|jspf|json|smil|asx|desktop|url)8?$", fn.lower())
             if dest:
                 dest = dest[0]
             else:
