@@ -13,7 +13,7 @@
 #    icast.py internet_radio.py itunes.py jamendo.py live365.py global_key.py
 #    modarchive.py myoggradio.py punkcast.py radiobrowser.py radiotray.py
 #    shoutcast.py surfmusik.py timer.py tunein.py xiph.py youtube.py
-#    exportcat.py useragentswitcher.py somafm.py dnd.py
+#    exportcat.py useragentswitcher.py somafm.py dnd.py ubuntuusers.py
 # config: -
 # priority: core
 #
@@ -28,7 +28,7 @@
 
 
 import gtk
-from uikit import uikit
+from uikit import uikit, ver as gtk_ver
 from config import *
 import ahttp as http
 import action
@@ -302,7 +302,10 @@ class GenericChannel(object):
 
     # called occasionally while retrieving and parsing
     def update_streams_partially_done(self, entries):
-        uikit.do(uikit.columns, self.gtk_list, self.datamap, entries)
+        if gtk_ver == 3 and not conf.nothreads:
+            pass
+        else:  # kills Gtk3 too easily
+            uikit.do(uikit.columns, self.gtk_list, self.datamap, entries)
 
         
     # finds differences in new/old streamlist, marks deleted with flag
