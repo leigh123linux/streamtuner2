@@ -36,21 +36,37 @@ Else it downloads to the current working directory (often your HOME path),
 and creates one directory per radio station there.</p>
 </section>
 
-
 <section>
 <title>fIcy/fPls</title>
 
 <p>As alternative to streamripper, check out <link href="http://freshcode.club/projects/ficy">fIcy/fPls</link>
 for recording ICEcast/SHOUTcast streaming servers.</p>
 
-<p>It can be configured with <cmd>xterm -e "fPls %srv"</cmd> simply.</p>
+<p>It can be configured with <cmd>xterm -e "fPls %pls"</cmd> simply.</p>
 </section>
+
+
+<section>
+<title>Graphical stream recording tools</title>
+<p>You might also want to try a streamripper GUI or graphical
+reimplementation. For instance there are:</p>
+<list>
+<item><p><link href="http://sourceforge.net/projects/stripper/">StreamRipStar</link> (Java), works best per drag and drop.</p></item>
+<item><p><link href="http://launchpad.net/streamtastic">Streamtastic</link> (Java)</p></item>
+<item><p><link href="http://kstreamripper.sourceforge.net/">KStreamRipper</link>, though no current version in distros.</p></item>
+<item><p>VLC has built-in recording capabilities.</p></item>
+</list>
+<p>Which simplify defining a custom download directory, or how radio
+streams are split (between advertisement breaks), and the naming scheme
+for resulting *.mp3 filenames of course.</p>
+</section>
+
 
 
 <section>
 <title>Youtube-DL</title>
 
-<p>The recording settings have a specific entry for "video/youtube" URLs. To configure a specific download
+<p>The recording settings have a specific entry for "video/youtube" URLs. To configure a custom download
 directory, use <cmd>xterm -e "cd /media/music ; youtube-dl %srv"</cmd> for example. (The <cmd>cd</cmd>
 trick works with streamripper too.)</p>
 </section>
@@ -59,12 +75,12 @@ trick works with streamripper too.)</p>
 <section>
 <title>Wget for MOD files</title>
 
-<p>To download audio files from The MOD Archive directly, you can define a
-few custom handlers.  Scroll/click on the empty row in the recording apps
+<p>To download audio files from The MOD Archive directly, you can also
+define a custom handler.  Scroll/click on the empty row in the recording apps
 table.  There create a new recording MIME type <var>audio/mod+zip</var> with
-a command like <cmd>xterm -e wget %srv</cmd>.  Copy it alike for
-<var>audio/it+zip</var> and <var>audio/xm+zip</var> to cover the most common
-file types.  Using <cmd>curl</cmd> would also work of course.  </p>
+a command like <cmd>xterm -e wget %srv</cmd>.  All mod formats (IT, XM, S3M,
+etc.) are mapped to this generic type specifier. Using <cmd>curl</cmd> would
+also work of course.</p>
 </section>
 
 

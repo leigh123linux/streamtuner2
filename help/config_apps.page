@@ -33,16 +33,21 @@
         works better. (And sometimes not.)</p>
 
 	<p>Some applications, like Rhythmbox or Banshee, are primarily playlist managers, not players,
-        and cannot be invoked with a play URL by other apps. This makes them less suitable for use with
-	streamtuner2. (Same goes for streamtuner2 of course. It's not a player, just a playlist tool.)</p>
+        and cannot be invoked with a station URL. This makes them less suitable for use with streamtuner2.
+        (Same goes for streamtuner2 itself. It's not a player, but just a playlist browser.)</p>
 
 	<section id="placeholders">
 	<title>URL placeholders</title>
 
-	<p>Any listed application can be invoked with a different kind of
-	URL or filename. Most are rather flexible, but some depend on
-	specific playlist file types or URLs. You can control this by adding
-	a placeholder after the configured application name:</p>
+	<p>Listed audio players get run with a streaming server address (URL).
+	These can either be direct MP3/Ogg servers (<var>http://example.org:7843/</var>)
+	and sometimes playlist files (<var>http://example.org/listen.pls</var>)
+	- depending on the channel directory.</p>
+
+	<p>Most audio players automatically handle any station URLs. Some however
+	support just a few formats, or can't handle modern XSPF playlists for
+	instance. Which is why you can control this by adding a placeholder
+	after the configured application name:</p>
 
 	<table shade="rows" rules="rows cols">
 	<thead>	<tr><td><p>Placeholder</p></td><td><p>Alternatives</p></td><td><p>URL/Filename type</p></td></tr> </thead>
@@ -55,13 +60,22 @@
 		<tr><td><p>%smil</p></td><td><p></p></td><td><p>Standardized multimedia sequencing lists (which nobody uses either)</p></td></tr>
 	</table>
 
-        <p>Preferrably use the long %abbr names for configuration.</p>
+        <p>Preferrably use the long %abbr names for configuration. The
+        default is <var>%pls</var> if you leave it out. (Most directories
+        already provide PLS files, which avoids any extra conversion by ST2
+        which sometimes delay playback.)</p>
         
-	<note style="info"><p>Most audio players like pls, yet sometimes the
-	older m3u format more.  Streamripper requires %srv for recording.</p>
-	
-	<p>Leave it to the default %pls to avoid Streamtuner2 doing unneeded
-	extra conversions (just delays playback).</p> </note>
+        <p>A few channels (like Jamendo) send custom JSON playlist snippets,
+        which no audio player would understand. Which is why they're always
+        pre-converted.</p>
+        
+	<note style="info"><p>Most audio players like %pls, yet sometimes the
+	older %m3u format more.  Streamripper requires %srv for recording.</p>
+
+	<p>Use the newer <var>%xspf</var> format if your player supports
+	it. This format retains the maximum of station infos (such as
+	homepages etc.), and thus often makes for better bookmarking directly
+	in your player.</p> </note>
 
 	</section>
 

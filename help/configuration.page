@@ -54,13 +54,14 @@ There are various options for streamtuner2, available under <guiseq><gui>Edit</g
 </table>
 
     <p>Application names are most always lowercase binary names. Double click an entry to edit it.
-    After editing the icon next to the application name will be updated. If it stays green, it's
+    After editing, the icon next to the application name will be updated. If it stays green, it's
     likely to work. If it turns red / into a stop symbol, then the entered name is likely incorrect.</p>
 
    <p><media type="image" src="img/configapps.png" mime="image/png" /></p>
 
-    <p>After the application name, you can use a placeholder like "<var>%pls</var>" (default),
-    or "<var>%m3u</var>" and "<var>%srv</var>". See <link xref="config_apps#placeholders">placeholders</link>.</p>
+    <p>After the application name, you can optionally use a placeholder like "<var>%pls</var>" (default),
+    "<var>%m3u</var>" (old), or "<var>%xspf</var>" (modern), and "<var>%srv</var>" (for direct
+    streaming URLs). See <link xref="config_apps#placeholders">placeholders</link>.</p>
 
     <p>Catch-all entries like <var>*/*</var> or a generic <var>audio/*</var> entry allow to configure a default player.
     While <var>video/youtube</var> is specific to the Youtube channel. And <var>url/http</var> a pseudo MIME type
@@ -161,7 +162,19 @@ There are various options for streamtuner2, available under <guiseq><gui>Edit</g
       <title>Temporary files</title>
       <p>Streamtuner2 creates temporary .m3u files - for audio players that are configured to use %m3u files
       instead of %pls or %srv URLs. For archival purposes you might want to set a dedicated directory
-      for this. Leave this to the default /tmp else.</p>
+      for this. In recent versions streamtuner2 will create a <file>/tmp/streamtuner2</file> directory
+      for itself. (You cannot set just `/tmp` anymore, because that will be mapped to the longer name.
+      You can trick the old behaviour with `/tmp/.` however. Don't do that unless you have a reason).</p>
+    </item>
+    <item>
+      <title>Reuse .m3u/.pls files</title>
+      <p>When converting online station playlists, streamtuner2 creates temporary files like
+      <var>shoutcast.11539398391891.m3u</var> for your audio player. It'll keep those
+      files around until you quit streamtuner2. That speeds up switching between and reconnecting to 
+      a previous station. It's in particular necessary when you use <key>⏭</key> or <key>⏪</key>
+      directly in your player. For <var>%pls</var> references your player typically usues the online-only
+      playlist files anyway. If you disable this option, then converted pls/m3u/xspf files get recreated
+      repeatedly.</p>
     </item>
     <item>
       <title>Config directory</title>
@@ -175,24 +188,41 @@ There are various options for streamtuner2, available under <guiseq><gui>Edit</g
       and processing or debug infos. Enable this only for testing, as it might slow down station
       rendering.</p>
     </item>
+    <item>
+      <title>Disable threading</title>
+      <p>Now "threading" is a somewhat technical term. It means that an
+      application runs different tasks internally at the same time. It's
+      used for snappier interfaces. However, it's also difficult to get
+      right at times. In Streamtuner2 some concurrent tasks conflict with
+      updating the Gtk3 user interface. Which is why the application may
+      crash even on reloading station lists or when switching between
+      categories too quickly. This is only an issue for Python3 on Gtk3 with
+      streamtuner2. In such cases you can disable the concurrent-tasking
+      mode. The GUI will appear slower at times, and freeze between fetching
+      lists, but remains stable on the upside. There's also a command line
+      flag <cmd>--nt</cmd> to enable this workaround.</p>
+    </item>
  </terms>
 
 </section>
 
 <section id="plugins">
-    <title>Plugin and Channel settings</title>
+    <title>Channel and feature plugins and settings</title>
 
-    <p>This tab lists all available channel and feature plugins. Mark checkboxes for those plugins
-    you want to enable. You have to restart Streamtuner2 for any changes here to take effect.</p>
+    <p>The tabs <key>Channels</key> lists all available directory services.
+    While the <key>Features</key> group provides internal or menu enhancements.
+    Disabling or enabling a plugin however requires a restart of Streamtuner2
+    to take effect.</p>
+    
     
     <p><media type="image" src="img/configplugins.png" mime="image/png" /></p>
 
-    <p>Each channel plugin may come with its own set of addition configuration settings
-    below.</p>
+    <p>Each plugin can have its own little list of extra options. They'll be
+    applied right away for already active channel/feature plugins.</p>
 
     <note style="note"><p>If you want to find out more about the short option descriptions (most settings are checkboxes),
     please have a look into the channels directory /usr/share/streamtuner2/channels/ and corresponding
-    *.py files. These are readable, and sometimes contain more information.</p></note>
+    *.py files. These are somewhat readable even to non-programmers, and sometimes contain more information.</p></note>
 </section>
 
 

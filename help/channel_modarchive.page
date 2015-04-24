@@ -22,7 +22,9 @@
         </list>
 
 	<note><p>See <link xref="recording">recording
-	configuration</link> if you want to enable the download mode. (Audio
-	files are packaged up in ZIP files on MODArchive.)</p></note>
+	configuration</link> if you want to enable the download mode. Audio
+	files are packaged up in ZIP files on MODArchive. While they are
+	different formats (IT, S3M, XM, etc) they'll all carry a generic
+	<var>audio/mod+zip</var> type specifier in streamtuner2.</p></note>
 
 </page>
