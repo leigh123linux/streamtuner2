@@ -334,7 +334,7 @@ class extract_playlist(object):
     # Probe MIME type and content per regex
     def probe_fmt(self):
         for probe,rx in playlist_content_map:
-            if re.search(rx, self.src, re.X|re.S):
+            if re.search(rx, self.src, re.X|re.M|re.S):
                 return listfmt(probe)
         return None
 
@@ -632,8 +632,11 @@ class save_playlist(object):
 
     # .DESKTOP links
     def desktop(self, rows):
-        row = rows[0]
-        return "[Desktop Entry]\nVersion=1.0\nIcon=media-playback-start\nType=Link\nName={title}\nComment={playing}\nURL={url}\n".format(**row)
+        return "[Desktop Entry]\nVersion=1.0\nIcon=media-playback-start\nType=Link\nName={title}\nComment={playing}\nURL={url}\n".format(**rows[0])
+
+    # .URL shortcuts
+    def url(self, rows):
+        return "[InternetShortcut]\nURL={url}\n".format(**rows[0])
 
 
 
