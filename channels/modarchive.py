@@ -21,8 +21,9 @@
 # MOD files dodn't work with all audio players. And with the default
 # download method, it'll receive a .zip archive with embeded .mod file.
 #
-# Configuring VLC for */* is the best option. See the help on how to
-# setup wget/curl to download them.
+# Configuring VLC for `audio/mod+zip` or just a generic `*/*` works
+# most reliably. See the help on how to define wget/curl to download
+# them as well.
 
 
 import re
@@ -104,7 +105,7 @@ class modarchive (ChannelPlugin):
                 "genre": cat,
                 "url": url,
                 "id": id,
-                "format": self.mime_fmt(fmt) + "+zip",
+                "format": "audio/mod+zip",
                 "title": title,
                 "playing": file,
                 "listeners": int(rating if rating else 0),
