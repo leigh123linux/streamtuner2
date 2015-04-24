@@ -125,21 +125,22 @@ class configwin (AuxiliaryWindow):
         for name,meta in sorted(ls.items(), key=lambda e: e[1]["type"]+e[1]["title"].lower(), reverse=False):
             if not name in conf.plugins:
                 conf.plugins[name] = False
-            self.add_plg(name, meta)
-
+            add_ = self.add_channels if meta.get("type") == "channel" else self.add_features
+            self.add_plg(name, meta, add_)
+        pass
 
     # add configuration setting definitions from plugins
     plugin_text = "<span size='larger' weight='heavy'>%s</span> "\
                 + "<span style='italic' foreground='slate blue'>(%s/%s)</span> "\
                 + "<span weight='bold' foreground='#777777'>%s</span>\n"\
                 + "<span size='smaller' stretch='ultraexpanded'>%s</span>"
-    def add_plg(self, name, meta):
+    def add_plg(self, name, meta, add_):
         # add plugin load entry
         cb = gtk.CheckButton(name)
         cb.set_sensitive(not meta.get("priority") in ("core", "required", "builtin"))
         cb.get_children()[0].set_markup(self.plugin_text % (meta.get("title", name), meta.get("type", "plugin"), meta.get("category", "addon"), meta.get("version", "./."), meta.get("description", "no description")))
         cb.set_tooltip_text(re.sub("(?<=\S) *\n(?! *\n)", " ",meta.get("doc", "")).strip())
-        self.add_( "config_plugins_"+name, cb, color=meta.get("color"), image=meta.get("png"))
+        add_( "config_plugins_"+name, cb, color=meta.get("color"), image=meta.get("png"))
 
         # default values are already in conf[] dict (now done in conf.add_plugin_defaults)
         for opt in meta["config"]:
@@ -147,21 +148,21 @@ class configwin (AuxiliaryWindow):
             # display checkbox
             if opt["type"] == "boolean":
                 cb = gtk.CheckButton(opt["description"])
-                self.add_( "config_"+opt["name"], cb, color=color )
+                add_( "config_"+opt["name"], cb, color=color )
             # drop down list
             elif opt["type"] == "select":
                 cb = ComboBoxText(ComboBoxText.parse_options(opt["select"])) # custom uikit widget
-                self.add_( "config_"+opt["name"], cb, opt["description"], color )
+                add_( "config_"+opt["name"], cb, opt["description"], color )
             # text entry
             else:
-                self.add_( "config_"+opt["name"], gtk.Entry(), opt["description"], color )
+                add_( "config_"+opt["name"], gtk.Entry(), opt["description"], color )
 
         # spacer 
-        self.add_( "filler_pl_"+name, gtk.HSeparator() )
+        add_( "filler_pl_"+name, gtk.HSeparator() )
 
 
-    # Put config widgets into config dialog notebook, wrap with label, or background, retain widget id/name
-    def add_(self, id=None, w=None, label=None, color=None, image=None):
+    # Wrap entries/checkboxes with extra label, background, images, etc.
+    def wrap_entry(self, id, w, label, color, image):
         if id:
             self.widgets[id] = w
         if label:
@@ -174,8 +175,16 @@ class configwin (AuxiliaryWindow):
                 w = uikit.hbox(w, pix, exr=False)
         if color:
             w = uikit.bg(w, color)
-        self.plugin_options.pack_start(w)
-    
+        return w
+
+    # Put config widgets into channels/features configwin notebooks
+    def add_channels(self, id=None, w=None, label=None, color=None, image=None):
+        self.plugin_options.pack_start(self.wrap_entry(id, w, label, color, image))
+
+    # Separate tab for non-channel plugins
+    def add_features(self, id=None, w=None, label=None, color=None, image=None):
+        self.feature_options.pack_start(self.wrap_entry(id, w, label, color, image))
+
     # save config
     def save(self, widget):
         self.save_config(conf.__dict__, "config_")
