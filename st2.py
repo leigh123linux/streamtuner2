@@ -296,6 +296,8 @@ class StreamTunerTwo(gtk.Builder):
 
     # Thread a function, add to worker pool (for utilizing stop button)
     def thread(self, target, *args):
+        if conf.nothreads:
+            return target(*args)
         thread = Thread(target=target, args=args)
         thread.start()
         self.working.append(thread)

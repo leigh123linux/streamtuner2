@@ -446,13 +446,12 @@ class GenericChannel(object):
 
     # insert content into gtk category list
     def display_categories(self):
+        log.UI(self.module+".display_categories()", "mk tree, expand_all, select first path, currentcat")
     
         # rebuild gtk.TreeView
-        log.UI("display_categoris: tree→gtk_cat")
         uikit.tree(self.gtk_cat, self.categories, title="Category", icon=gtk.STOCK_OPEN)
 
         # if it's a short list of categories, there's probably subfolders
-        log.UI("display_categoris: expand_all")
         if len(self.categories) < 20:
             self.gtk_cat.expand_all()
             

@@ -404,31 +404,35 @@ class uikit:
     # Spool gtk update calls from non-main threads (optional immediate=1 flag to run task next, not last)
     @staticmethod
     def do(callback, *args, **kwargs):
-        pos = kwargs.get("immediate", -1)
-        if pos and pos >= 0:
+        name = inspect.getsource(callback).strip() if callback.__name__=='<lambda>' else str(callback)
+        if kwargs.get("immediate"):
             del kwargs["immediate"]
             pos = 0
-        if uikit.idle_run:
-            log.UIKIT_DORUN(str(callback))
-            callback(*args, **kwargs)
         else:
-            log.UIKIT_SPOOL(str(callback))
-            uikit.idle_tasks.insert(pos, [lambda: callback(*args, **kwargs), str(callback)])
+            pos = -1
+        # Run callback right away
+        if uikit.in_idle or conf.nothreads:
+            log.UIKIT_RUN_NOW(name)
+            callback(*args, **kwargs)
+        # Spool them for Gtk idle handling
+        else:
+            log.UIKIT_SPOOL(name)
+            uikit.idle_tasks.insert(pos, [lambda: callback(*args, **kwargs), name])
             gobject.idle_add(uikit.idle_do)
     
     # Collect tasks to perform in gtk.main loop
     idle_tasks = []
-    idle_run = False
+    in_idle = False
     
     # Execute UI updating tasks in order
     @staticmethod
     def idle_do():
-        uikit.idle_run = True
+        uikit.in_idle = True
         if uikit.idle_tasks:
-            task, callback = uikit.idle_tasks.pop(0)
-            log.UIKIT_EXEC(callback)
+            task, name = uikit.idle_tasks.pop(0)
+            log.UIKIT_EXEC(name)
             task()
-        uikit.idle_run = False
+        uikit.in_idle = False
         return len(uikit.idle_tasks) > 0
         
 

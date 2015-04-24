@@ -11,7 +11,8 @@
 #    { arg: -D,     type: boolean,  name: debug,     description: Enable debug messages on console }
 #    { arg: action, type: str *,    name: action[],  description: CLI interface commands. }
 #    { arg: -x,     type: boolean,  name: exit,      hidden: 1 }
-# version: 2.6
+#    { arg: --nt,   type: boolean,  name: nothreads, description: Disable threading/gtk_idle UI. }
+# version: 2.7
 # priority: core
 #
 # In the main application or module files which need access
@@ -120,6 +121,7 @@ class ConfigDict(dict):
             "configwin": 1,
         }
         self.tmp = os.environ.get("TEMP", "/tmp") + "/streamtuner2"
+        self.nothreads = 0
         self.max_streams = "500"
         self.show_bookmarks = 1
         self.show_favicons = 1
@@ -287,6 +289,7 @@ class ConfigDict(dict):
     # Copy args fields into conf. dict
     def apply_args(self, args):
         self.debug = args.debug
+        self.nothreads = args.nothreads
         if args.exit:
             sys.exit(1)
         for p_id in (args.disable or []):
@@ -489,7 +492,7 @@ class log_printer(object):
             if "debug" in conf and not conf.debug:
                 return
         # color/prefix
-        method = r"[{}[{}][0m".format(self.colors.get(method, "47m"), method)
+        method = r"[{}[{}][0m".format(self.colors.get(method.split("_")[0], "47m"), method)
         # output
         print(method + " " + " ".join([str(a) for a in args]), file=sys.stderr)
 
@@ -500,6 +503,7 @@ class log_printer(object):
         "PROC": "32m", # green  PROCESS
         "CONF": "33m", # brown  CONFIG DATA
         "UI":   "34m", # blue   USER INTERFACE BEHAVIOUR
+        "UIKIT":"38;5;222;48;5;235m", # THREAD/UIKIT/IDLE TASKS
         "HTTP": "35m", # magenta HTTP REQUEST
         "DATA": "36m", # cyan   DATA
         "INFO": "37m", # gray   INFO
