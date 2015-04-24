@@ -21,19 +21,35 @@ window should appear, where streamripper shows its progress.</p>
 <section>
 <title>Streamripper</title>
 
-<p>The <cmd>xterm -e</cmd> prefix brings up the terminal popup. If you want
-silent downloads in the background (instead of seeing its progress), remove
-the xterm call.</p>
+<p>There's already a default entry for recording radio stations:</p>
 
 <table shade="rows" rules="rows cols">
   <thead>  <tr><td><p>Format</p></td>     <td><p>Application</p></td></tr> </thead>
   <tr><td><p><var>audio/*</var></p></td>  <td><p><cmd>xterm -e streamripper %srv</cmd></p></td></tr>
 </table>
 
-<p>To configure a default download directory, use the <cmd>-d</cmd> option to streamripper.
-For example <cmd>xterm -e "streamripper -d /media/music/"</cmd> would use an absolute path.
-Else it downloads to the current working directory (often your HOME path),
-and creates one directory per radio station there.</p>
+<p>Streamripper has a few more options of its own:</p>
+
+<steps>
+  <item><p>To define an exact download directory:</p>
+     <list> <item><p><cmd>xterm -e "streamripper -d ~/Music/ %srv"</cmd></p></item> </list>
+  </item>
+  <item><p>Use a specific filename pattern:</p>
+     <list> <item><p><cmd>xterm -e "streamripper --xs2 -D '%S-%A-%T-%a.mp3' %srv"</cmd></p></item> </list>
+  </item>
+  <item><p>Just record a continuous stream, for 1 hour, without splitting individual songs from a radio station:</p>
+     <list> <item><p><cmd>xterm -e "streamripper -A -s 3600 -d ~/Music/ %srv"</cmd></p></item> </list>
+  </item>
+  <item><p>Pretend to be an audio player (in case recording is blocked):</p>
+     <list> <item><p><cmd>streamripper -u 'WinampMPEG/5.0' %srv</cmd></p></item> </list>
+  </item>
+</steps>
+
+<p>Whenever you leave out the <cmd>xterm</cmd> prefix, it runs silently in the background.</p>
+
+<p>See the streamripper(1) man page or its
+<link href="http://streamripper.sourceforge.net/faq.php">FAQ</link> for more tips.</p>
+
 </section>
 
 <section>
@@ -42,21 +58,22 @@ and creates one directory per radio station there.</p>
 <p>As alternative to streamripper, check out <link href="http://freshcode.club/projects/ficy">fIcy/fPls</link>
 for recording ICEcast/SHOUTcast streaming servers.</p>
 
-<p>It can be configured with <cmd>xterm -e "fPls %pls"</cmd> simply.</p>
+<p>It can be configured just as easily with:</p>
+<steps> <item><p><cmd>xterm -e "fPls %pls"</cmd></p></item> </steps>
 </section>
 
 
 <section>
 <title>Graphical stream recording tools</title>
-<p>You might also want to try a streamripper GUI or graphical
-reimplementation. For instance there are:</p>
+<p>You can also try a streamripper GUI or graphical
+reimplementation:</p>
 <list>
-<item><p><link href="http://sourceforge.net/projects/stripper/">StreamRipStar</link> (Java), works best per drag and drop.</p></item>
-<item><p><link href="http://launchpad.net/streamtastic">Streamtastic</link> (Java)</p></item>
+<item><p><link href="http://sourceforge.net/projects/stripper/">StreamRipStar</link> (Java), works best per drag and drop; set the DND format to PLS or M3U however.</p></item>
+<item><p><link href="http://launchpad.net/streamtastic">Streamtastic</link> (Java), only imports a text entry per drag and drop.</p></item>
 <item><p><link href="http://kstreamripper.sourceforge.net/">KStreamRipper</link>, though no current version in distros.</p></item>
 <item><p>VLC has built-in recording capabilities.</p></item>
 </list>
-<p>Which simplify defining a custom download directory, or how radio
+<p>Which all simplify defining a custom download directory, or how radio
 streams are split (between advertisement breaks), and the naming scheme
 for resulting *.mp3 filenames of course.</p>
 </section>
@@ -66,21 +83,35 @@ for resulting *.mp3 filenames of course.</p>
 <section>
 <title>Youtube-DL</title>
 
-<p>The recording settings have a specific entry for "video/youtube" URLs. To configure a custom download
-directory, use <cmd>xterm -e "cd /media/music ; youtube-dl %srv"</cmd> for example. (The <cmd>cd</cmd>
-trick works with streamripper too.)</p>
+<p>The recording settings already have a specific entry for "video/youtube" URLs.</p>
+
+<p>To configure a custom download directory, use:</p>
+<steps> <item><p><cmd>xterm -e "cd /media/music ; youtube-dl %srv"</cmd></p></item> </steps>
+
+<p>The <cmd>cd</cmd> trick also works with streamripper, or other tools.</p>
 </section>
 
 
 <section>
 <title>Wget for MOD files</title>
-
 <p>To download audio files from The MOD Archive directly, you can also
-define a custom handler.  Scroll/click on the empty row in the recording apps
-table.  There create a new recording MIME type <var>audio/mod+zip</var> with
-a command like <cmd>xterm -e wget %srv</cmd>.  All mod formats (IT, XM, S3M,
-etc.) are mapped to this generic type specifier. Using <cmd>curl</cmd> would
-also work of course.</p>
+define a custom handler.</p>
+<steps>
+  <item><p>Scroll/click on the ⎘ empty row in the recording application list.</p></item>
+  <item><p>There create a new recording MIME type:</p>
+     <list> <item><p><var>audio/mod+zip</var></p></item> </list>
+  </item>
+  <item><p>Specifiy a command like:</p>
+     <list>
+        <item><p><cmd>xterm -e wget %srv</cmd></p></item>
+        <item><p><cmd>cd ~/Desktop ; wget %srv</cmd></p></item>
+        <item><p><cmd>curl %srv</cmd></p></item>
+     </list>
+  </item>
+</steps>
+<p>
+All MOD file formats (IT, XM, S3M, etc.) are mapped to this generic type specifier.
+</p>
 </section>
 
 
