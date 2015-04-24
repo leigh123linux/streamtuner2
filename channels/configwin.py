@@ -139,8 +139,11 @@ class configwin (AuxiliaryWindow):
         cb = gtk.CheckButton(name)
         cb.set_sensitive(not meta.get("priority") in ("core", "required", "builtin"))
         cb.get_children()[0].set_markup(self.plugin_text % (meta.get("title", name), meta.get("type", "plugin"), meta.get("category", "addon"), meta.get("version", "./."), meta.get("description", "no description")))
-        cb.set_tooltip_text(re.sub("(?<=\S) *\n(?! *\n)", " ",meta.get("doc", "")).strip())
-        add_( "config_plugins_"+name, cb, color=meta.get("color"), image=meta.get("png"))
+        doc = meta.get("doc", "").strip()
+        if ver < 3:
+            doc = re.sub("(?<=\S) *\n(?! *\n)", " ", doc)
+        cb.set_tooltip_text(doc)
+        add_( "config_plugins_"+name, cb, color=meta.get("color"), image=meta.get("png"), align=0)
 
         # default values are already in conf[] dict (now done in conf.add_plugin_defaults)
         for opt in meta["config"]:
@@ -162,7 +165,7 @@ class configwin (AuxiliaryWindow):
 
 
     # Wrap entries/checkboxes with extra label, background, images, etc.
-    def wrap_entry(self, id, w, label, color, image):
+    def wrap_entry(self, id, w, label, color, image, align=1):
         if id:
             self.widgets[id] = w
         if label:
@@ -175,15 +178,20 @@ class configwin (AuxiliaryWindow):
                 w = uikit.hbox(w, pix, exr=False)
         if color:
             w = uikit.bg(w, color)
+        if align:
+            a = gtk.Alignment()
+            a.set_padding(0, 0, align, 0)
+            a.add(w)
+            w = a
         return w
 
     # Put config widgets into channels/features configwin notebooks
-    def add_channels(self, id=None, w=None, label=None, color=None, image=None):
-        self.plugin_options.pack_start(self.wrap_entry(id, w, label, color, image))
+    def add_channels(self, id=None, w=None, label=None, color=None, image=None, align=20):
+        self.plugin_options.pack_start(self.wrap_entry(id, w, label, color, image, align))
 
     # Separate tab for non-channel plugins
-    def add_features(self, id=None, w=None, label=None, color=None, image=None):
-        self.feature_options.pack_start(self.wrap_entry(id, w, label, color, image))
+    def add_features(self, id=None, w=None, label=None, color=None, image=None, align=20):
+        self.feature_options.pack_start(self.wrap_entry(id, w, label, color, image, align))
 
     # save config
     def save(self, widget):

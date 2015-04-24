@@ -24,7 +24,7 @@ class streamedit (AuxiliaryWindow):
     # show stream data editing dialog
     def open(self, mw):
         self.main.configwin.load_config(self.main.row(), "streamedit_")
-        self.win_streamedit.show()
+        self.win_streamedit.show_all()
 
     # copy widget contents to stream
     def save(self, w):

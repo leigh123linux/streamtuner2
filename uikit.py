@@ -463,7 +463,7 @@ class uikit:
 
     # Create GtkLabel
     @staticmethod
-    def label(text, size=400, markup=0):
+    def label(text, size=305, markup=0):
         label = gtk.Label(text)
         if markup:
             label.set_markup(text)
@@ -475,7 +475,7 @@ class uikit:
     # Wrap two widgets in horizontal box
     @staticmethod
     def hbox(w1, w2, exr=True):
-        b = gtk.HBox(homogeneous=False, spacing=10)
+        b = gtk.HBox(homogeneous=False, spacing=5)
         ######b.set_property("visible", True)
         b.pack_start(w1, expand=not exr, fill=not exr)
         b.pack_start(w2, expand=exr, fill=exr)
