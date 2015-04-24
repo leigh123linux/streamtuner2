@@ -30,19 +30,22 @@ import compat2and3
 # Welcome to my new blog.
 #
 # Now it's perhaps not even Gtks fault, but all the gory implementation
-# details of XDND are pretty gory. Neither match up to reality anymore.
+# details of XDND are pretty gory. And not much documentatiion lives up
+# to reality anymore.
 #
-# Pretty much only the ridiculous `TEXT/URI-LIST` is used in practice.
-# Without host names, of course, despite the spec saying otherwise. (It
-# perhaps leaked into the Gnome UI, and they decreed it banished). And
-# needless to say, there's no actual IRI/URI support in any file manager
-# or pairing apps beyond local paths.
+# Almost only the ridiculous `TEXT/URI-LIST` is used in practice. Without
+# host names, of course, despite the spec saying otherwise. (It perhaps
+# leaked into the Gnome UI, and they decreed it banished). And needless
+# to say, there's no actual IRI (or "URI" if you've been living under a
+# rock for two decades) support in any file manager or pairing clients
+# beyond local paths.
 #
 # Supporting PLS, XSPF, M3U as direct payload was a pointless exercise.
 # It's not gonna get requested by anyone. Instead there's another config
 # option now, which predefines the exchange format for temporary file:///
 # dumps. Because, you know, there was never any point in type negotiation
-# due to all the API overhead.
+# due to all the API overhead. There's no way to indicate any actually
+# supported content types per text/uri-list.
 #
 # What works, and what's widely used in practice instead, is declaring
 # yet another custom type per application. Our row format is transferred
@@ -81,6 +84,7 @@ class dnd(object):
       ("url/direct", 0, 15),
       # filename, file:// IRL
       ("FILE_NAME", 0, 3),
+#     ("text/uri-list;x-format=xspf,pls,m3u,jspf,smil,http", 0, 4),
       ("text/uri-list", 0, 4),
       # url+comments
       ("TEXT", 0, 5),
@@ -162,10 +166,14 @@ class dnd(object):
         func, data = self.export_row(info, self.row)
         log.DND("data==", func, data)
         if func.find("text") >= 0:
-            # Yay for trial and error. Nay for docs. PyGtks selection.set_text() doesn't
-            # actually work unless the requested target type is an Atom. Therefore "STRING".
-            selection.set("STRING", 8, data)
-            # Neither gtk.gdk.TARGET_STRING nor selection.get_target() satisfy Gtk3 however
+            try:
+                # Yay for trial and error. Nay for docs. PyGtks selection.set_text() doesn't
+                # actually work unless the requested target type is an Atom. Therefore "STRING".
+                selection.set("STRING", 8, data)
+            except:
+                # Except of course Gtk3, where an Atom is required, but neither
+                # gtk.gdk.TARGET_STRING nor selection.get_target() actually do
+                selection.set_text(data, len(data))
         if func.find("uris") >= 0:
             selection.set_uris(data)
         return True
@@ -217,7 +225,8 @@ class dnd(object):
     def drop(self, widget, context, x, y, time):
         log.DND("dest←in: drop-probing, possible targets:", context.targets)
         # find a matching target
-        accept = [type[0] for type in self.drag_types if type[0] in context.targets]
+        targets = [t.split(";")[0] for t in context.targets]
+        accept = [type[0] for type in self.drag_types if type[0] in targets]
         context.drop_reply(len(accept) > 0, time)
         if accept:
                 widget.drag_get_data(context, accept[0], time) or True
@@ -256,7 +265,12 @@ class dnd(object):
         elif data and info >= 5:
             log.DND("Converting direct payload playlist")
             cnv = action.extract_playlist(data)
-            add = cnv.rows(self.cnv_types[info] if info>=20 else cnv.probe_fmt() or "raw")
+            if info >= 20:
+                fmt = self.cnv_types[info]
+            else:
+                fmt = cnv.probe_fmt()
+                if fmt == "href": fmt = "raw"
+            add = cnv.rows(fmt)
             rows += [ cnv.mkrow(row) for row in add ]
 
         # Extract from playlist files, either passed as text/uri-list or single FILE_NAME
@@ -273,7 +287,6 @@ class dnd(object):
         # Insert and update view
         if rows:
             cn.insert_rows(rows, y)
-            # if cn.module == "bookmarks":
             cn.save()
             # Show streamedit window if title is empty
             if not len(rows[0].get("title", "")):
