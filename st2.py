@@ -41,6 +41,7 @@ from copy import copy
 import inspect
 import traceback
 from threading import Thread
+import time
 
 # add library path (either global setup, or pyzip basename)
 if not os.path.dirname(__file__) in sys.path:
@@ -357,29 +358,36 @@ class StreamTunerTwo(gtk.Builder):
 
 
 
-    # shortcut to statusbar
-    # (hacked to work from within threads, circumvents the statusbar msg pool actually)
-    def status(self, text="", sbar_msg=[]):
-        # init
-        sbar_cid = self.get_widget("statusbar").get_context_id("messages")
-        # remove text
-        while ((not text) and (type(text)==str) and len(sbar_msg)):
-            sbar_msg.pop()
-            uikit.do(self.statusbar.pop, sbar_cid, immediate=1)
+    # Shortcut to statusbar and progressbar.
+    # Either pass a string "" or a float 0.5, the message and pulse will be automatically
+    # removed after 5 seconds now.
+    def status(self, text=None, timeout=3):
+        self.status_last = time.time() + timeout
+
         # progressbar
-        if (type(text)==float):
-            if text >= 0.999 or text < 0.0:  # completed
+        if isinstance(text, (int, float)):
+            log.FLOAT(text)
+            if (text <= 0):  # unknown state
+                uikit.do(self.progress.pulse, immediate=1)
+            elif text >= 0.999 or text < 0.0:  # completed
                 uikit.do(self.progress.hide)
             else:  # show percentage
                 uikit.do(self.progress.show, immediate=1)
                 uikit.do(self.progress.set_fraction, text, immediate=1)
-                if (text <= 0):  # unknown state
-                    uikit.do(self.progress.pulse, immediate=1)
+
         # add text
-        elif (type(text)==str):
-            sbar_msg.append(1)
-            uikit.do(self.statusbar.push, sbar_cid, text, immediate=1)
-        pass
+        elif isinstance(text, (str, unicode)):
+            uikit.do(self.statusbar.set_text, text)
+
+        # timeout
+        if not text or time.time() >= self.status_last:
+            self.statusbar.set_text("")
+            self.progress.hide()
+            return False
+        # add timer
+        else:
+            gobject.timeout_add(int(timeout*1000), self.status)
+        return True
 
 
     # load plugins from /usr/share/streamtuner2/channels/

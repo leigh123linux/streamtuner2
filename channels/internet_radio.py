@@ -81,7 +81,7 @@ class internet_radio (ChannelPlugin):
             # Is there a next page?
             if str(page+1) not in rx_pages.findall(html[-1]):
                 break
-#            self.parent.status(float(page)/float(max_pages+1))
+            self.parent.status(float(page)/float(max_pages+1))
 
         # Alternatively try regex or pyquery parsing
         #log.HTTP(html)
