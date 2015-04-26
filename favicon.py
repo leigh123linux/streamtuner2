@@ -264,7 +264,7 @@ def html_download(url):
 # convert .ico file to .png format
 def ico2png(ico, png_fn):
     image = Image.open(ico)
-    log.ICO2PNG(ico, png, image)
+    log.FAVICON_ICO2PNG(ico, png, image)
     # resize
     if image.size[0] > 16:
         image.resize((16, 16), Image.ANTIALIAS)

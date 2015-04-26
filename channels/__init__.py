@@ -202,8 +202,8 @@ class GenericChannel(object):
             # and there's no need to invalidate the ls cache, because that's referenced by model anyhow.
             (model,iter) = self.model_iter()
             model.set_value(iter, 0, gtkIcon)
-        except:
-             pass
+        except Exception as e:
+            log.ERR_UIKIT("Couldn't set row_icon()", e)
 
     
 

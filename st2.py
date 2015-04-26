@@ -366,7 +366,6 @@ class StreamTunerTwo(gtk.Builder):
 
         # progressbar
         if isinstance(text, (int, float)):
-            log.FLOAT(text)
             if (text <= 0):  # unknown state
                 uikit.do(self.progress.pulse, immediate=1)
             elif text >= 0.999 or text < 0.0:  # completed
@@ -376,7 +375,7 @@ class StreamTunerTwo(gtk.Builder):
                 uikit.do(self.progress.set_fraction, text, immediate=1)
 
         # add text
-        elif isinstance(text, (str, unicode)):
+        elif isinstance(text, (str)):
             uikit.do(self.statusbar.set_text, text)
 
         # timeout
@@ -434,13 +433,13 @@ class StreamTunerTwo(gtk.Builder):
         winlayout = conf.load("window")
         if (winlayout):
             try: uikit.app_restore(self, winlayout)
-            except Exception as e: log.APPRESTORE(e) # may fail for disabled/reordered plugin channels
+            except Exception as e: log.APPSTATE_RESTORE(e) # may fail for disabled/reordered plugin channels
 
         winstate = conf.load("state")
         if (winstate):
             for id,prev in winstate.items():
                 try: self.channels[id].current = prev["current"]
-                except Exception as e: log.APPSTATE(e)
+                except Exception as e: log.APPSTATE_RESTORE(e)
 
     # store window/widget states (sizes, selections, etc.)
     def save_app_state(self, widget):
@@ -463,7 +462,7 @@ class StreamTunerTwo(gtk.Builder):
             try:  # doesn't work with gtk3 yet (probably just hooking at the wrong time)
                 self.save_app_state(widget)
             except Exception as e:
-                log.ERR(e)
+                log.ERR("st2.gtk_main_quit", e)
         gtk.main_quit()
 
 

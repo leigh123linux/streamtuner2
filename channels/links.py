@@ -78,17 +78,20 @@ class links (object):
 
     def populate(self, parent):
     
-        # collect links from channel plugins
+        # Collect links from channel plugins
         for name,channel in parent.channels.items():
-          try:
-            self.streams.append({
-                "favourite": 1,
-                "genre": "channel",
-                "title": channel.meta.get("title", channel.module),
-                "homepage": channel.meta.get("url", ""),
-                "type": "text/html",
-            })
-          except: pass
+            try:
+                self.streams.append({
+                    "favourite": 1,
+                    "genre": "channel",
+                    "title": channel.meta.get("title", channel.module),
+                    "homepage": channel.meta.get("url", ""),
+                    "type": "text/html",
+                })
+            except Exception as e:
+                log.ERR("links: adding entry failed:", e)
+
+        # Add built-in link list
         for row in self.default:
             (genre, title, homepage) = row
             self.streams.append({

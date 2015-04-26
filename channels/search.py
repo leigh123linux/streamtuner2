@@ -109,6 +109,7 @@ class search (AuxiliaryWindow):
                         row["genre"] = cn.meta["title"] + " " + row.get("genre", "")
                     entries += add
                 except:
+                    log.WARN("server_search: update_streams error in {}:".format(cn.module), e)
                     continue
             #main.status(main, 1.0 * i / 15)
         uikit.do(self.show_results, entries)

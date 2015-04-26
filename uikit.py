@@ -668,7 +668,8 @@ def gui_startup(p=0/100.0, msg="streamtuner2 is starting"):
         while gtk.events_pending(): gtk.main_iteration(False)
       else:
         progresswin.hide()
-    except: return
+    except Exception as e:
+        log.ERR("gui_startup()", e)
 
 
 

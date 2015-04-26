@@ -91,8 +91,8 @@ class radiotray:
                         "url": bookmark.attrib["url"],
                         "playing": "",
                     })
-        except:
-            pass
+        except Exception as e:
+            log.DATA("Extracting from radiotray bookmarks.xml failed:", e)
         return r
 
 
