@@ -1,10 +1,10 @@
 # encoding: UTF-8
 # api: streamtuner2
 # type: functions
-# cagtegory: io
+# category: io
 # title: play/record actions
 # description: Starts audio applications, guesses MIME types for URLs
-# version: 0.9
+# version: 1.0
 # priority: core
 #
 # Multimedia interface for starting audio players, recording app,
@@ -178,9 +178,10 @@ def listfmt(t = "pls"):
 # for comparison against configured record/play association.
 def mime_app(fmt, cmd_list):
     major = fmt[:fmt.find("/")]
-    for match in [ fmt, major + "/*", "*/*" ]:
+    for match in [ fmt, major + "/*", "*/*", "video/*", "audio/*" ]:
         if cmd_list.get(match):
             return cmd_list[match]
+    log.ERR("No audio player for stream type found")
 
 
 
@@ -191,18 +192,17 @@ def mime_app(fmt, cmd_list):
 #
 def interpol(cmd, url, source="pls", row={}):
 
-    # inject other meta fields
+    # Inject other meta fields (%title, %genre, %playing, %format, etc.)
     row = copy.copy(row)
-    if row:
-        for field in row:
-            cmd = cmd.replace("%"+field, "%r" % row.get(field))
+    for field in set(re.findall("%(\w+)", cmd)).intersection(row.keys()):
+        cmd = cmd.replace("%"+field, "%r" % row.get(field))
 
-    # add default if cmd has no %url placeholder
+    # Add default %pls if cmd has no %url placeholder
     if cmd.find("%") < 0:
         cmd = cmd + " %pls"
         # "pls" as default requires no conversion for most channels, and seems broadly supported by players
 
-    # standard placeholders
+    # Playlist type placeholders (%pls, %m3u, %xspf, etc.)
     for dest, rx in placeholder_map.items():
         if re.search(rx, cmd, re.X):
             # from .pls to .m3u
@@ -210,7 +210,7 @@ def interpol(cmd, url, source="pls", row={}):
             # insert quoted URL/filepath
             return re.sub(rx, quote(fn_or_urls), cmd, 2, re.X)
 
-    return "false"
+    return "/bin/false"
 
 
 # Substitute .pls URL with local .m3u, or direct srv addresses, or leaves URL asis.
@@ -351,7 +351,7 @@ class extract_playlist(object):
         log.DATA("input extractor/regex:", fmt, len(self.src))
 
         # specific extractor implementations
-        if fmt in dir(self):
+        if hasattr(self, fmt):
             try:
                 return getattr(self, fmt)()
             except Exception as e:
@@ -456,8 +456,11 @@ class extract_playlist(object):
             unesc = "json",
         ),
         "json": dict(
-            url   = r" (?x) \"url\" \s*:\s* \"(\w+:\\?/\\?/[^\"\s]+)\" ",
-            title = r" (?x) \"title\" \s*:\s* \"([^\"]+)\" ",
+            url   = r" (?x) \"(?:url|audio|stream)\" \s*:\s* \"(\w+:\\?/\\?/[^\"\s]+)\" ",
+            title = r" (?x) \"(?:title|name|station)\" \s*:\s* \"([^\"]+)\" ",
+            playing = r" (?x) \"(?:playing|current|description)\" \s*:\s* \"([^\"]+)\" ",
+            homepage= r" (?x) \"(?:homepage|website|info)\" \s*:\s* \"([^\"]+)\" ",
+            genre = r" (?x) \"(?:genre|keywords|category)\" \s*:\s* \"([^\"]+)\" ",
             unesc = "json",
         ),
         "asf": dict(
@@ -489,7 +492,7 @@ class extract_playlist(object):
             if not num in rows:
                 rows[num] = {}
             field = fieldmap.get(field.lower())
-            if field:
+            if field and len(value):
                 rows[num][field] = value.strip()
         return [rows[str(i)] for i in sorted(map(int, rows.keys()))]
 
