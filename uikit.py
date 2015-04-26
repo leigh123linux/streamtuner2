@@ -665,7 +665,7 @@ def gui_startup(p=0/100.0, msg="streamtuner2 is starting"):
       elif p < 1.0:
         progressbar.set_fraction(p)
         progressbar.set_property("text", msg)
-        while gtk.events_pending(): gtk.main_iteration(False)
+        while gtk.events_pending(): gtk.main_iteration()
       else:
         progresswin.hide()
     except Exception as e:
