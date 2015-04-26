@@ -124,7 +124,7 @@ playlist_fmt_prio = [
 # Exec wrapper
 #
 def run(cmd):
-    log.PROC("Exec:", cmd)
+    log.EXEC(cmd)
     try:    os.system("start \"%s\"" % cmd if conf.windows else cmd + " &")
     except: log.ERR("Command not found:", cmd)
 
@@ -133,7 +133,7 @@ def run(cmd):
 #
 def browser(url):
     bin = conf.play.get("url/http", "sensible-browser")
-    log.BROWSER(bin)
+    log.EXEC(bin)
     run(bin + " " + quote(url))
 
 
@@ -246,7 +246,7 @@ def convert_playlist(url, source, dest, local_file=True, row={}):
 
     # Check ambiguity (except pseudo extension)
     if len(set([source, mime, probe])) > 1:
-        log.ERR("Possible playlist format mismatch:", "listformat={}, http_mime={}, rx_probe={}, ext={}".format(source, mime, probe, ext))
+        log.WARN("Possible playlist format mismatch:", "listformat={}, http_mime={}, rx_probe={}, ext={}".format(source, mime, probe, ext))
 
     # Extract URLs from content
     for fmt in playlist_fmt_prio:
@@ -326,7 +326,7 @@ class extract_playlist(object):
 
     # Test URL/path "extension" for ".pls" / ".m3u" etc.
     def probe_ext(self, url):
-        e = re.findall("\.(pls|m3u|xspf|jspf|asx|wpl|wsf|smil|html|url|json|desktop)$", url)
+        e = re.findall("\.(pls|m3u|xspf|jspf|asx|wpl|wsf|smil|html|url|json|desktop)\d?$", url)
         if e: return e[0]
         else: pass
 
@@ -338,9 +338,11 @@ class extract_playlist(object):
                 return listfmt(probe)
         return None
 
+
     # Return just URL list from extracted playlist
     def urls(self, fmt):
         return [row["url"] for row in self.rows(fmt)]
+
         
     # Extract only URLs from given source type
     def rows(self, fmt=None):
@@ -349,8 +351,11 @@ class extract_playlist(object):
         log.DATA("input extractor/regex:", fmt, len(self.src))
 
         # specific extractor implementations
-        if fmt in self.__dict__:
-            return getattr(self, fmt)()
+        if fmt in dir(self):
+            try:
+                return getattr(self, fmt)()
+            except Exception as e:
+                log.WARN("Native {} parser failed on input (improper encoding, etc)".format(fmt), e)
 
         # regex scheme
         rules = self.extr_urls[fmt]
@@ -388,7 +393,8 @@ class extract_playlist(object):
             return [self.decode(val, rules.get("unesc")) for val in vals]
         return [None]
 
-    # Decoding
+
+    # String decoding
     def decode(self, val, unesc):
         if unesc in ("xml", "*"):
             val = xmlunescape(val)
@@ -396,7 +402,8 @@ class extract_playlist(object):
             val = val.replace("\\/", "/")
         return val
 
-    # filter out duplicate urls
+
+    # Filter out duplicate urls
     def uniq(self, rows):
         seen = []
         filtered = []
@@ -411,8 +418,8 @@ class extract_playlist(object):
     # These regexps only look out for URLs, not local file paths.
     extr_urls = {
         "pls": dict(
-            url   = r"(?im) ^ \s*File\d* \s*=\s* (\w+://[^\s]+) ",
-            title = r"(?m) ^Title\d*=(.+)",
+            url   = r"(?m) ^File\d* \s*=\s* (\w+://[^\s]+) ",
+            title = r"(?m) ^Title\d* \s*=\s*(.+)",
             # Notably this extraction method assumes the entries are grouped in associative order
         ),
         "m3u": dict(
@@ -472,6 +479,19 @@ class extract_playlist(object):
             unesc = "*",
         ),
     }
+    
+    
+    # More exact PLS extraction (for the unlikely case entries were misordered)
+    def pls(self):
+        fieldmap = dict(file="url", title="title")
+        rows = {}
+        for field,num,value in re.findall("^\s* ([a-z_-]+) (\d+) \s*=\s* (.*) $", self.src, re.M|re.I|re.X):
+            if not num in rows:
+                rows[num] = {}
+            field = fieldmap.get(field.lower())
+            if field:
+                rows[num][field] = value.strip()
+        return [rows[str(i)] for i in sorted(map(int, rows.keys()))]
 
 
     # Add placeholder fields to extracted row
