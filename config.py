@@ -192,8 +192,14 @@ class ConfigDict(dict):
             if (not os.path.exists(subdir)):
                 os.mkdir(subdir)
                 open(subdir+"/.nobackup", "w").close()
-        # write                        
+        # target filename
         file = self.dir + "/" + name
+        # encode as JSON
+        try:
+            data = json.dumps(data, indent=(4 if nice else None))
+        except Exception as e:
+            log.ERR("JSON encoding failed", e)
+            return
         # .gz or normal file
         if gz:
             f = gzip.open(file+".gz", "w")
@@ -201,8 +207,7 @@ class ConfigDict(dict):
                 os.unlink(file)
         else:
             f = open(file, "w")
-        # encode
-        data = json.dumps(data, indent=(4 if nice else None))
+        # write
         try:
             f.write(data.encode("utf-8"))
         except TypeError as e:
@@ -269,7 +274,7 @@ class ConfigDict(dict):
                 except:
                      netrc = parser(self.xdg() + "/netrc").hosts
             except:
-                pass
+                log.STAT("No .netrc")
         for server in varhosts:
             if server in netrc:
                 return netrc[server]
@@ -355,7 +360,7 @@ def get_data(fn, decode=False, gz=False, file_base="config"):
         else:
             return str(bin)
     except:
-        pass
+        log.WARN("get_data() didn't find:", fn)
 
 
 # Search through ./channels/ and get module basenames.
@@ -384,7 +389,7 @@ def plugin_meta(fn=None, src=None, module=None, frame=1, plugin_base="channels")
     if module:
        fn = module
        try: src = pkgutil.get_data(plugin_base, fn+".py")
-       except: pass
+       except: pass  # Notice in plugin_meta_extract() is sufficient
 
     # get source directly from caller
     elif not src and not fn:
@@ -498,17 +503,21 @@ class log_printer(object):
 
     # Colors
     colors = {
-        "ERR":  "31m", # red    ERROR
-        "INIT": "31m", # red    INIT ERROR
-        "PROC": "32m", # green  PROCESS
-        "CONF": "33m", # brown  CONFIG DATA
-        "DND":  "1;33;41m", #   DRAG'N'DROP
-        "UI":   "34m", # blue   USER INTERFACE BEHAVIOUR
+        "ERR":  "31m",          # red    ERROR
+        "INIT": "38;5;196m",    # red    INIT ERROR
+        "WARN": "38;5;208m",    # orange WARNING
+        "EXEC": "38;5;66m",     # green  EXEC
+        "PROC": "32m",          # green  PROCESS
+        "FAVICON":"58;5;119m",  # green  FAVICON
+        "CONF": "33m",          # brown  CONFIG DATA
+        "DND":  "1;33;41m",     # yl/red DRAG'N'DROP
+        "UI":   "34m",          # blue   USER INTERFACE BEHAVIOUR
         "UIKIT":"38;5;222;48;5;235m", # THREAD/UIKIT/IDLE TASKS
-        "HTTP": "35m", # magenta HTTP REQUEST
-        "DATA": "36m", # cyan   DATA
-        "INFO": "37m", # gray   INFO
-        "STAT": "37m", # gray   CONFIG STATE
+        "APPSTATE":"38;5;200m", # magenta APPSTATE RESTORE
+        "HTTP": "35m",          # magenta HTTP REQUEST
+        "DATA": "36m",          # cyan   DATA
+        "INFO": "38;5;238m",    # lgray  INFO
+        "STAT": "37m",          # gray   CONFIG STATE
     }
 
 # instantiate right away
