@@ -108,7 +108,7 @@ class search (AuxiliaryWindow):
                     for row in add:
                         row["genre"] = cn.meta["title"] + " " + row.get("genre", "")
                     entries += add
-                except:
+                except Exception as e:
                     log.WARN("server_search: update_streams error in {}:".format(cn.module), e)
                     continue
             #main.status(main, 1.0 * i / 15)
