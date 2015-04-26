@@ -56,7 +56,7 @@ class punkcast (ChannelPlugin):
         entries = []
         
         #-- all from frontpage
-        html = http.get(self.homepage)
+        html = http.get("http://www.punkcast.com/")
         for uu in rx_link.findall(html):
             (homepage, id, title) = uu
             entries.append({
