@@ -79,7 +79,7 @@ class GenericChannel(object):
        ["Bitrate",	35,	["bitrate",	int,	"t",	{}],	],
        ["Homepage",	160,	["homepage",	str,	"t",	{"underline":10}],	],
        [False,		25,	["url",		str,	"t",	{"strikethrough":11}],	],
-       ["Format",	20,	["format",	str,	None,	{}],	],
+       [False,		20,	["format",	str,	None,	{}],	],
        [False,		0,	["favourite",	bool,	None,	{}],	],
        [False,		0,	["deleted",	bool,	None,	{}],	],
        [False,		0,	["search_col",	str,	None,	{}],	],
