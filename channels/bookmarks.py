@@ -21,6 +21,7 @@
 from config import *
 from uikit import *
 from channels import *
+import favicon
 
 
 
@@ -41,6 +42,7 @@ class bookmarks(GenericChannel):
     categories = ["favourite", ]  # timer, links, search, and links show up as needed
     finder_song = { "genre": "Youtube ", "format": "video/youtube", "playing": "current_", "title": "The Finder song", "url": "http://youtube.com/v/omyZy4H8y9M", "homepage": "http://youtu.be/omyZy4H8y9M" }
     streams = {"favourite":[finder_song], "search":[], "scripts":[], "timer":[], "history":[], }
+    default = "favourite"
 
 
     # cache list, to determine if a PLS url is bookmarked
