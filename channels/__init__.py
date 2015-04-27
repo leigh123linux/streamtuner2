@@ -288,7 +288,8 @@ class GenericChannel(object):
         if self.current == category:
             uikit.do(uikit.columns, self.gtk_list, self.datamap, self.prepare(self.streams[category]))
             if y:
-                uikit.do(self.gtk_list.scroll_to_point, 0, y)  # scroll to previous position
+                uikit.do(self.gtk_list.scroll_to_point, 0, y + 1)   # scroll to previous position, +1 px, because
+                # somehow Gtk.TreeView else stumbles over itself when scrolling to the same position the 2nd time
 
         # set pointer
         self.status("")
