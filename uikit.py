@@ -409,7 +409,7 @@ class uikit:
             del kwargs["immediate"]
             pos = 0
         else:
-            pos = -1
+            pos = len(uikit.idle_tasks)
         # Run callback right away
         if uikit.in_idle or conf.nothreads:
             log.UIKIT_RUN_NOW(name)
@@ -553,9 +553,9 @@ empty_pixbuf = uikit.pixbuf(
 # literally in Gtk2, TreePath-wrapped for Gtk3
 def treepath(ls):
     if isinstance(ls, (list,tuple)):
-        ls = ls[0]
+        ls = ":".join(map(str, ls))
     if ver==2:
-        return str(ls)
+        return ls
     else:
         return gtk.TreePath.new_from_string(str(ls))
 #
