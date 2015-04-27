@@ -3,6 +3,8 @@
 # title: PODspider
 # description: lists Podcasts RSS from proprietary podspider xml database
 # version: 0.0
+# type: channel
+# category: talk
 # depends: lxml.etree, pyquery
 # url: http://www.radiograbber.de/
 # status: unsupported
