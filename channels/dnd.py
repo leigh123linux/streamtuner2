@@ -70,18 +70,19 @@ class dnd(object):
       # internal
       ("json/vnd.streamtuner2.station", gtk.TARGET_SAME_APP, 51),
       # literal exports
-      ("audio/x-mpegurl", 0, 20),
-      ("application/x-scpls", 0, 21),
       ("application/xspf+xml", 0, 22),
+      ("application/jspf+json", 0, 25),
+      ("application/x-scpls", 0, 21),
+      ("audio/x-mpegurl", 0, 20),
       ("application/smil", 0, 23),
       ("text/html", 0, 23),
       ("text/richtext", 0, 23),
-      ("application/jspf+json", 0, 25),
       ("application/x-desktop", 0, 26),
+      ("text/url", 0, 27),
+      ("message/external-body", 0, 27),
       # direct srv urls
-      ("text/url", 0, 15),  #@TODO: support in action.save_/convert_
-      ("message/external-body", 0, 15),
       ("url/direct", 0, 15),
+      ("text/iri-list", 0, 15),
       # filename, file:// IRL
       ("FILE_NAME", 0, 3),
 #     ("text/uri-list;x-format=xspf,pls,m3u,jspf,smil,http", 0, 4),
@@ -101,6 +102,7 @@ class dnd(object):
        23: "smil",
        25: "jspf",
        26: "desktop",
+       27: "url",
        15: "srv",
         4: "temp",
         5: "srv",
@@ -234,7 +236,7 @@ class dnd(object):
 
     # Actual data is being passed,
     def data_received(self, widget, context, x, y, selection, info, time):
-        log.DND("dest←in: data-receival", info, selection.get_text(), selection.get_uris())
+        log.DND("dest←in: data-receival", info, selection.get_target(), selection.get_text(), selection.get_uris())
 
         # incoming data
         data = selection.get_text()
