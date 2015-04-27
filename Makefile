@@ -30,8 +30,7 @@ glade:
 	gzip -c9 < gtk3.xml > gtk3.xml.gz
 
 # Prepare packaging
-docs:	# update static files
-	gzip -9c NEWS > NEWS.gz
+docs:
 ver:	# copy `version:` info
 	version get:plugin st2.py write:control PKG-INFO
 clean:

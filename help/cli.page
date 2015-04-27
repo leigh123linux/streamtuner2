@@ -50,8 +50,45 @@
 
         <section>
         <title>GUI options</title>
-	<p>There are also --gtk3 and --gtk2 command line options. Usually the right toolkit
-	is picked depending on Python version. But you can manually override this.</p>
+	<p>There are also a few command line flags, which influence the
+        graphical runtime.</p>
+        <list>
+          <item>
+            <title>--gtk3</title>
+            <p>Picks the Gtk3 toolkit. Which is default for Python3 runs.
+            But could also be used for Python2 instead of pygtk.</p>
+          </item>
+          <item>
+            <title>--gtk2</title>
+            <p>Fake option. Python2 runs on Gtk2 per default. And Py3 is
+            bound to Gtk3/PyGObject anyway.</p>
+          </item>
+          <item>
+            <title>-D</title>
+            <p>Enable debug output on the console. Identical to the debug
+            configuration dialog option.</p>
+          </item>
+          <item>
+            <title>-d plugin</title>
+            <p>Disable a named plugin. Useful if it hangs on startup. So
+            <cmd>-d xiph</cmd> can temporarily disable it. Note that this
+            flag gets set durably by clicking [save] in the config
+            dialog.</p>
+          </item>
+          <item>
+            <title>-e plugin</title>
+            <p>Enable a channel/feature plugin just once.</p>
+          </item>
+          <item>
+            <title>-h</title>
+            <p>Print help list with all known command line flags. Note that
+            this excludes details on the CLI action commands.</p>
+          </item>
+          <item>
+            <title>-x</title>
+            <p>Exit right away. A flag only used for testing.</p>
+          </item>
+        </list>
 	</section>
 
 </page>
