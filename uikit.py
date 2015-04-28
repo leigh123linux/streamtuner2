@@ -333,8 +333,8 @@ class uikit:
                     for i in args:
                         w.expand_row(treepath(i), False)
                 #  - selected
-                if method == "row:selected":
-                    w.get_selection().select_path(treepath(args))
+              #  if method == "row:selected":
+              #      w.get_selection().select_path(treepath(args))
                 # gtk.Toolbar
                 if method == "icon_size":
                     w.set_icon_size(args)

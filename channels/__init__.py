@@ -144,9 +144,10 @@ class GenericChannel(object):
         self.gtk_list = parent.get_widget(self.module+"_list")
         self.gtk_cat = parent.get_widget(self.module+"_cat")
         
-        # category tree
+        # last category, and prepare genre tree
+        self.current = conf.state(self.module).get("current")
         self.display_categories()
-        
+
         # update column names
         for field,title in list(self.titles.items()):
             self.update_datamap(field, title=title)
@@ -172,6 +173,36 @@ class GenericChannel(object):
 
         
     #--------------------- streams/model data accesss ---------------------------
+
+    # traverse category TreeModel to set current, expand parent nodes
+    def select_current(self, name):
+        log.UI("reselect .current category in treelist:", name)
+        model = self.gtk_cat.get_model()
+        iter = model.get_iter_first()
+        self.iter_cats(name, model, iter)
+
+    # iterate over children to find current category        
+    def iter_cats(self, name, model, iter):
+        while iter:
+            val = model.get_value(iter, 0)
+            if val == name:
+                #log.UI("FOUND CATEGORY", name, "→select")
+                self.gtk_cat.get_selection().select_iter(iter)
+                self.gtk_cat.set_cursor(model.get_path(iter))
+                return True
+            if model.iter_has_child(iter):
+                found = self.iter_cats(name, model, model.iter_children(iter))
+                if found:
+                    self.gtk_cat.expand_row(model.get_path(iter), 0)
+                    return True
+            iter = model.iter_next(iter)
+        
+    # selected category
+    def currentcat(self):
+        (model, iter) = self.gtk_cat.get_selection().get_selected()
+        if (type(iter) == gtk.TreeIter):
+            self.current = model.get_value(iter, 0)
+        return self.current
         
     # Get list of stations in current category
     def stations(self):
@@ -284,16 +315,15 @@ class GenericChannel(object):
                 log.INFO("Oooops, parser returned nothing for category " + category)
                 
         # Update treeview/model (if category is still selected)
-        log.UI("load columns datamap streams")
         if self.current == category:
+            log.UI("load() → uikit.columns({}.streams[{}])".format(self.module, category), [inspect.stack()[x][3] for x in range(1,5)])
             uikit.do(uikit.columns, self.gtk_list, self.datamap, self.prepare(self.streams[category]))
             if y:
                 uikit.do(self.gtk_list.scroll_to_point, 0, y + 1)   # scroll to previous position, +1 px, because
                 # somehow Gtk.TreeView else stumbles over itself when scrolling to the same position the 2nd time
 
-        # set pointer
-        self.status("")
-        self.status(1.0)
+        # unset statusbar
+        self.status()
 
         
     # store current streams data
@@ -404,21 +434,17 @@ class GenericChannel(object):
 
         # Select first category
         if not self.current:
-            self.current = self.str_from_struct(self.categories) or None
             log.STAT(self.module, "→ first_show(); use first category as current =", self.current)
-            self.shown = 0,
+            self.current = self.str_from_struct(self.categories) or None
+
+        # put selection/cursor on last position
+        if True:
+            uikit.do(self.select_current, self.current)
+            #uikit.do(lambda:self.gtk_list.get_selection().select_path(self.shown))
 
         # Show current category in any case
         log.UI(self.module, "→ first_show(); station list → load(", self.current, ")")
         self.load(self.current)
-    
-        # put selection/cursor on last position
-        if True:#self.shown != None:
-            log.STAT(self.module+".first_show()", "select last known category treelist position =", self.shown)
-            try:
-                uikit.do(lambda:self.gtk_list.get_selection().select_path(self.shown))
-            except:
-                pass
             
         # Invoke only once
         self.shown = 55555
@@ -450,7 +476,7 @@ class GenericChannel(object):
 
     # insert content into gtk category list
     def display_categories(self):
-        log.UI(self.module+".display_categories()", "mk tree, expand_all, select first path, currentcat")
+        log.UI("{}.display_categories(), uikit.tree(#{}), expand_all(#<20), select_current(={})".format(self.module, len(self.categories), self.current))
     
         # rebuild gtk.TreeView
         uikit.tree(self.gtk_cat, self.categories, title="Category", icon=gtk.STOCK_OPEN)
@@ -459,17 +485,13 @@ class GenericChannel(object):
         if len(self.categories) < 20:
             self.gtk_cat.expand_all()
             
-        # select any first element
-        self.gtk_cat.get_selection().select_path("0") #set_cursor
-        self.currentcat()
+        # Select last .current or any first element
+        if self.current:
+            self.select_current(self.current)
+            #self.currentcat()
+        #else: self.gtk_cat.get_selection().select_path("0") #set_cursor
 
             
-    # selected category
-    def currentcat(self):
-        (model, iter) = self.gtk_cat.get_selection().get_selected()
-        if (type(iter) == gtk.TreeIter):
-            self.current = model.get_value(iter, 0)
-        return self.current
 
     
     # Insert/append new station rows - used by importing/drag'n'drop plugins

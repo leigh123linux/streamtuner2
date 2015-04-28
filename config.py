@@ -254,6 +254,15 @@ class ConfigDict(dict):
         if self.tmp == "/tmp":
             self.tmp = "/tmp/streamtuner2"
 
+            
+    # Shortcut to `state.json` loading (currently selected categories etc.)
+    def state(self, module=None, d={}):
+        if not d:
+            d.update(conf.load("state"))
+        if module:
+            return d.get(module, {})
+        return d
+
          
     # check for existing filename in directory list
     def find_in_dirs(self, dirs, file):

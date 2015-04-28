@@ -238,7 +238,7 @@ class StreamTunerTwo(gtk.Builder):
         # if first selected, load current category
         # (run in thread, to make it look speedy on first startup)
         self.thread( 
-        self.channel().first_show
+          self.channel().first_show
         )
 
     # Invoked from the menu instead, uses module name instead of numeric tab id
@@ -429,17 +429,16 @@ class StreamTunerTwo(gtk.Builder):
 
     # load application state (widget sizes, selections, etc.)
     def init_app_state(self):
-
         winlayout = conf.load("window")
         if (winlayout):
             try: uikit.app_restore(self, winlayout)
             except Exception as e: log.APPSTATE_RESTORE(e) # may fail for disabled/reordered plugin channels
 
-        winstate = conf.load("state")
-        if (winstate):
-            for id,prev in winstate.items():
-                try: self.channels[id].current = prev["current"]
-                except Exception as e: log.APPSTATE_RESTORE(e)
+        #winstate = conf.state()    # now handled by channels.gui() already
+        #if (winstate):
+        #    for id,prev in winstate.items():
+        #        try: self.channels[id].current = prev["current"]
+        #        except Exception as e: log.APPSTATE_RESTORE(e)
 
     # store window/widget states (sizes, selections, etc.)
     def save_app_state(self, widget):
