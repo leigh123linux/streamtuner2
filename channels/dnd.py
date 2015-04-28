@@ -4,10 +4,10 @@
 # description: Copy streams/stations from and to other applications.
 # depends: uikit
 # version: 0.5
-# type: interface
+# type: feature
 # config:
 #   { name: dnd_format, type: select, value: xspf, select: "pls|m3u|xspf|jspf|asx|smil|desktop", description: "Default temporary file format for copying a station." }
-# category: ui
+# category: io
 # priority: default
 # support: experimental
 #

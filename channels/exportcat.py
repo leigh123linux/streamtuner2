@@ -6,7 +6,7 @@
 # type: feature
 # category: file
 # priority: optional
-# config:
+# -disabled-config:
 #   { name: export_format, value: xspf, type: select, select: "pls|xspf|m3u|jspf|smil|asx|json", description: Default export format. }
 # hooks: config_save
 #
@@ -50,7 +50,7 @@ class exportcat():
         cn = self.parent.channel()
         source = cn.listformat
         streams = cn.streams[cn.current]
-        fn = uikit.save_file("Export category", None, "%s.%s.%s" % (cn.module, cn.current, conf.export_format))
+        fn = uikit.save_file("Export category", None, "%s.%s.%s" % (cn.module, cn.current, "xspf"))
         log.PROC("Exporting category to", fn)
         if fn:
             dest = re.findall("\.(m3u|pls|xspf|jspf|json|smil|asx|desktop|url)8?$", fn.lower())

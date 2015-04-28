@@ -427,6 +427,7 @@ class StreamTunerTwo(gtk.Builder):
                 log.INIT("load_plugin_channels: error initializing:", name, ", exception:")
                 traceback.print_exc()
 
+
     # load application state (widget sizes, selections, etc.)
     def init_app_state(self):
         winlayout = conf.load("window")
@@ -434,11 +435,6 @@ class StreamTunerTwo(gtk.Builder):
             try: uikit.app_restore(self, winlayout)
             except Exception as e: log.APPSTATE_RESTORE(e) # may fail for disabled/reordered plugin channels
 
-        #winstate = conf.state()    # now handled by channels.gui() already
-        #if (winstate):
-        #    for id,prev in winstate.items():
-        #        try: self.channels[id].current = prev["current"]
-        #        except Exception as e: log.APPSTATE_RESTORE(e)
 
     # store window/widget states (sizes, selections, etc.)
     def save_app_state(self, widget):
