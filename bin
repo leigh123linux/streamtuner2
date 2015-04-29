@@ -4,9 +4,10 @@
 # title: streamtuner2
 # pack: bin=/usr/bin/streamtuner2
 #
-# Invocation script for /usr/share/streamtuner2/streamtunertwo.py
+# Invocation script for /usr/share/streamtuner2/st2.py
 
 import sys
 sys.path.insert(0, "/usr/share/streamtuner2")
+
 import st2
 st2.main()
