@@ -63,9 +63,10 @@ class ubuntuusers (ChannelPlugin):
         f = "audio/mpeg" if cat == "stations" else "video/mp4"
         
         # split on headlines
-        return itertools.chain(
-            self.join(src, f) for src in re.split("^==+", wiki, 0, re.M)
-        )
+        r = []
+        for src in re.split("^==+", wiki, 0, re.M):
+            r += self.join(src, f)
+        return r
 
 
     # Extract individual stations
