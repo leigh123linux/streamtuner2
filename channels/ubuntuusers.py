@@ -25,6 +25,7 @@ import re
 from config import *
 from channels import *
 import ahttp
+import itertools
 
 
 # UU Wiki radio list
@@ -34,8 +35,11 @@ class ubuntuusers (ChannelPlugin):
     has_search = False
     listformat = "srv"
     titles = dict(playing=False, listeners=False, bitrate=False)
-    base = "http://wiki.ubuntuusers.de/Internetradio/Stationen?action=export&format=raw"
-    categories = ["stations"]
+    base = {
+       "stations": "http://wiki.ubuntuusers.de/Internetradio/Stationen?action=export&format=raw",
+       "tv": "http://wiki.ubuntuusers.de/Internet-TV/Stationen?action=export&format=raw",
+    }
+    categories = ["stations", "tv"]
 
 
     # Nope
@@ -55,19 +59,31 @@ class ubuntuusers (ChannelPlugin):
     def update_streams(self, cat, search=None):
 
         # fetch page
-        wiki = ahttp.get(self.base)
+        wiki = ahttp.get(self.base[cat])
+        f = "audio/mpeg" if cat == "stations" else "video/mp4"
+        
+        # split on headlines
+        return itertools.chain(
+            self.join(src, f) for src in re.split("^==+", wiki, 0, re.M)
+        )
 
+
+    # Extract individual stations
+    def join(self, src, f):
+    
         # regexp lists out, just one srv url per entry
         ls = re.findall(r"""
-           ^==\s*([\w\s.-]+)\s*==\s+
-           ^\[(http[^\s\]]+).*?\{(\w+)\}\s+
-           ^\{\{\{\s+
-           ^(http\S+)
-        """, wiki, re.X|re.S|re.M)
+           ^\s*([\w\s.-]+)\s*==+\s+
+           (?: ^\[(http[^\s\]]+) .*? \{(\w+)\} )?
+           .*?
+           ^\{\{\{
+           .*?
+           (\w+://[^"'\s]+)
+        """, src, re.X|re.S|re.M)
         
         # pack into row list
         return [
-           dict(genre=g, title=t, url=u, homepage=h, bitrate=0, listeners=0)
+           dict(genre=g, title=t, url=u, homepage=h, bitrate=0, listeners=0, format=f, listformat="href")
            for t,h,g,u in ls
         ]
 
