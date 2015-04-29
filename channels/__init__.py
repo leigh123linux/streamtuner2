@@ -189,6 +189,7 @@ class GenericChannel(object):
                 #log.UI("FOUND CATEGORY", name, "→select")
                 self.gtk_cat.get_selection().select_iter(iter)
                 self.gtk_cat.set_cursor(model.get_path(iter))
+                self.gtk_cat.scroll_to_cell(model.get_path(iter), None)
                 return True
             if model.iter_has_child(iter):
                 found = self.iter_cats(name, model, model.iter_children(iter))
