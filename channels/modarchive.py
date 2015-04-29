@@ -27,7 +27,7 @@
 
 
 import re
-import ahttp as http
+import ahttp
 from config import conf
 from channels import *
 from config import *
@@ -56,7 +56,7 @@ class modarchive (ChannelPlugin):
     # refresh category list
     def update_categories(self):
 
-        html = http.get("http://modarchive.org/index.php?request=view_genres")
+        html = ahttp.get("http://modarchive.org/index.php?request=view_genres")
 
         rx_current = re.compile(r"""
             >\s+(\w[^<>]+)\s+</h1>  |
@@ -88,7 +88,7 @@ class modarchive (ChannelPlugin):
 
         url = "http://modarchive.org/index.php"
         params = dict(query=self.catmap[cat], request="search", search_type="genre")
-        html = http.get(url, params)
+        html = ahttp.get(url, params)
         entries = []
         
         rx_mod = re.compile("""

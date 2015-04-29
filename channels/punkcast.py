@@ -24,7 +24,7 @@
 
 
 import re
-import ahttp as http
+import ahttp
 from config import conf
 import action
 from channels import *
@@ -56,7 +56,7 @@ class punkcast (ChannelPlugin):
         entries = []
         
         #-- all from frontpage
-        html = http.get("http://www.punkcast.com/")
+        html = ahttp.get("http://www.punkcast.com/")
         for uu in rx_link.findall(html):
             (homepage, id, title) = uu
             entries.append({
@@ -77,7 +77,7 @@ class punkcast (ChannelPlugin):
     def play(self, row):
     
         rx_sound = re.compile("""(http://[^"<>]+[.](mp3|ogg|m3u|pls|ram))""")
-        html = http.get(row["homepage"])
+        html = ahttp.get(row["homepage"])
         
         # look up ANY audio url
         for uu in rx_sound.findall(html):

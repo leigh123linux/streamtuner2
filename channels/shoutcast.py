@@ -23,7 +23,7 @@
 # took place. The former yellow pages API got deprecated.
 
 
-import ahttp as http
+import ahttp
 from json import loads as json_decode
 import re
 from config import *
@@ -66,7 +66,7 @@ class shoutcast(channels.ChannelPlugin):
     # Extracts the category list from www.shoutcast.com,
     # stores a catmap (title => id)
     def update_categories(self):
-        html = http.get(self.base_url)
+        html = ahttp.get(self.base_url)
         #log.DATA( html )
         self.categories = []
         
@@ -103,7 +103,7 @@ class shoutcast(channels.ChannelPlugin):
         params = { "genrename": cat }
         referer = None
         try:
-            json = http.get(url, params=params, referer=referer, post=1, ajax=1)
+            json = ahttp.get(url, params=params, referer=referer, post=1, ajax=1)
             json = json_decode(json)
         except:
             log.ERR("HTTP request or JSON decoding failed. Outdated python/requests perhaps.")

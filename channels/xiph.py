@@ -29,7 +29,7 @@
 
 from config import *
 from uikit import uikit
-import ahttp as http
+import ahttp
 from channels import *
 #from xml.sax.saxutils import unescape as entity_decode, escape as xmlentities
 #import xml.dom.minidom
@@ -104,7 +104,7 @@ class xiph (ChannelPlugin):
           params["search"] = search
       
       #-- get data
-      data = http.get(self.json_url, params=params)
+      data = ahttp.get(self.json_url, params=params)
       #log.DATA(data)
       
       #-- extract

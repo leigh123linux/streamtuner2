@@ -34,7 +34,7 @@
 import re
 from config import *
 from channels import *
-import ahttp as http
+import ahttp
 
 
 # Surfmusik sharing site
@@ -84,7 +84,7 @@ class itunes (ChannelPlugin):
     # Just copy over stream URLs and station titles
     def update_streams(self, cat):
     
-        m3u = http.get(self.base, {"category": cat.lower()})
+        m3u = ahttp.get(self.base, {"category": cat.lower()})
         if len(m3u) < 256:
             log.ERR(m3u)
         

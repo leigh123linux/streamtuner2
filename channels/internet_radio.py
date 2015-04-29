@@ -29,7 +29,7 @@
 from channels import *
 import re
 from config import *
-import ahttp as http
+import ahttp
 from pq import pq
 
 
@@ -47,7 +47,7 @@ class internet_radio (ChannelPlugin):
     # load genres
     def update_categories(self):
     
-        html = http.get(self.base_url)
+        html = ahttp.get(self.base_url)
         rx = re.compile("""="/stations/[-+&.\w\s%]+/">([^<]+)<""")
         cats = rx.findall(html)
         cats = list(set(cats))
@@ -71,7 +71,7 @@ class internet_radio (ChannelPlugin):
         
             # Append HTML source
             html.append(
-                http.get(
+                ahttp.get(
                     self.base_url + "stations/" +
                     cat.lower().replace(" ", "%20") +
                     "/" + ("page"+str(page) if page>1 else "")
@@ -128,7 +128,7 @@ class internet_radio (ChannelPlugin):
                     r.append({
                         "url": url,
                         "genre": self.strip_tags(genres or ""),
-                        "homepage": http.fix_url(homepage or ""),
+                        "homepage": ahttp.fix_url(homepage or ""),
                         "title": (title or "").strip().replace("\n", " "),
                         "playing": (playing or "").strip().replace("\n", " "),
                         "bitrate": int(bitrate or 0),
@@ -167,7 +167,7 @@ class internet_radio (ChannelPlugin):
                 
                 r.append({
                     "title": dir.find("h4").text(),
-                    "homepage": http.fix_url(dir.find("a.small").attr("href")),
+                    "homepage": ahttp.fix_url(dir.find("a.small").attr("href")),
                     "url": url,
                     "genre": dir.find("a[href^='/stations/']").text(),
                     "listeners": int(bl[0]),

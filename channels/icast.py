@@ -37,10 +37,10 @@ import re
 import json
 from config import *
 from channels import *
-import ahttp as http
+import ahttp
 
 
-# Surfmusik sharing site
+# iCast.io API
 class icast (ChannelPlugin):
 
     # control attributes
@@ -54,7 +54,7 @@ class icast (ChannelPlugin):
     # Categories require little post-processing, just dict into list conversion
     def update_categories(self):
         self.categories = []
-        for genre,cats in json.loads(http.get(self.base + "genres"))["genres"].items():
+        for genre,cats in json.loads(ahttp.get(self.base + "genres"))["genres"].items():
             self.categories.append(genre.title())
             self.categories.append([c.title() for c in cats])
 
@@ -84,7 +84,7 @@ class icast (ChannelPlugin):
     def api(self, method, path, params):
         r = []
         while len(r) < int(conf.max_streams):
-            data = json.loads(http.get( self.base + method + path, params))
+            data = json.loads(ahttp.get( self.base + method + path, params))
             r += data["stations"]
             if len(r) >= data["meta"]["total_count"] or len(data["stations"]) < 10:
                 break

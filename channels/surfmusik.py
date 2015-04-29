@@ -33,7 +33,7 @@
 #
 
 import re
-import ahttp as http
+import ahttp
 from config import *
 from channels import *
 
@@ -96,7 +96,7 @@ class surfmusik (ChannelPlugin):
         for cat in cats[lang]:
             r.append(cat)
             if map.get(cat):
-                subcats = rx_links.findall( http.get(base_url + map[cat]) )
+                subcats = rx_links.findall( ahttp.get(base_url + map[cat]) )
                 subcats = [x.replace("+", " ").title() for x in subcats]
                 r.append(sorted(subcats))
 
@@ -131,7 +131,7 @@ class surfmusik (ChannelPlugin):
         
         if path is not None:
             ucat = cat.replace(" ", "+").lower()
-            html = http.get(base_url + path + ucat + ".html")
+            html = ahttp.get(base_url + path + ucat + ".html")
             html = re.sub("&#x?\d+;", "", html)
         
             rx_radio = re.compile(r"""
@@ -150,7 +150,7 @@ class surfmusik (ChannelPlugin):
                 
                 # find mms:// for webtv stations
                 if is_tv:
-                    m = rx_video.search(http.get(url))
+                    m = rx_video.search(ahttp.get(url))
                     if m:
                         url = m.group(1)
                 # just convert /radio/ into /m3u/ link

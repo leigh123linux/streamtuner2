@@ -37,7 +37,7 @@ import re
 import json
 from config import *
 from channels import *
-import ahttp as http
+import ahttp
 
 
 # API endpoints:
@@ -112,7 +112,7 @@ class radiobrowser (ChannelPlugin):
 
     # fetch multiple pages
     def api(self, method, params={}):
-        j = http.get(self.base + method, params)
+        j = ahttp.get(self.base + method, params)
         try:
             return json.loads(j, strict=False)   # some entries contain invalid character encodings
         except:

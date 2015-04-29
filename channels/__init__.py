@@ -30,7 +30,7 @@
 import gtk
 from uikit import uikit, ver as gtk_ver
 from config import *
-import ahttp as http
+import ahttp
 import action
 import favicon
 import os.path
@@ -398,7 +398,7 @@ class GenericChannel(object):
             if url:
                 url = url.group(0).lower().replace(" ", "")
                 url = (url if url.find("www.") == 0 else "www."+url)
-                row["homepage"] = http.fix_url(url)
+                row["homepage"] = ahttp.fix_url(url)
         return row
 
         

@@ -37,7 +37,7 @@
 
 
 import re
-import ahttp as http
+import ahttp
 from config import *
 from channels import *
 import json
@@ -379,7 +379,7 @@ class jamendo (ChannelPlugin):
             }.items()) + list(params.items())
         )
         while (params["offset"] < max) and (len(r) % 200 == 0):
-            data = http.get(self.api_base + method, params)
+            data = ahttp.get(self.api_base + method, params)
             data = json.loads(data)
             if data:
                 r += data["results"]

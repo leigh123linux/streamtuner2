@@ -22,11 +22,10 @@
 
 
 # streamtuner2 modules
-from config import conf
-from uikit import uikit
-import ahttp as http
-from channels import *
 from config import *
+from uikit import uikit
+import ahttp
+from channels import *
 import action
 
 # python modules
@@ -90,7 +89,7 @@ class live365(ChannelPlugin):
         html = ""
         for i in [1, 17, 33, 49]:
             url = "http://www.live365.com/cgi-bin/directory.cgi?first=%i&site=web&mode=3&genre=%s&charset=UTF-8&target=content" % (i, cat.lower())
-            html += http.get(url, feedback=self.parent.status)
+            html += ahttp.get(url, feedback=self.parent.status)
         
         # Extract from JavaScript       
         rx = re.compile(r"""

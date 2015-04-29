@@ -31,7 +31,7 @@ from channels import *
 from config import *
 import action
 from uikit import uikit
-import ahttp as http
+import ahttp
 
 import re
 import json
@@ -80,12 +80,12 @@ class myoggradio(ChannelPlugin):
         # common
         if (cat == "common"):
             # fetch
-            data = http.get(self.api + "common.json")
+            data = ahttp.get(self.api + "common.json")
             entries = json.load(StringIO(data))
             
         # bookmarks
         elif (cat == "personal") and self.user_pw():
-            data = http.get(self.api + "favoriten.json?user=" + self.user_pw()[0])
+            data = ahttp.get(self.api + "favoriten.json?user=" + self.user_pw()[0])
             entries = json.load(StringIO(data))
         
         # unknown
@@ -113,7 +113,7 @@ class myoggradio(ChannelPlugin):
             
             # convert PLS/M3U link to direct ICY stream url
             if conf.myoggradio_morph and self.parent.channel().listformat != "url/direct":
-                row["url"] = http.fix_url(action.srv(row["url"]))
+                row["url"] = ahttp.fix_url(action.srv(row["url"]))
                 
             # prevent double check-ins
             if row["title"] in (r.get("title") for r in self.streams["common"]):
@@ -156,11 +156,11 @@ class myoggradio(ChannelPlugin):
             # just push data in, like the form does
             if form:
                 self.login()
-                http.get(self.api + "c_neu.jsp", params=submit, ajax=1, post=1)
+                ahttp.get(self.api + "c_neu.jsp", params=submit, ajax=1, post=1)
 
             # use JSON interface
             else:
-                http.get(self.api + "commonadd.json", params=submit, ajax=1)
+                ahttp.get(self.api + "commonadd.json", params=submit, ajax=1)
     
             
     # authenticate against MyOggRadio
@@ -168,7 +168,7 @@ class myoggradio(ChannelPlugin):
         login = self.user_pw()    
         if login:
             data = dict(zip(["benutzer", "passwort"], login))
-            http.get(self.api + "c_login.jsp", params=data, ajax=1)
+            ahttp.get(self.api + "c_login.jsp", params=data, ajax=1)
             # let's hope the JSESSIONID cookie is kept
 
 

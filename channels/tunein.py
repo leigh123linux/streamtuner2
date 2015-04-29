@@ -28,7 +28,7 @@ import re
 import json
 from config import *
 from channels import *
-import ahttp as http
+import ahttp
 from xml.etree import ElementTree
 
 
@@ -86,7 +86,7 @@ class tunein (ChannelPlugin):
     # Fetch OPML, convert outline elements to dicts
     def api(self, method):
         r = []
-        opml = http.get(self.base + method)
+        opml = ahttp.get(self.base + method)
         x = ElementTree.fromstring(opml)
         for outline in x.findall(".//outline"):
             r.append(dict(outline.items()))
