@@ -84,7 +84,12 @@ class icast (ChannelPlugin):
     def api(self, method, path, params):
         r = []
         while len(r) < int(conf.max_streams):
-            data = json.loads(ahttp.get( self.base + method + path, params))
+            try:
+                data = ahttp.get(self.base + method + path, params)
+                data = json.loads(data)
+            except Exception as e:
+                log.ERR("No data/json received.", e)
+                return r
             r += data["stations"]
             if len(r) >= data["meta"]["total_count"] or len(data["stations"]) < 10:
                 break
