@@ -9,35 +9,42 @@
         <desc>Open source stream directory.</desc>
 </info>
 
-	<title>MyOggRadio</title>
+<title>MyOggRadio</title>
 
-	<p><link href="http://ehm.homelinux.org/MyOggRadio/">MyOggRadio</link> is an open
-        source internet radio directory project. Since it provides its station list as
-	JSON it's very well supported.</p>
+<p><link href="http://ehm.homelinux.org/MyOggRadio/">MyOggRadio</link> is an open
+source internet radio directory project.</p>
 
-        <p>To help with populating the directory further,
-	streamtuner2 provides an option to share radion station links.
-	Use <guiseq><gui>Station</gui> <gui>Extensions</gui>
-	<gui>Share on MyOggRadio...</gui></guiseq> menu entry to upload the currently
-	selected radio (e.g. from your favourite bookmarks).</p>
+<p>Since it provides its station list as JSON it's very well supported.</p>
 
-        <p>The personal section is empty per default. You need to specify an user account
-	in the settings dialog, and actually bookmark stations in the MyOggRadio web site.
-	Shared entries aren't automatically in the <gui style="button">personal</gui> list.</p>
+<section>
+  <title>Sharing is caring</title>
+  <p>To help with populating the directory further,
+  streamtuner2 provides an option to share radion station links.
+  Use the <guiseq><gui>Station</gui> <gui>Share on MyOggRadio...</gui></guiseq>
+  context menu entry to upload a selected radio (e.g. from your bookmarks).</p>
+</section>
 
-	<note style="tip"><p>MyOggRadio also has a neat cross-platform player:
-	<link href="http://freshcode.club/projects/jmorp">JMyOggRadioPlayer</link>.</p></note>
+<section>
+  <title>Personal</title>
+  <p>The personal section is empty per default. You need to specify an user account
+  in the settings dialog, and actually bookmark stations in the MyOggRadio web site.
+  Shared entries aren't automatically in the <gui style="button">personal</gui> list.</p>
 
-<terms>
+  <note style="tip"><p>MyOggRadio also has a neat cross-platform player:
+  <link href="http://freshcode.club/projects/jmorp">JMyOggRadioPlayer</link>.</p></note>
+</section>
+
+<section>
   <title>Channel options.</title>
+  <terms>
   <item>
     <title><code>Login settings</code></title>
     <p>If you want to upload station infos to MyOggRadio, you need an account there.
     Registration is free and doesn't require personal information nor email address.
-    Specify it as <input>username:</input> separated with a : colon in this field.</p>
+    Specify it as <input>username:password</input> separated with a : colon in this field.</p>
     <note style="advanced">
       <p>Alternatively you can store your account settings in the central
-      <file>~/.netrc</file> config file. Or in <file>~/.config/netc</file> even.</p>
+      <file>~/.netrc</file> config file. Or in <file>~/.config/netrc</file> even.</p>
       <p>Your entry for MyOggRadio should follow the common format:</p>
 <code>
 machine myoggradio.org
@@ -46,15 +53,17 @@ machine myoggradio.org
 </code>
       <p>Which is useful because it's a standard format, and prevents
       leaking authorization data into per-application config stores.
-      Note that a user:pw setting in streamtuner takes precedence
-      though.</p>
+      Note that a user:pw setting in streamtuner still takes precedence
+      however.</p>
     </note>
   </item>
   <item>
     <title><code>stream URL format</code></title>
-    <p>When uploading stations, the streaming URL can be converted into RAW format. You
-    can however leave it as .PLS link file.</p>
+    <p>When uploading stations, the streaming URL can be converted into
+    raw/direct server address. When undefined, station URLs are left as
+    .M3U/.PLS link.</p>
   </item>
-</terms>
+  </terms>
+</section>
 
 </page>
