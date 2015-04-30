@@ -46,8 +46,47 @@
 </div>
 <div id="" class="sect"><div class="inner">
 <div class="hgroup"><h2 class="title"><span class="title">GUI options</span></h2></div>
-<div class="region"><div class="contents"><p class="p">There are also --gtk3 and --gtk2 command line options. Usually the right toolkit
-	is picked depending on Python version. But you can manually override this.</p></div></div>
+<div class="region"><div class="contents">
+<p class="p">There are also a few command line flags, which influence the
+        graphical runtime.</p>
+<div class="list"><div class="inner"><div class="region"><ul class="list">
+<li class="list">
+<div class="title title-item"><h3><span class="title">--gtk3</span></h3></div>
+<p class="p">Picks the Gtk3 toolkit. Which is default for Python3 runs.
+            But could also be used for Python2 instead of pygtk.</p>
+</li>
+<li class="list">
+<div class="title title-item"><h3><span class="title">--gtk2</span></h3></div>
+<p class="p">Fake option. Python2 runs on Gtk2 per default. And Py3 is
+            bound to Gtk3/PyGObject anyway.</p>
+</li>
+<li class="list">
+<div class="title title-item"><h3><span class="title">-D</span></h3></div>
+<p class="p">Enable debug output on the console. Identical to the debug
+            configuration dialog option.</p>
+</li>
+<li class="list">
+<div class="title title-item"><h3><span class="title">-d plugin</span></h3></div>
+<p class="p">Disable a named plugin. Useful if it hangs on startup. So
+            <span class="cmd">-d xiph</span> can temporarily disable it. Note that this
+            flag gets set durably by clicking [save] in the config
+            dialog.</p>
+</li>
+<li class="list">
+<div class="title title-item"><h3><span class="title">-e plugin</span></h3></div>
+<p class="p">Enable a channel/feature plugin just once.</p>
+</li>
+<li class="list">
+<div class="title title-item"><h3><span class="title">-h</span></h3></div>
+<p class="p">Print help list with all known command line flags. Note that
+            this excludes details on the CLI action commands.</p>
+</li>
+<li class="list">
+<div class="title title-item"><h3><span class="title">-x</span></h3></div>
+<p class="p">Exit right away. A flag only used for testing.</p>
+</li>
+</ul></div></div></div>
+</div></div>
 </div></div>
 <div class="sect sect-links" role="navigation">
 <div class="hgroup"></div>
