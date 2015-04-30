@@ -126,13 +126,13 @@ def available(url):
     
 # copy image from url into icons/ directory
 def localcopy(url, download=False):
-    if url.startswith("http"):
+    if url and url.startswith("http"):
         fn = re.sub("[:/]", "_", url)
         fn = conf.dir + "/icons/" + fn
         if os.path.exists(fn):
             return fn
         elif download:
-            imgdata = ahttp.get(url, binary=1)
+            imgdata = ahttp.get(url, binary=1, verify=False)
             with open(fn, "wb") as f:
                 f.write(imgdata)
                 f.close()
