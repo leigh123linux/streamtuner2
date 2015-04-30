@@ -21,11 +21,11 @@
 # checked, then its content regexped to guess the list format.
 # Lastly a playlist format suitable for audio players recreated.
 # Which is somewhat of a security feature; playlists get cleaned
-# up this way. The conversion is not strictly necessary for all
-# players, as basic PLS/M3U is supported by most.
+# up this way. The conversion is not strictly necessary, because
+# baseline PLS/M3U is understood by most players.
 #
-# And finally this module is also used by exporting and (perhaps
-# in the future) playlist importing features (e.g. in DND hooks).
+# And finally this module is also used by exporting and playlist
+# importing features (e.g. by the drag'n'drop module).
 #
 # Still needs some rewrites to transition off the [url] lists,
 # and work with full [rows] primarily. (And perhaps it should be
@@ -304,11 +304,11 @@ def http_probe_get(url):
 
 
 
-# Extract URLs from playlist formats:
+# Extract URLs and meta infos (titles) from playlist formats.
 #
-# It's entirely regex-based at the moment, because that's more
-# resilient against mailformed XSPF or JSON.
-# Needs proper extractors later for real playlist *imports*.
+# It's mostly regex-based at the moment, because that's more
+# resilient against mailformed XSPF or JSON. But specialized
+# import helpers can be added as needed.
 #
 class extract_playlist(object):
 
@@ -385,6 +385,7 @@ class extract_playlist(object):
             log.DATA("pair-rx", rows)
 
         return self.uniq(rows)
+
 
     # Single field
     def field(self, name, rules, src_part):
@@ -513,6 +514,7 @@ class extract_playlist(object):
         comb.update(row)
         return comb
 
+
     # Probe url "extensions" for common media types
     # (only care about the common audio formats, don't need an exact match or pre-probing in practice)
     def mime_guess(self, url):
@@ -526,22 +528,33 @@ class extract_playlist(object):
 
 
 
-# Save rows in one of the export formats.
+# Save rows[] in one of the export formats.
 #
-# The export() version uses urls[]+row/title= as input, converts it into
-# a list of rows{} beforehand.
+#  → The export() version uses urls[] and a template row{} as input,
+# converts it into a list of complete rows{} beforehand. It's mostly
+# utilized to expand a source playlist, merge in alternative streaming
+# server addresses.
 #
-# While store() requires rows{} to begin with, to perform a full
-# conversion. Can save directly to a file name.
+#  → With store() a full set of rows[] is required to begin with, as
+# it performs a complete serialization.  Can save directly to a file.
+# Which is often used directly by export functions, when no internal
+# .pls/.m3u urls should be expanded or converted.
+#
+# Note that this can chain to convert_playlist() itself. So there's
+# some danger for neverending loops in here. Never happened, but some
+# careful source= and dest= parameter use is advised. Use source="asis"
+# or "srv" to leave addresses alone, or "href" for input probing.
 #
 class save_playlist(object):
 
     # if converting
     source = "pls"
+ 
     # expand multiple server URLs into duplicate entries in target playlist
     multiply = True
+ 
     # constructor
-    def __init__(self, source, multiply):
+    def __init__(self, source="asis", multiply=False):
         self.source = source
         self.multiply = multiply
     
@@ -556,6 +569,7 @@ class save_playlist(object):
             row.update(url=url)
             rows.append(row)
         return self.store(rows, dest)
+
 
     # Export a playlist from rows{}
     def store(self, rows=None, dest="pls"):
@@ -584,6 +598,7 @@ class save_playlist(object):
         # call conversion schemes
         converter = getattr(self, dest) or self.pls
         return converter(rows)
+
 
     # save directly
     def file(self, rows, dest, fn):
