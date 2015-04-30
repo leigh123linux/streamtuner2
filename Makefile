@@ -9,6 +9,7 @@ DEST    := /usr/share/streamtuner2
 INST    := install -m 644
 PACK    := xpm
 DEPS    := -n $(NAME) -d python -d python-pyquery -d python-gtk2 -d python-requests -d python-keybinder
+DEPS_A  := -n $(NAME) -d pygtk -d python2 -d python2-cssselect -d python2-keybinder2 -d python2-lxml -d python2-pillow -d python2-pyquery -d python2-xdg
 OPTS    := -s src -u packfile,man,fixperms -f --prefix=$(DEST) --deb-compression xz --rpm-compression xz --exe-autoextract
 
 # targets
@@ -47,6 +48,8 @@ tar:
 	$(PACK) $(OPTS) $(DEPS) -t $@ -p "$(NAME)-VERSION.bin.txz" st2.py
 exe:
 	$(PACK) $(OPTS) $(DEPS) -t $@ -p "$(NAME)-VERSION.exe" st2.py
+arch:
+	$(PACK) $(OPTS) $(DEPS_A) -t $@ -p "$(NAME)-VERSION.arch.txz" st2.py
 pyz:
         #@BUG: relative package references leave a /tmp/doc/ folder
 	$(PACK) -u packfile -s src -t zip --zip-shebang "/usr/bin/env python"	\

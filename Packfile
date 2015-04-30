@@ -15,3 +15,6 @@ rpm:
 exe:
 src:
 tar:
+
+arch:
+	sed -i '1 s/python/python2/' usr/bin/streamtuner2
