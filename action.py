@@ -206,9 +206,10 @@ def interpol(cmd, url, source="pls", row={}):
     for dest, rx in placeholder_map.items():
         if re.search(rx, cmd, re.X):
             # from .pls to .m3u
-            fn_or_urls = convert_playlist(url, listfmt(source), listfmt(dest), local_file=True, row=row)
+            if not conf.playlist_asis:
+                url = convert_playlist(url, listfmt(source), listfmt(dest), local_file=True, row=row)
             # insert quoted URL/filepath
-            return re.sub(rx, quote(fn_or_urls), cmd, 2, re.X)
+            return re.sub(rx, quote(url), cmd, 2, re.X)
 
     return "/bin/false"
 
