@@ -577,7 +577,7 @@ class GenericChannel(object):
     
     # remove SGML/XML entities
     def entity_decode(self, s):
-        return xml.sax.saxutils.unescape(s)
+        return xml.sax.saxutils.unescape(s).replace("&nbsp;", " ")
     
     # convert special characters to &xx; escapes
     def xmlentities(self, s):
