@@ -29,6 +29,7 @@ import re
 from config import *
 from channels import *
 import ahttp
+import action
 
 
 # Basic HTML scraping
@@ -36,6 +37,7 @@ class publicradiofan (ChannelPlugin):
 
     # control attributes
     has_search = True
+    format = "mp3"
     listformat = "href"
     titles = dict(listeners=False, bitrate=False, playing="Description")
     categories = ["adult alternative", "adult contemporary", "blues", "business", "classical", "community", "contemporary", "country", "easy", "education", "ethnic", "folk", "free-form", "full service", "government", "international", "jazz", "military", "news", "nostalgia", "oldies", "reading", "regional", "religious", "rock", "seasonal", "sports", "student", "talk", "traffic", "urban", "variety", "world", "youth"]
@@ -51,6 +53,7 @@ class publicradiofan (ChannelPlugin):
 
         html = ahttp.get("http://www.publicradiofan.com/cgibin/statsearch.pl?format={}&lang=".format(cat))
         html = re.split("<H2>", html, 2, re.S)[1]
+        probe = action.extract_playlist()
 
         r = []
         for html in re.split("<TR VALIGN=TOP>", html, 0):
@@ -68,6 +71,7 @@ class publicradiofan (ChannelPlugin):
                     title = m.group("title"),
                     playing = m.group("descr"),
                     homepage = m.group("homepage"),
+                    listformat = probe.probe_ext(m.group("url")) or "srv",
                 ))
         return r
 
