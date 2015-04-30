@@ -36,7 +36,7 @@ import action
 class publicradiofan (ChannelPlugin):
 
     # control attributes
-    has_search = True
+    has_search = False
     format = "mp3"
     listformat = "href"
     titles = dict(listeners=False, bitrate=False, playing="Description")
