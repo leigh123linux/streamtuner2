@@ -7,7 +7,7 @@
 # type: channel
 # category: radio
 # config:
-#    { name: dirble_api_key,  value: "a0bdd7b8efc2f5d1ebdf1728b65a07ece4c73de5",  type: text,  description: Required API access key. }
+#    { name: dirble_api_key,  value: "",  type: text,  description: Alternative API access key. }
 # png:
 #    iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAA3NCSVQICAjb4U/gAAACP0lE
 #    QVQokVVSO0+UURA9M/d+jyWbBVcQFSQhPqJSYBRFA5pVoFGURApjYYWtvYUNP8FKOwsttDFq
@@ -24,15 +24,9 @@
 # priority: optional
 # documentation: http://dirble.com/developer/api
 #
-# Hmm ok, the new v2 API isn't so bad after all.
-# It actually contains streaming urls, and even
-# station homepages now.
 #
-#  · No idea what status: or timedout: signify.
-#  · Stream alternatives aren't yet sorted.
-#  · Leave favicons to regular behaviour,
-#    station banners are seemingly inaccessible.
-#
+# Server responses take a few seconds, and JSON
+# decoding is surprisingly slow.
 
 
 import json
@@ -41,7 +35,18 @@ from channels import *
 import ahttp
 
 
-# 
+# Dirble
+#
+# Hmm ok, the new v2 API isn't so bad after all.
+# It actually contains streaming urls, and even
+# station homepages now.
+#
+#  · No idea what status: or timedout: mean,
+#    just mapped to `deleted` and `status`
+#  · Stream alternatives aren't yet sorted.
+#  · Leave favicons to regular behaviour,
+#    station banners are not accessible per CDN.
+#
 class dirble (ChannelPlugin):
 
     # control flags
@@ -49,6 +54,7 @@ class dirble (ChannelPlugin):
     listformat = "srv"
     titles = dict(listeners=False, playing="Location")
     base = "http://api.dirble.com/v2/{}"
+    key = "a0bdd7b8efc2f5d1ebdf1728b65a07ece4c73de5"
 
 
     # Retrieve cat list and map
@@ -93,21 +99,25 @@ class dirble (ChannelPlugin):
             format = s["content_type"],
             bitrate = s["bitrate"],
            # img = r["image"]["image"]["thumb"]["url"], # CDN HTTPS trip up requests.get
-            status = "" if s["status"] else "gtk-stop",
+            state = self.state_map[int(s["status"])] if s["status"] in [0,1,2] else "",
             deleted = s["timedout"],
         )
+        
+    state_map = ["gtk-media-pause", "gtk-media-next", "gtk-media-rewind"]
 
 
     # Patch API url together, send request, decode JSON list
     def api(self, method, **params):
-        params["token"] = conf.dirble_api_key
+        params["token"] = conf.dirble_api_key or self.key
         try:
+            # HTTP request and JSON decoding take a while
             r = ahttp.get(self.base.format(method), params)
             r = json.loads(r)
             if isinstance(r, dict) and "error" in r:
                 log.ERR(r["error"])
                 raise Exception
-            if len(r) > conf.max_streams:
+            # cut down stream list
+            if len(r) > int(conf.max_streams):
                 del r[int(conf.max_streams):]
         except Exception as e:
             log.ERR("Dirble API retrieval failure:", e)
