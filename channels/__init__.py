@@ -10,10 +10,11 @@
 # url: http://fossil.include-once.org/streamtuner2/
 # pack:
 #    bookmarks.py configwin.py streamedit.py history.py search.py links.py 
-#    icast.py internet_radio.py itunes.py jamendo.py live365.py global_key.py
+#    internet_radio.py itunes.py jamendo.py live365.py global_key.py
 #    modarchive.py myoggradio.py punkcast.py radiobrowser.py radiotray.py
 #    shoutcast.py surfmusik.py timer.py tunein.py xiph.py youtube.py
 #    exportcat.py useragentswitcher.py somafm.py dnd.py ubuntuusers.py
+#    dirble.py filtermusic.py
 # config: -
 # priority: core
 #
