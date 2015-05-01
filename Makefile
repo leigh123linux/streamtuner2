@@ -9,7 +9,7 @@ DEST    := /usr/share/streamtuner2
 INST    := install -m 644
 PACK    := xpm
 DEPS    := -n $(NAME) -d python -d python-pyquery -d python-gtk2 -d python-requests -d python-keybinder
-DEPS_A  := -n $(NAME) -d pygtk -d python2 -d python2-cssselect -d python2-keybinder2 -d python2-lxml -d python2-pillow -d python2-pyquery -d python2-xdg
+DEPS_A  := -n $(NAME) -d pygtk -d python2 -d python2-cssselect -d python2-keybinder2 -d python2-lxml -d python2-pillow -d python2-pyquery -d python2-xdg -d python2-requests
 OPTS    := -s src -u packfile,man,fixperms -f --prefix=$(DEST) --deb-compression xz --rpm-compression xz --exe-autoextract
 
 # targets
