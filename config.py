@@ -259,7 +259,7 @@ class ConfigDict(dict):
     # Shortcut to `state.json` loading (currently selected categories etc.)
     def state(self, module=None, d={}):
         if not d:
-            d.update(conf.load("state"))
+            d.update(conf.load("state") or {})
         if module:
             return d.get(module, {})
         return d
