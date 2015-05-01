@@ -358,12 +358,10 @@ class StreamTunerTwo(gtk.Builder):
 
 
 
-    # Shortcut to statusbar and progressbar.
-    # Either pass a string "" or a float 0.5, the message and pulse will be automatically
-    # removed after 5 seconds now.
+    # Shortcut to statusbar and progressbar (receives either a string, or a float).
     def status(self, text=None, timeout=3):
-        t = time.time() + timeout
-
+        self.status_last = time.time() + timeout
+        gobject.timeout_add(int(timeout*1000), self.status_clear)
         # progressbar
         if isinstance(text, (int, float)):
             if (text <= 0):  # unknown state
@@ -373,23 +371,21 @@ class StreamTunerTwo(gtk.Builder):
             else:  # show percentage
                 uikit.do(self.progress.show, immediate=1)
                 uikit.do(self.progress.set_fraction, text, immediate=1)
-            self.status_last = t
-            
         # add text
         elif isinstance(text, (str)):
             uikit.do(self.statusbar.set_text, text)
-            self.status_last = t
+        # clean up
+        else:
+            self.status_clear(anyway=True)
 
-        # timeout
-        if not text or time.time() >= self.status_last:
+    # Clean up after 3 seconds
+    def status_clear(self, anyway=False):
+        if anyway or time.time() >= self.status_last:
             self.statusbar.set_text("")
             self.progress.hide()
             return False
-        # add timer
         else:
-            gobject.timeout_add(int(timeout*1000), self.status)
-        return True
-    status_last = 0
+            return True
 
 
     # load plugins from /usr/share/streamtuner2/channels/
