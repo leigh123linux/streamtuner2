@@ -6,7 +6,7 @@
 # type: channel
 # category: collection
 # config:
-#   { name: 8tracks_api_key,  value: "",  type: text,  description: Custom API access key. }
+#   { name: eighttracks_apikey,  value: "",  type: text,  description: Custom API access key. }
 # priority: optional
 # url: http://8tracks.com/
 # documentation: https://8tracks.com/developers
@@ -24,14 +24,11 @@ import ahttp as http
 
 
 # Surfmusik sharing site
-class _8tracks (ChannelPlugin):
+class eighttracks (ChannelPlugin):
 
     # description
-    title = "8tracks"
-    module = "8tracks"
-    homepage = "http://8tracks.com/"
     has_search = False
-    listformat = "audio/x-scpls"
+    listformat = "pls"
     titles = dict(listeners=False, playing="Location")
 
     categories = ["none"]
@@ -55,6 +52,3 @@ class _8tracks (ChannelPlugin):
         return r
 
 
-# Need to rename the class, else plugin loader won't find it.
-globals()["8tracks"] = _8tracks
-_8tracks = None
