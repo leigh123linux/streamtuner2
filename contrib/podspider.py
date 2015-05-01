@@ -8,7 +8,7 @@
 # depends: lxml.etree, pyquery
 # url: http://www.radiograbber.de/
 # status: unsupported
-# priority: separate
+# priority: never
 #
 # Podspider is one part of the commercial Windows "Radiograbber" software.
 # A demo version is available from http://www.surfmusik.net/downloads/download.php?pid=13
@@ -197,11 +197,6 @@ class podspider (ChannelPlugin):
                     r.append(row)
 
         return r
-
-
-
-
-
 
 
 
