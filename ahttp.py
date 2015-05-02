@@ -33,7 +33,7 @@ def progress_feedback(*args):
 
   # send to main win
   if feedback:
-    try: [feedback(d) for d in args]
+    try: [feedback(d, timeout=50) for d in args]
     except: pass
 
 
@@ -53,7 +53,7 @@ session.headers.update({
 #
 #  Well, it says "get", but it actually does POST and AJAXish GET requests too.
 #
-def get(url, params={}, referer="", post=0, ajax=0, binary=0, feedback=None, content=True, verify=False):
+def get(url, params={}, referer="", post=0, ajax=0, binary=0, feedback=None, content=True, verify=False, statusmsg=None):
 
     # statusbar info
     progress_feedback(url)
@@ -80,18 +80,19 @@ def get(url, params={}, referer="", post=0, ajax=0, binary=0, feedback=None, con
     log.HTTP(">>>", r.request.headers );
     log.HTTP("<<<", r.headers );
             
-    # finish, clean statusbar
-    #progress_feedback(0.9)
-    #progress_feedback("")
-
     # result
     log.INFO("Content-Length", len(r.content) )
+    statusmsg and progress_feedback(statusmsg)
     if not content:
         return r
     elif binary:
-        return r.content
+        r = r.content
     else:
-        return r.text
+        # Receival is actually happening here
+        r = r.text
+    # clean statusbar
+    statusmsg and progress_feedback()
+    return r
 
 
 #-- Append missing trailing slash to URLs
