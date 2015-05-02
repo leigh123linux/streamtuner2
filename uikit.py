@@ -112,7 +112,7 @@ class uikit:
                     # cell renderer
                     if (cell[2] == "pixbuf"):
                         rend = gtk.CellRendererPixbuf()  # img cell
-                        #rend.set_fixed_size(24, 24)
+                        rend.set_fixed_size(24, 24)
                         if (cell[1] == str):
                             cell[3]["stock_id"] = datapos  # for stock icons
                             expand = False
@@ -220,6 +220,7 @@ class uikit:
         #log.DATA(".tree", entries)
 
         # add entries
+        main = None
         for entry in entries:
             if isinstance(entry, (str,unicode)):
                 main = ls.append(None, [str(entry), icon])
@@ -440,11 +441,11 @@ class uikit:
     # adds background color to widget,
     # eventually wraps it into a gtk.Window, if it needs a container
     @staticmethod
-    def bg(w, color="", where=["bg"]):
+    def bg(w, color="", where=["bg"], wrap=1):
         """ this method should be called after widget creation, and before .add()ing it to container """
         if color:
             # wrap unstylable widgets into EventBox
-            if not isinstance(w, gtk.Window):
+            if wrap and not isinstance(w, (gtk.Window, gtk.EventBox)):
                 wrap = gtk.EventBox()
                 wrap.add(w)
                 ##########wrap.set_property("visible", True)
@@ -452,7 +453,7 @@ class uikit:
             # copy style object, modify settings
             s = w.get_style().copy()
             c = w.get_colormap().alloc_color(color)
-            for state in (gtk.STATE_NORMAL, gtk.STATE_SELECTED):
+            for state in (gtk.STATE_NORMAL, gtk.STATE_SELECTED, gtk.STATE_ACTIVE):
                 s.bg[state] = c
             w.set_style(s)
             # probably redundant, but better safe than sorry:
