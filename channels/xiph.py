@@ -213,10 +213,10 @@ class xiph (ChannelPlugin):
       # Assemble
       for homepage, title, listeners, playing, tags, url, bits, fmt in ls:
           r.append(dict(
-              genre = clean(tags),
-              title = clean(title),
+              genre = unhtml(tags),
+              title = unhtml(title),
               homepage = ahttp.fix_url(homepage),
-              playing = clean(playing),
+              playing = unhtml(playing),
               url = "http://dir.xiph.org{}".format(url),
               listformat = "xspf",
               listeners = int(listeners),
@@ -519,9 +519,4 @@ def bitrate(str):
 rx_fmt = re.compile("ogg|mp3|mp4|theora|nsv|webm|opus|mpeg")
 def guess_format(str):
     return rx_fmt.findall(str.lower() + "mpeg")[0]
-
-# Clean up HTML text snippets
-def clean(str):
-    return nl(entity_decode(strip_tags(str)))
-
 

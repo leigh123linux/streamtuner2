@@ -68,10 +68,10 @@ class delicast (ChannelPlugin):
                 r.append(dict(
                     homepage = homepage,
                     playing = country,
-                    title = self.entity_decode(title).strip(),
+                    title = unhtml(title),
                     url = "urn:delicast",
                     genre = cat,
-             #      genre = self.entity_decode(self.strip_tags(tags)).strip(),
+             #      genre = unhtml(tags),
                 ))
         return r
       

@@ -44,7 +44,7 @@ import inspect
 # Only export plugin classes
 __all__ = [
     "GenericChannel", "ChannelPlugin", "use_rx",
-    "entity_decode", "strip_tags", "to_int", "nl"
+    "entity_decode", "strip_tags", "nl", "unhtml", "to_int"
 ]
 
 
@@ -724,6 +724,8 @@ rx_spc = re.compile("\s+")
 def nl(str):
     return rx_spc.sub(" ", str).strip()
 
-
+# Combine html tag, escapes and whitespace cleanup
 def unhtml(str):
     return nl(entity_decode(strip_tags(str)))
+
+
