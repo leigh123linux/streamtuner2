@@ -37,7 +37,7 @@ class somafm (ChannelPlugin):
     # description
     has_search = False
     listformat = "pls"
-    format = "audio/aac"
+    audioformat = "audio/aac"
     titles = dict(listeners=False, playing="Description")
 
     categories = ["listen", "support"]

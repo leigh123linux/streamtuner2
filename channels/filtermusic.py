@@ -37,7 +37,7 @@ class filtermusic (ChannelPlugin):
     # control attributes
     has_search = False
     listformat = "srv"
-    format = "mp3"
+    audioformat = "audio/mpeg"
     titles = dict(listeners=False, bitrate=False, playing=False)
     categories = ["House / Dance", "Lounge Grooves", "Rock / Metal", "Breaks / Drum'n'Bass", "Various / Independent", "Downtempo / Ambient", "60's / 70's / 80's / 90's", "Hits / Mainstream", "Electronica / Industrial", "Techno / Trance", "HipHop / RnB", "Classical", "Eclectic", "Funk / Soul / Disco", "Reggae / Dub / Dancehall", "International / Ethnic", "Jazz", "Latin / Salsa / Tango"]
 
