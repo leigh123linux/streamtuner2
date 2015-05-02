@@ -1,10 +1,10 @@
 # encoding: UTF-8
 # api: streamtuner2
 # title: Xiph.org
-# description: ICEcast radio directory. Now utilizes a cached JSON API.
+# description: ICEcast radios. Scans per JSON API, slow XML, or raw directory.
 # type: channel
 # url: http://dir.xiph.org/
-# version: 0.4
+# version: 0.5
 # category: radio
 # config: 
 #    { name: xiph_min_bitrate, value: 64, type: int, description: "Minimum bitrate; filter lesser quality streams.", category: filter }
@@ -17,21 +17,25 @@
 #   5cClDWLwugQRIRiU5UdPCoD6S89jhV6pks9WG6fuwtBtF5v72vC1v+B86SsM+jD56hjnyiM0lRrAbofeXjQJLdE/78jbXSU5166I6f5VeeDdKdq6GtlSd0QkVU+8XsQhlt9W6izbZ5aMKWgtp2WT/yUHd0xSYU7i
 #   dsPQ+1WMKIsJD08wEV2HGLeRyNMjawqRxhuKBfdgz1m7fI/4mVX+ZGxmgniOoJv+QZHGAMC7p60ZnHkC8HfzZmLTBCd9af9ccnqMc9HTdmFe4kLkJbH/4h0xVtcu+SP/C78AL6btab6woPcAAAAASUVORK5CYII=
 #
-# Xiph.org maintains the Ogg streaming standard and Vorbis
-# audio compression format, amongst others.  The ICEcast
-# server is an alternative to SHOUTcast.
+# Xiph.org maintains the Ogg streaming standard and Vorbis,
+# Opus, FLAC audio, and Theora video compression formats.
+# The ICEcast server is a modern alternative to SHOUTcast.
 #
 # It also provides a directory listing of known internet
 # radio stations, only a handful of them using Ogg though.
-# The category list is hardwired in this plugin.
+# The category list is hardwired in this plugin. And there
+# are three station fetching modes now:
 #
-# And there are three fetch-modes now:
-#  → "Cache" retrieves a refurbished JSON station list,
+#  → "JSON cache" retrieves a refurbished JSON station list,
 #    both sliceable genres and searchable.
-#  → "XML" fetches the olden YP.XML once, buffers it,
-#    and tries to uncover per-genre categories from it.
-#  → "HTML" extracts from the raw dir.xiph.org directory,
-#    where homepages and listener/max infos are available.
+#
+#  → "Clunky XML" fetches the olden YP.XML, which is really
+#    slow, then slices out genres. No search.
+#
+#  → "Forbidden Fruits" extracts from dir.xiph.org HTML pages,
+#    with homepages and listener/max infos available. Search
+#    is also possible.
+#
 
 
 from config import *
@@ -178,16 +182,20 @@ class xiph (ChannelPlugin):
   def from_raw_html(self, cat, search=None, use_rx=False):
 
       # Build request URL
+      by_format = {t.lower(): t for t in self.categories[-1]}
       if search:
-          return []
-      elif cat in ("Ogg_Vorbis", "NSV", "WebM", "Opus"):
-          url = "http://dir.xiph.org/by_format/{}".format(cat)
+          url = "http://dir.xiph.org/search?search={}".format(search)
+          cat = "search"
+      elif by_format.get(cat):
+          url = "http://dir.xiph.org/by_format/{}".format(by_format[cat])
       elif cat:
           url = "http://dir.xiph.org/by_genre/{}".format(cat.title())
 
       # Collect all result pages
       html = ahttp.get(url)
       for i in range(1,4):
+          if html.find('page={}">{}</a></li>'.format(i, i+1)) < 0:
+              break
           self.status(i/5.1)
           html += ahttp.get(url, {"search": cat.title(), "page": i})
       try: html = html.encode("raw_unicode_escape").decode("utf-8")
@@ -209,7 +217,8 @@ class xiph (ChannelPlugin):
           .*? class="format"\s+title="([^"]+)"
           .*? /by_format/([^"]+)
       """, html, re.X|re.S)
-      
+      print ls
+            
       # Assemble
       for homepage, title, listeners, playing, tags, url, bits, fmt in ls:
           r.append(dict(
@@ -487,7 +496,8 @@ class xiph (ChannelPlugin):
             "oi"
         ],
         "darkwave",
-        "Ogg_Vorbis", "NSV", "WebM", "Opus",
+        "/FORMAT",
+        ["Ogg_Vorbis", "Ogg_Theora", "Opus", "NSV", "WebM"],
     ]
 
 
