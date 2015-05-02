@@ -43,7 +43,8 @@ import inspect
 
 # Only export plugin classes
 __all__ = [
-    "GenericChannel", "ChannelPlugin", "use_rx"
+    "GenericChannel", "ChannelPlugin", "use_rx",
+    "entity_decode", "strip_tags", "to_int", "nl"
 ]
 
 
@@ -167,8 +168,8 @@ class GenericChannel(object):
 
 
     # Statusbar stub (defers to parent/main window, if in GUI mode)
-    def status(self, *v):
-        if self.parent: self.parent.status(*v)
+    def status(self, *args, **kw):
+        if self.parent: self.parent.status(*args, **kw)
         else: log.INFO("status():", *v)
 
 
@@ -549,9 +550,6 @@ class GenericChannel(object):
 
     
 
-    # remove html <tags> from string        
-    def strip_tags(self, s):
-        return re.sub("<.+?>", "", s)
         
     # convert audio format nick/shortnames to mime types, e.g. "OGG" to "audio/ogg"
     def mime_fmt(self, s):
@@ -576,27 +574,6 @@ class GenericChannel(object):
         #
         return s
     
-    # remove SGML/XML entities
-    def entity_decode(self, str):
-        return re.sub('&(#?(x?))(\w+);', self._entity, str)
-    def _entity(self, sym):
-        num, hex, name = sym.groups()
-        if hex:
-            return unichr(int(name, base=16))
-        elif num:
-            return unichr(int(name))
-        else:
-            return unichr(htmlentitydefs.name2codepoint[name])
-    
-    # convert special characters to &xx; escapes
-    def xmlentities(self, s):
-        return xml.sax.saxutils.escape(s)
-    
-    # Extracts integer from string
-    def to_int(self, s):
-        i = re.findall("\d+", s) or [0]
-        return int(i[0])
-
 
 
 
@@ -689,6 +666,7 @@ class ChannelPlugin(GenericChannel):
         parent.notebook_channels.set_tab_reorderable(vbox, True)
 
 
+
 # WORKAROUND for direct channel module imports,
 # eases instantiations without GUI a little,
 # reducing module dependencies (conf. / ahttp. / channels. / parent.) would be better
@@ -715,3 +693,37 @@ def use_rx(func):
     return try_both
 
 
+
+#---------------- utility functions -------------------
+# Used by raw page extraction in channel modules
+
+
+# Strip html <tags> from string
+def strip_tags(s):
+    return re.sub("<.+?>", "", s)
+
+# remove SGML/XML entities
+def entity_decode(str):
+    return re.sub('&(#?(x?))(\w+);', _entity, str)
+def _entity(sym):
+    num, hex, name = sym.groups()
+    if hex:
+        return unichr(int(name, base=16))
+    elif num:
+        return unichr(int(name))
+    else:
+        return unichr(htmlentitydefs.name2codepoint[name])
+
+# Extracts integer from string
+def to_int(s):
+    i = re.findall("\d+", s) or [0]
+    return int(i[0])
+
+# Strip newlines
+rx_spc = re.compile("\s+")
+def nl(str):
+    return rx_spc.sub(" ", str).strip()
+
+
+def unhtml(str):
+    return nl(entity_decode(strip_tags(str)))
