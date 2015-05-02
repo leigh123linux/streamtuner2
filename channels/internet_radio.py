@@ -85,18 +85,20 @@ class internet_radio (ChannelPlugin):
 
         # Alternatively try regex or pyquery parsing
         #log.HTTP(html)
-        for use_rx in [not conf.pyquery, conf.pyquery]:
-            try:
-                entries = (self.with_regex(html) if use_rx else self.with_dom(html))
-                if len(entries):
-                    break
-            except Exception as e:
-                log.ERR(e)
-                continue
+        entries = self.from_html(html)
             
         # fin
         log.FINISHED("internet_radio.update_streams")
         return entries
+
+
+    # Switch update method
+    @use_rx
+    def from_html(self, html, use_rx):
+        if use_rx:
+            return self.with_regex(html)
+        else:
+            return self.with_dom(html)
 
 
     # Regex extraction
