@@ -129,10 +129,10 @@ class internet_radio (ChannelPlugin):
                     # transform data
                     r.append({
                         "url": url,
-                        "genre": self.strip_tags(genres or ""),
+                        "genre": strip_tags(genres or ""),
                         "homepage": ahttp.fix_url(homepage or ""),
-                        "title": (title or "").strip().replace("\n", " "),
-                        "playing": (playing or "").strip().replace("\n", " "),
+                        "title": nl(title or ""),
+                        "playing": nl(playing or ""),
                         "bitrate": int(bitrate or 0),
                         "listeners": int(listeners or 0),
                         "format": "audio/mpeg", # there is no stream info on that, but internet-radio.org.uk doesn't seem very ogg-friendly anyway, so we assume the default here
