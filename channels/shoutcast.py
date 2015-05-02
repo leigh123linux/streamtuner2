@@ -14,7 +14,7 @@
 #   /PM9BJLoh3Q6zVQqBZfLhXq9jlAohHA4LHTzhvqJ2+02c7kcgsEgfD4fRFFEPp+HZVmUJEk41kAURcHv99Pj8cAwDGiaBkVR0C0GAJDsW7VajYVCgYlEguVymZZlsVKpcG1tlYd5fX8AAIqiCF6vF6VSibIsI5lMYvvDE1xymwDu/ec5BhkcIJPJIHJzFqf372P1cgMf
 #   f46cLIKu61yJXufr5VO0voyzEZ/k8sI4s9ns0RFarRZjL56inIshekWGenYS6IzhR9PCntRBIBCw8XsiFItFNLMxPJgfwVjDi4Y8g2b9DILaMKZGd2Ca5tEGiqJg2xjF200H6J+AvKtjeG8T3998xW5nAk6n08bviSBJEqhewLlpN4bMHfwxfuH5J8J98SGerS/B4XDY
 #   d+FwQ6rVKm8vXeP++6vku2lu3FEZubFIXdc5qNm2x93ILZobszRfaYwuaIzH4wOFfafwt7CFb59/Y0uYx8rLR1BVtXd1u2AzCMwsQg6cx+O5uWOFBxAGnfNJ8Q/z/DNTtgbnsgAAAABJRU5ErkJggg==
-# depends: pq, re, http
+# depends: re, ahttp
 #
 # Shoutcast is a server software for audio streaming. It automatically spools
 # station information on shoutcast.com
@@ -28,9 +28,7 @@ from json import loads as json_decode
 import re
 from config import *
 from channels import *
-from pq import pq
 import channels
-from compat2and3 import urllib
 
 
 
