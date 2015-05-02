@@ -35,7 +35,7 @@ import ahttp
 import action
 import favicon
 import os.path
-import xml.sax.saxutils
+import xml.sax.saxutils, htmlentitydefs
 import re
 import copy
 import inspect
@@ -43,7 +43,7 @@ import inspect
 
 # Only export plugin classes
 __all__ = [
-    "GenericChannel", "ChannelPlugin"
+    "GenericChannel", "ChannelPlugin", "use_rx"
 ]
 
 
@@ -577,8 +577,16 @@ class GenericChannel(object):
         return s
     
     # remove SGML/XML entities
-    def entity_decode(self, s):
-        return xml.sax.saxutils.unescape(s).replace("&nbsp;", " ")
+    def entity_decode(self, str):
+        return re.sub('&(#?(x?))(\w+);', self._entity, str)
+    def _entity(self, sym):
+        num, hex, name = sym.groups()
+        if hex:
+            return unichr(int(name, base=16))
+        elif num:
+            return unichr(int(name))
+        else:
+            return unichr(htmlentitydefs.name2codepoint[name])
     
     # convert special characters to &xx; escapes
     def xmlentities(self, s):
@@ -650,7 +658,10 @@ class ChannelPlugin(GenericChannel):
             icon = gtk.image_new_from_stock(gtk.STOCK_DIRECTORY, size=1)
         label = gtk.HBox()
         label.pack_start(icon, expand=False, fill=True)
-        label.pack_start(gtk.Label(self.meta.get("title", self.module)), expand=True, fill=True)
+        l = gtk.Label(self.meta.get("title", self.module))
+        if self.meta.get("color"):
+            l = uikit.bg(l, self.meta["color"])
+        label.pack_start(l, expand=True, fill=True)
             
         # pack it into an event container to catch double-clicks
         ev_label = gtk.EventBox()
@@ -688,4 +699,19 @@ def stub_parent(object):
         return lambda *x: None
     def status(self, *x):
         pass
+
+
+# Decorator
+def use_rx(func):
+    def try_both(*args, **kwargs):
+        for method, use_rx in [("RX", not conf.pyquery), ("PQ", conf.pyquery)]:
+            try:
+                log.STAT(method)
+                return func(*args, use_rx=not conf.pyquery, **kwargs)
+            except Exception as e:
+                log.ERR("{} extraction failed:".format(method), e)
+                continue
+        return []
+    return try_both
+
 
