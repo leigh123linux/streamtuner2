@@ -113,7 +113,7 @@ class radionomy (ChannelPlugin):
     @use_rx
     def data_play_stream(self, html, use_rx):
         if use_rx:
-            return [self.entity_decode(j) for j in re.findall('data-play-stream="({.*?})"', html)]
+            return [entity_decode(j) for j in re.findall('data-play-stream="({.*?})"', html)]
         else:
             # fix up for PyQuery, else ignores appended content
             html = re.sub("</html>|</body>", "", html) + "</body></html>"
@@ -135,46 +135,3 @@ class radionomy (ChannelPlugin):
                 log.ERR("Radionomy title update:", e)
 
                 
-
-
-"""
-<div id="tile-4f60d666-c9af-4e86-9ed1-7d4d488df430" class="browseRadioWrap">
-	<a href="/en/radio/w1rs-blues--rock-s-radio/index" rel="internal"><img class="radioCover" src="https://i.radionomy.com/document/radios/4/4f60/4f60d666-c9af-4e86-9ed1-7d4d488df430.s67.jpg" alt="W1RS blues &amp; Rock&#39;s Radio" width="67" height="67"></a>
-	<div class="radioInfo">
-		<p class="radioName">W1RS blues &amp; Rock&#39;s Radio</p>
-		<p class="nowPlaying" style="display: none;">
-			<span class="artist">
-				
-			</span>
-			<span class="separator">-</span>
-			<span class="title">
-				
-			</span>
-		</p>
-
-		<div class="radioRating">
-			<img src="/images/icons/icon-radioRatings-one.png" width="82" height="13" alt="Ratings">
-			<a href="#" onclick="AddFavorite(&#39;4f60d666-c9af-4e86-9ed1-7d4d488df430&#39;, event); return false;" class="fav-icon addToFav">
-				<img src="/images/icons/icon-radioActionsUnfav.png" width="13" height="13">
-			</a>
-		</div>
-	</div>
-
-	<div class="radioPlay">
-		<div class="radioPlayBtn" data-play-stream="{
-		&quot;mp3&quot;:
-		&quot;http://listen.radionomy.com/w1rs-blues--rock-s-radio&quot;,
-		&quot;title&quot;: &quot;W1RS blues &amp; Rock&#39;s
-		Radio&quot;, &quot;isFavorite&quot;: false, &quot;url&quot;:
-		&quot;w1rs-blues--rock-s-radio&quot;, &quot;logo&quot;:
-		&quot;https://i.radionomy.com/document/radios/4/4f60/4f60d666-c9af-4e86-9ed1-7d4d488df430.s400.jpg&quot;,
-		&quot;song&quot;: &quot; - &quot;, &quot;radioUID&quot;:
-		&quot;4f60d666-c9af-4e86-9ed1-7d4d488df430&quot; }"></div>
-		<!-- StopBtn -->
-	</div>
-</div>
-"""        
-
-
-
-
