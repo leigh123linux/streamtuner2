@@ -23,21 +23,17 @@
 
 # streamtuner2 modules
 from config import *
-from uikit import uikit
+from uikit import *
 import ahttp
 from channels import *
 import action
 
 # python modules
 import re
-import xml.dom.minidom
-from xml.sax.saxutils import unescape as entity_decode, escape as xmlentities
-import gtk
 import copy
 import urllib
 from itertools import groupby
 from time import time
-from xml.dom.minidom import parseString
 
 
 # channel live365
