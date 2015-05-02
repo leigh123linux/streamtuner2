@@ -10,12 +10,16 @@
 #   { type=select, name=useragent, value=Streamtuner2, select="Streamtuner2|VLC|Firefox|Chrome|Android|MSIE|iTunes", description=Which browser string to use for HTTP requests. }
 # hooks: config_save
 #
-# This is currently unneeded.
+# This is currently unneeded / only for privacy.
+# Allows to masquerade streamtuner2 as different
+# audio player or just as web browser for station
+# or playlist fetching.
 
 
 from config import *
 from channels import *
 import ahttp
+
 
 # override ahttp.session headers, hooks into config dialog
 class useragentswitcher():

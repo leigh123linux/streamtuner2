@@ -1,3 +1,4 @@
+# encoding: utf-8
 # api: streamtuner2
 # title: Search feature
 # description: Provides the quick search box, and server/cache search window.
@@ -6,14 +7,15 @@
 # category: ui
 # config: -
 # priority: core
-# 
-# Configuration dialog for audio applications,
-# general settings, and plugin activation and
-# associated options.
 #
-# Some plugins hook into the saving method. Most
-# require a restart of streamtuner2 for changes
-# to take effect.
+# The search dialog implementes a "cache" and a live
+# "server" search (only some plugins). It scans through
+# all available, or just the last active channel tab.
+# Found entries are displayed in „bookmarks›search“.
+#
+# With the little search box atop the main window, you
+# can alternatively highlight entries in the currently
+# selected category.
 
 
 from uikit import *

@@ -17,10 +17,12 @@
 # depends: re, ahttp
 #
 # Shoutcast is a server software for audio streaming. It automatically spools
-# station information on shoutcast.com
+# station information on shoutcast.com, which today lists over 60000 radios.
 #
-# It has been aquired by Radionomy in 2014, since then significant changes
-# took place. The former yellow pages API got deprecated.
+# It has been aquired by Radionomy in 2014. Since then significant changes
+# took place. The former yellow pages API got deprecated. Streamtuner2 now
+# utilizes the AJAX interface for speedy playlist discovery
+#
 
 
 import ahttp
