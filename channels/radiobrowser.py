@@ -91,7 +91,7 @@ class radiobrowser (ChannelPlugin):
             else:
                 data = self.api("stations/" + self.catmap[conf.radiobrowser_cat] + "/" + cat)
         elif search:
-            data = self.api("stations/" + cat)
+            data = self.api("stations/" + search)
         else:
             return []
 
