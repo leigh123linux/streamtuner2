@@ -6,7 +6,7 @@
 # category: radio
 # version: 0.7
 # url: http://www.myoggradio.org/
-# depends: json, StringIO
+# depends: json, StringIO, ahttp >= 1.2
 # config:
 #    { name: myoggradio_login,  type: text,  value: "user:password", description: "Account for storing personal favourites." }
 #    { name: myoggradio_morph,  type: boolean, value: 0,  description: "Convert pls/m3u into direct shoutcast url." }

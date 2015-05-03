@@ -3,7 +3,7 @@
 # description: Displays mp3/oggs or m3u/pls files from local media file directories.
 # type: channel
 # category: local
-# version: 0.1
+# version: 0.2
 # priority: optional
 # depends: mutagen
 # config:  

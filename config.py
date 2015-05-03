@@ -393,8 +393,7 @@ def module_list(plugin_base="channels"):
 #  · module= utilizes pkgutil to read 
 #  · frame= automatically extract comment header from caller
 #
-plugin_base = ("channels", "plugins")
-def plugin_meta(fn=None, src=None, module=None, frame=1):
+def plugin_meta(fn=None, src=None, module=None, frame=1, plugin_base=["channels", "plugins"]):
 
     # try via pkgutil first
     if module:

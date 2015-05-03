@@ -9,7 +9,7 @@
 #    { name="switch_channel", type="text", value="bookmarks:favourite", description="Station list and channels to alternate in." },
 #    { name="switch_random", type="boolean", value=0, description="Pick random channel, instead of next." },
 # priority: extra
-# depends: python-keybinder
+# depends: python:keybinder, uikit >= 1.5
 #
 #
 # Binds a key to global desktop (F13 = left windows key).

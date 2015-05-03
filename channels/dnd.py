@@ -1,9 +1,9 @@
 # encoding: UTF-8
 # api: streamtuner2
-# title: Drag and Drop (experimental)
+# title: Drag and Drop
 # description: Copy streams/stations from and to other applications.
-# depends: uikit
-# version: 0.5
+# depends: uikit >= 1.8, action >= 1.0
+# version: 0.6
 # type: feature
 # config:
 #   { name: dnd_format, type: select, value: xspf, select: "pls|m3u|xspf|jspf|asx|smil|desktop|srv", description: "Default temporary file format for copying a station." }

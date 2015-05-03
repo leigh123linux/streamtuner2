@@ -3,7 +3,7 @@
 # type: functions
 # title: uikit helper functions
 # description: simplify usage of some gtk widgets
-# version: 1.8
+# version: 1.9
 # author: mario
 # license: public domain
 #
