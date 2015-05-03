@@ -30,7 +30,8 @@
 #    both sliceable genres and searchable.
 #
 #  → "Clunky XML" fetches the olden YP.XML, which is really
-#    slow, then slices out genres. No search.
+#    slow, then slices out genres. No search. With the secret
+#    "buffy" mode keeps all streams buffered.
 #
 #  → "Forbidden Fruits" extracts from dir.xiph.org HTML pages,
 #    with homepages and listener/max infos available. Search
@@ -117,7 +118,6 @@ class xiph (ChannelPlugin):
       l = []
       data = json.loads(data)
       for e in data:
-          #log.DATA(e)
           if not len(l) or l[-1]["title"] != e["stream_name"]:
               l.append({
                 "title": e["stream_name"],
@@ -147,8 +147,10 @@ class xiph (ChannelPlugin):
           buffy = []
 
       # Get XML blob
-      yp = ahttp.get(self.xml_url, statusmsg="Brace yourselves, still downloading the yp.xml blob.")
-      log.DATA("returned")
+      if not buffy:
+          yp = ahttp.get(self.xml_url, statusmsg="Brace yourselves, still downloading the yp.xml blob.")
+      else:
+          yp = "<none/>"
       self.status("Yes, XML parsing isn't much faster either.", timeout=20)
       for entry in xml.dom.minidom.parseString(yp).getElementsByTagName("entry"):
           buffy.append({
@@ -170,13 +172,11 @@ class xiph (ChannelPlugin):
       l = []
       if cat:
           rx = re.compile(cat.lower())
-          l = []
-          for row in buffy:
-              if rx.search(row["genre"]):
-                  l.append(row)
+          l = [row for row in buffy if rx.search(row["genre"])]
 
+      # Search is actually no problem. Just don't want to. Nobody is using the YP.XML mode anyway..
       elif search:
-	      pass
+          pass
         
       # Result category
       return l
