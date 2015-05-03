@@ -36,6 +36,9 @@
 #    with homepages and listener/max infos available. Search
 #    is also possible.
 #
+# The bitrate filter can strip any low-quality entries, but
+# retains `0` entries (which just lack meta information and
+# aren't necessarily low-bitrate.)
 
 
 from config import *
@@ -74,15 +77,24 @@ class xiph (ChannelPlugin):
   def update_streams(self, cat=None, search=None):
       if cat:
           cat = cat.lower()
+
+      # retrieval module
       if conf.xiph_source in ("cache", "json"):
           log.PROC("Xiph mode: processing api.dir.xiph.org JSON (via api.include-once.org cache)")
-          return self.from_json_cache(cat, search)
+          r = self.from_json_cache(cat, search)
       elif conf.xiph_source in ("xml", "buffy"):
           log.PROC("Xiph mode: xml.dom.minidom to traverse yp.xml")
-          return self.from_yp_xml(cat, search)
+          r = self.from_yp_xml(cat, search)
       else:
           log.PROC("Xiph mode: extract from dir.xiph.org HTML listings")
-          return self.from_raw_html(cat, search)
+          r = self.from_raw_html(cat, search)
+          
+      # filter bitrate
+      if conf.xiph_min_bitrate:
+          r = [row for row in r if row.get("bitrate", 0) <= 10 or row.get("bitrate", 0) >= int(conf.xiph_min_bitrate)]
+
+      return r
+      
 
 
 
@@ -106,20 +118,18 @@ class xiph (ChannelPlugin):
       data = json.loads(data)
       for e in data:
           #log.DATA(e)
-          bitrate = int(e["bitrate"])
-          if conf.xiph_min_bitrate and bitrate and bitrate >= int(conf.xiph_min_bitrate):
-              if not len(l) or l[-1]["title"] != e["stream_name"]:
-                  l.append({
-                    "title": e["stream_name"],
-                    "url": e["listen_url"],
-                    "format": e["type"],
-                    "bitrate": bitrate,
-                    "genre": e["genre"],
-                    "playing": e["current_song"],
-                    "listeners": 0,
-                    "max": 0,
-                    "homepage": (e["homepage"] if ("homepage" in e) else ""),
-                  })
+          if not len(l) or l[-1]["title"] != e["stream_name"]:
+              l.append({
+                "title": e["stream_name"],
+                "url": e["listen_url"],
+                "format": e["type"],
+                "bitrate": int(e["bitrate"]),
+                "genre": e["genre"],
+                "playing": e["current_song"],
+                "listeners": 0,
+                "max": 0,
+                "homepage": (e["homepage"] if ("homepage" in e) else ""),
+              })
           
       # send back the list 
       return l
@@ -141,21 +151,19 @@ class xiph (ChannelPlugin):
       log.DATA("returned")
       self.status("Yes, XML parsing isn't much faster either.", timeout=20)
       for entry in xml.dom.minidom.parseString(yp).getElementsByTagName("entry"):
-          bits = bitrate(x(entry, "bitrate"))
-          if bits and conf.xiph_min_bitrate and bits >= int(conf.xiph_min_bitrate):
-              buffy.append({
-                  "title": x(entry, "server_name"),
-                  "url": x(entry, "listen_url"),
-                  "format": self.mime_fmt(x(entry, "server_type")[6:]),
-                  "bitrate": bits,
-                  "channels": x(entry, "channels"),
-                  "samplerate": x(entry, "samplerate"),
-                  "genre": x(entry, "genre"),
-                  "playing": x(entry, "current_song"),
-                  "listeners": 0,
-                  "max": 0,
-                  "homepage": "",
-              })
+          buffy.append({
+              "title": x(entry, "server_name"),
+              "url": x(entry, "listen_url"),
+              "format": self.mime_fmt(x(entry, "server_type")[6:]),
+              "bitrate": bitrate(x(entry, "bitrate")),
+              "channels": x(entry, "channels"),
+              "samplerate": x(entry, "samplerate"),
+              "genre": x(entry, "genre"),
+              "playing": x(entry, "current_song"),
+              "listeners": 0,
+              "max": 0,
+              "homepage": "",
+          })
       self.status("This. Is. Happening. Now.")
 
       # Filter out a single subtree
@@ -217,7 +225,6 @@ class xiph (ChannelPlugin):
           .*? class="format"\s+title="([^"]+)"
           .*? /by_format/([^"]+)
       """, html, re.X|re.S)
-      print ls
             
       # Assemble
       for homepage, title, listeners, playing, tags, url, bits, fmt in ls:
@@ -247,16 +254,16 @@ class xiph (ChannelPlugin):
         "rock",
         [
             "alternative", "electro", "country", "mixed", "metal",
-            "eclectic", "folk", "anime", "hardcore", "pure" "jrock"
+            "eclectic", "folk", "anime", "hardcore", "pure", "jrock"
         ],
         "dance",
         [
-            "electronic", "deephouse", "dancefloor", "elektro" "eurodance"
+            "electronic", "deephouse", "dancefloor", "elektro", "eurodance",
             "rnb",
         ],
         "hits",
         [
-            "russian" "hit", "star"
+            "russian", "hit", "star"
         ],
         "radio",
         [
@@ -269,7 +276,7 @@ class xiph (ChannelPlugin):
         ],
         "talk",
         [
-            "news", "politics", "medicine", "health" "sport", "education",
+            "news", "politics", "medicine", "health", "sport", "education",
             "entertainment", "podcast",
         ],
         "various",
@@ -332,7 +339,7 @@ class xiph (ChannelPlugin):
             "korea", "seychelles", "black", "japanese", "ethnic", "country",
             "americana", "western", "cuba", "afrique", "paris", "celtic",
             "ambiance", "francais", "liberte", "anglais", "arabic",
-            "hungary", "folklore" "latin", "dutch" "italy"
+            "hungary", "folklore", "latin", "dutch", "italy"
         ],
         "artist",   # ARTIST NAMES
         [
@@ -422,7 +429,7 @@ class xiph (ChannelPlugin):
         "rockabilly",
         "charts",
         [
-            "best80", "70er", "80er", "60er" "chart",
+            "best80", "70er", "80er", "60er", "chart",
         ],
         "other",
         [
