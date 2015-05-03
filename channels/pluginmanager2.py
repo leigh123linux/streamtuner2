@@ -5,7 +5,7 @@
 # version: 0.2
 # type: hook
 # category: config
-# depends: uikit, config, pluginconf
+# depends: uikit >= 1.9, config >= 2.7, streamtuner2 >= 2.1.8, pluginconf < 1.0
 # config:
 #   { name: plugin_repos, type: text, value: "http://fossil.include-once.org/repo.json/streamtuner2/contrib/*.py, http://fossil.include-once.org/repo.json/streamtuner2/channels/*.py", description: "Plugin repository JSON source references." }
 #   { name: plugin_auto, type: boolean, value: 1, description: Apply plugin activation/disabling without restart. }
@@ -36,6 +36,7 @@ from uikit import *
 import ahttp
 import json
 import compat2and3
+from xml.sax.saxutils import escape as html_escape
 
 
 # Plugin manager
@@ -125,25 +126,27 @@ class pluginmanager2(object):
                 self.parent.status()
         
         # Clean up placeholders in vbox
-        vbox = self.vbox
-        for c in vbox.get_children()[3:]:
-            vbox.remove(c)
+        _ = [self.vbox.remove(c) for c in self.vbox.get_children()[3:]]
         
         # Query existing plugins
-        have = {name: plugin_meta(module=name) for name in module_list()}
+        dep = dependency()
         # Attach available downloads
         for newpl in meta:
             id = newpl.get("$name")
-            if id.find("__") == 0:   # skip __init__.py
+            # skip __init__.py
+            if id.find("__") == 0:
                 continue
-            if have.get(id):
-                if have[id]["version"] >= newpl.get("version"):
-                    continue;
+            # exclude if newer/current version already installed
+            if dep.have.get(id) and dep.have[id]["version"] >= newpl.get("version"):
+                continue
+            # check dependencies
+            #newpl["depends"] = "streamtuner2 < 2.2.0, config >= 2.5"
+            if not dep.depends(newpl):
+                continue
             self.add_plugin(newpl)
 
         # Readd some filler labels
-        for i in range(1,3):
-            self.add_(uikit.label(""))
+        _ = [self.add_(uikit.label("")) for i in range(1,3)]
 
 
     # Entry for plugin list
@@ -161,7 +164,8 @@ class pluginmanager2(object):
         
     # Add placeholder fields
     def update_p(self, p):
-        extras = ["{}: <b>{}</b>".format(n, p[n]) for n in ("status", "support", "author", "depends") if p.get(n)]
+        fields = ("status", "priority", "support", "author", "depends")
+        extras = ["{}: <b>{}</b>".format(n, html_escape(p[n])) for n in fields if p.get(n)]
         p["extras"] = " ".join(["💁"] + extras)
         p["file"] = p["$file"]
         for field in ("version", "title", "description", "type", "category"):
@@ -205,6 +209,62 @@ class pluginmanager2(object):
         # just let main load any new plugins
         p.load_plugin_channels()
 
+
+
+# Do minimal depends: probing
+class dependency(object):
+
+    # prepare list of known plugins and versions
+    def __init__(self):
+        self.have = {name: plugin_meta(module=name) for name in module_list()}
+        # dependencies on core modules are somewhat more interesting:
+        self.have.update({
+            "streamtuner2": plugin_meta(module="st2", plugin_base=["config"]),
+            "uikit": plugin_meta(module="uikit", plugin_base=["config"]),
+            "config": plugin_meta(module="config", plugin_base=["config"]),
+            "action": plugin_meta(module="action", plugin_base=["config"]),
+        })
+    have = {}
+
+    # depends:    
+    def depends(self, plugin):
+        if plugin.get("depends"):
+            d = self.deps(plugin["depends"])
+            if not self.cmp(d, self.have):
+                return False
+        return True
+
+    # Split trivial "pkg, mod >= 1, uikit < 4.0" list
+    def deps(self, dep_str):
+        d = []
+        for dep in re.split(r"\s*[,;]+\s*", dep_str):
+            # skip deb:pkg-name, rpm:name, bin:name etc.
+            if not len(dep) or dep.find(":") >= 0:
+                continue
+            # find comparison and version num
+            m = re.search(r"([\w.-]+)\s*([>=<!~]+)\s*([\d.]+([-~.]\w+)*)", dep + " >= 0")
+            if m and m.group(2):
+                d.append([m.group(i) for i in (1,2,3)])
+        return d
+    
+    # Do actual comparison
+    def cmp(self, d, have):
+        r = True
+        for name, op, ver in d:
+            # skip unknown plugins, might be python module references ("depends: re, json")
+            if not have.get(name, {}).get("version"):
+                continue
+            curr = have[name]["version"]
+            tbl = {
+               ">=": curr >= ver,
+               "<=": curr <= ver,
+               "==": curr == ver,
+               ">":  curr > ver,
+               "<":  curr < ver,
+               "!=": curr != ver,
+            }
+            r &= tbl.get(op, True)
+        return r
 
 
 # Alternative to .format(), with keys possibly being absent
