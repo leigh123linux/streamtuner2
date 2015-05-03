@@ -185,7 +185,13 @@ class uikit:
 
                 # autotransform string -> gtk image object
                 if (pix_entry and type(row[pix_entry]) == str):
-                    row[pix_entry] = (  gtk.gdk.pixbuf_new_from_file(row[pix_entry])  if  os.path.exists(row[pix_entry])  else  defaults[gtk.gdk.Pixbuf]  )
+                    pix = None
+                    try:
+                        if os.path.exists(row[pix_entry]):
+                            pix = gtk.gdk.pixbuf_new_from_file(row[pix_entry])
+                    except Exception as e:
+                        log.ERR("uikik.columns: Pixbuf fail,", e)
+                    row[pix_entry] = pix or defaults[gtk.gdk.Pixbuf]
 
                 try:
                     # add
