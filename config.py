@@ -393,13 +393,18 @@ def module_list(plugin_base="channels"):
 #  · module= utilizes pkgutil to read 
 #  · frame= automatically extract comment header from caller
 #
-def plugin_meta(fn=None, src=None, module=None, frame=1, plugin_base="channels"):
+plugin_base = ("channels", "plugins")
+def plugin_meta(fn=None, src=None, module=None, frame=1):
 
     # try via pkgutil first
     if module:
        fn = module
-       try: src = pkgutil.get_data(plugin_base, fn+".py")
-       except: pass  # Notice in plugin_meta_extract() is sufficient
+       for base in plugin_base:
+           try:
+               src = pkgutil.get_data(base, fn+".py")
+               if src: break
+           except:
+               continue  # plugin_meta_extract() will print a notice later
 
     # get source directly from caller
     elif not src and not fn:
