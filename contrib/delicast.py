@@ -62,7 +62,6 @@ class delicast (ChannelPlugin):
                 .*?
                 120%'>([^<>]+)</span>
             """, tr, re.X|re.S)
-            print ls
             if len(ls):
                 homepage, country, title = ls[0]
                 r.append(dict(
