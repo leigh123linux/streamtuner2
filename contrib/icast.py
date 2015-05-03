@@ -2,11 +2,11 @@
 # api: streamtuner2
 # title: iCast.io
 # description: Open collaborative stream directory
-# version: 0.1
+# version: 0.2
 # type: channel
 # url: http://www.icast.io/
 # category: radio
-# priority: optional
+# priority: obsolete
 # config: -
 # png:
 #   iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAcVQTFRF
