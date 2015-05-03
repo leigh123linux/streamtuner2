@@ -483,6 +483,30 @@ class uikit:
         return b
 
 
+    # Wrap entries/checkboxes with extra label, background, images, etc.
+    @staticmethod
+    def wrap(widgetstore=None, id=None, w=None, label=None, color=None, image=None, align=1, label_size=305, label_markup=0):
+        if id:
+            widgetstore[id] = w
+        if label:
+            if type(w) is gtk.Entry:
+                w.set_width_chars(11)
+            w = uikit.hbox(w, uikit.label(label, size=label_size, markup=label_markup))
+        if image:
+            pix = gtk.image_new_from_pixbuf(uikit.pixbuf(image))
+            if pix:
+                w = uikit.hbox(w, pix, exr=False)
+        if color:
+            w = uikit.bg(w, color)
+        if align:
+            a = gtk.Alignment()
+            a.set_padding(0, 0, align, 0)
+            a.add(w)
+            w = a
+        w.show_all()
+        return w
+
+
     # Attach textual menu entry and callback
     @staticmethod
     def add_menu(menuwidget, label, action, insert=None):
