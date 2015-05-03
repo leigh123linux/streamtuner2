@@ -6,7 +6,7 @@
 # version: 0.5
 # type: feature
 # config:
-#   { name: dnd_format, type: select, value: xspf, select: "pls|m3u|xspf|jspf|asx|smil|desktop", description: "Default temporary file format for copying a station." }
+#   { name: dnd_format, type: select, value: xspf, select: "pls|m3u|xspf|jspf|asx|smil|desktop|srv", description: "Default temporary file format for copying a station." }
 # category: io
 # priority: default
 # support: experimental
@@ -204,6 +204,9 @@ class dnd(object):
         # Text sources are assumed to understand the literal URL or expect a description block
         elif info >= 5:
             buf = 'text', "{url}\n# Title: {title}\n# Homepage: {homepage}\n\n".format(**r)
+        # Direct URL as text/uri-list
+        elif conf.dnd_format == "srv":
+            buf = 'uris', [self.row.get("url")]
         # Create temporary PLS file, because "text/uri-list" is widely misunderstood and just implemented for file:// IRLs
         else:
             title = re.sub("[^\w-]+", "_", r["title"]).strip()
