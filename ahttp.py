@@ -53,7 +53,7 @@ session.headers.update({
 #
 #  Well, it says "get", but it actually does POST and AJAXish GET requests too.
 #
-def get(url, params={}, referer="", post=0, ajax=0, binary=0, feedback=None, content=True, verify=False, statusmsg=None):
+def get(url, params={}, referer="", post=0, ajax=0, binary=0, feedback=None, content=True, verify=False, statusmsg=None, encoding=None):
 
     # statusbar info
     progress_feedback(url)
@@ -89,6 +89,8 @@ def get(url, params={}, referer="", post=0, ajax=0, binary=0, feedback=None, con
         r = r.content
     else:
         # Receival is actually happening here
+        if encoding:
+            r.encoding = encoding
         r = r.text
     # clean statusbar
     statusmsg and progress_feedback()
