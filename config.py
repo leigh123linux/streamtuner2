@@ -155,7 +155,7 @@ class ConfigDict(dict):
     def find_player(self, typ="audio", default="xdg-open"):
         players = {
            "audio": ["audacious %m3u", "audacious2", "exaile %pls", "xmms2", "banshee", "amarok %pls", "clementine", "qmmp", "quodlibet", "aqualung", "mp3blaster %m3u", "vlc --one-instance", "totem"],
-           "video": ["parole", "umplayer", "xnoise", "gxine", "totem", "vlc --one-instance", "smplayer", "gnome-media-player", "xine", "bangarang"],
+           "video": ["umplayer", "xnoise", "gxine", "totem", "vlc --one-instance", "parole", "smplayer", "gnome-media-player", "xine", "bangarang"],
            "browser": ["opera", "midori", "sensible-browser"],
            "xterm": ["xfce4-terminal", "x-termina-emulator", "gnome-terminal", "xterm", "rxvt"],
         }
