@@ -2,12 +2,13 @@
 # api: streamtuner2
 # title: User Plugin Manager Ⅱ
 # description: Downloads new plugins, or updates them.
-# version: 0.1
+# version: 0.2
 # type: hook
 # category: config
 # depends: uikit, config, pluginconf
 # config:
-#   { name: plugin_repos, type: text, value: "http://fossil.include-once.org/plugins.php/streamtuner2/contrib/*.py, http://fossil.include-once.org/plugins.php/streamtuner2/channels/*.py", description: "Plugin sources (common-repo.json)" }
+#   { name: plugin_repos, type: text, value: "http://fossil.include-once.org/repo.json/streamtuner2/contrib/*.py, http://fossil.include-once.org/repo.json/streamtuner2/channels/*.py", description: "Plugin repository JSON source references." }
+#   { name: plugin_auto, type: boolean, value: 1, description: Apply plugin activation/disabling without restart. }
 # priority: extra
 # support: experimental
 #
@@ -18,9 +19,11 @@
 # User plugins go into ~/.config/streamtuner2/channels/
 # and will be picked up in favour of system-installed ones.
 #
-# Further enables direct activation of existing plugins
-# without restarting streamtuner2.
+# Further enables direct activation of existing channel
+# plugins, often without restarting streamtuner2.
 #
+# Actually rather trivial. The Gtk interface building just
+# makes this handler look complicated.
 
 
 import imp
@@ -54,6 +57,7 @@ class pluginmanager2(object):
         # config dialog
         parent.hooks["config_load"].append(self.add_config_tab)
         parent.hooks["config_save"].append(self.activate_plugins)
+        parent.hooks["config_save"].append(self.clean_config_vboxen)
         
         # prepare user plugin directory
         conf.plugin_dir = conf.dir + "/plugins"
@@ -61,11 +65,11 @@ class pluginmanager2(object):
             os.mkdir(conf.plugin_dir)
             open(conf.plugin_dir + "/__init__.py", "w").close()
         
-        # register config dir for module loading
+        # Register user config dir "~/.config/streamtuner2/plugins" for module loading
         sys.path.insert(0, conf.dir)
+        
+        # Let channels.* package load modules from two directories
         channels__path__.insert(0, conf.plugin_dir)
-        # config.plugin_base.append("plugins")
-        # = pkgutil.extend_path(config.__path__, config.__name__)
 
 
     # Craft new config dialog notebook tab
@@ -112,7 +116,7 @@ class pluginmanager2(object):
     # Add plugin list
     def refresh(self, *w):
 
-        # fetch plugins
+        # Fetch repository JSON list
         meta = []
         for url in re.split("[\s,]+", conf.plugin_repos.strip()):
             if re.match("https?://", url):
@@ -120,24 +124,24 @@ class pluginmanager2(object):
                 meta += json.loads(d)
                 self.parent.status()
         
-        # clean up vbox
+        # Clean up placeholders in vbox
         vbox = self.vbox
-        for i,c in enumerate(vbox.get_children()):
-            if i>=3:
-                vbox.remove(c)
+        for c in vbox.get_children()[3:]:
+            vbox.remove(c)
         
-        # query existing plugins
+        # Query existing plugins
         have = {name: plugin_meta(module=name) for name in module_list()}
-        # add plugins
-        for p in meta:
-            id = p.get("$name")
+        # Attach available downloads
+        for newpl in meta:
+            id = newpl.get("$name")
             if id.find("__") == 0:   # skip __init__.py
                 continue
             if have.get(id):
-                if p.get("version") == have[id]["version"]:
+                if have[id]["version"] >= newpl.get("version"):
                     continue;
-            self.add_plugin(p)
-        # some filler
+            self.add_plugin(newpl)
+
+        # Readd some filler labels
         for i in range(1,3):
             self.add_(uikit.label(""))
 
@@ -145,8 +149,24 @@ class pluginmanager2(object):
     # Entry for plugin list
     def add_plugin(self, p):
         b = self.button("Install", stock="gtk-save", cb=lambda *w:self.install(p))
-        text = "<b>{title}</b> <small>{version}</small>\n<small>{description}</small>\n{type}/{category}".format(**p)
-        self.add_(b, text, markup=1)
+        p = self.update_p(p)
+        text = "<b>$title</b>, "\
+               "<small>version:</small> <span weight='bold' color='orange'>$version</span>, "\
+               "<small>type: <i><span color='#559'>$type</span></i> "\
+               "category: <i><span color='blue'>$category</span></i></small>\n"\
+               "<span variant='smallcaps' color='#333'>$description</span>\n"\
+               "<span size='small' color='#532' weight='ultralight'>$extras, <a href='view-source:$file'>view src</a></span>"
+        self.add_(b, safe_format(text, **p), markup=1)
+
+        
+    # Add placeholder fields
+    def update_p(self, p):
+        extras = ["{}: <b>{}</b>".format(n, p[n]) for n in ("status", "support", "author", "depends") if p.get(n)]
+        p["extras"] = " ".join(["💁"] + extras)
+        p["file"] = p["$file"]
+        for field in ("version", "title", "description", "type", "category"):
+            p.setdefault(field, "-")
+        return p
     
 
     # Download a plugin
@@ -157,9 +177,38 @@ class pluginmanager2(object):
         self.parent.status("Plugin '{$name}.py' installed.".format(**p))
 
 
+    # Empty out [channels] and [feature] tab in configdialog, so it rereads them
+    def clean_config_vboxen(self, *w):
+        self.parent.configwin.first_open = 1
+        for vbox in [self.parent.plugin_options, self.parent.feature_options]:
+            for c in vbox.get_children()[1:]:
+                vbox.remove(c)
+
+
     # Activate/deactivate changed plugins
     def activate_plugins(self, *w):
-        pass
+        if not conf.plugin_auto:
+            return
+        p = self.parent
+        for name,act in conf.plugins.items():
+
+            # disable channel plugin
+            if not act and name in p.channels:
+                p.notebook_channels.remove_page(p.channel_names.index(name))
+                del p.channels[name]
+
+            # feature plugins usually have to many hooks
+            if not act and name in p.features:
+                log.WARN("Cannot disable feature plugin '{}'.".format(name))
+                p.status("Disabling feature plugins requires a restart.")
+
+        # just let main load any new plugins
+        p.load_plugin_channels()
 
 
+
+# Alternative to .format(), with keys possibly being absent
+from string import Template
+def safe_format(str, **kwargs):
+    return Template(str).safe_substitute(**kwargs)
 
