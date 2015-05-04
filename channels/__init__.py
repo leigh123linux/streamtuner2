@@ -181,6 +181,8 @@ class GenericChannel(object):
     def select_current(self, name):
         log.UI("reselect .current category in treelist:", name)
         model = self.gtk_cat.get_model()
+           # [Gtk3] Warning: g_object_ref_sink: assertion 'object->ref_count >= 1' failed
+           # ERROR:../../gi/pygobject.c:688:pygobject_register_wrapper: assertion failed: (gself->obj->ref_count >= 1)
         iter = model.get_iter_first()
         self.iter_cats(name, model, iter)
 
@@ -444,7 +446,6 @@ class GenericChannel(object):
         # put selection/cursor on last position
         if True:
             uikit.do(self.select_current, self.current)
-            #uikit.do(lambda:self.gtk_list.get_selection().select_path(self.shown))
 
         # Show current category in any case
         log.UI(self.module, "→ first_show(); station list → load(", self.current, ")")
@@ -491,7 +492,7 @@ class GenericChannel(object):
             
         # Select last .current or any first element
         if self.current:
-            self.select_current(self.current)
+            uikit.do(self.select_current, self.current)
             #self.currentcat()
         #else: self.gtk_cat.get_selection().select_path("0") #set_cursor
 
