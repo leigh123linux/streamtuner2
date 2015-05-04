@@ -8,8 +8,8 @@
 # url: http://jamendo.com/
 # depends: json
 # config: 
-#    { name: jamendo_stream_format, value: ogg,  type: select,  select: "ogg=Ogg Vorbis, 112kbit/s|mp32=MP3, 192kbit/s VBR|mp31=MP3, 96kbit/s|flac=Xiph FLAC, ≳600kbit/s",  description: "Audio format for tracks, albums, playlists." }
-#    { name: jamendo_image_size,    value: 50,   type: select,  select: "25=25px|35=35px|50=50px|55=55px|60=60px|65=65px|70=70px|75=75px|85=85px|100=100px|130=130px|150=150px|200=200px|300=300px",  description: "Preview images size (height and width) for albums or tracks." }
+#    { name: jamendo_stream_format, value: ogg,  type: select,  select: "ogg=Vorbis, 112kbit/s|mp32=MP3, 192kbit/s|mp31=MP3, 96kbit/s|flac=FLAC, ≳600kbit/s",  description: "Audio format for tracks, albums, playlists." }
+#    { name: jamendo_image_size,    value: 35,   type: select,  select: "25=25px|35=35px|50=50px|55=55px|60=60px|65=65px|70=70px|75=75px|85=85px|100=100px|130=130px|150=150px|200=200px|300=300px",  description: "Preview images size (height and width) for albums or tracks." }
 #    { name: jamendo_count,         value: 1,    type:text,     description: "How many result sets (200 entries each) to retrieve." }
 # priority: default
 # png:
