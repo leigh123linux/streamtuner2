@@ -25,7 +25,6 @@
 
 from channels import *
 import action
-import http
 from config import conf
 
 
