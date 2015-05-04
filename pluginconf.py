@@ -85,10 +85,10 @@ log_WARN = lambda *x:None
 log_ERR = lambda *x:None
 
 # File lookup relation for get_data(), should name a top-level module/package
-module_base = "pluginconf"
+module_base = "config"
 
 # Package names or base paths for module_list() and plugin_meta() lookups
-plugin_base = ["plugins"]
+plugin_base = ["channels"]
             # [conf.share+"/channels", conf.dir+"/plugins"])
 
 
@@ -111,7 +111,7 @@ def get_data(fn, decode=False, gz=False, file_base=None):
         else:
             return str(bin)
     except:
-        log_WARN("get_data() didn't find:", fn)
+        log_WARN("get_data() didn't find:", fn, "in", file_base)
 
 
 
@@ -155,7 +155,7 @@ def all_plugin_meta():
 #   frame=   extract comment header of caller
 #            (default)
 #
-def plugin_meta(fn=None, src=None, module=None, frame=1, extra_base=[module_base]):
+def plugin_meta(fn=None, src=None, module=None, frame=1, extra_base=[]):
 
     # Try via pkgutil first,
     # find any plugins.* modules, or main packages
@@ -212,6 +212,7 @@ def plugin_meta_extract(src="", fn=None, literal=False):
         "type": "module",
         "category": None,
         "priority": None,
+        "version": "0",
         "title": fn,
         "description": "no description",
         "config": [],
