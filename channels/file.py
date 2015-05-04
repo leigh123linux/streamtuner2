@@ -5,7 +5,8 @@
 # category: local
 # version: 0.2
 # priority: optional
-# depends: mutagen
+# status: unsupported
+# depends: python:mutagen, python:id3
 # config:  
 #   { name: file_browser_dir, type: text, value: "$XDG_MUSIC_DIR, ~/MP3", description: "List of directories to scan for audio files." },
 #   { name: file_browser_ext, type: text, value: "mp3,ogg, m3u,pls,xspf, avi,flv,mpg,mp4", description: "File type/extension filter." },
@@ -160,7 +161,7 @@ class file (ChannelPlugin):
         meta = {
             "title": fn,
             "filename": fn,
-            "url": dir + "/" + fn,
+            "url": "file://" + dir + "/" + fn,
             "genre": "",
             "format": self.mime_fmt(fn[-3:]),
             "editable": True,
