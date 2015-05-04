@@ -6,20 +6,21 @@
 # description: Read meta data, pyz/package contents, module locating
 # version: 0.5
 # priority: core
+# doc: http://fossil.include-once.org/streamtuner2/wiki/plugin+meta+data
 # config: -
 #
 # Provides plugin lookup and meta data extraction utility functions.
-# It's used to abstract module+option management in applications,
-# which consolidates internal and external tool reuse.
+# It's used to abstract module+option management in applications.
+# For consolidating internal use and external/tool accessibility.
 #
-# The key:value format is language-agnostic, but in Python just uses
-# hash comments. It's basically YAML in the top-most script comment,
-# common field names, documentation, and a simple config: { .. } spec
-# for options and defaults.
+# The key:value format is language-agnostic. It's basically YAML in
+# a topmost script comment. For Python only # hash comments though.
+# Uses common field names, a documentation block, and an obvious
+# `config: { .. }` spec for options and defaults.
 #
 # It neither imposes a specific module/plugin API, nor config storage,
-# and doesn't provide much for module loading. It's really just meant
-# to look up meta infos.
+# and doesn't fixate module loading. It's really just meant to look
+# up meta infos.
 # This approach avoids in-code values/inspection, externalized meta
 # descriptors, and any hodgepodge or premature module loading just to
 # uncover module description fields.
@@ -38,10 +39,10 @@
 #
 # add_plugin_defaults()
 # ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
-#  Populates a configval{} and pluginstate{} list. Used for initial
-#  setup, when adding new plugins, etc. Both dicts might also be
-#  ConfigParser stores, or implement magic __set__ handling to act
-#  on changed states.
+#  Populates a config_options{} and plugin_states{} list. Used for
+#  initial setup, or when adding new plugins, etc. Both dicts might
+#  also be ConfigParser stores, or implement magic __set__ handling
+#  to act on state changes.
 #
 # get_data()
 # ‾‾‾‾‾‾‾‾‾‾
@@ -83,22 +84,22 @@ __all__ = ["get_data", "module_list", "plugin_meta", "dependency", "add_plugin_d
 log_WARN = lambda *x:None
 log_ERR = lambda *x:None
 
-# File lookup relation for get_data(), should be a top-level package module
+# File lookup relation for get_data(), should name a top-level module/package
 module_base = "pluginconf"
 
-# Module lookups via module_list(), may contain names or paths
+# Package names or base paths for module_list() and plugin_meta() lookups
 plugin_base = ["plugins"]
-    #   [conf.share+"/channels", conf.dir+"/plugins"])
+            # [conf.share+"/channels", conf.dir+"/plugins"])
 
 
 
 
 # Resource retrieval
 # ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
-# Retrieve file content from install path or from within
-# pyzip archive. This is just an alias and convenience
-# wrapper for pkgutil.get_data().
-# Uses module_base / file_base as top-level reference.
+# Fetches file content from install path or from within PYZ
+# archive. This is just an alias and convenience wrapper for
+# pkgutil.get_data().
+# Utilizes the module_base / file_base as top-level reference.
 #
 def get_data(fn, decode=False, gz=False, file_base=None):
     try:
@@ -146,7 +147,7 @@ def all_plugin_meta():
 #
 #   fn=      read literal files, or .pyz contents
 #
-#   src=     from pre-available script code
+#   src=     from already uncovered script code
 #
 #   module=  lookup per pkgutil, from plugin bases
 #            or top-level modules
@@ -313,7 +314,7 @@ class rx:
 #  · And `help:` is an alias to `description:`
 #    And `default:` an alias for `value:`
 #
-#  · While `type: select` utilizes the `select: a|b|c` format as uaual.
+#  · While `type: select` utilizes the `select: a|b|c` format as usual.
 #
 # ArgParsers const=, metavar= flag, or type=file are not aliased here.
 #
@@ -366,12 +367,12 @@ def argparse_map(opt):
 # helper might want to auto-tick them on, etc. This example is just
 # meant for probing downloadable plugins.
 #
-# The .valid() helper just asserts the api: string, or skips existing
-# modules.
-# While .depends() compares minimum versions of existing base plugins.
+# The .valid() helper only asserts the api: string, or skips existing
+# modules, and if they're more recent.
+# While .depends() compares minimum versions against existing modules.
 #
 # In practice there's little need for full-blown dependency resolving
-# for in-app modules.
+# for application-level modules.
 #
 class dependency(object):
 
