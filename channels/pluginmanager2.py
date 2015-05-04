@@ -28,6 +28,7 @@
 
 import imp
 import config
+import pluginconf
 import pkgutil
 from channels import __path__ as channels__path__
 import os
@@ -128,22 +129,12 @@ class pluginmanager2(object):
         # Clean up placeholders in vbox
         _ = [self.vbox.remove(c) for c in self.vbox.get_children()[3:]]
         
-        # Query existing plugins
-        dep = dependency()
-        # Attach available downloads
+        # Attach available downloads after checking dependencies
+        # e.g. newpl["depends"] = "streamtuner2 < 2.2.0, config >= 2.5"
+        dep = pluginconf.dependency()
         for newpl in meta:
-            id = newpl.get("$name")
-            # skip __init__.py
-            if id.find("__") == 0:
-                continue
-            # exclude if newer/current version already installed
-            if dep.have.get(id) and dep.have[id]["version"] >= newpl.get("version"):
-                continue
-            # check dependencies
-            #newpl["depends"] = "streamtuner2 < 2.2.0, config >= 2.5"
-            if not dep.depends(newpl):
-                continue
-            self.add_plugin(newpl)
+            if dep.valid(newpl) and dep.depends(newpl):
+                self.add_plugin(newpl)
 
         # Readd some filler labels
         _ = [self.add_(uikit.label("")) for i in range(1,3)]
@@ -157,7 +148,7 @@ class pluginmanager2(object):
                "<small>version:</small> <span weight='bold' color='orange'>$version</span>, "\
                "<small>type: <i><span color='#559'>$type</span></i> "\
                "category: <i><span color='blue'>$category</span></i></small>\n"\
-               "<span variant='smallcaps' color='#333'>$description</span>\n"\
+               "<span size='smaller' color='#364'>$description</span>\n"\
                "<span size='small' color='#532' weight='ultralight'>$extras, <a href='view-source:$file'>view src</a></span>"
         self.add_(b, safe_format(text, **p), markup=1)
 
@@ -209,62 +200,6 @@ class pluginmanager2(object):
         # just let main load any new plugins
         p.load_plugin_channels()
 
-
-
-# Do minimal depends: probing
-class dependency(object):
-
-    # prepare list of known plugins and versions
-    def __init__(self):
-        self.have = {name: plugin_meta(module=name) for name in module_list()}
-        # dependencies on core modules are somewhat more interesting:
-        self.have.update({
-            "streamtuner2": plugin_meta(module="st2", plugin_base=["config"]),
-            "uikit": plugin_meta(module="uikit", plugin_base=["config"]),
-            "config": plugin_meta(module="config", plugin_base=["config"]),
-            "action": plugin_meta(module="action", plugin_base=["config"]),
-        })
-    have = {}
-
-    # depends:    
-    def depends(self, plugin):
-        if plugin.get("depends"):
-            d = self.deps(plugin["depends"])
-            if not self.cmp(d, self.have):
-                return False
-        return True
-
-    # Split trivial "pkg, mod >= 1, uikit < 4.0" list
-    def deps(self, dep_str):
-        d = []
-        for dep in re.split(r"\s*[,;]+\s*", dep_str):
-            # skip deb:pkg-name, rpm:name, bin:name etc.
-            if not len(dep) or dep.find(":") >= 0:
-                continue
-            # find comparison and version num
-            m = re.search(r"([\w.-]+)\s*([>=<!~]+)\s*([\d.]+([-~.]\w+)*)", dep + " >= 0")
-            if m and m.group(2):
-                d.append([m.group(i) for i in (1,2,3)])
-        return d
-    
-    # Do actual comparison
-    def cmp(self, d, have):
-        r = True
-        for name, op, ver in d:
-            # skip unknown plugins, might be python module references ("depends: re, json")
-            if not have.get(name, {}).get("version"):
-                continue
-            curr = have[name]["version"]
-            tbl = {
-               ">=": curr >= ver,
-               "<=": curr <= ver,
-               "==": curr == ver,
-               ">":  curr > ver,
-               "<":  curr < ver,
-               "!=": curr != ver,
-            }
-            r &= tbl.get(op, True)
-        return r
 
 
 # Alternative to .format(), with keys possibly being absent
