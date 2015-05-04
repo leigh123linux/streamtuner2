@@ -15,6 +15,7 @@
 from uikit import *
 import channels
 from config import *
+from pluginconf import all_plugin_meta
 import re
 
 
@@ -115,14 +116,7 @@ class configwin (AuxiliaryWindow):
 
     # iterate over channel and feature plugins
     def add_plugins(self):
-        ls = {name: plugin_meta(module=name) for name in module_list()}
-        #for name in module_list():
-        #    if name in self.channels:
-        #        ls[name] = self.channels[name].meta
-        #    elif name in self.features:
-        #        ls[name] = self.features[name].meta
-        #    else:
-        #        ls[name] = plugin_meta(module=name)
+        ls = all_plugin_meta()
         for name,meta in sorted(ls.items(), key=lambda e: e[1]["type"]+e[1]["title"].lower(), reverse=False):
             if not name in conf.plugins:
                 conf.plugins[name] = False
@@ -130,41 +124,50 @@ class configwin (AuxiliaryWindow):
             self.add_plg(name, meta, add_)
         pass
 
-    # add configuration setting definitions from plugins
-    plugin_text = "<span size='larger' weight='heavy'>%s</span> "\
-                + "<span style='italic' foreground='slate blue'>(%s/%s)</span> "\
-                + "<span weight='bold' foreground='#777777'>%s</span>\n"\
-                + "<span size='smaller' stretch='ultraexpanded'>%s</span>"
+    # Description text
+    plugin_text = "<span size='larger' weight='heavy'>{title}</span> "\
+                + "<span style='italic' foreground='slate blue'>({type}/{category})</span> "\
+                + "<span weight='bold' foreground='#777777'>{version}</span>\n"\
+                + "<span size='smaller' stretch='ultraexpanded'>{description}</span>"
+
+    # Add [x] plugin setting, and its configuration definitions, set defaults from conf.*
     def add_plg(self, name, meta, add_):
-        # add plugin load entry
+
+        # Plugin enable button
         cb = gtk.CheckButton(name)
         cb.set_sensitive(not meta.get("priority") in ("core", "required", "builtin"))
-        cb.get_children()[0].set_markup(self.plugin_text % (meta.get("title", name), meta.get("type", "plugin"), meta.get("category", "addon"), meta.get("version", "./."), meta.get("description", "no description")))
-        doc = meta.get("doc", "").strip()
-        if ver < 3:
-            doc = re.sub("(?<=\S) *\n(?! *\n)", " ", doc)
-        cb.set_tooltip_text(doc)
+        cb.get_children()[0].set_markup(self.plugin_text.format(**meta))
+        cb.set_tooltip_text(self._tooltip(meta))
         add_( "config_plugins_"+name, cb, color=meta.get("color"), image=meta.get("png"), align=0)
 
-        # default values are already in conf[] dict (now done in conf.add_plugin_defaults)
+        # Default values are already in conf[] dict
+        # (now done in conf.add_plugin_defaults)
         for opt in meta["config"]:
             color = opt.get("color", None)
+
             # display checkbox
-            if opt["type"] == "boolean":
+            if opt["type"] in ("bool", "boolean"):
                 cb = gtk.CheckButton(opt["description"])
                 add_( "config_"+opt["name"], cb, color=color )
+
             # drop down list
-            elif opt["type"] == "select":
+            elif opt["type"] in ("select", "choose", "options"):
                 cb = ComboBoxText(ComboBoxText.parse_options(opt["select"])) # custom uikit widget
                 add_( "config_"+opt["name"], cb, opt["description"], color )
+
             # text entry
             else:
                 add_( "config_"+opt["name"], gtk.Entry(), opt["description"], color )
 
-        # spacer 
-        add_( "filler_pl_"+name, gtk.HSeparator() )
+        # Spacer between plugins
+        add_( None, gtk.HSeparator() )
 
-
+    # Reformat `doc` linebreaks for gtk.tooltip
+    def _tooltip(self, meta):
+        doc = meta.get("doc", "").strip()
+        if ver < 3:
+            doc = re.sub("(?<=\S) *\n(?! *\n)", " ", doc)
+        return doc
 
     # Put config widgets into channels/features configwin notebooks
     def add_channels(self, id=None, w=None, label=None, color=None, image=None, align=20):
@@ -173,6 +176,7 @@ class configwin (AuxiliaryWindow):
     # Separate tab for non-channel plugins
     def add_features(self, id=None, w=None, label=None, color=None, image=None, align=20):
         self.feature_options.pack_start(uikit.wrap(self.widgets, id, w, label, color, image, align))
+
 
     # save config
     def save(self, widget):
