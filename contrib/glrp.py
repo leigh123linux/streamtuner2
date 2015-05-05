@@ -49,6 +49,7 @@ class glrp (ChannelPlugin):
                 self.streams[genre].append(dict(
                     title=title, url=url, genre=genre, playing=location, favorite=len(fav)
                 ))
+            self.save()
         self.categories = sorted(self.streams.keys())
 
 
