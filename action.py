@@ -253,6 +253,7 @@ def convert_playlist(url, source, dest, local_file=True, row={}):
     for fmt in playlist_fmt_prio:
         if not urls and fmt in (source, mime, probe, ext, "raw"):
             urls = cnv.urls(fmt)
+            urls = filter(None, urls)
             log.DATA("conversion from:", source, " with extractor:", fmt, "got URLs=", urls)
             
     # Return original, or asis for srv targets
@@ -454,7 +455,7 @@ class extract_playlist(object):
         ),
         "jamj": dict(
             url   = r" (?x) \"audio\" \s*:\s* \"(\w+:\\?/\\?/[^\"\s]+)\" ",
-            title = r" (?x) \"name\" \s*:\s* \"([^\"]+)\" ",
+           #title = r" (?x) \"name\" \s*:\s* \"([^\"]+)\" ",
             unesc = "json",
         ),
         "json": dict(
@@ -497,6 +498,20 @@ class extract_playlist(object):
             if field and len(value):
                 rows[num][field] = value.strip()
         return [rows[str(i)] for i in sorted(map(int, rows.keys()))]
+
+
+    # Jamendo JAMJAMJSON playlists
+    def jamj(self):
+        rows = []
+        for result in json.loads(self.src)["results"]:
+            for track in result["tracks"]:
+                rows.append(dict(
+                    title = track["name"],
+                    url = track["audio"],
+                    playing = track.get("artist_name"),
+                    img = track.get("image"),
+                ))
+        return rows
 
 
     # Add placeholder fields to extracted row
@@ -566,8 +581,9 @@ class save_playlist(object):
         row["title"] = row.get("title", title or "unnamed stream")
         rows = []
         for url in urls:
-            row.update(url=url)
-            rows.append(row)
+            if url:
+                row.update(url=url)
+                rows.append(copy.copy(row))
         return self.store(rows, dest)
 
 
