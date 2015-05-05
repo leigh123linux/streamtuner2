@@ -9,12 +9,13 @@
 # author: mario
 # url: http://fossil.include-once.org/streamtuner2/
 # pack:
-#    bookmarks.py configwin.py streamedit.py history.py search.py links.py 
-#    internet_radio.py itunes.py jamendo.py live365.py global_key.py
-#    modarchive.py myoggradio.py punkcast.py radiobrowser.py radiotray.py
-#    shoutcast.py surfmusik.py timer.py tunein.py xiph.py youtube.py
-#    exportcat.py useragentswitcher.py somafm.py dnd.py ubuntuusers.py
-#    dirble.py filtermusic.py
+#    bookmarks.py, configwin.py, dirble.py, dnd.py, exportcat.py,
+#    filtermusic.py, global_key.py, history.py, internet_radio.py,
+#    itunes.py, jamendo.py, links.py, live365.py, modarchive.py,
+#    myoggradio.py, pluginmanager2.py, radiobrowser.py, radionomy.py,
+#    radiotray.py, search.py, shoutcast.py, somafm.py, streamedit.py,
+#    surfmusik.py, timer.py, tunein.py, ubuntuusers.py,
+#    useragentswitcher.py, xiph.py, youtube.py
 # config: -
 # priority: core
 #

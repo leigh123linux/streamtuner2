@@ -8,7 +8,7 @@
 # category: radio
 # config: 
 #    { name: xiph_min_bitrate, value: 64, type: int, description: "Minimum bitrate; filter lesser quality streams.", category: filter }
-#    { name: xiph_source, value: cache, type: select, select: "cache=JSON cache srv|xml=Clunky XML blob|web=Forbidden fruits", description: "Source for station list extraction." }
+#    { name: xiph_source, value: web, type: select, select: "cache=JSON cache srv|xml=Clunky XML blob|web=Forbidden fruits", description: "Source for station list extraction." }
 # priority: standard
 # png:
 #   iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAg5JREFUOI2lk1tIE2AUx3+7CG1tlmlG1rSEHrKgEUF7yO40taQiRj10I4qKkOaT4hIUItuTkC8hpJAQtJCICrFpzEKw
@@ -19,10 +19,10 @@
 #
 # Xiph.org maintains the Ogg streaming standard and Vorbis,
 # Opus, FLAC audio, and Theora video compression formats.
-# The ICEcast server is a modern alternative to SHOUTcast.
+# The ICEcast server is an open alternative to SHOUTcast.
 #
 # It also provides a directory listing of known internet
-# radio stations, only a handful of them using Ogg though.
+# radio stations; only a handful of them using Ogg though.
 # The category list is hardwired in this plugin. And there
 # are three station fetching modes now:
 #
@@ -34,8 +34,8 @@
 #    "buffy" mode keeps all streams buffered.
 #
 #  → "Forbidden Fruits" extracts from dir.xiph.org HTML pages,
-#    with homepages and listener/max infos available. Search
-#    is also possible.
+#    with homepages and listener/max infos available. Also
+#    enables live server searching.
 #
 # The bitrate filter can strip any low-quality entries, but
 # retains `0` entries (which just lack meta information and
