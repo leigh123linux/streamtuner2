@@ -1,0 +1,23 @@
+<page	xmlns="http://projectmallard.org/1.0/"
+	type="guide"
+	id="dirble">
+
+<info>
+	<link type="guide" xref="index#channels"/>
+	<link type="guide" xref="channels#list"/>
+        <desc>Dirble.com</desc>
+</info>
+
+	<title>Dirble</title>
+
+	<p>Dirble.com is another radio station directory, made up of
+	user-contributed content, and automatic streaming server polling.</p>
+
+	<p>It provides a JSON API, which as of v2 has a lot of unneeded meta
+	information and internal ids. But it's actually nicer to scan, and
+	contains even station homepages now.</p>
+
+        <note><p>The config option for a custom API key is perhaps
+        redundant. Should streamtuner2 -D however reveal an error, you
+        can configure your own account there.</p></note>
+</page>

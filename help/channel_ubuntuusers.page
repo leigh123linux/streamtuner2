@@ -1,0 +1,25 @@
+<page	xmlns="http://projectmallard.org/1.0/"
+	type="guide"
+	id="ubuntuusersm">
+
+<info>
+	<link type="guide" xref="index#channels"/>
+	<link type="guide" xref="channels#list"/>
+        <desc>Wiki list of radio stations</desc>
+</info>
+
+	<title>UbuntuUsers</title>
+
+	<p>There's a manually curated list of radio stations in the
+	UbuntuUsers.de Wiki. Like the origin website, most entries are
+	German or European stations.</p>
+
+	<p>So this is more of an example plugin, as it's not a huge list
+	of course. It's just here really, because the Wiki markup is
+	pretty well-written and easy to parse.</p>
+	
+	<note><p>There's also a small streaming TV list. But most entries
+	aren't really accessible (anymore) without command line tools. 
+	(Which that very Wiki page covers in detail.)</p></note>
+
+</page>

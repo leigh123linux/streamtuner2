@@ -1,0 +1,27 @@
+<page	xmlns="http://projectmallard.org/1.0/"
+	type="guide"
+	id="filtermusic">
+
+<info>
+	<link type="guide" xref="index#channels"/>
+	<link type="guide" xref="channels#list"/>
+        <desc>Selection of the best radio stations</desc>
+</info>
+
+	<title>filtermusic.net</title>
+
+
+	<p>Filtermusic summarizes all the common genres, but is primarily
+	focused on electro/dance/pop stations.  It elects on listener
+	popularity and freshness or something.</p>
+
+	<p>Which is why there are just a dozen categories with around 20-30
+	stations each. Still useful if you don't like to browse around
+	a lot.</p>
+	
+	<note><p>Like the Xiph plugin this channel provides two/three fetch modes.
+	There's no speed or feature differences this time. You might prefer
+	the buffered mode, as it reduces update requests, but still allows
+	refreshing lists.</p></note>
+
+</page>

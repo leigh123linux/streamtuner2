@@ -5,14 +5,17 @@
 <info>
 	<link type="guide" xref="index#channels"/>
 	<link type="guide" xref="channels#list"/>
-        <desc>iCast</desc>
+        <desc>iCast (removed)</desc>
 </info>
 
 	<title>iCast.io</title>
+	<subtitle>removed</subtitle>
 
-	<p>iCast is another huge collaborative radio station directory.</p>
-
-	<p>Its support in Streamtuner2 is quite robust, as it provides a JSON API.
-	It lacks in meta data information though (homepages, currently playing, listeners, etc.)</p>
+	<p>iCast was a collaborative (CC-BY-SA licensed entries) radio
+	station directory.</p>
+	
+	<note style="bug"><p>As of May 2015 it seems to be down. Which is why the channel
+	plugin got removed. It's still downloadable from contrib/ in the
+	project repository or per Plugin Manager.</p></note>
 
 </page>

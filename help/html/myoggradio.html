@@ -20,44 +20,53 @@
 <div class="region">
 <div class="contents">
 <p class="p"><span class="link"><a href="http://ehm.homelinux.org/MyOggRadio/" title="http://ehm.homelinux.org/MyOggRadio/">MyOggRadio</a></span> is an open
-        source internet radio directory project. Since it provides its station list as
-	JSON it's very well supported.</p>
-<p class="p">To help with populating the directory further,
-	streamtuner2 provides an option to share radion station links.
-	Use <span class="guiseq"><span class="gui">Station</span> ▸ <span class="gui">Extensions</span> ▸ <span class="gui">Share on MyOggRadio...</span></span> menu entry to upload the currently
-	selected radio (e.g. from your favourite bookmarks).</p>
+source internet radio directory project.</p>
+<p class="p">Since it provides its station list as JSON it's very well supported.</p>
+</div>
+<div id="" class="sect"><div class="inner">
+<div class="hgroup"><h2 class="title"><span class="title">Sharing is caring</span></h2></div>
+<div class="region"><div class="contents"><p class="p">To help with populating the directory further,
+  streamtuner2 provides an option to share radion station links.
+  Use the <span class="guiseq"><span class="gui">Station</span> ▸ <span class="gui">Share on MyOggRadio...</span></span>
+  context menu entry to upload a selected radio (e.g. from your bookmarks).</p></div></div>
+</div></div>
+<div id="" class="sect"><div class="inner">
+<div class="hgroup"><h2 class="title"><span class="title">Personal</span></h2></div>
+<div class="region"><div class="contents">
 <p class="p">The personal section is empty per default. You need to specify an user account
-	in the settings dialog, and actually bookmark stations in the MyOggRadio web site.
-	Shared entries aren't automatically in the <span class="gui">personal</span> list.</p>
+  in the settings dialog, and actually bookmark stations in the MyOggRadio web site.
+  Shared entries aren't automatically in the <span class="gui">personal</span> list.</p>
 <div class="note note-tip" title="Tip"><div class="inner"><div class="region"><div class="contents"><p class="p">MyOggRadio also has a neat cross-platform player:
-	<span class="link"><a href="http://freshcode.club/projects/jmorp" title="http://freshcode.club/projects/jmorp">JMyOggRadioPlayer</a></span>.</p></div></div></div></div>
-<div class="terms"><div class="inner">
-<div class="title title-terms"><h2><span class="title">Channel options.</span></h2></div>
-<div class="region"><dl class="terms">
+  <span class="link"><a href="http://freshcode.club/projects/jmorp" title="http://freshcode.club/projects/jmorp">JMyOggRadioPlayer</a></span>.</p></div></div></div></div>
+</div></div>
+</div></div>
+<div id="" class="sect"><div class="inner">
+<div class="hgroup"><h2 class="title"><span class="title">Channel options.</span></h2></div>
+<div class="region"><div class="contents"><div class="terms"><div class="inner"><div class="region"><dl class="terms">
 <dt class="terms"><span class="code">Login settings</span></dt>
 <dd class="terms">
 <p class="p">If you want to upload station infos to MyOggRadio, you need an account there.
     Registration is free and doesn't require personal information nor email address.
-    Specify it as <span class="input">username:</span> separated with a : colon in this field.</p>
+    Specify it as <span class="input">username:password</span> separated with a : colon in this field.</p>
 <div class="note note-advanced" title="Advanced"><div class="inner"><div class="region"><div class="contents">
 <p class="p">Alternatively you can store your account settings in the central
-      <span class="file">~/.netrc</span> config file. Or in <span class="file">~/.config/netc</span> even.</p>
+      <span class="file">~/.netrc</span> config file. Or in <span class="file">~/.config/netrc</span> even.</p>
 <p class="p">Your entry for MyOggRadio should follow the common format:</p>
 <div class="code"><pre class="contents ">machine myoggradio.org
     login usr123
     password pw123</pre></div>
 <p class="p">Which is useful because it's a standard format, and prevents
       leaking authorization data into per-application config stores.
-      Note that a user:pw setting in streamtuner takes precedence
-      though.</p>
+      Note that a user:pw setting in streamtuner still takes precedence
+      however.</p>
 </div></div></div></div>
 </dd>
 <dt class="terms"><span class="code">stream URL format</span></dt>
-<dd class="terms"><p class="p">When uploading stations, the streaming URL can be converted into RAW format. You
-    can however leave it as .PLS link file.</p></dd>
-</dl></div>
+<dd class="terms"><p class="p">When uploading stations, the streaming URL can be converted into
+    raw/direct server address. When undefined, station URLs are left as
+    .M3U/.PLS link.</p></dd>
+</dl></div></div></div></div></div>
 </div></div>
-</div>
 <div class="sect sect-links" role="navigation">
 <div class="hgroup"></div>
 <div class="contents"><div class="links guidelinks"><div class="inner">

@@ -10,17 +10,18 @@
 
 	<title>Timer</title>
 
+<section>
 	<p>You can programm play/recording events with the timer plugin. Simply select a station
 	and choose <guiseq><gui>Station</gui> <gui>Extensions</gui> <gui>Add timer...</gui></guiseq>.
 	A small popup will ask for a data/time string. If you press <key>OK</key> the station
 	and the programmed time will be stored in the bookmarks channel in the "timer" category.</p>
 	
-	<media type="image" src="img/timer.png" mime="image/png">Timer</media>
+	<p><media type="image" src="img/timer.png" mime="image/png">Timer</media></p>
 
         <note style="tip"><p>Note that streamtuner2 must be running for the programmed timer events to work.
 	(In a future version there might be the option to have it handled by the system cron
 	daemon.)</p></note>
-
+</section>
 
 	<section id="timestring">
 	<title>Time specification strings</title>

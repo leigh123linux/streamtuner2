@@ -11,9 +11,11 @@
 
 	<title>Xiph.org</title>
 
-	<p>Xiph.org is a non-profit organization, which develops and promotes the OGG audio format.
-        It also hosts a list of ICEcast streaming stations (ICEcast is the non-commercial pendant
-        to the SHOUTcast server.)</p>
+	<p>Xiph.org is a non-profit organization, which develops and
+	promotes the OGG streaming format, and develops audio compression
+	schemes such as Vorbis, FLAC, Opus, or the Theora video encoding
+	enve.  It also hosts a list of ICEcast streaming stations. ICEcast
+	is their non-commercial pendant to the SHOUTcast server.</p>
 
         <p>This channel is somehwat easy to read for Streamtuner2, because the source data is already
         provided as &lt;XML&gt; file. (Internally we're using a caching service, which pre-converts
@@ -32,6 +34,52 @@
     and low quality microphone sources. To filter these out, and only leave high quality music
     stations, you can therefore change this option. OGG starts to sound well with 96 kbit/s (whereas
     MP3 often requires 128 or 160 kbit/s at least).</p>
+  </item>
+  <item>
+    <title><code>Fetch mode</code></title>
+    <p>There are now three options to retrieve Xiph directory stations.</p>
+    <p></p>
+      <terms>
+      <item>
+        <title><code>Cache JSON</code></title>
+        <p>There's a caching server specifically for streamtuner2. It fixes
+        Xiphs quirky JSON API, and provides a simpler interface. It can't
+        correct the invalid encodings however, which is why you see ????
+        question marks a lot. This method does not reveal station homepages,
+        but enables the channel/server search.</p>
+      </item>
+      <p></p>
+      <item>
+        <title><code>Clunky YP.XML</code></title>
+        <p>The "yellow pages" YP.XML contains the full list of all known
+        ICEcast streaming servers. It's however quite bulky and super slow
+        to download. It furthermore clogs up a lot of memory, and requires
+        manual searching (only cache search works). Which is why streamtuner2
+        is trying hard to avoid it. It doesn't contain station homepages either.
+        </p>
+        <p>It's only still an option, because it's likely to remain accessible
+        after Xiph.org rewrites their directory service. (Which though is
+        getting delayed since a few years already.)
+        You can set the special "buffy" mode in your <file>settings.json</file>
+        to keep the whole YP.XML in memory. Which avoids the
+        slow station list download/unpacking.
+        </p>
+      </item>
+      <p></p>
+      <item>
+        <title><code>Forbidden fruits</code></title>
+        <p>As new alternative, you can let ST2 directly scrape the station
+        lists from dir.xiph.org (like it does for other channels). This is
+        something which Xiph doesn't like/encourage. But the drawbacks of
+        their alternative offerings are too severe and user-unfriendly;
+        which is why there's this raw HTML extraction mode now.</p><p>The website
+        listings contain full station homepages and a few more extras. In
+        this mode we can even acceess the XSPF playlist formats directly.
+        And the server search function, or browsing by audio/video format is
+        supported.
+        </p>
+      </item>
+    </terms>
   </item>
 </terms>
 

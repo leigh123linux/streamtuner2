@@ -40,9 +40,9 @@ There are various options for streamtuner2, available under <guiseq><gui>Edit</g
 
     <title>Player application settings</title>
 
-    <p>MIME types are categorzied identifiers for file types. <var>Audio/mpeg</var> for example represents MP3 files,
-    and <var>audio/ogg</var> means just OGG. And the player setting dialog simply associates an audio type with a
-    playback application:</p>
+    <p>MIME types are categorzied identifiers for file types. <var>Audio/mpeg</var> for
+    example represents MP3 files, and <var>audio/ogg</var> means just OGG.  And the player
+    setting dialog simply associates an audio type with a playback application:</p>
 
 <table shade="rows" rules="rows cols">
   <thead>  <tr><td><p>Format</p></td>     <td><p>Application</p></td></tr> </thead>
@@ -63,12 +63,15 @@ There are various options for streamtuner2, available under <guiseq><gui>Edit</g
     "<var>%m3u</var>" (old), or "<var>%xspf</var>" (modern), and "<var>%srv</var>" (for direct
     streaming URLs). See <link xref="config_apps#placeholders">placeholders</link>.</p>
 
-    <p>Catch-all entries like <var>*/*</var> or a generic <var>audio/*</var> entry allow to configure a default player.
-    While <var>video/youtube</var> is specific to the Youtube channel. And <var>url/http</var> a pseudo MIME type
-    to configure a web browser (for station homepages).</p>
+    <p>Catch-all entries like <var>*/*</var> or a generic <var>audio/*</var> entry allow to
+    configure a default player.  While <var>video/youtube</var> is specific to the Youtube
+    channel.  And <var>url/http</var> a pseudo MIME type to configure a web browser (for
+    station homepages).</p>
     
-    <p>You can remove default entries by clearing both the Format field and its associated Application.
-    Add completely new associations through the emtpy line. (Reopen the dialog to add another one.)</p>
+    <p>In practice you only need one entry for <var>audio/*</var> and one for
+    <var>video/*</var>, both can use the same player even.  You can remove default entries by
+    clearing both the Format field and its associated Application.  Add completely new
+    associations through the emtpy line.  (Reopen the dialog to add another one.)</p>
 
 </section>
 <section id="recording">
@@ -157,24 +160,43 @@ There are various options for streamtuner2, available under <guiseq><gui>Edit</g
  </terms>
 
   <terms>
-    <title>System</title>
+    <title>Playlist</title>
     <item>
-      <title>Temporary files</title>
-      <p>Streamtuner2 creates temporary .m3u files - for audio players that are configured to use %m3u files
-      instead of %pls or %srv URLs. For archival purposes you might want to set a dedicated directory
-      for this. In recent versions streamtuner2 will create a <file>/tmp/streamtuner2</file> directory
-      for itself. (You cannot set just `/tmp` anymore, because that will be mapped to the longer name.
-      You can trick the old behaviour with `/tmp/.` however. Don't do that unless you have a reason).</p>
+      <title>Reuse .m3u/.pls files</title> <p>When converting online station playlists,
+      streamtuner2 creates temporary files like <var>shoutcast.11539398391891.m3u</var> for
+      your audio player.  It'll keep those files around in /tmp/streamtuner2 until you quit. 
+      That speeds up switching between and reconnecting to a previous station.  It's in
+      particular necessary when you use <key>⏭</key> or <key>⏪</key> directly in your player. 
+      For <var>%pls</var> references your player typically usues the online-only playlist
+      files anyway.  If you disable this option, then converted pls/m3u/xspf files get
+      recreated repeatedly.</p>
     </item>
     <item>
-      <title>Reuse .m3u/.pls files</title>
-      <p>When converting online station playlists, streamtuner2 creates temporary files like
-      <var>shoutcast.11539398391891.m3u</var> for your audio player. It'll keep those
-      files around until you quit streamtuner2. That speeds up switching between and reconnecting to 
-      a previous station. It's in particular necessary when you use <key>⏭</key> or <key>⏪</key>
-      directly in your player. For <var>%pls</var> references your player typically usues the online-only
-      playlist files anyway. If you disable this option, then converted pls/m3u/xspf files get recreated
-      repeatedly.</p>
+      <title>Forgo any playlist conversion</title>
+      <p>Per default all server playlists (be they .pls or .m3u, .xpsf) into whatever
+      format your player/recording apss are configured with (per default <var>%pls</var>).
+      Set this option to disable those placeholders from the Player tab, and avoid
+      streamtuner2 pre-downloading any m3u/pls/xspf. Instead your audio  player gets passed
+      the literal server/playlist streaming address in any case. Note that this is only
+      a minor speedup, but may trip up some applications. A few channel sources even
+      don't provide standard stream URLs and playlist (Jamendo albums for example really
+      need pre-conversion; no audio player can deal with such custom JSON playlists).
+      In short: you don't normally want to enabled this, unless you run into problems
+      with streamtuner2 taking too long, or accidentially hangs due to downloading streams
+      itself.</p>
+    </item>
+ </terms>
+
+  <terms>
+    <title>System</title>
+    <item>
+      <title>Temporary files</title> <p>Streamtuner2 creates temporary .m3u files - for audio
+      players that are configured to use %m3u files instead of %pls or %srv URLs.  For
+      archival purposes you might want to set a dedicated directory for this.  In recent
+      versions streamtuner2 will create a <file>/tmp/streamtuner2</file> directory for itself. 
+      (You cannot set just `/tmp` anymore, because that will be mapped to the longer name. 
+      You can trick the old behaviour with `/tmp/.` however.  Don't do that unless you have a
+      reason).</p>
     </item>
     <item>
       <title>Config directory</title>
@@ -189,18 +211,15 @@ There are various options for streamtuner2, available under <guiseq><gui>Edit</g
       rendering.</p>
     </item>
     <item>
-      <title>Disable threading</title>
-      <p>Now "threading" is a somewhat technical term. It means that an
-      application runs different tasks internally at the same time. It's
-      used for snappier interfaces. However, it's also difficult to get
-      right at times. In Streamtuner2 some concurrent tasks conflict with
-      updating the Gtk3 user interface. Which is why the application may
-      crash even on reloading station lists or when switching between
-      categories too quickly. This is only an issue for Python3 on Gtk3 with
-      streamtuner2. In such cases you can disable the concurrent-tasking
-      mode. The GUI will appear slower at times, and freeze between fetching
-      lists, but remains stable on the upside. There's also a command line
-      flag <cmd>--nt</cmd> to enable this workaround.</p>
+      <title>Disable threading</title> <p>Now "threading" is a somewhat technical term.  It
+      means that an application runs different tasks internally at the same time.  It's used
+      for snappier interfaces.  However, it's also difficult to get right at times.  In
+      Streamtuner2 some concurrent tasks conflict with updating the Gtk3 user interface. 
+      Which is why the application may crash even on reloading station lists or when switching
+      between categories too quickly.  This is only an issue for Python3 on Gtk3 with
+      streamtuner2.  In such cases you can disable the concurrent-tasking mode.  The GUI will
+      appear slower at times, and freeze between fetching lists, but remains stable on the
+      upside.  There's also a command line flag <cmd>--nt</cmd> to enable this workaround.</p>
     </item>
  </terms>
 

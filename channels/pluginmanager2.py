@@ -98,7 +98,7 @@ class pluginmanager2(object):
         self.add_(uikit.label("\n<b><big>Install or update plugins</big></b>", size=520, markup=1))
         self.add_(uikit.label("You can update existing plugins, or install new contrib/ channels. User plugins reside in ~/.config/streamtuner2/plugins/ and can even be modified there (such as setting a custom # color: entry).\n", size=520, markup=1))
         self.add_(self.button("Refresh", stock="gtk-refresh", cb=self.refresh), "Show available plugins from repository\nhttp://fossil.include-once.org/streamtuner2/")
-        self.add_(gtk.image_new_from_stock("gtk-info", gtk.ICON_SIZE_LARGE_TOOLBAR), "While plugins are generally compatible across releases, newer versions may also require to update the streamtuner2 core setup.\n Please note that plugin installation is rather experimental. It still requires a restart of ST2 to activate them.")
+        self.add_(gtk.image_new_from_stock("gtk-info", gtk.ICON_SIZE_LARGE_TOOLBAR), "While plugins are generally compatible across releases, newer versions may also require to update the streamtuner2 core setup.")
         for i in range(1,10):
             self.add_(uikit.label(""))
 

@@ -1,0 +1,41 @@
+<page	xmlns="http://projectmallard.org/1.0/"
+	type="guide"
+	id="radionomy">
+
+<info>
+	<link type="guide" xref="index#channels"/>
+	<link type="guide" xref="channels#list"/>
+        <desc>European internet streaming provider</desc>
+</info>
+
+	<title>Radionomy</title>
+
+	<p>Radionomy is an internet radio streaming provider, orginally
+	founded in Belgium.  It "owns" a pretty slice of the worldwide
+	internet radio stuff these days.  It took over Shoutcast.com for
+	instance.</p>
+
+	<p>Their primary directory on Radionomy.com lists only stations,
+	that radionomy itself provides the servers for.  It's over 6000
+	already.  Both listening and station hosting are freegiven agreement
+	to autoplay advertisements, and a minimum quota of daily listeners). 
+	It's thus still growing.</p>
+	
+	<p>The extraction method in streamtuner2 uses a mix of RegExp,
+	DOM traversal, and JSON extraction, with some AJAX updating spiced
+	in. It follows the scheme of the website to fetch station lists.
+	</p>
+	
+	<section>
+	 <title>config options</title>
+	 
+         <p> You can configure the number of pages it'll try ('3' by
+  	 default) to influence the length of station lists.</p>
+	
+	 <p> And the song title updating ("OnAir Updates") can be disabled.
+	 Future versions of this channel plugin might poll it automatically,
+	 and keep the station list auto-updated.</p>
+	
+	 </section>
+
+</page>

@@ -36,8 +36,8 @@
 		<tr><td><p><link xref="playing">Play</link></p></td><td><p>Starts the radio in a configured audio player</p></td></tr>
 		<tr><td><p><link xref="recording">Record</link></p></td><td><p>Opens a terminal window and streamripper, which cuts the radio broadcast into individual mp3 songs.</p></td></tr>
 		<tr><td><p><link xref="bookmarks">Bookmarks</link></p></td><td><p>Copy radio entry over into the <gui>bookmarks</gui> channel.</p></td></tr>
-		<tr><td><p>Homepage</p></td><td><p>Most radio stations have a homepage. Open this in a web browser.</p></td></tr>
-		<tr><td><p>Saving</p></td><td><p>A radio entry can be exported as .m3u or .pls file.</p></td></tr>
+		<tr><td><p>Homepage</p></td><td><p>Most radio stations have a homepage, which you can start a web browser for.</p></td></tr>
+		<tr><td><p>Saving</p></td><td><p>A radio entry can be exported as .pls, .xspf, .m3u, .desktop, or .json file.</p></td></tr>
 		<tr><td><p>Extensions<guiseq><gui/><gui/></guiseq></p></td><td><p>Some plugins add other features in this submenu.</p></td></tr>
 		<tr><td><p>Editing</p></td><td><p>This command is in the <gui>Edit</gui> and context menu, allows to inspect and modify radio descriptions.</p></td></tr>
 		<tr><td><p>Searching</p></td><td><p>You can get a radio list according to search criteria.</p></td></tr>

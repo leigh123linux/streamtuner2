@@ -1,0 +1,34 @@
+<page	xmlns="http://projectmallard.org/1.0/"
+	type="guide"
+	id="pluginmanager2">
+
+<info>
+	<link type="guide" xref="index#extra"/>
+        <desc>User plugin installation</desc>
+</info>
+
+	<title>Plugin Manager 2</title>
+
+	<p>As of release 2.1.8 there is a plugin manager. It's available as
+	feature extension. Once acticated (after a restart) it brings up a
+	new <gui>📦 Add</gui> tab in the configuration window.</p>
+	
+	<p><media type="image" src="img/pluginmanager2.png"
+	mime="image/png">Install dialog for user plugins</media></p>
+	
+	<p>You can scan for available/new plugins there. And have them
+	downloaded right away. New plugins are just downloaded, not
+	implictly enabled. Reopen the config dialog to see them in the
+	regular lists.</p>
+	
+	<section id="configuration">
+	<title>Configuration</title>
+	<p>Alternative download repositories may be configured. (Little
+	practical value at the moment and foreseeable future.)</p>
+	<p>And you can let the plugin manager handle regular plugins as
+	well. After reconfiguring existing channel plugins, they get
+	automatically run, or disabled in the user interface (without
+	any restart). Which won't work for most feature/core plugins.</p>
+	</section>
+
+</page>
