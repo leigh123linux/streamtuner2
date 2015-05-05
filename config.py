@@ -345,7 +345,7 @@ class log_printer(object):
         "WARN": "38;5;208m",    # orange WARNING
         "EXEC": "38;5;66m",     # green  EXEC
         "PROC": "32m",          # green  PROCESS
-        "FAVICON":"58;5;119m",  # green  FAVICON
+        "FAVICON":"38;5;119m",  # green  FAVICON
         "CONF": "33m",          # brown  CONFIG DATA
         "DND":  "1;33;41m",     # yl/red DRAG'N'DROP
         "UI":   "34m",          # blue   USER INTERFACE BEHAVIOUR
@@ -369,6 +369,6 @@ log.PROC("ConfigDict() initialized")
 pluginconf.log_WARN = log.WARN
 pluginconf.log_ERR = log.ERR
 pluginconf.module_base = "config"
-pluginconf.plugin_base = ["channels", conf.share + "/channels", conf.dir + "/plugins"]
+pluginconf.plugin_base = ["channels", "plugins", conf.share+"/channels", conf.dir+"/plugins"]
 
 
