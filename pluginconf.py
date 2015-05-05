@@ -111,7 +111,7 @@ def get_data(fn, decode=False, gz=False, file_base=None):
         else:
             return str(bin)
     except:
-        log_WARN("get_data() didn't find:", fn, "in", file_base)
+        pass#log_WARN("get_data() didn't find:", fn, "in", file_base)
 
 
 
@@ -163,7 +163,7 @@ def plugin_meta(fn=None, src=None, module=None, frame=1, extra_base=[]):
        fn = module
        for base in plugin_base + extra_base:
            try:
-               src = get_data(fn+".py", decode=True, file_base=base)
+               src = get_data(fn=fn+".py", decode=True, file_base=base)
                if src: break
            except:
                continue  # plugin_meta_extract() will print a notice later
@@ -381,12 +381,9 @@ class dependency(object):
     def __init__(self):
         self.have = all_plugin_meta()
         # dependencies on core modules are somewhat more interesting:
-        self.have.update({
-            "streamtuner2": plugin_meta(module="st2", extra_base=["config"]),
-            "uikit": plugin_meta(module="uikit", extra_base=["config"]),
-            "config": plugin_meta(module="config", extra_base=["config"]),
-            "action": plugin_meta(module="action", extra_base=["config"]),
-        })
+        for name in ("st2", "uikit", "config", "action"):
+            self.have[name] = plugin_meta(module=name, extra_base=["config"])
+        self.have["streamtuner2"] = self.have["st2"]
     have = {}
 
     # depends:    
