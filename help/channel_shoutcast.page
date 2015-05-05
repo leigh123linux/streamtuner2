@@ -6,10 +6,11 @@
 	<link type="guide" xref="index#channels"/>
 	<link type="guide" xref="channels#list"/>
 	<link type="guide" xref="configuration#plugins"/>
-        <desc>One of the bigger radio station lists.</desc>
+        <desc>Probably still the largest radio station list.</desc>
 </info>
 
 	<title>Shoutcast</title>
+	<subtitle><link	href="http://shoutcast.com/">//shoutcast.com/</link></subtitle>
 
 	<p>SHOUTcast is the name of a MP3 streaming server software. It automatically collects all
 	station lists on shoutcast.com.

@@ -9,8 +9,9 @@
         <desc>Large radio directory from the UK.</desc>
 </info>
 
-	<title>Internet-Radio.com</title>
-
+	<title>Internet-Radio</title>
+        <subtitle><link href="http://internet-radio.com/">//internet-radio.com/</link></subtitle>
+        
 	<p>Internet-Radio.com is a broad alternative to Shoutcast.
 	It has regained station homepages for most entries again.
 	Genres are similiar to Shoutcast.</p>

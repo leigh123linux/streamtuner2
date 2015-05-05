@@ -5,11 +5,12 @@
 <info>
 	<link type="guide" xref="index#channels"/>
 	<link type="guide" xref="channels#list"/>
-        <desc>MOD files.</desc>
+        <desc>Tracker audio file collection.</desc>
 </info>
 
 	<title>The MOD Archive</title>
-
+        <subtitle><link href="http://modarchive.org/">//modarchive.org/</link></subtitle>          
+        
 	<p>MODArchive is a collection of module/tracker files. It's a community project, and
         categorizes individual audio files. You'll need a MOD-capable audio player.</p>
 

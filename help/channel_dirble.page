@@ -9,7 +9,8 @@
 </info>
 
 	<title>Dirble</title>
-
+        <subtitle><link href="http://dirble.com/">//dirble.com/</link></subtitle>
+	
 	<p>Dirble.com is another radio station directory, made up of
 	user-contributed content, and automatic streaming server polling.</p>
 

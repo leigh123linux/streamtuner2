@@ -9,7 +9,7 @@
 </info>
 
 	<title>Live365</title>
-
+        <subtitle><link href="http://live365.com/">//live365.com/</link></subtitle>
 	<p>Live365 is a radio broadcasting service and directory. It categorizes stations in
         over 250 genres. Not all radio stations are free to listen however. It's a commercial
         provider. Therefore streamtuner2 tries to filter result lists.</p>
