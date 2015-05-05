@@ -10,9 +10,23 @@
 # config:  
 #   { name: file_browser_dir, type: text, value: "$XDG_MUSIC_DIR, ~/MP3", description: "List of directories to scan for audio files." },
 #   { name: file_browser_ext, type: text, value: "mp3,ogg, m3u,pls,xspf, avi,flv,mpg,mp4", description: "File type/extension filter." },
+# png:
+#   iVBORw0KGgoAAAANSUhEUgAAABQAAAAPCAYAAADkmO9VAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wUFDQsK23vYngAAA6lJREFUOMtFz8tu1FYAxvH/sc+xxx7bM8lkElAgISoV4qIgpEaomwg2bMqiQmo3lfowPElVVbQr3gBVqGJRGi6VEERFDROS0Ewmc/N47Bkf+7gLevke4Kfv
+#   L374/vufxm/ffjnudJQoisoVonLDcN+sr39z7uXLXzfOn6cRhmSTCf3TUwa9HoN+H601ynXxwhA7ivhdCH48PkZOut0vdh48cKtej9C2iSyLsF7/xLpx4/5eu/1LZzSiaQx1z8O5cIHapUvVmpRkaUqcJMRpSjydmnEcP/2zKH6WOs/7mdZBVVXIqsKuKk4nE4qdnTueUncCpZh5HoHj4AqBVRQIrUFrLGPwlaLhOLiWtX93OPxKIuX+0HHWJ5ZF03VxpaRfFLRmM1rTKUGrRX1piUYQEIUhfhRRC0OqOMZxHIIwJIgiHFj77OnT+7KEd0Wt
+#   tl0Kgev7NHyf5apCTSaoLEMlCZdu3uT85ib1hQWi1VWcMCTb3cXxPJxmExlF2LWaMFpvS4TYcx2nmpalsKoKJQSNMCQ6cwZPCMxgwKTbpfPoETWlWDx3jtblyyghEFpjSYmwbYQx6DyPJUJ0bKUKU5Yqn83QSqGVolQKGQSEGxssrK3RffyY6Zs3zK9epb6wgBWGCCFQjkOlFFVRoIfDkTRwYIRIDTR0nqPnc7RSFP/AhW2jfJ/WlSvQ7zPe3SU9OECdPYuwbUrXxSiFsW2KOB7IaZYdp3keV9DQ8znacSj+RaWkqtVACExR0NrcZPriBflw
+#   SJqmWO32R9BxMEAxnfatJE37cZb1jWVRaP3x4XxOkecIy0J6HibPmY1GqHqdpa0tbNdlvLNDfnJCOR5jJhPMYECZpj2JlPEwSbqBEFTG/Jd85fZtNm/dIjk6Itnbw19e5tN79yiHQ5JnzxgfHDBrNvGjCOM4lElCkWWn1ufb2/M4TQ9LIQAoiwJTlrQ3NrCVQjoOw04Hf2UF5ftI3wchsOt1Zu/eoTsd9KtX5E+eYCaTnux2u1VRVe8N/y/PMn57+JBka4v04IDs8JDD+RxGI8RoxPz1a6yyJJ/PGT9/rivXzZRSp3m9/kYAtFdWvm3PZt+1
+#   kkQEtk1g2wRSEihV+badR7Va2vS8ceR5A9uYrimKv/LZ7MhU1VF7efnD2sWL3cb6+slzrT9IgKXFxT8W07S33GpZywsLHxzLep/Gcac3Gu0H9fp7Z3X1KLp27WT9+vXh8epq8vXdu7N+FPG61UIXBXZZAmCVJX8DADze5LjPkMQAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTUtMDUtMDVUMTU6MTA6NTkrMDI6MDBD/PY6AAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE1LTA1LTA1VDE1OjEwOjU5KzAyOjAwMqFOhgAAAABJRU5ErkJggg==
+# png-orig:
+#   https://openclipart.org/detail/168001/folder-icon-red-music
 #
 # Local file browser. Presents files from configured directories.
-
+# This is not what streamtuner2 is meant for. Therefore this is
+# an optional plugin, and not overly well integrated.
+#
+# Bugs:
+# Only loads directories on startup. Doesn't work when post-activated
+# per pluginmanager2 for instance. And LANG=C breaks it on startup,
+# if media directories contain anything but ASCII filenames.
 
 
 # modules
