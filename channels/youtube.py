@@ -8,7 +8,7 @@
 # category: video
 # config:
 #    { name: youtube_channels,  type: text,  value: "Key Of Awesome, Pentatonix",  description: "Preferred channels to list videos from.",  category: select }
-#    { name: youtube_region,  type: select,  select: "=No Region|AR=Argentina|AU=Australia|AT=Austria|BE=Belgium|BR=Brazil|CA=Canada|CL=Chile|CO=Colombia|CZ=Czech Republic|EG=Egypt|FR=France|DE=Germany|GB=Great Britain|HK=Hong Kong|HU=Hungary|IN=India|IE=Ireland|IL=Israel|IT=Italy|JP=Japan|JO=Jordan|MY=Malaysia|MX=Mexico|MA=Morocco|NL=Netherlands|NZ=New Zealand|PE=Peru|PH=Philippines|PL=Poland|RU=Russia|SA=Saudi Arabia|SG=Singapore|ZA=South Africa|KR=South Korea|ES=Spain|SE=Sweden|CH=Switzerland|TW=Taiwan|AE=United Arab Emirates|US=United States",  value: UK,  description: "Filter by region id.",  category: auth }
+#    { name: youtube_region,  type: select,  select: "=No Region|AR=Argentina|AU=Australia|AT=Austria|BE=Belgium|BR=Brazil|CA=Canada|CL=Chile|CO=Colombia|CZ=Czech Republic|EG=Egypt|FR=France|DE=Germany|GB=Great Britain|HK=Hong Kong|HU=Hungary|IN=India|IE=Ireland|IL=Israel|IT=Italy|JP=Japan|JO=Jordan|MY=Malaysia|MX=Mexico|MA=Morocco|NL=Netherlands|NZ=New Zealand|PE=Peru|PH=Philippines|PL=Poland|RU=Russia|SA=Saudi Arabia|SG=Singapore|ZA=South Africa|KR=South Korea|ES=Spain|SE=Sweden|CH=Switzerland|TW=Taiwan|AE=United Arab Emirates|US=United States",  value: GB,  description: "Filter by region id.",  category: auth }
 #    { name: youtube_wadsworth,  type: boolean,  value: 0,  description: "Apply Wadsworth constant.",  category: filter }
 # priority: default
 # png:
@@ -176,10 +176,10 @@ class youtube (ChannelPlugin):
 
         # Most Popular
         elif cat == "mostPopular":
-            for row in self.api("feeds/api/standardfeeds/%s/most_popular"%conf.youtube_region, ver=2):
-                entries.append(self.wrap2(row))
-            #for row in self.api("videos", chart="mostPopular", regionCode=conf.youtube_region):
-            #    entries.append( self.wrap3(row, {"genre": "mostPopular"}) )
+            #for row in self.api("feeds/api/standardfeeds/%s/most_popular"%conf.youtube_region, ver=2):
+            #    entries.append(self.wrap2(row))
+            for row in self.api("videos", chart="mostPopular", regionCode=conf.youtube_region):
+                entries.append( self.wrap3(row, {"genre": "mostPopular"}) )
 
         # Categories
         elif cat in self.videocat_id:
