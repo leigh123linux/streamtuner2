@@ -3,7 +3,7 @@
 # title: Drag and Drop
 # description: Copy streams/stations from and to other applications.
 # depends: uikit >= 1.8, action >= 1.0
-# version: 0.6
+# version: 0.7
 # type: feature
 # config:
 #   { name: dnd_format, type: select, value: xspf, select: "pls|m3u|xspf|jspf|asx|smil|desktop|srv", description: "Default temporary file format for copying a station." }
@@ -193,21 +193,27 @@ class dnd(object):
         # internal JSON row
         if info >= 51:
             buf = 'text', json.dumps(r)
+
         # Pass M3U/PLS/XSPF as literal payload
         elif info >= 20:
             buf = 'text', cnv.export(urls=[r["url"]], row=r, dest=self.cnv_types[info])
+
         # Direct server URL
         elif info >= 10:
             urls = action.convert_playlist(r["url"], r["listformat"], "srv", False, r)
             #buf = 'uris', urls
             buf = 'text', urls[0]
+
         # Text sources are assumed to understand the literal URL or expect a description block
         elif info >= 5:
             buf = 'text', "{url}\n# Title: {title}\n# Homepage: {homepage}\n\n".format(**r)
+
         # Direct URL as text/uri-list
         elif conf.dnd_format == "srv":
             buf = 'uris', [self.row.get("url")]
-        # Create temporary PLS file, because "text/uri-list" is widely misunderstood and just implemented for file:// IRLs
+
+        # Create temporary PLS file, because "text/uri-list" is widely misunderstood
+        # and just used for file:// IRLs in drag and drops
         else:
             title = re.sub("[^\w-]+", "_", r["title"]).strip()
             tmpfn = "{}/{}.{}".format(conf.tmp, title, conf.dnd_format)
@@ -270,11 +276,16 @@ class dnd(object):
         elif data and info >= 5:
             log.DND("Converting direct payload playlist")
             cnv = action.extract_playlist(data)
+            
+            # known DND info format
             if info >= 20:
                 fmt = self.cnv_types[info]
+
+            # else probe content (which also works for URLs in plain text)
             else:
                 fmt = cnv.probe_fmt()
                 if fmt == "href": fmt = "raw"
+
             add = cnv.rows(fmt)
             rows += [ cnv.mkrow(row) for row in add ]
 
@@ -282,12 +293,23 @@ class dnd(object):
         elif urls:
             log.DND("Importing from playlist file")
             for fn in urls or [data]:
-                if not re.match("^(scp|file)://(localhost)?/|/", fn):
-                    continue
-                fn = compat2and3.urldecode(re.sub("^\w+://[^/]*", "", fn))
-                cnv = action.extract_playlist(fn=fn)
-                if cnv.src:
-                    rows += [ cnv.mkrow(row) for row in cnv.rows() ]
+
+                # Plain file urls
+                if re.match("^(scp|file)://(localhost)?/|/", fn):
+
+                    # read and convert playlist files
+                    fn = compat2and3.urldecode(re.sub("^\w+://[^/]*", "", fn))
+                    cnv = action.extract_playlist(fn=fn)
+                    if cnv.src:
+                        rows += [ cnv.mkrow(row) for row in cnv.rows() ]
+
+                # Real resource links, http://server:8090/.mp3 etc
+                else:
+                    # Action module can't query streaming servers yet,
+                    # so append a stub entry of just the target url,
+                    # which will bring up the streamedit dialog
+                    rows += [ dict(url=fn, title="", playing="", genre="url") ]
+                    
         
         # Insert and update view
         if rows:
