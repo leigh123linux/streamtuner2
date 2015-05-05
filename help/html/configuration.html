@@ -18,16 +18,23 @@ There are various options for streamtuner2, available under <span class="guiseq"
 </p>
 <p class="p"><span class="media"><span class="media media-image"><img src="img/configtabs.png" class="media media-inline" alt=""></span></span></p>
 <div class="terms"><div class="inner">
-<div class="title title-terms"><h2><span class="title">It's separated into three main sections / tabs.</span></h2></div>
+<div class="title title-terms"><h2><span class="title">It's separated into different sections/tabs.</span></h2></div>
 <div class="region"><dl class="terms">
-<dt class="terms">Player</dt>
+<dt class="terms">🔊 Player</dt>
 <dd class="terms"><p class="p">Lists audio formats and the audio player applications, or recording tools below.
-    It's a file type to application table. Double click an entry for editing.</p></dd>
-<dt class="terms">Options</dt>
-<dd class="terms"><p class="p">Influences the display of all stream/station lists, and contains some system settings.</p></dd>
-<dt class="terms">Channel Plugins</dt>
+    It's a map of file-types to applications. Double click an entry to edit it.</p></dd>
+<dt class="terms">☑ Options</dt>
+<dd class="terms"><p class="p">Influences the display of all stream/station lists, and contains some
+    behaviour and system settings.</p></dd>
+<dt class="terms">📻 Channel Plugins</dt>
 <dd class="terms"><p class="p">Every channel tab can have specific options. These are configured here.
     Also you can disable channels you don't need.</p></dd>
+<dt class="terms">🔌 Feature Plugins</dt>
+<dd class="terms"><p class="p">Another class of plugins enables internal functions, or adds extra menu
+    entries, or configuration options.</p></dd>
+<dt class="terms">📦 Add</dt>
+<dd class="terms"><p class="p">The <span class="link"><a href="pluginmanager2.html" title="Plugin Manager 2">Plugin Manager 2</a></span> adds another
+    tab for updating or installing new plugins.</p></dd>
 </dl></div>
 </div></div>
 </div>
@@ -167,17 +174,20 @@ There are various options for streamtuner2, available under <span class="guiseq"
       files anyway.  If you disable this option, then converted pls/m3u/xspf files get
       recreated repeatedly.</p></dd>
 <dt class="terms">Forgo any playlist conversion</dt>
-<dd class="terms"><p class="p">Per default all server playlists (be they .pls or .m3u, .xpsf) into whatever
-      format your player/recording apss are configured with (per default <span class="var">%pls</span>).
-      Set this option to disable those placeholders from the Player tab, and avoid
+<dd class="terms">
+<p class="p">Per default most server playlists (be they .pls or .m3u, .xpsf) are converted.
+      All player/recording apps receive a default <span class="var">%pls</span> file normally.
+      Set this option to disable any such placeholders from the Player tab, and avoid
       streamtuner2 pre-downloading any m3u/pls/xspf. Instead your audio  player gets passed
-      the literal server/playlist streaming address in any case. Note that this is only
-      a minor speedup, but may trip up some applications. A few channel sources even
-      don't provide standard stream URLs and playlist (Jamendo albums for example really
+      the literal server/playlist streaming URL then.</p>
+<div class="note" title="Note"><div class="inner"><div class="region"><div class="contents"><p class="p">Note that this is only
+      a minor speedup, but may trip up some applications. A few channel sources don't
+      even provide standard stream addresses and playlists. (Jamendo albums for example really
       need pre-conversion; no audio player can deal with such custom JSON playlists).
-      In short: you don't normally want to enabled this, unless you run into problems
-      with streamtuner2 taking too long, or accidentially hangs due to downloading streams
-      itself.</p></dd>
+      In short: you don't normally want to enable this flag - unless you run into problems
+      with streamtuner2 taking too long, or when it hang by accidentially downloading streams
+      itself.</p></div></div></div></div>
+</dd>
 </dl></div>
 </div></div>
 <div class="terms"><div class="inner">
@@ -216,10 +226,11 @@ There are various options for streamtuner2, available under <span class="guiseq"
 <div id="plugins" class="sect"><div class="inner">
 <div class="hgroup"><h2 class="title"><span class="title">Channel and feature plugins and settings</span></h2></div>
 <div class="region"><div class="contents">
-<p class="p">The tabs <span class="key"><kbd>Channels</kbd></span> lists all available directory services.
-    While the <span class="key"><kbd>Features</kbd></span> group provides internal or menu enhancements.
+<p class="p">The tabs <span class="key"><kbd>📻 Channels</kbd></span> lists all available directory services.
+    While the <span class="key"><kbd>🔌 Features</kbd></span> group provides internal or menu enhancements.
     Disabling or enabling a plugin however requires a restart of Streamtuner2
-    to take effect.</p>
+    to take effect. (Unless the <span class="link"><a href="pluginmanager2.html" title="Plugin Manager 2">Plugin Manager 2</a></span>
+    is enabled, with its <span class="key"><kbd>📦 Add</kbd></span> tab visible.)</p>
 <p class="p"><span class="media"><span class="media media-image"><img src="img/configplugins.png" class="media media-inline" alt=""></span></span></p>
 <p class="p">Each plugin can have its own little list of extra options. They'll be
     applied right away for already active channel/feature plugins.</p>

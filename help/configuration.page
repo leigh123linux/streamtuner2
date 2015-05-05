@@ -17,20 +17,31 @@ There are various options for streamtuner2, available under <guiseq><gui>Edit</g
   <p><media type="image" src="img/configtabs.png" mime="image/png" /></p>
 
 <terms>
-  <title>It's separated into three main sections / tabs.</title>
+  <title>It's separated into different sections/tabs.</title>
   <item>
-    <title>Player</title>
+    <title>🔊 Player</title>
     <p>Lists audio formats and the audio player applications, or recording tools below.
-    It's a file type to application table. Double click an entry for editing.</p>
+    It's a map of file-types to applications. Double click an entry to edit it.</p>
   </item>
   <item>
-    <title>Options</title>
-    <p>Influences the display of all stream/station lists, and contains some system settings.</p>
+    <title>☑ Options</title>
+    <p>Influences the display of all stream/station lists, and contains some
+    behaviour and system settings.</p>
   </item>
   <item>
-    <title>Channel Plugins</title>
+    <title>📻 Channel Plugins</title>
     <p>Every channel tab can have specific options. These are configured here.
     Also you can disable channels you don't need.</p>
+  </item>
+  <item>
+    <title>🔌 Feature Plugins</title>
+    <p>Another class of plugins enables internal functions, or adds extra menu
+    entries, or configuration options.</p>
+  </item>
+  <item>
+    <title>📦 Add</title>
+    <p>The <link xref="pluginmanager2">Plugin Manager 2</link> adds another
+    tab for updating or installing new plugins.</p>
   </item>
 </terms>
 
@@ -173,17 +184,17 @@ There are various options for streamtuner2, available under <guiseq><gui>Edit</g
     </item>
     <item>
       <title>Forgo any playlist conversion</title>
-      <p>Per default all server playlists (be they .pls or .m3u, .xpsf) into whatever
-      format your player/recording apss are configured with (per default <var>%pls</var>).
-      Set this option to disable those placeholders from the Player tab, and avoid
+      <p>Per default most server playlists (be they .pls or .m3u, .xpsf) are converted.
+      All player/recording apps receive a default <var>%pls</var> file normally.
+      Set this option to disable any such placeholders from the Player tab, and avoid
       streamtuner2 pre-downloading any m3u/pls/xspf. Instead your audio  player gets passed
-      the literal server/playlist streaming address in any case. Note that this is only
-      a minor speedup, but may trip up some applications. A few channel sources even
-      don't provide standard stream URLs and playlist (Jamendo albums for example really
+      the literal server/playlist streaming URL then.</p> <note><p>Note that this is only
+      a minor speedup, but may trip up some applications. A few channel sources don't
+      even provide standard stream addresses and playlists. (Jamendo albums for example really
       need pre-conversion; no audio player can deal with such custom JSON playlists).
-      In short: you don't normally want to enabled this, unless you run into problems
-      with streamtuner2 taking too long, or accidentially hangs due to downloading streams
-      itself.</p>
+      In short: you don't normally want to enable this flag - unless you run into problems
+      with streamtuner2 taking too long, or when it hang by accidentially downloading streams
+      itself.</p></note>
     </item>
  </terms>
 
@@ -228,10 +239,11 @@ There are various options for streamtuner2, available under <guiseq><gui>Edit</g
 <section id="plugins">
     <title>Channel and feature plugins and settings</title>
 
-    <p>The tabs <key>Channels</key> lists all available directory services.
-    While the <key>Features</key> group provides internal or menu enhancements.
+    <p>The tabs <key>📻 Channels</key> lists all available directory services.
+    While the <key>🔌 Features</key> group provides internal or menu enhancements.
     Disabling or enabling a plugin however requires a restart of Streamtuner2
-    to take effect.</p>
+    to take effect. (Unless the <link xref="pluginmanager2">Plugin Manager 2</link>
+    is enabled, with its <key>📦 Add</key> tab visible.)</p>
     
     
     <p><media type="image" src="img/configplugins.png" mime="image/png" /></p>

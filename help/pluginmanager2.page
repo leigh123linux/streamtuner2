@@ -11,7 +11,7 @@
 
 	<p>As of release 2.1.8 there is a plugin manager. It's available as
 	feature extension. Once acticated (after a restart) it brings up a
-	new <gui>📦 Add</gui> tab in the configuration window.</p>
+	new <key>📦 Add</key> tab in the configuration window.</p>
 	
 	<p><media type="image" src="img/pluginmanager2.png"
 	mime="image/png">Install dialog for user plugins</media></p>
