@@ -17,24 +17,49 @@
 <div class="hgroup"><h1 class="title"><span class="title">Plugin Manager 2</span></h1></div>
 <div class="region">
 <div class="contents">
-<p class="p">As of release 2.1.8 there is a plugin manager. It's available as
-	feature extension. Once acticated (after a restart) it brings up a
-	new <span class="key"><kbd>📦 Add</kbd></span> tab in the configuration window.</p>
+<p class="p">For updating or installing new plugins (extra channels or
+	features), there's a user plugin manager. It's available as
+	feature extension itself.</p>
+<p class="p">Once acticated (after a restart) it brings up a new <span class="key"><kbd>📦
+	Add</kbd></span> tab in the configuration window.</p>
 <p class="p"><span class="media"><span class="media media-image"><img src="img/pluginmanager2.png" class="media media-inline" alt="Install dialog for user plugins"></span></span></p>
 <p class="p">You can scan for available/new plugins there. And have them
 	downloaded right away. New plugins are just downloaded, not
 	implictly enabled. Reopen the config dialog to see them in the
-	regular lists.</p>
+	regular <span class="key"><kbd>📻 Channels</kbd></span> or <span class="key"><kbd>🔌 Feature</kbd></span> tabs, and
+	then enable them.</p>
+<div class="links topiclinks"><div class="inner"><div class="region"><div class="linkdiv "><a class="linkdiv" href="configuration.html#plugins" title="Channel and feature plugins and settings"><span class="title">Channel and feature plugins and settings</span></a></div></div></div></div>
 </div>
 <div id="configuration" class="sect"><div class="inner">
 <div class="hgroup"><h2 class="title"><span class="title">Configuration</span></h2></div>
+<div class="region"><div class="contents"><div class="list"><div class="inner"><div class="region"><ul class="list">
+<li class="list"><p class="p">Alternative download repositories may be configured. (Little
+	practical value at the moment.)</p></li>
+<li class="list">
+<p class="p">And you can let the plugin manager handle autoactivation
+	of changed plugin states.</p>
+<div class="list"><div class="inner"><div class="region"><ul class="list">
+<li class="list"><p class="p">After reconfiguring existing channel plugins, they get
+   	  automatically instantiated or disabled in the user interface.
+   	  (Which avoids the usual restart).</p></li>
+<li class="list"><p class="p">This currently doesn't work with feature/core
+   	  plugins. Plugin deactivation is mostly visual, but does not undo
+   	  menu extensions or undefine callback hooks.</p></li>
+</ul></div></div></div>
+</li>
+</ul></div></div></div></div></div>
+</div></div>
+<div id="configuration" class="sect"><div class="inner">
+<div class="hgroup"><h2 class="title"><span class="title">User plugins</span></h2></div>
 <div class="region"><div class="contents">
-<p class="p">Alternative download repositories may be configured. (Little
-	practical value at the moment and foreseeable future.)</p>
-<p class="p">And you can let the plugin manager handle regular plugins as
-	well. After reconfiguring existing channel plugins, they get
-	automatically run, or disabled in the user interface (without
-	any restart). Which won't work for most feature/core plugins.</p>
+<p class="p">Downloaded plugins are stored in <span class="file">~/.config/streamtuner2/plugins</span>.
+	To remove them, delete the individual *.py files there manually.</p>
+<div class="note note-bug" title="Bug"><div class="inner"><div class="region"><div class="contents">
+<p class="p">Currently system-installed core plugins take
+	precedence over downloaded updates.</p>
+<p class="p">And you'll have to take care to eventually refresh/delete outdated user plugins,
+	whenever you install a newer Streamtuner2 version.</p>
+</div></div></div></div>
 </div></div>
 </div></div>
 <div class="sect sect-links" role="navigation">

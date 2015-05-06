@@ -15,9 +15,9 @@
 	<media type="image" mime="image/png" src="img/channels-left.png">Tabs</media>
 
         <p>The notebook tabs can also be repositioned with
-        <guiseq><gui>Edit</gui> <gui>Channel tab position</gui> <gui>Left</gui></guiseq>.
-        And since 2.1.5 you can directly reorder the channel tabs themselves,
-        by dragging them around.</p>
+        <guiseq><gui>Edit</gui> <gui>Channel tab position</gui> <gui>Top</gui></guiseq>.
+        And you can directly rearrange the channel tabs themselves,
+        by dragging them within the list.</p>
 
         <p>If you first select a channel tab, the categories should appear or be loading.
         Otherwise:</p>
@@ -29,8 +29,8 @@
 	</steps>
 
 	<p>Individual channels provide different music/radio information. The table
-        views are mostly identical in each tab. Some views may rename columns, or remove
-        them alltogether.</p>
+        views are however mostly identical for each tab. Some views may rename columns,
+        or remove them alltogether.</p>
 
 	<section id="list">
 		<title>Available channels</title>

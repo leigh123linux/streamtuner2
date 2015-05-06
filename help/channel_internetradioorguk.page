@@ -12,12 +12,18 @@
 	<title>Internet-Radio</title>
         <subtitle><link href="http://internet-radio.com/">//internet-radio.com/</link></subtitle>
         
-	<p>Internet-Radio.com is a broad alternative to Shoutcast.
-	It has regained station homepages for most entries again.
-	Genres are similiar to Shoutcast.</p>
+	<p>Internet-Radio.com is a broad alternative to Shoutcast.</p>
+	<list>
+ 	 <item><p>It has regained station homepages for most entries again.</p></item>
+ 	 <item><p>Genres are similiar to Shoutcast.</p></item>
+ 	 <item><p>Updating station list is comperatively fast.</p></item>
+ 	</list>
 
-	<note><p>Note that this plugin has its own setting on how many
+        <section id="options">
+        <title>Configuration</title>
+	<p>Note that this plugin has its own setting on how many
 	links to retrieve.  Instead of stream numbers, it only counts pages
-	(which however speeds up processing now).</p></note>
+	(which however speeds up processing now).</p>
+	</section>
 
 </page>

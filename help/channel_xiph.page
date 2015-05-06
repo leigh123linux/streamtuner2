@@ -26,9 +26,9 @@
 
         <p>Xiph also uses the .xspf format, instead of .pls stream links</p>
 
-
-<terms>
+<section id="options">
   <title>Channel options.</title>
+  <terms>
   <item>
     <title><code>Filter by minimum bitrate</code></title>
     <p>The bitrate of an audio stream determines the music quality. Many Xiph streams have simple
@@ -82,6 +82,7 @@
       </item>
     </terms>
   </item>
-</terms>
+  </terms>
+</section>
 
 </page>

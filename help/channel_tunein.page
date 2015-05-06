@@ -5,6 +5,7 @@
 <info>
 	<link type="guide" xref="index#channels"/>
 	<link type="guide" xref="channels#list"/>
+	<link type="guide" xref="configuration#plugins"/>
         <desc>Radio and Podcast directory.</desc>
 </info>
 
@@ -14,5 +15,13 @@
 	<p>TuneIn hosts a major radio, show and podcast directory. It also provides the
         RadioTime/AIR interface for listener feedback or something. ST2 queries the OPML
         lists only for radio stations currently.</p>
+        
+        <section id="options">
+        <title>Configuration</title>
+        <p>You can switch between "music" and "genres" list. The genres
+        list is basically a longer and expanded variant of "music".
+        Use <guiseq><gui>Channel</gui> <gui>Reload category tree</gui></guiseq>
+        to update them thereafter.</p>
+        </section>
 
 </page>

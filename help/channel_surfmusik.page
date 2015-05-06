@@ -18,19 +18,19 @@
         <p>It's both pretty large and rather quick to extract listings from. And it mostly
         includes station homepage links.</p>
 
+        <note style="bug"><p>The MusicTV and NewsTV sections also return results, but those are mostly
+        web-based video stations. Some of them are outdated links even.</p></note>
 
-        <p>The MusicTV and NewsTV sections also return results, but those are mostly
-        web-based video stations. Some of them are outdated links even.</p>
-
-
-<terms>
+<section id="options">
   <title>Channel options.</title>
+  <terms>
   <item>
     <title><code>Language</code></title>
     <p>There's an English and a German variant of this radio directory. Genres are
     also localized. Restart streamtuner2 after switching the Language option. Then
     use <guiseq><gui>Channel</gui> <gui>Reload category tree</gui></guiseq>.</p>
   </item>
-</terms>
+  </terms>
+</section>
 
 </page>

@@ -5,6 +5,7 @@
 <info>
 	<link type="guide" xref="index#channels"/>
 	<link type="guide" xref="channels#list"/>
+	<link type="guide" xref="configuration#plugins"/>
         <desc>Selection of the best radio stations</desc>
 </info>
 
@@ -19,10 +20,14 @@
 	<p>Which is why there are just a dozen categories with around 20-30
 	stations each. Still useful if you don't like to browse around
 	a lot.</p>
-	
-	<note><p>Like the Xiph plugin this channel provides two/three fetch modes.
+
+        <section id="options">	
+        <title>Configuration</title>
+	<p>Like the Xiph plugin this channel provides two/three fetch modes.</p>
+	<note><p>
 	There's no speed or feature differences this time. You might prefer
 	the buffered mode, as it reduces update requests, but still allows
 	refreshing lists.</p></note>
+	</section>
 
 </page>

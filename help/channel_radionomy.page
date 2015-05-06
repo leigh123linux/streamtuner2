@@ -5,7 +5,8 @@
 <info>
 	<link type="guide" xref="index#channels"/>
 	<link type="guide" xref="channels#list"/>
-        <desc>European internet streaming provider</desc>
+	<link type="guide" xref="configuration#plugins"/>
+        <desc>Large internet streaming provider</desc>
 </info>
 
 	<title>Radionomy</title>
@@ -16,8 +17,8 @@
 	internet radio stuff these days. - It took over Shoutcast.com for
 	instance.</p>
 
-	<p>Their primary directory on Radionomy.com lists only stations
-	that radionomy itself hosts streaming servers for.  It's over 6000
+	<p>Their primary directory on Radionomy.com only lists stations
+	which radionomy itself hosts streaming servers for.  It's over 6000
 	already.  Both listening and station hosting are free (given agreement
 	to autoplay advertisements, and a minimum quota of daily listeners). 
 	Radionomy is therefore pretty popular and growing.</p>
@@ -27,8 +28,8 @@
 	in. (It closely follows the website scheme to fetch station lists.)
 	</p>
 	
-	<section>
-	 <title>config options</title>
+	<section id="options">
+	 <title>Configuration</title>
 	 
          <p> You can configure the number of pages it'll try (<key>3</key> by
   	 default) to influence the length of station lists.</p>

@@ -251,11 +251,13 @@ There are various options for streamtuner2, available under <guiseq><gui>Edit</g
     <p>Each plugin can have its own little list of extra options. They'll be
     applied right away for already active channel/feature plugins.</p>
 
+</section>
+
+<section id="note">
     <note style="note"><p>If you want to find out more about the short option descriptions (most settings are checkboxes),
     please have a look into the channels directory /usr/share/streamtuner2/channels/ and corresponding
     *.py files. These are somewhat readable even to non-programmers, and sometimes contain more information.</p></note>
 </section>
-
 
 
 </page>

@@ -5,6 +5,7 @@
 <info>
 	<link type="guide" xref="index#channels"/>
 	<link type="guide" xref="channels#list"/>
+        <link type="guide" xref="configuration#channels"/>
         <desc>Set of radio stations</desc>
 </info>
 
@@ -14,13 +15,17 @@
 	<p>SomaFM is a small radio station network. It provides its own
 	unique channels. Which streamtuner2 shows in a static list.</p>
 
+        <note><p>SomaFM is a non-commercial and ad-free provider. It
+        strongly depends on listener donations.</p></note>
+
+        <section id="configuration">	
+        <title>Bitrate configuration</title>
+
 	<p>It provides streaming links in different audio formats. Only
 	AAC64 is guaranteed to be available for all. Other bitrates depend
 	on the station.</p>
-	
+
 	<p>After reconfiguring the bitrate/format, you can Reload the
 	station list to update them. Otherwise refreshing has no effect.</p>
-
-        <note><p>SomaFM is a non-commercial and ad-free provider. It
-        strongly depends on listener donations.</p></note>
+	</section>
 </page>
