@@ -26,7 +26,7 @@ if sys.version_info < (3,0):
     # urllib modules
     import urllib
     import urllib2
-    from urllib import urlencode, unquote as urldecode
+    from urllib import quote_plus as urlencode, unquote as urldecode
     import urlparse
     import cookielib
     
@@ -52,7 +52,7 @@ else:
     # urllib modules
     import urllib.request as urllib
     import urllib.request as urllib2
-    from urllib.parse import urlencode, unquote as urldecode
+    from urllib.parse import quote_plus as urlencode, unquote as urldecode
     import urllib.parse as urlparse
     from http import cookiejar as cookielib
     
