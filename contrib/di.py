@@ -1,23 +1,25 @@
 # encoding: UTF-8
 # api: streamtuner2
-# title: di.fm / sky.fm
-# description:
+# title: di.fm
+# description: "Digitally Imported", electronic music stations, + sky.fm and jazzradio
 # url: http://di.fm/
-# version: 0.1
+# version: 0.2
 # type: channel
 # category: radio
 # config: -
 # png:
+#   iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAPhJREFUOI3Fkj9OAkEYxX87uyyDgSxDYUyMV/AgNtzAkngC7Ci4AB1rTbyADYml8QY2tiZQmC34o4Qs
+#   CDMUZAnRIQMmhNfNfN9733vJg1PDK7RMG6gB/j/4sVdomYVIh743n+w4ITBhEZ2PEOmQbM+ERbRUywDwvfmE78aVlT9ONffPIx7f1+Rsr9TsgVS+cHmMpOChWqEsptZ5kNkpNXtWcr9+CcD1RY7X
+#   j5ldYNvaTSfhJYkwQZ7x11/R33BGcCGwqk4TYG37YIHu7bl18e3zx/q/V4S7pwEjfWaduYvEpjQ7ixRrqWpIFbqcaKlAquy5BOJ9EhwXK0vYVWJw1aEpAAAAAElFTkSuQmCC
 # priority: extra
 #
 # Just prints the public list of RadioTunes stations.
-# Premium entries are available, not fetched here.
-# Free entries use a 64kbit/s AACP audio encoding.
+# Premium entries are available, but not fetched here.
+# Public stations use a 64kbit/s AACP audio encoding.
 #
 # Alternative JSON list: http://listen.di.fm/public3
 # Required unpacking a complex category association,
 # and only adds a few more descriptions.
-
 
 
 from config import *
@@ -50,3 +52,4 @@ class di (ChannelPlugin):
            for row in ls
         ]
         return rows    
+
