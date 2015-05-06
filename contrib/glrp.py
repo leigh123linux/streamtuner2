@@ -38,8 +38,8 @@ class glrp (ChannelPlugin):
 
     # Imports the CSV once and populates streams
     def update_categories(self):
-        #dal = ahttp.get("http://fossil.include-once.org/streamtuner2/cat/contrib/glrp.csv")
-        dat = open("contrib/glrp.csv", "r").read()
+        dat = ahttp.get("http://fossil.include-once.org/streamtuner2/cat/contrib/glrp.csv")
+        #dat = open("contrib/glrp.csv", "r").read()
         self.streams = {}
         if dat:
             ls = csv.reader(dat.split("\n"))
