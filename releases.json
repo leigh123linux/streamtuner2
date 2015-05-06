@@ -13,7 +13,7 @@
         "rpm": "http://milki.include-once.org/streamtuner2/streamtuner2-$version.rpm",
         "pyz": "http://milki.include-once.org/streamtuner2/streamtuner2-$version.pyz",
         "raw": "http://milki.include-once.org/streamtuner2/streamtuner2-$version.bin.txz",
-        "exe": "http://milki.include-once.org/streamtuner2/streamtuner2-$version.exe"
+        "exe": "http://milki.include-once.org/streamtuner2/streamtuner2-$version.exe",
         "arch": "http://milki.include-once.org/streamtuner2/streamtuner2-$version.arch.txz"
     },
     "releases": [
