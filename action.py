@@ -518,7 +518,7 @@ class extract_playlist(object):
     def mkrow(self, row, title=None):
         url = row.get("url", "")
         comb = {
-            "title": row.get("title") or re.sub("\.\w+$", "", os.path.basename(self.fn)),
+            "title": row.get("title") or title or re.sub("\.\w+$", "", os.path.basename(self.fn)),
             "playing": "",
             "url": None,
             "homepage": "",
