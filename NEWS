@@ -1,3 +1,28 @@
+
+2.1.8 (2015-05-05)
+ * New channel plugins for Radionomy.com, Filtermusic.net, Delicast.com.
+ * Added Dirble channel again, using new API.
+ * Removed iCast plugin. Removed 8tracks plugin.
+ * Brought back Xiph XML extraction, and added direct website extraction,
+   in addition to JSON cache mode.
+ * Add TV list for UbuntuUsers channel.
+ * Introduction of User Plugin Manager and channel module updating,
+   automatic plugin activation, contrib plugins: PublicRadioFan, GLRP.
+ * Change Youtube plugin to use only v3 API henceforth.
+ * Minor fixes to action/playlist extraction, add specific JAMJ extractor.
+ * Update manual on new channel/feature plugins.
+ * Separated config and pluginconf modules.
+ * Fixes to contrib/ plugins: compound, file, punkcast.
+ * Scroll back to last category on initialization, simplified window
+   and state storage.
+ * Some Gtk3 fixes, catch invalid favicons while updating columns,
+   another fix for search function.
+ * Better inline documentation for player configuration, more thorough
+   program binary detection. Simplified channel parsing utility code,
+   added @use_rx decorator. And a few more internal cleanups.
+ * Add new configuration dialog group for Playlist processing.
+ * Experimental new package for Arch Linux / pacman.
+
 2.1.7 (2015-04-26)
 - Experimental support for drag and drop, which allows playback,
   importing, or exporting stations from/to files.

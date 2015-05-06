@@ -64,7 +64,6 @@
 #
 
 
-from __future__ import print_function
 import sys
 import os
 import re
@@ -81,7 +80,6 @@ __all__ = ["get_data", "module_list", "plugin_meta", "dependency", "add_plugin_d
 
 # Injectables
 # ‾‾‾‾‾‾‾‾‾‾‾
-log_WARN = lambda *x:None
 log_ERR = lambda *x:None
 
 # File lookup relation for get_data(), should name a top-level module/package
@@ -111,7 +109,7 @@ def get_data(fn, decode=False, gz=False, file_base=None):
         else:
             return str(bin)
     except:
-        pass#log_WARN("get_data() didn't find:", fn, "in", file_base)
+        pass#log_ERR("get_data() didn't find:", fn, "in", file_base)
 
 
 
@@ -338,7 +336,7 @@ def argparse_map(opt):
     is_arr = "[]" in (naming + typing) and nargs == [None]
     is_bool= "bool" in typing
     false_b = "false" in typing or opt["value"] in ("0", "false")
-    #print "\nname=", name, "is_arr=", is_arr, "is_bool=", is_bool, "bool_d=", false_b, "naming=", naming, "typing=", typing
+    #print("\nname=", name, "is_arr=", is_arr, "is_bool=", is_bool, "bool_d=", false_b, "naming=", naming, "typing=", typing)
 
     # Populate partially - ArgumentParser has aversions to many parameter combinations
     kwargs = dict(

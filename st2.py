@@ -4,7 +4,7 @@
 # type: application
 # title: streamtuner2
 # description: Directory browser for internet radio, audio and video streams
-# version: 2.1.7-dev
+# version: 2.1.8
 # state: beta
 # author: Mario Salzer <mario@include-once.org>
 # license: Public Domain
@@ -278,7 +278,7 @@ class StreamTunerTwo(gtk.Builder):
         if url and len(url): action.browser(url)
         else: self.status("No homepage URL present.")
 
-    # Browse to channel homepage (double click on notebook tab)
+    # Browse to channel homepage (@BROKEN: double click on notebook tab)
     def on_homepage_channel_clicked(self, widget, event=2):
         if event == 2 or event.type == gtk.gdk._2BUTTON_PRESS:
             log.UI("dblclick")
