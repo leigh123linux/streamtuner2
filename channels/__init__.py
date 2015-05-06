@@ -62,7 +62,7 @@ class GenericChannel(object):
     has_search = False
 
     # categories
-    categories = ["empty", ]
+    categories = []
     catmap = {}
     shown = None      # last selected entry in stream list, also indicator if notebook tab has been selected once / stream list of current category been displayed yet
 
