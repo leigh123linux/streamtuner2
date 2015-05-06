@@ -13,7 +13,7 @@
 	from various directory services. These are represented as "channel" tabs in the main
 	window. Below are the category/genre lists (left) and all stations for a genre (right).</p>
 
-	<media src="img/mainwindow2.svg" type="image" mime="image/svg+xml" />
+	<media src="img/mainwindow.png" type="image" mime="image/png" />
 
         <section id="play">
 	<title>How to select and play a radio.</title>
