@@ -444,8 +444,8 @@ class uikit:
         
 
 
-    # adds background color to widget,
-    # eventually wraps it into a gtk.Window, if it needs a container
+    # Adds background color to widget,
+    # eventually wraps it into a gtk.EventBox, if it needs a container
     @staticmethod
     def bg(w, color="", where=["bg"], wrap=1):
         """ this method should be called after widget creation, and before .add()ing it to container """
@@ -454,16 +454,14 @@ class uikit:
             if wrap and not isinstance(w, (gtk.Window, gtk.EventBox)):
                 wrap = gtk.EventBox()
                 wrap.add(w)
-                ##########wrap.set_property("visible", True)
                 w = wrap
             # copy style object, modify settings
-            s = w.get_style().copy()
-            c = w.get_colormap().alloc_color(color)
+            try: # Gtk2
+                c = w.get_colormap().alloc_color(color)
+            except: # Gtk3
+                p, c = gtk.gdk.Color.parse(color)
             for state in (gtk.STATE_NORMAL, gtk.STATE_SELECTED, gtk.STATE_ACTIVE):
-                s.bg[state] = c
-            w.set_style(s)
-            # probably redundant, but better safe than sorry:
-            w.modify_bg(gtk.STATE_NORMAL, c)
+                w.modify_bg(state, c)
         # return modified or wrapped widget
         return w
 
