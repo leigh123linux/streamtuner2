@@ -298,7 +298,7 @@ class ConfigDict(dict):
         for opt in plugin_meta(frame=1).get("config"):
             kwargs = pluginconf.argparse_map(opt)
             if kwargs:
-                #print kwargs
+                #print(kwargs)
                 ap.add_argument(*kwargs.pop("args"), **kwargs)
         return ap.parse_args()
 

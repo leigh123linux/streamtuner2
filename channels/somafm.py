@@ -105,6 +105,6 @@ class somafm (ChannelPlugin):
            dict(genre=g, title=t, playing=p, url=u, listeners=int(l), bitrate=128, homepage=re.sub("\d*\.pls$", "/", u))
             for l,g,t,p,u in ls
         ]
-        #print rows
+        #log.DATA(rows)
         return rows
         

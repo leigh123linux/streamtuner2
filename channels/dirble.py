@@ -61,7 +61,6 @@ class dirble (ChannelPlugin):
     def update_categories(self):
         cats = []
         for row in self.api("categories/tree"):
-            print row
             cats += [row["title"]]
             self.catmap[row["title"]] = row["id"]
             if row.get("children"):

@@ -118,7 +118,7 @@ class timer:
     
         # chk
         if not row.get(self.timefield) or not row.get("url"):
-            #print("NO TIME DATA", row)
+            #log.DATA("NO TIME DATA", row)
             return
     
         # extract timing parameters
@@ -176,7 +176,7 @@ class timer:
 
     # action wrapper
     def record(self, row, *args, **kwargs):
-        #print("TIMED RECORD")
+        #log.TIMER("TIMED RECORD", *args)
         
         # extra params
         duration = self.duration(row.get(self.timefield))
@@ -194,6 +194,6 @@ class timer:
         )
     
     def test(self, row, *args, **kwargs):
-        print("TEST KRONOS", row)
+        log.TEST("KRONOS", row)
 
 
