@@ -14,8 +14,14 @@
 	features), there's a user plugin manager. It's available as
 	feature extension itself.</p>
 	
-	<p>Once acticated (after a restart) it brings up a new <key>📦
-	Add</key> tab in the configuration window.</p>
+	<steps>
+	 <item><p>See the <key>F12</key> config dialog <key>🔌 Feature</key> section.</p></item>
+	 <item><p>Enable the <key>⨯</key> Plugin Manager (listed near the end).</p></item>
+	 <item><p>Restart streamtuner2 one last time for this change to take effect.</p></item>
+	</steps>
+	
+	<p>Once acticated it brings up a new <key>📦 Add</key> tab
+	in the configuration window.</p>
 	
 	<p><media type="image" src="img/pluginmanager2.png"
 	mime="image/png">Install dialog for user plugins</media></p>
@@ -25,6 +31,10 @@
 	implictly enabled. Reopen the config dialog to see them in the
 	regular <key>📻 Channels</key> or <key>🔌 Feature</key> tabs, and
 	then enable them.</p>
+	
+	<note><p>Updated plugins will not be automatically loaded if they
+	were enable already. That requires either a restart, or disabling +
+	saving once, then reenabling them.</p></note>
 	
 	<section id="configuration">
 	<title>Configuration</title>
@@ -53,6 +63,15 @@
 	precedence over downloaded updates.</p>
 	<p>And you'll have to take care to eventually refresh/delete outdated user plugins,
 	whenever you install a newer Streamtuner2 version.</p></note>
+	</section>
+	
+	<section>
+	<subtitle>Disable user plugin loading</subtitle>
+	<p>Since this is still rather experimental, you may disable all
+	associated features by starting ST2 via:</p>
+	<screen>streamtuner2 -d <input>pluginmanager2</input></screen>
+	<p>That'll inhibit loading this extension plugin. (Also works
+	with any other plugin id.)</p>
 	</section>
 
 </page>

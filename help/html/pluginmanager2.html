@@ -20,14 +20,22 @@
 <p class="p">For updating or installing new plugins (extra channels or
 	features), there's a user plugin manager. It's available as
 	feature extension itself.</p>
-<p class="p">Once acticated (after a restart) it brings up a new <span class="key"><kbd>📦
-	Add</kbd></span> tab in the configuration window.</p>
+<div class="steps"><div class="inner"><div class="region"><ol class="steps">
+<li class="steps"><p class="p">See the <span class="key"><kbd>F12</kbd></span> config dialog <span class="key"><kbd>🔌 Feature</kbd></span> section.</p></li>
+<li class="steps"><p class="p">Enable the <span class="key"><kbd>⨯</kbd></span> Plugin Manager (listed near the end).</p></li>
+<li class="steps"><p class="p">Restart streamtuner2 one last time for this change to take effect.</p></li>
+</ol></div></div></div>
+<p class="p">Once acticated it brings up a new <span class="key"><kbd>📦 Add</kbd></span> tab
+	in the configuration window.</p>
 <p class="p"><span class="media"><span class="media media-image"><img src="img/pluginmanager2.png" class="media media-inline" alt="Install dialog for user plugins"></span></span></p>
 <p class="p">You can scan for available/new plugins there. And have them
 	downloaded right away. New plugins are just downloaded, not
 	implictly enabled. Reopen the config dialog to see them in the
 	regular <span class="key"><kbd>📻 Channels</kbd></span> or <span class="key"><kbd>🔌 Feature</kbd></span> tabs, and
 	then enable them.</p>
+<div class="note" title="Note"><div class="inner"><div class="region"><div class="contents"><p class="p">Updated plugins will not be automatically loaded if they
+	were enable already. That requires either a restart, or disabling +
+	saving once, then reenabling them.</p></div></div></div></div>
 <div class="links topiclinks"><div class="inner"><div class="region"><div class="linkdiv "><a class="linkdiv" href="configuration.html#plugins" title="Channel and feature plugins and settings"><span class="title">Channel and feature plugins and settings</span></a></div></div></div></div>
 </div>
 <div id="configuration" class="sect"><div class="inner">
@@ -60,6 +68,16 @@
 <p class="p">And you'll have to take care to eventually refresh/delete outdated user plugins,
 	whenever you install a newer Streamtuner2 version.</p>
 </div></div></div></div>
+</div></div>
+</div></div>
+<div id="" class="sect"><div class="inner">
+<div class="hgroup"><h3 class="subtitle"><span class="subtitle">Disable user plugin loading</span></h3></div>
+<div class="region"><div class="contents">
+<p class="p">Since this is still rather experimental, you may disable all
+	associated features by starting ST2 via:</p>
+<div class="screen"><pre class="contents ">streamtuner2 -d <span class="input">pluginmanager2</span></pre></div>
+<p class="p">That'll inhibit loading this extension plugin. (Also works
+	with any other plugin id.)</p>
 </div></div>
 </div></div>
 <div class="sect sect-links" role="navigation">
