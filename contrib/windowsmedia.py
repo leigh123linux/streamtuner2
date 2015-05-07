@@ -4,6 +4,7 @@
 # description: ASX-Playlist radio stations, common genres
 # url: http://windowsmedia.com/
 # version: 0.3
+# depends: streamtuner2 >= 2.1.8-dev
 # type: channel
 # category: radio
 # config:
