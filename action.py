@@ -99,7 +99,7 @@ playlist_content_map = [
    ("pls",  r""" (?i)\[playlist\].*NumberOfEntries """),
    ("xspf", r""" <\?xml .* <playlist .* ((?i)http://xspf\.org)/ns/0/ """),
    ("m3u",  r""" ^ \s* \#(EXT)?M3U """),
-   ("asx" , r""" <asx\b """),
+   ("asx" , r""" (?i) <asx\b """),
    ("smil", r""" <smil[^>]*> .* <seq> """),
    ("html", r""" (?i)<(audio|video)\b[^>]+\bsrc\s*=\s*["']?https?:// """),
    ("wpl",  r""" <\?wpl \s+ version="1\.0" \s* \?> """),
@@ -366,7 +366,7 @@ class extract_playlist(object):
 
         # Block-wise processing
         if rules.get("split"):
-            for part_src in re.split(rules["split"], self.src, re.X):
+            for part_src in re.split(rules["split"], self.src, 0, re.X):
                 row = {}
                 for name in fields:
                     val = self.field(name, rules, part_src)
@@ -439,9 +439,9 @@ class extract_playlist(object):
             unesc = "xml",
         ),
         "asx": dict(
-            split = r" (?x) <entry[^>]*> ",
-            url   = r" (?x) <ref \b[^>]+\b href \s*=\s* [\'\"] (\w+://[^\s\"\']+) [\'\"] ",
-            title = r"(?x) <title> ([^<>]+) ",
+            split = r" (?ix) <entry[^>]*> ",
+            url   = r" (?ix) <ref \b[^>]+\b href \s*=\s* [\'\"] (\w+://[^\s\"\']+) [\'\"] ",
+            title = r" (?ix) <title> ([^<>]+) ",
             unesc = "xml",
         ),
         "smil": dict(
