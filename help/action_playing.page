@@ -4,6 +4,7 @@
 
 	<info>
 	<link type="guide" xref="index#browsing"/>
+	<link type="guide" xref="index#functions"/>
 	<desc>Double click a station to start it in your audio player.</desc>
 	<link type="guide" xref="streams#actions"/>
 	</info>

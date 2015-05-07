@@ -8,7 +8,8 @@
 
 	<info>
 	<credit type="author"><name>Mario Salzer</name></credit>
-        <desc>Documentation overview</desc>
+        <desc>Internet radio station browser</desc>
+        <revision pkgversion="2.1.9" version="2.1.9"/>
 	</info>
 
 	<title><media type="image" mime="image/png" src="img/logo.png">♪</media> Streamtuner2 </title>
@@ -36,10 +37,24 @@
     	</section>
 
 	<section id="footer">
-	<p>You can get additional help from the online forum. See <guiseq><gui>Help</gui> <gui>Forum</gui></guiseq>.</p>
+	<subtitle>Project resources and additional help</subtitle>
+	<list>
+	  <item><p>You can get additional help from the
+   	  <link href="http://sourceforge.net/p/streamtuner2/discussion/1173108/">online forum</link>.
+   	  Or via <guiseq><gui>Help</gui> <gui>Forum</gui></guiseq>.</p></item>
 
-	<p>This documentation was last updated for available functions in streamtuner2
-	version 2.1.8, as of May 2015.</p>
+	  <item><p>Feedback on issues you ran into is also very welcome.
+	  <link href="http://fossil.include-once.org/streamtuner2/rptview?rn=1">Bug reports</link>
+	  don't require any account registration. But please include -D debug output.
+	  Also accessible via <guiseq><gui>Help</gui> <gui>Wiki/Fossil/Bugs</gui></guiseq>.</p></item>
+
+	  <item><p>Watch for new project releases on
+	  <link href="http://freshcode.club/projects/streamtuner2">freshcode.club</link></p></item>
+
+   	</list>
+
+	<p>This manual was last updated for available functions in streamtuner2
+	version 2.1.9, as of May 2015.</p>
 	</section>
 
 </page>
