@@ -3,7 +3,7 @@
 # title: GrLittleRadio
 # description: Static list from Great Little Radio Player
 # url: http://sourceforge.net/projects/glrp/
-# version: 0.1
+# version: 0.2
 # type: channel
 # category: playlist
 # config: -
@@ -24,6 +24,7 @@ import csv
 from config import *
 from channels import *
 import ahttp
+from compat2and3 import gzip_decode
 
 
 # CSV list from GLRP
@@ -38,8 +39,10 @@ class glrp (ChannelPlugin):
 
     # Imports the CSV once and populates streams
     def update_categories(self):
-        dat = ahttp.get("http://fossil.include-once.org/streamtuner2/cat/contrib/glrp.csv")
-        #dat = open("contrib/glrp.csv", "r").read()
+
+        dat = ahttp.get("http://fossil.include-once.org/streamtuner2/cat/contrib/glrp.csv.gz")
+        dat = gzip_decode(dat)
+
         self.streams = {}
         if dat:
             ls = csv.reader(dat.split("\n"))
