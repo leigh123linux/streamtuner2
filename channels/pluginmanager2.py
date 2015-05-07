@@ -149,7 +149,7 @@ class pluginmanager2(object):
                "<small>type: <i><span color='#559'>$type</span></i> "\
                "category: <i><span color='blue'>$category</span></i></small>\n"\
                "<span size='smaller' color='#364'>$description</span>\n"\
-               "<span size='small' color='#532' weight='ultralight'>$extras, <a href='view-source:$file'>view src</a></span>"
+               "<span size='small' color='#532' weight='ultralight'>$extras, <a href='$file'>view src</a></span>"
         self.add_(b, safe_format(text, **p), markup=1)
 
         
@@ -158,7 +158,7 @@ class pluginmanager2(object):
         fields = ("status", "priority", "support", "author", "depends")
         extras = ["{}: <b>{}</b>".format(n, html_escape(p[n])) for n in fields if p.get(n)]
         p["extras"] = " ".join(["💁"] + extras)
-        p["file"] = p["$file"]
+        p["file"] = p["$file"].replace("/cat/", "/doc/tip/")
         for field in ("version", "title", "description", "type", "category"):
             p.setdefault(field, "-")
         return p
