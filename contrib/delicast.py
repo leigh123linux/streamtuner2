@@ -3,7 +3,7 @@
 # title: Delicast
 # description: directory of streaming media
 # url: http://delicast.com/
-# version: 0.1
+# version: 0.2
 # type: channel
 # category: radio
 # config: -
@@ -39,7 +39,14 @@ class delicast (ChannelPlugin):
     audioformat = "mp3"
     titles = dict(listeners=False, bitrate=False, playing="Location")
     base = "http://delicast.com/"
-    categories = ["60s", "70s", "80s", "90s", "Alternative", "Blues", "Chillout", "Christian", "Classical", "Community", "Country", "Culture", "Dance", "Disco", "Easy listening", "Electronic", "Folk", "Funk", "Gospel", "Hiphop", "House	Indie", "Information", "Jazz", "Latin", "Lounge", "Love", "Metal", "Oldies", "Pop", "R n b", "Reggae", "Rock", "Romantic", "Soul", "Sports", "Student", "Talk", "Techno", "Trance", "Urban", "World music"]
+
+    categories = ["60s", "70s", "80s", "90s", "Alternative", "Blues",
+    "Chillout", "Christian", "Classical", "Community", "Country", "Culture",
+    "Dance", "Disco", "Easy listening", "Electronic", "Folk", "Funk",
+    "Gospel", "Hiphop", "House Indie", "Information", "Jazz", "Latin",
+    "Lounge", "Love", "Metal", "Oldies", "Pop", "R n b", "Reggae", "Rock",
+    "Romantic", "Soul", "Sports", "Student", "Talk", "Techno", "Trance",
+    "Urban", "World music"]
 
 
     # static
@@ -75,7 +82,7 @@ class delicast (ChannelPlugin):
         return r
       
 
-    # Update `url`
+    # Update `url` on station data access (incurs a delay for playing or recording)
     def row(self):
         r = ChannelPlugin.row(self)
         if r.get("url") == "urn:delicast":

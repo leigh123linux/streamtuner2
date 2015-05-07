@@ -46,9 +46,12 @@ class windowsmedia (ChannelPlugin):
     listformat = "wax"
     audioformat = "audio/mpeg"
     titles = dict(listeners=False, bitrate=False, playing="Location")
+
     _web = "http://www.windowsmedia.com/RadioUI/Home.aspx?g={}&culture=en-gb"
     base = "http://www.windowsmedia.com/RadioUI/getstationsforgenre.aspx?g={}&offset=0&culture={}"
-    _url = "http://www.windowsmedia.com/RadioTunerAPI/Service.asmx/playStation?stationID={}&dialupDetected=true&useHighBandwidth=false&locale={}"
+    _url = "http://www.windowsmedia.com/RadioTunerAPI/Service.asmx/playStation?"\
+         + "stationID={}&dialupDetected=false&useHighBandwidth=true&locale={}"
+           # reversed default true and false for connection speed
 
     categories = ["80s", "Adult Hits", "Adult Rock", "Alternative Rock",
     "Americana + Roots", "Big Band", "Blues", "Christian Hits", "Classic R&B",

@@ -36,6 +36,7 @@ class di (ChannelPlugin):
     listformat = "pls"
     audioformat = "audio/aac"
     titles = dict(listeners=False, bitrate=False, playing=False)
+
     categories = ["di.fm", "sky.fm", "jazzradio.com"]
                # sky.fm is an alias of "radiotunes.com"
 

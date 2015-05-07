@@ -40,7 +40,12 @@ class publicradiofan (ChannelPlugin):
     format = "mp3"
     listformat = "href"
     titles = dict(listeners=False, bitrate=False, playing="Description")
-    categories = ["adult alternative", "adult contemporary", "blues", "business", "classical", "community", "contemporary", "country", "easy", "education", "ethnic", "folk", "free-form", "full service", "government", "international", "jazz", "military", "news", "nostalgia", "oldies", "reading", "regional", "religious", "rock", "seasonal", "sports", "student", "talk", "traffic", "urban", "variety", "world", "youth"]
+
+    categories = ["adult alternative", "adult contemporary", "blues", "business", "classical",
+    "community", "contemporary", "country", "easy", "education", "ethnic", "folk", "free-form",
+    "full service", "government", "international", "jazz", "military", "news", "nostalgia",
+    "oldies", "reading", "regional", "religious", "rock", "seasonal", "sports", "student",
+    "talk", "traffic", "urban", "variety", "world", "youth"]
     
 
     # static
