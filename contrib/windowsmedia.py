@@ -1,7 +1,7 @@
 # encoding: UTF-8
 # api: streamtuner2
 # title: WindowsMedia
-# description: 
+# description: ASX-Playlist radio stations, common genres
 # url: http://windowsmedia.com/
 # version: 0.3
 # type: channel
