@@ -113,7 +113,11 @@ class myoggradio(ChannelPlugin):
             
             # convert PLS/M3U link to direct ICY stream url
             if conf.myoggradio_morph and self.parent.channel().listformat != "url/direct":
-                row["url"] = ahttp.fix_url(action.srv(row["url"]))
+                
+                urls = action.convert_playlist(row["url"], row.get("listformat", "any"), "srv", local_file=False, row=row)
+                if not urls:
+                    urls = [row["url"]]
+                row["url"] = ahttp.fix_url(urls[0])
                 
             # prevent double check-ins
             if row["title"] in (r.get("title") for r in self.streams["common"]):
