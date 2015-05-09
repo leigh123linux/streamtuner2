@@ -86,7 +86,7 @@ class uikit:
     # for missing cols. All values must already be in the correct type however.
     #
     @staticmethod
-    def columns(widget, datamap=[], entries=None, pix_entry=False, typecast=0):
+    def columns(widget, datamap=[], entries=None, pix_entry=False):
 
         # create treeviewcolumns?
         if (not widget.get_column(0)):
@@ -148,11 +148,10 @@ class uikit:
             #- expand datamap
             vartypes = []  #(str, str, bool, str, int, int, gtk.gdk.Pixbuf, str, int)
             rowmap = []    #["title", "desc", "bookmarked", "name", "count", "max", "img", ...]
-            if (not rowmap):
-                for desc in datamap:
-                    for var in xrange(2, len(desc)):
-                        vartypes.append(desc[var][1])  # content types
-                        rowmap.append(desc[var][0])    # dict{} column keys in entries[] list
+            for desc in datamap:
+                for var in xrange(2, len(desc)):
+                    vartypes.append(desc[var][1])  # content types
+                    rowmap.append(desc[var][0])    # dict{} column keys in entries[] list
             # create gtk array storage
             ls = gtk.ListStore(*vartypes)   # could be a TreeStore, too
             #log.UI(vartypes, len(vartypes))
@@ -206,7 +205,7 @@ class uikit:
             
             # apply array to widget
             widget.set_model(ls)
-            return ls
+            return ls, rowmap, pix_entry
             
         pass
 
