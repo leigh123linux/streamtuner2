@@ -148,7 +148,7 @@ class xiph (ChannelPlugin):
 
       # Get XML blob
       if not buffy:
-          yp = ahttp.get(self.xml_url, statusmsg="Brace yourselves, still downloading the yp.xml blob.")
+          yp = ahttp.get(self.xml_url, encoding="utf-8", statusmsg="Brace yourselves, still downloading the yp.xml blob.")
       else:
           yp = "<none/>"
       self.status("Yes, XML parsing isn't much faster either.", timeout=20)
@@ -523,7 +523,7 @@ def x(node, name):
 def bitrate(str):
     uu = re.findall("(\d+)", str)
     if uu:
-        br = uu[0]
+        br = int(uu[0])
         if br > 10:
             return int(br)
         else:

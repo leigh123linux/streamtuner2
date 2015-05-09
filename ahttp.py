@@ -88,10 +88,13 @@ def get(url, params={}, referer="", post=0, ajax=0, binary=0, feedback=None, con
     elif binary:
         r = r.content
     else:
-        # Receival is actually happening here
+        # Manually decode charset
         if encoding:
             r.encoding = encoding
-        r = r.text
+            r = r.content.decode(encoding, errors='replace')
+        # See requests isse #2359, automatic charset detection can be awfully slow
+        else:
+            r = r.text
     # clean statusbar
     statusmsg and progress_feedback()
     return r
