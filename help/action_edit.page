@@ -10,7 +10,7 @@
 
 	<title>Edit</title>
 
-	<p>You probably don't often need this. But there's an
+	<p>You probably won't need this often. But there's an
 	<guiseq><gui></gui> <gui>Edit/Details</gui></guiseq> context menu
 	which brings up a station editor:
 	</p>

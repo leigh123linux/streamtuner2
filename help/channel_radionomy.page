@@ -25,7 +25,9 @@
 	
 	<p>The extraction method in streamtuner2 uses a mix of RegExp,
 	DOM traversal, and JSON extraction, with some AJAX updating spiced
-	in. (It closely follows the website scheme to fetch station lists.)
+	in. It closely follows the website scheme to fetch station lists.
+	Instead of favicons smaller station logos are displayed (25px
+	in contrast to the usual 16px).
 	</p>
 	
 	<section id="options">
