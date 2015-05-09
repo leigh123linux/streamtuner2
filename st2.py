@@ -262,9 +262,11 @@ class StreamTunerTwo(gtk.Builder):
     # Play button
     def on_play_clicked(self, widget, event=None, *args):
         self.status("Starting player...")
-        row = self.channel().play()
+        channel = self.channel()
+        pixstore = [channel._ls, channel._pix_entry, channel.rowno()]
+        row = channel.play()
         self.status("")
-        [callback(row) for callback in self.hooks["play"]]
+        [callback(row, pixstore=pixstore) for callback in self.hooks["play"]]
 
     # Recording: invoke streamripper for current stream URL
     def on_record_clicked(self, widget):
@@ -323,8 +325,8 @@ class StreamTunerTwo(gtk.Builder):
 
     # Menu invocation: refresh favicons for all stations in current streams category
     def update_favicons(self, widget):
-        entries = self.channel().stations()
-        favicon.download_all(entries)
+        ch = self.channel()
+        favicon.download_all(entries=ch.stations(), pixstore=[ch._ls, ch._pix_entry, None])
 
     # Save stream to file (.m3u)
     def save_as(self, widget):

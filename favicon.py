@@ -34,6 +34,7 @@ from threading import Thread
 import ahttp
 import compat2and3
 from PIL import Image
+from uikit import gtk
 
 
 
@@ -45,33 +46,54 @@ tried_urls = []
 
 
 # walk through entries
-def download_all(entries, treestore=None, pix_i=None):
-  t = Thread(target= download_thread, args= ([entries]))
+def download_all(*args, **kwargs):
+  t = Thread(target=download_thread, args=args, kwargs=kwargs)
   t.start()
-def download_thread(entries):
-    for e in entries:
+def download_thread(entries, pixstore=None):
+    for i,e in enumerate(entries):
         # try just once
         if e.get("homepage") in tried_urls:
             continue
+
         # retrieve specific img url as favicon
         elif e.get("img"):
             localcopy(e["img"], True)
-            continue
+            tried_urls.append(e.get("img"))
         # favicon from homepage URL
         elif e.get("homepage"):
             download(e["homepage"])
-        # remember
-        tried_urls.append(e.get("homepage"))
+            tried_urls.append(e.get("homepage"))
+
+        # Update TreeView
+        update_pixstore(e, pixstore, i)
     pass
 
 # download a single favicon for currently playing station
-def download_playing(row, treestore_pix=None):
+def download_playing(row, pixstore=None):
     if conf.google_homepage and not row.get("homepage"):
         google_find_homepage(row)
     if conf.load_favicon and row.get("homepage"):
-        download_all([row])
+        download_all([row], pixstore=pixstore)
     pass
 
+
+# Update favicon in treeview/liststore
+def update_pixstore(row, pixstore=None, row_i=None):
+    log.PIXSTORE(pixstore, row_i)
+    if pixstore:
+        ls, pix_entry, i = pixstore
+        if i is None:
+            i = row_i
+        fn = None
+        if row.get("favicon"):
+            fn = row["favicon"]
+        elif row.get("img"):
+            fn = localcopy(row["img"], False)
+        elif row.get("homepage"):
+            fn = file(row["homepage"])
+        if fn and os.path.exists(fn):
+            p = gtk.gdk.pixbuf_new_from_file(fn)
+            ls[i][pix_entry] = p
 
 
 #--- unrelated ---
