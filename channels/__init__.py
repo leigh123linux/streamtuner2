@@ -70,6 +70,9 @@ class GenericChannel(object):
     streams = {}      # Station list dict, associates each genre to a list of stream rows
     gtk_list = None   # Gtk widget for station treeview
     gtk_cat = None    # Gtk widget for category columns
+    _ls = None        # ListStore for station treeview
+    _rowmap = None    # Preserve streams-datamap
+    _pix_entry = None # ListStore entry that contains favicon
 
     # mapping of stream{} data into gtk treeview/treestore representation
     datamap = [
@@ -156,18 +159,15 @@ class GenericChannel(object):
         for field,title in list(self.titles.items()):
             self.update_datamap(field, title=title)
         
-        # prepare stream list
-        if (not self.rowmap):
-            for row in self.datamap:
-                for x in range(2, len(row)):
-                    self.rowmap.append(row[x][0])
-
         # Initialize stations TreeView
-        uikit.columns(self.gtk_list, self.datamap, [])
+        self.columns([])
         
         # add to main menu
         uikit.add_menu([parent.channelmenuitems], self.meta["title"], lambda w: parent.channel_switch_by_name(self.module) or 1)
 
+    # Just wraps uikit.columns() to retain liststore, rowmap and pix_entry
+    def columns(self, entries=None, pix_entry=False, typecast=0):
+        self._ls, self._rowmap, self._pix_entry = uikit.columns(self.gtk_list, self.datamap, entries)
 
     # Statusbar stub (defers to parent/main window, if in GUI mode)
     def status(self, *args, **kw):
@@ -324,7 +324,7 @@ class GenericChannel(object):
         # Update treeview/model (if category is still selected)
         if self.current == category:
             log.UI("load() → uikit.columns({}.streams[{}])".format(self.module, category), [inspect.stack()[x][3] for x in range(1,5)])
-            uikit.do(uikit.columns, self.gtk_list, self.datamap, self.prepare(self.streams[category]))
+            uikit.do(self.columns, self.prepare(self.streams[category]))
             if y:
                 uikit.do(self.gtk_list.scroll_to_point, 0, y + 1)   # scroll to previous position, +1 px, because
                 # somehow Gtk.TreeView else stumbles over itself when scrolling to the same position the 2nd time
@@ -343,7 +343,7 @@ class GenericChannel(object):
         if gtk_ver == 3 and not conf.nothreads:
             pass
         else:  # kills Gtk3 too easily
-            uikit.do(uikit.columns, self.gtk_list, self.datamap, entries)
+            uikit.do(self.columns, entries)
 
         
     # finds differences in new/old streamlist, marks deleted with flag
