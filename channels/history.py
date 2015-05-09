@@ -43,7 +43,7 @@ class history:
 
         
     # add to favourites/history stream list
-    def queue(self, row):
+    def queue(self, row, *x, **y):
     
         # assert a present store
         streams = self.bm.streams
