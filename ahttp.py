@@ -53,7 +53,7 @@ session.headers.update({
 #
 #  Well, it says "get", but it actually does POST and AJAXish GET requests too.
 #
-def get(url, params={}, referer="", post=0, ajax=0, binary=0, feedback=None, content=True, verify=False, statusmsg=None, encoding=None):
+def get(url, params={}, referer="", post=0, ajax=0, binary=0, feedback=None, content=True, verify=False, statusmsg=None, encoding=None, timeout=9.25):
 
     # statusbar info
     progress_feedback(url)
@@ -72,10 +72,10 @@ def get(url, params={}, referer="", post=0, ajax=0, binary=0, feedback=None, con
     # read
     if post:
         log.HTTP("POST", url, params)
-        r = session.post(url, params=params, headers=headers, timeout=7.5)
+        r = session.post(url, params=params, headers=headers, timeout=timeout)
     else:    
         log.HTTP("GET"+(" AJAX" if ajax else ""), url, params )
-        r = session.get(url, params=params, headers=headers, verify=verify, timeout=9.75)
+        r = session.get(url, params=params, headers=headers, verify=verify, timeout=timeout)
 
     log.HTTP(">>>", r.request.headers );
     log.HTTP("<<<", r.headers );
