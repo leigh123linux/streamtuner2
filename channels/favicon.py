@@ -9,7 +9,7 @@
 #    [ main-name: load_favicon ]
 # type: feature
 # category: ui
-# version: 1.7
+# version: 1.8
 # depends: streamtuner2 >= 2.1.9, python:pil
 # priority: standard
 #
@@ -26,6 +26,7 @@
 # depend on a recent Pillow2 python module (superseding the PIL module).
 # Else may display images with fragments if converted from ICO files.
 
+
 import os, os.path
 from io import BytesIO
 import re
@@ -33,6 +34,7 @@ from config import *
 import ahttp
 from PIL import Image
 from uikit import gtk
+#import traceback
 
 
 # Ensure that we don't try to download a single favicon twice per session.
@@ -249,11 +251,14 @@ def store_image(imgdata, fn, resize=None):
         try:
             # Read from byte/str
             image = Image.open(BytesIO(imgdata))
-            log.FAVICON_IMAGE_TO_PNG(image, resize)
+            log.FAVICON_IMAGE_TO_PNG(image, image.size, resize)
 
             # Resize
             if resize and image.size[0] > resize:
-                image.resize((resize, resize), Image.ANTIALIAS)
+                try:
+                    image.thumbnail(resize, Image.ANTIALIAS)
+                except:
+                    image = image.resize((resize,resize), Image.ANTIALIAS)
 
             # Convert to PNG via string buffer
             out = BytesIO()
@@ -261,6 +266,7 @@ def store_image(imgdata, fn, resize=None):
             imgdata = out.getvalue()
 
         except Exception as e:
+            #traceback.print_exc()
             return log.ERR("favicon/logo conversion error:", e) and False
     else:
         log.WARN("Couldn't detect valig image type from its raw content")
@@ -329,12 +335,13 @@ def html_link_icon(url, href="/favicon.png"):
                 href = pair["href"].replace("&amp;", "&") # unhtml()
                 break
     # Patch URL together
+    log.DATA(url, href)
     if re.match("^https?://", href): # absolute URL
         return href
-    elif re.startswith("//", href): # proto-absolute
+    elif href.startswith("//"): # proto-absolute
         return "http:" + href
-    elif re.startswith("/", href): # root path
-        return re.sub("(https?://[^/]).*$", "\g<1>") + href
+    elif href.startswith("/"): # root path
+        return re.sub("(https?://[^/]+).*$", "\g<1>", url) + href
     else: # relative path references xyz/../
         href = re.sub("[^/]+$", "", url) + href
         return re.sub("[^/]+/../", "/", href)
