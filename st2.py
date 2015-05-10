@@ -56,7 +56,6 @@ from uikit import pygtk, gtk, gobject, uikit, ui_xml, gui_startup, AboutStreamtu
 import ahttp
 import action
 import logo
-import favicon
 import channels
 import channels.bookmarks
 import channels.configwin
@@ -75,7 +74,7 @@ class StreamTunerTwo(gtk.Builder):
     features = {}    # non-channel plugins
     working = []     # threads
     hooks = {
-        "play": [favicon.download_playing],  # observers queue here
+        "play": [],  # observers queue here
         "record": [],
         "init": [],
         "quit": [action.cleanup_tmp_files],
@@ -122,8 +121,10 @@ class StreamTunerTwo(gtk.Builder):
         # display current open channel/notebook tab
         gui_startup(18/20.0)
         self.current_channel = self.current_channel_gtk()
-        try: self.channel().first_show()
-        except: log.INIT("main.__init__: current_channel.first_show() initialization error")
+        try:
+            self.channel().first_show()
+        except Exception as e:
+            log.INIT("main.__init__: current_channel.first_show() initialization error:", e)
 
   
         # bind gtk/glade event names to functions
@@ -297,10 +298,10 @@ class StreamTunerTwo(gtk.Builder):
         )
 
     # Thread a function, add to worker pool (for utilizing stop button)
-    def thread(self, target, *args):
+    def thread(self, target, *args, **kwargs):
         if conf.nothreads:
-            return target(*args)
-        thread = Thread(target=target, args=args)
+            return target(*args, **kwargs)
+        thread = Thread(target=target, args=args, kwargs=kwargs)
         thread.start()
         self.working.append(thread)
 
@@ -325,8 +326,9 @@ class StreamTunerTwo(gtk.Builder):
 
     # Menu invocation: refresh favicons for all stations in current streams category
     def update_favicons(self, widget):
-        ch = self.channel()
-        favicon.download_all(entries=ch.stations(), pixstore=[ch._ls, ch._pix_entry, None])
+        if "favicon" in self.features:
+            ch = self.channel()
+            self.features["favicon"].update_all(entries=ch.stations(), pixstore=[ch._ls, ch._pix_entry, None])
 
     # Save stream to file (.m3u)
     def save_as(self, widget):

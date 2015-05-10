@@ -34,7 +34,6 @@ from uikit import uikit, ver as gtk_ver
 from config import *
 import ahttp
 import action
-import favicon
 import os.path
 import xml.sax.saxutils
 import re
@@ -375,19 +374,14 @@ class GenericChannel(object):
                 if conf.retain_deleted and row.get("deleted"):
                     streams[i]["state"] = gtk.STOCK_DELETE
             
-            # favicons?
-            if conf.show_favicons:
-                # entry provides its own image
-                if "img" in row:
-                    favicon_url = row["img"]
-                    streams[i]["favicon"] = favicon.localcopy(favicon_url)
-                
-                # get actual homepage favicon.png
-                elif "homepage" in row:
-                    homepage_url = row.get("homepage")
-                    # check for availability of PNG file, inject local icons/ filename
-                    if homepage_url and favicon.available(homepage_url):
-                        streams[i]["favicon"] = favicon.file(homepage_url)
+            # Favicons? construct local cache filename, basically reimplements favicon.row_to_fn()
+            if conf.show_favicons and "favicon" in self.parent.features:
+                url = row.get("img") or row.get("homepage")
+                if url:
+                    # Normalize by stripping proto:// and non-alphanumeric chars
+                    url = re.sub("[^\w._-]", "_", re.sub("^\w+://|/$", "", url.lower()))
+                    streams[i]["favicon"] = "{}/icons/{}.png".format(conf.dir, url)
+
         return streams
 
 
