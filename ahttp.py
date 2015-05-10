@@ -4,7 +4,7 @@
 # type: functions
 # title: http download / methods
 # description: http utility
-# version: 1.4
+# version: 1.5
 #
 # Utility code for HTTP requests, used by all channel plugins.
 #
@@ -53,10 +53,15 @@ session.headers.update({
 #
 #  Well, it says "get", but it actually does POST and AJAXish GET requests too.
 #
-def get(url, params={}, referer="", post=0, ajax=0, binary=0, feedback=None, content=True, verify=False, statusmsg=None, encoding=None, timeout=9.25):
+def get(
+       url, params={}, referer="", post=0, ajax=0,
+       binary=0, content=True, encoding=None, verify=False,
+       statusmsg=None, timeout=9.25, quieter=0
+    ):
 
     # statusbar info
-    progress_feedback(url)
+    if not quieter:
+        progress_feedback(url)
     
     # combine headers
     headers = {}
@@ -77,8 +82,9 @@ def get(url, params={}, referer="", post=0, ajax=0, binary=0, feedback=None, con
         log.HTTP("GET"+(" AJAX" if ajax else ""), url, params )
         r = session.get(url, params=params, headers=headers, verify=verify, timeout=timeout)
 
-    log.HTTP(">>>", r.request.headers );
-    log.HTTP("<<<", r.headers );
+    if not quieter:
+        log.HTTP(">>>", r.request.headers );
+        log.HTTP("<<<", r.headers );
             
     # result
     log.INFO("Content-Length", len(r.content) )
