@@ -63,9 +63,11 @@ class pluginmanager2(object):
         
         # prepare user plugin directory
         conf.plugin_dir = conf.dir + "/plugins"
+        plugin_dir_stub = "{}/__init__.py".format(conf.plugin_dir)
         if not os.path.exists(conf.plugin_dir):
             os.mkdir(conf.plugin_dir)
-            open(conf.plugin_dir + "/__init__.py", "w").close()
+        if not os.path.exists(plugin_dir_stub):
+            open(plugin_dir_stub, "a").close()
         
         # Register user config dir "~/.config/streamtuner2/plugins" for module loading
         sys.path.insert(0, conf.dir)
