@@ -25,20 +25,6 @@
 # it's often speedier to use the Google PNG conversion service. Both
 # depend on a recent Pillow2 python module (superseding the PIL module).
 # Else may display images with fragments if converted from ICO files.
-#
-# Has recently been rewritten, is somewhat less entangled with other
-# modules now:
-#  · GenericChannel presets row["favicon"] with cache image filename
-#    in any case, uses row["homepage"] or row["img"] as template
-#  · The filename shortening functionality must be shared between
-#    favicon and genericchannel.prepare() code
-#  · uikit.columns() merely checks row["favicon"] for file existence
-#    on redraws
-#  · main.play() only calls .update_playing() or .update_all()
-#  · urllib is no longer required, uses the main ahttp/requests API
-#  · Still might need unhtml() from channels/__init__ later
-#  · Reduce config options → move main favicon options here?
-
 
 import os, os.path
 from io import BytesIO
@@ -53,6 +39,30 @@ from uikit import gtk
 # If it's not available the first time, we won't get it after switching
 # stations back and forth either. So URLs are skipped simply.
 tried_urls = []
+
+
+
+# Has recently been rewritten, is somewhat less entangled with other
+# modules now:
+#
+#  · GenericChannel presets row["favicon"] with cache image filename
+#    in any case. It uses row["homepage"] or row["img"] as template.
+#
+#  · The url-to-filename shortening functionality is therefore shared.
+#    GenericChannel.prepare() duplicates all row_to_fn() logic.
+#
+#  · uikit.columns() merely checks row["favicon"] for file existence
+#    when redrawing a station list.
+#
+#  · main.play() only calls .update_playing() or .update_all()
+#
+#  · urllib is no longer required. Using just ahttp/requests API now.
+#
+#  · Might need unhtml() utility from channels/__init__ later..
+#
+#  · Still need to consolidate config options → Move main favicon
+#    options here?
+#
 
 
 
@@ -119,22 +129,27 @@ class favicon(object):
             if os.path.exists(favicon_fn):
                 continue
 
-            # Custom "img" banner/logo as favicon
-            if row.get("img"):
-                tried_urls.append(row["img"])
-                ok = banner_localcopy(row["img"], favicon_fn)
+            try:
+                # Custom "img" banner/logo as favicon
+                if row.get("img"):
+                    tried_urls.append(row["img"])
+                    ok = banner_localcopy(row["img"], favicon_fn)
 
-            # Homepage to favicon
-            elif row.get("homepage"):
-                tried_urls.append(row["homepage"])
-                if conf.favicon_google_first:
-                    ok = fav_google_ico2png(row["homepage"], favicon_fn)
-                else:
-                    ok = fav_from_homepage(row["homepage"], favicon_fn)
+                # Homepage to favicon
+                elif row.get("homepage"):
+                    tried_urls.append(row["homepage"])
+                    if conf.favicon_google_first:
+                        ok = fav_google_ico2png(row["homepage"], favicon_fn)
+                    else:
+                        ok = fav_from_homepage(row["homepage"], favicon_fn)
 
-            # Update TreeView
-            if ok:
-                self.update_pixstore(row, pixstore, i)
+                # Update TreeView
+                if ok:
+                    self.update_pixstore(row, pixstore, i)
+
+            # catch HTTP Timeouts etc., so update_all() row processing just continues..
+            except Exception as e:
+                log.WARN("favicon.update_rows():", e)
         pass
 
 
@@ -263,12 +278,11 @@ def store_image(imgdata, fn, resize=None):
 
 # PNG via Google ico2png
 def fav_google_ico2png(url, fn):
-    log.FAVICON("fav_google_ico2png()")
 
     # Download from service
     domain = re.sub("^\w+://|/.*$", "", url).lower()
     geturl = "http://www.google.com/s2/favicons?domain={}".format(domain)
-    imgdata = ahttp.get(geturl, binary=1, timeout=2.5)
+    imgdata = ahttp.get(geturl, binary=1, timeout=3.5, quieter=1)
     
     # Check for stub sizes
     if conf.favicon_delete_stub and len(imgdata) in (726,896): # google_placeholder_filesizes
@@ -289,7 +303,7 @@ def fav_from_homepage(url, fn):
         return False
         
     # Fetch image, verify MIME type
-    r = ahttp.get(img, binary=1, content=0, timeout=2.75)
+    r = ahttp.get(img, binary=1, content=0, timeout=4.25, quieter=1)
     if not re.match('image/(png|jpe?g|png|ico|x-ico|vnd.microsoft.ico)', r.headers["content-type"], re.I):
         log.WARN("content-type wrong", r.headers)
         return False
@@ -305,18 +319,25 @@ def fav_from_homepage(url, fn):
 # icon path to homepage url; nor does any entity decoding.
 #
 def html_link_icon(url, href="/favicon.png"):
-    html = ahttp.get(url, encoding="iso-8859-1", timeout=3.5)
+    html = ahttp.get(url, encoding="iso-8859-1", timeout=4.5, quieter=1)
     # Extract
     for link in re.findall(r"""  <link ([^<>]+) >  """, html, re.X):
         pair = re.findall(r"""  \b(rel|href) \s*=\s* ["']? ([^<>"']+) ["']? """, link, re.X)
         pair = { name: val for name, val in pair }
         for name in ("shortcut icon", "favicon", "icon", "icon shortcut"):
-            if name == pair.get("rel", "ignore") and pair.get("href"):
-                href = pair["href"] # unhtml()
+            if name == pair.get("rel", "ignore").lower() and pair.get("href"):
+                href = pair["href"].replace("&amp;", "&") # unhtml()
                 break
-    # Patch URL together (strip double proto/domain, or double slash)
-    return re.sub("^(https?://\w[^/]+\w)?/?(https?://\w[^/]+\w)/?(/.+)$", "\g<2>\g<3>", url+href)
-    # (should rather split this up again, a few more special cases w/ non-root homepages)
+    # Patch URL together
+    if re.match("^https?://", href): # absolute URL
+        return href
+    elif re.startswith("//", href): # proto-absolute
+        return "http:" + href
+    elif re.startswith("/", href): # root path
+        return re.sub("(https?://[^/]).*$", "\g<1>") + href
+    else: # relative path references xyz/../
+        href = re.sub("[^/]+$", "", url) + href
+        return re.sub("[^/]+/../", "/", href)
     
 
 
