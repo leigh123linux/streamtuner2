@@ -17,12 +17,12 @@
 # or logo for some channel modules. It converts .ico image files and
 # sanitizes .png or .jpeg images even prior display.
 # 
-# It prepares cache files in ~/.config/streamtuner2/icons/ in agreement
-# with the station list display logic. Either uses station "homepage"
-# or "img" URLs from entry rows{}.
+# It prepares cache files in ~/.config/streamtuner2/icons/ in silent
+# agreement with the station list display logic. Either uses station
+# row["homepage"] or row["img"] URLs from any entry.
 #
 # While it can often discover favicons directly from station homepages,
-# it's often speedier to user the Google PNG conversion service. Both
+# it's often speedier to use the Google PNG conversion service. Both
 # depend on a recent Pillow2 python module (superseding the PIL module).
 # Else may display images with fragments if converted from ICO files.
 #
@@ -30,18 +30,18 @@
 # modules now:
 #  · GenericChannel presets row["favicon"] with cache image filename
 #    in any case, uses row["homepage"] or row["img"] as template
-#  · the filename shortening functionality must be shared between
+#  · The filename shortening functionality must be shared between
 #    favicon and genericchannel.prepare() code
 #  · uikit.columns() merely checks row["favicon"] for file existence
 #    on redraws
 #  · main.play() only calls .update_playing() or .update_all()
 #  · urllib is no longer required, uses the main ahttp/requests API
-#  · still might need unhtml() from channels/__init__ later
+#  · Still might need unhtml() from channels/__init__ later
 #  · Reduce config options → move main favicon options here?
 
 
 import os, os.path
-from compat2and3 import StringIO
+from io import BytesIO
 import re
 from config import *
 import ahttp
@@ -146,7 +146,7 @@ class favicon(object):
 
         # Unpack ListStore, pixbuf column no, preset rowno
         ls, pix_entry, i = pixstore
-        # Else rows-iteration rowno
+        # Else use row index from update_all-iteration
         if i is None:
             i = row_i
 
@@ -170,9 +170,9 @@ class favicon(object):
 #--- somewhat unrelated ---
 #
 # Should become a distinct feature plugin. - It just depends on correct
-# invocation order for plugins to work.
+# invocation order for both plugins to interact.
 # Googling is often blocked anyway, because this is clearly a bot request.
-# Tag requests with ?client=streamtuner2 purposefully still.
+# And requests are tagged with ?client=streamtuner2 still purposefully.
 # 
 def google_find_homepage(self, row):
     """ Searches for missing homepage URL via Google. """
@@ -233,7 +233,7 @@ def store_image(imgdata, fn, resize=None):
     if re.match(br'^(.PNG|GIF\d+|.{0,15}JFIF|\x00\x00\x01\x00|.{0,255}<svg[^>]+svg)', imgdata):
         try:
             # Read from byte/str
-            image = Image.open(StringIO(imgdata))
+            image = Image.open(BytesIO(imgdata))
             log.FAVICON_IMAGE_TO_PNG(image, resize)
 
             # Resize
@@ -241,14 +241,14 @@ def store_image(imgdata, fn, resize=None):
                 image.resize((resize, resize), Image.ANTIALIAS)
 
             # Convert to PNG via string buffer
-            out = StringIO()
+            out = BytesIO()
             image.save(out, "PNG", quality=98)
             imgdata = out.getvalue()
 
         except Exception as e:
             return log.ERR("favicon/logo conversion error:", e) and False
     else:
-        log.WARN("couldn't detect mime type")
+        log.WARN("Couldn't detect valig image type from its raw content")
 
     # PNG already?
     if re.match(b"^.(PNG)", imgdata):
@@ -263,7 +263,7 @@ def store_image(imgdata, fn, resize=None):
 
 # PNG via Google ico2png
 def fav_google_ico2png(url, fn):
-    log.FAVICON("google ico2png")
+    log.FAVICON("fav_google_ico2png()")
 
     # Download from service
     domain = re.sub("^\w+://|/.*$", "", url).lower()
@@ -288,7 +288,7 @@ def fav_from_homepage(url, fn):
     if not img:
         return False
         
-    # Fetc image, verify MIMEE type
+    # Fetch image, verify MIME type
     r = ahttp.get(img, binary=1, content=0, timeout=2.75)
     if not re.match('image/(png|jpe?g|png|ico|x-ico|vnd.microsoft.ico)', r.headers["content-type"], re.I):
         log.WARN("content-type wrong", r.headers)
@@ -316,6 +316,7 @@ def html_link_icon(url, href="/favicon.png"):
                 break
     # Patch URL together (strip double proto/domain, or double slash)
     return re.sub("^(https?://\w[^/]+\w)?/?(https?://\w[^/]+\w)/?(/.+)$", "\g<2>\g<3>", url+href)
+    # (should rather split this up again, a few more special cases w/ non-root homepages)
     
 
 

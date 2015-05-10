@@ -21,7 +21,6 @@
 from config import *
 from uikit import *
 from channels import *
-import favicon
 
 
 
@@ -102,8 +101,8 @@ class bookmarks(GenericChannel):
 
         # normalize data (this row originated in a gtk+ widget)
         row["favourite"] = 1
-        if row.get("favicon"):
-           row["favicon"] = favicon.file(row.get("homepage"))
+        #if row.get("favicon"):
+        #   row["favicon"] = favicon.file(row.get("homepage"))
         if not row.get("listformat"):
             row["listformat"] = self.parent.channel().listformat
            
