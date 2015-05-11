@@ -72,7 +72,7 @@ class StreamTunerTwo(gtk.Builder):
     widgets = {}     # non-glade widgets (any manually instantiated ones)
     channels = {}    # channel modules
     features = {}    # non-channel plugins
-    working = []     # threads
+    #working = []     # threads
     hooks = {
         "play": [],  # observers queue here
         "record": [],
@@ -214,6 +214,15 @@ class StreamTunerTwo(gtk.Builder):
         else:
             return gtk.Builder.get_object(self, name)
 
+
+    # Run a function in thread
+    def thread(self, target, *args, **kwargs):
+        if conf.nothreads:
+            return target(*args, **kwargs)
+        thread = Thread(target=target, args=args, kwargs=kwargs)
+        thread.start()
+        #self.working.append(thread)
+
             
     # Returns the currently selected directory/channel object (remembered position)
     def channel(self):
@@ -264,7 +273,7 @@ class StreamTunerTwo(gtk.Builder):
     def on_play_clicked(self, widget, event=None, *args):
         self.status("Starting player...")
         channel = self.channel()
-        pixstore = [channel._ls, channel._pix_entry, channel.rowno()]
+        pixstore = [channel.ls, channel.pix_entry, channel.rowno()]
         row = channel.play()
         self.status("")
         [callback(row, pixstore=pixstore) for callback in self.hooks["play"]]
@@ -291,20 +300,12 @@ class StreamTunerTwo(gtk.Builder):
     # Reload stream list in current channel-category
     def on_reload_clicked(self, widget=None, reload=1):
         log.UI("on_reload_clicked()", "reload=", reload, "current_channel=", self.current_channel, "c=", self.channels[self.current_channel], "cat=", self.channel().current)
-        category = self.channel().current
-        self.thread(
-                       #@TODO: should get a wrapper, for HTTP errors, and optionalize bookamrks
-            lambda: (  self.channel().load(category,reload), reload and self.bookmarks.heuristic_update(self.current_channel,category)  )
-        )
-
-    # Thread a function, add to worker pool (for utilizing stop button)
-    def thread(self, target, *args, **kwargs):
-        if conf.nothreads:
-            return target(*args, **kwargs)
-        thread = Thread(target=target, args=args, kwargs=kwargs)
-        thread.start()
-        self.working.append(thread)
-
+        self.thread(self._on_reload, self.channel(), reload)
+    def _on_reload(self, channel, reload):
+        self.channel().load(channel.current, force=reload)
+        if reload:
+            try: self.bookmarks.heuristic_update(self.current_channel, channel.category)
+            except: pass
 
     # Click in category list
     def on_category_clicked(self, widget, event, *more):
@@ -322,13 +323,13 @@ class StreamTunerTwo(gtk.Builder):
 
     # Reload category tree
     def update_categories(self, widget):
-        Thread(target=self.channel().reload_categories).start()
+        self.thread(self.channel().reload_categories)
 
     # Menu invocation: refresh favicons for all stations in current streams category
     def update_favicons(self, widget):
         if "favicon" in self.features:
             ch = self.channel()
-            self.features["favicon"].update_all(entries=ch.stations(), pixstore=[ch._ls, ch._pix_entry, None])
+            self.features["favicon"].update_all(entries=ch.stations(), pixstore=[ch.ls, ch.pix_entry, None])
 
     # Save stream to file (.m3u)
     def save_as(self, widget):
