@@ -69,9 +69,9 @@ class GenericChannel(object):
     streams = {}      # Station list dict, associates each genre to a list of stream rows
     gtk_list = None   # Gtk widget for station treeview
     gtk_cat = None    # Gtk widget for category columns
-    _ls = None        # ListStore for station treeview
-    _rowmap = None    # Preserve streams-datamap
-    _pix_entry = None # ListStore entry that contains favicon
+    ls = None         # ListStore for station treeview
+    rowmap = None     # Preserve streams-datamap
+    pix_entry = None  # ListStore entry that contains favicon
 
     # mapping of stream{} data into gtk treeview/treestore representation
     datamap = [
@@ -165,8 +165,8 @@ class GenericChannel(object):
         uikit.add_menu([parent.channelmenuitems], self.meta["title"], lambda w: parent.channel_switch_by_name(self.module) or 1)
 
     # Just wraps uikit.columns() to retain liststore, rowmap and pix_entry
-    def columns(self, entries=None, pix_entry=False, typecast=0):
-        self._ls, self._rowmap, self._pix_entry = uikit.columns(self.gtk_list, self.datamap, entries)
+    def columns(self, entries=None):
+        self.ls, self.rowmap, self.pix_entry = uikit.columns(self.gtk_list, self.datamap, entries)
 
     # Statusbar stub (defers to parent/main window, if in GUI mode)
     def status(self, *args, **kw):
