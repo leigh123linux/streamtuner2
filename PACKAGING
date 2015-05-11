@@ -34,7 +34,14 @@ Renames
 
  · bookmarks, configdialog, streamedit were extracted into
    channels/ - which is why the main module got lighter.
+
  · uikit.py is the new mygtk
+
+ · contrib/ contains more add-on modules, which could just
+   be packaged into channels/ - selectively.
+
+   (Alternatively users can download and activate those
+   themselves later.)
  
 
 Aux files

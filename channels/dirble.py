@@ -110,7 +110,7 @@ class dirble (ChannelPlugin):
         params["token"] = conf.dirble_api_key or self.key
         try:
             # HTTP request and JSON decoding take a while
-            r = ahttp.get(self.base.format(method), params)
+            r = ahttp.get(self.base.format(method), params, encoding="utf-8")
             r = json.loads(r)
             if isinstance(r, dict) and "error" in r:
                 log.ERR(r["error"])
