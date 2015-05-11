@@ -6,6 +6,7 @@
 # type: channel
 # category: radio
 # url: http://www.itunes.com?
+# status: broken
 # priority: optional
 # config: -
 # png:
@@ -44,8 +45,8 @@ class itunes (ChannelPlugin):
     has_search = False
     listformat = "pls"
     titles = dict(listeners=False, bitrate=False, playing=False)
-    base = "http://lab.rolisoft.net/playlists/itunes.php"
-    #base = "http://aws-eu.rolisoft.net/playlists/itunes.php"
+    #base = "http://lab.rolisoft.net/playlists/itunes.php"
+    base = "http://aws-eu.rolisoft.net/playlists/itunes.php"
     #base = "http://aws-us.rolisoft.net/playlists/itunes.php"
 
     categories = [
