@@ -46,7 +46,7 @@ __all__ = [
     "GenericChannel", "ChannelPlugin", "use_rx",
     "entity_decode", "strip_tags", "nl", "unhtml", "to_int"
 ]
-#__path__.insert(0, "plugins")#conf.plugin_dir)
+__path__.insert(0, conf.dir + "/plugins")
 
 
 

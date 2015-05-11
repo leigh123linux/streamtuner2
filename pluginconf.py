@@ -4,7 +4,7 @@
 # category: io
 # title: Plugin configuration
 # description: Read meta data, pyz/package contents, module locating
-# version: 0.5
+# version: 0.6
 # priority: core
 # doc: http://fossil.include-once.org/streamtuner2/wiki/plugin+meta+data
 # config: -
@@ -61,7 +61,20 @@
 #  Very crude and tied to streamtuner2 base names.
 #
 #
+# Generally this scheme concerns itself more with plugin basenames.
+# That is: module scripts in a package like `ext.plg1` and `ext.plg2`.
+# It can be initialized by injecting the plugin-package basename into
+# plugin_base = []. The associated paths will be used for module
+# lookup via pkgutil.iter_modules().
 #
+# And a central module can be extended with new lookup locations best
+# by attaching new locations itself via module.__path__ + ["./local"]
+# for example.
+#
+# Plugin loading thus becomes as simple as __import__("ext.local").
+# The attachaed plugin_state config dictionary in most cases can just
+# list module basenames, if there's only one set to manage.
+
 
 
 import sys
@@ -82,13 +95,12 @@ __all__ = ["get_data", "module_list", "plugin_meta", "dependency", "add_plugin_d
 # ‾‾‾‾‾‾‾‾‾‾‾
 log_ERR = lambda *x:None
 
-# File lookup relation for get_data(), should name a top-level module/package
+# File lookup relation for get_data(), should name a top-level package.
 module_base = "config"
 
-# Package names or base paths for module_list() and plugin_meta() lookups
+# Package/module names for module_list() and plugin_meta() lookups.
+# All associated paths will be scanned for module/plugin basenames.
 plugin_base = ["channels"]
-            # [conf.share+"/channels", conf.dir+"/plugins"])
-
 
 
 
@@ -116,12 +128,20 @@ def get_data(fn, decode=False, gz=False, file_base=None):
 # Plugin name lookup
 # ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 # Search through ./plugins/ (and other configured plugin_base
-# names or paths) and get module basenames.
+# names → paths) and get module basenames.
 #
-def module_list(extra_base=[]):
+def module_list(extra_paths=[]):
+
+    # Convert plugin_base package names into paths for iter_modules
+    paths = []
+    for mp in plugin_base:
+        if sys.modules.get(mp):
+            paths += sys.modules[mp].__path__
+        elif os.path.exists(mp):
+            paths.append(mp)
 
     # Should list plugins within zips as well as local paths
-    ls = pkgutil.iter_modules(plugin_base + extra_base)
+    ls = pkgutil.iter_modules(paths + extra_paths)
     return [name for loader,name,ispkg in ls]
 
 

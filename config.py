@@ -369,6 +369,6 @@ log.PROC("ConfigDict() initialized")
 pluginconf.log_WARN = log.WARN
 pluginconf.log_ERR = log.ERR
 pluginconf.module_base = "config"
-pluginconf.plugin_base = ["channels", "plugins", conf.share+"/channels", conf.dir+"/plugins"]
+pluginconf.plugin_base = ["channels", "plugins"]#, conf.share+"/channels", conf.dir+"/plugins"]
 
 
