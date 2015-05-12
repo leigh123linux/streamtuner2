@@ -2,7 +2,6 @@
 # api: streamtuner2
 # title: Radionomy
 # description: Modern radio directory and streaming provider
-# color: #ffcc77
 # url: http://radionomy.com/
 # version: 0.5
 # type: channel
@@ -125,12 +124,14 @@ class radionomy (ChannelPlugin):
         if conf.radionomy_update:
             try:
                 d = json.loads(
-                  ahttp.get("https://www.radionomy.com/en/OnAir/Update", post=1, referer=req)
+                    ahttp.get("https://www.radionomy.com/en/OnAir/Update", post=1, referer=req)
                 )
-                if d:
-                    self.playing.update(
-                      {row["RadioUID"]: "{Title} - {Artist}".format(**row) for row in d}
-                    )
+                if not d:
+                    return
+                print d
+                self.playing.update(
+                    {row["RadioUID"]: "{Title} - {Artist}".format(**row) for row in d}
+                )
             except Exception as e:
                 log.ERR("Radionomy title update:", e)
 
