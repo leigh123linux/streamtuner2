@@ -1,15 +1,15 @@
 # encoding: UTF-8
 # api: streamtuner2
 # title: Filter Bitrate
-# description: Cleans up low-quality entries from all station lists.
-# version: 0.1
+# description: Cleans out low-quality entries from all station lists.
+# version: 0.2
 # type: filter
 # category: audio
-# priority: optional
 # config:
-#   { name: min_bitrate_mp3, value: 32, type: select, select: "32|48|64|80|96|112|128|144|160", description: Filter MP3 streams with lesser audio quality. }
-#   [ name: min_bitrate_ogg, value: 32, type: select, select: "32|48|64|80|96|112|128|144|160", description: OggVorbis/AAC sound ok with slightly lower bitrates still. ]
-# hooks: -
+#   { name: min_bitrate_mp3, value: 32, type: select, select: "32=32kbit/s|48=48kbit/s|64=64kbit/s|80=80kbit/s|96=96kbit/s|112=112kbit/s|128=128kbit/s|144=144kbit/s|160=160kbit/s", description: Filter MP3 streams with lesser audio quality. }
+#   { name: min_bitrate_ogg, value: 48, type: select, select: "32=32kbit/s|48=48kbit/s|64=64kbit/s|80=80kbit/s|96=96kbit/s|112=112kbit/s|128=128kbit/s|144=144kbit/s|160=160kbit/s", description: Minimum bitrate for Ogg Vorbis and AAC. }
+# priority: optional
+# hooks: postprocess_filters
 #
 # Plugin that filters radio stations on bitrate (audio quality).
 # Anything below 64 kbit/s often sounds awful for MP3 streams.
@@ -22,26 +22,27 @@
 
 
 from config import *
-import channels
+from channels import GenericChannel
 
 
 # Filter streams by bitrate
-class filter_bitrate():
+class filter_bitrate(object):
 
     meta = plugin_meta()
     module = "filter_bitrate"
 
-    # Hijack GenericChannel.prepare
+    # Hijack postprocessing filters in stream_update handler 
     def __init__(self, parent):
-        channels.GenericChannel.postprocess_filters.append(self.filter_rows)
+        GenericChannel.postprocess_filters.append(self.filter_rows)
+        print GenericChannel.postprocess_filters
 
-    # filter bitrate
-    def filter_rows(self, row):
-        b = int(row.get("bitrate", 0))
-        if b <= 10:
+    # Filter row on bitrate
+    def filter_rows(self, row, channel):
+        bits = int(row.get("bitrate", 0))
+        if bits <= 10:
             return True
-        elif b < int(conf.min_bitrate_mp3):
-            return False
+        elif row.get("format", channel.audioformat) in ("audio/ogg", "audio/aac", "audio/aacp"):
+            return bits >= int(conf.min_bitrate_ogg)
         else:
-            return True
+            return bits >= int(conf.min_bitrate_mp3)
 

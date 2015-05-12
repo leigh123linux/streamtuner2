@@ -135,13 +135,15 @@ class GenericChannel(object):
         # Only if streamtuner2 is run in graphical mode        
         if (parent):
             # Update/display stream processors
-            self.prepare_filters += [
-                self.prepare_filter_icons,
-            ]
-            self.postprocess_filters += [
-                self.postprocess_filter_required_fields,
-                self.postprocess_filter_homepage,
-            ]
+            if not self.prepare_filters:
+                self.prepare_filters += [
+                    self.prepare_filter_icons,
+                ]
+            if not self.postprocess_filters:
+                self.postprocess_filters += [
+                    self.postprocess_filter_required_fields,
+                    self.postprocess_filter_homepage,
+                ]
             # Load cache, instantiate Gtk widgets
             self.cache()
             self.gui(parent)
@@ -306,7 +308,7 @@ class GenericChannel(object):
                 try:
                     new_streams = self.postprocess(new_streams)
                 except Exception as e:
-                    log.ERR(e, "Updating new streams, postprocessing failed:", row)
+                    log.ERR("Updating new streams, postprocessing failed:", e)
   
                 # don't lose forgotten streams
                 if conf.retain_deleted:
@@ -365,6 +367,7 @@ class GenericChannel(object):
         for f in self.prepare_filters:
             map(f, streams)
         return streams
+
     # state icon: bookmark star, or deleted mark
     def prepare_filter_icons(self, row):
         if conf.show_bookmarks:# and "bookmarks" in self.parent.channels:
@@ -376,19 +379,21 @@ class GenericChannel(object):
                 row["state"] = gtk.STOCK_DELETE
 
 
-    # Stream list prepareations directly after reload,
-    # can remove entries, or just update fields.
+    # Stream list preparations - invoked directly after reload(),
+    # callbacks can remove entries, or just update fields.
     postprocess_filters = []
     def postprocess(self, streams):
         for f in self.postprocess_filters:
-            streams = filter(f, streams)
+            streams = [row for row in streams if f(row, self)]
         return streams
+
     # Filter entries without title or url
-    def postprocess_filter_required_fields(self, row):
+    def postprocess_filter_required_fields(self, row, channel):
         return not len(set(["", None]) & set([row.get("title"), row.get("url")]))
+
     # Deduce homepage URLs from title
     # by looking for www.xyz.com domain names
-    def postprocess_filter_homepage(self, row):
+    def postprocess_filter_homepage(self, row, channel):
         if not row.get("homepage"):
             url = self.rx_www_url.search(row.get("title", ""))
             if url:
