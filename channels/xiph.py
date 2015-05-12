@@ -7,7 +7,6 @@
 # version: 0.5
 # category: radio
 # config: 
-#    { name: xiph_min_bitrate, value: 64, type: int, description: "Minimum bitrate; filter lesser quality streams.", category: filter }
 #    { name: xiph_source, value: web, type: select, select: "cache=JSON cache srv|xml=Clunky XML blob|web=Forbidden fruits", description: "Source for station list extraction." }
 # priority: standard
 # png:
@@ -37,9 +36,8 @@
 #    with homepages and listener/max infos available. Also
 #    enables live server searching.
 #
-# The bitrate filter can strip any low-quality entries, but
-# retains `0` entries (which just lack meta information and
-# aren't necessarily low-bitrate.)
+# The previous bitrate filter is now a separate plugin, but
+# available for all channels.
 
 
 from config import *
@@ -89,10 +87,6 @@ class xiph (ChannelPlugin):
       else:
           log.PROC("Xiph mode: extract from dir.xiph.org HTML listings")
           r = self.from_raw_html(cat, search)
-          
-      # filter bitrate
-      if conf.xiph_min_bitrate:
-          r = [row for row in r if row.get("bitrate", 0) <= 10 or row.get("bitrate", 0) >= int(conf.xiph_min_bitrate)]
 
       return r
       
