@@ -134,6 +134,15 @@ class GenericChannel(object):
         
         # Only if streamtuner2 is run in graphical mode        
         if (parent):
+            # Update/display stream processors
+            self.prepare_filters += [
+                self.prepare_filter_icons,
+            ]
+            self.postprocess_filters += [
+                self.postprocess_filter_required_fields,
+                self.postprocess_filter_homepage,
+            ]
+            # Load cache, instantiate Gtk widgets
             self.cache()
             self.gui(parent)
 
@@ -166,7 +175,7 @@ class GenericChannel(object):
 
     # Just wraps uikit.columns() to retain liststore, rowmap and pix_entry
     def columns(self, entries=None):
-        self.ls, self.rowmap, self.pix_entry = uikit.columns(self.gtk_list, self.datamap, entries)
+        self.ls, self.rowmap, self.pix_entry = uikit.columns(self.gtk_list, self.datamap, entries, show_favicons=conf.show_favicons)
 
     # Statusbar stub (defers to parent/main window, if in GUI mode)
     def status(self, *args, **kw):
@@ -292,18 +301,12 @@ class GenericChannel(object):
             else:
                 new_streams = self.update_streams(category)
   
+            # Postprocess new list of streams (e.g. assert existing title and url)
             if new_streams:
-                # check and modify entry;
-                # assert that title and url are present
-                modified = []
-                for row in new_streams:
-                    if len(set(["", None]) & set([row.get("title"), row.get("url")])):
-                        continue
-                    try:
-                        modified.append( self.postprocess(row) )
-                    except Exception as e:
-                        log.DATA(e, "Missing title or url. Postprocessing failed:", row)
-                new_streams = modified
+                try:
+                    new_streams = self.postprocess(new_streams)
+                except Exception as e:
+                    log.ERR(e, "Updating new streams, postprocessing failed:", row)
   
                 # don't lose forgotten streams
                 if conf.retain_deleted:
@@ -356,50 +359,44 @@ class GenericChannel(object):
         return diff
 
     
-    # prepare data for display
-    #
-    #  - favourite icon
-    #  - or deleted icon
-    #
+    # Prepare stream list for display
+    prepare_filters = []
     def prepare(self, streams):
-        for i,row in enumerate(streams):
-            # state icon: bookmark star
-            if (conf.show_bookmarks and "bookmarks" in self.parent.channels and self.parent.bookmarks.is_in(streams[i].get("url", "file:///tmp/none"))):
-                streams[i]["favourite"] = 1
-            
-            # state icon: INFO or DELETE
-            if (not row.get("state")):
-                if row.get("favourite"):
-                    streams[i]["state"] = gtk.STOCK_ABOUT
-                if conf.retain_deleted and row.get("deleted"):
-                    streams[i]["state"] = gtk.STOCK_DELETE
-            
-            # Favicons? construct local cache filename, basically reimplements favicon.row_to_fn()
-            if conf.show_favicons and "favicon" in self.parent.features:
-                url = row.get("img") or row.get("homepage")
-                if url:
-                    # Normalize by stripping proto:// and non-alphanumeric chars
-                    url = re.sub("[^\w._-]", "_", re.sub("^\w+://|/$", "", url.lower()))
-                    streams[i]["favicon"] = "{}/icons/{}.png".format(conf.dir, url)
-
+        for f in self.prepare_filters:
+            map(f, streams)
         return streams
+    # state icon: bookmark star, or deleted mark
+    def prepare_filter_icons(self, row):
+        if conf.show_bookmarks:# and "bookmarks" in self.parent.channels:
+            row["favourite"] = self.parent.bookmarks.is_in(row.get("url", "file:///tmp/none"))
+        if not row.get("state"):
+            if row.get("favourite"):
+                row["state"] = gtk.STOCK_ABOUT
+            if row.get("deleted"):
+                row["state"] = gtk.STOCK_DELETE
 
 
-    # data preparations directly after reload
-    #
-    # - drop shoutcast homepage links
-    # - or find homepage name in title
-    #
-    def postprocess(self, row):
-        # deduce homepage URLs from title
-        # by looking for www.xyz.com domain names
+    # Stream list prepareations directly after reload,
+    # can remove entries, or just update fields.
+    postprocess_filters = []
+    def postprocess(self, streams):
+        for f in self.postprocess_filters:
+            streams = filter(f, streams)
+        return streams
+    # Filter entries without title or url
+    def postprocess_filter_required_fields(self, row):
+        return not len(set(["", None]) & set([row.get("title"), row.get("url")]))
+    # Deduce homepage URLs from title
+    # by looking for www.xyz.com domain names
+    def postprocess_filter_homepage(self, row):
         if not row.get("homepage"):
             url = self.rx_www_url.search(row.get("title", ""))
             if url:
                 url = url.group(0).lower().replace(" ", "")
                 url = (url if url.find("www.") == 0 else "www."+url)
                 row["homepage"] = ahttp.fix_url(url)
-        return row
+                print row
+        return True
 
         
 

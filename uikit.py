@@ -86,7 +86,7 @@ class uikit:
     # for missing cols. All values must already be in the correct type however.
     #
     @staticmethod
-    def columns(widget, datamap=[], entries=None, pix_entry=False):
+    def columns(widget, datamap=[], entries=None, show_favicons=True, pix_entry=False):
 
         # create treeviewcolumns?
         if (not widget.get_column(0)):
@@ -186,7 +186,7 @@ class uikit:
                 if (pix_entry and type(row[pix_entry]) == str):
                     pix = None
                     try:
-                        if os.path.exists(row[pix_entry]):
+                        if show_favicons and os.path.exists(row[pix_entry]):
                             pix = gtk.gdk.pixbuf_new_from_file(row[pix_entry])
                     except Exception as e:
                         log.ERR("uikik.columns: Pixbuf fail,", e)
