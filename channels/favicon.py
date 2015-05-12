@@ -30,6 +30,7 @@
 import os, os.path
 from io import BytesIO
 import re
+import channels
 from config import *
 import ahttp
 from PIL import Image
@@ -47,16 +48,17 @@ tried_urls = []
 # Has recently been rewritten, is somewhat less entangled with other
 # modules now:
 #
-#  · GenericChannel presets row["favicon"] with cache image filename
+#  · GenericChannel presets row["favicon"] with cache image filenames
 #    in any case. It uses row["homepage"] or row["img"] as template.
 #
-#  · The url-to-filename shortening functionality is therefore shared.
-#    GenericChannel.prepare() duplicates all row_to_fn() logic.
+#  · The url-to-filename shortening functionality in GenChan.prepare()
+#    is identical to that in row_to_fn() here.
 #
 #  · uikit.columns() merely checks row["favicon"] for file existence
 #    when redrawing a station list.
 #
-#  · main.play() only calls .update_playing() or .update_all()
+#  · main only calls .update_playing() via hooks["play"], and the menu
+#    invokes .update_all()
 #
 #  · urllib is no longer required. Using just ahttp/requests API now.
 #
@@ -89,6 +91,9 @@ class favicon(object):
         if not os.path.exists(conf.icon_dir):
             os.mkdir(conf.icon_dir)
             open(icon_dir+"/.nobackup", "a").close()
+            
+        # Hook into channel/streams updating pipine
+        channels.GenericChannel.prepare_filters.append(self.prepare_filter_favicon)
 
 
 
@@ -182,6 +187,9 @@ class favicon(object):
                 log.ERR("Update_pixstore image", fn, "error:", e)
 
 
+    # Run after any channel .update_streams() to populate "favicon"
+    def prepare_filter_favicon(self, row):
+        row["favicon"] = row_to_fn(row)
 
 
 #--- somewhat unrelated ---
@@ -191,7 +199,7 @@ class favicon(object):
 # Googling is often blocked anyway, because this is clearly a bot request.
 # And requests are tagged with ?client=streamtuner2 still purposefully.
 # 
-def google_find_homepage(self, row):
+def google_find_homepage(row):
     """ Searches for missing homepage URL via Google. """
     if row.get("url") not in tried_urls:
         tried_urls.append(row.get("url"))
@@ -218,12 +226,14 @@ def google_find_homepage(self, row):
 
 
 # Convert row["img"] or row["homepage"] into local favicon cache filename
+rx_strip_proto = re.compile("^\w+://|/$")
+rx_non_wordchr = re.compile("[^\w._-]")
 def row_to_fn(row):
     url = row.get("img") or row.get("homepage") or None
     if url:
          url = url.lower()
-         url = re.sub("^\w+://|/$", "", url)   # strip proto:// and trailing /
-         url = re.sub("[^\w._-]", "_", url)    # remove any non-word characters
+         url = rx_strip_proto.sub("", url)     # strip proto:// and trailing /
+         url = rx_non_wordchr.sub("_", url)    # remove any non-word characters
          url = "{}/{}.png".format(conf.icon_dir, url)
     return url
 
