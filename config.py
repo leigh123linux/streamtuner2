@@ -199,7 +199,7 @@ class ConfigDict(dict):
         file = self.dir + "/" + name
         # encode as JSON
         try:
-            data = json.dumps(data, indent=(4 if nice else None))
+            data = json.dumps(data, indent=(4 if nice else None), sort_keys=True)
         except Exception as e:
             log.ERR("JSON encoding failed", e)
             return

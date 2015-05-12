@@ -399,8 +399,8 @@ class StreamTunerTwo(gtk.Builder):
         for name in ls:
             gui_startup(4/20.0 + 13.5/20.0 * float(ls.index(name))/len(ls), "loading module "+name)
 
-            # load defaults on first startup
-            if not name in conf.plugins:
+            # load defaults - on first startup - or with -D in any case
+            if not name in conf.plugins or conf.debug:
                 conf.add_plugin_defaults(plugin_meta(module=name), name)
             
             # skip module if disabled
