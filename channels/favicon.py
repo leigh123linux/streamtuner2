@@ -9,7 +9,7 @@
 #    [ main-name: load_favicon ]
 # type: feature
 # category: ui
-# version: 1.8
+# version: 1.9
 # depends: streamtuner2 >= 2.1.9, python:pil
 # priority: standard
 #
@@ -49,16 +49,14 @@ tried_urls = []
 # modules now:
 #
 #  · GenericChannel presets row["favicon"] with cache image filenames
-#    in any case. It uses row["homepage"] or row["img"] as template.
-#
-#  · The url-to-filename shortening functionality in GenChan.prepare()
-#    is identical to that in row_to_fn() here.
+#    in any case. It calls row_to_fn() per prepare_filters hook after
+#    station list updates.
 #
 #  · uikit.columns() merely checks row["favicon"] for file existence
 #    when redrawing a station list.
 #
-#  · main only calls .update_playing() via hooks["play"], and the menu
-#    invokes .update_all()
+#  · main calls .update_playing() on hooks["play"],
+#    or .update_all() per menu command
 #
 #  · urllib is no longer required. Using just ahttp/requests API now.
 #
@@ -104,21 +102,24 @@ class favicon(object):
 
 
     # Main callback for a single play() event
-    def update_playing(self, row, pixstore=None):
+    def update_playing(self, row, pixstore=None, channel=None, **x):
 
         # Homepage search
         if conf.google_homepage and not len(row.get("homepage", "")):
-            google_find_homepage(row)
+            found = google_find_homepage(row)
+            # could call channel.save() now to preserve found homepage URL
+        else:
+            found = False
 
         # Favicon only for currently playing station
         if conf.load_favicon:
             if row.get("homepage") or row.get("img"):
-                self.update_all([row], pixstore=pixstore)
+                self.update_all([row], pixstore=pixstore, always_update=found)
 
       
     # Run through rows[] to update "favicon" from "homepage" or "img",
     # optionally display new image right away in ListStore
-    def update_rows(self, entries, pixstore=None):
+    def update_rows(self, entries, pixstore=None, always_update=False):
         for i,row in enumerate(entries):
             ok = False
 
@@ -133,16 +134,21 @@ class favicon(object):
             favicon_fn = row_to_fn(row)
             if not favicon_fn:
                 continue
-            if os.path.exists(favicon_fn):
-                continue
 
             try:
-                # Custom "img" banner/logo as favicon
-                if row.get("img"):
+                # Image already exists
+                if os.path.exists(favicon_fn):
+                    if not always_update:
+                        continue
+                    else:  # For freshly added ["homepage"] when favicon already
+                        ok = True  # exists in cache. Then just update pix store.
+
+                # Download custom "img" banner/logo as favicon
+                elif row.get("img"):
                     tried_urls.append(row["img"])
                     ok = banner_localcopy(row["img"], favicon_fn)
 
-                # Homepage to favicon
+                # Fetch homepage favicon into local png
                 elif row.get("homepage"):
                     tried_urls.append(row["homepage"])
                     if conf.favicon_google_first:
@@ -188,9 +194,12 @@ class favicon(object):
                 log.ERR("Update_pixstore image", fn, "error:", e)
 
 
-    # Run after any channel .update_streams() to populate "favicon"
+    # Run after any channel .update_streams() to populate row["favicon"]
+    # from `homepage` or `img` url.
     def prepare_filter_favicon(self, row):
         row["favicon"] = row_to_fn(row)
+
+
 
 
 #--- somewhat unrelated ---
@@ -214,12 +223,13 @@ def google_find_homepage(row):
         #title = title.group(0).replace(" ", "%20")
         
         # Do 'le google search
-        html = ahttp.get("http://www.google.com/search", params=dict(hl="en", q=title, client="streamtuner2"), ajax=1)
+        html = ahttp.get("http://www.google.com/search", params=dict(hl="en", q=title, client="streamtuner2"), ajax=1, timeout=3.5)
                   
         # Find first URL hit
         url = rx_u.findall(html)
         if url:
             row["homepage"] = ahttp.fix_url(url[0])
+            return True
     pass
 #-----------------
 
@@ -235,7 +245,7 @@ def row_to_fn(row):
          url = url.lower()
          url = rx_strip_proto.sub("", url)     # strip proto:// and trailing /
          url = rx_non_wordchr.sub("_", url)    # remove any non-word characters
-         url = "{}/{}.png".format(conf.icon_dir, url)
+         url = "{}/{}.png".format(conf.icon_dir, url)  # prefix cache directory
     return url
 
 
@@ -254,7 +264,7 @@ def banner_localcopy(url, fn):
     
 
     
-# Check valid image, possibly convert, and save to cache filename
+# Check for valid image binary, possibly convert or resize, then save to cache filename
 def store_image(imgdata, fn, resize=None):
 
     # Convert accepted formats -- even PNG for filtering now
@@ -332,8 +342,8 @@ def fav_from_homepage(url, fn):
 
 # Download HTML, look for favicon name in <link rel=shortcut icon>.
 #
-# Very rough, doesn't respect any <base href=> and manually patches
-# icon path to homepage url; nor does any entity decoding.
+# Very rough: doesn't respect any <base href=> and manually patches
+# icon path to homepage url; doesn't do much HTML entity decoding.
 #
 def html_link_icon(url, href="/favicon.png"):
     html = ahttp.get(url, encoding="iso-8859-1", timeout=4.5, quieter=1)

@@ -25,15 +25,16 @@ feedback = None
 #
 # Can either take a float parameter (e.g. 0.99 for % indicator)
 # or text message. Alternatively two parameters to update both.
-def progress_feedback(*args):
+def progress_feedback(*args, **kwargs):
 
   # use reset values if none given
   if not args:
      args = ["", 1.0]
+  timeout = kwargs.get("timeout", 50)
 
   # send to main win
   if feedback:
-    try: [feedback(d, timeout=50) for d in args]
+    try: [feedback(d, timeout=timeout) for d in args]
     except: pass
 
 
@@ -61,7 +62,7 @@ def get(
 
     # statusbar info
     if not quieter:
-        progress_feedback(url)
+        progress_feedback(url, timeout=timeout/1.5)
     
     # combine headers
     headers = {}

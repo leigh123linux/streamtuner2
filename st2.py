@@ -276,7 +276,7 @@ class StreamTunerTwo(gtk.Builder):
         pixstore = [channel.ls, channel.pix_entry, channel.rowno()]
         row = channel.play()
         self.status("")
-        [callback(row, pixstore=pixstore) for callback in self.hooks["play"]]
+        [callback(row, pixstore=pixstore, channel=channel) for callback in self.hooks["play"]]
 
     # Recording: invoke streamripper for current stream URL
     def on_record_clicked(self, widget):
