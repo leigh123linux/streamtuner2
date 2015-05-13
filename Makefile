@@ -84,5 +84,5 @@ install:
 # start locally
 st2: run
 run:
-	python -B -3 ./st2.py -D
+	python -B ./st2.py -D
 

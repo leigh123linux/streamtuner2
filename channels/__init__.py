@@ -41,16 +41,16 @@ import copy
 import inspect
 
 
-# Only export plugin classes
+# Only export plugin classes and a few utility functions
 __all__ = [
-    "GenericChannel", "ChannelPlugin", "use_rx",
+    "GenericChannel", "ChannelPlugin", "use_rx", "mime_fmt",
     "entity_decode", "strip_tags", "nl", "unhtml", "to_int"
 ]
 __path__.insert(0, conf.dir + "/plugins")
 
 
 
-# generic channel module                            ---------------------------------------
+# Generic channel module
 class GenericChannel(object):
 
     # control attributes
@@ -60,13 +60,15 @@ class GenericChannel(object):
     audioformat = "audio/mpeg" # fallback value
     has_search = False
 
-    # categories
-    categories = []
-    catmap = {}
-    shown = None      # last selected entry in stream list, also indicator if notebook tab has been selected once / stream list of current category been displayed yet
+    # Categories
+    categories = []   # Category names or subcategory groups in [] lists
+    catmap = {}       # Map category names to channel/service-internal ids
+    shown = None      # Just a state flag for .first_show() now
 
-    # gui + data
+    # Stream list
     streams = {}      # Station list dict, associates each genre to a list of stream rows
+    
+    # Gtk widgets
     gtk_list = None   # Gtk widget for station treeview
     gtk_cat = None    # Gtk widget for category columns
     ls = None         # ListStore for station treeview
@@ -92,18 +94,22 @@ class GenericChannel(object):
        [False,		0,	["search_set",	bool,	None,	{}],	],
     ]
     rowmap = []   # [state,genre,title,...] field enumeration still needed separately
-    titles = {}   # for easier adapting of column titles in datamap
+    titles = {}   # For easier adapting of column titles in datamap
 
-    # for empty grouping / categories
+    # For empty grouping / categories
     placeholder = [dict(genre="./.", title="Subcategory placeholder", playing="./.", url="none:", listeners=0, bitrate=0, homepage="", state="gtkfolder")]
     empty_stub = [dict(genre="./.", title="No categories found (HTTP error)", playing="Try Channel→Reload Categories later..", url="none:", listeners=0, bitrate=0, homepage="", state="gtk-stop")]
     nothing_found = [dict(genre="./.", title="No contents found on directory server", playing="Notice", listeners=0, bitrate=0, state="gtk-info")]
     
-    # regex            
+    # Title to homepage regex
     rx_www_url = re.compile("""(www(\.\w+[\w-]+){2,}|(\w+[\w-]+[ ]?\.)+(com|FM|net|org|de|PL|fr|uk))""", re.I)
 
+    # Hooks for station list updating 
+    prepare_filters = []      # run prior columns() display
+    postprocess_filters = []  # called after update_streams()
 
-    #-- keep track of currently selected genre/category
+
+    # Keep track of currently selected genre/category
     __current = None
     @property
     def current(self):
@@ -175,9 +181,11 @@ class GenericChannel(object):
         # add to main menu
         uikit.add_menu([parent.channelmenuitems], self.meta["title"], lambda w: parent.channel_switch_by_name(self.module) or 1)
 
+
     # Just wraps uikit.columns() to retain liststore, rowmap and pix_entry
     def columns(self, entries=None):
         self.ls, self.rowmap, self.pix_entry = uikit.columns(self.gtk_list, self.datamap, entries, show_favicons=conf.show_favicons)
+
 
     # Statusbar stub (defers to parent/main window, if in GUI mode)
     def status(self, *args, **kw):
@@ -188,7 +196,8 @@ class GenericChannel(object):
         
     #--------------------- streams/model data accesss ---------------------------
 
-    # traverse category TreeModel to set current, expand parent nodes
+
+    # Traverse category TreeModel to set current, expand parent nodes
     def select_current(self, name):
         log.UI("reselect .current category in treelist:", name)
         model = self.gtk_cat.get_model()
@@ -197,7 +206,7 @@ class GenericChannel(object):
         iter = model.get_iter_first()
         self.iter_cats(name, model, iter)
 
-    # iterate over children to find current category        
+    # Iterate over children to find current category
     def iter_cats(self, name, model, iter):
         while iter:
             val = model.get_value(iter, 0)
@@ -214,7 +223,7 @@ class GenericChannel(object):
                     return True
             iter = model.iter_next(iter)
         
-    # selected category
+    # Selected category (current state from Gtk TreeModel)
     def currentcat(self):
         (model, iter) = self.gtk_cat.get_selection().get_selected()
         if (type(iter) == gtk.TreeIter):
@@ -257,7 +266,8 @@ class GenericChannel(object):
 
     #------------------------ base implementations -----------------------------
 
-    # read previous channel/stream data, if there is any
+
+    # Read previous channel/stream data, if there's any
     def cache(self):
         # stream list
         cache = conf.load("cache/" + self.module)
@@ -273,8 +283,12 @@ class GenericChannel(object):
             self.catmap = cache
         pass
 
+    # Store current streams data
+    def save(self):
+        conf.save("cache/" + self.module, self.streams, gz=1)
+
         
-    # make private copy of .datamap and modify field (title= only ATM)
+    # Create private copy of .datamap and modify entries (title= rewrites)
     def update_datamap(self, search="name", title=None):
         if self.datamap == GenericChannel.datamap:
             self.datamap = copy.deepcopy(self.datamap)
@@ -283,7 +297,19 @@ class GenericChannel(object):
                 row[0] = title
 
 
-    # Called on switching genre/category.
+    # Reload current station list
+    def reload(self):
+        self.load(self.current, force=1)
+    def switch(self):
+        self.load(self.current, force=0)
+    
+    # Update streams pane if currently selected (used by bookmarks.links channel)
+    def reload_if_current(self, category):
+        if self.current == category:
+            self.reload()
+
+
+    # Called on switching genre/category, or loading a genre for the first time.
     # Either fetches new stream data, or displays list from cache.
     def load(self, category, force=False, y=None):
 
@@ -337,32 +363,13 @@ class GenericChannel(object):
         self.status()
 
         
-    # store current streams data
-    def save(self):
-        conf.save("cache/" + self.module, self.streams, gz=1)
-
-
-    # called occasionally while retrieving and parsing
+    # Called occasionally (by some plugins) while updating station list
     def update_streams_partially_done(self, entries):
         if gtk_ver == 3 and not conf.nothreads:
             pass
         else:  # kills Gtk3 too easily
             uikit.do(self.columns, entries)
-
-        
-    # finds differences in new/old streamlist, marks deleted with flag
-    def deleted_streams(self, new, old):
-        diff = []
-        new = [row.get("url","http://example.com/") for row in new]
-        for row in old:
-            if ("url" in row and (row.get("url") not in new)):
-                row["deleted"] = 1
-                diff.append(row)
-        return diff
-
-    
-    # Prepare stream list for display
-    prepare_filters = []
+    # Prepare stream list for display (called immediataly before .columns() refreshing)
     def prepare(self, streams):
         for f in self.prepare_filters:
             map(f, streams)
@@ -379,9 +386,8 @@ class GenericChannel(object):
                 row["state"] = gtk.STOCK_DELETE
 
 
-    # Stream list preparations - invoked directly after reload(),
+    # Stream list cleanup - invoked directly after reload(),
     # callbacks can remove entries, or just update fields.
-    postprocess_filters = []
     def postprocess(self, streams):
         for f in self.postprocess_filters:
             streams = [row for row in streams if f(row, self)]
@@ -403,21 +409,20 @@ class GenericChannel(object):
                 print row
         return True
 
-        
 
-    # reload current stream from web directory
-    def reload(self):
-        self.load(self.current, force=1)
-    def switch(self):
-        self.load(self.current, force=0)
-    
-    # update streams pane if currently selected (used by bookmarks.links channel)
-    def reload_if_current(self, category):
-        if self.current == category:
-            self.reload()
-    
+    # Finds differences in new/old streamlist, marks deleted with flag
+    def deleted_streams(self, new, old):
+        diff = []
+        new = [row.get("url","http://example.com/") for row in new]
+        for row in old:
+            if ("url" in row and (row.get("url") not in new)):
+                row["deleted"] = 1
+                diff.append(row)
+        return diff
+
+
         
-    # display .current category, once notebook/channel tab is first opened
+    # Display .current category, once notebook/channel tab is first opened
     def first_show(self):
 
         # Already processed
@@ -462,7 +467,7 @@ class GenericChannel(object):
             return d[0] if len(d) else None
 
 
-    # update categories, save, and display                
+    # Update categories, save, and display                
     def reload_categories(self):
     
         # get data and save
@@ -476,7 +481,7 @@ class GenericChannel(object):
         uikit.do(self.display_categories)
 
 
-    # insert content into gtk category list
+    # Refresh category treeview
     def display_categories(self):
         log.UI("{}.display_categories(), uikit.tree(#{}), expand_all(#<20), select_current(={})".format(self.module, len(self.categories), self.current))
     
@@ -545,33 +550,9 @@ class GenericChannel(object):
 
 
 
-    #--------------------------- utility functions -----------------------
-
     
 
         
-    # convert audio format nick/shortnames to mime types, e.g. "OGG" to "audio/ogg"
-    def mime_fmt(self, s):
-        # clean string
-        s = s.lower().strip()
-        # rename
-        map = {
-            "audio/mp3":"audio/mpeg",  # Note the real mime type is /mpeg, but /mp3 is more understandable in the GUI
-            "ogg":"ogg", "ogm":"ogg", "xiph":"ogg", "vorbis":"ogg", "vnd.xiph.vorbis":"ogg",
-            "mp3":"mpeg", "mp":"mpeg", "mp2":"mpeg", "mpc":"mpeg", "mps":"mpeg",
-            "aac+":"aac", "aacp":"aac",
-            "realaudio":"x-pn-realaudio", "real":"x-pn-realaudio", "ra":"x-pn-realaudio", "ram":"x-pn-realaudio", "rm":"x-pn-realaudio",
-            # yes, we do video
-            "flv":"video/flv", "mp4":"video/mp4",
-        }
-        #map.update(action.listfmt_t)   # list type formats (.m3u .pls and .xspf)
-        if map.get(s):
-            s = map[s]
-        # add prefix:
-        if s.find("/") < 1:
-            s = "audio/" + s
-        #
-        return s
     
 
 
@@ -762,5 +743,30 @@ def nl(str):
 # Combine html tag, escapes and whitespace cleanup
 def unhtml(str):
     return nl(entity_decode(strip_tags(str)))
+
+
+# Convert audio format nick/shortnames to mime types, e.g. "OGG" to "audio/ogg"
+# (only used by few plugin meanwhile, could be merged with action. module now)
+def mime_fmt(s):
+    # clean string
+    s = s.lower().strip()
+    # rename
+    map = {
+        "audio/mp3":"audio/mpeg",  # Note the real mime type is /mpeg, but /mp3 is more understandable in the GUI
+        "ogg":"ogg", "ogm":"ogg", "xiph":"ogg", "vorbis":"ogg", "vnd.xiph.vorbis":"ogg",
+        "mp3":"mpeg", "mp":"mpeg", "mp2":"mpeg", "mpc":"mpeg", "mps":"mpeg",
+        "aac+":"aac", "aacp":"aac",
+        "realaudio":"x-pn-realaudio", "real":"x-pn-realaudio", "ra":"x-pn-realaudio", "ram":"x-pn-realaudio", "rm":"x-pn-realaudio",
+        # yes, we do video
+        "flv":"video/flv", "mp4":"video/mp4",
+    }
+    #map.update(action.listfmt_t)   # list type formats (.m3u .pls and .xspf)
+    if map.get(s):
+        s = map[s]
+    # add prefix:
+    if s.find("/") < 1:
+        s = "audio/" + s
+    #
+    return s
 
 

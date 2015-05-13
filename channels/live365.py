@@ -2,7 +2,7 @@
 # api: streamtunter2
 # title: Live365
 # description: Around 5000 categorized internet radio streams, some paid ad-free ones.
-# version: 0.3
+# version: 0.4
 # type: channel
 # category: radio
 # url: http://www.live365.com/
@@ -18,7 +18,16 @@
 # 
 # Live365 lists around 5000 radio stations. Some are paid
 # entries and require a logon. This plugins tries to filter
-# thoise out.
+# those out.
+
+
+# Non-tracking cookies:
+#
+# box_mc |bitrate=256|ls=3|hasFlash=Y|ab=viphp:G3|POC=8|mvd=2|SUPMsg=| (desktop player off)
+#        |ab=viphp:G3|POC=10|bitrate=256|mvd=2|ls=3|hasFlash=Y|SUPMsg=| (desktop player on)
+# pg_mc  |hp=A|darg=|curl=|curlt=Live365 - My Live365 - Listen Settings|
+# session_mc |plr=N|site=web|
+# player_mc |Vol=50|
 
 
 # streamtuner2 modules
@@ -81,11 +90,11 @@ class live365(ChannelPlugin):
     # extract stream infos
     def update_streams(self, cat):
 
-        # Retrieve genere index pages    
+        # Retrieve genre index pages    
         html = ""
         for i in [1, 17, 33, 49]:
             url = "http://www.live365.com/cgi-bin/directory.cgi?first=%i&site=web&mode=3&genre=%s&charset=UTF-8&target=content" % (i, cat.lower())
-            html += ahttp.get(url, feedback=self.parent.status)
+            html += ahttp.get(url)
         
         # Extract from JavaScript       
         rx = re.compile(r"""

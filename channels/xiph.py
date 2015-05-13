@@ -150,7 +150,7 @@ class xiph (ChannelPlugin):
           buffy.append({
               "title": x(entry, "server_name"),
               "url": x(entry, "listen_url"),
-              "format": self.mime_fmt(x(entry, "server_type")[6:]),
+              "format": mime_fmt(x(entry, "server_type")[6:]),
               "bitrate": bitrate(x(entry, "bitrate")),
               "channels": x(entry, "channels"),
               "samplerate": x(entry, "samplerate"),
@@ -231,7 +231,7 @@ class xiph (ChannelPlugin):
               listformat = "xspf",
               listeners = int(listeners),
               bitrate = bitrate(bits),
-              format = self.mime_fmt(guess_format(fmt)),
+              format = mime_fmt(guess_format(fmt)),
           ))
       return r
 

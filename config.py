@@ -79,7 +79,7 @@ class ConfigDict(dict):
     def __init__(self):
     
         # object==dict means conf.var is conf["var"]
-        self.__dict__ = self  # let's pray this won't leak memory due to recursion issues
+        self.__dict__ = self
 
         # prepare
         self.defaults()

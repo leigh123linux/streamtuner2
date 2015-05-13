@@ -153,6 +153,7 @@ class favicon(object):
                 # Update TreeView
                 if ok:
                     self.update_pixstore(row, pixstore, i)
+                    row["favicon"] = favicon_fn
 
             # catch HTTP Timeouts etc., so update_all() row processing just continues..
             except Exception as e:

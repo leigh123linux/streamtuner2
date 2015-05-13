@@ -83,7 +83,7 @@ class punkcast (ChannelPlugin):
         for uu in rx_sound.findall(html):
             log.DATA( uu )
             (url, fmt) = uu
-            action.play(url, self.mime_fmt(fmt), "srv")
+            action.play(url, mime_fmt(fmt), "srv")
             return
         
         # or just open webpage

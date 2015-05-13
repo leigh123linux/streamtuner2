@@ -177,7 +177,7 @@ class file (ChannelPlugin):
             "filename": fn,
             "url": "file://" + dir + "/" + fn,
             "genre": "",
-            "format": self.mime_fmt(fn[-3:]),
+            "format": mime_fmt(fn[-3:]),
             "editable": True,
         }
         # add ID3

@@ -79,7 +79,7 @@ class listenlive (ChannelPlugin):
                     url = url,
                     genre = genre[0] if genre else cat,
                     bitrate = int(bitrate),
-                    format = self.mime_fmt(format),
+                    format = mime_fmt(format),
                 ))
         return r
       
