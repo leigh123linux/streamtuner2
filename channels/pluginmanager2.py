@@ -10,6 +10,11 @@
 #   { name: plugin_repos, type: text, value: "http://fossil.include-once.org/repo.json/streamtuner2/contrib/*.py, http://fossil.include-once.org/repo.json/streamtuner2/channels/*.py", description: "Plugin repository JSON source references." }
 #   { name: plugin_auto, type: boolean, value: 1, description: Apply plugin activation/disabling without restart. }
 # priority: extra
+# png:
+#   iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAJ1BMVEUAAABNYQVcdAx1iTB6mQ6KsQGUsTCUuxGmyDKvzEK51FnB13LP3pnSUwRYAAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAJcEhZcwAACxMAAAsT
+#   AQCanBgAAAAHdElNRQffBQ4EMidI8LXfAAABGUlEQVQoz32NPU7DQBCFx4aOxosIIOzGlkWRiogGkBssRfQoK/cxRBwAaw6AhJcLoAwtlTdlKtiSMj4U++PIBiReM/O+mXkD0ImdMxhqp23bsyHINkp9/Qu8TLXBj5BMrfsp
+#   08rk2hT7KtIf2o1cmWJzIqU+pVVD9i6SW9Ev0BC9D0FDSzEExouyB0QkLGAQunMSL7IuwVNB+EZu/Bw/lLAnJ1fa6nOBT3CZQ0irDzsWiHo/gLFwqhFxbl6Me+/AiXhdmnUHfIBDMb+onccZnE7AXwTHncfH5CYHSGALeHGH
+#   tybGAr7gFS8KC464Vs7Se84dGGlvmvQPqAZgFoM/7QYwQqx0fIoFuo0DE3oNuzbbgP1EKwDPlPgb5NefnUHe3aAAAAAASUVORK5CYII=
 # support: experimental
 #
 # Scans for new plugins from the repository server, using
