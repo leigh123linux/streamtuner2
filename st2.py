@@ -256,7 +256,8 @@ class StreamTunerTwo(gtk.Builder):
 
     # Mirror selected channel tab into main window title
     def update_title(self):
-        self.win_streamtuner2.set_title("Streamtuner2 - %s" % self.channel().meta.get("title"))
+        if conf.window_title:
+            self.win_streamtuner2.set_title("Streamtuner2 - %s" % self.channel().meta.get("title"))
 
 
     # Channel: row{} dict for current station
