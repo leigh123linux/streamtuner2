@@ -406,7 +406,6 @@ class GenericChannel(object):
                 url = url.group(0).lower().replace(" ", "")
                 url = (url if url.find("www.") == 0 else "www."+url)
                 row["homepage"] = ahttp.fix_url(url)
-                print row
         return True
 
 

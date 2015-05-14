@@ -422,7 +422,7 @@ class uikit:
             callback(*args, **kwargs)
         # Spool them for Gtk idle handling
         else:
-            log.UIKIT_SPOOL(name)
+            #log.UIKIT_SPOOL(name)
             uikit.idle_tasks.insert(pos, [lambda: callback(*args, **kwargs), name])
             gobject.idle_add(uikit.idle_do)
     

@@ -93,7 +93,7 @@ class StreamTunerTwo(gtk.Builder):
         # Load stylesheet, instantiate GtkBuilder in self, menu and logo hooks
         gui_startup(1/20.0), gtk.Builder.__init__(self)
         gui_startup(1/20.0), gtk.Builder.add_from_string(self, ui_xml)
-        gui_startup(3/20.0), self.img_logo.set_from_pixbuf(uikit.pixbuf(logo.png, decode=1, fmt="png"))
+        gui_startup(3/20.0), self.logo_scale(1.0)
 
         # initialize built-in plugins
         self.channels = {
@@ -147,9 +147,9 @@ class StreamTunerTwo(gtk.Builder):
             "menu_toolbar_standard": lambda w: (self.toolbar.unset_style(), self.toolbar.unset_icon_size()),
             "menu_toolbar_style_icons": lambda w: (self.toolbar.set_style(gtk.TOOLBAR_ICONS)),
             "menu_toolbar_style_both": lambda w: (self.toolbar.set_style(gtk.TOOLBAR_BOTH)),
-            "menu_toolbar_size_small": lambda w: (self.toolbar.set_icon_size(gtk.ICON_SIZE_SMALL_TOOLBAR)),
-            "menu_toolbar_size_medium": lambda w: (self.toolbar.set_icon_size(gtk.ICON_SIZE_DND)),
-            "menu_toolbar_size_large": lambda w: (self.toolbar.set_icon_size(gtk.ICON_SIZE_DIALOG)),
+            "menu_toolbar_size_small": lambda w: (self.toolbar.set_icon_size(gtk.ICON_SIZE_SMALL_TOOLBAR), self.logo_scale(0.40)),
+            "menu_toolbar_size_medium": lambda w: (self.toolbar.set_icon_size(gtk.ICON_SIZE_DND), self.logo_scale(0.75)),
+            "menu_toolbar_size_large": lambda w: (self.toolbar.set_icon_size(gtk.ICON_SIZE_DIALOG), self.logo_scale(1.0)),
             "menu_notebook_pos_top": lambda w: self.notebook_channels.set_tab_pos(2),
             "menu_notebook_pos_left": lambda w: self.notebook_channels.set_tab_pos(0),
             "menu_notebook_pos_right": lambda w: self.notebook_channels.set_tab_pos(1),
@@ -430,12 +430,25 @@ class StreamTunerTwo(gtk.Builder):
                 traceback.print_exc()
 
 
+    # Redraw logo        
+    def logo_scale(self, r=1.0, map=None):
+        pix = uikit.pixbuf(logo.png, decode=1, fmt="png")
+        if map and map in (2,5,0):
+            r = { 2: 0.45, 5: 0.75, 0: 1.0 }[map]
+        if r != 1.0:
+            pix = pix.scale_simple(int(321*r), int(115*r), gtk.gdk.INTERP_BILINEAR)
+        self.img_logo.set_from_pixbuf(pix)
+
+
     # load application state (widget sizes, selections, etc.)
     def init_app_state(self):
         winlayout = conf.load("window")
         if (winlayout):
-            try: uikit.app_restore(self, winlayout)
-            except Exception as e: log.APPSTATE_RESTORE(e) # may fail for disabled/reordered plugin channels
+            try:
+                uikit.app_restore(self, winlayout)
+                self.logo_scale(map=winlayout["toolbar"]["icon_size"])
+            except Exception as e:
+                log.APPSTATE_RESTORE(e) # may fail for disabled/reordered plugin channels
 
 
     # store window/widget states (sizes, selections, etc.)
