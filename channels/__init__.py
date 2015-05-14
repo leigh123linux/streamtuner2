@@ -184,7 +184,10 @@ class GenericChannel(object):
 
     # Just wraps uikit.columns() to retain liststore, rowmap and pix_entry
     def columns(self, entries=None):
-        self.ls, self.rowmap, self.pix_entry = uikit.columns(self.gtk_list, self.datamap, entries, show_favicons=conf.show_favicons)
+        self.ls, self.rowmap, self.pix_entry = uikit.columns(
+            self.gtk_list, self.datamap, entries, show_favicons=True
+        )
+        # no longer using `conf.show_favicons`
 
 
     # Statusbar stub (defers to parent/main window, if in GUI mode)

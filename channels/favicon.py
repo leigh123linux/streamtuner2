@@ -3,28 +3,33 @@
 # title: Favicons
 # description: Display station favicons/logos. Instantly download them when ▸playing.
 # config:
+#    { name: load_favicon, type: bool, value: 1, description: "Load favicon instantly when ▸playing a station.", color: yellow }
 #    { name: favicon_google_first, type: bool, value: 1, description: "Prefer faster Google favicon to PNG conversion service." }
 #    { name: favicon_delete_stub , type: bool, value: 1, description: "Don't accept any placeholder favicons." }
-#    [ main-name: google_homepage ]
-#    [ main-name: load_favicon ]
+#    { name: google_homepage, type: bool, value: 0, description: "Google missing station homepages right away." }
 # type: feature
 # category: ui
 # version: 1.9
 # depends: streamtuner2 >= 2.1.9, python:pil
 # priority: standard
+# png:
+#   iVBORw0KGgoAAAANSUhEUgAAABYAAAAWBAMAAAA2mnEIAAAAJ1BMVEUAAACwDw5oKh1RRU5OTSCOTxp0Um9zcyFUhSXsbwChdp/lgCNbrA7VFTQPAAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHU
+#   gAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQffBQ4ENQJMtfdfAAAAmUlEQVQY02NgcAECYxBgYODeOXPmTKtVQLCAwXsmjL2YQRPINDNGsFclI7GXQdmzZ87MSoOyI0pnpgHVLAOy1c+c
+#   mTkzeFWioBSUbQZkiy1mcPFpCXUxTksTFEtm8Ojp6OhQVDJWVFJi8DkDBIIgIARhKyKx3c8g2GfOBCKxFeHspg6EmiZFJDbEHB44W4CBwQNor5MSEDAAAGcoaQmD1t8TAAAAAElFTkSuQmCC
 #
-# This module fetches a favicon for each station, or a small banner
-# or logo for some channel modules. It converts .ico image files and
-# sanitizes .png or .jpeg images even prior display.
+# This module fetches a favicon for each station. Some channels
+# provide small logos/banners even. It sanitizes and converts
+# any .ico/.png/.jpeg file prior display.
 # 
-# It prepares cache files in ~/.config/streamtuner2/icons/ in silent
-# agreement with the station list display logic. Either uses station
-# row["homepage"] or row["img"] URLs from any entry.
+# Cache files are kept in ~/.config/streamtuner2/icons/ where
+# the station column display picks them up form.
 #
-# While it can often discover favicons directly from station homepages,
-# it's often speedier to use the Google PNG conversion service. Both
-# depend on a recent Pillow2 python module (superseding the PIL module).
-# Else may display images with fragments if converted from ICO files.
+# While it can often discover favicons directly from station
+# homepages, it's mostly speedier to use the PNG conversion
+# service from Google.
+# Both methods depend on a recent Pillow2 python module (that
+# superseded the PIL module). Else icon display may have some
+# transparency fragments.
 
 
 import os, os.path
@@ -57,14 +62,6 @@ tried_urls = []
 #
 #  · main calls .update_playing() on hooks["play"],
 #    or .update_all() per menu command
-#
-#  · urllib is no longer required. Using just ahttp/requests API now.
-#
-#  · Might need unhtml() utility from channels/__init__ later..
-#
-#  · Still need to consolidate config options → Move main favicon
-#    options here?
-#
 
 
 
@@ -80,46 +77,47 @@ class favicon(object):
     # Register with main
     def __init__(self, parent):
     
-        # Reference main, and register hook
+        # Reference main, and register station .play() hook for conf.load_favicon
         self.parent, self.main = parent, parent
         parent.hooks["play"].append(self.update_playing)
+
+        # Register in channel/streams updating pipeline (to predefine row["favicon"] filename from `homepage` or `img`)
+        channels.GenericChannel.prepare_filters.append(self.prepare_filter_favicon)
 
         # Prepare favicon cache directory
         conf.icon_dir = conf.dir + "/icons"
         if not os.path.exists(conf.icon_dir):
             os.mkdir(conf.icon_dir)
             open(icon_dir+"/.nobackup", "a").close()
-            
-        # Hook into channel/streams updating pipine
-        channels.GenericChannel.prepare_filters.append(self.prepare_filter_favicon)
 
 
-
-    # Main callback: update favicon cache for complete list of station rows
+    # Main menu "Update favicons": update favicon cache for complete list of station rows
     def update_all(self, *args, **kwargs):
         #kwargs[pixstore] = self.parent.channel()._ls, ...
         self.parent.thread(self.update_rows, *args, **kwargs)
 
 
-    # Main callback for a single play() event
+    # Main [▸play] event for a single station
     def update_playing(self, row, pixstore=None, channel=None, **x):
 
         # Homepage search
         if conf.google_homepage and not len(row.get("homepage", "")):
             found = google_find_homepage(row)
-            # could call channel.save() now to preserve found homepage URL
+            # Save channel list right away to preserve found homepage URL
+            if found and conf.auto_save_stations:
+                channel.save()
         else:
             found = False
 
         # Favicon only for currently playing station
         if conf.load_favicon:
             if row.get("homepage") or row.get("img"):
-                self.update_all([row], pixstore=pixstore, always_update=found)
+                self.parent.thread(self.update_rows, [row], pixstore=pixstore, always_update=found)
 
       
     # Run through rows[] to update "favicon" from "homepage" or "img",
     # optionally display new image right away in ListStore
-    def update_rows(self, entries, pixstore=None, always_update=False):
+    def update_rows(self, entries, pixstore=None, always_update=False, **x):
         for i,row in enumerate(entries):
             ok = False
 
@@ -197,6 +195,7 @@ class favicon(object):
     # Run after any channel .update_streams() to populate row["favicon"]
     # from `homepage` or `img` url.
     def prepare_filter_favicon(self, row):
+        # if conf.show_favicons:  (do we still need that?)
         row["favicon"] = row_to_fn(row)
 
 

@@ -140,6 +140,7 @@ class ConfigDict(dict):
         self.heuristic_bookmark_update = 0
         self.retain_deleted = 0
         self.auto_save_appstate = 1
+        self.auto_save_stations = 0
         self.reuse_m3u = 1
         self.playlist_asis = 0
         self.google_homepage = 0
