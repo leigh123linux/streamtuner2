@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<interface uri="http://fossil.include-once.org/streamtuner2/doc/trunk/dev/0-st2.xml" xmlns="http://zero-install.sourceforge.net/2004/injector/interface">
+  <name>streamtuner2</name>
+  <summary>internet radio browser</summary>
+  <description>
+</description>
+  <homepage>http://fossil.include-once.org/streamtuner2/</homepage>
+  <category>Audio</category>
+  <implementation doc-dir="usr/share/doc" id="sha1new=530fb7fcf5b4b4e6307b56cb7f2471eba62efb07" license="Public Domain" main="st2.py" released="2015-05-14" stability="testing" version="2.1.8">
+    <archive href="http://downloads.sourceforge.net/project/streamtuner2/streamtuner2-2.1.8.pyz" size="226181" type="executable/pyz"/>
+    <requires interface="http://repo.roscidus.com/python/python-gobject">
+      <environment insert="" mode="prepend" name="PYTHONPATH"/>
+    </requires>
+  </implementation>
+</interface>
