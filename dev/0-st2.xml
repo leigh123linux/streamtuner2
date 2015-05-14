@@ -4,18 +4,18 @@
   <name>streamtuner2</name>
   <summary>internet radio browser</summary>
   <description>
-</description>
+GUI for internet radio directories.</description>
   <homepage>http://fossil.include-once.org/streamtuner2/</homepage>
   <category>Audio</category>
-  <implementation doc-dir="usr/share/doc" id="sha1new=530fb7fcf5b4b4e6307b56cb7f2471eba62efb07" license="Public Domain" main="st2.py" released="2015-05-14" stability="testing" version="2.1.8">
-    <archive href="http://downloads.sourceforge.net/project/streamtuner2/streamtuner2-2.1.8.pyz" size="226181" type="executable/pyz"/>
+  <implementation doc-dir="usr/share/doc" id="sha1new=530fb7fcf5b4b4e6307b56cb7f2471eba62efb07" license="Public Domain" main="st2.py" released="2015-05-05" stability="testing" version="2.1.8">
+    <file dest="streamtuner.pyz" href="http://downloads.sourceforge.net/project/streamtuner2/streamtuner2-2.1.8.pyz" size="226181" type="x-executable/python+zip"/>
     <requires interface="http://repo.roscidus.com/python/python-gobject">
       <environment insert="" mode="prepend" name="PYTHONPATH"/>
     </requires>
   </implementation>
 </interface>
 <!-- Base64 Signature
-iF4EABEIAAYFAlVVAkQACgkQ4aA2BuVY6sx3mQD/QX61m25ehctLZrdH02ycPhQg3hvtXSVqLXxz
-+ivZOOAA/1H+VXPpELvBVSuGKUyBzy63IExcqeQNJEeFXjMZ62OU
+iF4EABEIAAYFAlVVJNMACgkQ4aA2BuVY6swEmQEAh+sHvcQiX1tAUTzRKBcVLS4Ujj8t9XaBtjWX
+k7bzPZIA/AqO/dDiEwXDibXdjtuAbPjMBuS/CjMO3+o1a692Ubu6
 
 -->
