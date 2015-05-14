@@ -379,7 +379,7 @@ class jamendo (ChannelPlugin):
             }.items()) + list(params.items())
         )
         while (params["offset"] < max) and (len(r) % 200 == 0):
-            data = ahttp.get(self.api_base + method, params)
+            data = ahttp.get(self.api_base + method, params, encoding="utf-8")
             data = json.loads(data)
             if data:
                 r += data["results"]
