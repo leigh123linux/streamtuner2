@@ -1,6 +1,7 @@
 <?xml version="1.0" ?>
 <?xml-stylesheet type='text/xsl' href='interface.xsl'?>
 <interface uri="http://fossil.include-once.org/streamtuner2/doc/trunk/dev/0-st2.xml" xmlns="http://zero-install.sourceforge.net/2004/injector/interface">
+
   <name>streamtuner2</name>
   <summary>internet radio browser</summary>
   <description>
@@ -9,29 +10,18 @@ GUI for internet radio directories.</description>
   <icon>http://fossil.include-once.org/streamtuner2/doc/trunk/icon.png</icon>
   <category>Audio</category>
 
-  <implementation arch="*-*" id="streamtuner2-2.1.8" license="Public Domain" main="streamtuner2.pyz" released="2015-05-05" stability="testing" version="2.1.8">
-    <!-- Use relocatable package -->
-    <file dest="streamtuner2.pyz" href="http://downloads.sourceforge.net/project/streamtuner2/streamtuner2-2.1.8.pyz" size="226181" type="x-executable/python+zip"/>
-    <manifest-digest sha256="246c79be0abccad78490488c3584040c3636cb92ce01980a41f864587a74ff27"/>
-    <!-- Invoke PYZ via Python handler -->
-    <command name="run" path="streamtuner2.pyz">
-      <runner interface="http://repo.roscidus.com/python/python"/>
-    </command>
-    <!-- Python2.7 with PyGTK -->
-    <requires interface="http://repo.roscidus.com/python/python-gobject">
-      <environment insert="" mode="prepend" name="PYTHONPATH"/>
-      <version before="3.0" not-before="2.7"/>
-    </requires>
-    <!-- or optionally with Gtk3/GObject/GI -->
-    <requires interface="http://repo.roscidus.com/python/python" os="POSIX">
-      <environment insert="" mode="prepend" name="PATH"/>
-    </requires>
-  </implementation>
+  <group arch="*-*" license="Public Domain" main="streamtuner2.pyz" stability="testing">
 
-  <implementation arch="*-*" id="streamtuner2-2.1.8-dev" license="Public Domain" main="streamtuner2.pyz" released="2015-05-05" stability="testing" version="2.1.8.2">
-    <!-- Use relocatable package -->
-    <file dest="streamtuner2.pyz" href="http://downloads.sourceforge.net/project/streamtuner2/streamtuner2-2.1.8-dev.pyz" size="227209" type="x-executable/python+zip"/>
-    <manifest-digest sha256="d0b4aff327e1a7b724ce60911cecf6a06e45411b1bd89b3de9cbf946f16798cc"/>
+    <!-- Use relocatable packages -->
+    <implementation arch="*-*" id="streamtuner2-2.1.8" released="2015-05-05" version="2.1.8">
+      <file dest="streamtuner2.pyz" href="http://downloads.sourceforge.net/project/streamtuner2/streamtuner2-2.1.8.pyz" size="226181" type="x-executable/python+zip"/>
+      <manifest-digest sha256="246c79be0abccad78490488c3584040c3636cb92ce01980a41f864587a74ff27"/>
+    </implementation>
+    <implementation arch="*-*" id="streamtuner2-2.1.8-dev" released="2015-05-15" version="2.1.8.2">
+      <file dest="streamtuner2.pyz" href="http://downloads.sourceforge.net/project/streamtuner2/streamtuner2-2.1.8-dev.pyz" size="227209" type="x-executable/python+zip"/>
+      <manifest-digest sha256="d0b4aff327e1a7b724ce60911cecf6a06e45411b1bd89b3de9cbf946f16798cc"/>
+    </implementation>
+
     <!-- Invoke PYZ via Python handler -->
     <command name="run" path="streamtuner2.pyz">
       <runner interface="http://repo.roscidus.com/python/python"/>
@@ -45,10 +35,15 @@ GUI for internet radio directories.</description>
     <requires interface="http://repo.roscidus.com/python/python" os="POSIX">
       <environment insert="" mode="prepend" name="PATH"/>
     </requires>
-  </implementation>
+    <!-- module: requests -->
+    <requires interface="http://fossil.include-once.org/streamtuner2/doc/trunk/dev/0-requests.xml" version="2..">
+      <environment insert="" mode="prepend" name="PYTHONPATH"/>
+    </requires>
+
+  </group>
 </interface>
 <!-- Base64 Signature
-iF4EABEIAAYFAlVV/rAACgkQ4aA2BuVY6sx6pAEApbkM/Pzn4pbFo962J0x05aHI8Go0HhZvwVXI
-QvXFeFQBAIAxfqB9TQaPIEDqaoMkzLOaVTK6gXxoGyVi4rpth6V7
+iF4EABEIAAYFAlVWI/UACgkQ4aA2BuVY6szCJAD/UmxqgczEm4enE+GztATi6jPm9y/RUVZyLgPh
+7ZSYqCEA/1d5UjyC0JNjbFA/Tip7Hniru89B7n58rFJFNNu+wdnp
 
 -->

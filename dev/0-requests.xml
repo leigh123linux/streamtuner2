@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<?xml-stylesheet type='text/xsl' href='interface.xsl'?>
+<interface uri="http://fossil.include-once.org/streamtuner2/doc/trunk/dev/0-requests.xml" xmlns="http://zero-install.sourceforge.net/2004/injector/interface">
+  <name>requests</name>
+  <summary>python module: requests</summary>
+  <description>
+</description>
+  <homepage>https://pypi.python.org/pypi/requests</homepage>
+  <implementation id="sha1new=40aa9d95ea90b0af152e2e32e3fbba8912320684" released="2015-05-03" version="2.7.0">
+    <archive href="https://pypi.python.org/packages/2.7/r/requests/requests-2.7.0-py2.py3-none-any.whl" size="470641" type="application/zip"/>
+  </implementation>
+</interface>
+<!-- Base64 Signature
+iF4EABEIAAYFAlVWIbQACgkQ4aA2BuVY6sxt5gEAsR+Nj17mU8Wby6Li10IPGeD6I6W60jH7TqDL
+6dOLMo0A/iALq9VlrF/ZlLubweKAGR6OnaoHqgnBMmsb2pEaWJ0O
+
+-->
