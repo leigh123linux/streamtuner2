@@ -34,7 +34,6 @@ class filter_bitrate(object):
     # Hijack postprocessing filters in stream_update handler 
     def __init__(self, parent):
         GenericChannel.postprocess_filters.append(self.filter_rows)
-        print GenericChannel.postprocess_filters
 
     # Filter row on bitrate
     def filter_rows(self, row, channel):

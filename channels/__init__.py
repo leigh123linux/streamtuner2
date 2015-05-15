@@ -4,7 +4,7 @@
 # category: ui
 # title: Channel plugins
 # description: Base implementation for channels and feature plugins
-# version: 1.5
+# version: 1.6
 # license: public domain
 # author: mario
 # url: http://fossil.include-once.org/streamtuner2/
@@ -14,8 +14,8 @@
 #    itunes.py, jamendo.py, links.py, live365.py, modarchive.py,
 #    myoggradio.py, pluginmanager2.py, radiobrowser.py, radionomy.py,
 #    radiotray.py, search.py, shoutcast.py, somafm.py, streamedit.py,
-#    surfmusik.py, timer.py, tunein.py, ubuntuusers.py,
-#    useragentswitcher.py, xiph.py, youtube.py, favicon.py
+#    surfmusik.py, timer.py, tunein.py, ubuntuusers.py, youtube.py,
+#    useragentswitcher.py, xiph.py, favicon.py, filter_bitrate.py
 # config: -
 # priority: core
 #
