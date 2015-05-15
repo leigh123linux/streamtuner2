@@ -82,12 +82,31 @@ class dirble (ChannelPlugin):
     # Extract rows
     def unpack(self, r):
     
-        # find stream (might select on `bitrate` or `format` if available)
+        # find stream
         if len(r.get("streams", [])):
             s = r["streams"][0]
+
+            # select "best" stream if there are alternatives
+            if len(r["streams"]) > 1:
+                for alt in r["streams"]:
+                
+                    # weight format with bitrate
+                    cur_q = self.format_q.get(  s["content_type"].strip(), "0.9") \
+                            * s.get("bitrate", 32)
+                    alt_q = self.format_q.get(alt["content_type"].strip(), "0.9") \
+                            * alt.get("bitrate", 32)
+
+                    # swap out for overall better score
+                    if alt_q > cur_q:
+                        s = alt
+                        #log.DATA_BETTER_STREAM(s, "←FROM←", r)
+
+            # fix absent audio type
+            if s["content_type"] == "?":
+                s["content_type"] == "audio/mpeg"
+
         else:
             return {}
-        print r
 
         # rename fields
         return dict(
@@ -96,7 +115,7 @@ class dirble (ChannelPlugin):
             playing = "{} {}".format(r.get("country"), r.get("description")),
             homepage = ahttp.fix_url(r["website"]),
             url = s["stream"],
-            format = s["content_type"],
+            format = s["content_type"].strip(),
             bitrate = s["bitrate"],
            # img = r["image"]["image"]["thumb"]["url"], # CDN HTTPS trip up requests.get
             state = self.state_map[int(s["status"])] if s["status"] in [0,1,2] else "",
@@ -104,6 +123,8 @@ class dirble (ChannelPlugin):
         )
         
     state_map = ["gtk-media-pause", "gtk-media-next", "gtk-media-rewind"]
+
+    format_q = {"?":0.75, "audio/mpeg":1.0, "audio/aac":1.25, "audio/aacp":1.35, "audio/ogg":1.50}
 
 
     # Patch API url together, send request, decode JSON list
