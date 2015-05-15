@@ -3,11 +3,11 @@
 # title: Dirble
 # description: Song history tracker for Internet radio stations.
 # url: http://dirble.com/
-# version: 2.0
+# version: 2.1
 # type: channel
 # category: radio
 # config:
-#    { name: dirble_api_key,  value: "",  type: text,  description: Alternative API access key. }
+#    { name: dirble_api_key,  value: "",  type: text,  description: Alternative API access key., hidden: 1 }
 # png:
 #    iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAA3NCSVQICAjb4U/gAAACP0lE
 #    QVQokVVSO0+UURA9M/d+jyWbBVcQFSQhPqJSYBRFA5pVoFGURApjYYWtvYUNP8FKOwsttDFq
@@ -87,19 +87,20 @@ class dirble (ChannelPlugin):
             s = r["streams"][0]
         else:
             return {}
+        print r
 
         # rename fields
         return dict(
             genre = " ".join(c["slug"] for c in r["categories"]),
             title = r["name"],
-            playing = "{country} {description}".format(**r),
+            playing = "{} {}".format(r.get("country"), r.get("description")),
             homepage = r["website"],
             url = s["stream"],
             format = s["content_type"],
             bitrate = s["bitrate"],
            # img = r["image"]["image"]["thumb"]["url"], # CDN HTTPS trip up requests.get
             state = self.state_map[int(s["status"])] if s["status"] in [0,1,2] else "",
-            deleted = s["timedout"],
+            deleted = s.get("timedout", False),
         )
         
     state_map = ["gtk-media-pause", "gtk-media-next", "gtk-media-rewind"]
