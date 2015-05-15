@@ -6,23 +6,49 @@
   <description>
 GUI for internet radio directories.</description>
   <homepage>http://fossil.include-once.org/streamtuner2/</homepage>
+  <icon>http://fossil.include-once.org/streamtuner2/doc/trunk/icon.png</icon>
   <category>Audio</category>
-  <implementation arch="*-*" id="sha1new=ed8a4430f40cf7667fac28d8ae128d6b3ac05387" license="Public Domain" main="streamtuner2.pyz" released="2015-05-05" stability="testing" version="2.1.8">
+
+  <implementation arch="*-*" id="streamtuner2-2.1.8" license="Public Domain" main="streamtuner2.pyz" released="2015-05-05" stability="testing" version="2.1.8">
+    <!-- Use relocatable package -->
     <file dest="streamtuner2.pyz" href="http://downloads.sourceforge.net/project/streamtuner2/streamtuner2-2.1.8.pyz" size="226181" type="x-executable/python+zip"/>
+    <manifest-digest sha256="246c79be0abccad78490488c3584040c3636cb92ce01980a41f864587a74ff27"/>
     <!-- Invoke PYZ via Python handler -->
     <command name="run" path="streamtuner2.pyz">
       <runner interface="http://repo.roscidus.com/python/python"/>
     </command>
+    <!-- Python2.7 with PyGTK -->
     <requires interface="http://repo.roscidus.com/python/python-gobject">
       <environment insert="" mode="prepend" name="PYTHONPATH"/>
+      <version before="3.0" not-before="2.7"/>
     </requires>
-    <requires interface="http://repo.roscidus.com/python/python">
+    <!-- or optionally with Gtk3/GObject/GI -->
+    <requires interface="http://repo.roscidus.com/python/python" os="POSIX">
+      <environment insert="" mode="prepend" name="PATH"/>
+    </requires>
+  </implementation>
+
+  <implementation arch="*-*" id="streamtuner2-2.1.8-dev" license="Public Domain" main="streamtuner2.pyz" released="2015-05-05" stability="testing" version="2.1.8.2">
+    <!-- Use relocatable package -->
+    <file dest="streamtuner2.pyz" href="http://downloads.sourceforge.net/project/streamtuner2/streamtuner2-2.1.8-dev.pyz" size="227209" type="x-executable/python+zip"/>
+    <manifest-digest sha256="d0b4aff327e1a7b724ce60911cecf6a06e45411b1bd89b3de9cbf946f16798cc"/>
+    <!-- Invoke PYZ via Python handler -->
+    <command name="run" path="streamtuner2.pyz">
+      <runner interface="http://repo.roscidus.com/python/python"/>
+    </command>
+    <!-- Python2.7 with PyGTK -->
+    <requires interface="http://repo.roscidus.com/python/python-gobject">
+      <environment insert="" mode="prepend" name="PYTHONPATH"/>
+      <version before="3.0" not-before="2.7"/>
+    </requires>
+    <!-- or optionally with Gtk3/GObject/GI -->
+    <requires interface="http://repo.roscidus.com/python/python" os="POSIX">
       <environment insert="" mode="prepend" name="PATH"/>
     </requires>
   </implementation>
 </interface>
 <!-- Base64 Signature
-iF4EABEIAAYFAlVVQusACgkQ4aA2BuVY6syMEAD+OXCg8sbCkf63GUL+FpNq8csJXIUv/9jK07xa
-8dFR7dQA/07Cb4AxF+hunTFLjEtzzyN9oDRpSAxpFeLnC8DzZ03a
+iF4EABEIAAYFAlVV/rAACgkQ4aA2BuVY6sx6pAEApbkM/Pzn4pbFo962J0x05aHI8Go0HhZvwVXI
+QvXFeFQBAIAxfqB9TQaPIEDqaoMkzLOaVTK6gXxoGyVi4rpth6V7
 
 -->
