@@ -20,5 +20,5 @@
 
         <note><p>The config option for a custom API key is perhaps
         redundant. Should streamtuner2 -D however reveal an error, you
-        can configure your own account there.</p></note>
+        can however configure your own account there.</p></note>
 </page>

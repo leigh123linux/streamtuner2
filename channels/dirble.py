@@ -25,8 +25,17 @@
 # documentation: http://dirble.com/developer/api
 #
 #
-# Server responses take a few seconds, and JSON
-# decoding is surprisingly slow.
+# Dirble is a user-contributed list of radio stations,
+# auot-updating song titles and station information.
+# Homepages are there now, and thus favicons readily
+# available. Extra station banners aren't fetched.
+#
+# It provides a JSON API. Which in this newer version
+# is actually speedier, as it doesn't strictly impose
+# pagination roundtrips anymore.
+#
+# Response times are fixed now by overriding the HTTP
+# encoding. (A python-requests issue mostly).
 
 
 import json
@@ -43,7 +52,8 @@ import ahttp
 #
 #  · No idea what status: or timedout: mean,
 #    just mapped to `deleted` and `status`
-#  · Stream alternatives aren't yet sorted.
+#  · Stream alternatives are meanwhile scanned
+#    for "best" format+bitrate combinations.
 #  · Leave favicons to regular behaviour,
 #    station banners are not accessible per CDN.
 #
@@ -112,18 +122,20 @@ class dirble (ChannelPlugin):
         return dict(
             genre = " ".join(c["slug"] for c in r["categories"]),
             title = r["name"],
-            playing = "{} {}".format(r.get("country"), r.get("description")),
+            playing = "{} {}".format(r.get("country"), r.get("description", "")),
             homepage = ahttp.fix_url(r["website"]),
             url = s["stream"],
-            format = s["content_type"].strip(),
+            format = s["content_type"].strip(),  # There's a "\r\n" in nearly every entry :?
             bitrate = s["bitrate"],
            # img = r["image"]["image"]["thumb"]["url"], # CDN HTTPS trip up requests.get
-            state = self.state_map[int(s["status"])] if s["status"] in [0,1,2] else "",
+            state = self.state_map.get(int(s["status"]), ""),
             deleted = s.get("timedout", False),
         )
-        
-    state_map = ["gtk-media-pause", "gtk-media-next", "gtk-media-rewind"]
 
+    # Streams contain a `status`, here mapped onto arbitrary Gtk icons        
+    state_map = {0:"gtk-media-pause", 1:"gtk-media-next", 2:"gtk-media-rewind"}
+
+    # Weighting bitrate and audio format for alternative stream URLs
     format_q = {"?":0.75, "audio/mpeg":1.0, "audio/aac":1.25, "audio/aacp":1.35, "audio/ogg":1.50}
 
 
