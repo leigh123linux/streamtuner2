@@ -94,7 +94,7 @@ class dirble (ChannelPlugin):
             genre = " ".join(c["slug"] for c in r["categories"]),
             title = r["name"],
             playing = "{} {}".format(r.get("country"), r.get("description")),
-            homepage = r["website"],
+            homepage = ahttp.fix_url(r["website"]),
             url = s["stream"],
             format = s["content_type"],
             bitrate = s["bitrate"],
