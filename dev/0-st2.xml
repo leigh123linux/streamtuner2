@@ -9,6 +9,10 @@ GUI for internet radio directories.</description>
   <category>Audio</category>
   <implementation arch="*-*" id="sha1new=ed8a4430f40cf7667fac28d8ae128d6b3ac05387" license="Public Domain" main="streamtuner2.pyz" released="2015-05-05" stability="testing" version="2.1.8">
     <file dest="streamtuner2.pyz" href="http://downloads.sourceforge.net/project/streamtuner2/streamtuner2-2.1.8.pyz" size="226181" type="x-executable/python+zip"/>
+    <!-- Invoke PYZ via Python handler -->
+    <command name="run" path="streamtuner2.pyz">
+      <runner interface="http://repo.roscidus.com/python/python"/>
+    </command>
     <requires interface="http://repo.roscidus.com/python/python-gobject">
       <environment insert="" mode="prepend" name="PYTHONPATH"/>
     </requires>
@@ -18,7 +22,7 @@ GUI for internet radio directories.</description>
   </implementation>
 </interface>
 <!-- Base64 Signature
-iF4EABEIAAYFAlVVKlAACgkQ4aA2BuVY6szELAEAl8MQO3ET7caMRvr0psW4wky7NAAfCV0CEt/p
-DCEG8UEA/0qrLEPTZrdAYEcnFb4eD7mac1heM7HPeKy0gcPRbbG7
+iF4EABEIAAYFAlVVQusACgkQ4aA2BuVY6syMEAD+OXCg8sbCkf63GUL+FpNq8csJXIUv/9jK07xa
+8dFR7dQA/07Cb4AxF+hunTFLjEtzzyN9oDRpSAxpFeLnC8DzZ03a
 
 -->
