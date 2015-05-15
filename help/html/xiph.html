@@ -24,16 +24,17 @@
 </div>
 <div class="region">
 <div class="contents">
-<p class="p">Xiph.org is a non-profit organization, which develops and
+<p class="p">Xiph.org is a non-profit organization, which maintains and
 	promotes the OGG streaming format, and develops audio compression
 	schemes such as Vorbis, FLAC, Opus, or the Theora video encoding
-	enve.  It also hosts a list of ICEcast streaming stations. ICEcast
+	format.  It also hosts a list of ICEcast streaming stations. ICEcast
 	is their non-commercial pendant to the SHOUTcast server.</p>
-<p class="p">This channel is somehwat easy to read for Streamtuner2, because the source data is already
-        provided as &lt;XML&gt; file. (Internally we're using a caching service, which pre-converts
-        that into JSON lists. The Xiph-org JSON API isn't really working yet).</p>
-<p class="p">However, it lacks some essential informations like station homepages and listener numbers.</p>
-<p class="p">Xiph also uses the .xspf format, instead of .pls stream links</p>
+<p class="p">There are different ways for streamtuner2 to retrieve the station
+        lists available on dir.xiph.org.  That's because this is a primary
+        plugin, and fallback solutions therefore important.  Each fetching
+        mode has its own advantages and drawbacks though.</p>
+<p class="p">Xiph also uses the .xspf playlist format, instead of just the
+        more ancient Shoutcast .pls stream links.</p>
 </div>
 <div id="options" class="sect"><div class="inner">
 <div class="hgroup"><h2 class="title"><span class="title">Channel options.</span></h2></div>
@@ -73,16 +74,14 @@
 <dt class="terms"><span class="code">Forbidden fruits</span></dt>
 <dd class="terms">
 <p class="p">As new alternative, you can let ST2 directly scrape the station
-        lists from dir.xiph.org (like it does for other channels). This is
-        something which Xiph doesn't like/encourage. But the drawbacks of
-        their alternative offerings are too severe and user-unfriendly;
-        which is why there's this raw HTML extraction mode now.</p>
-<p class="p">The website
-        listings contain full station homepages and a few more extras. In
-        this mode we can even acceess the XSPF playlist formats directly.
-        And the server search function, or browsing by audio/video format is
-        supported.
-        </p>
+        lists from dir.xiph.org (like it does for other channels).  This is
+        something which Xiph doesn't approve of.  But the drawbacks of their
+        alternative offerings are too severe and user-unfriendly; which is
+        why there's this raw HTML extraction mode now.</p>
+<p class="p">The website listings contain full station homepages and a few
+        more extras.  In this mode we can even acceess the XSPF playlist
+        formats directly.  Both, the server search function, or browsing by
+        audio/video format are supported.  </p>
 </dd>
 </dl></div></div></div>
 </dd>

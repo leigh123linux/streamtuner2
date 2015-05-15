@@ -109,18 +109,6 @@ There are various options for streamtuner2, available under <guiseq><gui>Edit</g
   <terms>
     <title>Display settings</title>
     <item>
-      <title>Display favicons</title>
-      <p>The options for the favicons define if station entries should show little icons.
-      Not all stations have one, so you might as well turn this off to conserve a little memory.</p>
-    </item>
-    <item>
-      <title>Load favicons</title>
-      <p>When starting to play a station, its homepage favicon is automatically retrieved in the
-      background. It's not going to be displayed right away, but after you reload the category/station list.
-      Alternatively use <guiseq><gui>Channel</gui> <gui>Update favicons...</gui></guiseq> to update all
-      station icons at once.</p>
-    </item>
-    <item>
       <title>Show bookmark star</title>
       <p>Bookmarked stations will be marked with a ★ star in all other station lists / categories.
       That doesn't often work for the same station entry from two different channel services / tabs though.</p>
@@ -131,7 +119,14 @@ There are various options for streamtuner2, available under <guiseq><gui>Edit</g
       Also keeps the width of station list columns. If disabled, you can manually save the current
       layout/selections via <guiseq><gui>Edit</gui> <gui>Save States</gui></guiseq>.</p>
     </item>
- </terms>
+    <item>
+      <title>Update window title</title>
+      <p>When switching channel tabs, the Streamtuner2 window title usually gets the current
+      channel name appended (such as "- Shoutcast" or "- Xiph"). You can disable this if it
+      looks confusing. (Requires a restart to fully take effect.)</p>
+    </item>
+    <item><title><link type="guide" xref="favicon">→ Favicon plugin options</link></title></item>
+  </terms>
 
   <terms>
     <title>Station loading</title>
@@ -161,12 +156,6 @@ There are various options for streamtuner2, available under <guiseq><gui>Edit</g
       <title>Update favouries from freshened URLs</title>
       <p>Streaming URLs in bookmarked stations get renewed on category reloads/updates. This isn't
       very reliable, as often station titles change together with the streaming URLs.</p>
-    </item>
-    <item>
-      <title>google station homepages</title>
-      <p>When playing a station that doesn't have a homepage entry, streamtuner2 tries to google
-      the station title. The found URL is then used/kept as station homepage. (Btw, station titles
-      like www.mymusicstation.com are automatically mapped to homepage URLs already.)</p>
     </item>
  </terms>
 

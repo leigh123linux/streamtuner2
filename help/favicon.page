@@ -1,0 +1,73 @@
+<page	xmlns="http://projectmallard.org/1.0/"
+	type="guide"
+	id="favicon">
+
+<info>
+	<link type="guide" xref="index#extra"/>
+        <desc>Favicons</desc>
+</info>
+
+<title>Station favicons</title>
+
+<p>Per default you'll get a small logo / icon for any station
+with a homepage link. They're automatically fetched and displayed
+as soon as you play a radio entry.</p>
+
+<p>This functionality meanwhile resides in a plugin. It's available in the
+<key>🔌 Features</key> <link xref="configuration">configuration</link> tab. 
+You can disable it as whole if unneeded.  Most configuration options are now
+collected there.</p>
+
+<p>Some channels (Jamendo or Radionomy) provide small album previews
+or banners (Punkcast) even. Whereas normal favicons are just 16x16
+pixel images.</p>
+
+<p>Downloaded image files are meanwhile all sanitized (internally
+converted to ensure they're really image files).
+Albeit that's not strictly necessary for modern Gtk versions. (But
+better safe than sorry).
+Images are kept in the <file>~/.config/streamtuner2/icons</file> directory.
+</p>
+
+
+<section id="configuration">
+<title>Configuration options</title>
+
+<terms>
+  <item>
+    <title>Load favicons on playing</title>
+    <p>When starting to play a station, its homepage favicon is automatically downloaded
+    in the background. It's even displayed right away as soon as it's there. You can
+    also have a whole category/genre list updated right away per menu command
+    <guiseq><gui>Channel</gui> <gui>Update favicons...</gui></guiseq>.</p>
+  </item>
+  <item>
+    <title>Homepage googling</title>
+    <p>When playing a station that doesn't have a homepage entry, streamtuner2 tries
+    to google the station title. The found URL is then used/kept as station homepage.
+    This isn't super exact however, so you might end up with homepages and icons
+    from Wikipedia, Twitter, Facebook or something for generic radio station names.
+    (Btw, station titles like www.mymusicstation.com are automatically mapped to
+    homepage URLs already.)</p>
+  </item>
+  <item>
+    <title>Use Google favicon service</title>
+    <p>Downloading favicons directly from station homepages can sometimes be
+    a little slow. Which is because it requires to inspect the homepage
+    itself first, and then uncovering an image resource. The Google method
+    instead uses <cmd>http://www.google.com/s2/favicons?domain=www.example.com</cmd>
+    to fetch a PNG icon right away. Which is often faster. You might want to
+    disable this for privacy reasons though.</p>
+  </item>
+  <item>
+    <title>Omit placeholders</title>
+    <p>Oftentimes the Google favicon service sends back a placeholder icon
+    (a blue mini globe), which doesn't look very interesting. So you might
+    want to disable those. (They're still downloaded, but just not saved in
+    the cache directory.)</p>
+  </item>
+</terms>
+
+</section>
+
+</page>
