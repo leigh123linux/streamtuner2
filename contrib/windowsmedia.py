@@ -3,7 +3,7 @@
 # title: WindowsMedia
 # description: ASX-Playlist radio stations, common genres
 # url: http://windowsmedia.com/
-# version: 0.3
+# version: 0.4
 # depends: streamtuner2 >= 2.1.8-dev
 # type: channel
 # category: radio
@@ -21,14 +21,11 @@
 # status: unsupported
 #
 # Well, this one is Windows-specific, so naturally uses
-# horrible formats WAX ( ASX ) for playlists. Still can
+# horrible formats "WAX" (ASX) for playlists. Still can
 # be parsed by action module, but possibly falling back
-# onto raw extraction etc.
+# onto raw extraction etc. VLC does quadruple redirects.
 #
 # Only fetches the first page for each category anyway.
-# And there's no specific category extraction, so stuck
-# on the UK entries.
-#
 # Most entries are lower bitrates, 32 to 64 kbit/s MP3.
 
 
@@ -44,7 +41,7 @@ class windowsmedia (ChannelPlugin):
 
     # control flags
     has_search = False
-    listformat = "wax"
+    listformat = "asx"
     audioformat = "audio/mpeg"
     titles = dict(listeners=False, bitrate=False, playing="Location")
 
@@ -73,20 +70,21 @@ class windowsmedia (ChannelPlugin):
 
         ucat = re.sub("\W+", "", cat.lower())
         html = ahttp.get(self.base.format(ucat, conf.windowsmedia_culture))
+        # onclick="Listen('31e11281-cf43-4d39-9164-77721604380b', 'DJ Perry Radio', 'http://www.djperryradio.com/', 'More Stations', '20', true);">
 
         r = []
-        ls = re.findall("""
-            stationid="([a-f0-9-]+)"  \s+
-            onclick="Listen\('[\w-]+',\s*'(.+?)',\s*'(.+?)',
+        ls = re.findall(r"""
+            onclick="Listen\('([\w\-]+)',\s*'(.+?)',\s*'(.+?)',
         """, html, re.X|re.S)
         for id, title, homepage in ls:
             r.append(dict(
                 id = id,
                 title = unhtml(title),
-                homepage = homepage,
+                homepage = ahttp.fix_url(homepage),
                 url = self._url.format(id, conf.windowsmedia_culture),
-                bitrate = 32,
+                bitrate = 0,
             ))
+            print r
         return r
       
 
