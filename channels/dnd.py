@@ -314,7 +314,8 @@ class dnd(object):
         # Insert and update view
         if rows:
             cn.insert_rows(rows, y)
-            cn.save()
+            if conf.auto_save_stations or cn.module == "bookmarks":
+                cn.save()
             # Show streamedit window if title is empty
             if not len(rows[0].get("title", "")):
                 self.parent.configwin.load_config(rows[0], "streamedit_")
