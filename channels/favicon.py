@@ -1,7 +1,7 @@
 # encoding: utf-8
 # api: streamtuner2
 # title: Favicons
-# description: Display station favicons/logos. Instantly download them when ▸playing.
+# description: Load and display station favicons/logos.
 # config:
 #    { name: load_favicon, type: bool, value: 1, description: "Load favicon instantly when ▸playing a station.", color: yellow }
 #    { name: favicon_google_first, type: bool, value: 1, description: "Prefer faster Google favicon to PNG conversion service." }
@@ -77,7 +77,7 @@ class favicon(object):
     # Register with main
     def __init__(self, parent):
     
-        # Reference main, and register station .play() hook for conf.load_favicon
+        # Reference main, and register station .play() hook
         self.parent, self.main = parent, parent
         parent.hooks["play"].append(self.update_playing)
 
@@ -112,12 +112,12 @@ class favicon(object):
         # Favicon only for currently playing station
         if conf.load_favicon:
             if row.get("homepage") or row.get("img"):
-                self.parent.thread(self.update_rows, [row], pixstore=pixstore, always_update=found)
+                self.parent.thread(self.update_rows, [row], pixstore=pixstore, fresh_homepage=found)
 
       
     # Run through rows[] to update "favicon" from "homepage" or "img",
     # optionally display new image right away in ListStore
-    def update_rows(self, entries, pixstore=None, always_update=False, **x):
+    def update_rows(self, entries, pixstore=None, fresh_homepage=False, **x):
         for i,row in enumerate(entries):
             ok = False
 
@@ -130,13 +130,14 @@ class favicon(object):
 
             # Cache image filename: have or can't have
             favicon_fn = row_to_fn(row)
+            print favicon_fn
             if not favicon_fn:
                 continue
 
             try:
                 # Image already exists
                 if os.path.exists(favicon_fn):
-                    if not always_update:
+                    if not fresh_homepage:
                         continue
                     else:  # For freshly added ["homepage"] when favicon already
                         ok = True  # exists in cache. Then just update pix store.
@@ -236,15 +237,22 @@ def google_find_homepage(row):
 
 
 # Convert row["img"] or row["homepage"] into local favicon cache filename
+# Use just domain for homepages, but most of the url for banner/logo imgs.
 rx_strip_proto = re.compile("^\w+://|/$")
+rx_just_domain = re.compile("^\w+://|[/#?].*$")
 rx_non_wordchr = re.compile("[^\w._-]")
 def row_to_fn(row):
-    url = row.get("img") or row.get("homepage") or None
+    url = row.get("img")
     if url:
-         url = url.lower()
-         url = rx_strip_proto.sub("", url)     # strip proto:// and trailing /
-         url = rx_non_wordchr.sub("_", url)    # remove any non-word characters
-         url = "{}/{}.png".format(conf.icon_dir, url)  # prefix cache directory
+        url = rx_strip_proto.sub("", url)     # strip proto:// and trailing /
+    else:
+        url = row.get("homepage")
+        if url:
+            url = rx_just_domain.sub("", url) # remove proto:// and any /path
+    if url:
+        url = url.lower()
+        url = rx_non_wordchr.sub("_", url)    # remove any non-word characters
+        url = "{}/{}.png".format(conf.icon_dir, url)  # prefix cache directory
     return url
 
 
