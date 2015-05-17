@@ -1,4 +1,3 @@
-#
 # api: streamtuner2
 # title: Links to directory services
 # description: Static list of various music directory websites.
@@ -9,7 +8,8 @@
 # config: -
 #
 # Simply adds a "links" entry in bookmarks tab, where known services
-# are listed with homepage links.
+# are listed with homepage links. Registered plugins automatically
+# end up on top of that list.
 #
 
 

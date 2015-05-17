@@ -2,7 +2,7 @@
 # api: streamtuner2
 # title: User Plugin Manager Ⅱ
 # description: Downloads new plugins, or updates them.
-# version: 0.2
+# version: 0.3
 # type: hook
 # category: config
 # depends: uikit >= 1.9, config >= 2.7, streamtuner2 >= 2.1.8, pluginconf < 1.0

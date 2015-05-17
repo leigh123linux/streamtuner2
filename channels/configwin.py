@@ -144,9 +144,13 @@ class configwin (AuxiliaryWindow):
         # (now done in conf.add_plugin_defaults)
         for opt in meta["config"]:
             color = opt.get("color", None)
+            
+            # hidden
+            if opt.get("hidden"):
+                continue 
 
             # display checkbox
-            if opt["type"] in ("bool", "boolean"):
+            elif opt["type"] in ("bool", "boolean"):
                 cb = gtk.CheckButton(opt["description"])
                 add_( "config_"+opt["name"], cb, color=color )
 

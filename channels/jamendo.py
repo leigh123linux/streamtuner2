@@ -46,10 +46,11 @@ import json
 # jamendo CC music sharing site
 #
 #
-# The v3.0 streaming URLs don't seem to work. Therefore some /get2 URLs will
-# be used.
+# For the newer v3.0 streaming URLs there's a custom action.extract_playlist
+# format now (JAMJSON), so that albums/feeds can be extracted into standard
+# playlists as well.
 #
-#  [x]  http://api.jamendo.com/v3.0/playlists/file?client_id=&id=
+#  [+]  http://api.jamendo.com/v3.0/playlists/file?client_id=&id=
 #  [+]  http://storage-new.newjamendo.com/?trackid=792843&format=ogg2&u=0
 #  [+]  http://api.jamendo.com/get2/stream/track/xspf/?playlist_id=171574&n=all&order=random
 #  [+]  http://api.jamendo.com/get2/stream/track/xspf/?album_id=%s&streamencoding=ogg2&n=all
