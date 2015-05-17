@@ -34,13 +34,14 @@
 
 import re
 import os
-from ahttp import fix_url as http_fix_url, session
-from config import *
 import platform
 import copy
 import json
 from datetime import datetime
 from xml.sax.saxutils import escape as xmlentities, unescape as xmlunescape
+
+import ahttp
+from config import *
 
 
 # Coupling to main window
@@ -185,7 +186,8 @@ def mime_app(fmt, cmd_list):
 
 
 
-# Replaces instances of %m3u, %pls, %srv in a command string.
+# Replaces instances of %m3u, %pls, %srv in a command string
+# ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 #  · Also understands short aliases %l, %f, %d.
 #  · And can embed %title or %genre placeholders.
 #  · Replace .pls URL with local .m3u file depending on map.
@@ -214,7 +216,12 @@ def interpol(cmd, url, source="pls", row={}):
     return "/bin/false"
 
 
-# Substitute .pls URL with local .m3u, or direct srv addresses, or leaves URL asis.
+# Substitute streaming address with desired playlist format
+# ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+# Converts input rows/urls, probes for playlist format, fetches them
+# and possibly converts remote .pls to local .m3u/.xpsf filename or
+# just returns direct "srv" urls.
+#
 #  · Takes a single input `url` (and original row{} as template).
 #  · But returns a list of [urls] after playlist extraction.
 #  · If repackaging as .m3u/.pls/.xspf, returns the local [fn].
@@ -280,7 +287,7 @@ def http_probe_get(url):
 
     # HTTP request, abort if streaming server hit (no HTTP/ header, but ICY/ response)
     try:
-        r = session.get(url, stream=True, timeout=5.0)
+        r = ahttp.session.get(url, stream=True, timeout=5.0)
         if not len(r.headers):
             return ("srv", r)
     except:
@@ -305,8 +312,8 @@ def http_probe_get(url):
 
 
 
-# Extract URLs and meta infos (titles) from playlist formats.
-#
+# Extract URLs and meta infos (titles) from playlist formats
+# ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 # It's mostly regex-based at the moment, because that's more
 # resilient against mailformed XSPF or JSON. But specialized
 # import helpers can be added as needed.
@@ -357,9 +364,12 @@ class extract_playlist(object):
             try:
                 return getattr(self, fmt)()
             except Exception as e:
-                log.WARN("Native {} parser failed on input (improper encoding, etc)".format(fmt), e)
+                log.WARN("Native '{}' parser failed on input (improper encoding, etc)".format(fmt), e)
 
         # regex scheme
+        if not fmt in self.extr_urls:
+            log.ERR("Unknown playlist format type '{}' - falling back to 'raw' mode".format(fmt))
+            fmt = "raw"
         rules = self.extr_urls[fmt]
         rows = []
         fields = [name for name in ("url", "title", "homepage", "genre", "playing") if rules.get(name)]
@@ -543,8 +553,8 @@ class extract_playlist(object):
 
 
 
-# Save rows[] in one of the export formats.
-#
+# Save rows[] in one of the export formats
+# ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 #  → The export() version uses urls[] and a template row{} as input,
 # converts it into a list of complete rows{} beforehand. It's mostly
 # utilized to expand a source playlist, merge in alternative streaming
@@ -628,7 +638,7 @@ class save_playlist(object):
         txt = "#EXTM3U\n"
         for r in rows:
             txt += "#EXTINF:-1,%s\n" % r["title"]
-            txt += "%s\n" % http_fix_url(r["url"])
+            txt += "%s\n" % ahttp.fix_url(r["url"])
         return txt
 
     # PLS
