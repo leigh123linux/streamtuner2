@@ -8,7 +8,7 @@
 # depends: uikit >= 1.9, config >= 2.7, streamtuner2 >= 2.1.8, pluginconf < 1.0
 # config:
 #   { name: plugin_repos, type: text, value: "http://fossil.include-once.org/repo.json/streamtuner2/contrib/*.py, http://fossil.include-once.org/repo.json/streamtuner2/channels/*.py", description: "Plugin repository JSON source references." }
-#   { name: plugin_auto, type: boolean, value: 1, description: Apply plugin activation/disabling without restart. }
+#   { name: plugin_auto, type: boolean, value: 1, description: Apply plugin activation/disabling without restart., color: orange }
 # priority: extra
 # png:
 #   iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAJ1BMVEUAAABNYQVcdAx1iTB6mQ6KsQGUsTCUuxGmyDKvzEK51FnB13LP3pnSUwRYAAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAJcEhZcwAACxMAAAsT
