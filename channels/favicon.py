@@ -130,7 +130,6 @@ class favicon(object):
 
             # Cache image filename: have or can't have
             favicon_fn = row_to_fn(row)
-            print favicon_fn
             if not favicon_fn:
                 continue
 
