@@ -6,7 +6,7 @@
 # category: radio
 # version: 0.7
 # url: http://www.myoggradio.org/
-# depends: json, StringIO, ahttp >= 1.2
+# depends: json, ahttp >= 1.5
 # config:
 #    { name: myoggradio_login,  type: text,  value: "user:password", description: "Account for storing personal favourites." }
 #    { name: myoggradio_morph,  type: boolean, value: 0,  description: "Convert pls/m3u into direct shoutcast url." }
@@ -35,7 +35,6 @@ import ahttp
 
 import re
 import json
-from compat2and3 import StringIO
 import copy
 from uikit import gtk
 
@@ -44,7 +43,7 @@ from uikit import gtk
 class myoggradio(ChannelPlugin):
 
     # control flags
-    listformat = "mixed(pls/m3u/srv)"
+    listformat = "pls,m3u,srv"
     has_search = False
     api = "http://www.myoggradio.org/"
     
@@ -80,13 +79,13 @@ class myoggradio(ChannelPlugin):
         # common
         if (cat == "common"):
             # fetch
-            data = ahttp.get(self.api + "common.json")
-            entries = json.load(StringIO(data))
+            data = ahttp.get(self.api + "common.json", encoding="utf-8")
+            entries = json.loads(data)
             
         # bookmarks
         elif (cat == "personal") and self.user_pw():
-            data = ahttp.get(self.api + "favoriten.json?user=" + self.user_pw()[0])
-            entries = json.load(StringIO(data))
+            data = ahttp.get(self.api + "favoriten.json?user=" + self.user_pw()[0], encoding="utf-8")
+            entries = json.loads(data)
         
         # unknown
         else:
