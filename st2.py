@@ -76,6 +76,7 @@ class StreamTunerTwo(gtk.Builder):
     hooks = {
         "play": [],  # observers queue here
         "record": [],
+        "switch": [],
         "init": [],
         "quit": [action.cleanup_tmp_files],
         "config_load": [],
@@ -255,9 +256,11 @@ class StreamTunerTwo(gtk.Builder):
         self.notebook_channels.set_current_page(self.channel_names.index(name))
 
     # Mirror selected channel tab into main window title
-    def update_title(self):
+    def update_title(self, *x, **y):
+        meta = self.channel().meta
         if conf.window_title:
-            self.win_streamtuner2.set_title("Streamtuner2 - %s" % self.channel().meta.get("title"))
+            self.win_streamtuner2.set_title("Streamtuner2 - %s" % meta.get("title"))
+        [cb(meta) for cb in self.hooks["switch"]]
 
 
     # Channel: row{} dict for current station
