@@ -470,7 +470,14 @@ def add_plugin_defaults(conf_options, conf_plugins, meta={}, module=""):
     for opt in meta.get("config", []):
         if "name" in opt and "value" in opt:
             if opt["name"] not in conf_options:
-                 conf_options[opt["name"]] = opt["value"]  # should typemap "bool" and "int" here
+                 # typemap "bool" and "int" here
+                 if opt["type"] in ("bool", "boolean"):
+                     val = bool(opt["value"])
+                 elif opt["type"] in ("int", "integer", "numeric"):
+                     val = int(opt["value"])
+                 else:
+                     val = str(opt["value"])
+                 conf_options[opt["name"]] = val
 
     # Initial plugin activation status
     if module and module not in conf_plugins:

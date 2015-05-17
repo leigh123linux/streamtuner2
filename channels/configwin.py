@@ -54,16 +54,19 @@ class configwin (AuxiliaryWindow):
             w = self.main.get_widget(prefix + key)
             if w:
                 # input field
-                if type(w) is gtk.Entry:
+                if isinstance(w, gtk.Entry):
                     w.set_text(str(val))
                 # checkmark
-                elif type(w) is gtk.CheckButton:
+                elif isinstance(w, gtk.CheckButton):
                     w.set_active(bool(val))
                 # dropdown
-                elif type(w) is ComboBoxText:
+                elif isinstance(w, ComboBoxText):
                     w.set_default(val)
+                # number
+                elif isinstance(w, gtk.SpinButton):
+                    w.set_value(int(val))
                 # list
-                elif type(w) is gtk.ListStore:
+                elif isinstance(w, gtk.ListStore):
                     w.clear()
                     for k,v in val.items():
                         w.append([k, v, True, self.app_bin_check(v)])
@@ -76,16 +79,19 @@ class configwin (AuxiliaryWindow):
             w = self.main.get_widget(prefix + key)
             if w:
                 # text
-                if type(w) is gtk.Entry:
+                if isinstance(w, gtk.Entry):
                     config[key] = w.get_text()
                 # pre-defined text
-                elif type(w) is ComboBoxText:
+                elif isinstance(w, ComboBoxText):
                     config[key] = w.get_active_text()
                 # boolean
-                elif type(w) is gtk.CheckButton:
+                elif isinstance(w, gtk.CheckButton):
                     config[key] = w.get_active()
+                # int
+                elif isinstance(w, gtk.SpinButton):
+                    config[key] = int(w.get_value(val))
                 # dict
-                elif type(w) is gtk.ListStore:
+                elif isinstance(w, gtk.ListStore):
                     config[key] = {}
                     for row in w:
                         if row[0] and row[1]:
@@ -144,6 +150,8 @@ class configwin (AuxiliaryWindow):
         # (now done in conf.add_plugin_defaults)
         for opt in meta["config"]:
             color = opt.get("color", None)
+            type = opt.get("type", "str")
+            description = opt.get("description", "./.")
             
             # hidden
             if opt.get("hidden"):
@@ -152,16 +160,22 @@ class configwin (AuxiliaryWindow):
             # display checkbox
             elif opt["type"] in ("bool", "boolean"):
                 cb = gtk.CheckButton(opt["description"])
-                add_( "config_"+opt["name"], cb, color=color )
+                description = None
 
             # drop down list
             elif opt["type"] in ("select", "choose", "options"):
                 cb = ComboBoxText(ComboBoxText.parse_options(opt["select"])) # custom uikit widget
-                add_( "config_"+opt["name"], cb, opt["description"], color )
 
-            # text entry
+            # numeric
+            elif opt["type"] in ("int", "integer", "numeric"):
+                adj = gtk.Adjustment(0, 0, 5000, 1, 10, 0)
+                cb = gtk.SpinButton(adj, 1.0, 0)
+
+            # text field
             else:
-                add_( "config_"+opt["name"], gtk.Entry(), opt["description"], color )
+                cb = gtk.Entry()
+           
+            add_( "config_"+opt["name"], cb, description, color )
 
         # Spacer between plugins
         add_( None, gtk.HSeparator() )
