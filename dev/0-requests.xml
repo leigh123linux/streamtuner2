@@ -6,12 +6,12 @@
   <description>
 </description>
   <homepage>https://pypi.python.org/pypi/requests</homepage>
-  <implementation id="sha1new=40aa9d95ea90b0af152e2e32e3fbba8912320684" released="2015-05-03" version="2.7.0">
+  <implementation id="sha1new=40aa9d95ea90b0af152e2e32e3fbba8912320684" released="2015-05-03" stability="stable" version="2.7.0">
     <archive href="https://pypi.python.org/packages/2.7/r/requests/requests-2.7.0-py2.py3-none-any.whl" size="470641" type="application/zip"/>
+    <environment insert="" mode="prepend" name="PYTHONPATH"/>
   </implementation>
 </interface>
 <!-- Base64 Signature
-iF4EABEIAAYFAlVWIbQACgkQ4aA2BuVY6sxt5gEAsR+Nj17mU8Wby6Li10IPGeD6I6W60jH7TqDL
-6dOLMo0A/iALq9VlrF/ZlLubweKAGR6OnaoHqgnBMmsb2pEaWJ0O
-
+iF4EABEIAAYFAlVYA0IACgkQ4aA2BuVY6sxhGgD/dmZfvUhz4VcCn+fiVuquj153MwHl8GVZQNy+
+Nz43gxcA+wbrX+d6jdljKg6GlUJq4GHYTpbbPKoh9ltJ6PgilFAL
 -->

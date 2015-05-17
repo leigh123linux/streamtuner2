@@ -7,7 +7,7 @@
   <description>
 GUI for internet radio directories.</description>
   <homepage>http://fossil.include-once.org/streamtuner2/</homepage>
-  <icon>http://fossil.include-once.org/streamtuner2/doc/trunk/icon.png</icon>
+  <icon href="http://fossil.include-once.org/streamtuner2/doc/trunk/icon.png" type="image/PNG;x-size=64x64"/>
   <category>Audio</category>
 
   <group arch="*-*" license="Public Domain" main="streamtuner2.pyz" stability="testing">
@@ -27,23 +27,16 @@ GUI for internet radio directories.</description>
       <runner interface="http://repo.roscidus.com/python/python"/>
     </command>
     <!-- Python2.7 with PyGTK -->
-    <requires interface="http://repo.roscidus.com/python/python-gobject">
-      <environment insert="" mode="prepend" name="PYTHONPATH"/>
-      <version before="3.0" not-before="2.7"/>
-    </requires>
+    <requires interface="http://repo.roscidus.com/python/python" version="2.7..!3"/>
     <!-- or optionally with Gtk3/GObject/GI -->
-    <requires interface="http://repo.roscidus.com/python/python" os="POSIX">
-      <environment insert="" mode="prepend" name="PATH"/>
-    </requires>
+    <requires interface="http://repo.roscidus.com/python/python-gobject" os="POSIX"/>
     <!-- module: requests -->
-    <requires interface="http://fossil.include-once.org/streamtuner2/doc/trunk/dev/0-requests.xml" version="2..">
-      <environment insert="" mode="prepend" name="PYTHONPATH"/>
-    </requires>
+    <requires interface="http://fossil.include-once.org/streamtuner2/doc/trunk/dev/0-requests.xml" version="2.."/>
 
   </group>
 </interface>
 <!-- Base64 Signature
-iF4EABEIAAYFAlVWI/UACgkQ4aA2BuVY6szCJAD/UmxqgczEm4enE+GztATi6jPm9y/RUVZyLgPh
-7ZSYqCEA/1d5UjyC0JNjbFA/Tip7Hniru89B7n58rFJFNNu+wdnp
+iF4EABEIAAYFAlVYBF4ACgkQ4aA2BuVY6swJAAD9GwTqxxoSsRP6zGRZDqB5vrl4cRIRDP1J3URN
+xEQCrJQBALPP3csMDrD8gAL2uClvoC4ZlolwtosEPoJwJPJbjoG+
 
 -->
