@@ -3,7 +3,7 @@
 # title: radio.net
 # description: Europe's biggest radio platform
 # url: http://radio.net/
-# version: 0.3
+# version: 0.4
 # type: channel
 # category: radio
 # png:
@@ -108,9 +108,10 @@ class radionet (ChannelPlugin):
     # Patch together JSON station info URL
     def _url(self, name):
         return \
-        "{}/search/station?_={}&apikey={}&pageindex=1&station={}".format(
-            self.apiPrefix, time.time(), self.apiKey, name
-        )
+        "{}/search/station?apikey={}&pageindex=1&station={}".format(
+            self.apiPrefix, self.apiKey, name
+        )      # '?_={time}&' is omitted here, only relevant to jQuery/AJAX,
+               # and just made bookmarks.is_in() fail due to randomized URLs
 
 
     # extract JavaScript key from any HTML blob (needed for station query)
