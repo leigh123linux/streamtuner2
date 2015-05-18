@@ -237,7 +237,7 @@ def google_find_homepage(row):
 
 # Convert row["img"] or row["homepage"] into local favicon cache filename
 # Use just domain for homepages, but most of the url for banner/logo imgs.
-rx_strip_proto = re.compile("^\w+://|/$")
+rx_strip_proto = re.compile("^\w+://|/$|\.(png|gif|ico|jpe?g)$")
 rx_just_domain = re.compile("^\w+://|[/#?].*$")
 rx_non_wordchr = re.compile("[^\w._-]")
 def row_to_fn(row):
