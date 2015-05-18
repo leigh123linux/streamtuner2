@@ -91,8 +91,8 @@ class bookmarks(GenericChannel):
     # this method is called by other channel modules' display() method
     def is_in(self, url, once=1):
         if (not self.urls):
-            self.urls = [row.get("url","urn:x-streamtuner2:no") for row in self.streams["favourite"]]
-        return url in self.urls
+            self.urls = [str(row.get("url","urn:x-streamtuner2:no")) for row in self.streams["favourite"]]
+        return str(url) in self.urls
 
 
     # called from main window / menu / context menu,

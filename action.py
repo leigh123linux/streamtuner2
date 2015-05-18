@@ -255,6 +255,7 @@ def convert_playlist(url, source, dest, local_file=True, row={}):
     # Check ambiguity (except pseudo extension)
     if len(set([source, mime, probe])) > 1:
         log.WARN("Possible playlist format mismatch:", "listformat={}, http_mime={}, rx_probe={}, ext={}".format(source, mime, probe, ext))
+#        log.DATA(cnt)
 
     # Extract URLs from content
     for fmt in playlist_fmt_prio:
