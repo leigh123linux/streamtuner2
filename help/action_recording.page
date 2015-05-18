@@ -45,7 +45,9 @@ window should appear, where streamripper shows its progress.</p>
   </item>
 </steps>
 
-<p>Whenever you leave out the <cmd>xterm</cmd> prefix, it runs silently in the background.</p>
+<p>Whenever you leave out the <cmd>xterm</cmd> prefix, it runs silently in the background.
+Common xterm alternatives are <cmd>x-terminal-emulator</cmd>, or <cmd>rxvt</cmd>,
+<cmd>gnome-terminal</cmd>, and <cmd>xfce4-terminal</cmd> etc.</p>
 
 <p>See the streamripper(1) man page or its
 <link href="http://streamripper.sourceforge.net/faq.php">FAQ</link> for more tips.</p>

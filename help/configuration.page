@@ -17,11 +17,10 @@ There are various options for streamtuner2, available under <guiseq><gui>Edit</g
   <p><media type="image" src="img/configtabs.png" mime="image/png" /></p>
 
 <terms>
-  <title>It's separated into different sections/tabs.</title>
+  <title>It's grouped into:</title>
   <item>
     <title>🔊 Player</title>
-    <p>Lists audio formats and the audio player applications, or recording tools below.
-    It's a map of file-types to applications. Double click an entry to edit it.</p>
+    <p>Associates media formats to audio player applications or recording tools.</p>
   </item>
   <item>
     <title>☑ Options</title>
@@ -30,13 +29,13 @@ There are various options for streamtuner2, available under <guiseq><gui>Edit</g
   </item>
   <item>
     <title>📻 Channel Plugins</title>
-    <p>Every channel tab can have specific options. These are configured here.
-    Also you can disable channels you don't need.</p>
+    <p>Allows to enable or disable channel tabs. Each can have specific
+    options, which can be configured here.</p>
   </item>
   <item>
     <title>🔌 Feature Plugins</title>
     <p>Another class of plugins enables internal functions, or adds extra menu
-    entries, or configuration options.</p>
+    entries, or further configuration options.</p>
   </item>
   <item>
     <title>📦 Add</title>
@@ -51,8 +50,8 @@ There are various options for streamtuner2, available under <guiseq><gui>Edit</g
 
     <title>Player application settings</title>
 
-    <p>MIME types are categorzied identifiers for file types. <var>Audio/mpeg</var> for
-    example represents MP3 files, and <var>audio/ogg</var> means just OGG.  And the player
+    <p>MIME types are categorized identifiers for file types. <var>Audio/mpeg</var> for
+    example represents MP3 files, and <var>audio/ogg</var> means OGG Vorbis.  And the player
     setting dialog simply associates an audio type with a playback application:</p>
 
 <table shade="rows" rules="rows cols">
@@ -98,8 +97,7 @@ There are various options for streamtuner2, available under <guiseq><gui>Edit</g
 </table>
 
     <p>To define a target directory, you can often add commandline arguments to each. Also it's typically
-    helpful to leave the xterm prefix on, so you can follow the processing state. (Alternatively to
-    xterm there is x-terminal-emulator, or rxvt, gnome-terminal, xfce4-terminal, etc.)</p>
+    helpful to leave the xterm prefix on, so you can follow the processing state.</p>
 </section>
 
 
@@ -140,7 +138,7 @@ There are various options for streamtuner2, available under <guiseq><gui>Edit</g
       are tried. You can influence the order with this setting, and thus speed it up.</p>
     </item>
     <item>
-      <title>[<input>250</input>] Limit stream number</title>
+      <title>[<input>500</input>] Limit stream number</title>
       <p> Constraints the length of station lists per category.
       The number of stations option is not honored by all channel plugins. Often it's not possible to
       load more or fewer station entries. Some plugins have own settings (in the 'Plugins' section) even.
@@ -156,6 +154,12 @@ There are various options for streamtuner2, available under <guiseq><gui>Edit</g
       <title>Update favouries from freshened URLs</title>
       <p>Streaming URLs in bookmarked stations get renewed on category reloads/updates. This isn't
       very reliable, as often station titles change together with the streaming URLs.</p>
+    </item>
+    <item>
+      <title>Save station lists after updates</title>
+      <p>After reloading (<key>F5</key>) the updated station lists are
+      autoamtically saved. For favicon updates or drag and drop events this
+      only happens automatically when this option is set.</p>
     </item>
  </terms>
 
