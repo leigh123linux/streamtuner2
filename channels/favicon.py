@@ -274,7 +274,7 @@ def banner_localcopy(url, fn):
 def store_image(imgdata, fn, resize=None):
 
     # Convert accepted formats -- even PNG for filtering now
-    if re.match(br'^(.PNG|GIF\d+|.{0,15}JFIF|\x00\x00\x01\x00|.{0,255}<svg[^>]+svg)', imgdata):
+    if re.match(br'^(.PNG|GIF\d+|.{0,15}(Exif|JFIF)|\x00\x00\x01\x00|.{0,255}<svg[^>]+svg)', imgdata):
         try:
             # Read from byte/str
             image = Image.open(BytesIO(imgdata))

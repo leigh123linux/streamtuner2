@@ -380,8 +380,11 @@ class GenericChannel(object):
 
     # state icon: bookmark star, or deleted mark
     def prepare_filter_icons(self, row):
-        if conf.show_bookmarks:# and "bookmarks" in self.parent.channels:
+        if conf.show_bookmarks:
+            # and "bookmarks" in self.parent.channels:
             row["favourite"] = self.parent.bookmarks.is_in(row.get("url", "file:///tmp/none"))
+            # this should really go into bookmarks plugin itself,
+            # disadvantage: would decelerate processing loop further
         if not row.get("state"):
             if row.get("favourite"):
                 row["state"] = gtk.STOCK_ABOUT
