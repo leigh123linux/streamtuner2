@@ -244,12 +244,11 @@ class StreamTunerTwo(gtk.Builder):
     def channel_switch(self, notebook, page, page_num=0, *args):
         self.current_channel = notebook.get_menu_label_text(notebook.get_nth_page(page_num))
         log.UI("main.channel_switch() :=", self.current_channel)
-        self.update_title()
+        # update window title, call plugin (e.g. channel link in toolbar)
+        uikit.do(self.update_title)
         # if first selected, load current category
         # (run in thread, to make it look speedy on first startup)
-        self.thread( 
-          self.channel().first_show
-        )
+        self.thread(self.channel().first_show)
 
     # Invoked from the menu instead, uses module name instead of numeric tab id
     def channel_switch_by_name(self, name):

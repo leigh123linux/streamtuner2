@@ -84,5 +84,5 @@ install:
 # start locally
 st2: run
 run:
-	python -B ./st2.py -D
+	MALLOC_CHECK_=2	 PYTHONVERBOSE=2  python -B  ./st2.py -D
 
