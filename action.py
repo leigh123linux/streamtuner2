@@ -64,10 +64,10 @@ listfmt_t = {
     "audio/x-pn-realaudio": "ram",
     "application/json":     "json",
     "application/smil":     "smil",
-    "application/vnd.ms-wpl":"smil",
+    "application/vnd.ms-wpl": "smil",
     "audio/x-ms-wax":       "asx",
     "video/x-ms-asf":       "asx",
-    "x-urn/st2-script":     "script", # unused
+    "x-urn/st2-script":     "script",  # unused
     "application/x-shockwave-flash": "href",  # fallback
 }
 
@@ -75,8 +75,8 @@ listfmt_t = {
 mediafmt_t = {
     "audio/mpeg":   "mp3",
     "audio/ogg":    "ogg",
-    "audio/aac" :   "aac",
-    "audio/aacp" :  "aac",
+    "audio/aac":    "aac",
+    "audio/aacp":   "aac",
     "audio/midi":   "midi",
     "audio/mod":    "mod",
     "audio/it+zip": "mod",

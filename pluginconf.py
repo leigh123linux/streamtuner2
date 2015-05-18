@@ -6,7 +6,7 @@
 # description: Read meta data, pyz/package contents, module locating
 # version: 0.6
 # priority: core
-# doc: http://fossil.include-once.org/streamtuner2/wiki/plugin+meta+data
+# docs: http://fossil.include-once.org/streamtuner2/wiki/plugin+meta+data
 # config: -
 #
 # Provides plugin lookup and meta data extraction utility functions.
@@ -25,7 +25,7 @@
 # descriptors, and any hodgepodge or premature module loading just to
 # uncover module description fields.
 #
-# plugin_meta() 
+# plugin_meta()
 # ‾‾‾‾‾‾‾‾‾‾‾‾‾
 #  Is the primary function to extract a meta dictionary from files.
 #  It either reads from a given module= name, a literal fn=, or just
@@ -76,24 +76,27 @@
 # list module basenames, if there's only one set to manage.
 
 
-
 import sys
 import os
 import re
 import pkgutil
 import inspect
-try: from compat2and3 import gzip_decode
-except: from gzip import decompress as gzip_decode # Py3 only
+try:
+    from compat2and3 import gzip_decode
+except:
+    from gzip import decompress as gzip_decode  # Py3 only
 import zipfile
 import argparse
 
-__all__ = ["get_data", "module_list", "plugin_meta", "dependency", "add_plugin_defaults"]
-
+__all__ = [
+    "get_data", "module_list", "plugin_meta",
+    "dependency", "add_plugin_defaults"
+]
 
 
 # Injectables
 # ‾‾‾‾‾‾‾‾‾‾‾
-log_ERR = lambda *x:None
+log_ERR = lambda *x: None
 
 # File lookup relation for get_data(), should name a top-level package.
 module_base = "config"
@@ -101,7 +104,6 @@ module_base = "config"
 # Package/module names for module_list() and plugin_meta() lookups.
 # All associated paths will be scanned for module/plugin basenames.
 plugin_base = ["channels"]
-
 
 
 # Resource retrieval
@@ -121,8 +123,8 @@ def get_data(fn, decode=False, gz=False, file_base=None):
         else:
             return str(bin)
     except:
-        pass#log_ERR("get_data() didn't find:", fn, "in", file_base)
-
+        # log_ERR("get_data() didn't find:", fn, "in", file_base)
+        pass
 
 
 # Plugin name lookup
@@ -142,8 +144,7 @@ def module_list(extra_paths=[]):
 
     # Should list plugins within zips as well as local paths
     ls = pkgutil.iter_modules(paths + extra_paths)
-    return [name for loader,name,ispkg in ls]
-
+    return [name for loader, name, ispkg in ls]
 
 
 # Plugin => meta dict
@@ -156,7 +157,6 @@ def all_plugin_meta():
     return {
         name: plugin_meta(module=name) for name in module_list()
     }
-
 
 
 # Plugin meta data extraction
@@ -178,13 +178,14 @@ def plugin_meta(fn=None, src=None, module=None, frame=1, extra_base=[]):
     # Try via pkgutil first,
     # find any plugins.* modules, or main packages
     if module:
-       fn = module
-       for base in plugin_base + extra_base:
-           try:
-               src = get_data(fn=fn+".py", decode=True, file_base=base)
-               if src: break
-           except:
-               continue  # plugin_meta_extract() will print a notice later
+        fn = module
+        for base in plugin_base + extra_base:
+            try:
+                src = get_data(fn=fn+".py", decode=True, file_base=base)
+                if src:
+                    break
+            except:
+                continue  # plugin_meta_extract() will print a notice later
 
     # Real filename/path
     elif fn and os.path.exists(fn):
@@ -211,7 +212,6 @@ def plugin_meta(fn=None, src=None, module=None, frame=1, extra_base=[]):
     if not isinstance(src, str):
         src = src.decode("utf-8", errors='replace')
     return plugin_meta_extract(src, fn)
-
 
 
 # Comment and field extraction logic
@@ -245,7 +245,7 @@ def plugin_meta_extract(src="", fn=None, literal=False):
             return meta
         src = src.group(0)
         src = rx.hash.sub("", src).strip()
-    
+
     # Split comment block
     if src.find("\n\n") > 0:
         src, meta["doc"] = src.split("\n\n", 1)
@@ -256,7 +256,6 @@ def plugin_meta_extract(src="", fn=None, literal=False):
     meta["config"] = plugin_meta_config(meta.get("config") or "")
 
     return meta
-
 
 
 # Unpack config: structures
@@ -285,7 +284,6 @@ def plugin_meta_config(str):
     return config
 
 
-
 # Comment extraction regexps
 # ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 # Pretty crude comment splitting approach. But works
@@ -294,22 +292,21 @@ def plugin_meta_config(str):
 #
 class rx:
     comment = re.compile(r"""(^ {0,4}#.*\n)+""", re.M)
-    hash    = re.compile(r"""(^ {0,4}# *)""", re.M)
-    keyval  = re.compile(r"""
+    hash = re.compile(r"""(^ {0,4}# *)""", re.M)
+    keyval = re.compile(r"""
         ^([\w-]+):(.*$(?:\n(?![\w-]+:).+$)*)      # plain key:value lines
-    """, re.M|re.X)
-    config  = re.compile(r"""
+    """, re.M | re.X)
+    config = re.compile(r"""
         [\{\<] (.+?) [\}\>]                    # JSOL/YAML scheme {...} dicts
     """, re.X)
     options = re.compile(r"""
         ["':$]?   (\w*)  ["']?                 # key or ":key" or '$key'
         \s* [:=] \s*                           # "=" or ":"
-     (?:  "  ([^"]*)  " 
+     (?:  "  ([^"]*)  "
        |  '  ([^']*)  '                        #  "quoted" or 'singl' values
        |     ([^,]*)                           #  or unquoted literals
      )
     """, re.X)
-
 
 
 # ArgumentParser options conversion
@@ -351,27 +348,31 @@ def argparse_map(opt):
     # Prepare mapping options
     typing = re.findall("bool|str|\[\]|const|false|true", opt["type"])
     naming = re.findall("\[\]", opt["name"])
-    name   = re.findall("(?<!-)\\b\\w+", opt["name"])
-    nargs  = re.findall("\\b\d+\\b|[\?\*\+]", opt["type"]) or [None]
+    name = re.findall("(?<!-)\\b\\w+", opt["name"])
+    nargs = re.findall("\\b\d+\\b|[\?\*\+]", opt["type"]) or [None]
     is_arr = "[]" in (naming + typing) and nargs == [None]
-    is_bool= "bool" in typing
+    is_bool = "bool" in typing
     false_b = "false" in typing or opt["value"] in ("0", "false")
-    #print("\nname=", name, "is_arr=", is_arr, "is_bool=", is_bool, "bool_d=", false_b, "naming=", naming, "typing=", typing)
+    # print("\nname=", name, "is_arr=", is_arr, "is_bool=", is_bool,
+    # "bool_d=", false_b, "naming=", naming, "typing=", typing)
 
-    # Populate partially - ArgumentParser has aversions to many parameter combinations
+    # Populate combination as far as ArgumentParser permits
     kwargs = dict(
         args     = args,
         dest     = name[0] if not name[0] in args else None,
-        action   = is_arr and "append"  or  is_bool and false_b and "store_false"  or  is_bool and "store_true"  or  "store",
+        action   = is_arr and "append"
+                   or  is_bool and false_b and "store_false"
+                   or  is_bool and "store_true"  or  "store",
         nargs    = nargs[0],
         default  = opt.get("default") or opt["value"],
-        type     = None if is_bool  else  ("int" in typing and int  or  "bool" in typing and bool  or  str),
+        type     = None if is_bool  else  ("int" in typing and int
+                   or  "bool" in typing and bool  or  str),
         choices  = opt["select"].split("|") if "select" in opt else None,
         required = "required" in opt or None,
-        help     = opt["description"] if not "hidden" in opt else argparse.SUPPRESS
+        help     = opt["description"] if not "hidden" in opt
+                   else argparse.SUPPRESS
     )
-    return {k:w for k,w in kwargs.items() if w is not None}
-
+    return {k: w for k, w in kwargs.items() if w is not None}
 
 
 # Minimal depends: probing
@@ -404,7 +405,7 @@ class dependency(object):
         self.have["streamtuner2"] = self.have["st2"]
     have = {}
 
-    # depends:    
+    # depends:
     def depends(self, plugin):
         if plugin.get("depends"):
             d = self.deps(plugin["depends"])
@@ -412,13 +413,19 @@ class dependency(object):
                 return False
         return True
 
-    # basic list pre-filtering (skip __init__, filter by api:, exclude installed & same-version plugins)
+    # basic list pre-filtering (skip __init__, filter by api:,
+    # exclude installed & same-version plugins)
     def valid(self, newpl):
-        id = newpl.get("$name")
         have_ver = self.have.get(id, {}).get("version", "0")
-        return id.find("__") < 0                        \
-           and newpl.get("api") == "streamtuner2"       \
-           and have_ver < newpl.get("version", "0.0")
+        id = newpl.get("$name", "__invalid")
+        if id.find("__") == 0:
+            pass
+        elif newpl.get("api") != "streamtuner2":
+            pass
+        elif have_ver >= newpl.get("version", "0.0"):
+            pass
+        else:
+            return True
 
     # Split trivial "pkg, mod >= 1, uikit < 4.0" list
     def deps(self, dep_str):
@@ -428,30 +435,30 @@ class dependency(object):
             if not len(dep) or dep.find(":") >= 0:
                 continue
             # find comparison and version num
-            m = re.search(r"([\w.-]+)\s*([>=<!~]+)\s*([\d.]+([-~.]\w+)*)", dep + " >= 0")
+            dep += " >= 0"
+            m = re.search(r"([\w.-]+)\s*([>=<!~]+)\s*([\d.]+([-~.]\w+)*)", dep)
             if m and m.group(2):
-                d.append([m.group(i) for i in (1,2,3)])
+                d.append([m.group(i) for i in (1, 2, 3)])
         return d
-    
+
     # Do actual comparison
     def cmp(self, d, have):
         r = True
         for name, op, ver in d:
-            # skip unknown plugins, might be python module references ("depends: re, json")
+            # skip unknown plugins, might be python module references
             if not have.get(name, {}).get("version"):
                 continue
             curr = have[name]["version"]
             tbl = {
-               ">=": curr >= ver,
-               "<=": curr <= ver,
-               "==": curr == ver,
-               ">":  curr > ver,
-               "<":  curr < ver,
-               "!=": curr != ver,
+                ">=": curr >= ver,
+                "<=": curr <= ver,
+                "==": curr == ver,
+                ">":  curr > ver,
+                "<":  curr < ver,
+                "!=": curr != ver,
             }
             r &= tbl.get(op, True)
         return r
-
 
 
 # Add plugin defaults to conf.* store
@@ -470,17 +477,19 @@ def add_plugin_defaults(conf_options, conf_plugins, meta={}, module=""):
     for opt in meta.get("config", []):
         if "name" in opt and "value" in opt:
             if opt["name"] not in conf_options:
-                 # typemap "bool" and "int" here
-                 if opt["type"] in ("bool", "boolean"):
-                     val = bool(opt["value"])
-                 elif opt["type"] in ("int", "integer", "numeric"):
-                     val = int(opt["value"])
-                 else:
-                     val = str(opt["value"])
-                 conf_options[opt["name"]] = val
+                # typemap "bool" and "int" here
+                if opt["type"] in ("bool", "boolean"):
+                    val = bool(opt["value"])
+                elif opt["type"] in ("int", "integer", "numeric"):
+                    val = int(opt["value"])
+                else:
+                    val = str(opt["value"])
+                conf_options[opt["name"]] = val
 
     # Initial plugin activation status
     if module and module not in conf_plugins:
-         conf_plugins[module] = meta.get("priority") in ("core", "builtin", "always", "default", "standard")
+        conf_plugins[module] = meta.get("priority") in (
+            "core", "builtin", "always", "default", "standard"
+        )
 
 
