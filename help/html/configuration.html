@@ -18,20 +18,19 @@ There are various options for streamtuner2, available under <span class="guiseq"
 </p>
 <p class="p"><span class="media"><span class="media media-image"><img src="img/configtabs.png" class="media media-inline" alt=""></span></span></p>
 <div class="terms"><div class="inner">
-<div class="title title-terms"><h2><span class="title">It's separated into different sections/tabs.</span></h2></div>
+<div class="title title-terms"><h2><span class="title">It's grouped into:</span></h2></div>
 <div class="region"><dl class="terms">
 <dt class="terms">🔊 Player</dt>
-<dd class="terms"><p class="p">Lists audio formats and the audio player applications, or recording tools below.
-    It's a map of file-types to applications. Double click an entry to edit it.</p></dd>
+<dd class="terms"><p class="p">Associates media formats to audio player applications or recording tools.</p></dd>
 <dt class="terms">☑ Options</dt>
 <dd class="terms"><p class="p">Influences the display of all stream/station lists, and contains some
     behaviour and system settings.</p></dd>
 <dt class="terms">📻 Channel Plugins</dt>
-<dd class="terms"><p class="p">Every channel tab can have specific options. These are configured here.
-    Also you can disable channels you don't need.</p></dd>
+<dd class="terms"><p class="p">Allows to enable or disable channel tabs. Each can have specific
+    options, which can be configured here.</p></dd>
 <dt class="terms">🔌 Feature Plugins</dt>
 <dd class="terms"><p class="p">Another class of plugins enables internal functions, or adds extra menu
-    entries, or configuration options.</p></dd>
+    entries, or further configuration options.</p></dd>
 <dt class="terms">📦 Add</dt>
 <dd class="terms"><p class="p">The <span class="link"><a href="pluginmanager2.html" title="Plugin Manager 2">Plugin Manager 2</a></span> adds another
     tab for updating or installing new plugins.</p></dd>
@@ -41,8 +40,8 @@ There are various options for streamtuner2, available under <span class="guiseq"
 <div id="apps" class="sect"><div class="inner">
 <div class="hgroup"><h2 class="title"><span class="title">Player application settings</span></h2></div>
 <div class="region"><div class="contents">
-<p class="p">MIME types are categorzied identifiers for file types. <span class="var">Audio/mpeg</span> for
-    example represents MP3 files, and <span class="var">audio/ogg</span> means just OGG.  And the player
+<p class="p">MIME types are categorized identifiers for file types. <span class="var">Audio/mpeg</span> for
+    example represents MP3 files, and <span class="var">audio/ogg</span> means OGG Vorbis.  And the player
     setting dialog simply associates an audio type with a playback application:</p>
 <div class="table"><div class="inner"><div class="region"><table class="table">
 <thead><tr>
@@ -104,8 +103,7 @@ There are various options for streamtuner2, available under <span class="guiseq"
 </tr>
 </table></div></div></div>
 <p class="p">To define a target directory, you can often add commandline arguments to each. Also it's typically
-    helpful to leave the xterm prefix on, so you can follow the processing state. (Alternatively to
-    xterm there is x-terminal-emulator, or rxvt, gnome-terminal, xfce4-terminal, etc.)</p>
+    helpful to leave the xterm prefix on, so you can follow the processing state.</p>
 <div class="links topiclinks"><div class="inner"><div class="region"><div class="linkdiv "><a class="linkdiv" href="recording.html" title="Recording"><span class="title">Recording</span><span class="linkdiv-dash"> — </span><span class="desc">Save radio songs as MP3 files via streamripper.</span></a></div></div></div></div>
 </div></div>
 </div></div>
@@ -140,7 +138,7 @@ There are various options for streamtuner2, available under <span class="guiseq"
       plugins often use a regex to match text. Occassionally the regex method is surprisingly more exact,
       because directory services often use frightful unstructured HTML. If available, both methods
       are tried. You can influence the order with this setting, and thus speed it up.</p></dd>
-<dt class="terms">[<span class="input">250</span>] Limit stream number</dt>
+<dt class="terms">[<span class="input">500</span>] Limit stream number</dt>
 <dd class="terms"><p class="p"> Constraints the length of station lists per category.
       The number of stations option is not honored by all channel plugins. Often it's not possible to
       load more or fewer station entries. Some plugins have own settings (in the 'Plugins' section) even.
@@ -153,6 +151,10 @@ There are various options for streamtuner2, available under <span class="guiseq"
 <dt class="terms">Update favouries from freshened URLs</dt>
 <dd class="terms"><p class="p">Streaming URLs in bookmarked stations get renewed on category reloads/updates. This isn't
       very reliable, as often station titles change together with the streaming URLs.</p></dd>
+<dt class="terms">Save station lists after updates</dt>
+<dd class="terms"><p class="p">After reloading (<span class="key"><kbd>F5</kbd></span>) the updated station lists are
+      autoamtically saved. For favicon updates or drag and drop events this
+      only happens automatically when this option is set.</p></dd>
 </dl></div>
 </div></div>
 <div class="terms"><div class="inner">

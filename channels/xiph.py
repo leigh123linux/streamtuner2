@@ -4,7 +4,7 @@
 # description: ICEcast radios. Scans per JSON API, slow XML, or raw directory.
 # type: channel
 # url: http://dir.xiph.org/
-# version: 0.5
+# version: 0.6
 # category: radio
 # config: 
 #    { name: xiph_source, value: web, type: select, select: "cache=JSON cache srv|xml=Clunky XML blob|web=Forbidden fruits", description: "Source for station list extraction." }
@@ -195,46 +195,57 @@ class xiph (ChannelPlugin):
 
       # Collect all result pages
       html = ahttp.get(url)
-      for i in range(1,4):
+      for i in range(1,5):
           if html.find('page={}">{}</a></li>'.format(i, i+1)) < 0:
               break
           self.status(i/5.1)
           html += ahttp.get(url, {"search": cat.title(), "page": i})
-      try: html = html.encode("raw_unicode_escape").decode("utf-8")
-      except: pass
+      try:
+          html = html.encode("raw_unicode_escape").decode("utf-8")
+      except:
+          pass
 
       # Find streams
       r = []
-      #for row in re.findall("""<tr class="row[01]">(.+?)</tr>""", html, re.X|re.S):
-      #    pass
-      ls = re.findall("""
-          <tr\s+class="row[01]">
-          .*? class="name">
-               <a\s+href="(.*?)"[^>]*>
-                (.*?)</a>
-          .*? "listeners">\[(\d+)
-          .*? "stream-description">(.*?)<
-          .*? Tags: (.*?) </div>
-          .*? href="(/listen/\d+/listen.xspf)"
-          .*? class="format"\s+title="([^"]+)"
-          .*? /by_format/([^"]+)
-      """, html, re.X|re.S)
-            
-      # Assemble
-      for homepage, title, listeners, playing, tags, url, bits, fmt in ls:
+      rows = re.findall("""<tr\s+class="row\d*">(.+?)</tr>""", html, re.S)
+      for html in rows:
+          ls = self.rx_all(
+               dict(
+                  homepage = """ class="name">  <a\s+href="(.*?)" """,
+                  title = """ class="name">  <a[^>]*> (.*?)</a> """,
+                  listeners = """ "listeners">\[(\d+) """,
+                  playing = """ "stream-description">(.*?)< """,
+                  tags = """ (?s) Tags: (.*?) </div> """,
+                  url = """ href="(/listen/\d+/listen.xspf)" """,
+                  bits = """ class="format"\s+title="([^"]+)" """,
+                  fmt = """ /by_format/([^"]+) """,
+              ),
+              html
+          )
           r.append(dict(
-              genre = unhtml(tags),
-              title = unhtml(title),
-              homepage = ahttp.fix_url(homepage),
-              playing = unhtml(playing),
-              url = "http://dir.xiph.org{}".format(url),
+              genre = unhtml(ls["tags"]),
+              title = unhtml(ls["title"]),
+              homepage = ahttp.fix_url(ls["homepage"]),
+              playing = unhtml(ls["playing"]),
+              url = "http://dir.xiph.org{}".format(ls["url"]),
               listformat = "xspf",
-              listeners = int(listeners),
-              bitrate = bitrate(bits),
-              format = mime_fmt(guess_format(fmt)),
+              listeners = int(ls["listeners"]),
+              bitrate = bitrate(ls["bits"]),
+              format = mime_fmt(guess_format(ls["fmt"])),
           ))
       return r
 
+  # Regex dict
+  def rx_all(self, fields, src, flags=re.X):
+      row = {}
+      for k, v in fields.items():
+          m = re.search(v, src, flags)
+          if m:
+              row[k] = m.group(1)
+          else:
+              row[k] = ""
+      return row
+     
 
 
   # Static list of categories
