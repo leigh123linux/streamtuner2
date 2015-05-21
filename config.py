@@ -149,6 +149,15 @@ class ConfigDict(dict):
         self.pyquery = 1
         self.debug = 0
 
+    # update old setting names
+    def migrate(self):
+        # 2.1.1
+        if "audio/mp3" in self.play:
+            self.play["audio/mpeg"] = self.play["audio/mp3"]
+            del self.play["audio/mp3"]
+        # 2.1.7
+        if self.tmp == "/tmp":
+            self.tmp = "/tmp/streamtuner2"
         
     # Add plugin names and default config: options from each .meta
     def add_plugin_defaults(self, meta, name):
@@ -219,7 +228,6 @@ class ConfigDict(dict):
             f.write(data)  # Python3 sometimes wants to write strings rather than bytes
         f.close()
 
-
     # retrieve data from config file            
     def load(self, name):
         name = name + ".json"
@@ -239,7 +247,6 @@ class ConfigDict(dict):
         except Exception as e:
             log.ERR("JSON parsing error (in "+name+")", e)
         
-
     # recursive dict update
     def update(self, with_new_data):
         for key,value in with_new_data.items():
@@ -249,17 +256,6 @@ class ConfigDict(dict):
                 self[key] = value
         # descends into sub-dicts instead of wiping them with subkeys
 
-
-    # update old setting names
-    def migrate(self):
-        # 2.1.1
-        if "audio/mp3" in self.play:
-            self.play["audio/mpeg"] = self.play["audio/mp3"]
-            del self.play["audio/mp3"]
-        if self.tmp == "/tmp":
-            self.tmp = "/tmp/streamtuner2"
-
-            
     # Shortcut to `state.json` loading (currently selected categories etc.)
     def state(self, module=None, d={}):
         if not d:
@@ -267,14 +263,6 @@ class ConfigDict(dict):
         if module:
             return d.get(module, {})
         return d
-
-         
-    # check for existing filename in directory list
-    def find_in_dirs(self, dirs, file):
-        for d in dirs:
-            if os.path.exists(d+"/"+file):
-                return d+"/"+file
-
 
     # standard user account storage in ~/.netrc or less standard but contemporarily in ~/.config/netrc
     def netrc(self, varhosts=("shoutcast.com")):
@@ -293,7 +281,6 @@ class ConfigDict(dict):
             if server in netrc:
                 return netrc[server]
 
-
     # Use config:-style definitions for argv extraction,
     # such as: { arg: -D, name: debug, type: bool }
     def init_args(self, ap):
@@ -303,7 +290,6 @@ class ConfigDict(dict):
                 #print(kwargs)
                 ap.add_argument(*kwargs.pop("args"), **kwargs)
         return ap.parse_args()
-
 
     # Copy args fields into conf. dict
     def apply_args(self, args):
@@ -315,8 +301,6 @@ class ConfigDict(dict):
             self.plugins[p_id] = 0
         for p_id in (args.enable or []):
             self.plugins[p_id] = 1
-
-
 
 
 # Simplified print wrapper: `log.err(...)`
@@ -368,9 +352,7 @@ conf = ConfigDict()
 log.PROC("ConfigDict() initialized")
 
 # tie in pluginconf.*
-pluginconf.log_WARN = log.WARN
 pluginconf.log_ERR = log.ERR
 pluginconf.module_base = "config"
 pluginconf.plugin_base = ["channels", "plugins"]#, conf.share+"/channels", conf.dir+"/plugins"]
-
 

@@ -201,9 +201,9 @@ class StreamTunerTwo(gtk.Builder):
     # Allows access to widgets as direct attributes instead of using .get_widget()
     # Also looks in self.channels[] for the named channel plugins
     def __getattr__(self, name):
-        if (name in self.channels):
+        if name in self.channels:
             return self.channels[name]     # like self.shoutcast
-        elif (name in self.features):
+        elif name in self.features:
             return self.features[name]     # like self.configwin
         else:
             return self.get_object(name)   # or gives an error if neither exists
@@ -216,13 +216,13 @@ class StreamTunerTwo(gtk.Builder):
             return gtk.Builder.get_object(self, name)
 
 
-    # Run a function in thread
+    # Run function in separate thread.
+    # Often used in conjunction with uikit.do() for Gtk interactions.
     def thread(self, target, *args, **kwargs):
         if conf.nothreads:
             return target(*args, **kwargs)
         thread = Thread(target=target, args=args, kwargs=kwargs)
         thread.start()
-        #self.working.append(thread)
 
             
     # Returns the currently selected directory/channel object (remembered position)

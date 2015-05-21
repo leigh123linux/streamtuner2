@@ -15,7 +15,8 @@
 #    myoggradio.py, pluginmanager2.py, radiobrowser.py, radionomy.py,
 #    radiotray.py, search.py, shoutcast.py, somafm.py, streamedit.py,
 #    surfmusik.py, timer.py, tunein.py, ubuntuusers.py, youtube.py,
-#    useragentswitcher.py, xiph.py, favicon.py, filter_bitrate.py
+#    useragentswitcher.py, xiph.py, favicon.py, filter_bitrate.py,
+#    ui_cht.py
 # config: -
 # priority: core
 #
