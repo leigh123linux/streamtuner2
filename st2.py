@@ -4,7 +4,7 @@
 # type: application
 # title: streamtuner2
 # description: Directory browser for internet radio, audio and video streams
-# version: 2.1.8-dev
+# version: 2.1.9-beta1
 # state: beta
 # author: Mario Salzer <mario@include-once.org>
 # license: Public Domain
@@ -436,7 +436,7 @@ class StreamTunerTwo(gtk.Builder):
     # Redraw logo        
     def logo_scale(self, r=1.0, map=None):
         pix = uikit.pixbuf(logo.png, decode=1, fmt="png")
-        if map and map in (2,5,0):
+        if map and map in (2,5,0):  # gtk.ICON_SIZE_SMALL_TOOLBAR / _DND / _DIALOG
             r = { 2: 0.45, 5: 0.75, 0: 1.0 }[map]
         if r != 1.0:
             pix = pix.scale_simple(int(321*r), int(115*r), gtk.gdk.INTERP_BILINEAR)
