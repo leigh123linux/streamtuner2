@@ -98,9 +98,9 @@ class GenericChannel(object):
     titles = {}   # For easier adapting of column titles in datamap
 
     # For empty grouping / categories
-    placeholder = [dict(genre="./.", title="Subcategory placeholder", playing="./.", url="none:", listeners=0, bitrate=0, homepage="", state="gtkfolder")]
-    empty_stub = [dict(genre="./.", title="No categories found (HTTP error)", playing="Try Channel→Reload Categories later..", url="none:", listeners=0, bitrate=0, homepage="", state="gtk-stop")]
-    nothing_found = [dict(genre="./.", title="No contents found on directory server", playing="Notice", listeners=0, bitrate=0, state="gtk-info")]
+    placeholder = [dict(state="gtk-info", genre="./.", title="Subcategory placeholder", playing="./.", url="none:", listeners=0, bitrate=0, homepage="")]
+    empty_stub = [dict(state="gtk-dialog-error", genre="./.", title="No categories found (website error)", playing="Try Channel→Reload Categories later..", url="none:", listeners=0, bitrate=0, homepage="")]
+    nothing_found = [dict(state="gtk-no", genre="./.", title="No contents found on directory server", playing="Notice", listeners=0, bitrate=0)]
     
     # Title to homepage regex
     rx_www_url = re.compile("""(www(\.\w+[\w-]+){2,}|(\w+[\w-]+[ ]?\.)+(com|FM|net|org|de|PL|fr|uk))""", re.I)
