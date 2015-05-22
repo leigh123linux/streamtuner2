@@ -1,8 +1,8 @@
 # encoding: UTF-8
 # api: streamtuner2
 # title: reddit⛱music
-# description: Music recommendations from reddit /r/music etc.
-# version: 0.5
+# description: Music recommendations from reddit /r/music and associated subreddits.
+# version: 0.6
 # type: channel
 # url: http://reddit.com/r/Music
 # category: playlist
@@ -98,17 +98,25 @@ class reddit (ChannelPlugin):
 
         # collect links
         data = []
-        after = ""
+        after = None
         for i in range(1, int(conf.reddit_pages) + 1):
-            j = json.loads(ahttp.get(
-                "http://www.reddit.com/r/{}/new.json?sort=new&after={}".format(
-                    cat.lower(), after
-                )
-            ))
-            if not j.get("data",[]).get("children"):
+            j = ahttp.get(
+                "http://www.reddit.com/r/{}/new.json".format(cat.lower()),
+                { "sort": "new", "after": after }
+            )
+            try:
+                j = json.loads(j)
+            except Exception as e:
+                log.ERR("Reddit down?", e)
                 break
-            data += j["data"]["children"]
-            after = j["data"]["after"]
+            if j.get("data",[]).get("children"):
+                data += j["data"]["children"]
+            else:
+                break
+            if j.get("data",[]).get("after"):
+                after = j["data"]["after"]
+            else:
+                break
 
         # convert
         r = []
@@ -127,16 +135,14 @@ class reddit (ChannelPlugin):
             elif url_ext in ("mp3", "ogg", "flac", "aac", "aacp"):
                 format = "audio/" + url_ext
                 listformat = "srv"
-                print row
-                print url_ext
             # playlists?
             elif url_ext in ("m3u", "pls", "xspf"):
                 listformat = url_ext
                 format = "audio/x-unknown"
-                print url_ext
             # links from selftext
             elif text_urls:
                 row["url"] = text_urls[0]
+                format = "video/youtube"
             # filter out Soundcloud etc.
             else:
                 continue
