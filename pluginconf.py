@@ -481,7 +481,7 @@ def add_plugin_defaults(conf_options, conf_plugins, meta={}, module=""):
                 if opt["type"] in ("bool", "boolean"):
                     val = bool(opt["value"])
                 elif opt["type"] in ("int", "integer", "numeric"):
-                    val = int(opt["value"])
+                    val = opt["value"].lower() in ("1", "true", "yes", "on")
                 else:
                     val = str(opt["value"])
                 conf_options[opt["name"]] = val
