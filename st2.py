@@ -10,7 +10,7 @@
 # license: Public Domain
 # url: http://freshcode.club/projects/streamtuner2
 # config:  
-#   { type: env, name: http_proxy, description: proxy for HTTP access }
+#   { type: env, name: HTTP_PROXY, description: proxy for HTTP access }
 #   { type: env, name: XDG_CONFIG_HOME, description: relocates user .config subdirectory }
 # category: sound
 # depends: pygtk | gi, threading, requests, pyquery, lxml
@@ -276,10 +276,9 @@ class StreamTunerTwo(gtk.Builder):
     def on_play_clicked(self, widget, event=None, *args):
         self.status("Starting player...")
         channel = self.channel()
-        pixstore = [channel.ls, channel.pix_entry, channel.rowno()]
         row = channel.play()
         self.status("")
-        [callback(row, pixstore=pixstore, channel=channel) for callback in self.hooks["play"]]
+        [callback(row, channel=channel) for callback in self.hooks["play"]]
 
     # Recording: invoke streamripper for current stream URL
     def on_record_clicked(self, widget):
@@ -332,7 +331,7 @@ class StreamTunerTwo(gtk.Builder):
     def update_favicons(self, widget):
         if "favicon" in self.features:
             ch = self.channel()
-            self.features["favicon"].update_all(entries=ch.stations(), pixstore=[ch.ls, ch.pix_entry, None])
+            self.features["favicon"].update_all(entries=ch.stations(), channel=ch)
 
     # Save stream to file (.m3u)
     def save_as(self, widget):

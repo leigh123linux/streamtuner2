@@ -75,6 +75,7 @@ class GenericChannel(object):
     ls = None         # ListStore for station treeview
     rowmap = None     # Preserve streams-datamap
     pix_entry = None  # ListStore entry that contains favicon
+    img_resize = None  # Rescale `img` references to icon size
 
     # mapping of stream{} data into gtk treeview/treestore representation
     datamap = [

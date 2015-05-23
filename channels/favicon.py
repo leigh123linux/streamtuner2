@@ -9,7 +9,7 @@
 #    { name: google_homepage, type: bool, value: 0, description: "Google missing station homepages right away." }
 # type: feature
 # category: ui
-# version: 1.9
+# version: 2.0
 # depends: streamtuner2 >= 2.1.9, python:pil
 # priority: standard
 # png:
@@ -60,8 +60,12 @@ tried_urls = []
 #  · uikit.columns() merely checks row["favicon"] for file existence
 #    when redrawing a station list.
 #
-#  · main calls .update_playing() on hooks["play"],
-#    or .update_all() per menu command
+#  · The main window calls .update_playing() on hooks["play"].
+#    (Which passes the current row{} and row_i index, and its channel
+#    object for updating the ListStore→pixbuf right away.)
+#
+#  · Main also calls .update_all() wrapper per menu command "Channel ›
+#    Update Favicons..."
 
 
 
@@ -91,14 +95,15 @@ class favicon(object):
             open(icon_dir+"/.nobackup", "a").close()
 
 
-    # Main menu "Update favicons": update favicon cache for complete list of station rows
+    # Main menu "Update favicons": update favicon cache for complete list
+    # of station rows. Just a wrapper now around update_rows(). Expects
+    # both entries=[] and channel={} argument still.
     def update_all(self, *args, **kwargs):
-        #kwargs[pixstore] = self.parent.channel()._ls, ...
         self.parent.thread(self.update_rows, *args, **kwargs)
 
 
     # Main [▸play] event for a single station
-    def update_playing(self, row, pixstore=None, channel=None, **x):
+    def update_playing(self, row, channel=None, **x):
 
         # Homepage search
         if conf.google_homepage and not len(row.get("homepage", "")):
@@ -112,12 +117,30 @@ class favicon(object):
         # Favicon only for currently playing station
         if conf.load_favicon:
             if row.get("homepage") or row.get("img"):
-                self.parent.thread(self.update_rows, [row], pixstore=pixstore, fresh_homepage=found)
+                self.parent.thread(
+                    self.update_rows,
+                    entries=[row], channel=channel, row_i=channel.rowno(),
+                    fresh_homepage=found
+                )
 
       
-    # Run through rows[] to update "favicon" from "homepage" or "img",
+    # Run through rows[] to update "favicon" cachefile from "homepage" or "img",
     # optionally display new image right away in ListStore
-    def update_rows(self, entries, pixstore=None, fresh_homepage=False, **x):
+    #
+    #  · The entries[] list can be a single row. In which case it is accompanied
+    #    by its row_i index.
+    #  · If it's a complete streams list, then the row index will be manually
+    #    counted up.
+    #  · This is needed to update the pixstore. The `channel` reference is used
+    #    for accessing the displayed ListStore, and its `pix_entry` column for
+    #    updates.
+    #
+    def update_rows(self, entries, channel=None, row_i=None, fresh_homepage=False, **x):
+
+        # Preserve current ListStore object - in case the channel/notebook
+        # tab gets switched for longer .update_all() invocations.
+        ch_ls = channel.ls if channel else None
+
         for i,row in enumerate(entries):
             ok = False
 
@@ -144,7 +167,8 @@ class favicon(object):
                 # Download custom "img" banner/logo as favicon
                 elif row.get("img"):
                     tried_urls.append(row["img"])
-                    ok = banner_localcopy(row["img"], favicon_fn)
+                    resize = row.get("img_resize", channel.img_resize)
+                    ok = banner_localcopy(row["img"], favicon_fn, resize)
 
                 # Fetch homepage favicon into local png
                 elif row.get("homepage"):
@@ -154,9 +178,11 @@ class favicon(object):
                     else:
                         ok = fav_from_homepage(row["homepage"], favicon_fn)
 
-                # Update TreeView
+                # Update TreeView (single `row_i`, or counted up `i` index)
                 if ok:
-                    self.update_pixstore(row, pixstore, i)
+                    if row_i is not None:  # single row update
+                        i = row_i
+                    self.update_pixstore(row, ch_ls, channel, i)
                     row["favicon"] = favicon_fn
 
             # catch HTTP Timeouts etc., so update_all() row processing just continues..
@@ -165,17 +191,11 @@ class favicon(object):
         pass
 
 
-    # Update favicon in treeview/liststore
-    def update_pixstore(self, row, pixstore=None, row_i=None):
-        log.FAVICON_UPDATE_PIXSTORE(pixstore, row_i)
-        if not pixstore:
+    # Update favicon pixbuf in treeview/liststore
+    def update_pixstore(self, row, ls, channel=None, row_i=None):
+        log.FAVICON_UPDATE_PIXSTORE(channel, ls, row_i)
+        if not channel or not ls or row_i is None:
             return
-
-        # Unpack ListStore, pixbuf column no, preset rowno
-        ls, pix_entry, i = pixstore
-        # Else use row index from update_all-iteration
-        if i is None:
-            i = row_i
 
         # Existing "favicon" cache filename
         if row.get("favicon"):
@@ -187,7 +207,7 @@ class favicon(object):
         if fn and os.path.exists(fn):
             try:
                 p = gtk.gdk.pixbuf_new_from_file(fn)
-                ls[i][pix_entry] = p
+                ls[row_i][channel.pix_entry] = p
             except Exception as e:
                 log.ERR("Update_pixstore image", fn, "error:", e)
 
@@ -257,7 +277,7 @@ def row_to_fn(row):
 
     
 # Copy banner row["img"] into icons/ directory
-def banner_localcopy(url, fn):
+def banner_localcopy(url, fn, resize=None):
 
     # Check URL and target filename
     if not re.match("^https?://[\w.-]{10}", url):
@@ -266,7 +286,7 @@ def banner_localcopy(url, fn):
     # Fetch and save
     imgdata = ahttp.get(url, binary=1, verify=False)
     if imgdata:
-        return store_image(imgdata, fn)
+        return store_image(imgdata, fn, resize)
     
 
     
@@ -283,7 +303,7 @@ def store_image(imgdata, fn, resize=None):
             # Resize
             if resize and image.size[0] > resize:
                 try:
-                    image.thumbnail(resize, Image.ANTIALIAS)
+                    image.thumbnail((resize, resize), Image.ANTIALIAS)
                 except:
                     image = image.resize((resize,resize), Image.ANTIALIAS)
 
