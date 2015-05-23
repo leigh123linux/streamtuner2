@@ -2,7 +2,7 @@
 # api: streamtuner2
 # title: reddit⛱
 # description: Music recommendations from reddit /r/music and associated subreddits.
-# version: 0.7
+# version: 0.8
 # type: channel
 # url: http://reddit.com/r/Music
 # category: playlist
@@ -18,8 +18,11 @@
 # Just imports Youtube links from music-related subreddits.
 # Those are usually new bands or fresh releases, or favorite
 # user selections. The category/subreddit list is filtered
-# for a minimum quote of usable links (namely Youtube URLs,
-# Soundcloud/Spotify/Bandcamp and weblinks aren't playable.)
+# for a minimum quote of usable links (namely Youtube URLs).
+#
+# If you have a custom audio player available for Soundcloud,
+# Spotify or Bandcamp, you can enable to retain such links.
+# (For example configure `soundcli` for "audio/soundcloud".)
 #
 # This plugin currently uses the old reddit API, which might
 # be obsolete by August. It's thus a temporary channel, as
@@ -46,6 +49,7 @@ class reddit (ChannelPlugin):
     listformat = "srv"
     audioformat = "video/youtube"
     titles = dict(playing="submitter", listeners="votes", bitrate=False)
+    img_resize = 24  # scale down reddit preview `img` artwork
     
     # just subreddit names to extract from
     categories = [
@@ -251,8 +255,8 @@ class reddit (ChannelPlugin):
             listformat = "href"
             state = "gtk-media-play"
 
-            # Youtube
-            if re.search("youtu", row["url"]):
+            # Youtube URLs
+            if re.search("youtu\.?be|vimeo|dailymotion", row["url"]):
                 format = "video/youtube"
                 listformat = "srv"
             # direct MP3/Ogg
@@ -267,16 +271,27 @@ class reddit (ChannelPlugin):
             elif text_urls:
                 row["url"] = text_urls[0]
                 format = "video/youtube"
-            # filter out Soundcloud etc.
-            elif re.search("soundcloud|spotify|bandcamp", row["url"]):
-                if conf.kill_soundcloud:
-                    continue
-                format = "url/http"
-                listformat = "srv"
-                state = "gtk-media-pause"
-            # pure web links etc.
+            # check for specific web links (Soundcloud etc.)
             else:
-                continue
+                listformat = "srv"
+                format = None
+                for urltype in ("soundcloud", "spotify", "bandcamp", "mixcloud"):
+                    if row["url"].find(urltype) > 0:
+                        # is a specific player configured?
+                        fmt = "audio/" + urltype
+                        if fmt in conf.play:
+                            state = "gtk-media-forward"
+                            format = fmt
+                        # retain it as web link?
+                        elif not conf.kill_soundcloud:
+                            state = "gtk-media-pause"
+                            format = "url/http"
+                        break
+                # else skip entry completely
+                if not format:
+                    log.DATA_SKIP(format, row["url"])
+                    continue
+            #log.DATA(format, row["url"])
 
             # repack into streams list
             r.append(dict(
@@ -287,6 +302,7 @@ class reddit (ChannelPlugin):
                 listeners = row["score"],
                 homepage = "http://reddit.com{}".format(row["permalink"]),
                 img = row.get("thumbnail", ""),
+                #img_resize = 24,
                 format = format,
                 listformat = listformat,
                 state = state,
