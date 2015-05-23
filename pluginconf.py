@@ -416,8 +416,8 @@ class dependency(object):
     # basic list pre-filtering (skip __init__, filter by api:,
     # exclude installed & same-version plugins)
     def valid(self, newpl):
-        have_ver = self.have.get(id, {}).get("version", "0")
         id = newpl.get("$name", "__invalid")
+        have_ver = self.have.get(id, {}).get("version", "0")
         if id.find("__") == 0:
             pass
         elif newpl.get("api") != "streamtuner2":
