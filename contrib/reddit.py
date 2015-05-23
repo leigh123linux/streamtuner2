@@ -8,7 +8,8 @@
 # category: playlist
 # config:
 #   { name: reddit_pages, type: int, value: 2, description: Number of pages to fetch. }
-#   { name: kill_soundcloud, type: boolean, value: 1, description: Filter soundcloud/spotify/bandcamp (only web links). }
+#   { name: kill_soundcloud, type: boolean, value: 1, description: Filter soundcloud/spotify/etc if there's no player configured. }
+#   { name: reddit_keep_all, type: boolean, value: 0, description: Keep all web links (starts a browser for websites/news). }
 # png:
 #   iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAJ1BMVEUAAAAcICX/AABHSk1jZ299hYz/bmajq6//lY/d0M3C1+3T7P38+/iaLhuGAAAAAXRSTlMAQObYZgAAAAFiS0dEAIgF
 #   HUgAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQffBRUXIyQbWArCAAAAh0lEQVQI12Pg3g0BDLtXrVq1eveq3Qy7gIxCU9dqEGO11/ZKbzBDenUIUM3u7cGi1UDFW0TE55wsdpZikAw/
@@ -289,8 +290,12 @@ class reddit (ChannelPlugin):
                         break
                 # else skip entry completely
                 if not format:
-                    log.DATA_SKIP(format, row["url"])
-                    continue
+                    if conf.reddit_keep_all:
+                        state = "gtk-page-setup"
+                        format = "url/http"
+                    else:
+                        log.DATA_SKIP(format, row["url"])
+                        continue
             #log.DATA(format, row["url"])
 
             # repack into streams list
