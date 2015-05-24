@@ -2,7 +2,7 @@
 # api: streamtuner2
 # title: Search feature
 # description: Provides the quick search box, and server/cache search window.
-# version: 0.9
+# version: 1.0
 # type: feature
 # category: ui
 # config: -
@@ -53,20 +53,26 @@ class search (AuxiliaryWindow):
         return True  # stop any other gtk handlers
         
 
-    # prepare variables
+    # Prepare self.q and self.targets, empty streams{search} result store
     def prepare_search(self):
-        self.main.status("Searching... Stand back.")
         self.cancel()
         self.q = self.search_full.get_text().lower()
+        if not len(self.q):
+            self.main.status("No search terms given.")
+            return False
+        else:
+            self.main.status("Searching... Stand back.")
         if self.search_dialog_all.get_active():
             self.targets = self.main.channels.keys()
         else:
             self.targets = [self.current]
         self.main.bookmarks.streams["search"] = []
+        return True
         
     # perform search
     def cache_search(self, *w):
-        self.prepare_search()
+        if not self.prepare_search():
+            return
         entries = []
         # which fields?
         fields = ["title", "playing", "homepage"]
@@ -85,23 +91,11 @@ class search (AuxiliaryWindow):
                             row["genre"] = "%s %s" % (c or "", row.get("genre")  or "")
                             entries.append(row)
         uikit.do(self.show_results, entries)
-
-    # display "search" in "bookmarks"
-    def show_results(self, entries):
-        self.main.status(1.0)
-        self.main.status("")
-        # set contents right away
-        self.main.channels["bookmarks"].streams["search"] = entries
-        # switch to bookmarks›search tab
-        self.main.channel_switch_by_name("bookmarks")
-        self.main.bookmarks.set_category("search")
-        # insert data and show
-        self.main.bookmarks.load("search")
-        
         
     # live search on directory server homepages
     def server_search(self, w):
-        self.prepare_search()
+        if not self.prepare_search():
+            return
         entries = []
         for i,cn in enumerate([self.main.channels[c] for c in self.targets]):
             if cn.has_search:  # "search" in cn.update_streams.func_code.co_varnames:
@@ -117,6 +111,18 @@ class search (AuxiliaryWindow):
                     continue
             #main.status(main, 1.0 * i / 15)
         uikit.do(self.show_results, entries)
+
+    # display "search" in "bookmarks"
+    def show_results(self, entries):
+        self.main.status(1.0)
+        self.main.status("")
+        # set contents right away
+        self.main.channels["bookmarks"].streams["search"] = entries
+        # switch to bookmarks›search tab
+        uikit.do(self.main.channel_switch_by_name, "bookmarks")
+        uikit.do(self.main.bookmarks.set_category, "search")
+        # insert data and show
+        self.main.bookmarks.load("search")
 
 
     # search text edited in text entry box
@@ -134,8 +140,6 @@ class search (AuxiliaryWindow):
         m = c.gtk_list.get_model()
         m.foreach(self.quicksearch_treestore, (rows, self.main.q, col, col+1))
     search_set = quicksearch_set
-        
-        
         
     # callback that iterates over whole gtk treelist,
     # looks for search string and applies TreeList color and flag if found
