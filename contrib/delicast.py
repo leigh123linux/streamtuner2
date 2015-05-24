@@ -3,7 +3,7 @@
 # title: Delicast
 # description: directory of streaming media
 # url: http://delicast.com/
-# version: 0.2
+# version: 0.3
 # type: channel
 # category: radio
 # config: -
@@ -36,9 +36,8 @@ class delicast (ChannelPlugin):
     # control flags
     has_search = False
     listformat = "srv"
-    audioformat = "mp3"
+    audioformat = "audio/mpeg"
     titles = dict(listeners=False, bitrate=False, playing="Location")
-    base = "http://delicast.com/"
 
     categories = ["60s", "70s", "80s", "90s", "Alternative", "Blues",
     "Chillout", "Christian", "Classical", "Community", "Country", "Culture",
