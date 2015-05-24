@@ -80,7 +80,13 @@ class favicon(object):
     
     # Register with main
     def __init__(self, parent):
-    
+
+        # Prepare favicon cache directory
+        conf.icon_dir = conf.dir + "/icons"
+        if not os.path.exists(conf.icon_dir):
+            os.mkdir(conf.icon_dir)
+            open(conf.icon_dir+"/.nobackup", "a").close()
+
         # Reference main, and register station .play() hook
         self.parent, self.main = parent, parent
         parent.hooks["play"].append(self.update_playing)
@@ -88,11 +94,6 @@ class favicon(object):
         # Register in channel/streams updating pipeline (to predefine row["favicon"] filename from `homepage` or `img`)
         channels.GenericChannel.prepare_filters.append(self.prepare_filter_favicon)
 
-        # Prepare favicon cache directory
-        conf.icon_dir = conf.dir + "/icons"
-        if not os.path.exists(conf.icon_dir):
-            os.mkdir(conf.icon_dir)
-            open(icon_dir+"/.nobackup", "a").close()
 
 
     # Main menu "Update favicons": update favicon cache for complete list
