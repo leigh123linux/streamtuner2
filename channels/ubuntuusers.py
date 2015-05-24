@@ -79,7 +79,7 @@ class ubuntuusers (ChannelPlugin):
            .*?
            ^\{\{\{
            .*?
-           (\w+://[^"'\s]+)
+           (\w+://[^"'\s\}\)\]]+)
         """, src, re.X|re.S|re.M)
         
         # pack into row list
