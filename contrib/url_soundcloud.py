@@ -32,7 +32,7 @@ def client():
     return conn
 
 # Capture play events for faux MIME type
-def sndcl_convert(row={}, audioformat="audio/mpeg", source="pls", url=None, assoc={}):
+def sndcl_convert(row={}, audioformat="audio/mpeg", source="pls", assoc={}):
     if audioformat==fmt or rx_url.match(url):
 
         # find streaming address
@@ -44,8 +44,9 @@ def sndcl_convert(row={}, audioformat="audio/mpeg", source="pls", url=None, asso
 
             # override attributes
             row["url"] = url
-            source = "srv"
+            row["format"] = "audio/mpeg"
             audioformat = "audio/mpeg"
+            source = "srv"
 
         except Exception as e:
             log.ERR_SOUNDCLOUD("URL resolving failed:", e)
@@ -55,7 +56,7 @@ def sndcl_convert(row={}, audioformat="audio/mpeg", source="pls", url=None, asso
     
     # let primary handler take over
     if audioformat != fmt:
-        return action.run_fmt_url(row, audioformat, source, url, assoc)
+        return action.run_fmt_url(row, audioformat, source, assoc)
 
 
 # Hook up custom action.handler for soundcloud URLs
