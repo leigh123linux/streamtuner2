@@ -120,7 +120,7 @@ class ConfigDict(dict):
            "url/http": self.find_player(typ="browser"),
         }
         self.record = {
-           "audio/*": self.find_player(typ="xterm") + " -e streamripper %srv",   # -d /home/***USERNAME***/Musik
+           "audio/*": self.find_player(typ="xterm") + " -e \"streamripper %srv\"",   # -d /home/***USERNAME***/Musik
            "video/youtube": self.find_player(typ="xterm") + " -e \"youtube-dl %srv\"",
         }
         # Presets are redundant now. On first startup the `priority:` field of each plugin is checked.
