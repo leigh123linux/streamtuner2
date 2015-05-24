@@ -325,6 +325,7 @@ class GenericChannel(object):
             log.ERR("load(None)")
             return
         self.current = category
+        do_save = False
 
         # get data from cache or download
         if force or not category in self.streams:
@@ -340,6 +341,7 @@ class GenericChannel(object):
             if new_streams:
                 try:
                     new_streams = self.postprocess(new_streams)
+                    do_save = True
                 except Exception as e:
                     log.ERR("Updating new streams, postprocessing failed:", e)
   
@@ -348,9 +350,6 @@ class GenericChannel(object):
                    self.streams[category] = new_streams + self.deleted_streams(new_streams, self.streams.get(category,[]))
                 else:
                    self.streams[category] = new_streams
-  
-                # save in cache
-                self.save()
   
             else:
                 # parse error
@@ -365,6 +364,10 @@ class GenericChannel(object):
             if y:
                 uikit.do(self.gtk_list.scroll_to_point, 0, y + 1)   # scroll to previous position, +1 px, because
                 # somehow Gtk.TreeView else stumbles over itself when scrolling to the same position the 2nd time
+  
+        # save in cache
+        if do_save:
+            self.save()
 
         # unset statusbar
         self.status()
