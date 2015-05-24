@@ -4,7 +4,7 @@
 # category: io
 # title: play/record actions
 # description: Starts audio applications, guesses MIME types for URLs
-# version: 1.0
+# version: 1.1
 # priority: core
 #
 # Multimedia interface for starting audio players, recording app,
@@ -120,9 +120,9 @@ playlist_fmt_prio = [
    "pls", "xspf", "asx", "smil", "jamj", "json", "m3u", "asf", "raw"
 ]
 
-# custom stream domain handlers
+# custom stream domain (with faux audioformat) handlers
 handler = {
-    # "soundcloud": callback(),
+    # "audio/soundcloud": callback(),
 }
 
 
@@ -138,14 +138,12 @@ def help(*args):
     run("yelp /usr/share/doc/streamtuner2/help/")
 
 # Invokes player/recorder for stream url and format
-def run_fmt_url(row={}, audioformat="audio/mpeg", source="pls", url=None, assoc={}):
-    if not url:
-        url = row["url"]
+def run_fmt_url(row={}, audioformat="audio/mpeg", source="pls", assoc={}):
     if audioformat in handler:
-        handler[audioformat](row, audioformat, source, url, assoc)
+        handler[audioformat](row, audioformat, source, assoc)
     else:
         cmd = mime_app(audioformat, assoc)
-        cmd = interpol(cmd, url, source, row)
+        cmd = interpol(cmd, source, row)
         run(cmd)
 
 # Start web browser
@@ -153,12 +151,12 @@ def browser(url):
     run_fmt_url({}, "url/http", "srv", url, conf.play)
 
 # Calls player for stream url and format
-def play(row={}, audioformat="audio/mpeg", source="pls", url=None):
-    run_fmt_url(row, audioformat, source, url, conf.play)
+def play(row={}, audioformat="audio/mpeg", source="pls"):
+    run_fmt_url(row, audioformat, source, conf.play)
 
 # Call streamripper / youtube-dl / wget
-def record(row={}, audioformat="audio/mpeg", source="href", url=None):
-    run_fmt_url(row, audioformat, source, url, conf.record)
+def record(row={}, audioformat="audio/mpeg", source="href"):
+    run_fmt_url(row, audioformat, source, conf.record)
 
 
 # OS shell command escaping
@@ -193,7 +191,7 @@ def mime_app(fmt, cmd_list):
 #  · And can embed %title or %genre placeholders.
 #  · Replace .pls URL with local .m3u file depending on map.
 #
-def interpol(cmd, url, source="pls", row={}):
+def interpol(cmd, source="pls", row={}):
 
     # Inject other meta fields (%title, %genre, %playing, %format, etc.)
     row = copy.copy(row)
@@ -208,9 +206,12 @@ def interpol(cmd, url, source="pls", row={}):
     # Playlist type placeholders (%pls, %m3u, %xspf, etc.)
     for dest, rx in placeholder_map.items():
         if re.search(rx, cmd, re.X):
-            # from .pls to .m3u
-            if not conf.playlist_asis:
-                url = convert_playlist(url, listfmt(source), listfmt(dest), local_file=True, row=row)
+            # no conversion
+            if conf.playlist_asis:
+                url = row["url"]
+            # e.g. from .m3u to .pls
+            else:
+                url = convert_playlist(row["url"], listfmt(source), listfmt(dest), local_file=True, row=row)
             # insert quoted URL/filepath
             return re.sub(rx, quote(url), cmd, 2, re.X)
 
@@ -711,8 +712,10 @@ class save_playlist(object):
 def tmp_fn(row, ext="pls"):
     # use original url for generating a hash sum
     stream_url_hash = abs(hash(str(row)))
-    try: channelname = main.current_channel
-    except: channelname = "unknown"
+    try:
+        channelname = main.current_channel
+    except:
+        channelname = "unknown"
     # return temp filename
     fn = "%s/%s.%s.%s" % (str(conf.tmp), channelname, stream_url_hash, ext)
     tmp_files.append(fn)
