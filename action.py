@@ -120,44 +120,45 @@ playlist_fmt_prio = [
    "pls", "xspf", "asx", "smil", "jamj", "json", "m3u", "asf", "raw"
 ]
 
+# custom stream domain handlers
+handler = {
+    # "soundcloud": callback(),
+}
+
 
 
 # Exec wrapper
-#
 def run(cmd):
     log.EXEC(cmd)
     try:    os.system("start \"%s\"" % cmd if conf.windows else cmd + " &")
     except: log.ERR("Command not found:", cmd)
 
-
-# Start web browser
-#
-def browser(url):
-    bin = conf.play.get("url/http", "sensible-browser")
-    log.EXEC(bin)
-    run(bin + " " + quote(url))
-
-
 # Open help browser, streamtuner2 pages
-#
 def help(*args):
     run("yelp /usr/share/doc/streamtuner2/help/")
 
+# Invokes player/recorder for stream url and format
+def run_fmt_url(row={}, audioformat="audio/mpeg", source="pls", url=None, assoc={}):
+    if not url:
+        url = row["url"]
+    if audioformat in handler:
+        handler[audioformat](row, audioformat, source, url, assoc)
+    else:
+        cmd = mime_app(audioformat, assoc)
+        cmd = interpol(cmd, url, source, row)
+        run(cmd)
+
+# Start web browser
+def browser(url):
+    run_fmt_url({}, "url/http", "srv", url, conf.play)
 
 # Calls player for stream url and format
-#
 def play(row={}, audioformat="audio/mpeg", source="pls", url=None):
-    cmd = mime_app(audioformat, conf.play)
-    cmd = interpol(cmd, url or row["url"], source, row)
-    run(cmd)
+    run_fmt_url(row, audioformat, source, url, conf.play)
 
-
-# Call streamripper
-#
+# Call streamripper / youtube-dl / wget
 def record(row={}, audioformat="audio/mpeg", source="href", url=None):
-    cmd = mime_app(audioformat, conf.record)
-    cmd = interpol(cmd, url or row["url"], source, row)
-    run(cmd)
+    run_fmt_url(row, audioformat, source, url, conf.record)
 
 
 # OS shell command escaping

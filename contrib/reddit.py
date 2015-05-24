@@ -8,7 +8,7 @@
 # category: playlist
 # config:
 #   { name: reddit_pages, type: int, value: 2, description: Number of pages to fetch. }
-#   { name: kill_soundcloud, type: boolean, value: 1, description: Filter soundcloud/spotify/etc if there's no player configured. }
+#   { name: filter_walledgardens, type: boolean, value: 1, description: Filter walled gardens (soundcloud/spotify/…) if there's no player. }
 #   { name: reddit_keep_all, type: boolean, value: 0, description: Keep all web links (starts a browser for websites/news). }
 # png:
 #   iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAJ1BMVEUAAAAcICX/AABHSk1jZ299hYz/bmajq6//lY/d0M3C1+3T7P38+/iaLhuGAAAAAXRSTlMAQObYZgAAAAFiS0dEAIgF
@@ -35,6 +35,7 @@ import json
 import re
 from config import *
 from channels import *
+import action
 import ahttp
 
 
@@ -279,18 +280,18 @@ class reddit (ChannelPlugin):
             else:
                 listformat = "srv"
                 format = None
-                for urltype in ("soundcloud", "spotify", "bandcamp", "mixcloud"):
-                    if row["url"].find(urltype) > 0:
-                        # is a specific player configured?
-                        fmt = "audio/" + urltype
-                        if fmt in conf.play:
-                            state = "gtk-media-forward"
-                            format = fmt
-                        # retain it as web link?
-                        elif not conf.kill_soundcloud:
-                            state = "gtk-media-pause"
-                            format = "url/http"
-                        break
+                # look for walled gardens
+                urltype = re.findall("([\w-]+)\.\w+/", row["url"] + "/x-unknown.com/")[0]
+                if urltype in ("soundcloud", "spotify", "bandcamp", "mixcloud"):
+                    # is a specific player configured?
+                    fmt = "audio/" + urltype
+                    if fmt in conf.play or fmt in action.handler:
+                        state = "gtk-media-forward"
+                        format = fmt
+                    # retain it as web link?
+                    elif not conf.filter_walledgardens:
+                        state = "gtk-media-pause"
+                        format = "url/http"
                 # else skip entry completely
                 if not format:
                     if conf.reddit_keep_all:
