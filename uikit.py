@@ -86,16 +86,16 @@ class uikit:
     # for missing cols. All values must already be in the correct type however.
     #
     @staticmethod
-    def columns(widget, datamap=[], entries=None, show_favicons=True, pix_entry=False):
+    def columns(widget, datamap=[], entries=None, show_favicons=True, pix_entry=False, fixed_size=24):
 
         # create treeviewcolumns?
-        if (not widget.get_column(0)):
+        if not widget.get_column(0):
             # loop through titles
             datapos = 0
-            for n_col,desc in enumerate(datamap):
-                                
+            for n_col, desc in enumerate(datamap):
+
                 # check for title
-                if (type(desc[0]) != str):
+                if not isinstance(desc[0], str):
                     datapos += 1  # if there is none, this is just an undisplayed data column
                     continue
                 # new tvcolumn
@@ -107,18 +107,23 @@ class uikit:
                     col.set_fixed_width(desc[1])
 
                 # loop through cells
-                for var in xrange(2, len(desc)):
+                for var in range(2, len(desc)):
                     cell = desc[var]
                     # cell renderer
                     if (cell[2] == "pixbuf"):
                         rend = gtk.CellRendererPixbuf()  # img cell
-                        rend.set_fixed_size(24, 24)
-                        if (cell[1] == str):
-                            cell[3]["stock_id"] = datapos  # for stock icons
+                        # stock icons
+                        if cell[1] == str:  # only match for literal `str`
+                            cell[3]["stock_id"] = datapos
                             expand = False
+                        # pixbufs
                         else:
                             pix_entry = datapos
                             cell[3]["pixbuf"] = datapos
+                            if fixed_size:
+                                if not isinstance(fixed_size, list):
+                                    fixed_size = [fixed_size, fixed_size]
+                                rend.set_fixed_size(*fixed_size)
                     else:
                         rend = gtk.CellRendererText()    # text cell
                         cell[3]["text"] = datapos
@@ -135,13 +140,6 @@ class uikit:
 
                 # add column to treeview
                 widget.append_column(col)
-            # finalize widget
-            widget.set_search_column(5)   #??
-            widget.set_search_column(4)   #??
-            widget.set_search_column(3)   #??
-            widget.set_search_column(2)   #??
-            widget.set_search_column(1)   #??
-            #widget.set_reorderable(True)
            
         # add data?
         if (entries is not None):

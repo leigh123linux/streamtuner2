@@ -50,7 +50,10 @@ class reddit (ChannelPlugin):
     listformat = "srv"
     audioformat = "video/youtube"
     titles = dict(playing="submitter", listeners="votes", bitrate=False)
-    img_resize = 24  # scale down reddit preview `img` artwork
+
+    # favicon scaling (from reddit preview `img`)
+    img_resize = 32
+    fixed_size = [32,26]
     
     # just subreddit names to extract from
     categories = [
@@ -296,7 +299,6 @@ class reddit (ChannelPlugin):
                     else:
                         log.DATA_SKIP(format, row["url"])
                         continue
-            #log.DATA(format, row["url"])
 
             # repack into streams list
             r.append(dict(

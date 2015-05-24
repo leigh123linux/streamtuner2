@@ -76,13 +76,14 @@ class GenericChannel(object):
     rowmap = None     # Preserve streams-datamap
     pix_entry = None  # ListStore entry that contains favicon
     img_resize = None  # Rescale `img` references to icon size
+    fixed_size = [24,24]  # Default height+width for favicons
 
     # mapping of stream{} data into gtk treeview/treestore representation
     datamap = [
        # coltitle   width	[ datasrc key, type, renderer, attrs ]	[cellrenderer2], ...
        ["",		20,	["state",	str,  "pixbuf",	{}],	],
        ["Genre",	65,	['genre',	str,	"t",	{}],	],
-       ["Station Title",275,	["title",	str,    "text",	{"strikethrough":11, "cell-background":12, "cell-background-set":13}],  ["favicon", gtk.gdk.Pixbuf, "pixbuf", {}], ],
+       ["Station Title",275,	["title",	str,    "text",	{"strikethrough":11, "cell-background":12, "cell-background-set":13}],  ["favicon", gtk.gdk.Pixbuf, "pixbuf", {"expand":False}], ],
        ["Now Playing",	185,	["playing",	str,	"text",	{"strikethrough":11}],	],                                                                             #{"width":20}
        ["Listeners", 	45,	["listeners",	int,	"t",	{"strikethrough":11}],	],
       #["Max",		45,	["max",		int,	"t",	{}],	],
@@ -187,7 +188,8 @@ class GenericChannel(object):
     # Just wraps uikit.columns() to retain liststore, rowmap and pix_entry
     def columns(self, entries=None):
         self.ls, self.rowmap, self.pix_entry = uikit.columns(
-            self.gtk_list, self.datamap, entries, show_favicons=True
+            self.gtk_list, self.datamap, entries,
+            show_favicons=True, fixed_size=self.fixed_size
         )
         # no longer using `conf.show_favicons`
 
