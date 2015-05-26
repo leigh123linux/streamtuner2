@@ -148,7 +148,7 @@ def run_fmt_url(row={}, audioformat="audio/mpeg", source="pls", assoc={}):
 
 # Start web browser
 def browser(url):
-    run_fmt_url({}, "url/http", "srv", url, conf.play)
+    run_fmt_url({"url": url, "homepage": url}, "url/http", "srv", conf.play)
 
 # Calls player for stream url and format
 def play(row={}, audioformat="audio/mpeg", source="pls"):
@@ -516,8 +516,9 @@ class extract_playlist(object):
     # Jamendo JAMJAMJSON playlists
     def jamj(self):
         rows = []
+        print self.src
         for result in json.loads(self.src)["results"]:
-            for track in result["tracks"]:
+            for track in result.get("tracks") or [result]:
                 rows.append(dict(
                     title = track["name"],
                     url = track["audio"],
