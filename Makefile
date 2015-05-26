@@ -85,7 +85,7 @@ install:
 st2: run
 run:
 	#MALLOC_CHECK_=2 PYTHONVERBOSE=2
-	python -B  ./st2.py -D
+	python -B  ./st2.py -D  -e dev_faulthandler
 
 yelp:
 	yelp help/index.page 2>/dev/null &

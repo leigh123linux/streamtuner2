@@ -18,6 +18,14 @@
     },
     "releases": [
         {
+            "version": "2.1.9",
+            "state": "stable",
+            "scope": "minor bugfix",
+            "changes": "Overhaul favicon/banner module, support instant icon display updates, simpler cache filenames, rescaling, implicit sanitizing, less coupling. Add radio.net channel. Add di.fm/sky.fm/jazzradio as contrib plugin. Add basic Magnatune channel. Add ListenLive contrib plugin. Add reddit channel plugin, and optional support for converting Soundcloud links to streamable addresses. Add WindowsMediaGuide plugin and fix ASX extraction. More Python3 fixes. More forced UTF-8 decoding to speed downloading up. Crash fixes for server search. Fix for stream url conversion for MyOggRadio plugin. Add bitrate filter plugin to apply on all channels. Remove iTunes plugin. Fix Dirble channel fetching, add weighted bitrate+format selection. Add channel homepage title+link in toolbar (like in streamtuner1). More internal simplifications and rewrites, externalized pluginconf. Compact main settings list, introduce SpinButtons for integers. Update documentation, add project links, slim down images. Introduce 0install package using PYZ bundle.",
+            "download": "http://sourceforge.net/projects/streamtuner2/files/",
+            "published": "2015-05-25T23:55:00+0000"
+        },
+        {
             "version": "2.1.8",
             "state": "beta",
             "scope": "feature creep",
