@@ -17,7 +17,7 @@ GUI for internet radio directories.</description>
       <file dest="streamtuner2.pyz" href="http://downloads.sourceforge.net/project/streamtuner2/streamtuner2-2.1.8.pyz" size="226181" type="x-executable/python+zip"/>
       <manifest-digest sha256="246c79be0abccad78490488c3584040c3636cb92ce01980a41f864587a74ff27"/>
     </implementation>
-    <implementation arch="*-*" id="sha1new=eb05cdfe4d96ab0b5b058fe3a2473992c006c005" released="2015-05-25" version="2.1.9">
+    <implementation arch="*-*" id="sha1new=eb30588bc3898004fa8dff776930396c7437e4c8" released="2015-05-25" version="2.1.9">
       <file dest="streamtuner2.pyz" href="http://downloads.sourceforge.net/project/streamtuner2/streamtuner2-2.1.9.pyz" size="231620" type="x-executable/python+zip"/>
     </implementation>
 
