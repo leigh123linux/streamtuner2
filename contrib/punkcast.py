@@ -4,7 +4,7 @@
 # description: Online video site that covered NYC artists. Not updated anymore.
 # type: channel
 # category: video
-# version: 0.2
+# version: 0.3
 # url: http://www.punkcast.com/
 # png:
 #   iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAyxJREFUOI0FwUlvG2UAgOH3++abxfsy2dtmcRsnghpBKyKhQA7lgsShPwEk/gVcKn4HN+6AynKIkEgFUkFF
@@ -37,7 +37,10 @@ class punkcast (ChannelPlugin):
     # keeps category titles->urls    
     catmap = {}
     categories = ["list"]
-    titles = dict(playing=False, listeners=False, bitrate=False, homepage=False) 
+    titles = dict(playing=False, listeners=False, bitrate=False, homepage=False)
+    
+    img_resize = 196
+    fixed_size = [128,32]
 
 
     # don't do anything
@@ -74,8 +77,8 @@ class punkcast (ChannelPlugin):
 
 
     # special handler for play
-    def play(self, row):
-    
+    def play(self):
+        row = self.row()
         rx_sound = re.compile("""(http://[^"<>]+[.](mp3|ogg|m3u|pls|ram))""")
         html = ahttp.get(row["homepage"])
         
@@ -83,7 +86,8 @@ class punkcast (ChannelPlugin):
         for uu in rx_sound.findall(html):
             log.DATA( uu )
             (url, fmt) = uu
-            action.play(url, mime_fmt(fmt), "srv")
+            row["url"] = url
+            action.play(row, mime_fmt(fmt), "srv")
             return
         
         # or just open webpage
