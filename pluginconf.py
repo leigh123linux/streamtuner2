@@ -420,7 +420,7 @@ class dependency(object):
         have_ver = self.have.get(id, {}).get("version", "0")
         if id.find("__") == 0:
             pass
-        elif newpl.get("api") != "streamtuner2":
+        elif newpl.get("api") not in ("python", "streamtuner2"):
             pass
         elif have_ver >= newpl.get("version", "0.0"):
             pass
