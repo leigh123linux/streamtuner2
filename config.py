@@ -143,7 +143,7 @@ class ConfigDict(dict):
         self.auto_save_stations = 0
         self.reuse_m3u = 1
         self.playlist_asis = 0
-        self.window_title = 1
+        self.window_title = 0
         self.google_homepage = 0
         self.windows = platform.system()=="Windows"
         self.pyquery = 1

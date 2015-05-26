@@ -4,7 +4,7 @@
 # type: application
 # title: streamtuner2
 # description: Directory browser for internet radio, audio and video streams
-# version: 2.1.9-beta1
+# version: 2.1.9
 # state: beta
 # author: Mario Salzer <mario@include-once.org>
 # license: Public Domain
@@ -192,7 +192,8 @@ class StreamTunerTwo(gtk.Builder):
         })
         
         # actually display main window
-        self.update_title()
+        if conf.window_title:
+            self.update_title()
         self.win_streamtuner2.show_all()
         gui_startup(100.0)
 
@@ -245,7 +246,8 @@ class StreamTunerTwo(gtk.Builder):
         self.current_channel = notebook.get_menu_label_text(notebook.get_nth_page(page_num))
         log.UI("main.channel_switch() :=", self.current_channel)
         # update window title, call plugin (e.g. channel link in toolbar)
-        uikit.do(self.update_title)
+        if conf.window_title:
+            uikit.do(self.update_title)
         # if first selected, load current category
         # (run in thread, to make it look speedy on first startup)
         self.thread(self.channel().first_show)
@@ -257,8 +259,7 @@ class StreamTunerTwo(gtk.Builder):
     # Mirror selected channel tab into main window title
     def update_title(self, *x, **y):
         meta = self.channel().meta
-        if conf.window_title:
-            self.win_streamtuner2.set_title("Streamtuner2 - %s" % meta.get("title"))
+        self.win_streamtuner2.set_title("Streamtuner2 - %s" % meta.get("title"))
         [cb(meta) for cb in self.hooks["switch"]]
 
 
