@@ -1,18 +1,19 @@
 # api: streamtuner2
 # title: Soundcloud streams
 # description: Convert soundcloud links from reddit to streamable tracks
-# version: 0.2
+# version: 0.3
 # type: filter
 # category: audio
 # depends: python:soundcloud, action >= 1.1, reddit >= 0.8
 # priority: rare
 #
-# Overrides action.play() function to convert soundcloud URLs
+# Hooks into action.play() function to convert soundcloud URLs
 # to track/streaming address.  Disables the reddit filter for
 # walled gardens, and overrides any custom player configured
 # for "audio/soundcloud" in settings.
 
 
+import copy
 import re
 import soundcloud
 from config import *
@@ -44,6 +45,7 @@ def sndcl_convert(row={}, audioformat="audio/mpeg", source="pls", assoc={}):
             url = client().get(track_str, allow_redirects=False).location
 
             # override attributes
+            row = copy.copy(row)  # Throw away afterwards; tokens time out.
             row["url"] = url
             row["format"] = "audio/mpeg"
             audioformat = "audio/mpeg"
