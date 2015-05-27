@@ -5,7 +5,8 @@
 <info>
 	<link type="guide" xref="index#channels"/>
 	<link type="guide" xref="pluginmanager2"/>
-	<link type="topic" xref="configuration#plugins"/>
+	<link type="guide" xref="configuration#plugins"/>
+	<link type="guide" xref="channels#list"/>
         <desc>Downloadable channel plugins</desc>
 </info>
 
