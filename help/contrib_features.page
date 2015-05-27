@@ -25,17 +25,17 @@ those out of station lists.</p>
  <item><p>MP3 streams often start to sound okay at 96kbit/s.</p></item>
  <item><p>Whereas OGG Vorbis or AAC are sometimes acceptable at 64kbit/s already.</p></item>
 </list>
-<note style="warning"><p>Note that you may end up with empty channel lists
+<p>Note that you may end up with empty channel lists
 altogether if you set these options too high. Some channels provide all
-their streams with 64kbit/s only.</p></note>
+their streams with 64kbit/s only.</p>
 </section>
 
 <section>
 <title>Channel toolbar link</title>
 <p>Adds a toolbar entry which shows the current channel/directory
 service title and its homepage link. Such as:</p>
-<code><span style="bold">Shoutcast</span>
-<link href="http://shoutcast.com/">//shoutcast.com/</link>
+<code><span style="bold">  ▶    ●    🏠     Shoutcast</span>
+play rcrd  hmpg   <link href="http://shoutcast.com/">//shoutcast.com/</link>
 </code>
 <p>It depends on the "update window title" option being enabled.</p>
 </section>
@@ -71,22 +71,38 @@ radios are recategorized in RadioTray.</p>
 </list>
 </section>
 
-
-
 <section>
+ <title>Other feature plugins</title>
+ <list>
+   <item><p><link xref="dragndrop">Drag and Drop</link></p></item>
+   <item><p><link xref="favicon">Favicons</link></p></item>
+   <item><p><link xref="global_key">Global key shortcut</link></p></item>
+   <item><p><link xref="timer">Timer</link></p></item>
+ </list>
+ <p>The "<link xref="search">search</link>",
+ "<link xref="configuration">configwin</link>" and
+ "<link xref="edit">streamedit</link>" plugins are considered
+ built-ins and cannot be disabled.</p>
+</section>
+
+
+<section id="contrib">
 <title>Downloadable contrib/ feature plugins</title>
 
-<p>The <link xref="pluginmanager2">Plugin Manager</link> lists further
-feature pluginsand in the <key>📦 Add</key> tab.</p>
+<p>The <link xref="pluginmanager2">Plugin Manager</link> lists other
+available feature plugins in the <key>📦 Add</key> tab.</p>
 
 <terms>
   <item>
     <title><p>Soundcloud streaming</p></title>
     <p>Enables playback of soundcloud.com links in the Reddit plugin.
     Homepage links are transformed into direct MP3 streaming addresses
-    on playback. This plugin registers a "audio/soundcloud" pseudo
-    type. Alternatively you could use <link
-    href="http://github.com/rekado/soundCLI">soundcli</link> of course.</p>
+    on playback.</p>
+    <note><p>Depends on python-soundcloud, which you can install per
+    <cmd>pip install soundcloud</cmd>.</p></note>
+    <p> Alternatively you could configure an external player like <link
+    href="http://github.com/rekado/soundCLI">soundcli</link> of course.
+    Use the pseudo type "audio/soundcloud" for the player settings table.</p>
   </item>
   <item>
     <title><p>dev_faulthandler</p></title>

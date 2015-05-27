@@ -17,13 +17,15 @@
           <item><p><link action="install:python-gtk2">PyGtk or PyGI</link></p></item>
           <item><p>Gtk2 or Gtk3</p></item>
           <item><p><link action="install:python-requests">Requests/urllib3</link></p></item>
+          <item><p><link action="install:python-imaging">PIL/Pillow</link></p></item>
 	</terms>
         <terms>
   	  <title>Soft dependencies</title>
           <item><p><link action="install:python-lxml">Python-LXML</link></p></item>
           <item><p><link action="install:python-pyquery">Python-PyQuery</link></p></item>
-          <item><p>Python-Kronos</p></item>
-          <item><p>Audacious</p></item>
+          <item><p>Audacious/VLC or any other player</p></item>
+          <item><p>Streamripper or fIcy</p></item>
+          <item><p>youtube-dl</p></item>
 	</terms>
 	</section>
 
@@ -60,6 +62,10 @@
             <title><file>~/.config/streamtuner2/icons/*.png</file></title>
             <p>Holds downloaded favicons for station homepages.</p>
           </item>
+          <item>
+            <title><file>~/.config/streamtuner2/plugins/*.py</file></title>
+            <p>Contain downloaded contrib/ plugins.</p>
+          </item>
 	</terms>
 	</section>
 
@@ -69,7 +75,7 @@
         <terms>
           <item>
             <title><file>/usr/bin/streamtuner2</file></title>
-            <p>Is the main binary.</p>
+            <p>Associates the main binary.</p>
           </item>
           <item>
             <title><file>/usr/share/streamtuner2/</file></title>
@@ -88,7 +94,7 @@
 	<p>The majority of code distributed with ST2 is placed into the Public Domain; meaning
         no licensing requirement and all code can be copied, modified
 	and distributed unrestrictively.</p>
-        <p>The bundled kronos.py and requests/ library are NOT however.</p>
+        <note><p>The bundled kronos.py and requests/ library are NOT however.</p></note>
 	</section>
 
 
