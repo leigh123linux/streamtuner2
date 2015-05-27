@@ -12,13 +12,14 @@
 	<subtitle><link	href="http://ubuntuusers.de/">//ubuntuusers.de/</link></subtitle>
 
 	<p>There's a manually curated list of radio stations in the
-	UbuntuUsers.de Wiki. Like the origin website, most entries are
-	German or European stations.</p>
-
-	<p>So this is more of an example plugin, as it's not a huge list
-	of course. It's just here really, because the Wiki markup is
-	pretty well-written and easy to parse.</p>
+	UbuntuUsers.de Wiki.</p>
 	
+        <list>
+          <item><p>Like the origin website, most entries are German or European stations.</p></item>
+          <item><p>So this is more of an example plugin, as it's not a huge list.</p></item>
+          <item><p>RegExp are used for extraction, because the Wiki markup is rather well-maintained and consistent.</p></item>
+        </list>
+
 	<note><p>There's also a small streaming TV list. But most entries
 	aren't really accessible (anymore) without command line tools. 
 	(Which that very Wiki page covers in detail.)</p></note>

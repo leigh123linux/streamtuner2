@@ -13,17 +13,19 @@
         <subtitle><link href="http://internet-radio.com/">//internet-radio.com/</link></subtitle>
         
 	<p>Internet-Radio.com is a broad alternative to Shoutcast.</p>
+
 	<list>
  	 <item><p>It has regained station homepages for most entries again.</p></item>
  	 <item><p>Genres are similiar to Shoutcast.</p></item>
  	 <item><p>Updating station lists is comperatively fast.</p></item>
+ 	 <item><p>Uses HTML extraction (regex or pyquery) internally.</p></item>
  	</list>
 
         <section id="options">
         <title>Configuration</title>
 	<p>Note that this plugin has its own setting on how many
-	links to retrieve.  Instead of stream numbers, it only counts pages
-	(which however speeds up processing now).</p>
+	links to retrieve.  Instead of stream numbers, it only counts pages.
+	Which however speeds up processing now.</p>
 	</section>
 
 </page>

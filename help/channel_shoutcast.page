@@ -17,7 +17,7 @@
 
         <list>
 		<item><p>Station entries usually provide current playing information.</p></item>
-		<item><p>Stream links are plain <link xref="gloassry_pls">PLS files</link>.</p></item>
+		<item><p>Stream links are plain <link xref="pls">PLS files</link>.</p></item>
 		<item><p>Genres are subcategorized, so the main groups in the category
 		list must be expanded to see the interesting entries.</p></item>
         </list>

@@ -1,0 +1,98 @@
+<page	xmlns="http://projectmallard.org/1.0/"
+	type="guide"
+	id="contrib_channels">
+
+<info>
+	<link type="guide" xref="index#channels"/>
+	<link type="guide" xref="pluginmanager2"/>
+	<link type="topic" xref="configuration#plugins"/>
+        <desc>Downloadable channel plugins</desc>
+</info>
+
+<title>→ Contrib/Extra Channels</title>
+
+<p>Besides the standard channels, there are a few more plugins available
+for download. See the <link xref="pluginmanager2">Plugin Manager</link>
+and its <key>📦 Add</key> tab.</p>
+
+<terms>
+  <item>
+    <title><p>Reddit</p></title>
+    <p>Reddit is a social media site. Among its various sections is a large
+    /r/Music subreddit group. Most of them link popular or novel Youtube
+    music videos, or user-produced content etc. Radioreddit.com even provides
+    streaming servers. This plugin can also list Soundcloud/Mixcloud/Bandcamp
+    links. But those would require a custom audio player. There's an extra
+    Soundcloud plugin however, which makes those streams readily playble.</p>
+  </item>
+  <item>
+    <title><p>Di.fm</p></title>
+    <p>"Digitally Imported" are mostly electronic music radio stations.
+    The freely available stations stream with 64kbit/s AAC+ only.</p>
+  </item>
+  <item>
+    <title><p>Radio.net</p></title>
+    <p>Radio.net is a European radio directory. It nicely catalogues
+    stations into genres as usual. The primary list is ordered by
+    popularity even. </p>
+  </item>
+  <item>
+    <title><p>Magnatune</p></title>
+    <p>Magnatune is an independent label for artists. It makes most
+    albums available for free listening with only a few intermittent
+    adverts. Otherwise it's a flatrate payable music discovery and
+    download service. </p>
+  </item>
+  <item>
+    <title><p>PublicRadioFan</p></title>
+    <p>PublicRadioFan.com hosts a huge lists of worldwide radio stations.
+    This plugin displays just the genre list though.</p>
+  </item>
+  <item>
+    <title><p>WindowsMedia</p></title>
+    <p>Is actually a Windows-specific streaming directory. Station entries
+    are converted from ASX into standard playlist formats by ST2. </p>
+  </item>
+  <item>
+    <title><p>Delicast</p></title>
+    <p>Delicast.com is another web directory of radio stations. It's
+    somewhat slower because playback addresses are hidden away with extra
+    page requests. Works reliably still. </p>
+  </item>
+  <item>
+    <title><p>ListenLive.eu</p></title>
+    <p>ListenLive is also an Europe-centric radio directory. </p>
+  </item>
+  <item>
+    <title><p>PunkCast</p></title>
+    <p>PunkCast is no longer maintained. It covered the NY music and tech
+    scenes, but existing recordings are still accessible mostly (some are
+    just weblinks howeever). This plugin is kept for nostalgic reasons;
+    it was available with streamtuner1 as well. </p>
+  </item>
+  <item>
+    <title><p>GrLittleRadioPlayer</p></title>
+    <p>Great Little Radio Player is another Linux desktop radio browser.
+    It comes with a default set of categorized stations. This plugin merely
+    imports that list as static directory. </p>
+  </item>
+  <item>
+    <title><p>Compound</p></title>
+    <p>The compound channel is a meta plugin. It can aggregate categories
+    from other channel plugins on a per-category basis. You for example
+    can mash Top40 or Classic genres from Shoutcast, Xiph, InternetRadio,
+    Tunein, etc. Which avoids switching between channel tabs somewhat. </p>
+  </item>
+  <item>
+    <title><p>File browser</p></title>
+    <p>You can also browser local files with streamtuner2 using the file
+    browser plugin. It must be configured with your music collection path.
+    It's not a default plugin, because this isn't really what Streamtuner2
+    is made for. There are way better local music collection managers for
+    Linux. It's just here for convenience, and displays files just as any
+    other channel list. It has no specific file management features, and
+    won't get any. </p>
+  </item>
+</terms>
+
+</page>

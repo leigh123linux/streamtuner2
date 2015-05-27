@@ -20,14 +20,19 @@
 </div>
 <div class="region">
 <div class="contents">
-<p class="p">Dirble.com is another radio station directory, made up of
-	user-contributed content, and automatic streaming server polling.</p>
-<p class="p">It provides a JSON API, which as of v2 has a lot of unneeded meta
-	information and internal ids. But it's actually nicer to scan, and
-	contains even station homepages now.</p>
-<div class="note" title="Note"><div class="inner"><div class="region"><div class="contents"><p class="p">The config option for a custom API key is perhaps
-        redundant. Should streamtuner2 -D however reveal an error, you
-        can however configure your own account there.</p></div></div></div></div>
+<p class="p">Dirble.com is another radio station directory, based on
+	user-contributed entries and automatic streaming server polling.</p>
+<div class="list"><div class="inner"><div class="region"><ul class="list">
+<li class="list"><p class="p">Provides a JSON API, which in v2 is easy to extract from.</p></li>
+<li class="list"><p class="p">List contain even station homepages mostly.</p></li>
+<li class="list"><p class="p">And the channel plugin selects among the available
+         streaming URLs based on format (Ogg, AAC, preferred over MP3) and
+         maximum bitrate.</p></li>
+</ul></div></div></div>
+<div class="note" title="Note"><div class="inner"><div class="region"><div class="contents"><p class="p">There's a hidden config option for a custom API key.
+        It's perhaps redundant. Should streamtuner2 -D however reveal an error,
+        you can however configure your own account in <span class="file">settings.json</span>.
+        </p></div></div></div></div>
 </div>
 <div class="sect sect-links" role="navigation">
 <div class="hgroup"></div>

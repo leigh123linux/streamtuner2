@@ -9,81 +9,70 @@
         <desc>ICEcast radio directory.</desc>
 </info>
 
-	<title>Xiph.org</title>
-	<subtitle><link	href="http://dir.xiph.org/">//dir.xiph.org/</link></subtitle>
+<title>Xiph.org</title>
+<subtitle><link href="http://dir.xiph.org/">//dir.xiph.org/</link></subtitle>
 
-	<p>Xiph.org is a non-profit organization, which maintains and
-	promotes the OGG streaming format, and develops audio compression
-	schemes such as Vorbis, FLAC, Opus, or the Theora video encoding
-	format.  It also hosts a list of ICEcast streaming stations. ICEcast
-	is their non-commercial pendant to the SHOUTcast server.</p>
+<p>Xiph.org is a non-profit organization which develops and maintains
+various audio- and video-related standards.</p>
 
-        <p>There are different ways for streamtuner2 to retrieve the station
-        lists available on dir.xiph.org.  That's because this is a primary
-        plugin, and fallback solutions therefore important.  Each fetching
-        mode has its own advantages and drawbacks though.</p>
+<list>
+  <item><p>For example the OGG streaming/multiplexing format.</p></item>
+  <item><p>Audio compression schemes like Vorbis, Speex, FLAC, Opus.</p></item>
+  <item><p>Video encoding formats like Theora, Tarkin, Dirac.</p></item>
+  <item><p>The ICEcast streaming server is an alternative to SHOUTcast.</p></item>
+  <item><p>And the more modern .xspf (and .jspf) playlist format, which is used by all channel entries.</p></item>
+</list>
 
-        <p>Xiph also uses the .xspf playlist format, instead of just the
-        more ancient Shoutcast .pls stream links.</p>
+<p>There are different ways for streamtuner2 to retrieve the station
+lists available on dir.xiph.org.  That's because this is a primary
+plugin, and fallback solutions therefore important.  Each fetching
+mode has its own advantages and drawbacks though.</p>
+
 
 <section id="options">
-  <title>Channel options.</title>
+  <title>Channel fetch mode option</title>
+  <p>There are now three options to retrieve Xiph directory stations.</p>
   <terms>
   <item>
-    <title><code>Filter by minimum bitrate</code></title>
-    <p>The bitrate of an audio stream determines the music quality. Many Xiph streams have simple
-    and low quality microphone sources. To filter these out, and only leave high quality music
-    stations, you can therefore change this option. OGG starts to sound well with 96 kbit/s (whereas
-    MP3 often requires 128 or 160 kbit/s at least).</p>
+    <title><code>Cache JSON</code></title>
+    <p>There's a caching server specifically for streamtuner2. It fixes
+    Xiphs quirky JSON API, and provides a simpler interface. It can't
+    correct the invalid encodings however, which is why you see ????
+    question marks a lot. This method does not reveal station homepages,
+    but enables the channel/server search.</p>
   </item>
   <item>
-    <title><code>Fetch mode</code></title>
-    <p>There are now three options to retrieve Xiph directory stations.</p>
-    <p></p>
-      <terms>
-      <item>
-        <title><code>Cache JSON</code></title>
-        <p>There's a caching server specifically for streamtuner2. It fixes
-        Xiphs quirky JSON API, and provides a simpler interface. It can't
-        correct the invalid encodings however, which is why you see ????
-        question marks a lot. This method does not reveal station homepages,
-        but enables the channel/server search.</p>
-      </item>
-      <p></p>
-      <item>
-        <title><code>Clunky YP.XML</code></title>
-        <p>The "yellow pages" YP.XML contains the full list of all known
-        ICEcast streaming servers. It's however quite bulky and super slow
-        to download. It furthermore clogs up a lot of memory, and requires
-        manual searching (only cache search works). Which is why streamtuner2
-        is trying hard to avoid it. It doesn't contain station homepages either.
-        </p>
-        <p>It's only still an option, because it's likely to remain accessible
-        after Xiph.org rewrites their directory service. (Which though is
-        getting delayed since a few years already.)
-        You can set the special "buffy" mode in your <file>settings.json</file>
-        to keep the whole YP.XML in memory. Which avoids the
-        slow station list download/unpacking.
-        </p>
-      </item>
-      <p></p>
-      <item>
-        <title><code>Forbidden fruits</code></title>
-        <p>As new alternative, you can let ST2 directly scrape the station
-        lists from dir.xiph.org (like it does for other channels).  This is
-        something which Xiph doesn't approve of.  But the drawbacks of their
-        alternative offerings are too severe and user-unfriendly; which is
-        why there's this raw HTML extraction mode now.</p>
-        <p>The website listings contain full station homepages and a few
-        more extras.  In this mode we can even acceess the XSPF playlist
-        formats directly.  Both, the server search function, or browsing by
-        audio/video format are supported.  </p>
-        <note><p>A miximum of 100 entries get fetched in this mode however
-        (which is 5 pages á 20 entries).</p></note>
-      </item>
-    </terms>
+    <title><code>Clunky YP.XML</code></title>
+    <p>The "yellow pages" YP.XML contains the full list of all known
+    ICEcast streaming servers. It's however quite bulky and super slow
+    to download. It furthermore clogs up a lot of memory, and requires
+    manual searching (only cache search works). Which is why streamtuner2
+    is trying hard to avoid it. It doesn't contain station homepages either.
+    </p>
+    <p>It's only still an option, because it's likely to remain accessible
+    after Xiph.org rewrites their directory service. (Which though is
+    getting delayed since a few years already.)
+    You can set the special "buffy" mode in your <file>settings.json</file>
+    to keep the whole YP.XML in memory. Which avoids the
+    slow station list download/unpacking.
+    </p>
+  </item>
+  <item>
+    <title><code>Forbidden fruits</code></title>
+    <p>As new alternative, you can let ST2 directly scrape the station
+    lists from dir.xiph.org (like it does for other channels).  This is
+    something which Xiph doesn't approve of.  But the drawbacks of their
+    alternative offerings are too severe and user-unfriendly; which is
+    why there's this raw HTML extraction mode now.</p>
+    <p>The website listings contain full station homepages and a few
+    more extras.  In this mode we can even acceess the XSPF playlist
+    formats directly.  Both, the server search function, or browsing by
+    audio/video format are supported.  </p>
+    <note><p>A miximum of 100 entries get fetched in this mode however
+    (which is 5 pages á 20 entries).</p></note>
   </item>
   </terms>
+  <p>The filter by bitrate option is now a generic plugin.</p>
 </section>
 
 </page>

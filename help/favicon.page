@@ -13,21 +13,21 @@
 with a homepage link. They're automatically fetched and displayed
 as soon as you play a radio entry.</p>
 
-<p>This functionality meanwhile resides in a plugin. It's available in the
-<key>🔌 Features</key> <link xref="configuration">configuration</link> tab. 
-You can disable it as whole if unneeded.  Most configuration options are now
-collected there.</p>
+<list>
+  <item><p>This functionality meanwhile resides in a plugin.</p></item>
+  <item><p>It's available in the <key>🔌 Features</key> <link xref="configuration">configuration</link> tab.</p></item>
+  <item><p>Most configuration options are now collected there.</p></item>
+</list>
 
 <p>Some channels (Jamendo or Radionomy) provide small album previews
-or banners (Punkcast) even. Whereas normal favicons are just 16x16
-pixel images.</p>
+or banners even. Whereas normal favicons are just 16x16 pixel images.</p>
 
-<p>Downloaded image files are meanwhile all sanitized (internally
+<note><p>Downloaded image files are meanwhile all sanitized (internally
 converted to ensure they're really image files).
 Albeit that's not strictly necessary for modern Gtk versions. (But
 better safe than sorry).
 Images are kept in the <file>~/.config/streamtuner2/icons</file> directory.
-</p>
+</p></note>
 
 
 <section id="configuration">

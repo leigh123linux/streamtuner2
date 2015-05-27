@@ -10,15 +10,20 @@
 
 	<title>Dirble</title>
         <subtitle><link href="http://dirble.com/">//dirble.com/</link></subtitle>
+
+	<p>Dirble.com is another radio station directory, based on
+	user-contributed entries and automatic streaming server polling.</p>
+
+        <list>
+         <item><p>Provides a JSON API, which in v2 is easy to extract from.</p></item>
+         <item><p>List contain even station homepages mostly.</p></item>
+         <item><p>And the channel plugin selects among the available
+         streaming URLs based on format (Ogg, AAC, preferred over MP3) and
+         maximum bitrate.</p></item>
+        </list>
 	
-	<p>Dirble.com is another radio station directory, made up of
-	user-contributed content, and automatic streaming server polling.</p>
-
-	<p>It provides a JSON API, which as of v2 has a lot of unneeded meta
-	information and internal ids. But it's actually nicer to scan, and
-	contains even station homepages now.</p>
-
-        <note><p>The config option for a custom API key is perhaps
-        redundant. Should streamtuner2 -D however reveal an error, you
-        can however configure your own account there.</p></note>
+        <note><p>There's a hidden config option for a custom API key.
+        It's perhaps redundant. Should streamtuner2 -D however reveal an error,
+        you can however configure your own account in <file>settings.json</file>.
+        </p></note>
 </page>

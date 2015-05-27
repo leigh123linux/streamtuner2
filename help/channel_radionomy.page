@@ -9,37 +9,35 @@
         <desc>Large internet streaming provider</desc>
 </info>
 
-	<title>Radionomy</title>
-	<subtitle><link href="http://radionomy.com/">//radionomy.com/</link></subtitle>
+<title>Radionomy</title>
+<subtitle><link href="http://radionomy.com/">//radionomy.com/</link></subtitle>
 
-	<p>Radionomy is an internet radio streaming provider, orginally
-	founded in Belgium.  It commands a pretty big slice of the worldwide
-	internet radio stuff these days. - It took over Shoutcast.com for
-	instance.</p>
+<p>Radionomy is an internet radio streaming provider, orginally
+founded in Belgium.  It commands a pretty big slice of the worldwide
+internet radio stuff these days. - It took over Shoutcast.com for
+instance.</p>
 
-	<p>Their primary directory on Radionomy.com only lists stations
-	which radionomy itself hosts streaming servers for.  It's over 6000
-	already.  Both listening and station hosting are free (given agreement
-	to autoplay advertisements, and a minimum quota of daily listeners). 
-	Radionomy is therefore pretty popular and growing.</p>
-	
-	<p>The extraction method in streamtuner2 uses a mix of RegExp,
-	DOM traversal, and JSON extraction, with some AJAX updating spiced
-	in. It closely follows the website scheme to fetch station lists.
-	Instead of favicons smaller station logos are displayed (25px
-	in contrast to the usual 16px).
-	</p>
-	
-	<section id="options">
-	 <title>Configuration</title>
-	 
-         <p> You can configure the number of pages it'll try (<key>3</key> by
-  	 default) to influence the length of station lists.</p>
-	
-	 <p> And the song title updating ("<key>OnAir Updates</key>") can be disabled.
-	 Future versions of this channel plugin might poll it automatically,
-	 and keep the station list auto-updated.</p>
-	
-	 </section>
+<list>
+  <item><p>Its directory contains over 6000 stations already, all of them hosted by Radionomy directly.</p></item>
+  <item><p>This plugin uses a mixture of RegExp/DOM extraction, JSON reading, and simulated AJAX queries to fetch station lists.</p></item>
+  <item><p>Station logos are 25x25px large, and directly fetched from radionomy.com as well.</p></item>
+</list>
+
+<p>Both listening and station hosting are free (given agreement
+to autoplay advertisements, and a minimum quota of daily listeners). 
+Radionomy is therefore pretty popular and growing.</p>
+
+
+<section id="options">
+ <title>Configuration</title>
+ 
+ <p> You can configure the number of pages it'll try (<key>3</key> by
+ default) to influence the length of station lists.</p>
+
+ <p> And the song title updating ("<key>OnAir Updates</key>") can be disabled.
+ Future versions of this channel plugin might poll it automatically,
+ and keep the station list auto-updated.</p>
+
+</section>
 
 </page>
