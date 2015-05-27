@@ -32,9 +32,9 @@
 	regular <key>📻 Channels</key> or <key>🔌 Feature</key> tabs, and
 	then enable them.</p>
 	
-	<note><p>Updated plugins will not be automatically loaded if they
-	were enable already. That requires either a restart, or disabling +
-	saving once, then reenabling them.</p></note>
+	<note><p>Updated plugins will not be automatically loaded if they've
+	been active already. That requires either a restart. (Or disabling +
+	saving once, then reenabling them.)</p></note>
 	
 	<section id="configuration">
 	<title>Configuration</title>
