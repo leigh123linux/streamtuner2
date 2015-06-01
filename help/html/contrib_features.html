@@ -1,0 +1,117 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>→ Feature plugins</title>
+<link rel="stylesheet" type="text/css" href="C.css">
+<script type="text/javascript" src="jquery.js"></script><script type="text/javascript" src="jquery.syntax.js"></script><script type="text/javascript" src="yelp.js"></script>
+</head>
+<body><div class="page" role="main">
+<div class="header"><div class="trails" role="navigation">
+<div class="trail">
+<a class="trail" href="index.html" title="♪ Streamtuner2"><span class="media"><span class="media media-image"><img src="img/logo.png" class="media media-inline" alt="♪"></span></span> Streamtuner2 </a> › <a class="trail" href="index.html#extra" title="Additional features">Additional features</a> » </div>
+<div class="trail">
+<a class="trail" href="index.html" title="♪ Streamtuner2"><span class="media"><span class="media media-image"><img src="img/logo.png" class="media media-inline" alt="♪"></span></span> Streamtuner2 </a> › <a class="trail" href="index.html#extra" title="Additional features">Additional features</a> » <a class="trail" href="pluginmanager2.html" title="Plugin Manager 2">Plugin Manager 2</a> » </div>
+<div class="trail">
+<a class="trail" href="index.html" title="♪ Streamtuner2"><span class="media"><span class="media media-image"><img src="img/logo.png" class="media media-inline" alt="♪"></span></span> Streamtuner2 </a> › <a class="trail" href="index.html#extra" title="Additional features">Additional features</a> » <a class="trail" href="pluginmanager2.html" title="Plugin Manager 2">Plugin Manager 2</a> » <a class="trail" href="configuration.html#plugins" title="Channel and feature plugins and settings">Channel and feature plugins and settings</a> » </div>
+</div></div>
+<div class="body">
+<div class="hgroup"><h1 class="title"><span class="title">→ Feature plugins</span></h1></div>
+<div class="region">
+<div class="contents"><p class="p">Extra functionality and behaviour changes are available in
+the <span class="key"><kbd>🔌 Feature</kbd></span> <span class="link"><a href="configuration.html" title="Settings dialog">configuration</a></span>
+section.</p></div>
+<div id="" class="sect"><div class="inner">
+<div class="hgroup"><h2 class="title"><span class="title">Filter Bitrate</span></h2></div>
+<div class="region"><div class="contents">
+<p class="p">Some channels provide lower-quality audio streams. In particular
+Xiph lists some awful radio stations. And this plugin helps filtering
+those out of station lists.</p>
+<div class="list"><div class="inner"><div class="region"><ul class="list">
+<li class="list"><p class="p">MP3 streams often start to sound okay at 96kbit/s.</p></li>
+<li class="list"><p class="p">Whereas OGG Vorbis or AAC are sometimes acceptable at 64kbit/s already.</p></li>
+</ul></div></div></div>
+<div class="note note-warning" title="Warning"><div class="inner"><div class="region"><div class="contents"><p class="p">Note that you may end up with empty channel lists
+altogether if you set these options too high. Some channels provide all
+their streams with 64kbit/s only.</p></div></div></div></div>
+</div></div>
+</div></div>
+<div id="" class="sect"><div class="inner">
+<div class="hgroup"><h2 class="title"><span class="title">Channel toolbar link</span></h2></div>
+<div class="region"><div class="contents">
+<p class="p">Adds a toolbar entry which shows the current channel/directory
+service title and its homepage link. Such as:</p>
+<div class="code"><pre class="contents "><span class="span">Shoutcast</span>
+<span class="link"><a href="http://shoutcast.com/" title="http://shoutcast.com/">//shoutcast.com/</a></span></pre></div>
+<p class="p">It depends on the "update window title" option being enabled.</p>
+</div></div>
+</div></div>
+<div id="" class="sect"><div class="inner">
+<div class="hgroup"><h2 class="title"><span class="title">Export all stations</span></h2></div>
+<div class="region"><div class="contents">
+<p class="p">There's an "Export All" plugin available. It adds an entry under
+<span class="guiseq"><span class="gui">Main menu</span> ▸ <span class="gui">Extensions</span> ▸ <span class="gui">Export all stations</span></span>.
+Which allows to export all stations from the currently visible channel category.</p>
+<div class="list"><div class="inner"><div class="region"><ul class="list">
+<li class="list"><p class="p">This is of course intended primarily for saving your bookmarks.</p></li>
+<li class="list"><p class="p">And it allows to import radio lists into any other music player  or playlist collection/management app (such as Rhythmbox).</p></li>
+<li class="list"><p class="p">You can set the desired playlist format in the file saving dialog that pops up.</p></li>
+</ul></div></div></div>
+</div></div>
+</div></div>
+<div id="" class="sect"><div class="inner">
+<div class="hgroup"><h2 class="title"><span class="title">RadioTray hook</span></h2></div>
+<div class="region"><div class="contents">
+<p class="p">This plugin enables an extra category in the <span class="key"><kbd>bookmarks</kbd></span> tab.
+It shows bookmarked stations from the RadioTray application, if that's
+installed. Additionally it adds an context option to save new stations
+from Streamtuner2 to RadioTray. The mapping option influences if added
+radios are recategorized in RadioTray.</p>
+<div class="note" title="Note"><div class="inner"><div class="region"><div class="contents"><p class="p"> Please see the Wiki for further <span class="link"><a href="http://fossil.include-once.org/streamtuner2/wiki/radiotray" title="http://fossil.include-once.org/streamtuner2/wiki/radiotray">setup instructions</a></span>.</p></div></div></div></div>
+</div></div>
+</div></div>
+<div id="" class="sect"><div class="inner">
+<div class="hgroup"><h2 class="title"><span class="title">User Agent Switcher</span></h2></div>
+<div class="region"><div class="contents">
+<p class="p">This plugin merely masks Streamtuner2 as an ordinary web browser when retrieving station lists.</p>
+<div class="list"><div class="inner"><div class="region"><ul class="list">
+<li class="list"><p class="p"> It's technically unneeded, as ST2 isn't stressful to directory websites and not blocked anywhere. </p></li>
+<li class="list"><p class="p">It's only useful as additional privacy feature really, but shouldn't be used habitually. </p></li>
+</ul></div></div></div>
+</div></div>
+</div></div>
+<div id="" class="sect"><div class="inner">
+<div class="hgroup"><h2 class="title"><span class="title">Downloadable contrib/ feature plugins</span></h2></div>
+<div class="region"><div class="contents">
+<p class="p">The <span class="link"><a href="pluginmanager2.html" title="Plugin Manager 2">Plugin Manager</a></span> lists further
+feature pluginsand in the <span class="key"><kbd>📦 Add</kbd></span> tab.</p>
+<div class="terms"><div class="inner"><div class="region"><dl class="terms">
+<dt class="terms">Soundcloud streaming</dt>
+<dd class="terms"><p class="p">Enables playback of soundcloud.com links in the Reddit plugin.
+    Homepage links are transformed into direct MP3 streaming addresses
+    on playback. This plugin registers a "audio/soundcloud" pseudo
+    type. Alternatively you could use <span class="link"><a href="http://github.com/rekado/soundCLI" title="http://github.com/rekado/soundCLI">soundcli</a></span> of course.</p></dd>
+<dt class="terms">dev_faulthandler</dt>
+<dd class="terms"><p class="p">This is a pure development plugin, meant to debug ST2 crashes.</p></dd>
+</dl></div></div></div>
+</div></div>
+</div></div>
+<div class="sect sect-links" role="navigation">
+<div class="hgroup"></div>
+<div class="contents"><div class="links guidelinks"><div class="inner">
+<div class="title"><h2><span class="title">More Information</span></h2></div>
+<div class="region"><ul>
+<li class="links "><a href="index.html#extra" title="Additional features">Additional features</a></li>
+<li class="links "><a href="configuration.html#plugins" title="Channel and feature plugins and settings">Channel and feature plugins and settings</a></li>
+<li class="links ">
+<a href="pluginmanager2.html" title="Plugin Manager 2">Plugin Manager 2</a><span class="desc"> — User plugin installation</span>
+</li>
+</ul></div>
+</div></div></div>
+</div>
+</div>
+<div class="clear"></div>
+</div>
+<div class="footer"></div>
+</div></body>
+</html>
