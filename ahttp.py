@@ -17,6 +17,16 @@
 from config import *
 import requests
 
+#-- extra debugging, http://stackoverflow.com/questions/10588644/how-can-i-see-the-entire-http-request-thats-being-sent-by-my-python-application
+if conf.debug >= 2:
+    import logging
+    import httplib
+    httplib.HTTPConnection.debuglevel = 1
+    logging.basicConfig() 
+    logging.getLogger().setLevel(logging.DEBUG)
+    requests_log = logging.getLogger("requests.packages.urllib3")
+    requests_log.setLevel(logging.DEBUG)
+    requests_log.propagate = True
 
 #-- hooks to progress meter and status bar in main window
 feedback = None
@@ -55,7 +65,7 @@ session.headers.update({
 #  Well, it says "get", but it actually does POST and AJAXish GET requests too.
 #
 def get(
-       url, params={}, referer="", post=0, ajax=0,
+       url, params={}, referer=None, post=0, ajax=0,
        binary=0, content=True, encoding=None, verify=False,
        statusmsg=None, timeout=9.25, quieter=0
     ):
@@ -69,7 +79,7 @@ def get(
     if ajax:
         headers["X-Requested-With"] = "XMLHttpRequest"
     if referer:
-        headers["Referer"] = (referer if referer else url)
+        headers["Referer"] = (referer if referer not in [True, 1] else url)
 
 #ifdef BLD_DEBUG
 #srcout    raise Exception("Simulated HTTP error")
@@ -78,7 +88,7 @@ def get(
     # read
     if post:
         log.HTTP("POST", url, params)
-        r = session.post(url, params=params, headers=headers, timeout=timeout)
+        r = session.post(url, data=params, headers=headers, timeout=timeout)
     else:    
         log.HTTP("GET"+(" AJAX" if ajax else ""), url, params )
         r = session.get(url, params=params, headers=headers, verify=verify, timeout=timeout)
