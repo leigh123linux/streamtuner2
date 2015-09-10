@@ -3,7 +3,7 @@
 # title: Radionomy
 # description: Modern radio directory and streaming provider
 # url: http://radionomy.com/
-# version: 0.5
+# version: 0.6
 # type: channel
 # category: radio
 # config: -
@@ -45,7 +45,7 @@ class radionomy (ChannelPlugin):
     titles = dict(listeners=False, bitrate=False)
     categories = []
     
-    base = "http://www.radionomy.com"
+    base = "https://www.radionomy.com"
 
     playing = {}  # OnAir/Update dict
 
@@ -81,11 +81,13 @@ class radionomy (ChannelPlugin):
         if cat:
             req = self.base + self.catmap[cat]
 
-        # assemble page input
-        html = ahttp.get(req)
+        # https://www.radionomy.com/de/style/GENRE
+        html = ahttp.get(req, ajax=1, referer=1)
+        # https://www.radionomy.com/de/OnAir/Update
         self.onair_update(req)
+        # collect additional pages
         for i in range(0, int(conf.radionomy_pages) - 1):
-            add = ahttp.get(req, { "scrollOffset": i }, post=1, ajax=1)
+            add = ahttp.get(req, { "scrollOffset": i }, post=1, ajax=1, referer=1)
             if add.find("browseRadio") < 0:
                 break
             html += add
@@ -108,15 +110,21 @@ class radionomy (ChannelPlugin):
         return r
 
 
-    # Extracts the data- attribute JSON blob
+    # Extracts the data-play-stream= JSON blob attributes
     @use_rx
     def data_play_stream(self, html, use_rx):
         if use_rx:
-            return [entity_decode(j) for j in re.findall('data-play-stream="({.*?})"', html)]
+            return [
+                entity_decode(json_attr) for json_attr in
+                re.findall('data-play-stream="({.*?})"', html)
+            ]
         else:
             # fix up for PyQuery, else ignores appended content
             html = re.sub("</html>|</body>", "", html) + "</body></html>"
-            return [div.attrib["data-play-stream"] for div in pq(html)(".browseRadioWrap .radioPlayBtn")]
+            return [
+                div.attrib["data-play-stream"] for div in
+                pq(html)(".browseRadioWrap .radioPlayBtn")
+            ]
 
 
     # Retrieve en/OnAir/Update for per-UID song titles
@@ -124,7 +132,7 @@ class radionomy (ChannelPlugin):
         if conf.radionomy_update:
             try:
                 d = json.loads(
-                    ahttp.get("https://www.radionomy.com/en/OnAir/Update", post=1, referer=req)
+                    ahttp.get("https://www.radionomy.com/en/OnAir/Update", post=1, referer=req, ajax=1)
                 )
                 if not d:
                     return
