@@ -136,7 +136,7 @@ class timer:
         # add
         task = self.sched.add_daytime_task(action_method, activity, days, None, time, kronos.method.threaded, [row], {})
 
-        #log.QUEUE( act, self.sched, (action_method, act, days, None, time, kronos.method.threaded, [row], {}), task.get_schedule_time(True) )
+        log.QUEUE( activity, self.sched, (action_method, activity, days, None, time, kronos.method.threaded, [row], {}), task.get_schedule_time(True) )
     
     
     
@@ -176,7 +176,7 @@ class timer:
 
     # action wrapper
     def record(self, row, *args, **kwargs):
-        #log.TIMER("TIMED RECORD", *args)
+        log.TIMER("TIMED RECORD", *args)
         
         # extra params
         duration = self.duration(row.get(self.timefield))
