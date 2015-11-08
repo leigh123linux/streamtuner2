@@ -136,7 +136,7 @@ class radionomy (ChannelPlugin):
                 )
                 if not d:
                     return
-                print d
+                log.DEBUG_DATA(d)
                 self.playing.update(
                     {row["RadioUID"]: "{Title} - {Artist}".format(**row) for row in d}
                 )

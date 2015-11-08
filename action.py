@@ -516,7 +516,7 @@ class extract_playlist(object):
     # Jamendo JAMJAMJSON playlists
     def jamj(self):
         rows = []
-        print self.src
+        log.DATA(self.src)
         for result in json.loads(self.src)["results"]:
             for track in result.get("tracks") or [result]:
                 rows.append(dict(
