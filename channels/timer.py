@@ -5,7 +5,7 @@
 # type: feature
 # category: hook
 # depends: kronos
-# version: 0.7
+# version: 0.7.1
 # config: -
 # priority: optional
 # support: unsupported
@@ -18,6 +18,9 @@
 # Programmed events are visible in "timer" under the "bookmarks" channel. Times
 # are stored in the description field, and can thus be edited. However, after editing
 # times manually, streamtuner2 must be restarted for any changes to take effect.
+#
+# Allowable time specifications are "Mon,Wed,Fri 18:00-20:00 record"
+# or even "Any 7:00-12:00 play". Though the length isn't honored currently.
 #
 
 
@@ -140,10 +143,12 @@ class timer:
     
     
     
-    # converts Mon,Tue,... into numberics 1-7
+    # converts Mon,Tue,... into numeric 1-7
     def days(self, s):
         weekdays = ["su", "mo", "tu", "we", "th", "fr", "sa", "su"]
         r = []
+        if re.search("any|all|\*", s, re.I):
+            return range(0,7)
         for day in re.findall("\w\w+", s.lower()):
             day = day[0:2]
             if day in weekdays:
