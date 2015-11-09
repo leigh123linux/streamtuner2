@@ -5,7 +5,7 @@
 # type: feature
 # category: hook
 # depends: kronos
-# version: 0.6
+# version: 0.7
 # config: -
 # priority: optional
 # support: unsupported
@@ -169,9 +169,9 @@ class timer:
     # action wrapper
     def play(self, row, *args, **kwargs):
         action.play(
-            url = row["url"],
+            row = row,
             audioformat = row.get("format","audio/mpeg"), 
-            listformat = row.get("listformat","href"),
+            source = row.get("listformat","href")
         )
 
     # action wrapper
@@ -187,10 +187,10 @@ class timer:
 
         # start recording
         action.record(
-            url = row["url"],
+            row = row,
             audioformat = row.get("format","audio/mpeg"), 
-            listformat = row.get("listformat","href"),
-            append = append,
+            source = row.get("listformat","href")
+            #append = append,
         )
     
     def test(self, row, *args, **kwargs):
