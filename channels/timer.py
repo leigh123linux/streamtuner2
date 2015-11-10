@@ -5,8 +5,9 @@
 # type: feature
 # category: hook
 # depends: kronos
-# version: 0.7.1
-# config: -
+# version: 0.7.2
+# config: 
+#   { name: timer_duration, type: select, select: "none|streamripper", value: none, description: support for time ranges }
 # priority: optional
 # support: unsupported
 #
@@ -184,18 +185,20 @@ class timer:
         log.TIMER("TIMED RECORD", *args)
         
         # extra params
+        # make streamripper record a timed broadcast
         duration = self.duration(row.get(self.timefield))
+        append = None
         if duration:
-            append = " -a %S.%d.%q -l "+str(duration*60)   # make streamripper record a whole broadcast
-        else:
-            append = ""
+            _rec = conf.record.get("audio/*", "")
+            if re.search("streamripper", _rec):
+                append = "-a %S.%d.%q -l " + str(duration*60)
 
         # start recording
         action.record(
             row = row,
             audioformat = row.get("format","audio/mpeg"), 
-            source = row.get("listformat","href")
-            #append = append,
+            source = row.get("listformat","href"),
+            append = append,
         )
     
     def test(self, row, *args, **kwargs):

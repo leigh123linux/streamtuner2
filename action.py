@@ -4,7 +4,7 @@
 # category: io
 # title: play/record actions
 # description: Starts audio applications, guesses MIME types for URLs
-# version: 1.1
+# version: 1.1.1
 # priority: core
 #
 # Multimedia interface for starting audio players, recording app,
@@ -138,12 +138,14 @@ def help(*args):
     run("yelp /usr/share/doc/streamtuner2/help/")
 
 # Invokes player/recorder for stream url and format
-def run_fmt_url(row={}, audioformat="audio/mpeg", source="pls", assoc={}):
+def run_fmt_url(row={}, audioformat="audio/mpeg", source="pls", assoc={}, append=None):
     if audioformat in handler:
         handler[audioformat](row, audioformat, source, assoc)
     else:
         cmd = mime_app(audioformat, assoc)
         cmd = interpol(cmd, source, row)
+        if append:
+            cmd = re.sub('(["\']?\s*)$', " " + append + "\\1", cmd)
         run(cmd)
 
 # Start web browser
@@ -155,8 +157,8 @@ def play(row={}, audioformat="audio/mpeg", source="pls"):
     run_fmt_url(row, audioformat, source, conf.play)
 
 # Call streamripper / youtube-dl / wget
-def record(row={}, audioformat="audio/mpeg", source="href"):
-    run_fmt_url(row, audioformat, source, conf.record)
+def record(row={}, audioformat="audio/mpeg", source="href", append=None):
+    run_fmt_url(row, audioformat, source, conf.record, append=append)
 
 
 # OS shell command escaping
