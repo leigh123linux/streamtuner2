@@ -5,7 +5,7 @@
 # type: feature
 # category: hook
 # depends: kronos, action >= 1.1.1
-# version: 0.7.2
+# version: 0.7.3
 # config: 
 #   { name: timer_duration, type: select, select: "none|streamripper", value: none, description: support for time ranges }
 # priority: optional
@@ -21,7 +21,8 @@
 # times manually, streamtuner2 must be restarted for any changes to take effect.
 #
 # Allowable time specifications are "Mon,Wed,Fri 18:00-20:00 record"
-# or even "Any 7:00-12:00 play". Though the length isn't honored currently.
+# or even "Any 7:00-12:00 play". The duration is only honored for
+# recording via streamripper or fIcy/fPls currently.
 #
 
 
@@ -191,7 +192,9 @@ class timer:
         if duration:
             _rec = conf.record.get("audio/*", "")
             if re.search("streamripper", _rec):
-                append = "-a %S.%d.%q -l " + str(duration*60)
+                append = "-a %S.%d.%q -l " + str(duration*60) # seconds
+            if re.search("fPls|fIcy", _rec, re.I):
+                append = "-M " + str(duration) # minutes
 
         # start recording
         action.record(
