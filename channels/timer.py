@@ -4,7 +4,7 @@
 # description: Schedules play/record events for bookmarked radio stations.
 # type: feature
 # category: hook
-# depends: kronos
+# depends: kronos, action >= 1.1.1
 # version: 0.7.2
 # config: 
 #   { name: timer_duration, type: select, select: "none|streamripper", value: none, description: support for time ranges }
