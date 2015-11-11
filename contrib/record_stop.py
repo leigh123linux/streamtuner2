@@ -7,7 +7,7 @@
 # category: ui
 #
 # Displays the [X] STOP toolbar button, and hooks it to
-# streamripper kill switch.
+# a streamripper kill switch.
 
 import action
 from config import log
@@ -26,5 +26,5 @@ class record_stop(object):
 
     # stop recording
     def pkill_streamripper(self, *x, **y):
-        action.run("pkill streamripper")
+        action.run("pkill streamripper || pkill fPls")
 
