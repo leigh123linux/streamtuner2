@@ -5,9 +5,9 @@
 # type: feature
 # category: hook
 # depends: kronos, action >= 1.1.1
-# version: 0.7.3
+# version: 0.7.4
 # config: 
-#   { name: timer_duration, type: select, select: "none|streamripper", value: none, description: support for time ranges }
+#   { name: timer_duration, type: select, select: "auto|streamripper|fpls", value: none, description: support for time ranges }
 # priority: optional
 # support: unsupported
 #
@@ -55,6 +55,7 @@ class timer:
     def __init__(self, parent):
         if not parent:
             return
+        conf.add_plugin_defaults(self.meta, self.module)
           
         # keep reference to main window
         self.parent = parent
