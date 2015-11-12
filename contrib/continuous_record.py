@@ -1,7 +1,7 @@
 # encoding: utf-8
 # title: Continuous/JIT record
 # description: Starts background recording on play, to allow saving current track
-# version: -0.1
+# version: 0.0
 # depends: streamtuner2 >= 2.1.9
 # type: hook
 # config:
@@ -67,11 +67,12 @@ class continuous_record(object):
         self.rec.set_stock_id(gtk.STOCK_FLOPPY)
         self.rec.set_label("track")
         self.rec.connect("clicked", self.save_current)
+        #self.rec.disconnect("clicked", self.parent.on_record_clicked)
         
         # check for temp directory
         tmp = conf.jitrecord_tmp
-        if not os.path.exits(tmp):
-            os.makedirs(tmp)
+        if not os.path.exists(tmp):
+            os.mkdir(tmp)
 
         # start streamripper
         action.run("pkill streamripper")
