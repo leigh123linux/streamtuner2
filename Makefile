@@ -57,7 +57,7 @@ pyz:
 src:
 	cd .. && pax -wvJf streamtuner2/streamtuner2-$(VERSION).src.txz \
 		streamtuner2/*.{py,png,desktop} streamtuner2/channels/*.{py,png} \
-		streamtuner2/{bundle/,contrib/,help/,gtk,NEWS,READ,PACK,PKG,CRED,Make,bin,.zip}*
+		streamtuner2/{bundle/,contrib/,help/,gtk3.xml.gz,NEWS,READ,PACK,PKG,CRED,Make,bin,.zip}*
 
 # test .deb contents
 check:

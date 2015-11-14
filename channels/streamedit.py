@@ -37,7 +37,7 @@ class streamedit (AuxiliaryWindow):
         s = self.main.channel().stations()
         s.append({"title":"new", "url":"", "format":"audio/mpeg", "genre":"", "listeners":1});
         self.main.channel().switch() # update display
-        selfmain.channel().gtk_list.get_selection().select_path(str(len(s)-1)); # set cursor to last row
+        self.main.channel().gtk_list.get_selection().select_path(str(len(s)-1)); # set cursor to last row
         self.open(w)
 
     # hide window
