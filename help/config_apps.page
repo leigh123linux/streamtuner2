@@ -77,6 +77,31 @@
 	homepages etc.), and thus often makes for better bookmarking directly
 	in your player.</p> </note>
 
+
 	</section>
+	
+<section>
+<title>Other players</title>
+<p>Here a few other configuration examples for other
+players/backends.</p>
+<terms>
+  <item>
+    <title>MPD</title>
+    <p>
+       Rocus van Oosten <link href="https://sourceforge.net/p/streamtuner2/discussion/1173108/thread/82b6be86/">recommends</link>
+       following wrapper script to start playing radio streams via MPD right away:
+    </p>
+	<code>MPD_HOST='10.0.0.222' # or your MPD host
+export MPD_HOST
+mpc clear
+mpc load $1
+mpc play</code>
+    <p>
+	Save it as <file>mpc-pls</file> script and configure it in streamtuner as
+	<cmd>mpc-pls %pls</cmd> for example.
+    </p>
+  </item>
+</terms>
+</section>
 
 </page>
