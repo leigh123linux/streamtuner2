@@ -18,7 +18,7 @@ and its <key>📦 Add</key> tab.</p>
 
 <terms>
   <item>
-    <title><p>Reddit</p></title>
+    <title><link href="http://reddit.com/">Reddit</link></title>
     <p>Reddit is a social media site. Among its various sections is a large
     /r/Music subreddit group. Most of them link popular or novel Youtube
     music videos, or user-produced content etc. Radioreddit.com even provides
@@ -27,45 +27,45 @@ and its <key>📦 Add</key> tab.</p>
     Soundcloud plugin however, which makes those streams readily playble.</p>
   </item>
   <item>
-    <title><p>Di.fm</p></title>
+    <title><link href="http://di.fm/">Di.fm</link></title>
     <p>"Digitally Imported" are mostly electronic music radio stations.
     The freely available stations stream with 64kbit/s AAC+ only.</p>
   </item>
   <item>
-    <title><p>Radio.net</p></title>
+    <title><link href="http://radio.net/">Radio.net</link></title>
     <p>Radio.net is a European radio directory. It nicely catalogues
     stations into genres as usual. The primary list is ordered by
     popularity even. </p>
   </item>
   <item>
-    <title><p>Magnatune</p></title>
+    <title><link href="http://magnatune.com/">Magnatune</link></title>
     <p>Magnatune is an independent label for artists. It makes most
     albums available for free listening with only a few intermittent
     adverts. Otherwise it's a flatrate payable music discovery and
     download service. </p>
   </item>
   <item>
-    <title><p>PublicRadioFan</p></title>
+    <title><link href="http://publicradiofan.com/">PublicRadioFan</link></title>
     <p>PublicRadioFan.com hosts a huge lists of worldwide radio stations.
     This plugin displays just the genre list though.</p>
   </item>
   <item>
-    <title><p>WindowsMedia</p></title>
+    <title><link href="http://windowsmedia.com/">WindowsMedia</link></title>
     <p>Is actually a Windows-specific streaming directory. Station entries
     are converted from ASX into standard playlist formats by ST2. </p>
   </item>
   <item>
-    <title><p>Delicast</p></title>
+    <title><link href="http://delicast.com/">Delicast</link></title>
     <p>Delicast.com is another web directory of radio stations. It's
     somewhat slower because playback addresses are hidden away with extra
     page requests. Works reliably still. </p>
   </item>
   <item>
-    <title><p>ListenLive.eu</p></title>
+    <title><link href="http://listenlive.eu/">ListenLive.eu</link></title>
     <p>ListenLive is also an Europe-centric radio directory. </p>
   </item>
   <item>
-    <title><p>PunkCast</p></title>
+    <title><link href="http://punkcast.com/">PunkCast</link></title>
     <p>PunkCast is no longer maintained. It covered the NY music and tech
     scenes, but existing recordings are still accessible mostly (some are
     just weblinks howeever). This plugin is kept for nostalgic reasons;
