@@ -84,12 +84,21 @@ class tunein (ChannelPlugin):
 
 
     # Fetch OPML, convert outline elements to dicts
-    def api(self, method):
+    def api(self, method, url=None):
         r = []
-        opml = ahttp.get(self.base + method)
+        opml = ahttp.get(url or self.base + method)
         x = ElementTree.fromstring(opml)
+        # append entries
         for outline in x.findall(".//outline"):
-            r.append(dict(outline.items()))
+            outline = dict(outline.items())
+            # additional pages
+            if "key" in outline and outline["key"] == "nextStations":
+                if len(x) < conf.max_streams:
+                    r = r + self.api(method=None, url=outline["URL"])
+                else:
+                    pass
+            else:
+                r.append(outline)
         return r
 
 
