@@ -2,12 +2,13 @@
 # api: streamtuner2
 # title: TuneIn
 # description: Online Radio, Broadcasts, Podcasts per RadioTime API
-# version: 0.2
+# version: 0.3
 # type: channel
 # category: radio
 # url: http://tunein.com/
 # config:
 #   { name: radiotime_group, value: music, type: select, select: music|genres, description: Catalogue type as categories. (→ Reload Category Tree) }
+#   { name: radiotime_maxpages, value: 10, type: int, description: Maximum number of pages. }
 # priority: default
 # png:
 #   iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAbpJREFUOI2Nkk9PE1EUxc+ZuTMIaP+KqClxx4dA0jRVgwFM/JPIRv0CunDnxsQ1G4NGvgD7LkiExG5IDHFhDDEmblwRQJG2AVuwMNOZd91QAuUR
@@ -84,21 +85,25 @@ class tunein (ChannelPlugin):
 
 
     # Fetch OPML, convert outline elements to dicts
-    def api(self, method, url=None):
+    def api(self, method):
         r = []
-        opml = ahttp.get(url or self.base + method)
-        x = ElementTree.fromstring(opml)
-        # append entries
-        for outline in x.findall(".//outline"):
-            outline = dict(outline.items())
-            # additional pages
-            if "key" in outline and outline["key"] == "nextStations":
-                if len(x) < conf.max_streams:
-                    r = r + self.api(method=None, url=outline["URL"])
+        # fetch API page
+        next = self.base + method
+        max = int(conf.radiotime_maxpages)
+        while next:
+            opml = ahttp.get(next)
+            next = None
+            x = ElementTree.fromstring(opml)
+            # append entries
+            for outline in x.findall(".//outline"):
+                outline = dict(outline.items())
+                # additional pages
+                if "key" in outline and outline["key"] == "nextStations":
+                    if len(r) < conf.max_streams and max > 0:
+                        next = outline["URL"]
+                        max = max - 1
                 else:
-                    pass
-            else:
-                r.append(outline)
+                    r.append(outline)
         return r
 
 
