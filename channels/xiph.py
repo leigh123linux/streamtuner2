@@ -7,7 +7,7 @@
 # version: 0.6
 # category: radio
 # config: 
-#    { name: xiph_source, value: web, type: select, select: "cache=JSON cache srv|xml=Clunky XML blob|web=Forbidden fruits", description: "Source for station list extraction." }
+#    { name: xiph_source, value: web, type: select, select: "cache=JSON cache srv|xml=Clunky XML blob|buffy=Buffy YP.XML|web=Forbidden fruits", description: "Source for station list extraction." }
 # priority: standard
 # png:
 #   iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAg5JREFUOI2lk1tIE2AUx3+7CG1tlmlG1rSEHrKgEUF7yO40taQiRj10I4qKkOaT4hIUItuTkC8hpJAQtJCICrFpzEKw
@@ -29,8 +29,9 @@
 #    both sliceable genres and searchable.
 #
 #  → "Clunky XML" fetches the olden YP.XML, which is really
-#    slow, then slices out genres. No search. With the secret
-#    "buffy" mode keeps all streams buffered.
+#    slow, then slices out genres. No search.
+#
+#  → While the secret "buffy" mode keeps the XML blob in memory.
 #
 #  → "Forbidden Fruits" extracts from dir.xiph.org HTML pages,
 #    with homepages and listener/max infos available. Also
