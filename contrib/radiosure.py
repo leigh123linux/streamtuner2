@@ -2,7 +2,7 @@
 # api: streamtuner2
 # title: RadioSure
 # description: Huge radio station collection
-# version: 0.2
+# version: 0.3
 # type: channel
 # category: radio
 # url: http://radiosure.com/
@@ -15,9 +15,8 @@
 # RadioSure is a Windows freeware/shareware for playing internet
 # stations. It comes with a huge database of streams.
 #
-# Fetches the ZIP/CSV at once. Extracts all stations in memory.
-# RadioSure stream lists are just updated once per day.
-#
+# Fetches and keeps the ZIP/CSV database at maximum once per day.
+# (Not updated more frequently.)
 
 
 from config import *
@@ -77,31 +76,26 @@ class radiosure (ChannelPlugin):
 
     # import station list
     def update_streams(self, cat, search=None):
+        streams = []
         # refresh zip file
-        if not os.path.isfile(self.tmp) or os.path.getmtime(self.tmp) < (time.time() - 3600):
+        if not os.path.isfile(self.tmp) or os.path.getmtime(self.tmp) < (time.time() - 24*3600):
             with open(self.tmp, "w") as f:
                 f.write(ahttp.get(self.zip, binary=1))
         # get first file
         zip = zipfile.ZipFile(self.tmp)
         csv = zip.read(zip.namelist()[0])
         self.status("Updating streams from RadioSure CSV database")
-        #fields = ["title", "playing", "genre", "country", "language", "url"]
+        # fields = ["title", "playing", "genre", "country", "language", "url"]
         for e in re.findall("^([^\t]+)\t([^\t]+)\t([^\t]+)\t([^\t]+)\t([^\t]+)\t([^\t]+(?:\t[^\t]{3,})*)", csv, re.M):
-            genre = e[2]
-            if not genre in self.streams:
-                self.streams[genre] = []
-            self.streams[genre].append(dict(
-                title = e[0],
-                playing = e[1],
-                genre = e[2],
-                country = e[3],
-                language = e[4],
-                url = e[5]#...
-            ))
-        return self.streams[cat]
-        
-        
-        
-        
-        
-        
+            if cat == e[2]:
+                streams.append(dict(
+                    title = e[0],
+                    playing = e[1],
+                    genre = e[2],
+                    country = e[3],
+                    language = e[4],
+                    url = e[5]#...
+                ))
+        return streams
+
+
