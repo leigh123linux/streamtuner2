@@ -8,6 +8,6 @@ pluginconf.plugin_base = ["channels", "contrib"]#, conf.share+"/channels", conf.
 for name,e in pluginconf.all_plugin_meta().items():
     if "title" in e:
         try:
-            print "| {title} | {version} | {category} | {url} | {description} |".format(**e)
-        except:
-            None
+            print "| [{title}]({url}) | **{version}** | {type} | {category} | *{priority}* | {description} |".format(**e)
+        except Exception, e:
+            print "ERROR*** ", name, e
