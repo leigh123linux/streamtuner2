@@ -2,7 +2,7 @@
 # api: streamtuner2
 # title: UbuntuUsers
 # description: Static list of radio stations courtesy of the UbuntuUsers.de Wiki
-# version: 0.1
+# version: 0.2
 # type: channel
 # category: radio
 # url: http://wiki.ubuntuusers.de/Internetradio/Stationen
@@ -36,8 +36,8 @@ class ubuntuusers (ChannelPlugin):
     listformat = "srv"
     titles = dict(playing=False, listeners=False, bitrate=False)
     base = {
-       "stations": "http://wiki.ubuntuusers.de/Internetradio/Stationen?action=export&format=raw",
-       "tv": "http://wiki.ubuntuusers.de/Internet-TV/Stationen?action=export&format=raw",
+       "stations": "http://wiki.ubuntuusers.de/Internetradio/Stationen/a/export/raw/",
+       "tv": "https://wiki.ubuntuusers.de/Internet-TV/Stationen/a/export/raw/",
     }
     categories = ["stations", "tv"]
 
