@@ -2,8 +2,8 @@
 # api: streamtuner2
 # title: Reciva
 # url: https://radios.reciva.com/stations/genre/34?&start=100&count=50
-# description: 
-# version: 0.1
+# description: Home internet radio app and diverse station database.
+# version: 0.2
 # type: channel
 # category: radio
 # config: -
@@ -15,7 +15,10 @@
 #
 # Reciva is a mobile app. They have a web directory though.
 # It's a bit difficult to query, and streaming urls aren't
-# directly accessible.
+# directly accessible. But allows to fetch all stations from
+# a category at once; so still a quick database.
+#
+# They probably have an API somewhere, but no public docs.
 #
 
 
@@ -33,7 +36,7 @@ class reciva (ChannelPlugin):
     module = "reciva"
     listformat = "pls"
     has_search = False
-    categories = ['60s', '70s', '80s', '90s', 'Adult', 'Adult Contemporary', 'Alternative', 'Ambient', 'Bluegrass', 'Blues', 'Bollywood', 'Christian', 'Christian Contemporary', 'Classic Rock', 'Classical', 'College', 'Comedy', 'Contemporary', 'Country', 'Dance', 'Discussion', 'Easy', 'Electronica', 'Experimental', 'Folk', 'Gospel', 'Greek', 'Hip Hop', 'Indian', 'Indie', 'Indie Rock', 'Jazz', 'Jungle', 'Kids', 'Latin Hits', 'New Age', 'News', 'News Talk', 'News Updates', 'Oldies', 'Pop', 'Public', 'Punk', 'Rap', 'Reggae', 'Religious', 'Rock', 'Short Wave Radio', 'Soft Rock', 'Spanish', 'Sports', 'Talk', 'Top 40', 'Unknown', 'Varied', 'World', 'World Africa', 'World Asia', 'World Caribbean', 'World Europe', 'World Mediterranean', 'World Middle East', 'World Tropical']
+    categories = ['60s', '70s', '80s', '90s', 'Adult', ['Adult Contemporary'], 'Alternative', 'Ambient', 'Bluegrass', 'Blues', 'Bollywood', 'Christian', ['Christian Contemporary'], 'Classic Rock', 'Classical', 'College', 'Comedy', 'Contemporary', 'Country', 'Dance', 'Discussion', 'Easy', 'Electronica', 'Experimental', 'Folk', 'Gospel', 'Greek', 'Hip Hop', 'Indian', 'Indie', ['Indie Rock'], 'Jazz', 'Jungle', 'Kids', 'Latin Hits', 'New Age', 'News', ['News Talk', 'News Updates'], 'Oldies', 'Pop', 'Public', 'Punk', 'Rap', 'Reggae', 'Religious', 'Rock', 'Short Wave Radio', 'Soft Rock', 'Spanish', 'Sports', 'Talk', 'Top 40', 'Unknown', 'Varied', 'World', ['World Africa', 'World Asia', 'World Caribbean', 'World Europe', 'World Mediterranean', 'World Middle East', 'World Tropical']]
     catmap = { 'classical': '14', 'dance': '18', 'bluegrass': '52', 'contemporary': '16', 'pop': '34', 'spanish': '66', 'college': '15', 'rap': '38', 'ambient': '69', 'talk': '43', 'alternative': '9', 'religious': '39', 'blues': '10', 'folk': '23', 'classic rock': '13', '90s': '7', 'adult contemporary': '8', 'oldies': '33', 'indie rock': '54', 'electronica': '21', 'unknown': '45', 'discussion': '19', 'news talk': '31', 'world mediterranean': '55', 'sports': '42', 'new age': '51', 'indie': '27', 'indian': '65', 'easy': '20', '80s': '6', 'world africa': '67', 'comedy': '62', 'public': '35', 'jungle': '72', 'reggae': '48', 'world middle east': '50', 'christian': '11', 'world caribbean': '68', '60s': '58', 'world europe': '56', 'jazz': '28', '70s': '5', 'soft rock': '41', 'top 40': '44', 'adult': '57', 'news': '30', 'bollywood': '60', 'world tropical': '53', 'latin hits': '29', 'varied': '46', 'christian contemporary': '12', 'kids': '59', 'short wave radio': '73', 'world': '49', 'world asia': '47', 'country': '17', 'news updates': '32', 'punk': '36', 'greek': '25', 'hip hop': '26', 'rock': '40', 'gospel': '24', 'experimental': '22' }
     titles = dict( genre="Genre", title="Station", playing="Location", bitrate="Bitrate", listeners=False )
     base_url = "https://radios.reciva.com/stations/genre/%s?&start=0&count=%s"
