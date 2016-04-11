@@ -2,13 +2,13 @@
 # api: streamtuner2
 # title: vTuner
 # url: http://vtuner.com/
-# description: 
-# version: 0.2
+# description: Huge station list by music service provider
+# version: 0.3
 # type: channel
 # category: radio
 # config:
 #   { name: vtuner_pages,  value: 1,  type: int,  description: "Number of pages to fetch." }
-#   { name: vtuner_order,  value: "POP",  type: select,  select: "POP=Popularity|AA=Alphabetically|HBR=Quality|RELI=Uptime|OP=Country",  description: "Station sorting order." }
+#   { name: vtuner_order,  value: POP,  type: select,  select: "POP=Popularity|AA=Alphabetically|HBR=Quality|RELI=Uptime|OP=Country",  description: "Station sorting order." }
 # priority: contrib
 # png:
 #   iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAhFBMVEUAAACIowCIowCIowCIowAkWlsAP3yIowCIowATTWoAP3wAP3xrjhsAP3wAP3yIowAAP3wAP3wAP3wMSHEbU2MAP3wV
@@ -19,6 +19,10 @@
 #
 # vTuner is a rather large station directory. The website is somewhat
 # slow though. So fetching large results sets isn't advisable.
+#
+# There's an C API of sorts, but no publically available docs. So
+# querying the website for stations. Personal/non-commercial use
+# seems explicitely permitted.
 #
 
 
