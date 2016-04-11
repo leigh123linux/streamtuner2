@@ -31,7 +31,7 @@ from channels import *
 import re
 import ahttp
 
-# TuneIn radio directory
+# SomaFM radio stations
 class somafm (ChannelPlugin):
 
     # description
