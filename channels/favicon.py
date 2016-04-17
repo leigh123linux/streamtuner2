@@ -236,7 +236,13 @@ def google_find_homepage(row):
 
     if row.get("title"):
         rx_t = re.compile('^(([^-:]+.?){1,2})')
-        rx_u = re.compile(r'/url\?q=(https?://[^"&/]+)')
+        rx_u = re.compile(r'''
+            (?:  <h3\s+class="r"><a\s+href="  |  /url\?q=  )
+            (https?://
+            (?!www\.google|webcache|google|tunein|streema)
+            [^"&]+)''',
+            re.X
+        )
 
         # Use literal station title now
         title = row["title"]
@@ -244,10 +250,12 @@ def google_find_homepage(row):
         
         # Do 'le google search
         html = ahttp.get("http://www.google.com/search", params=dict(hl="en", q=title, client="streamtuner2"), ajax=1, timeout=3.5)
+        log.DATA(re.sub("<(script|style)[^>]*>.*?</(script|style)>", "", html, 100, re.S))
                   
         # Find first URL hit
         url = rx_u.findall(html)
         if url:
+            log.DATA(url)
             row["homepage"] = ahttp.fix_url(url[0])
             return True
     pass
