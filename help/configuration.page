@@ -50,7 +50,7 @@ There are various options for streamtuner2, available under <guiseq><gui>Edit</g
 
     <title>Player application settings</title>
 
-    <p>MIME types are categorized identifiers for file types. <var>Audio/mpeg</var> for
+    <p>MIME types are abstract identifiers for media types. <var>Audio/mpeg</var> for
     example represents MP3 files, and <var>audio/ogg</var> means OGG Vorbis.  And the player
     setting dialog simply associates an audio type with a playback application:</p>
 

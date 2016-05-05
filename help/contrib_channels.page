@@ -65,6 +65,18 @@ and its <key>📦 Add</key> tab.</p>
     <p>ListenLive is also an Europe-centric radio directory. </p>
   </item>
   <item>
+    <title><link href="http://radiosure.com/">RadioSure</link></title>
+    <p>Station database that's readily available as CSV list. </p>
+  </item>
+  <item>
+    <title><link href="http://vtuner.com/">vTuner</link></title>
+    <p>Categorized station list by a cross-platform streaming service provider. </p>
+  </item>
+  <item>
+    <title><link href="http://reciva.com/">Reciva</link></title>
+    <p>Reciva is an iPhone app, with a browsable station list. </p>
+  </item>
+  <item>
     <title><link href="http://punkcast.com/">PunkCast</link></title>
     <p>PunkCast is no longer maintained. It covered the NY music and tech
     scenes, but existing recordings are still accessible mostly (some are
@@ -95,5 +107,9 @@ and its <key>📦 Add</key> tab.</p>
     won't get any. </p>
   </item>
 </terms>
+
+<p>See also the list of
+<link href="http://fossil.include-once.org/streamtuner2/wiki/plugins">available
+plugins</link> in the project wiki.</p>
 
 </page>
