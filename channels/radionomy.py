@@ -3,7 +3,7 @@
 # title: Radionomy
 # description: Modern radio directory and streaming provider
 # url: http://radionomy.com/
-# version: 0.6
+# version: 0.7
 # type: channel
 # category: radio
 # config: -
@@ -104,7 +104,7 @@ class radionomy (ChannelPlugin):
                 playing = self.playing.get(data["radioUID"], data["song"]),
                 favourite = int(data.get("isFavorite", 0)),
                 homepage = "http://www.radionomy.com/en/radio/{}/index".format(data["url"]),
-                img = re.sub("\.s\d+\.", ".s32.", data["logo"]),
+                img = re.sub("/\d+/", "/32/", data["logo"]),
                 uid = data["radioUID"],
             ))
         return r
