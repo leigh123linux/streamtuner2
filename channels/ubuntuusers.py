@@ -59,7 +59,7 @@ class ubuntuusers (ChannelPlugin):
     def update_streams(self, cat, search=None):
 
         # fetch page
-        wiki = ahttp.get(self.base[cat])
+        wiki = ahttp.get(self.base[cat], verify=False)
         f = "audio/mpeg" if cat == "stations" else "video/mp4"
         
         # split on headlines
