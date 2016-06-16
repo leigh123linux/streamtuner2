@@ -169,7 +169,12 @@ class configwin (AuxiliaryWindow):
             # numeric
             elif opt["type"] in ("int", "integer", "numeric"):
                 adj = gtk.Adjustment(0, 0, 5000, 1, 10, 0)
-                cb = gtk.SpinButton(adj, 1.0, 0)
+                if ver == 2:
+                    cb = gtk.SpinButton(adj, 1.0, 0)
+                else:
+                    cb = gtk.SpinButton()
+                    cb.set_adjustment(adj)
+                    cb.set_digits(0)
 
             # text field
             else:
