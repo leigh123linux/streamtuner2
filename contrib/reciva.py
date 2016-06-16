@@ -82,7 +82,6 @@ class reciva (ChannelPlugin):
         if not r["url"].startswith("http"):
             html = ahttp.get("https://radios.reciva.com/streamer?stationid=%s&streamnumber=0" % r["id"])
             ls = re.findall("""(?:<iframe src=|iframe\()['"]([^'"]+)['"]""", html)
-            print ls
             if ls:
                 r["url"] = ls[0]
             else:
