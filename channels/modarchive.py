@@ -3,7 +3,7 @@
 # title: MODarchive
 # description: Collection of module / tracker audio files (MOD, S3M, XM, etc.)
 # type: channel
-# version: 0.2
+# version: 0.3
 # url: http://www.modarchive.org/
 # priority: extra
 # config: -
@@ -92,8 +92,8 @@ class modarchive (ChannelPlugin):
         entries = []
         
         rx_mod = re.compile("""
-            href="(http://api\.modarchive\.org/downloads\.php[?]moduleid=(\d+)[#][^"]+)"
-            .*?    /formats/(\w+)\.png"
+            href="(https?://api\.modarchive\.org/downloads\.php[?]moduleid=(\d+)[#][^"]+)"
+            .*?    ="format-icon">(\w+)<
             .*?    title="([^">]+)">([^<>]+)</a>
             .*?    >(?:Rated|Unrated)</a>\s*(\d*)
         """, re.X|re.S)
