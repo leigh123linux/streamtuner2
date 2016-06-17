@@ -134,6 +134,7 @@ class ConfigDict(dict):
         self.tmp = os.environ.get("TEMP", "/tmp") + "/streamtuner2"
         self.nothreads = 0
         self.max_streams = "500"
+        self.internetradio_max_pages = 5
         self.show_bookmarks = 1
         self.show_favicons = 1
         self.load_favicon = 1
