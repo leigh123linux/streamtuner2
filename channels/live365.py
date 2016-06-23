@@ -1,13 +1,13 @@
 
 # api: streamtunter2
 # title: Live365
-# description: Around 5000 categorized internet radio streams, some paid ad-free ones.
-# version: 0.4
+# description: Around 5000 categorized internet radio streams. [DISCONTINUED]
+# version: 0.5
 # type: channel
 # category: radio
 # url: http://www.live365.com/
 # config: -
-# priority: optional
+# priority: obsolete
 # png:
 #   iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAzlJREFUOI1lk0tMXGUUx3/fvTP3zgyPGR5SKIQODdDGEtoCJdFopA9SJTFMjInGaJDEulWTGg2JApqoO+PShaAmdVEXQAxoCtgKNjYFWrQgMD6KDAylkde8Lnfunfu5IJii
 #   Z3POSc7//M/i/AT/ichrbUE1NyckfN5WV0kpUjpYS4s4sdhAZnOrP9jTv/jgvHiw+ftSb5f2UEGnfuQYCIG9fg8pJa5AIdJIEf9hhNTkze5gz9ddexrXXrE1+E2v7/TZl9lcx/hxBCu5DUikzCDTFjiSrMYnyGp8vPOuaR+quNTXDqACRLve7cp5suV1YaSwpyewYts4
@@ -16,7 +16,9 @@
 #   AOuvCHp1NcmFMK6ERx0wEvGmou5OtLJSrJUV7n/wEWY4TOLKCHsnlfV8hq+hgc3eL4l9O4y7sYGErgyIofqaYEHdqbvljzWx+v6HaI5ERSCE2Pen0pE4Wh22NUXxOx1Exq+yOTVRobRMzSxGZqa6zUI/3uefYcOrsq0JEqokhcRAkhSSuBti+gw5F9qxSw+wuRrpbp6e
 #   XVQBLi+vXatfngseeuGlE/5TjUQX7pCSNoZbkNIUUrqCWRCg8u0OKC9h/L2Oz0OjP73xP5g+PXeyq+R4Q+eR5qfJ8maz/ds8AIGqoySNBMs3xvhjbKT7wvfT/8K0bwHAxy31QcWRIaA1v/ww3kA+0V8mAQb8+UX9bV99tw/nfwAe2WTAAcikxQAAAABJRU5ErkJggg==
 # 
-# Live365 lists around 5000 radio stations. Some are paid
+# Live365 shut down in January 2016.
+#
+# It did list around 5000 radio stations. Some are paid
 # entries and require a logon. This plugins tries to filter
 # those out.
 
