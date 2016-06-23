@@ -27,10 +27,15 @@
 #
 #
 # Radio-Browser is a community-collected list of internet radios.
-# Currently lists 4400 streaming stations, and tracks favourited
+# Currently lists ≥4000 streaming stations, and tracks favourited
 # entries. Furthermore includes station homepage links!
 #
-# Also has a neat JSON API, so is quite easy to support.
+# If you change the categories between tags/countries/languages,
+# please apply [Channel]→[Reload Category Tree] afterwards.
+#
+# Also has a neat JSON API, has an excellent documentation, thus
+# is quite easy to support. It's also used by Rhythmbox / VLC /
+# Clementine / Kodi / RadioDroid / etc.
 
 
 import re
