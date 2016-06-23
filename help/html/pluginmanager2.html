@@ -29,9 +29,9 @@
 	implictly enabled. Reopen the config dialog to see them in the
 	regular <span class="key"><kbd>📻 Channels</kbd></span> or <span class="key"><kbd>🔌 Feature</kbd></span> tabs, and
 	then enable them.</p>
-<div class="note" title="Note"><div class="inner"><div class="region"><div class="contents"><p class="p">Updated plugins will not be automatically loaded if they've
-	been active already. That requires either a restart. (Or disabling +
-	saving once, then reenabling them.)</p></div></div></div></div>
+<div class="note" title="Note"><div class="inner"><div class="region"><div class="contents"><p class="p">Updated plugin versions won't be instantiated right away
+	if they've been active already. That requires either a restart.
+	Or disabling + saving once, then reenabling them.</p></div></div></div></div>
 <div class="links topiclinks"><div class="inner"><div class="region">
 <div class="linkdiv "><a class="linkdiv" href="configuration.html#plugins" title="Channel and feature plugins and settings"><span class="title">Channel and feature plugins and settings</span></a></div>
 <div class="linkdiv "><a class="linkdiv" href="contrib_channels.html" title="→ Contrib/Extra Channels"><span class="title">→ Contrib/Extra Channels</span><span class="linkdiv-dash"> — </span><span class="desc">Downloadable channel plugins</span></a></div>
@@ -61,7 +61,8 @@
 <div class="hgroup"><h2 class="title"><span class="title">User plugins</span></h2></div>
 <div class="region"><div class="contents">
 <p class="p">Downloaded plugins are stored in <span class="file">~/.config/streamtuner2/plugins</span>.
-	To remove them, delete the individual *.py files there manually.</p>
+	To remove them, delete the individual *.py files there manually. But
+	keep the <span class="file">__init__.py</span> stub.</p>
 <div class="note note-bug" title="Bug"><div class="inner"><div class="region"><div class="contents">
 <p class="p">Currently system-installed core plugins take
 	precedence over downloaded updates.</p>

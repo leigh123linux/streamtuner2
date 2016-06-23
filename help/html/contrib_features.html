@@ -31,9 +31,9 @@ those out of station lists.</p>
 <li class="list"><p class="p">MP3 streams often start to sound okay at 96kbit/s.</p></li>
 <li class="list"><p class="p">Whereas OGG Vorbis or AAC are sometimes acceptable at 64kbit/s already.</p></li>
 </ul></div></div></div>
-<div class="note note-warning" title="Warning"><div class="inner"><div class="region"><div class="contents"><p class="p">Note that you may end up with empty channel lists
+<p class="p">Note that you may end up with empty channel lists
 altogether if you set these options too high. Some channels provide all
-their streams with 64kbit/s only.</p></div></div></div></div>
+their streams with 64kbit/s only.</p>
 </div></div>
 </div></div>
 <div id="" class="sect"><div class="inner">
@@ -41,8 +41,8 @@ their streams with 64kbit/s only.</p></div></div></div></div>
 <div class="region"><div class="contents">
 <p class="p">Adds a toolbar entry which shows the current channel/directory
 service title and its homepage link. Such as:</p>
-<div class="code"><pre class="contents "><span class="span">Shoutcast</span>
-<span class="link"><a href="http://shoutcast.com/" title="http://shoutcast.com/">//shoutcast.com/</a></span></pre></div>
+<div class="code"><pre class="contents "><span class="span">  ▶    ●    🏠     Shoutcast</span>
+play rcrd  hmpg   <span class="link"><a href="http://shoutcast.com/" title="http://shoutcast.com/">//shoutcast.com/</a></span></pre></div>
 <p class="p">It depends on the "update window title" option being enabled.</p>
 </div></div>
 </div></div>
@@ -81,16 +81,36 @@ radios are recategorized in RadioTray.</p>
 </div></div>
 </div></div>
 <div id="" class="sect"><div class="inner">
+<div class="hgroup"><h2 class="title"><span class="title">Other feature plugins</span></h2></div>
+<div class="region"><div class="contents">
+<div class="list"><div class="inner"><div class="region"><ul class="list">
+<li class="list"><p class="p"><span class="link"><a href="dragndrop.html" title="Drag'n'drop">Drag and Drop</a></span></p></li>
+<li class="list"><p class="p"><span class="link"><a href="favicon.html" title="Station favicons">Favicons</a></span></p></li>
+<li class="list"><p class="p"><span class="link"><a href="global_key.html" title="Global_key">Global key shortcut</a></span></p></li>
+<li class="list"><p class="p"><span class="link"><a href="timer.html" title="Timer">Timer</a></span></p></li>
+</ul></div></div></div>
+<p class="p">The "<span class="link"><a href="search.html" title="Searching">search</a></span>",
+ "<span class="link"><a href="configuration.html" title="Settings dialog">configwin</a></span>" and
+ "<span class="link"><a href="edit.html" title="Edit">streamedit</a></span>" plugins are considered
+ built-ins and cannot be disabled.</p>
+</div></div>
+</div></div>
+<div id="contrib" class="sect"><div class="inner">
 <div class="hgroup"><h2 class="title"><span class="title">Downloadable contrib/ feature plugins</span></h2></div>
 <div class="region"><div class="contents">
-<p class="p">The <span class="link"><a href="pluginmanager2.html" title="Plugin Manager 2">Plugin Manager</a></span> lists further
-feature pluginsand in the <span class="key"><kbd>📦 Add</kbd></span> tab.</p>
+<p class="p">The <span class="link"><a href="pluginmanager2.html" title="Plugin Manager 2">Plugin Manager</a></span> lists other
+available feature plugins in the <span class="key"><kbd>📦 Add</kbd></span> tab.</p>
 <div class="terms"><div class="inner"><div class="region"><dl class="terms">
 <dt class="terms">Soundcloud streaming</dt>
-<dd class="terms"><p class="p">Enables playback of soundcloud.com links in the Reddit plugin.
+<dd class="terms">
+<p class="p">Enables playback of soundcloud.com links in the Reddit plugin.
     Homepage links are transformed into direct MP3 streaming addresses
-    on playback. This plugin registers a "audio/soundcloud" pseudo
-    type. Alternatively you could use <span class="link"><a href="http://github.com/rekado/soundCLI" title="http://github.com/rekado/soundCLI">soundcli</a></span> of course.</p></dd>
+    on playback.</p>
+<div class="note" title="Note"><div class="inner"><div class="region"><div class="contents"><p class="p">Depends on python-soundcloud, which you can install per
+    <span class="cmd">pip install soundcloud</span>.</p></div></div></div></div>
+<p class="p"> Alternatively you could configure an external player like <span class="link"><a href="http://github.com/rekado/soundCLI" title="http://github.com/rekado/soundCLI">soundcli</a></span> of course.
+    Use the pseudo type "audio/soundcloud" for the player settings table.</p>
+</dd>
 <dt class="terms">dev_faulthandler</dt>
 <dd class="terms"><p class="p">This is a pure development plugin, meant to debug ST2 crashes.</p></dd>
 </dl></div></div></div>

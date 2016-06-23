@@ -138,6 +138,31 @@
 </div></div></div></div>
 </div></div>
 </div></div>
+<div id="" class="sect"><div class="inner">
+<div class="hgroup"><h2 class="title"><span class="title">Other players</span></h2></div>
+<div class="region"><div class="contents">
+<p class="p">Here a few other configuration examples for other
+players/backends.</p>
+<div class="terms"><div class="inner"><div class="region"><dl class="terms">
+<dt class="terms">MPD</dt>
+<dd class="terms">
+<p class="p">
+       Rocus van Oosten <span class="link"><a href="https://sourceforge.net/p/streamtuner2/discussion/1173108/thread/82b6be86/" title="https://sourceforge.net/p/streamtuner2/discussion/1173108/thread/82b6be86/">recommends</a></span>
+       following wrapper script to start playing radio streams via MPD right away:
+    </p>
+<div class="code"><pre class="contents ">MPD_HOST='10.0.0.222' # or your MPD host
+export MPD_HOST
+mpc clear
+mpc load $1
+mpc play</pre></div>
+<p class="p">
+	Save it as <span class="file">mpc-pls</span> script and configure it in streamtuner as
+	<span class="cmd">mpc-pls %pls</span> for example.
+    </p>
+</dd>
+</dl></div></div></div>
+</div></div>
+</div></div>
 <div class="sect sect-links" role="navigation">
 <div class="hgroup"></div>
 <div class="contents">

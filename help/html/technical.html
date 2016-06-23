@@ -23,6 +23,7 @@
 <dd class="terms"><p class="p"><span class="link">PyGtk or PyGI</span></p></dd>
 <dd class="terms"><p class="p">Gtk2 or Gtk3</p></dd>
 <dd class="terms"><p class="p"><span class="link">Requests/urllib3</span></p></dd>
+<dd class="terms"><p class="p"><span class="link">PIL/Pillow</span></p></dd>
 </dl></div>
 </div></div>
 <div class="terms"><div class="inner">
@@ -30,8 +31,10 @@
 <div class="region"><dl class="terms">
 <dd class="terms"><p class="p"><span class="link">Python-LXML</span></p></dd>
 <dd class="terms"><p class="p"><span class="link">Python-PyQuery</span></p></dd>
-<dd class="terms"><p class="p">Python-Kronos</p></dd>
-<dd class="terms"><p class="p">Audacious</p></dd>
+<dd class="terms"><p class="p">Audacious/VLC or any other player</p></dd>
+<dd class="terms"><p class="p">Streamripper or fIcy</p></dd>
+<dd class="terms"><p class="p">youtube-dl</p></dd>
+<dd class="terms"><p class="p">fonts: Symbola/Unifont for some UI parts</p></dd>
 </dl></div>
 </div></div>
 </div></div>
@@ -54,13 +57,15 @@
 <dd class="terms"><p class="p">JSON files for stream lists in each channel.</p></dd>
 <dt class="terms"><span class="file">~/.config/streamtuner2/icons/*.png</span></dt>
 <dd class="terms"><p class="p">Holds downloaded favicons for station homepages.</p></dd>
+<dt class="terms"><span class="file">~/.config/streamtuner2/plugins/*.py</span></dt>
+<dd class="terms"><p class="p">Contain downloaded contrib/ plugins.</p></dd>
 </dl></div></div></div></div></div>
 </div></div>
 <div id="install_dirs" class="sect"><div class="inner">
 <div class="hgroup"><h2 class="title"><span class="title">Installation spread</span></h2></div>
 <div class="region"><div class="contents"><div class="terms"><div class="inner"><div class="region"><dl class="terms">
 <dt class="terms"><span class="file">/usr/bin/streamtuner2</span></dt>
-<dd class="terms"><p class="p">Is the main binary.</p></dd>
+<dd class="terms"><p class="p">Associates the main binary.</p></dd>
 <dt class="terms"><span class="file">/usr/share/streamtuner2/</span></dt>
 <dd class="terms"><p class="p">Contains the individual ST2 python modules, and plugins in channels/. Also packages in pyquery/, but which is only used if the according modules aren't installed by the distribution.</p></dd>
 <dt class="terms"><span class="file">/usr/share/doc/streamtuner2/</span></dt>
@@ -73,7 +78,7 @@
 <p class="p">The majority of code distributed with ST2 is placed into the Public Domain; meaning
         no licensing requirement and all code can be copied, modified
 	and distributed unrestrictively.</p>
-<p class="p">The bundled kronos.py and requests/ library are NOT however.</p>
+<div class="note" title="Note"><div class="inner"><div class="region"><div class="contents"><p class="p">The bundled kronos.py and requests/ library are NOT however.</p></div></div></div></div>
 </div></div>
 </div></div>
 <div class="sect sect-links" role="navigation">
