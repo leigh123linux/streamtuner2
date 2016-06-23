@@ -1,0 +1,43 @@
+<page	xmlns="http://projectmallard.org/1.0/"
+	type="guide"
+	id="radiobrowser">
+
+<info>
+	<link type="guide" xref="index#channels"/>
+	<link type="guide" xref="channels#list"/>
+	<link type="guide" xref="configuration#plugins"/>
+        <desc>Community-driven streaming directory</desc>
+</info>
+
+<title>Radio-Browser</title>
+<subtitle><link href="http://radio-browser.info/">//radio-browser.info/</link></subtitle>
+
+<p>Radio-Browser is an ambitious community project. It collects as many
+public internet radio stations as possible. It's free to use, has a well
+documented API, with a simple JSON interface.</p>
+
+<p>It's now the backend in many open source music players:</p>
+
+<list>
+  <item><p>Rhytmbox (for which it was originally intended)</p></item>
+  <item><p>Streamtuner2 (obviously)</p></item>
+  <item><p>RadioDroid (Android)</p></item>
+  <item><p>DreamBox plugin</p></item>
+  <item><p>Musicbox (Android)</p></item>
+  <item><p>Gradio</p></item>
+  <item><p>Kodi/XBMC</p></item>
+</list>
+
+
+<section id="options">
+ <title>Configuration</title>
+ 
+ <p> Instead of browsing by genres, you can switch to languages or
+ countries.</p>
+
+ <p> Note that you'll have to use <guiseq><gui>Channel</gui> <gui>Reload Category Tree (F5)</gui></guiseq>
+ again to update the catogory view.</p>
+
+</section>
+
+</page>
