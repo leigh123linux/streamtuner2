@@ -60,9 +60,12 @@
 	<p>Downloaded plugins are stored in <file>~/.config/streamtuner2/plugins</file>.
 	To remove them, delete the individual *.py files there manually. But
 	keep the <file>__init__.py</file> stub.</p>
-	<note style="bug"><p>Currently system-installed core plugins take
-	precedence over downloaded updates.</p>
-	<p>And you'll have to take care to eventually refresh/delete outdated user plugins,
+	<note style="bug"><p>Core plugins (those which are installed
+	system-wide) can often also be updated. The user-saved plugin will
+	take precedence after a restart. However the version number in
+	PluginManager2 still shows the system-installed/older version
+	regardless.</p>
+	<p>So you'll have to take care to eventually refresh/delete outdated user plugins,
 	whenever you install a newer Streamtuner2 version.</p></note>
 	</section>
 	

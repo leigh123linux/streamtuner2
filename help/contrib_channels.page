@@ -80,7 +80,7 @@ and its <key>📦 Add</key> tab.</p>
     <title><link href="http://punkcast.com/">PunkCast</link></title>
     <p>PunkCast is no longer maintained. It covered the NY music and tech
     scenes, but existing recordings are still accessible mostly (some are
-    just weblinks howeever). This plugin is kept for nostalgic reasons;
+    just weblinks however). This plugin is kept for nostalgic reasons;
     it was available with streamtuner1 as well. </p>
   </item>
   <item>
@@ -98,13 +98,13 @@ and its <key>📦 Add</key> tab.</p>
   </item>
   <item>
     <title><p>File browser</p></title>
-    <p>You can also browser local files with streamtuner2 using the file
+    <p>You can also browse local files with streamtuner2 using the file
     browser plugin. It must be configured with your music collection path.
     It's not a default plugin, because this isn't really what Streamtuner2
     is made for. There are way better local music collection managers for
     Linux. It's just here for convenience, and displays files just as any
     other channel list. It has no specific file management features, and
-    won't get any. </p>
+    won't receive any. </p>
   </item>
 </terms>
 
