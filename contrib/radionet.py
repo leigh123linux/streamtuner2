@@ -3,7 +3,7 @@
 # title: radio.net
 # description: Europe's biggest radio platform
 # url: http://radio.net/
-# version: 0.4
+# version: 0.5
 # type: channel
 # category: radio
 # png:
@@ -81,13 +81,14 @@ class radionet (ChannelPlugin):
 
         # split station blocks
         for row in re.split("""<div class="stationinfo""", html):
+            print row
         
             # extract text fields
             d = re.findall("""
-              <a\s+href="(//([\w-]+)\.radio.net)" .*?
+              <a\s+href="(//([\w-]+)\.radio\.net/?)" .*?
               <img\s+src="([^<">]+)" .*?
-              <strong>(.*?)</strong> .*?
-              <small>\s*(.*?)\s*</small> .*?
+              <strong[^>]*>(.*?)</strong> .*?
+              <small[^>]*>\s*(.*?)\s*</small> .*?
             """, row, re.X|re.S)
             
             # refurbish extracted strings
