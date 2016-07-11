@@ -3,7 +3,7 @@
 # title: Youtube
 # description: Channel, playlist and video browsing for youtube.
 # type: channel
-# version: 0.2
+# version: 0.3
 # url: http://www.youtube.com/
 # category: video
 # config:
@@ -198,8 +198,12 @@ class youtube (ChannelPlugin):
         elif cat in channels:
             # channel id, e.g. UCEmCXnbNYz-MOtXi3lZ7W1Q
             UC = self.channel_id(cat)
+
+            # fetches videos ordered by date
+            for row in self.api("search", order="date", fields="pageInfo,nextPageToken,items(id,snippet(title,channelTitle,description))", channelId=UC, type="video"):
+                entries.append( self.wrap3(row, {"genre": cat, "playing": cat}) )
             
-            # playlist
+            # augments with playlist entries
             for i,playlist in enumerate(self.api("playlists", fields="items(id,snippet/title)", channelId=UC, maxResults=15)):
 
                 # items (videos)
@@ -209,6 +213,10 @@ class youtube (ChannelPlugin):
                 self.update_streams_partially_done(entries)
                 self.parent.status(i / 15.0)
             
+            # unique entries
+            e = []
+            [e.append(v) for v in entries if v not in e]
+            entries = e
         
         # empty entries
         else:
@@ -234,7 +242,7 @@ class youtube (ChannelPlugin):
 
     #-- Retrieve Youtube API query results
     #
-    def api(self, method, ver=3, pages=5, **params):
+    def api(self, method, ver=3, pages=5, debug=False, **params):
         items = []
 
         # URL and default parameters
@@ -244,6 +252,7 @@ class youtube (ChannelPlugin):
         # Retrieve data set
         while pages > 0:
             j = ahttp.get(base_url + method, params=params)
+            #if debug:
             #log.DATA(j)
             if j:
                 # json decode
@@ -293,12 +302,15 @@ class youtube (ChannelPlugin):
             format = self.audioformat,
             title = row["snippet"]["title"],
         ))
+        #log.DATA(row)
         
         # optional values
-        if "playing" not in data:
-            data["playing"] = row["snippet"]["channelTitle"]
-        if "description" in row["snippet"]:
-            data["description"] = row["snippet"]["description"],
+        if "snippet" in row:
+            if "playing" not in data and "channelTitle" in row["snippet"]:
+                 data["playing"] = row["snippet"]["channelTitle"]
+            if "description" in row["snippet"] and "description" in row["snippet"]:
+                data["description"] = row["snippet"]["description"],
+        #log.UI(data)
 
         return data
 
