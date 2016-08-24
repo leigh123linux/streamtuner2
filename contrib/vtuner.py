@@ -3,7 +3,7 @@
 # title: vTuner
 # url: http://vtuner.com/
 # description: Huge station list by music service provider
-# version: 0.3
+# version: 0.4
 # type: channel
 # category: radio
 # config:
@@ -80,6 +80,10 @@ class vtuner (ChannelPlugin):
         html = ""
         for i in xrange(1, int(conf.vtuner_pages) + 1):
             html = html + ahttp.get(self.base_url % (cat, conf.vtuner_order, i))
+            # cancel page scan if no further result links
+            if not re.search(r"""<A HREF="[^>]+&iCurrPage=%s">""" % (i + 1), html, re.I):
+                log.DATA("No further results at page %s" % i)
+                break
 
         # crude <tr> extraction
         rx_radio = re.compile(r"""
