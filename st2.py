@@ -357,7 +357,7 @@ class StreamTunerTwo(gtk.Builder):
         cn.switch()
         cn.save()
 
-    # Alternative Notebook channel tabs between TOP and LEFT position
+    # Change notebook channel tabs between TOP and LEFT position
     def switch_notebook_tabs_position(self, w, pos):
         self.notebook_channels.set_tab_pos(pos);
 
