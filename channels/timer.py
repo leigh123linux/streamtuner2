@@ -1,15 +1,16 @@
-#
+# encoding: utf-8
 # api: streamtuner2
 # title: Recording timer
 # description: Schedules play/record events for bookmarked radio stations.
 # type: feature
 # category: hook
 # depends: kronos, action >= 1.1.1
-# version: 0.7.4
+# version: 0.7.5
 # config: 
-#   { name: timer_duration, type: select, select: "auto|streamripper|fpls", value: none, description: support for time ranges }
+#   { name: timer_duration, type: select, select: "auto|streamripper|fpls", value: none, description: "Support for time ranges" }
+#   { name: timer_crontab, type: bool, value: 0, description: "Utilize cron instead of runtime scheduler. (not implemented yet)"}
 # priority: optional
-# support: unsupported
+# support: basic
 #
 # Provides an internal timer, to configure recording and playback times/intervals
 # for stations. It accepts a natural language time string when registering a stream.
@@ -28,7 +29,7 @@
 
 from config import *
 from channels import *
-import bundle.kronos as kronos  # Doesn't work with Python3
+import bundle.kronos as kronos  # unmaintend pkg, but py3-compatibilized version distributed within bundle/
 from uikit import uikit
 import action
 import copy
@@ -77,8 +78,14 @@ class timer:
             ("timer_dialog", "close"): self.hide,
             ("timer_dialog", "delete-event"): self.hide,
         })
+
+        #-- crontab mode?
+        # if "timer_crontab" in conf and conf.timer_crontab:
+        #     pass
+        # elif "timer_crontab_dequeue" in conf:
+        #     pass
         
-        # prepare spool
+        #-- prepare scheduler
         self.sched = kronos.ThreadedScheduler()
         for row in self.streams:
             try: self.queue(row)
@@ -119,7 +126,7 @@ class timer:
         pass
         
         
-    # add event to list
+    # Add timer/recording events to scheduler (or later crontab)
     def queue(self, row):
     
         # chk
@@ -182,7 +189,7 @@ class timer:
             source = row.get("listformat","href")
         )
 
-    # action wrapper
+    # kronos/sched callback: action wrapper
     def record(self, row, *args, **kwargs):
         log.TIMER("TIMED RECORD", *args)
         
@@ -205,7 +212,19 @@ class timer:
             append = append,
         )
     
+    # kronos/sched callback for testing
     def test(self, row, *args, **kwargs):
         log.TEST("KRONOS", row)
 
 
+    # crontab handlers
+    def cron_queue(self, row):
+        pass
+
+    # crontab cleanup
+    """
+        All streamtuner2 events will be preceded with a `# streamtuner2: …` comment
+    """
+    def cron_dequeue_all(self):
+        pass
+    
