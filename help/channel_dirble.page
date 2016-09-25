@@ -24,6 +24,6 @@
 	
         <note><p>There's a hidden config option for a custom API key.
         It's perhaps redundant. Should streamtuner2 -D however reveal an error,
-        you can however configure your own account in <file>settings.json</file>.
+        you can configure your own account in <file>settings.json</file>.
         </p></note>
 </page>

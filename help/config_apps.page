@@ -3,7 +3,7 @@
 	id="config_apps">
 
 <info>
-	<link type="seealso" xref="index#configuration"/>
+	<link type="seealso" xref="index#functions"/>
 	<link type="guide" xref="configuration#apps"/>
 	<desc>Common applications to use as players.</desc>
 </info>

@@ -4,11 +4,12 @@
     id="configuration">
 
 <info>
-    <link type="guide" xref="index#configuration"/>
+    <link type="guide" xref="index#functions"/>
+    <!--link type="guide" xref="index#configuration"/-->
     <desc><key>F12</key> brings up the options window with the Player, Display, System and Plugin sections.</desc>
 </info>
 
-<title>Settings dialog</title>
+<title>Configuration / Settings dialog</title>
 
 <p>
 There are various options for streamtuner2, available under <guiseq><gui>Edit</gui>

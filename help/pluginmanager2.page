@@ -74,8 +74,8 @@
 	<p>Since this is still rather experimental, you may disable all
 	associated features by starting ST2 via:</p>
 	<screen>streamtuner2 -d <input>pluginmanager2</input></screen>
-	<p>That'll inhibit loading this extension plugin. (Also works
-	with any other plugin id.)</p>
+	<p>Which inhibits loading this whole extension. (The <code>-d</code>
+	flag also works	for any other plugin name.)</p>
 	</section>
 
 </page>

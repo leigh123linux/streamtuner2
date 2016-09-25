@@ -4,7 +4,7 @@
 
 <info>
 	<link type="guide" xref="index#browsing"/>
-	<link type="topic" xref="index#functions"/>
+	<link type="seealso" xref="index#functions"/>
         <desc>Radio streams lists, station information columns, entry actions.</desc>
 </info>
 

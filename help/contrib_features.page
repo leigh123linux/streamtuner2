@@ -6,6 +6,7 @@
 	<link type="guide" xref="index#extra"/>
         <link type="guide" xref="pluginmanager2"/>
         <link type="guide" xref="configuration#plugins"/>
+	<link type="seealso" xref="index#channels"/>
         <desc>Additional feature plugins</desc>
 </info>
 
