@@ -41,6 +41,7 @@ import inspect
 import traceback
 from threading import Thread
 import time
+from compat2and3 import *
 
 # add library path (either global setup, or pyzip basename)
 if not os.path.dirname(__file__) in sys.path:
@@ -368,6 +369,7 @@ class StreamTunerTwo(gtk.Builder):
     def status(self, text=None, timeout=3):
         self.status_last = time.time() + timeout
         gobject.timeout_add(int(timeout*1000), self.status_clear)
+        #log.UI("progressbar := %s" %text)
         # progressbar
         if isinstance(text, (int, float)):
             if (text <= 0):  # unknown state
@@ -378,7 +380,7 @@ class StreamTunerTwo(gtk.Builder):
                 uikit.do(self.progress.show, immediate=1)
                 uikit.do(self.progress.set_fraction, text, immediate=1)
         # add text
-        elif isinstance(text, (str)):
+        elif isinstance(text, (str, unicode)):
             uikit.do(self.statusbar.set_text, text)
         # clean up
         else:
@@ -387,6 +389,7 @@ class StreamTunerTwo(gtk.Builder):
     # Clean up after 3 seconds
     def status_clear(self, anyway=False):
         if anyway or time.time() >= self.status_last:
+            #log.UI("progressbar.hide()")
             self.statusbar.set_text("")
             self.progress.hide()
             return False
