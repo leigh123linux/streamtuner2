@@ -3,7 +3,7 @@
 # description: UK DJs house/techno mixes
 # type: channel
 # category: archive
-# version: 0.3
+# version: 0.4
 # url: http://www.house-mixes.com/
 # config: -
 # priority: contrib
@@ -83,7 +83,7 @@ class housemixes(channels.ChannelPlugin):
         for i in range(2, int(conf.max_streams)/50): #conf.housemixes_pages):
             if html.find("latest/" + str(i)):
                 html = html + ahttp.get(self.base_url + self.catmap[cat] + "/latest/%s" % i)
-        html = re.sub("</body>.+<body>", "", html, 100, re.S)
+        html = re.sub("</body>.+?<body>", "", html, 100, re.S)
         
         # extract
         for card in [pq(e) for e in pq(html)(".card-audio")]:
