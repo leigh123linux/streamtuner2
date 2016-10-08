@@ -39,7 +39,7 @@ class housemixes(channels.ChannelPlugin):
 
     # attrs
     base_url = "http://www.house-mixes.com"
-    listformat = "pls"
+    listformat = "href" # direct mp3s (after .row() hook)
     has_search = False
     titles = dict(title="Mix Title", playing = "DJ", bitrate="Favs")
     img_resize = 32
