@@ -81,7 +81,6 @@ class radionet (ChannelPlugin):
 
         # split station blocks
         for row in re.split("""<div class="stationinfo""", html):
-            print row
         
             # extract text fields
             d = re.findall("""
