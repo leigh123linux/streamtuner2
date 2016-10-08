@@ -1,11 +1,13 @@
+# encoding: UTF-8
 # api: streamtuner2
 # title: house-mixes.com
 # description: UK DJs house/techno mixes
 # type: channel
 # category: archive
-# version: 0.4
+# version: 0.5
 # url: http://www.house-mixes.com/
-# config: -
+# config:
+#    { -x-disabled-name: housemixes_pages, type: int, value: 5, description: maximum number of pages to scan }
 # priority: contrib
 # png:
 #    iVBORw0KGgoAAAANSUhEUgAAABgAAAAVCAIAAADTi7lxAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAAAAB3RJTUUH4AoIAh8yU50KHAAABKFJREFUOMtllHtM1WUYx7/P+/7eH4fDATpcDkcBuSuwIFG8l5eGmjnNwK3S/mu2MU1ctdacl1pmO1vWMpfTwBnNpuSW900s1CaJLpilCEOZ7kRJiFzOlXP5/Z7+QBHtu/ff97Pv8z57P6Tr
@@ -39,7 +41,7 @@ class housemixes(channels.ChannelPlugin):
     base_url = "http://www.house-mixes.com"
     listformat = "pls"
     has_search = False
-    titles = dict(playing = "Artist", bitrate=False)
+    titles = dict(title="Mix Title", playing = "DJ", bitrate="Favs")
     img_resize = 32
     
     # categories
@@ -60,7 +62,6 @@ class housemixes(channels.ChannelPlugin):
         for group in pq(html)("ul.genre-nav > li"):
 
             a = pq(group)("a")[0]
-            print a.text
             self.categories.append(a.text)
             self.catmap[a.text] = a.attrib["href"]
             subs = []
@@ -79,11 +80,15 @@ class housemixes(channels.ChannelPlugin):
             return
 
         # collect
+        self.status(0.0)
         html = ahttp.get(self.base_url + self.catmap[cat])
-        for i in range(2, int(conf.max_streams)/50): #conf.housemixes_pages):
+        max = int(conf.max_streams) / 50  # or enable conf.housemixes_pages?
+        for i in range(2, int(max)):
+            self.status(float(i) / max)
             if html.find("latest/" + str(i)):
                 html = html + ahttp.get(self.base_url + self.catmap[cat] + "/latest/%s" % i)
         html = re.sub("</body>.+?<body>", "", html, 100, re.S)
+        self.status("Extracting mixes…")
         
         # extract
         for card in [pq(e) for e in pq(html)(".card-audio")]:
@@ -97,6 +102,7 @@ class housemixes(channels.ChannelPlugin):
                 # standard size 318x318 loads quicker
                 "img": card(".audio-image-link img").attr("src"), # re.sub("=318&", "=32&",  ...)
                 "listeners": int(card("a.card-plays").text()),
+                "bitrate": sum(int(a) for a in card(".card-likes, .card-downloads, .card-favs").text().split()),
             }
             streams.append(r)
 
@@ -109,10 +115,9 @@ class housemixes(channels.ChannelPlugin):
         r = ChannelPlugin.row(self)
         url = r.get("url")
         if url and url.find("/profile/") > 0:
-            print url
             html = ahttp.get(url)
             ls = re.findall(r""" Mp3Url [\\\\:"]+ (http[^\\\\"]+) """, html, re.M|re.X)
-            print ls
             if ls:
+                log.URL(ls[0])
                 r["url"] = ls[0]
         return r
