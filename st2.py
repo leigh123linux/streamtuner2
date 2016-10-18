@@ -34,7 +34,7 @@
 
 # standard modules
 import sys
-import os
+import os, subprocess
 import re
 from copy import copy
 import inspect
@@ -452,14 +452,29 @@ class StreamTunerTwo(gtk.Builder):
     def specbuttons_load(self):
         x = 0
         for btn,cmd in conf.specbuttons.items():
-            log.BTN(btn, cmd)
+            log.IN(btn, cmd)
             i = gtk.Image()
-            i.set_from_stock(btn, gtk.ICON_SIZE_SMALL_TOOLBAR)
-            b = gtk.Button(btn, btn)
-            b.connect("clicked", lambda *x: action.run(cmd))
-            self.specbuttons.attach_defaults(b, int(x / 2), int(x/2)+1, x%2, (x%2)+1)
-            x = x + 1
-            self.specbuttons.attach_defaults(b, int(x / 2), int(x/2)+1, x%2, (x%2)+1)
+            if (btn.find("gtk-") == 0):
+                i.set_from_stock(btn, gtk.ICON_SIZE_SMALL_TOOLBAR)
+            else:
+                path = None
+                if os.path.exists(btn):
+                    path = btn
+                else:
+                    f = subprocess.Popen(["locate", "/usr/share/[pi]*s/*%s*.*" % btn], stdout=subprocess.PIPE)
+                    path, err = f.communicate()
+                    path = path.split("\n")[0]
+                    log.DATA(path)
+                if path:
+                    i.set_from_file(path)
+            b = gtk.Button()
+            b.set_image(i)
+            b.connect("clicked", lambda x0, cmd=cmd, *x: action.run(cmd) )
+            self.specbuttons.attach(
+                b,
+                int(x / 2), int(x/2)+1, x%2, (x%2)+1,
+                gtk.SHRINK, gtk.SHRINK, 0, 0
+            )
             x = x + 1
         self.specbuttons.show_all()
 
