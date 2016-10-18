@@ -164,6 +164,8 @@ class StreamTunerTwo(gtk.Builder):
             "config_play_list_edit_col1": lambda w,path,txt: (self.configwin.list_edit(self.config_play, path, 1, txt)),
             "config_record_list_edit_col0": lambda w,path,txt: (self.configwin.list_edit(self.config_record, path, 0, txt)),
             "config_record_list_edit_col1": lambda w,path,txt: (self.configwin.list_edit(self.config_record, path, 1, txt)),
+            "config_specbuttons_list_edit_col0": lambda w,path,txt: (self.configwin.list_edit(self.config_specbuttons, path, 0, txt)),
+            "config_specbuttons_list_edit_col1": lambda w,path,txt: (self.configwin.list_edit(self.config_specbuttons, path, 1, txt)),
             # else
             "update_categories": self.update_categories,
             "update_favicons": self.update_favicons,
@@ -197,6 +199,7 @@ class StreamTunerTwo(gtk.Builder):
             self.update_title()
         self.win_streamtuner2.show_all()
         gui_startup(100.0)
+        self.specbuttons_load()
 
 
     #-- Shortcut for glade.get_widget()
@@ -445,6 +448,20 @@ class StreamTunerTwo(gtk.Builder):
             pix = pix.scale_simple(int(321*r), int(115*r), gtk.gdk.INTERP_BILINEAR)
         self.img_logo.set_from_pixbuf(pix)
 
+    # Extra buttons
+    def specbuttons_load(self):
+        x = 0
+        for btn,cmd in conf.specbuttons.items():
+            log.BTN(btn, cmd)
+            i = gtk.Image()
+            i.set_from_stock(btn, gtk.ICON_SIZE_SMALL_TOOLBAR)
+            b = gtk.Button(btn, btn)
+            b.connect("clicked", lambda *x: action.run(cmd))
+            self.specbuttons.attach_defaults(b, int(x / 2), int(x/2)+1, x%2, (x%2)+1)
+            x = x + 1
+            self.specbuttons.attach_defaults(b, int(x / 2), int(x/2)+1, x%2, (x%2)+1)
+            x = x + 1
+        self.specbuttons.show_all()
 
     # load application state (widget sizes, selections, etc.)
     def init_app_state(self):

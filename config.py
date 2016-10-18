@@ -123,6 +123,9 @@ class ConfigDict(dict):
            "audio/*": self.find_player(typ="xterm") + " -e \"streamripper %srv\"",   # -d /home/***USERNAME***/Musik
            "video/youtube": self.find_player(typ="xterm") + " -e \"youtube-dl %srv\"",
         }
+        self.specbuttons = {
+           "gtk-media-forward": "pavucontrol",
+        }
         # Presets are redundant now. On first startup the `priority:` field of each plugin is checked.
         self.plugins = {
              # core plugins, cannot be disabled anyway
