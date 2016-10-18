@@ -3,20 +3,16 @@
 # title: house-mixes.com
 # description: UK DJs house/techno mixes
 # type: channel
-# category: archive
-# version: 0.5
+# category: collection
+# version: 0.6
 # url: http://www.house-mixes.com/
 # config:
-#    { -x-disabled-name: housemixes_pages, type: int, value: 5, description: maximum number of pages to scan }
+#    ( -x-off-name: housemixes_pages, type: int, value: 5, description: maximum number of pages to scan )
 # priority: contrib
 # png:
-#    iVBORw0KGgoAAAANSUhEUgAAABgAAAAVCAIAAADTi7lxAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAAAAB3RJTUUH4AoIAh8yU50KHAAABKFJREFUOMtllHtM1WUYx7/P+/7eH4fDATpcDkcBuSuwIFG8l5eGmjnNwK3S/mu2MU1ctdacl1pmO1vWMpfTwBnNpuSW900s1CaJLpilCEOZ7kRJiFzOlXP5/Z7+QBHtu/ff97Pv8z57P6Tr
-#    OjPjUZjZYIrTqNjOJUnRWemUKAGgN4DWXv5jUOseRsBgQSCisVtEREqpaDT6iAJBKE+lqiJanm2EImh9QEMeBiFWR7qV7Fa09GF/G+74eDxI07THIGbWBSoLxJaFHAjyoZsxXWZGfG55ckaOUJZwwDfU3SruXXvZ6XFajV2/U1MPooxRmqZp2lgXi6R1pdg027x4mw71Zpevesu15vXsjAlK10FkGqY/EGi+2nr80AG949T6Ms8zFnH0Fpv8qJpSCiACVRWIng3Y+YKsWLjo3C9N4UiEmQ3DGPZ6hz1ewzCYmZnv37/v+vzLyhLHkWU0
-#    M5XG3oeUUpFIND8eP61G9zB/1VO2Y0/d3BlloVDockvL2bONHV23o4aRkZFRuWrl/HlzLRZLKBzZs3ff30e2F6qBD1poOAylNFh0VWin2sXUXY1XCuP31tWbzIODgy6Xy+l0js0uhEx1OD765NOBgQFm7h8YrF63btt08V4ZFdopVldYkiHb1pDxPg4swooVK3v+6Y1Ewi6Xy2azPV4tEUAAbDbbjp2fBYJBZj55tmlZSVZfNa6upVkOKaoKeKqT/SGc/9cyf+Gi9AlprW3XausOjPh8STGUZSWdQEQFCSInQZpBX+2+/ed/bQZQNKXA
-#    WVAcGMF0J68pZC0/kTmMcBB+mZw/eYpp8rHjJ/T+rm1zxLx09oSw8TwE4ZsKLkgyO4fpXPfdg7XfzpwxPcEWlxpjkAEyUJ7GmjdKJJkZsXE2e4ojEBzpar/5bineLDV1K1p6SRJsirOSkJaIBwZIw6WfT584fmzKs2V3eocsOQBDF9Cae1CRB2EBC0lSgU1vwPfFn3ziLk1zUH8IgyPsDWNXM3kiaL2Pv3wIGv6Pt2+3JzvsfTf0IpgSl+6RdvSOzEvj4gR2DwXDfo+mtMRkx7kBtA/gjJsJiDIYqOtkg8EACERwu91utzvTSld6yWNS
-#    XYeEplSiojwbEhIS9tcdNAzzw81bnlzWwzM+UkohhCTKjhNpVqkpXUopA1FzMEyhUCglJblicYUAGhsb/X6/JsVEq5gQyykxiNdF0IDBYOb0SVnTyqa63W6DeSgMf4SlFFJKyaY5+l28/uDz8xc8V1rS2dl54/r1VAu2luPtEqzMw4vpaOunvoBpsVjeWb9eCNHW1jZamghCCCilxgoDqN6wMRyJNF24MLmoWCeU2sWCiWLBRDEjVcRpAGhV5eofjvyYnZOLcdMqpZ4GpaSk1NfXh8Lh7+q/T3M6MS5CyKXLV1xsvvxq1Wo8+WZPg0ZZ
-#    ubm5DQ0NwWDw1JkzS5a+NCkrKzXNWVhUVFNT03Xr9uYtW2Ot1v+DnjDkmG0zMzNrNm167Y21SqCjs3No2JudlQkhv969u+HwYZ/PO16PDw35lLNHYxhGQmLi7Dlzly6uyM/PF0TX29tPnjp95fJvzDzWfbyz/wNZXAuckyZkmAAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxNi0xMC0wOFQwNDozMDo1NCswMjowMFEBTy0AAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTYtMTAtMDhUMDQ6MzA6NTQrMDI6MDAgXPeRAAAAGXRFWHRTb2Z0d2Fy
-#    ZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAABJRU5ErkJggg==
+#    iVBORw0KGgoAAAANSUhEUgAAABQAAAASBAMAAACp/uMjAAAAGFBMVEUIBQE7KCGSPABUWFrwcACIkJayuLr3+vjaVnR4AAAAAWJLR0QAiAUdSAAAAAlwSFlzAAALEwAACxMB
+#    AJqcGAAAAAd0SU1FB+AKCQwWONCoEiQAAACPSURBVAjXLY29DsIgFIUPxehaExJXW+EB7MJaCE/gAKvRaNdWYu/rewve6bsn5wcARN+3KNeE7hgq60t8X30Rx4mIhjOj2tMr
+#    UnaMPmXAUsPiSBwRdHMcWtEKpIdHMFk7FQ6fAG0WPe46OXgos9QhrpC5jm576wayvBO0x7Pgaebee0HJDlv9sN80/xGxOH8QkRfKLi9RvwAAAABJRU5ErkJggg==
 # depends: pq, ahttp
 #
 # House-mixes.com is an UK platform for DJs to showcase their
