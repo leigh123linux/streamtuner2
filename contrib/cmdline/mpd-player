@@ -1,0 +1,36 @@
+!/bin/bash
+# title: MPD playback wrapper
+# description: handles MPD playlist types from ST2 url input
+# author: Rocus van Oosten
+# version: 1.2
+
+MPD_HOST=10.0.2.209
+export MPD_HOST
+
+ST=$1 # parameter 1 contains stream information
+ echo $ST #just for testing
+
+if [[ $ST == toggle ]] ;
+  then
+    mpc toggle
+elif [[ $ST == louder ]] ;
+  then
+    mpc volume +5
+elif [[ $ST == softer ]] ;
+  then
+    mpc volume -5
+else
+  mpc clear
+  if [[ $ST == /* ]] ;
+    then # temp treamtuner2 file (starts with / )
+      FN=basename $ST
+      scp $ST root@$MPD_HOST:/var/lib/mpd/music/WEBRADIO 
+      mpc load WEBRADIO/$FN
+  elif [[ $ST == *pls* ]] || [[ $ST == *m3u* ]] || [[ $ST == *asx* ]] || [[ $ST == *ashx* ]] || [[ $ST == *xspf* ]] ;
+    then # stream (starts with http and is playlist)
+      mpc load $ST
+  else # stream (must be added to mpd)
+    mpc add $ST
+  fi
+  mpc play
+fi
