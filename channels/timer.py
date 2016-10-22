@@ -8,7 +8,7 @@
 # version: 0.7.5
 # config: 
 #   { name: timer_duration, type: select, select: "auto|streamripper|fpls", value: none, description: "Support for time ranges" }
-#   { name: timer_crontab, type: bool, value: 0, description: "Utilize cron instead of runtime scheduler. (not implemented yet)"}
+#   { name: timer_crontab, type: bool, value: 0, description: "Utilize cron instead of runtime scheduler. (not implemented yet)" }
 # priority: optional
 # support: basic
 #
