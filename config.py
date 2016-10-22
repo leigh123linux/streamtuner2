@@ -124,7 +124,7 @@ class ConfigDict(dict):
            "video/youtube": self.find_player(typ="xterm") + " -e \"youtube-dl %srv\"",
         }
         self.specbuttons = {
-           "gtk-media-forward": "pavucontrol",
+           #"gtk-media-forward": "pavucontrol",
         }
         # Presets are redundant now. On first startup the `priority:` field of each plugin is checked.
         self.plugins = {
