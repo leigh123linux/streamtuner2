@@ -194,11 +194,11 @@ class configwin (AuxiliaryWindow):
 
     # Put config widgets into channels/features configwin notebooks
     def add_channels(self, id=None, w=None, label=None, color=None, image=None, align=20):
-        self.plugin_options.pack_start(uikit.wrap(self.widgets, id, w, label, color, image, align))
+        self.plugin_options.pack_start(uikit.wrap(self.widgets, id, w, label, color, image, align, label_markup=1))
 
     # Separate tab for non-channel plugins
     def add_features(self, id=None, w=None, label=None, color=None, image=None, align=20):
-        self.feature_options.pack_start(uikit.wrap(self.widgets, id, w, label, color, image, align))
+        self.feature_options.pack_start(uikit.wrap(self.widgets, id, w, label, color, image, align, label_markup=1))
 
 
     # save config

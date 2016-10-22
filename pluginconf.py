@@ -272,6 +272,7 @@ def plugin_meta_extract(src="", fn=None, literal=False):
 def plugin_meta_config(str):
     config = []
     for entry in rx.config.findall(str):
+        entry = entry[0] or entry[1]
         opt = {
             "type": None,
             "name": None,
@@ -297,7 +298,7 @@ class rx:
         ^([\w-]+):(.*$(?:\n(?![\w-]+:).+$)*)      # plain key:value lines
     """, re.M | re.X)
     config = re.compile(r"""
-        [\{\<] (.+?) [\}\>]                    # JSOL/YAML scheme {...} dicts
+        \{ (.+?) \} | \< (.+?) \>              # JSOL/YAML scheme {...} dicts
     """, re.X)
     options = re.compile(r"""
         ["':$]?   (\w*)  ["']?                 # key or ":key" or '$key'
