@@ -1,6 +1,6 @@
 # encoding: UTF-8
 # api: streamtuner2
-# title: house-mixes.com
+# title: house-mixes
 # description: UK DJs house/techno mixes
 # type: channel
 # category: collection
