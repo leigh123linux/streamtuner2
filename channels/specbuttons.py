@@ -1,19 +1,32 @@
 # encoding: utf-8
 # title: Extra buttons for apps
 # description: Adds configurable mini toolbar buttons
-# version: 0.5
+# version: 0.7
 # depends: streamtuner2 >= 2.2.0
 # type: feature
 # category: ui
 # config:
-#    { name: specbutton_rows, value: 2, type: int, description: "Number of rows to arrange buttons in (default 2, looks ok with up to 3 rows)" }
+#    { name: specbutton_rows, value: 2, max: 4, type: int, description: "Number of rows to arrange buttons in." }
+# doc:
+#    http://fossil.include-once.org/streamtuner2/info/43b36ed35b1488d5
 #
-# Shows the mini extra buttons in the toolbar, which allow to control your
+# Adds the mini/extra buttons in the toolbar, which allow to control your
 # audio player or run other system commands. The configuration list is in
 # the Settings → Options tab.
 #
 # Icons can either be gtk-xyz icon names, or load /usr/share/icon/*.png
-# pixmaps.
+# pixmaps. Enter a shortcut like "firefox" as icon name for it be looked up.
+# Then specify an external command to start. For example:
+#
+#     Icon           Cmd
+#     ------         ------
+#     volume         pavucontrol
+#     mute           amixer -c 0 set Front 50DB 
+#     up             amixer -D pulse sset Master 5%+
+#     kill           pkill vlc
+#
+# The commands can be pretty much any shell command, but still allow for
+# streamtuner2 placeholders like %g or %url and $title.
 
 
 import os.path
@@ -25,7 +38,7 @@ import action
 from uikit import gtk
 
 
-# Channel Homepage in Toolbar
+# Extra/mini buttons in toolbar
 class specbuttons(object):
     module = __name__
 
@@ -42,25 +55,29 @@ class specbuttons(object):
     def update_buttons(self, parent):
     
         # define table width (2 rows default)
-        y = min(int(conf.specbutton_rows), 4)
+        y = max(min(int(conf.specbutton_rows), 4), 1) # 1 <= y <= 4
         self.specbuttons.resize(y, int(math.ceil(len(conf.specbuttons) / y)))
         # clean up
         for widget in self.specbuttons.get_children():
             widget.destroy()
-        xy = 0
         
         # add icon buttons
-        for btn, cmd in conf.specbuttons.items():
+        for xy, (btn, cmd) in enumerate(conf.specbuttons.items()):
             #log.IN(btn, cmd)
             w_btn = gtk.Button()
             w_btn.set_image(self.icon(btn))
-            w_btn.connect("clicked", lambda x0, cmd=cmd, *x: action.run(cmd) )
+            w_btn.connect("clicked", lambda x0, cmd=cmd, *x: self.action(cmd))
             self.specbuttons.attach(
-                w_btn,
-                int(xy / y), int(xy / y) + 1, xy % y, (xy % y) + 1,
-                gtk.EXPAND, gtk.EXPAND, 1, 1
+                child = w_btn,
+                left_attach   = int(xy / y),
+                right_attach  = int(xy / y) + 1,
+                top_attach    = xy % y,
+                bottom_attach = (xy % y) + 1,
+                xoptions = gtk.EXPAND,
+                yoptions = gtk.EXPAND,
+                xpadding = 1,
+                ypadding = 1
             )
-            xy = xy + 1
         self.specbuttons.show_all()
 
     # Instantiate Image from gtk-* string or path
@@ -78,7 +95,7 @@ class specbuttons(object):
                 wi.set_from_stock("gtk-image-missing", gtk.ICON_SIZE_SMALL_TOOLBAR)
         return wi
 
-    # Look for image basename "play" in /usr/share/icons/*.*
+    # Look for image basename (e.g. "play") in /usr/share/icons/*.* and /pixmaps/*
     def locate(self, btn):
         f = subprocess.Popen(["locate", "/usr/share/[pi]*s/*%s*.*" % btn], stdout=subprocess.PIPE)
         path, err = f.communicate()
@@ -102,4 +119,11 @@ class specbuttons(object):
             r[btn] = cmd
         conf.specbuttons = r
         self.update_buttons(self.parent)
+
+    # Button callback, allow for %url/%title placeholders
+    def action(self, cmd):
+        if re.search("[%$]", cmd):
+            row = self.parent.channel().row()
+            cmd = action.interpol(cmd, row=row, add_default=False)
+        action.run(cmd)
 

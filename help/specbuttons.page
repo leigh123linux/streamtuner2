@@ -1,0 +1,65 @@
+<page	xmlns="http://projectmallard.org/1.0/"
+	type="guide"
+	id="specbuttons">
+
+<info>
+	<link type="guide" xref="index#extra"/>
+	<link type="guide" xref="configuration#apps"/>
+	<link type="guide" xref="configuration#gui"/>
+	<desc>Toolbar application short cuts.</desc>
+</info>
+
+	<title>Extra/mini buttons</title>
+
+	<p>Using the specbuttons plugin, you can define additional
+	shortcuts. This is meant as convenience - allows to start
+	other audio apps or system ontrols from within streamtuner2.</p>
+	
+	<p>The settings list can be found in the Settings → Options tab. It
+	follows the layout of the player/recording configuration. Except
+	that it lists icons and their according action commands:</p>
+
+	<table shade="rows" rules="rows cols">
+		<tr><td><p><em>Icon</em></p></td>  	<td><p><em>Cmd</em></p></td> </tr>
+		<tr><td><p><app>gtk-media-forward</app></p></td>     <td><p><cmd>vlc next</cmd></p></td> </tr>
+		<tr><td><p><app>terminal</app></p></td>  	<td><p><cmd>xterm</cmd></p></td> </tr>
+		<tr><td><p><app>volume</app></p></td>		<td><p><cmd>pavucontrol</cmd></p></td> </tr>
+		<tr><td><p><app>database</app></p></td>		<td><p><cmd>./myscript "%url" "%title"</cmd></p></td> </tr>
+		<tr><td><p><app>./import.png</app></p></td>	<td><p><cmd>audacity %pls</cmd></p></td> </tr>
+	</table>
+
+        <section id="gtk-icons">
+        <title>gtk-icons</title>
+	<p>Note that the icon name can either be Gtk-builtin icon. Their
+        names always start with "<app>gtk-</app>", for example "<app>gtk-cancel</app>". You can
+        find a list of all available builtins under
+        <link href="http://www.pygtk.org/pygtk2reference/gtk-stock-items.html">http://www.pygtk.org/pygtk2reference/gtk-stock-items.html</link>.</p>
+	</section>
+	
+        <section id="png-icons">
+        <title>PNG icons</title>
+	<p>In case you enter something like "<app>player</app>", the icon name will be
+	searched for and expanded to an absolute PNG filename. For example
+        "<file>totem</file>" might become <file>/usr/share/icons/HighContrast/16x16/apps/totem.png</file>.</p>
+        
+        <p>This won't always yield the exact icon / theme / or size you wanted. So it's
+	sometimes necessary to look up the complete path yourself.</p>
+	</section>
+
+        <section id="placeholders">
+        <title>Commands</title>
+        <p>You can define any graphical or commandline application to be
+        invoked by your custom toolbar button. Foremost you want to invoke
+        audio controls of course, or start/stop players.</p>
+        
+	<p>Placeholders like %title and %url or %pls and %m3u are supported
+	for all commands as well. So you can have additional play/record
+	shortcuts.</p>
+	</section>
+
+        <section>
+        <note style="bug"><p>The icon list isn't ordered. So you cannot
+        define which button appears first.</p></note>
+        </section>
+
+</page>
