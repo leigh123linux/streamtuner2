@@ -193,15 +193,15 @@ def mime_app(fmt, cmd_list):
 #  · And can embed %title or %genre placeholders.
 #  · Replace .pls URL with local .m3u file depending on map.
 #
-def interpol(cmd, source="pls", row={}):
+def interpol(cmd, source="pls", row={}, add_default=True):
+    row = copy.copy(row)
 
     # Inject other meta fields (%title, %genre, %playing, %format, etc.)
-    row = copy.copy(row)
-    for field in set(re.findall("%(\w+)", cmd)).intersection(row.keys()):
-        cmd = cmd.replace("%"+field, "%r" % row.get(field))
+    rx_keys = "[\$\%](" + "|".join(row.keys()) + ")\\b"
+    cmd = re.sub(rx_keys, lambda m: "%r" % str(row.get(m.group(1))), cmd)
 
     # Add default %pls if cmd has no %url placeholder
-    if cmd.find("%") < 0:
+    if not add_default and cmd.find("%") < 0:
         cmd = cmd + " %pls"
         # "pls" as default requires no conversion for most channels, and seems broadly supported by players
 
@@ -217,7 +217,10 @@ def interpol(cmd, source="pls", row={}):
             # insert quoted URL/filepath
             return re.sub(rx, quote(url), cmd, 2, re.X)
 
-    return "/bin/false"
+    if not add_default:
+        return cmd
+    else:
+         return "/bin/false"
 
 
 # Substitute streaming address with desired playlist format
