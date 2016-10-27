@@ -7,6 +7,7 @@
 # category: ui
 # config:
 #    { name: specbutton_rows, value: 2, max: 4, type: int, description: "Number of rows to arrange buttons in." }
+#    { name: specbuttons, type: dict, rows: "icon,command", description: "Associate icons to external commands." }
 # doc:
 #    http://fossil.include-once.org/streamtuner2/info/43b36ed35b1488d5
 #

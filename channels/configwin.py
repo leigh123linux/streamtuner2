@@ -5,6 +5,7 @@
 # type: feature
 # category: ui
 # config: -
+#    { name: arraysample, value: "1,2", type: array, rows: "xxx,yyy", description: table }
 # priority: core
 # 
 # Configuration dialog for audio applications,
@@ -66,7 +67,7 @@ class configwin (AuxiliaryWindow):
                 elif isinstance(w, gtk.SpinButton):
                     w.set_value(int(val))
                 # list
-                elif isinstance(w, gtk.ListStore):
+                elif isinstance(w, gtk.ListStore) and isinstance(val, dict):
                     w.clear()
                     for k,v in val.items():
                         w.append([k, v, True, self.app_bin_check(v)])
@@ -175,6 +176,13 @@ class configwin (AuxiliaryWindow):
                     cb = gtk.SpinButton()
                     cb.set_adjustment(adj)
                     cb.set_digits(0)
+
+            # ListView
+            elif opt["type"] in ("list", "table", "array", "dict"):
+                cb, ls = uikit.config_treeview(opt)
+                add_("cfgui_tv", cb, "", None)
+                self.widgets["config_" + opt["name"]] = ls
+                continue
 
             # text field
             else:

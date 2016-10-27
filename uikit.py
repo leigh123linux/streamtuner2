@@ -139,6 +139,7 @@ class uikit:
                     #log.INFO(cell, len(cell))
 
                 # add column to treeview
+                #log.E(col)
                 widget.append_column(col)
            
         # add data?
@@ -151,8 +152,8 @@ class uikit:
                     vartypes.append(desc[var][1])  # content types
                     rowmap.append(desc[var][0])    # dict{} column keys in entries[] list
             # create gtk array storage
-            ls = gtk.ListStore(*vartypes)   # could be a TreeStore, too
             #log.UI(vartypes, len(vartypes))
+            ls = gtk.ListStore(*vartypes)   # could be a TreeStore, too
             #log.DATA(rowmap, len(rowmap))
  
             # prepare for missing values, and special variable types
@@ -506,6 +507,31 @@ class uikit:
             w = a
         w.show_all()
         return w
+    
+    
+    # Config win table
+    @staticmethod
+    def config_treeview(opt):
+        w = gtk.TreeView()
+        w.set_property("width_request", 450)
+        w.set_property("height_request", 125)
+        # options
+        _k,_v = str(opt.get("rows", "x,y")).split(",")
+        # fill columns
+        liststore, rowmap, pix_entry = uikit.columns(
+            w,
+            [    # datamap
+                 [_k,125, [_k,str,"text",{"editable":2}] ],
+                 [_v,275, [_v,str,"text",{"editable":True}] ],
+                 [None,0, ['b',bool,None,{}] ],
+                 [None,0, ['i',str,None,{}] ]
+            ],
+            [{}]
+        )
+        for i,tvc in enumerate(w.get_children()):
+          for tvcr in tvc.get_children():
+            tvcr.connect("edited", lambda *x: log.EDIT(x))
+        return w, liststore
 
 
     # Attach textual menu entry and callback
