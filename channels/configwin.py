@@ -5,7 +5,6 @@
 # type: feature
 # category: ui
 # config: -
-#    { name: arraysample, value: "1,2", type: array, rows: "xxx,yyy", description: table }
 # priority: core
 # 
 # Configuration dialog for audio applications,
@@ -70,8 +69,8 @@ class configwin (AuxiliaryWindow):
                 elif isinstance(w, gtk.ListStore) and isinstance(val, dict):
                     w.clear()
                     for k,v in val.items():
-                        w.append([k, v, True, self.app_bin_check(v)])
-                    w.append(["", "", True, gtk.STOCK_NEW])
+                        w.append([k, v, uikit.app_bin_check(v)])
+                    w.append(["", "", gtk.STOCK_NEW])
             #log.CONF("config load", prefix+key, val, type(w))
 
     # Store gtk widget valus back into conf. dict
@@ -99,27 +98,6 @@ class configwin (AuxiliaryWindow):
                             config[key][row[0]] = row[1]
             log.CONF("config save", prefix+key, val)
     
-    
-    # Generic Gtk callback to update ListStore when entries get edited.
-    # (The main signal_connect() dict prepares individual lambda funcs
-    # for each ListStore column id.)
-    def list_edit(self, liststore, path, column, new_text):
-        liststore[path][column] = new_text
-        liststore[path][3] = self.app_bin_check(new_text)
-
-    # return OK or CANCEL depending on availability of app
-    def app_bin_check(self, v):
-        bin = re.findall(r"(?<![$(`%-])\b(\w+(?:-\w+)*)", v)
-        if bin:
-            bin = [find_executable(bin) for bin in bin]
-            if not None in bin:
-                return gtk.STOCK_MEDIA_PLAY
-            else:
-                return gtk.STOCK_CANCEL
-        else:
-            return gtk.STOCK_NEW
-        
-
 
     # iterate over channel and feature plugins
     def add_plugins(self):
@@ -179,9 +157,10 @@ class configwin (AuxiliaryWindow):
 
             # ListView
             elif opt["type"] in ("list", "table", "array", "dict"):
-                cb, ls = uikit.config_treeview(opt)
+                cb, ls = uikit.config_treeview(opt, opt.get("columns", "Key,Value").split(","))
                 add_("cfgui_tv", cb, "", None)
                 self.widgets["config_" + opt["name"]] = ls
+                add_({}, uikit.label("<small>%s</small>" % description, markup=True, size=455))
                 continue
 
             # text field

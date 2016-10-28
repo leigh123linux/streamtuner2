@@ -509,29 +509,60 @@ class uikit:
         return w
     
     
-    # Config win table
+    # Config win table (editable dictionary, two columns w/ executable indicator pixbuf)
     @staticmethod
-    def config_treeview(opt):
-        w = gtk.TreeView()
+    def config_treeview(opt, columns=["Icon", "Command"]):
+        liststore = gtk.ListStore(str, str, str)
+        w = gtk.TreeView(liststore)
+        lno = len(columns)
+        # two text columns and renderers
+        for i in range(0, lno):
+            c = gtk.TreeViewColumn(columns[i])
+            c.set_resizable(True)
+            c.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
+            c.set_fixed_width(150 + 75*i)
+            r = gtk.CellRendererText()
+            c.pack_end(r, expand=True)
+            r.set_property("editable", True)
+            r.connect("edited", uikit.liststore_edit, (liststore, i))
+            c.add_attribute(r, "text", i)
+            #c.add_attribute(r, "editable", 2)
+            w.append_column(c)
+        # add pixbuf holder to last column
+        if lno < 3:
+            r = gtk.CellRendererPixbuf()
+            c.pack_start(r, expand=False)
+            c.add_attribute(r, "stock_id", 2)
         w.set_property("width_request", 450)
-        w.set_property("height_request", 125)
-        # options
-        _k,_v = str(opt.get("rows", "x,y")).split(",")
-        # fill columns
-        liststore, rowmap, pix_entry = uikit.columns(
-            w,
-            [    # datamap
-                 [_k,125, [_k,str,"text",{"editable":2}] ],
-                 [_v,275, [_v,str,"text",{"editable":True}] ],
-                 [None,0, ['b',bool,None,{}] ],
-                 [None,0, ['i',str,None,{}] ]
-            ],
-            [{}]
-        )
-        for i,tvc in enumerate(w.get_children()):
-          for tvcr in tvc.get_children():
-            tvcr.connect("edited", lambda *x: log.EDIT(x))
+        w.set_property("height_request", 115)
         return w, liststore
+        
+    # Generic Gtk callback to update ListStore when entries get edited.
+    # where user_data = (liststore, column #id)
+    @staticmethod
+    def liststore_edit(cell, row, text, user_data):
+        #log.EDIT(cell, row, text, user_data)
+        liststore, column = user_data
+        liststore[row][column] = text
+        # update executable-indicator pixbuf
+        if column == 1 and len(liststore) == 3 and liststore[row][2].startswith("gtk."):
+            liststore[row][2] = uikit.app_bin_check(text)
+        # add new row if editing last
+        if row == len(liststore) -1:
+            liststore.append(*["" for c in liststore[column]])
+
+    # return OK or CANCEL depending on availability of app
+    @staticmethod
+    def app_bin_check(v):
+        bin = re.findall(r"(?<![$(`%-;/$])\b(\w+(?:-\w+)*)", v)
+        if bin:
+            bin = [find_executable(bin) for bin in bin]
+            if not None in bin:
+                return gtk.STOCK_MEDIA_PLAY
+            else:
+                return gtk.STOCK_CANCEL
+        else:
+            return gtk.STOCK_NEW
 
 
     # Attach textual menu entry and callback
