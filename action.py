@@ -201,7 +201,7 @@ def interpol(cmd, source="pls", row={}, add_default=True):
     cmd = re.sub(rx_keys, lambda m: "%r" % str(row.get(m.group(1))), cmd)
 
     # Add default %pls if cmd has no %url placeholder
-    if not add_default and cmd.find("%") < 0:
+    if add_default and cmd.find("%") < 0:
         cmd = cmd + " %pls"
         # "pls" as default requires no conversion for most channels, and seems broadly supported by players
 
