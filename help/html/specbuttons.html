@@ -1,0 +1,112 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Special extra/mini buttons</title>
+<link rel="stylesheet" type="text/css" href="C.css">
+<script type="text/javascript" src="jquery.js"></script><script type="text/javascript" src="jquery.syntax.js"></script><script type="text/javascript" src="yelp.js"></script>
+</head>
+<body><div class="page" role="main">
+<div class="header"><div class="trails" role="navigation">
+<div class="trail">
+<a class="trail" href="index.html" title="♪ Streamtuner2"><span class="media"><span class="media media-image"><img src="img/logo.png" class="media media-inline" alt="♪"></span></span> Streamtuner2 </a> › <a class="trail" href="index.html#extra" title="Additional features">Additional features</a> » </div>
+<div class="trail">
+<a class="trail" href="index.html" title="♪ Streamtuner2"><span class="media"><span class="media media-image"><img src="img/logo.png" class="media media-inline" alt="♪"></span></span> Streamtuner2 </a> › <a class="trail" href="index.html#functions" title="Functions">Functions</a> » <a class="trail" href="configuration.html" title="Configuration / Settings dialog">Configuration / Settings dialog</a> › <a class="trail" href="configuration.html#gui" title="Display/GUI options">Display/GUI options</a> » </div>
+<div class="trail">
+<a class="trail" href="index.html" title="♪ Streamtuner2"><span class="media"><span class="media media-image"><img src="img/logo.png" class="media media-inline" alt="♪"></span></span> Streamtuner2 </a> › <a class="trail" href="index.html#functions" title="Functions">Functions</a> » <a class="trail" href="configuration.html" title="Configuration / Settings dialog">Configuration / Settings dialog</a> › <a class="trail" href="configuration.html#apps" title="Player application settings">Player application settings</a> » </div>
+</div></div>
+<div class="body">
+<div class="hgroup"><h1 class="title"><span class="title">Special extra/mini buttons</span></h1></div>
+<div class="region">
+<div class="contents">
+<p class="p">Using the specbuttons plugin, you can define additional
+	shortcuts. This is meant as convenience - allows to start
+	other audio apps or system ontrols from within streamtuner2.</p>
+<p class="p">The settings list can be found with th plugin options in the
+	<span class="key"><kbd>🔌 Features</kbd></span> tab.  It follows the layout of the player/recording
+	configuration.  Except that it lists icons and their according
+	action commands:</p>
+<div class="table"><div class="inner"><div class="region"><table class="table">
+<tr>
+<td><p class="p"><span class="em">Icon</span></p></td>
+<td style="border-left-style: solid;"><p class="p"><span class="em">Cmd</span></p></td>
+</tr>
+<tr class="shade">
+<td style="border-top-style: solid;"><p class="p"><span class="app">gtk-media-forward</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">vlc next</span></p></td>
+</tr>
+<tr>
+<td style="border-top-style: solid;"><p class="p"><span class="app">terminal</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">xterm</span></p></td>
+</tr>
+<tr class="shade">
+<td style="border-top-style: solid;"><p class="p"><span class="app">volume</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">pavucontrol</span></p></td>
+</tr>
+<tr>
+<td style="border-top-style: solid;"><p class="p"><span class="app">database</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">./myscript "%url" "%title"</span></p></td>
+</tr>
+<tr class="shade">
+<td style="border-top-style: solid;"><p class="p"><span class="app">./import.png</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">audacity %pls</span></p></td>
+</tr>
+</table></div></div></div>
+</div>
+<div id="gtk-icons" class="sect"><div class="inner">
+<div class="hgroup"><h2 class="title"><span class="title">gtk-icons</span></h2></div>
+<div class="region"><div class="contents"><p class="p">Note that the icon name can also be that of a Gtk-builtin icon. Their
+        names always start with "<span class="app">gtk-</span>", for example "<span class="app">gtk-cancel</span>". You can
+        find a list of all available builtins under
+        <span class="link"><a href="http://www.pygtk.org/pygtk2reference/gtk-stock-items.html" title="http://www.pygtk.org/pygtk2reference/gtk-stock-items.html">http://www.pygtk.org/pygtk2reference/gtk-stock-items.html</a></span>.</p></div></div>
+</div></div>
+<div id="png-icons" class="sect"><div class="inner">
+<div class="hgroup"><h2 class="title"><span class="title">PNG icons</span></h2></div>
+<div class="region"><div class="contents">
+<p class="p">In case you enter something like "<span class="app">player</span>", the icon name will be
+	searched for and expanded to an absolute PNG filename. For example
+        "<span class="file">totem</span>" might become <span class="file">/usr/share/icons/HighContrast/16x16/apps/totem.png</span>.</p>
+<p class="p">This won't always yield the exact icon / theme / or size you wanted. So it's
+	sometimes necessary to look up the complete path yourself.</p>
+</div></div>
+</div></div>
+<div id="placeholders" class="sect"><div class="inner">
+<div class="hgroup"><h2 class="title"><span class="title">Commands</span></h2></div>
+<div class="region"><div class="contents">
+<p class="p">You can define any graphical or commandline application to be
+        invoked by your custom toolbar button. Foremost you want to invoke
+        audio controls of course, or start/stop players.</p>
+<p class="p">Placeholders like %title and %url or %pls and %m3u are supported
+	for all commands as well. So you can have additional play/record
+	shortcuts.</p>
+</div></div>
+</div></div>
+<div id="" class="sect"><div class="inner">
+<div class="hgroup"><h2 class="title"><span class="title">icon rows</span></h2></div>
+<div class="region"><div class="contents">
+<p class="p">With the "number of rows" setting, more buttons can be packed together.
+	It looks okay with up to 3 rows - when using the large sized main toolbar.
+	The defined icon shortcuts will always be packed column-wise.</p>
+<div class="note note-bug" title="Bug"><div class="inner"><div class="region"><div class="contents"><p class="p">The icon list isn't ordered. So you cannot
+        define which button appears first. (Albeit the plugin config
+        definition can be changed from 'dict' to 'table' now, and the plugin
+        required just a little editing then.)</p></div></div></div></div>
+</div></div>
+</div></div>
+<div class="sect sect-links" role="navigation">
+<div class="hgroup"></div>
+<div class="contents"><div class="links guidelinks"><div class="inner">
+<div class="title"><h2><span class="title">More Information</span></h2></div>
+<div class="region"><ul>
+<li class="links "><a href="index.html#extra" title="Additional features">Additional features</a></li>
+<li class="links "><a href="configuration.html#gui" title="Display/GUI options">Display/GUI options</a></li>
+<li class="links "><a href="configuration.html#apps" title="Player application settings">Player application settings</a></li>
+</ul></div>
+</div></div></div>
+</div>
+</div>
+<div class="clear"></div>
+</div>
+<div class="footer"></div>
+</div></body>
+</html>
