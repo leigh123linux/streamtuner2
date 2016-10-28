@@ -1,7 +1,7 @@
 # api: streamtuner2
 # title: Config dialog
 # description: Allows to configure players, options, and plugins
-# version: 2.5
+# version: 2.7
 # type: feature
 # category: ui
 # config: -

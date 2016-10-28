@@ -4,7 +4,7 @@
 # category: io
 # title: play/record actions
 # description: Starts audio applications, guesses MIME types for URLs
-# version: 1.1.1
+# version: 1.1.2
 # priority: core
 #
 # Multimedia interface for starting audio players, recording app,

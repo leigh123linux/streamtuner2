@@ -1,7 +1,7 @@
 # encoding: utf-8
 # title: Spec buttons for apps
 # description: Adds configurable mini toolbar buttons
-# version: 0.7
+# version: 0.8
 # depends: streamtuner2 >= 2.2.0
 # type: feature
 # category: ui
