@@ -66,11 +66,18 @@ class configwin (AuxiliaryWindow):
                 elif isinstance(w, gtk.SpinButton):
                     w.set_value(int(val))
                 # list
-                elif isinstance(w, gtk.ListStore) and isinstance(val, dict):
+                elif isinstance(w, gtk.ListStore):
                     w.clear()
-                    for k,v in val.items():
-                        w.append([k, v, uikit.app_bin_check(v)])
-                    w.append(["", "", gtk.STOCK_NEW])
+                    if isinstance(val, dict):
+                        for k,v in val.items():
+                            w.append([k, v, uikit.app_bin_check(v)])
+                        w.append(["", "", gtk.STOCK_NEW])
+                    elif isinstance(val, list):
+                        for row in val:
+                            log.DATA(row)
+                            w.append([str(e) for e in row])
+                        if len(val):
+                            w.append(["" for e in val[0]])
             #log.CONF("config load", prefix+key, val, type(w))
 
     # Store gtk widget valus back into conf. dict
@@ -92,10 +99,15 @@ class configwin (AuxiliaryWindow):
                     config[key] = int(w.get_value(val))
                 # dict
                 elif isinstance(w, gtk.ListStore):
-                    config[key] = {}
-                    for row in w:
-                        if row[0] and row[1]:
-                            config[key][row[0]] = row[1]
+                    if key in config and isinstance(config[key], list):
+                        config[key] = []
+                        for row in w:
+                            config[key].append([str(e) for e in row])
+                    else:
+                        config[key] = {}
+                        for row in w:
+                            if row[0] and row[1]:
+                                config[key][row[0]] = row[1]
             log.CONF("config save", prefix+key, val)
     
 

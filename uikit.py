@@ -512,15 +512,18 @@ class uikit:
     # Config win table (editable dictionary, two columns w/ executable indicator pixbuf)
     @staticmethod
     def config_treeview(opt, columns=["Icon", "Command"]):
-        liststore = gtk.ListStore(str, str, str)
-        w = gtk.TreeView(liststore)
         lno = len(columns)
+        if lno == 2:
+            liststore = gtk.ListStore(str, str, str)
+        else:
+            liststore = gtk.ListStore(*[str for i in range(0, lno)])
+        w = gtk.TreeView(liststore)
         # two text columns and renderers
         for i in range(0, lno):
             c = gtk.TreeViewColumn(columns[i])
             c.set_resizable(True)
             c.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
-            c.set_fixed_width(150 + 75*i)
+            c.set_fixed_width(int(430/lno))
             r = gtk.CellRendererText()
             c.pack_end(r, expand=True)
             r.set_property("editable", True)
@@ -542,14 +545,15 @@ class uikit:
     @staticmethod
     def liststore_edit(cell, row, text, user_data):
         #log.EDIT(cell, row, text, user_data)
+        row = int(row)
         liststore, column = user_data
         liststore[row][column] = text
         # update executable-indicator pixbuf
-        if column == 1 and len(liststore) == 3 and liststore[row][2].startswith("gtk."):
+        if column == 1 and len(liststore[0]) == 3 and liststore[row][2].startswith("gtk-"):
             liststore[row][2] = uikit.app_bin_check(text)
-        # add new row if editing last
-        if row == len(liststore) -1:
-            liststore.append(*["" for c in liststore[column]])
+        # add new row when editing last one
+        if len(text) and (row + 1) == len(liststore):
+            liststore.append(["", "", "gtk-new"])
 
     # return OK or CANCEL depending on availability of app
     @staticmethod

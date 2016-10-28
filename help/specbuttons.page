@@ -9,15 +9,16 @@
 	<desc>Toolbar application short cuts.</desc>
 </info>
 
-	<title>Extra/mini buttons</title>
+	<title>Special extra/mini buttons</title>
 
 	<p>Using the specbuttons plugin, you can define additional
 	shortcuts. This is meant as convenience - allows to start
 	other audio apps or system ontrols from within streamtuner2.</p>
 	
-	<p>The settings list can be found in the Settings → Options tab. It
-	follows the layout of the player/recording configuration. Except
-	that it lists icons and their according action commands:</p>
+	<p>The settings list can be found with th plugin options in the
+	<key>🔌 Features</key> tab.  It follows the layout of the player/recording
+	configuration.  Except that it lists icons and their according
+	action commands:</p>
 
 	<table shade="rows" rules="rows cols">
 		<tr><td><p><em>Icon</em></p></td>  	<td><p><em>Cmd</em></p></td> </tr>
@@ -30,7 +31,7 @@
 
         <section id="gtk-icons">
         <title>gtk-icons</title>
-	<p>Note that the icon name can either be Gtk-builtin icon. Their
+	<p>Note that the icon name can also be that of a Gtk-builtin icon. Their
         names always start with "<app>gtk-</app>", for example "<app>gtk-cancel</app>". You can
         find a list of all available builtins under
         <link href="http://www.pygtk.org/pygtk2reference/gtk-stock-items.html">http://www.pygtk.org/pygtk2reference/gtk-stock-items.html</link>.</p>
@@ -58,8 +59,15 @@
 	</section>
 
         <section>
+        <title>icon rows</title>
+	<p>With the "number of rows" setting, more buttons can be packed together.
+	It looks okay with up to 3 rows - when using the large sized main toolbar.
+	The defined icon shortcuts will always be packed column-wise.</p>
+
         <note style="bug"><p>The icon list isn't ordered. So you cannot
-        define which button appears first.</p></note>
+        define which button appears first. (Albeit the plugin config
+        definition can be changed from 'dict' to 'table' now, and the plugin
+        required just a little editing then.)</p></note>
         </section>
 
 </page>

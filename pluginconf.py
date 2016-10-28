@@ -483,6 +483,10 @@ def add_plugin_defaults(conf_options, conf_plugins, meta={}, module=""):
                     val = opt["value"].lower() in ("1", "true", "yes", "on")
                 elif opt["type"] in ("int", "integer", "numeric"):
                     val = int(opt["value"])
+                elif opt["type"] in ("array", "table", "list"):
+                    val = [ opt["value"].split(",") ]
+                elif opt["type"] in ("dict"):
+                    val = dict(opt["value"].split(","))
                 else:
                     val = str(opt["value"])
                 conf_options[opt["name"]] = val

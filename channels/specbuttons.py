@@ -7,7 +7,7 @@
 # category: ui
 # config:
 #    { name: specbutton_rows, value: 2, max: 4, type: int, description: "Number of rows to arrange buttons in." }
-#    { name: specbuttons, type: dict, columns: "Icon,Command", description: "Icons can either be `<a href='http://www.pygtk.org/pygtk2reference/gtk-stock-items.html'>gtk-xyz</a>` internal names, or `/usr/share/icon/*.png` path names ← which icon basenames would be expanded into. Commands can be any external program." }
+#    { name: specbuttons, type: dict, columns: "Icon,Command", description: "Icons can be `<a href='http://www.pygtk.org/pygtk2reference/gtk-stock-items.html'>gtk-xyz</a>` internal names. Else use `/usr/share/icon/*.png` file names. Icon file basenames will be expanded into full paths. "}
 # doc:
 #    http://fossil.include-once.org/streamtuner2/info/43b36ed35b1488d5
 #
