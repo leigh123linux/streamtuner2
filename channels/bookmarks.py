@@ -99,13 +99,15 @@ class bookmarks(GenericChannel):
     # when bookmark is to be added for a selected stream entry
     def add(self, row):
 
-        # normalize data (this row originated in a gtk+ widget)
+        # Add / copy some row attributes
         row["favourite"] = 1
-        #if row.get("favicon"):
-        #   row["favicon"] = favicon.file(row.get("homepage"))
+        if not row.get("favicon"):
+            pass#   row["favicon"] = favicon.file(row.get("homepage"))
         if not row.get("listformat"):
             row["listformat"] = self.parent.channel().listformat
-           
+        if not row.get("extra"):
+            row["extra"] = self.parent.channel().module
+
         # append to storage
         self.streams["favourite"].append(row)
         self.save()
