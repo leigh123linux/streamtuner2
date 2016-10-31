@@ -548,12 +548,15 @@ class uikit:
         row = int(row)
         liststore, column = user_data
         liststore[row][column] = text
-        # update executable-indicator pixbuf
-        if column == 1 and len(liststore[0]) == 3 and liststore[row][2].startswith("gtk-"):
-            liststore[row][2] = uikit.app_bin_check(text)
-        # add new row when editing last one
-        if len(text) and (row + 1) == len(liststore):
-            liststore.append(["", "", "gtk-new"])
+        try:
+            # update executable-indicator pixbuf
+            if column == 1 and liststore[row][2].startswith("gtk-"):
+                liststore[row][2] = uikit.app_bin_check(text)
+            # add new row when editing last one
+            if len(text) and (row + 1) == len(liststore):
+                liststore.append(["", "", "gtk-new"])
+        except:
+            pass
 
     # return OK or CANCEL depending on availability of app
     @staticmethod
