@@ -28,6 +28,9 @@ documented API, with a simple JSON interface.</p>
   <item><p>Kodi/XBMC</p></item>
 </list>
 
+<p>Since v0.3 / streamtuner2.2.0 you can now also share your favorite
+stations directly. There's a new <guiseq><gui>context menu</gui> <gui>Share in
+Radio-Browser</gui></guiseq>.</p>
 
 <section id="options">
  <title>Configuration</title>
@@ -38,6 +41,13 @@ documented API, with a simple JSON interface.</p>
  <p> Note that you'll have to use <guiseq><gui>Channel</gui> <gui>Reload Category Tree (F5)</gui></guiseq>
  again to update the catogory view.</p>
 
+</section>
+
+<section id="advertisment">
+ <note style="note"><p> With <link  href="https://play.google.com/store/apps/details?id=net.programmierecke.radiodroid2">RadioDroid</link>
+ there's a mobile version to access and play from radio-browser.info
+ directly. Get it on <link  href="https://f-droid.org/forums/topic/radiodroid/">F-Droid</link>
+ or the Play store.</p></note>
 </section>
 
 </page>
