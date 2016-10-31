@@ -2,7 +2,7 @@
 # api: streamtuner2
 # title: RadioBrowser
 # description: Community collection of stations; votes, clicks, homepage links.
-# version: 0.1
+# version: 0.3
 # type: channel
 # url: http://www.radio-browser.info/
 # category: radio
@@ -42,6 +42,7 @@ import re
 import json
 from config import *
 from channels import *
+from uikit import uikit
 import ahttp
 
 
@@ -71,7 +72,12 @@ class radiobrowser (ChannelPlugin):
     categories = []
     pricat = ("topvote", "topclick")
     catmap = { "tags": "bytag", "countries": "bycountry", "languages": "bylanguage" }
-    
+
+    # hook menu
+    def __init__(self, parent):
+        ChannelPlugin.__init__(self, parent)
+        if parent:
+            uikit.add_menu([parent.streammenu, parent.streamactions], "Share in Radio-Browser", self.submit, insert=5)
 
     # votes, and tags, no countries or languages
     def update_categories(self):
@@ -116,10 +122,35 @@ class radiobrowser (ChannelPlugin):
 
 
     # fetch multiple pages
-    def api(self, method, params={}):
-        j = ahttp.get(self.base + method, params)
+    def api(self, method, params={}, post=False):
+        j = ahttp.get(self.base + method, params, post=post)
         try:
             return json.loads(j, strict=False)   # some entries contain invalid character encodings
         except:
             return []
 
+
+    # Add radio station to RBI
+    def submit(self, *w):
+        cn = self.parent.channel()
+        row = cn.row()
+        # convert row from channel
+        data = dict(
+            name = row["title"],
+            url = row["url"],
+            homepage = row["homepage"],
+            #favicon = self.parent.favicon.html_link_icon(row["url"]), # no longer available as module
+            tags = row["genre"].replace(" ", ","),
+        )
+        # map extra fields
+        for _from,_val,_to in [("playing","location","country")]:
+            #country	Austria	The name of the country where the radio station is located
+            #state	Vienna	The name of the part of the country where the station is located
+            #language	English	The main language which is used in spoken text parts of the radio station.
+            if _from in cn.titles and cn.titles[_from].lower() == _val:
+                data[_to] = _from
+        # API submit
+        j = self.api("add", data, post=1)
+        log.SUBMIT_RBI(j)
+        if j and "ok" in j and j["ok"] == "true" and "id" in j:
+            self.parent.status("Submitted successfully to Radio-Browser.info, new station id #%s." % j["id"], timeout=15)
