@@ -7,27 +7,23 @@
 # category: ui
 # config:
 #    { name: specbutton_rows, value: 2, max: 4, type: int, description: "Number of rows to arrange buttons in." }
-#    { name: specbuttons, type: dict, columns: "Icon,Command", description: "Icons can be `<a href='http://www.pygtk.org/pygtk2reference/gtk-stock-items.html'>gtk-xyz</a>` internal names. Else use `/usr/share/icon/*.png` file names. Icon file basenames will be expanded into full paths. "}
-# doc:
+#    { name: specbuttons, type: dict, columns: "Icon,Command", description: "Icons can be `<a href='http://www.pygtk.org/pygtk2reference/gtk-stock-items.html'>gtk-xyz</a>` internal names. Else use `/usr/share/icon/*.png` file names. Icon file basenames will be expanded into full paths." }
+# documentation:
 #    http://fossil.include-once.org/streamtuner2/info/43b36ed35b1488d5
 #
 # Adds the mini/extra buttons in the toolbar, which allow to control your
-# audio player or run other system commands. The configuration list is in
-# the Settings → Options tab.
+# audio player or run other system commands.
 #
-# Icons can either be gtk-xyz icon names, or load /usr/share/icon/*.png
-# pixmaps. Enter a shortcut like "firefox" as icon name for it be looked up.
-# Then specify an external command to start. For example:
+#  [Icon]  [Cmd]
 #
-#     Icon           Cmd
-#     ------         ------
-#     volume         pavucontrol
-#     mute           amixer -c 0 set Front 50DB 
-#     up             amixer -D pulse sset Master 5%+
-#     kill           pkill vlc
+#  volume  pavucontrol
 #
-# The commands can be pretty much any shell command, but still allow for
-# streamtuner2 placeholders like %g or %url and $title.
+#  up      amixer sset Master 5%+
+#
+#  kill    pkill vlc
+#
+# Icons can be gtk-xyz icon names or /usr/share/icon/* PNG files.
+# Each command may use streamtuner2 placeholders like %g or %url and $title.
 
 
 import os.path
