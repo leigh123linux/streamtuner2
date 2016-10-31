@@ -2,7 +2,7 @@
 	type="guide"
 	id="timer">
 
-	<title>Timer</title>
+<title>Timer</title>
 
 <info>
 	<link type="guide" xref="bookmarks#other"/>
@@ -10,8 +10,8 @@
         <desc>Programming recurring play and recording events.</desc>
 </info>
 
+<section id="intro">
 
-<section>
 	<p>You can programm play/recording events with the timer plugin. Simply select a station
 	and choose <guiseq><gui>Station</gui> <gui>Extensions</gui> <gui>Add timer...</gui></guiseq>.
 	A small popup will ask for a data/time string. If you press <key>OK</key> the station

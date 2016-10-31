@@ -2,12 +2,12 @@
 	type="guide"
 	id="technical">
 
+	<title>Technical information</title>
+
 <info>
 	<link type="guide" xref="index#footer"/>
         <desc>Filenames, Directories, Dependencies</desc>
 </info>
-
-	<title>Technical information</title>
 
 
 	<section id="dependecies">

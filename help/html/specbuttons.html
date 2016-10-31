@@ -21,8 +21,9 @@
 <div class="contents">
 <p class="p">Using the specbuttons plugin, you can define additional
 	shortcuts. This is meant as convenience - allows to start
-	other audio apps or system ontrols from within streamtuner2.</p>
-<p class="p">The settings list can be found with th plugin options in the
+	other audio apps or system controls from within streamtuner2.</p>
+<p class="p"><span class="media"><span class="media media-image"><img src="img/specbuttons.png" class="media media-inline" alt=""></span></span></p>
+<p class="p">The settings list can be found with the plugin options in the
 	<span class="key"><kbd>🔌 Features</kbd></span> tab.  It follows the layout of the player/recording
 	configuration.  Except that it lists icons and their according
 	action commands:</p>
@@ -32,15 +33,15 @@
 <td style="border-left-style: solid;"><p class="p"><span class="em">Cmd</span></p></td>
 </tr>
 <tr class="shade">
+<td style="border-top-style: solid;"><p class="p"><span class="app">volume-up</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">amixer sset Master 2%+</span></p></td>
+</tr>
+<tr>
 <td style="border-top-style: solid;"><p class="p"><span class="app">gtk-media-forward</span></p></td>
 <td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">vlc next</span></p></td>
 </tr>
-<tr>
-<td style="border-top-style: solid;"><p class="p"><span class="app">terminal</span></p></td>
-<td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">xterm</span></p></td>
-</tr>
 <tr class="shade">
-<td style="border-top-style: solid;"><p class="p"><span class="app">volume</span></p></td>
+<td style="border-top-style: solid;"><p class="p"><span class="app">mixer</span></p></td>
 <td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">pavucontrol</span></p></td>
 </tr>
 <tr>
@@ -56,9 +57,10 @@
 <div id="gtk-icons" class="sect"><div class="inner">
 <div class="hgroup"><h2 class="title"><span class="title">gtk-icons</span></h2></div>
 <div class="region"><div class="contents"><p class="p">Note that the icon name can also be that of a Gtk-builtin icon. Their
-        names always start with "<span class="app">gtk-</span>", for example "<span class="app">gtk-cancel</span>". You can
+        names always start with "<span class="app">gtk-</span>" - for example "<span class="app">gtk-cancel</span>". You can
         find a list of all available builtins under
-        <span class="link"><a href="http://www.pygtk.org/pygtk2reference/gtk-stock-items.html" title="http://www.pygtk.org/pygtk2reference/gtk-stock-items.html">http://www.pygtk.org/pygtk2reference/gtk-stock-items.html</a></span>.</p></div></div>
+        <span class="link"><a href="http://www.pygtk.org/pygtk2reference/gtk-stock-items.html" title="http://www.pygtk.org/pygtk2reference/gtk-stock-items.html">http://www.pygtk.org/pygtk2reference/gtk-stock-items.html</a></span>.
+        They usually match your Gtk theme though.</p></div></div>
 </div></div>
 <div id="png-icons" class="sect"><div class="inner">
 <div class="hgroup"><h2 class="title"><span class="title">PNG icons</span></h2></div>
@@ -67,7 +69,10 @@
 	searched for and expanded to an absolute PNG filename. For example
         "<span class="file">totem</span>" might become <span class="file">/usr/share/icons/HighContrast/16x16/apps/totem.png</span>.</p>
 <p class="p">This won't always yield the exact icon / theme / or size you wanted. So it's
-	sometimes necessary to look up the complete path yourself.</p>
+	sometimes necessary to look up the complete path yourself.
+	So you might want search them manually <span class="cmd">locate /usr/shar/icons |
+	grep "volume"</span> to pick out a more fitting icon.</p>
+<p class="p">You can also use png files located in your homedir or else.</p>
 </div></div>
 </div></div>
 <div id="placeholders" class="sect"><div class="inner">
@@ -76,6 +81,8 @@
 <p class="p">You can define any graphical or commandline application to be
         invoked by your custom toolbar button. Foremost you want to invoke
         audio controls of course, or start/stop players.</p>
+<p class="p">For example <span class="cmd">amixer sset Master 1dB+</span> is likely to work
+        for all current distributions.</p>
 <p class="p">Placeholders like %title and %url or %pls and %m3u are supported
 	for all commands as well. So you can have additional play/record
 	shortcuts.</p>

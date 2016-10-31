@@ -69,7 +69,7 @@
 	whenever you install a newer Streamtuner2 version.</p></note>
 	</section>
 	
-	<section>
+	<section id="disable">
 	<subtitle>Disable user plugin loading</subtitle>
 	<p>Since this is still rather experimental, you may disable all
 	associated features by starting ST2 via:</p>
