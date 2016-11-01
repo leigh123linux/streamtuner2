@@ -65,6 +65,9 @@ class reciva (ChannelPlugin):
     def update_streams(self, cat):
         entries = []
         html = ahttp.get(self.base_url % (self.catmap[cat.lower()], conf.max_streams))
+        if not html:
+            log.ERR("No results from http://radios.reciva.com/ server. Their category browsing sometimes breaks. We're not using the search function as that would strain their server too much. You might try adding login credentials to `.netrc` - albeit that rarely helps.", html)
+            return []
         
         # extract
         for row in (pq(row) for row in pq(html).find("#mytable").find(".oddrow, .evenrow")):
