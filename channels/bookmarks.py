@@ -105,7 +105,7 @@ class bookmarks(GenericChannel):
             pass#   row["favicon"] = favicon.file(row.get("homepage"))
         if not row.get("listformat"):
             row["listformat"] = self.parent.channel().listformat
-        if not row.get("extra"):
+        if not len(row.get("extra", "")):
             row["extra"] = self.parent.channel().module
 
         # append to storage
