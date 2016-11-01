@@ -130,7 +130,7 @@ handler = {
 # Exec wrapper
 def run(cmd):
     log.EXEC(cmd)
-    try:    os.system("start \"%s\"" % cmd if conf.windows else cmd + " &")
+    try:    os.system("start %s" % cmd if conf.windows else cmd + " &")
     except: log.ERR("Command not found:", cmd)
 
 # Open help browser, streamtuner2 pages
