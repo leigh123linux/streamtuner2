@@ -3,7 +3,7 @@
 # title: Reciva
 # url: https://radios.reciva.com/stations/genre/34?&start=100&count=50
 # description: Home internet radio app and diverse station database.
-# version: 0.2
+# version: 0.3
 # type: channel
 # category: radio
 # config: -
@@ -19,6 +19,10 @@
 # a category at once; so still a quick database.
 #
 # They probably have an API somewhere, but no public docs.
+#
+# You can optionally define a user account and password in
+# `.netrc` (make a `machine reciva.com` entry) → which is
+# going to be used implicitly.
 #
 
 
@@ -41,6 +45,12 @@ class reciva (ChannelPlugin):
     titles = dict( genre="Genre", title="Station", playing="Location", bitrate="Bitrate", listeners=False )
     base_url = "https://radios.reciva.com/stations/genre/%s?&start=0&count=%s"
     
+    
+    # init
+    def __init__(self, parent):
+        ChannelPlugin.__init__(self, parent)
+        self.login()
+
 
     # update list
     def update_categories(self):
@@ -89,3 +99,16 @@ class reciva (ChannelPlugin):
         return r
 
 
+    # Option login
+    def login(self):
+        lap = conf.netrc(varhosts = ("reciva.com", "radios.reciva.com"))
+        if lap:
+            log.LOGIN("Reciva account:", lap)
+            ahttp.get(
+                "https://radios.reciva.com/account/login",
+                {
+                    "username": lap[0] or lap[1],
+                    "password": lap[2]
+                },
+                timeout=2
+            )
