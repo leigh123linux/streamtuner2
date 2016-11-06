@@ -1,7 +1,7 @@
 # encoding: UTF-8
 # api: streamtuner2
 # title: Reciva
-# url: https://radios.reciva.com/stations/genre/34?&start=100&count=50
+# url: https://radios.reciva.com/
 # description: Home internet radio app and diverse station database.
 # version: 0.4
 # type: channel
@@ -29,6 +29,7 @@
 import re
 from pq import pq
 import ahttp
+import action
 from config import *
 from channels import *
 
@@ -46,12 +47,6 @@ class reciva (ChannelPlugin):
     base_url = "https://radios.reciva.com/stations/genre/%s?&start=0&count=%s"
     
     
-    # init
-    def __init__(self, parent):
-        ChannelPlugin.__init__(self, parent)
-        self.login()
-
-
     # update list
     def update_categories(self):
         self.categories = []
@@ -93,10 +88,10 @@ class reciva (ChannelPlugin):
 
 
     # Fetch real `url` on stream access/playback (delay)
-    def row(self):
-        r = ChannelPlugin.row(self)
-        if not r["url"].startswith("http"):
-            html = ahttp.get("https://radios.reciva.com/streamer?stationid=%s&streamnumber=0" % r["id"])
+    def resolve_urn(self, r):
+        if r["url"].startswith("urn:"):
+            id = r["url"].split(":")[2]
+            html = ahttp.get("https://radios.reciva.com/streamer?stationid=%s&streamnumber=0" % id)
             ls = re.findall("""(?:<iframe src=|iframe\()['"]([^'"]+)['"]""", html)
             if ls:
                 r["url"] = ls[0]
@@ -106,7 +101,7 @@ class reciva (ChannelPlugin):
 
 
     # Option login
-    def login(self):
+    def init2(self, *p):
         lap = conf.netrc(varhosts = ("reciva.com", "radios.reciva.com"))
         if lap:
             log.LOGIN("Reciva account:", lap)

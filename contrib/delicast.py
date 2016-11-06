@@ -3,7 +3,7 @@
 # title: Delicast
 # description: directory of streaming media
 # url: http://delicast.com/
-# version: 0.3
+# version: 0.4
 # type: channel
 # category: radio
 # config: -
@@ -28,6 +28,7 @@ import re
 from config import *
 from channels import *
 import ahttp
+import action
 
 
 # Delayed streaming URL discovery
@@ -46,7 +47,7 @@ class delicast (ChannelPlugin):
     "Lounge", "Love", "Metal", "Oldies", "Pop", "R n b", "Reggae", "Rock",
     "Romantic", "Soul", "Sports", "Student", "Talk", "Techno", "Trance",
     "Urban", "World music"]
-
+    
 
     # static
     def update_categories(self):
@@ -82,11 +83,10 @@ class delicast (ChannelPlugin):
       
 
     # Update `url` on station data access (incurs a delay for playing or recording)
-    def row(self):
-        r = ChannelPlugin.row(self)
-        if r.get("url") == "urn:delicast":
+    def resolve_urn(self, row):
+        if row.get("url").startswith("urn:delicast"):
             html = ahttp.get(r["homepage"])
             ls = re.findall("^var url = \"(.+)\";", html, re.M)
-            r["url"] = ls[0]
-        return r
+            row["url"] = ls[0]
+        return row
 
