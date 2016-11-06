@@ -133,7 +133,7 @@ handler = {
 
 # Exec wrapper
 def run(cmd):
-    if "exec" in conf:
+    if "cmd" in conf:
         cmd = conf.cmd % cmd
     elif conf.windows:
         cmd = "start " + cmd
