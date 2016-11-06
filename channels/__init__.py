@@ -33,6 +33,7 @@
 import gtk
 from uikit import uikit, ver as gtk_ver
 from config import *
+from compat2and3 import *
 import ahttp
 import action
 import os.path

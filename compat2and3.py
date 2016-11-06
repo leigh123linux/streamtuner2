@@ -48,6 +48,7 @@ else:
     # basic functions
     xrange = range
     unicode = str
+    unichr = chr
 
     # urllib modules
     import urllib.request as urllib
