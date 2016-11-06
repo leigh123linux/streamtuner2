@@ -91,7 +91,10 @@ class reciva (ChannelPlugin):
     def resolve_urn(self, r):
         if r["url"].startswith("urn:"):
             id = r["url"].split(":")[2]
-            html = ahttp.get("https://radios.reciva.com/streamer?stationid=%s&streamnumber=0" % id)
+            html = ahttp.get(
+                "https://radios.reciva.com/streamer?stationid=%s&streamnumber=0" % id,
+                timeout=4, quieter=True, statusmsg="Resolving actual stream URL for `%s`" % r["url"]
+            )
             ls = re.findall("""(?:<iframe src=|iframe\()['"]([^'"]+)['"]""", html)
             if ls:
                 r["url"] = ls[0]
