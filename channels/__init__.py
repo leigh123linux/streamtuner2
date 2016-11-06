@@ -141,6 +141,12 @@ class GenericChannel(object):
         # add default options values to config.conf.* dict
         conf.add_plugin_defaults(self.meta, self.module)
         
+        # extra init function
+        if hasattr(self, "init2"):
+            self.init2(parent)
+        if hasattr(self, "resolve_urn"):
+            action.handler["urn:%s" % self.module] = self.resolve_urn
+        
         # Only if streamtuner2 is run in graphical mode        
         if (parent):
             # Update/display stream processors
@@ -252,7 +258,14 @@ class GenericChannel(object):
 
     # Currently selected entry in stations list, return complete data dict
     def row(self):
-        return self.stations() [self.rowno()]
+        no = self.rowno()
+        ls = self.stations()
+        row = ls[no]
+        # resolve stream url for some plugins
+        if row["url"].startswith("urn:"):
+            row = action.resolve_urn(row)
+            ls[no] = row
+        return row
         
     # Fetches a single varname from currently selected station entry
     def selected(self, name="url"):
