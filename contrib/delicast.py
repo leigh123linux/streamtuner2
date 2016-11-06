@@ -3,7 +3,7 @@
 # title: Delicast
 # description: directory of streaming media
 # url: http://delicast.com/
-# version: 0.4
+# version: 0.5
 # type: channel
 # category: radio
 # config: -
@@ -87,6 +87,9 @@ class delicast (ChannelPlugin):
         if row.get("url").startswith("urn:delicast"):
             html = ahttp.get(row["homepage"])
             ls = re.findall("^var url = \"(.+)\";", html, re.M)
-            row["url"] = ls[0]
+            if ls:
+                row["url"] = unhtml(ls[0])
+            else:
+                log.ERR("No stream found on %s" % row["homepage"])
         return row
 
