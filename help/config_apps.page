@@ -98,10 +98,34 @@ mpc load $1
 mpc play</code>
     <p>
 	Save it as <file>mpc-pls</file> script and configure it in streamtuner as
-	<cmd>mpc-pls %pls</cmd> for example.
+	<cmd>mpc-pls %pls</cmd> for example. You can find an extended
+	version in the <file>contrib/cmdline/</file> directory.
     </p>
   </item>
 </terms>
+</section>
+
+<section>
+<title>Windows config</title>
+<note style="bug"><p>There's a few gothchas when running streamtuner2 on
+Windows.</p></note>
+<list>
+ <item><p>You will often have to quote command paths (e.g. to 
+  <cmd>"C:/Program Files/Mozilla Firefox/firefox.exe"</cmd> or
+  <cmd>vlc.exe</cmd>) in double quotes.  In particular if those paths
+  contain spaces.</p></item>
+
+ <item><p>If you're using streamripper.exe it's best to put it into a directory
+  without spaces. For some reason quoting the full exe path will not pass on
+  parameters.</p></item>
+
+ <item><p>If you want to be extra safe, just extend your system %PATH variable
+  to include all relevant directories. Then just specify the basenames, like
+  <file>firefox.exe</file> for browsing, or <file>vlc.exe</file> as
+  player.</p></item>
+</list>
+<note style="info"><p>As reported by Oliver in the sourceforge Discussion
+board.</p></note>
 </section>
 
 </page>
