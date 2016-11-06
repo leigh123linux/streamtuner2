@@ -77,6 +77,7 @@ class GenericChannel(object):
     pix_entry = None  # ListStore entry that contains favicon
     img_resize = None  # Rescale `img` references to icon size
     fixed_size = [24,24]  # Default height+width for favicons
+    parent = None     # reference to main window
 
     # mapping of stream{} data into gtk treeview/treestore representation
     datamap = [
@@ -258,13 +259,11 @@ class GenericChannel(object):
 
     # Currently selected entry in stations list, return complete data dict
     def row(self):
-        no = self.rowno()
-        ls = self.stations()
-        row = ls[no]
+        row = self.stations() [ self.rowno() ]
         # resolve stream url for some plugins
-        if row["url"].startswith("urn:"):
-            row = action.resolve_urn(row)
-            ls[no] = row
+        if row.get("url", "urn:x-streamtuner2:no").startswith("urn:"):
+            self.status("Resolving actual stream URL for `%s`" % row["url"], timeout=2)
+            action.resolve_urn(row)
         return row
         
     # Fetches a single varname from currently selected station entry
