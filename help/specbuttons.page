@@ -63,9 +63,9 @@
         <p>For example <cmd>amixer sset Master 1dB+</cmd> is likely to work
         for all current distributions.</p>
         
-	<p>Placeholders like %title and %url or %pls and %m3u are supported
-	for all commands as well. So you can have additional play/record
-	shortcuts.</p>
+	<p><link xref="config_apps#placeholders">Placeholders</link>
+	like %title and %url or %pls and %m3u are supported for all commands
+	as well. So you can have additional play/record	shortcuts.</p>
 	</section>
 
         <section id="icon-rows">

@@ -83,6 +83,35 @@
 
 
 	</section>
+
+	<section id="row_placeholders">
+	<title>Other placeholders</title>
+
+	<p>In addition to stream URL + type placeholders (<var>%r</var>, <var>%x</var>, 
+	<var>%pls</var>, <var>%m3u</var>, etc),	you can also pass row
+	placeholders. These contain the stream information like title or
+	bitrate, or any other internal field:</p>
+
+	<table shade="rows" rules="rows cols">
+	<thead>	<tr><td><p>Placeholder</p></td><td><p>As variable</p></td><td><p>Field content</p></td></tr> </thead>
+		<tr><td><p>%title</p></td><td><p>$title</p></td><td><p>Station title</p></td></tr>
+		<tr><td><p>%genre</p></td><td><p>$genre</p></td><td><p>Stream category or genre list</p></td></tr>
+		<tr><td><p>%playing</p></td><td><p>$playing</p></td><td><p>Currently playing song, or geographic location</p></td></tr>
+		<tr><td><p>-</p></td><td><p>$url</p></td><td><p>Unfiltered stream url (may contain internal urn:xx:id)</p></td></tr>
+		<tr><td><p>%format</p></td><td><p>$format</p></td><td><p>The MIME type ("audio/mpeg")</p></td></tr>
+		<tr><td><p>%bitrate</p></td><td><p>$bitrate</p></td><td><p>Known stream bitrate, if any</p></td></tr>
+		<tr><td><p>%extra</p></td><td><p>$extra</p></td><td><p>Comments or timer settings</p></td></tr>
+		<tr><td><p>%favourite</p></td><td><p>$favourite</p></td><td><p>If bookmarked</p></td></tr>
+	</table>
+
+	<p>Not all fields are used in all channels. Sometimes they're repurposed (like <var>playing</var>
+	often doubles as Location: field). And some channels may even use custom internal names.</p>
+
+	<note style="info"><p>You often want to use such placeholders if you have a player or recording shell script, such as
+	<link href="http://fossil.include-once.org/streamtuner2/artifact/51b695f41d9f9ad2"><file>contrib/cmdline/streamripper_addgenre</file></link>
+	to handle them. Or if you define a <link xref="specbuttons">mini-toolbar specbutton</link>
+	with custom commands.</p></note>
+	</section>
 	
 <section>
 <title>Other players</title>
