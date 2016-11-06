@@ -164,10 +164,14 @@ def record(row={}, audioformat="audio/mpeg", source="href", append=None):
 # OS shell command escaping
 #
 def quote(ins):
-    if type(ins) is list:
-        return " ".join(["%r" % str(s) for s in ins])
+    if conf.windows:
+        Q = '"%s%"'
     else:
-        return "%r" % str(ins)
+        Q = "%r"
+    if type(ins) is list:
+        return " ".join([Q % str(s) for s in ins])
+    else:
+        return Q % str(ins)
 
 
 # Convert e.g. "text/x-scpls" MIME types to just "pls" monikers
@@ -198,7 +202,7 @@ def interpol(cmd, source="pls", row={}, add_default=True):
 
     # Inject other meta fields (%title, %genre, %playing, %format, etc.)
     rx_keys = "[\$\%](" + "|".join(row.keys()) + ")\\b"
-    cmd = re.sub(rx_keys, lambda m: "%r" % str(row.get(m.group(1))), cmd)
+    cmd = re.sub(rx_keys, lambda m: quote(str(row.get(m.group(1)))), cmd)
 
     # Add default %pls if cmd has no %url placeholder
     if add_default and cmd.find("%") < 0:
