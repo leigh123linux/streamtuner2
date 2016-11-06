@@ -121,8 +121,11 @@ playlist_fmt_prio = [
 ]
 
 # custom stream domain (with faux audioformat) handlers
+#  - may contain both "audio/x-service" handlers to convert playlist formsts
+#  - and "urn:service" resolvers (which fetch an #id/page to extract actual stram url)
 handler = {
-    # "audio/soundcloud": callback(),
+    # "audio/soundcloud": playlist_callback(),
+    # "urn:reciva": stream_resolve(),
 }
 
 
@@ -141,6 +144,8 @@ def help(*args):
 def run_fmt_url(row={}, audioformat="audio/mpeg", source="pls", assoc={}, append=None):
     if audioformat in handler:
         handler[audioformat](row, audioformat, source, assoc)
+    elif row.get("url", "").startswith("urn:"):
+        row = resolve_urn(row);
     else:
         cmd = mime_app(audioformat, assoc)
         cmd = interpol(cmd, source, row)
@@ -189,6 +194,18 @@ def mime_app(fmt, cmd_list):
             return cmd_list[match]
     log.ERR("No audio player for stream type found")
 
+
+# Is called upon rows containing an url starting with "urn:service:#id",
+# calls the handler from the channel plugin to look up the page and find
+# the actual streaming url
+def resolve_urn(row):
+    if row["url"].startswith("urn:"):
+        urn_service = ":".join(row["url"].split(":")[:2])
+        if urn_service in handler:
+            row = handler[urn_service](row)
+        else:
+            log.WARN("There's currently no action.handler[] for %s:#id streaming addresses (likely disabled channel plugin)." % urn_service)
+    return row
 
 
 # Replaces instances of %m3u, %pls, %srv in a command string
