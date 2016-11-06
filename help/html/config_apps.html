@@ -17,6 +17,8 @@
 	<span class="link"><a href="configuration.html" title="Configuration / Settings dialog">configure</a></span> most of them as target application. Mostly it makes sense to use a single
 	application for all audio formats. But at least the */* media type should be handled
 	by a generic player, like vlc.</p>
+<p class="p"><span class="media"><span class="media media-image"><img src="img/configapps.png" class="media media-inline" alt=""></span></span></p>
+<p class="p">A few common applications and invocation strings to use are:</p>
 <div class="table"><div class="inner"><div class="region"><table class="table">
 <tr>
 <td><p class="p"><span class="app">Audacious</span></p></td>
@@ -138,6 +140,68 @@
 </div></div></div></div>
 </div></div>
 </div></div>
+<div id="row_placeholders" class="sect"><div class="inner">
+<div class="hgroup"><h2 class="title"><span class="title">Other placeholders</span></h2></div>
+<div class="region"><div class="contents">
+<p class="p">In addition to stream URL + type placeholders (<span class="var">%r</span>, <span class="var">%x</span>, 
+	<span class="var">%pls</span>, <span class="var">%m3u</span>, etc),	you can also pass row
+	placeholders. These contain the stream information like title or
+	bitrate, or any other internal field:</p>
+<div class="table"><div class="inner"><div class="region"><table class="table">
+<thead><tr>
+<td><p class="p">Placeholder</p></td>
+<td style="border-left-style: solid;"><p class="p">As variable</p></td>
+<td style="border-left-style: solid;"><p class="p">Field content</p></td>
+</tr></thead>
+<tr>
+<td><p class="p">%title</p></td>
+<td style="border-left-style: solid;"><p class="p">$title</p></td>
+<td style="border-left-style: solid;"><p class="p">Station title</p></td>
+</tr>
+<tr class="shade">
+<td style="border-top-style: solid;"><p class="p">%genre</p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">$genre</p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">Stream category or genre list</p></td>
+</tr>
+<tr>
+<td style="border-top-style: solid;"><p class="p">%playing</p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">$playing</p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">Currently playing song, or geographic location</p></td>
+</tr>
+<tr class="shade">
+<td style="border-top-style: solid;"><p class="p">-</p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">$url</p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">Unfiltered stream url (may contain internal urn:xx:id)</p></td>
+</tr>
+<tr>
+<td style="border-top-style: solid;"><p class="p">%format</p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">$format</p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">The MIME type ("audio/mpeg")</p></td>
+</tr>
+<tr class="shade">
+<td style="border-top-style: solid;"><p class="p">%bitrate</p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">$bitrate</p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">Known stream bitrate, if any</p></td>
+</tr>
+<tr>
+<td style="border-top-style: solid;"><p class="p">%extra</p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">$extra</p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">Comments or timer settings</p></td>
+</tr>
+<tr class="shade">
+<td style="border-top-style: solid;"><p class="p">%favourite</p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">$favourite</p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p">If bookmarked</p></td>
+</tr>
+</table></div></div></div>
+<p class="p">Not all fields are used in all channels. Sometimes they're repurposed (like <span class="var">playing</span>
+	often doubles as Location: field). And some channels may even use custom internal names.</p>
+<div class="note" title="Note"><div class="inner"><div class="region"><div class="contents"><p class="p">You often want to use such placeholders if you have a player or recording shell script, such as
+	<span class="link"><a href="http://fossil.include-once.org/streamtuner2/artifact/51b695f41d9f9ad2" title="http://fossil.include-once.org/streamtuner2/artifact/51b695f41d9f9ad2"><span class="file">contrib/cmdline/streamripper_addgenre</span></a></span>
+	to handle them. Or if you define a <span class="link"><a href="specbuttons.html" title="Special extra/mini buttons">mini-toolbar specbutton</a></span>
+	with custom commands.</p></div></div></div></div>
+</div></div>
+</div></div>
 <div id="" class="sect"><div class="inner">
 <div class="hgroup"><h2 class="title"><span class="title">Other players</span></h2></div>
 <div class="region"><div class="contents">
@@ -157,10 +221,33 @@ mpc load $1
 mpc play</pre></div>
 <p class="p">
 	Save it as <span class="file">mpc-pls</span> script and configure it in streamtuner as
-	<span class="cmd">mpc-pls %pls</span> for example.
+	<span class="cmd">mpc-pls %pls</span> for example. You can find an extended
+	version in the <span class="file">contrib/cmdline/</span> directory.
     </p>
 </dd>
 </dl></div></div></div>
+</div></div>
+</div></div>
+<div id="" class="sect"><div class="inner">
+<div class="hgroup"><h2 class="title"><span class="title">Windows config</span></h2></div>
+<div class="region"><div class="contents">
+<div class="note note-bug" title="Bug"><div class="inner"><div class="region"><div class="contents"><p class="p">There's a few gothchas when running streamtuner2 on
+Windows.</p></div></div></div></div>
+<div class="list"><div class="inner"><div class="region"><ul class="list">
+<li class="list"><p class="p">You will often have to quote command paths (e.g. to 
+  <span class="cmd">"C:/Program Files/Mozilla Firefox/firefox.exe"</span> or
+  <span class="cmd">vlc.exe</span>) in double quotes.  In particular if those paths
+  contain spaces.</p></li>
+<li class="list"><p class="p">If you're using streamripper.exe it's best to put it into a directory
+  without spaces. For some reason quoting the full exe path will not pass on
+  parameters.</p></li>
+<li class="list"><p class="p">If you want to be extra safe, just extend your system %PATH variable
+  to include all relevant directories. Then just specify the basenames, like
+  <span class="file">firefox.exe</span> for browsing, or <span class="file">vlc.exe</span> as
+  player.</p></li>
+</ul></div></div></div>
+<div class="note" title="Note"><div class="inner"><div class="region"><div class="contents"><p class="p">As reported by Oliver in the sourceforge Discussion
+board.</p></div></div></div></div>
 </div></div>
 </div></div>
 <div class="sect sect-links" role="navigation">
