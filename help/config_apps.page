@@ -15,6 +15,10 @@
 	application for all audio formats. But at least the */* media type should be handled
 	by a generic player, like vlc.</p>
 
+        <p><media type="image" src="img/configapps.png" mime="image/png" /></p>
+        
+        <p>A few common applications and invocation strings to use are:</p>
+
 	<table shade="rows" rules="rows cols">
 		<tr><td><p><app>Audacious</app></p></td>     <td><p><cmd>audacious</cmd></p></td>  <td><p>audio</p></td></tr>
 		<tr><td><p><app>XMMS2</app></p></td>         <td><p><cmd>xmms2 %m3u</cmd></p></td>      <td><p>audio</p></td></tr>
