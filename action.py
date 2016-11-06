@@ -4,7 +4,7 @@
 # category: io
 # title: play/record actions
 # description: Starts audio applications, guesses MIME types for URLs
-# version: 1.1.2
+# version: 1.2.0
 # priority: core
 #
 # Multimedia interface for starting audio players, recording app,
@@ -37,6 +37,7 @@ import os
 import platform
 import copy
 import json
+import subprocess, pipes
 from datetime import datetime
 from xml.sax.saxutils import escape as xmlentities, unescape as xmlunescape
 
@@ -132,7 +133,9 @@ handler = {
 
 # Exec wrapper
 def run(cmd):
-    if conf.windows:
+    if "exec" in conf:
+        cmd = conf.cmd % cmd
+    elif conf.windows:
         cmd = "start " + cmd
     else:
         cmd = cmd + " &"
@@ -179,14 +182,16 @@ def record(row={}, audioformat="audio/mpeg", source="href", append=None):
 # OS shell command escaping
 #
 def quote(ins):
-    if conf.windows:
-        Q = '"%s%"'
-    else:
-        Q = "%r"
     if type(ins) is list:
-        return " ".join([Q % str(s) for s in ins])
+        return " ".join([quote(s) for s in ins])
+    # Windows: double quotes
+    elif conf.windows:
+        return subprocess.list2cmdline([ins])
+        return '"%s"' % ins
+    # Posix-style shell quoting
     else:
-        return Q % str(ins)
+        return pipes.quote(ins)
+        return "%r" % ins
 
 
 # Convert e.g. "text/x-scpls" MIME types to just "pls" monikers
