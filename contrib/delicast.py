@@ -85,7 +85,7 @@ class delicast (ChannelPlugin):
     # Update `url` on station data access (incurs a delay for playing or recording)
     def resolve_urn(self, row):
         if row.get("url").startswith("urn:delicast"):
-            html = ahttp.get(r["homepage"])
+            html = ahttp.get(row["homepage"])
             ls = re.findall("^var url = \"(.+)\";", html, re.M)
             row["url"] = ls[0]
         return row
