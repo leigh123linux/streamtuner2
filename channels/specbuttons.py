@@ -120,6 +120,6 @@ class specbuttons(object):
     def action(self, cmd):
         if re.search("[%$]", cmd):
             row = self.parent.channel().row()
-            cmd = action.interpol(cmd, row=row, add_default=False)
+            cmd = action.run_fmt_url(cmd, row=row, add_default=False, cmd=cmd)
         action.run(cmd)
 

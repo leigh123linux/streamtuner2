@@ -132,23 +132,33 @@ handler = {
 
 # Exec wrapper
 def run(cmd):
-    log.EXEC(cmd)
-    try:    os.system("start %s" % cmd if conf.windows else cmd + " &")
-    except: log.ERR("Command not found:", cmd)
+    if conf.windows:
+        cmd = "start " + cmd
+    else:
+        cmd = cmd + " &"
+    try:
+        log.EXEC(cmd)
+        os.system(cmd)
+    except:
+        log.ERR("Command not found:", cmd)
 
 # Open help browser, streamtuner2 pages
 def help(*args):
     run("yelp /usr/share/doc/streamtuner2/help/")
 
 # Invokes player/recorder for stream url and format
-def run_fmt_url(row={}, audioformat="audio/mpeg", source="pls", assoc={}, append=None):
+def run_fmt_url(row={}, audioformat="audio/mpeg", source="pls", assoc={}, append=None, cmd=None, add_default=True):
+    # look for specific "audio/type" or "urn:service:…" resolvers
     if audioformat in handler:
         handler[audioformat](row, audioformat, source, assoc)
     elif row.get("url", "").startswith("urn:"):
         row = resolve_urn(row);
     else:
-        cmd = mime_app(audioformat, assoc)
-        cmd = interpol(cmd, source, row)
+        # use default handler for mime type
+        if not cmd:
+            cmd = mime_app(audioformat, assoc)
+        # replace %u, %url or $title placeholders
+        cmd = interpol(cmd, source, row, add_default=add_default)
         if append:
             cmd = re.sub('(["\']?\s*)$', " " + append + "\\1", cmd)
         run(cmd)
@@ -211,7 +221,7 @@ def resolve_urn(row):
 # Replaces instances of %m3u, %pls, %srv in a command string
 # ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 #  · Also understands short aliases %l, %f, %d.
-#  · And can embed %title or %genre placeholders.
+#  · And can embed %title or $genre placeholders (may use either % or $).
 #  · Replace .pls URL with local .m3u file depending on map.
 #
 def interpol(cmd, source="pls", row={}, add_default=True):
