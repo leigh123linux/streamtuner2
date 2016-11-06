@@ -43,7 +43,7 @@ import json
 import gzip
 import platform
 import re
-from compat2and3 import gzip_decode, find_executable
+from compat2and3 import gzip_decode, find_executable, PY2, PY3
 import zlib
 import zipfile
 import inspect
@@ -150,6 +150,7 @@ class ConfigDict(dict):
         self.window_title = 0
         self.google_homepage = 0
         self.windows = platform.system()=="Windows"
+        self.open_mode = "r" if self.windows and PY2 else "rt"
         self.pyquery = 1
         self.debug = 0
 
@@ -239,9 +240,9 @@ class ConfigDict(dict):
         try:
             # .gz or normal file
             if os.path.exists(file + ".gz"):
-                f = gzip.open(file + ".gz", "rt")
+                f = gzip.open(file + ".gz", self.open_mode)
             elif os.path.exists(file):
-                f = open(file, "rt")
+                f = open(file, self.open_mode)
             else:
                 return # file not found
             # decode
