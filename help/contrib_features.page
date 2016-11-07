@@ -79,6 +79,7 @@ radios are recategorized in RadioTray.</p>
    <item><p><link xref="favicon">Favicons</link></p></item>
    <item><p><link xref="global_key">Global key shortcut</link></p></item>
    <item><p><link xref="timer">Timer</link></p></item>
+   <item><p><link xref="specbuttons">Specbuttons</link></p></item>
  </list>
  <p>The "<link xref="search">search</link>",
  "<link xref="configuration">configwin</link>" and
