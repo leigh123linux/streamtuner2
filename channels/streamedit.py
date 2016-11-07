@@ -1,7 +1,7 @@
 # api: streamtuner2
 # title: Stream entry editor
 # description: Allows to inspect and modify station/stream entries.
-# version: 0.5
+# version: 0.6
 # type: feature
 # category: ui
 # config: -
@@ -21,6 +21,10 @@ from copy import copy
 # aux win: stream data editing dialog
 class streamedit (AuxiliaryWindow):
 
+    fields = [
+        "favicon", "format", "genre", "homepage", "playing", "title", "url", "extra"
+    ]
+
     # show stream data editing dialog
     def open(self, mw):
         self.main.configwin.load_config(self.main.row(), "streamedit_")
@@ -28,7 +32,11 @@ class streamedit (AuxiliaryWindow):
 
     # copy widget contents to stream
     def save(self, w):
-        self.main.configwin.save_config(self.main.row(), "streamedit_")
+        row = self.main.row()
+        for k in self.fields:
+            if not k in row:
+                row[k] = ""
+        self.main.configwin.save_config(row, "streamedit_")
         self.main.channel().save()
         self.cancel(w)
 
