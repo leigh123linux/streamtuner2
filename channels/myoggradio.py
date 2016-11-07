@@ -56,8 +56,7 @@ class myoggradio(ChannelPlugin):
     
     
     # prepare GUI
-    def __init__(self, parent):
-        ChannelPlugin.__init__(self, parent)
+    def init2(self, parent):
         if parent:
             #uikit.add_menu([parent.extensions, parent.extensions_context], "Share in MyOggRadio", self.share)
             uikit.add_menu([parent.streammenu, parent.streamactions], "Share in MyOggRadio", self.share, insert=4)

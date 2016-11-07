@@ -56,8 +56,7 @@ class surfmusik (ChannelPlugin):
 
     
     # Set channel title
-    def __init__(self, parent=None):
-        ChannelPlugin.__init__(self, parent)
+    def init2(self, parent=None):
         # title updating is a workaround, because the fixed .meta attribute are read first
         self.title = ("SurfMusik", "SurfMusic")[conf.get("surfmusik_lang", "EN") == "EN"]
         self.meta["title"] = self.title

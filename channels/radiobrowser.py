@@ -74,8 +74,7 @@ class radiobrowser (ChannelPlugin):
     catmap = { "tags": "bytag", "countries": "bycountry", "languages": "bylanguage" }
 
     # hook menu
-    def __init__(self, parent):
-        ChannelPlugin.__init__(self, parent)
+    def init2(self, parent):
         if parent:
             uikit.add_menu([parent.streammenu, parent.streamactions], "Share in Radio-Browser", self.submit, insert=5)
 
