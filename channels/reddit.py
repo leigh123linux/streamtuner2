@@ -1,8 +1,8 @@
 # encoding: UTF-8
 # api: streamtuner2
-# title: reddit⛱
+# title: reddit
 # description: Music recommendations from reddit /r/music and associated subreddits.
-# version: 0.8
+# version: 0.9
 # type: channel
 # url: http://reddit.com/r/Music
 # category: playlist
@@ -16,7 +16,8 @@
 #   eebMnMmHGVxqDuUc0zzpynD4zIk5J3vOSDNsOQMG1gy7bI5HTq85Ws2wu/jM9PIzrkArdhmXlzuuXg00eVd5+epVqxmgrtgNAOWeS1KYtcY4AAAAAElFTkSuQmCC
 # priority: extra
 #
-# Just imports Youtube links from music-related subreddits.
+# Scans music-related subreddits for MP3/Youtube/Soundcloud
+# links.
 # Those are usually new bands or fresh releases, or favorite
 # user selections. The category/subreddit list is filtered
 # for a minimum quote of usable links (namely Youtube URLs).
@@ -94,7 +95,7 @@ class reddit (ChannelPlugin):
         "futuresynth", "gabber", "glitch", "Grime", "happyhardcore",
         "hardhouse", "hardstyle", "house", "idm", "industrialmusic", "ItaloDisco",
         "latinhouse", "LiquidDubstep", "mashups", "minimal", "moombahcore",
-        "nightstep", "OldskoolRave", "partymusic", "plunderphonics", "psybient",
+        "nightstep", "OldskoolRave", "Outrun", "partymusic", "plunderphonics", "psybient",
         "PsyBreaks", "psytrance", "purplemusic", "raggajungle", "RealDubstep",
         "swinghouse", "tech_house", "Techno", "Trance", "tranceandbass",
         "tribalbeats", "ukfunky", "witchhouse", "wuuB"],
@@ -211,6 +212,12 @@ class reddit (ChannelPlugin):
         "TheOffspring", "TheStrokes", "TheMagneticZeros", "tragicallyhip",
         "ToolBand", "U2Band", "Umphreys", "UnicornsMusic", "velvetunderground",
         "Ween", "weezer", "WeirdAl", "yesband", "Zappa"],
+        
+        "DJs / Playlist →",
+        ["DJs", "PirateRadio", "Spotify", "Turntablists", "GroveSharkPlaylists"],
+        
+        "Midi",
+        ["midimusic", "MidiCovers", "ModernMidiMusic", "StarboundSongbase", "synthesizers"],
     ]
 
 
@@ -256,7 +263,7 @@ class reddit (ChannelPlugin):
 
             # find links in text posts
             text_urls = re.findall("\]\((https?://(?:www\.)?youtu[^\"\'\]\)]+)", row.get("selftext", ""))
-            url_ext = (re.findall("\.(\w+)$", row["url"]) or [None])[0]
+            url_ext = (re.findall("\.(\w+)(?:$|[?&])", row["url"]) or [""])[0].lower()
             listformat = "href"
             state = "gtk-media-play"
 
@@ -265,7 +272,7 @@ class reddit (ChannelPlugin):
                 format = "video/youtube"
                 listformat = "srv"
             # direct MP3/Ogg
-            elif url_ext in ("mp3", "ogg", "flac", "aac", "aacp"):
+            elif url_ext in ("mp3", "ogg", "flac", "aac", "aacp", "mid", "midi"):
                 format = "audio/" + url_ext
                 listformat = "srv"
             # playlists?
