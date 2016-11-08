@@ -1,7 +1,7 @@
 # encoding: utf-8
 # title: Stop button
 # description: Kills streamripper recording
-# version: 0.1
+# version: 0.2
 # depends: streamtuner2 >= 2.1.9
 # type: feature
 # category: ui
@@ -10,7 +10,7 @@
 # a streamripper kill switch.
 
 import action
-from config import log
+from config import log, conf
 
 # Stop button
 class record_stop(object):
@@ -26,5 +26,8 @@ class record_stop(object):
 
     # stop recording
     def pkill_streamripper(self, *x, **y):
-        action.run("pkill streamripper || pkill fPls")
+        if conf.windows:
+            action.run("taskkill -im streamripper.exe")
+        else:
+            action.run("pkill streamripper || pkill fPls")
 
