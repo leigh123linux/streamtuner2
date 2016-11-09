@@ -4,7 +4,7 @@
 # category: io
 # title: Plugin configuration
 # description: Read meta data, pyz/package contents, module locating
-# version: 0.6
+# version: 0.6.2
 # priority: core
 # docs: http://fossil.include-once.org/streamtuner2/wiki/plugin+meta+data
 # config: -
@@ -238,6 +238,7 @@ def plugin_meta_extract(src="", fn=None, literal=False):
     }
 
     # Extract coherent comment block
+    src = src.replace("\r", "")
     if not literal:
         src = rx.comment.search(src)
         if not src:
@@ -293,7 +294,7 @@ def plugin_meta_config(str):
 #
 class rx:
     comment = re.compile(r"""(^ {0,4}#.*\n)+""", re.M)
-    hash = re.compile(r"""(^ {0,4}# *)""", re.M)
+    hash = re.compile(r"""(^ {0,4}# *\r*)""", re.M)
     keyval = re.compile(r"""
         ^([\w-]+):(.*$(?:\n(?![\w-]+:).+$)*)      # plain key:value lines
     """, re.M | re.X)

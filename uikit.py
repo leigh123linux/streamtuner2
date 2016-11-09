@@ -32,7 +32,6 @@ import base64
 import inspect
 from compat2and3 import unicode, xrange, PY3, gzip_decode
 
-
 # gtk version (2=gtk2, 3=gtk3, 7=tk;)
 ver = 2
 # if running on Python3 or with commandline flag
@@ -53,6 +52,7 @@ else:
     import gtk
     import gobject
     GdkPixbuf = gtk.gdk
+empty_pixbuf = None
 
 # prepare gtkbuilder data
 ui_xml = get_data("gtk3.xml.gz", decode=True, gz=True) #or get_data("gtk3.xml", decode=True)
@@ -617,8 +617,12 @@ class uikit:
             p = GdkPixbuf.PixbufLoader(fmt)
         else:
             p = GdkPixbuf.PixbufLoader()
-        if decode and re.match("^[\w+/=\s]+$", str(buf)):
-            buf = base64.b64decode(buf)  # inline encoding
+        if decode: # inline encoding
+            if re.match("^[\w+/=\s]+$", str(buf)):
+                buf = base64.b64decode(buf)  # from e.g. #png: meta field
+            else:
+                p.close()
+                return empty_pixbuf
         if gzip:
             buf = gzip_decode(buf)
         if buf:
