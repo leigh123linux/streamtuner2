@@ -374,7 +374,7 @@ class extract_playlist(object):
         # Only read filename if it matches allowed extension
         if fn and self.probe_ext(fn):
             self.fn = fn
-            self.src = open(fn, "rt").read()
+            self.src = open(fn, conf.open_mode).read()
 
 
     # Test URL/path "extension" for ".pls" / ".m3u" etc.
