@@ -2,7 +2,7 @@
 # api: streamtuner2
 # title: RadioSure
 # description: Huge radio station collection
-# version: 0.3
+# version: 0.4
 # type: channel
 # category: radio
 # url: http://radiosure.com/
@@ -79,7 +79,7 @@ class radiosure (ChannelPlugin):
         streams = []
         # refresh zip file
         if not os.path.isfile(self.tmp) or os.path.getmtime(self.tmp) < (time.time() - 24*3600):
-            with open(self.tmp, "w") as f:
+            with open(self.tmp, "wb") as f:
                 f.write(ahttp.get(self.zip, binary=1))
         # get first file
         zip = zipfile.ZipFile(self.tmp)
