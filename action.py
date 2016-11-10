@@ -186,8 +186,12 @@ def quote(ins):
         return " ".join([quote(s) for s in ins])
     # Windows: double quotes
     elif conf.windows:
-        return subprocess.list2cmdline([ins])
-        return '"%s"' % ins
+        if re.search(r"""[()<>&%!^'";\s]""", ins):
+            ins = re.sub(r"([()<>&%^])", "^$1", ins)
+            ins = ins.replace('"', '\\^"')
+            return '"%s"' % ins
+        else:
+            return subprocess.list2cmdline([ins])
     # Posix-style shell quoting
     else:
         return pipes.quote(ins)
