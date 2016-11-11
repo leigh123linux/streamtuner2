@@ -2,7 +2,7 @@
 # api: streamtuner2
 # title: Export Category
 # description: Exports a complete channel category (all stations into one file).
-# version: 0.2
+# version: 0.3
 # type: feature
 # category: file
 # priority: optional
@@ -50,7 +50,8 @@ class exportcat():
         cn = self.parent.channel()
         source = cn.listformat
         streams = cn.streams[cn.current]
-        fn = uikit.save_file("Export category", None, "%s.%s.%s" % (cn.module, cn.current, "xspf"))
+        category = re.sub(r"[^\w&-+]+", "_", cn.current)
+        fn = uikit.save_file("Export category", None, "%s.%s.%s" % (cn.module, category, "xspf"))
         log.PROC("Exporting category to", fn)
         if fn:
             dest = re.findall("\.(m3u|pls|xspf|jspf|json|smil|asx|desktop|url)8?$", fn.lower())
