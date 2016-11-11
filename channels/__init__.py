@@ -406,6 +406,8 @@ class GenericChannel(object):
             # this should really go into bookmarks plugin itself,
             # disadvantage: would decelerate processing loop further
         if not row.get("state"):
+            if row.get("url", "").find(" ") > 0:
+                row["state"] = gtk.STOCK_UNINDENT
             if row.get("favourite"):
                 row["state"] = gtk.STOCK_ABOUT
             if row.get("deleted"):

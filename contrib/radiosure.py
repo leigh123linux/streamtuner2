@@ -2,7 +2,7 @@
 # api: streamtuner2
 # title: RadioSure
 # description: Huge radio station collection
-# version: 0.4
+# version: 0.5
 # type: channel
 # category: radio
 # url: http://radiosure.com/
@@ -86,7 +86,7 @@ class radiosure (ChannelPlugin):
         csv = zip.read(zip.namelist()[0])
         self.status("Updating streams from RadioSure CSV database")
         # fields = ["title", "playing", "genre", "country", "language", "url"]
-        for e in re.findall("^([^\t]+)\t([^\t]+)\t([^\t]+)\t([^\t]+)\t([^\t]+)\t([^\t]+(?:\t[^\t]{3,})*)", csv, re.M):
+        for e in re.findall(r"^([^\t]+)\t([^\t]+)\t([^\t]+)\t([^\t]+)\t([^\t]+)\t([^\t]+(?:\t[^\t\n]{3,})*)", csv, re.M):
             if cat == e[2]:
                 streams.append(dict(
                     title = e[0],
@@ -94,7 +94,7 @@ class radiosure (ChannelPlugin):
                     genre = e[2],
                     country = e[3],
                     language = e[4],
-                    url = e[5]#...
+                    url = e[5].replace("\t", " ")#...
                 ))
         return streams
 
