@@ -3,7 +3,7 @@
 # title: Dirble
 # description: Song history tracker for Internet radio stations.
 # url: http://dirble.com/
-# version: 2.1
+# version: 2.2
 # type: channel
 # category: radio
 # config:
@@ -91,19 +91,28 @@ class dirble (ChannelPlugin):
     
     # Extract rows
     def unpack(self, r):
-    
+
         # find stream
         if len(r.get("streams", [])):
+
+            # compare against first entry
             s = r["streams"][0]
 
             # select "best" stream if there are alternatives
-            if len(r["streams"]) > 1:
+            if len(r["streams"]) > 0:
                 for alt in r["streams"]:
+
+                    # set defaults
+                    if not alt.get("content_type"):
+                        alt["content_type"] = "?"
+                    if not alt.get("bitrate"):
+                        alt["bitrate"] = 16
+                    alt["content_type"] = alt["content_type"].strip()  # There's a "\r\n" in nearly every entry :?
                 
                     # weight format with bitrate
-                    cur_q = self.format_q.get(  s["content_type"].strip(), "0.9") \
+                    cur_q = self.format_q.get(  s["content_type"], "0.9") \
                             * s.get("bitrate", 32)
-                    alt_q = self.format_q.get(alt["content_type"].strip(), "0.9") \
+                    alt_q = self.format_q.get(alt["content_type"], "0.9") \
                             * alt.get("bitrate", 32)
 
                     # swap out for overall better score
@@ -112,8 +121,9 @@ class dirble (ChannelPlugin):
                         #log.DATA_BETTER_STREAM(s, "←FROM←", r)
 
             # fix absent audio type
-            if s["content_type"] == "?":
-                s["content_type"] == "audio/mpeg"
+            if not s.get("content_type") or len(s["content_type"]) < 7:
+                s["content_type"] = "audio/mpeg"
+            #log.DATA(s)
 
         else:
             return {}
@@ -125,7 +135,7 @@ class dirble (ChannelPlugin):
             playing = "{} {}".format(r.get("country"), r.get("description", "")),
             homepage = ahttp.fix_url(r["website"]),
             url = s["stream"],
-            format = s["content_type"].strip(),  # There's a "\r\n" in nearly every entry :?
+            format = s["content_type"],
             bitrate = s["bitrate"],
            # img = r["image"]["image"]["thumb"]["url"], # CDN HTTPS trip up requests.get
             state = self.state_map.get(int(s["status"]), ""),
