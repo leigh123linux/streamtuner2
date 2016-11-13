@@ -27,7 +27,8 @@
 	It allows to shorten or rename things. You can even use
 	<gui style="button">new</gui> to add new entries this way.
 	(Which doesn't make sense in regular channel categories, because
-	changes will be lost once you hit Reload.)</p>
+	changes will be lost once you hit Reload). A proper "Add station..."
+	dialog is planned though.</p>
 	</note>
 
 

@@ -61,7 +61,9 @@ and its <key>📦 Add</key> tab.</p>
   </item>
   <item>
     <title><link href="http://radiosure.com/">RadioSure</link></title>
-    <p>Station database that's readily available as CSV list. </p>
+    <p>Station database that's readily available as CSV list. You'll
+    currently need the tmp_clean_multiurl plugin as well, as most entries
+    supply multiple URLs, but action.py doesn't support those currently.</p>
   </item>
   <item>
     <title><link href="http://vtuner.com/">vTuner</link></title>

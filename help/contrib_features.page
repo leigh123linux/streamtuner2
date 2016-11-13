@@ -110,6 +110,24 @@ available feature plugins in the <key>📦 Add</key> tab.</p>
     <title><p>dev_faulthandler</p></title>
     <p>This is a pure development plugin, meant to debug ST2 crashes.</p>
   </item>
+  <item>
+    <title><p>bookmarks_show_extra</p></title>
+    <p>Is a slim UI adaption to show the `extra` field in the bookmarks
+    channel. This field can contain user comments, but is used per default
+    to store the originating channel in.</p>
+  </item>
+  <item>
+    <title><p>new_station</p></title>
+    <p>Currently not working. Small plugin to provide an "Add station..."
+    menu entry. Note that ST2 is not meant as playlist manager, which is
+    why this isn't a built-in feature. However, it's oft-requested anyway.</p>
+  </item>
+  <item>
+    <title><p>tmp_clean_multiurl</p></title>
+    <p>Strips extra space-separate URLs from station list. (Currently only
+    required for RadioSure channel. Later ST2 versions will likely support
+    such entries per default again).</p>
+  </item>
 </terms>
 </section>
 
