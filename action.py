@@ -184,18 +184,21 @@ def record(row={}, audioformat="audio/mpeg", source="href", append=None):
 def quote(ins):
     if type(ins) is list:
         return " ".join([quote(s) for s in ins])
-    # Windows: double quotes
+    # Windows: double quotes / caret escaping
     elif conf.windows:
         if re.search(r"""[()<>&%!^'";\s]""", ins):
-            ins = re.sub(r"([()<>&%^])", "^$1", ins)
-            ins = ins.replace('"', '\\^"')
-            return '"%s"' % ins
+            ins = '"%s"' % ins
+            ins = re.sub(r'([()<>"&%^])', r"^\1", ins)
+            return ins
         else:
             return subprocess.list2cmdline([ins])
     # Posix-style shell quoting
     else:
-        return pipes.quote(ins)
-        return "%r" % ins
+        if re.match("^\w[\w.:/\-]+$", ins):
+            return ins
+        else:
+            return pipes.quote(ins)
+    #return "%r" % ins
 
 
 # Convert e.g. "text/x-scpls" MIME types to just "pls" monikers
