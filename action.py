@@ -149,7 +149,7 @@ def run(cmd):
 def help(*args):
     run([
        "yelp /usr/share/doc/streamtuner2/help/",
-       "start /usr/share/doc/streamtuner2/help.chm"
+       r"\usr\share\doc\streamtuner2\help.chm"
     ][1 if conf.windows else 0])
 
 # Invokes player/recorder for stream url and format
