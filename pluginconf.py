@@ -424,6 +424,8 @@ class dependency(object):
             pass
         elif newpl.get("api") not in ("python", "streamtuner2"):
             pass
+        elif newpl.get("status") not in ("obsolete", "broken"):
+            pass
         elif have_ver >= newpl.get("version", "0.0"):
             pass
         else:
