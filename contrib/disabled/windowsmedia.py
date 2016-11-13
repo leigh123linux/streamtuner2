@@ -18,7 +18,9 @@
 #   lMMNgbvebJl3U6ptjSxFFDPop+7NF5RFcVK8X6qfPIS+n0BrNf9FQ98retXZDlfoxuYDwYsJfXHQg0AAAAAASUVORK5CYII=
 # png-orig: https://openclipart.org/detail/176727/windows-bug
 # priority: extra
-# status: unsupported
+# status: obsolete
+#
+# -- Service was shut down for Microsoft Groove --
 #
 # Well, this one is Windows-specific, so naturally uses
 # horrible formats "WAX" (ASX) for playlists. Still can
@@ -45,9 +47,9 @@ class windowsmedia (ChannelPlugin):
     audioformat = "audio/mpeg"
     titles = dict(listeners=False, bitrate=False, playing="Location")
 
-    _web = "http://www.windowsmedia.com/RadioUI/Home.aspx?g={}&culture=en-gb"
-    base = "http://www.windowsmedia.com/RadioUI/getstationsforgenre.aspx?g={}&offset=0&culture={}"
-    _url = "http://www.windowsmedia.com/RadioTunerAPI/Service.asmx/playStation?"\
+    _web = "http://web.archive.org/web/2015*/http://www.windowsmedia.com/RadioUI/Home.aspx?g={}&culture=en-gb"
+    base = "http://web.archive.org/web/2015*/http://www.windowsmedia.com/RadioUI/getstationsforgenre.aspx?g={}&offset=0&culture={}"
+    _url = "http://web.archive.org/web/2015*/http://www.windowsmedia.com/RadioTunerAPI/Service.asmx/playStation?"\
          + "stationID={}&dialupDetected=false&useHighBandwidth=true&locale={}"
            # reversed default true and false for connection speed
 
