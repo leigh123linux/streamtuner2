@@ -27,7 +27,7 @@
 		<tr><td><p><app>mplayer</app></p></td>       <td><p><cmd>mplayer %srv</cmd></p></td>    <td><p>console</p></td></tr>
 		<tr><td><p><app>VLC</app></p></td>           <td><p><cmd>vlc %u</cmd></p></td>          <td><p>video</p></td></tr>
 		<tr><td><p><app>Totem</app></p></td>         <td><p><cmd>totem %u</cmd></p></td>        <td><p>video</p></td></tr>
-		<tr><td><p><app>Media Player</app></p></td>  <td><p><cmd>mplayer2.exe %asx</cmd></p></td>  <td><p>Win32</p></td></tr>
+		<tr><td><p><app>Media Player</app></p></td>  <td><p><cmd>wmplayer.exe %asx</cmd></p></td>  <td><p>Win32</p></td></tr>
 	</table>
 
 	<p>Some audio players open a second instance when you actually want to switch radios.
