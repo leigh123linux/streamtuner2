@@ -47,7 +47,9 @@ rpm:
 tar:
 	$(PACK) -t $@ $(OPTS) $(DEPS) -p "$(NAME)-VERSION.bin.txz" st2.py
 exe:
-	$(PACK) -t $@ $(OPTS) $(DEPS) -p "$(NAME)-VERSION.exe" st2.py help/help.chm
+	$(PACK) -t $@ $(OPTS) $(DEPS) -p "$(NAME)-VERSION.exe" \
+	--exe-exec 'cmd /K c:\usr\share\streamtuner2\dev\install_python_gtk.bat' \
+	--exe-dest c:/ --version $(VERSION) help/help.chm dev/install_python_gtk.bat st2.py
 arch:
 	$(PACK) -t $@ $(OPTS) $(DEPS_A) -p "$(NAME)-VERSION.arch.txz" st2.py
 pyz:
