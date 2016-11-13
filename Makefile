@@ -47,7 +47,7 @@ rpm:
 tar:
 	$(PACK) -t $@ $(OPTS) $(DEPS) -p "$(NAME)-VERSION.bin.txz" st2.py
 exe:
-	$(PACK) -t $@ $(OPTS) $(DEPS) -p "$(NAME)-VERSION.exe" st2.py
+	$(PACK) -t $@ $(OPTS) $(DEPS) -p "$(NAME)-VERSION.exe" st2.py help/help.chm
 arch:
 	$(PACK) -t $@ $(OPTS) $(DEPS_A) -p "$(NAME)-VERSION.arch.txz" st2.py
 pyz:

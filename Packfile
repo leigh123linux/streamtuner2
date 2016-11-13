@@ -13,6 +13,7 @@ deb:	# complainy lintian needs a custom changelog.gz
 zip:
 rpm:
 exe:
+	mv usr/share/streamtuner2/help/help.chm usr/share/doc/streamtuner2/help.chm
 src:
 tar:
 

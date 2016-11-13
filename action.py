@@ -147,7 +147,10 @@ def run(cmd):
 
 # Open help browser, streamtuner2 pages
 def help(*args):
-    run("yelp /usr/share/doc/streamtuner2/help/")
+    run([
+       "yelp /usr/share/doc/streamtuner2/help/",
+       "start /usr/share/doc/streamtuner2/help.chm"
+    ][1 if conf.windows else 0])
 
 # Invokes player/recorder for stream url and format
 def run_fmt_url(row={}, audioformat="audio/mpeg", source="pls", assoc={}, append=None, cmd=None, add_default=True):
