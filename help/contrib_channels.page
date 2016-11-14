@@ -45,11 +45,6 @@ and its <key>📦 Add</key> tab.</p>
     This plugin displays just the genre list though.</p>
   </item>
   <item>
-    <title><link href="http://windowsmedia.com/">WindowsMedia</link></title>
-    <p>Is actually a Windows-specific streaming directory. Station entries
-    are converted from ASX into standard playlist formats by ST2. </p>
-  </item>
-  <item>
     <title><link href="http://delicast.com/">Delicast</link></title>
     <p>Delicast.com is another web directory of radio stations. It's
     somewhat slower because playback addresses are hidden away with extra
