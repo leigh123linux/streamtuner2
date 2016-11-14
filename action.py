@@ -147,10 +147,12 @@ def run(cmd):
 
 # Open help browser, streamtuner2 pages
 def help(*args):
-    run([
-       "yelp /usr/share/doc/streamtuner2/help/",
-       r"\usr\share\doc\streamtuner2\help.chm"
-    ][1 if conf.windows else 0])
+    if not os.path.exists("/usr/share/doc/streamtuner2/help"):
+        browser("http://fossil.include-once.org/streamtuner2/doc/tip/help/html/index.html")
+    elif conf.windows:
+        run(r"\usr\share\doc\streamtuner2\help.chm")
+    else:
+        run("yelp /usr/share/doc/streamtuner2/help/")
 
 # Invokes player/recorder for stream url and format
 def run_fmt_url(row={}, audioformat="audio/mpeg", source="pls", assoc={}, append=None, cmd=None, add_default=True):
