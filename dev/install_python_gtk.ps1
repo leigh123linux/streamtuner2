@@ -1,6 +1,13 @@
-#
-
-# Run as post-install script for .exe package
+<#
+ #
+ # Run as post-install script for .exe package
+ #
+ #  - downloads Python + Gtk
+ #  - some python libraries
+ #  - and runs their respective installers
+ #  - crafts streamtuner2 desktop shortcut
+ #
+ #>
 
 $TEMP = $env:TEMP
 $PYTHON = "C:\Python27"
@@ -19,10 +26,10 @@ $files = @(
 #-- ask before running
 Write-Host ""
 Write-Host "Do you want to install Python 2.7 and Gtk dependencies now?"
-Write-Host ""
-Write-Host " - This will install 32-bit versions of Python and Gtk."
-Write-Host " - Leave the default install path of $PYTHON for this to work."
-Write-Host " - Packages will go into $TEMP"
+Write-Host "–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––"
+Write-Host " → This will install 32-bit versions of Python and Gtk."
+Write-Host " → Leave the default install path of $PYTHON for this to work."
+Write-Host " → Packages will go into $TEMP"
 Write-Host ""
 $y = Read-Host "y/n"
 if ($y -notmatch "y|Y|1") {
@@ -68,6 +75,6 @@ ForEach ($url in $files) {
 #-- make ST2 .lnk
 $WshShell = New-Object -ComObject WScript.Shell
 $Shortcut = $WshShell.CreateShortcut("$Home\Desktop\Streamtuner2.lnk")
-$Shortcut.TargetPath = "C:\Python27\pythonw.exe"
+$Shortcut.TargetPath = "$PYTHON\pythonw.exe"
 $Shortcut.Arguments = "c:\usr\bin\streamtuner2"
 $Shortcut.Save()
