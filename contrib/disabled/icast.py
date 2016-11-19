@@ -7,6 +7,7 @@
 # url: http://www.icast.io/
 # category: radio
 # priority: obsolete
+# status: broken
 # config: -
 # png:
 #   iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAcVQTFRF

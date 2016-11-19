@@ -7,7 +7,8 @@
 # category: radio
 # url: http://www.itunes.com?
 # status: broken
-# priority: optional
+# priority: obsolete
+# status: broken
 # config: -
 # png:
 #   iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAA3lJREFUOI1Fk01MHGUAht9vZnZml53dhcJSYIEVt8Tu1qbQRNI0wKGxiUk1HBpjbzUmatWUCzHe1Kjx0KQH5WA08aAXYzTRpKnSFG2kpB4ILEstP1skwC50f1nmf3Zmvvk8aOtzf05PHoL/YIyhWtpD

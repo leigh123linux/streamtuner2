@@ -17,8 +17,8 @@
 #   Ve9/OhUK0xmTj2Q3yU4WAPnmL6Y69rDQwJB/bDOLpYNDEFgc352betYh4EIcK5lVgVHnIk/3kCdp5g7PHykv742sp43LFS4y
 #   lMMNgbvebJl3U6ptjSxFFDPop+7NF5RFcVK8X6qfPIS+n0BrNf9FQ98retXZDlfoxuYDwYsJfXHQg0AAAAAASUVORK5CYII=
 # png-orig: https://openclipart.org/detail/176727/windows-bug
-# priority: extra
-# status: obsolete
+# priority: obsolete
+# status: broken
 #
 # -- Service was shut down for Microsoft Groove --
 #

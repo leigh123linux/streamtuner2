@@ -8,6 +8,7 @@
 # url: http://www.live365.com/
 # config: -
 # priority: obsolete
+# status: broken
 # png:
 #   iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAzlJREFUOI1lk0tMXGUUx3/fvTP3zgyPGR5SKIQODdDGEtoCJdFopA9SJTFMjInGaJDEulWTGg2JApqoO+PShaAmdVEXQAxoCtgKNjYFWrQgMD6KDAylkde8Lnfunfu5IJii
 #   Z3POSc7//M/i/AT/ichrbUE1NyckfN5WV0kpUjpYS4s4sdhAZnOrP9jTv/jgvHiw+ftSb5f2UEGnfuQYCIG9fg8pJa5AIdJIEf9hhNTkze5gz9ddexrXXrE1+E2v7/TZl9lcx/hxBCu5DUikzCDTFjiSrMYnyGp8vPOuaR+quNTXDqACRLve7cp5suV1YaSwpyewYts4
