@@ -145,14 +145,14 @@ def run(cmd):
     except:
         log.ERR("Command not found:", cmd)
 
-# Open help browser, streamtuner2 pages
+# Open help browser, chm, or streamtuner2 pages
 def help(*args):
-    if not os.path.exists("/usr/share/doc/streamtuner2/help"):
-        browser("http://fossil.include-once.org/streamtuner2/doc/tip/help/html/index.html")
-    elif conf.windows:
-        run(r"\usr\share\doc\streamtuner2\help.chm")
-    else:
-        run("yelp /usr/share/doc/streamtuner2/help/")
+    for path in [p for p in ("./help", "/usr/share/doc/streamtuner2/help") if os.path.exists(p)]:
+        if conf.windows:
+            return run(("%s/help.chm" % path).replace("/", '\\'))
+        else:
+            return run("yelp %s" % path)
+    return browser("http://fossil.include-once.org/streamtuner2/doc/tip/help/html/index.html")
 
 # Invokes player/recorder for stream url and format
 def run_fmt_url(row={}, audioformat="audio/mpeg", source="pls", assoc={}, append=None, cmd=None, add_default=True):
