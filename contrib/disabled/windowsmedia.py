@@ -3,7 +3,9 @@
 # title: WindowsMedia
 # description: ASX-Playlist radio stations, common genres
 # url: http://windowsmedia.com/
-# version: 0.4
+# version: 0.5
+# priority: obsolete
+# status: broken
 # depends: streamtuner2 >= 2.1.8-dev
 # type: channel
 # category: radio
@@ -17,8 +19,6 @@
 #   Ve9/OhUK0xmTj2Q3yU4WAPnmL6Y69rDQwJB/bDOLpYNDEFgc352betYh4EIcK5lVgVHnIk/3kCdp5g7PHykv742sp43LFS4y
 #   lMMNgbvebJl3U6ptjSxFFDPop+7NF5RFcVK8X6qfPIS+n0BrNf9FQ98retXZDlfoxuYDwYsJfXHQg0AAAAAASUVORK5CYII=
 # png-orig: https://openclipart.org/detail/176727/windows-bug
-# priority: obsolete
-# status: broken
 #
 # -- Service was shut down for Microsoft Groove --
 #
