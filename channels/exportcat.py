@@ -51,7 +51,7 @@ class exportcat():
         source = cn.listformat
         streams = cn.streams[cn.current]
         category = re.sub(r"[^\w&-+]+", "_", cn.current)
-        fn = uikit.save_file("Export category", None, "%s.%s.%s" % (cn.module, category, "xspf"))
+        fn = uikit.save_file("Export category", None, "%s.%s.%s" % (cn.module, category, "pls"))
         log.PROC("Exporting category to", fn)
         if fn:
             dest = re.findall("\.(m3u|pls|xspf|jspf|json|smil|asx|desktop|url)8?$", fn.lower())
