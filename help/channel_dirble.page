@@ -16,14 +16,38 @@
 
         <list>
          <item><p>Provides a JSON API, which in v2 is easy to extract from.</p></item>
-         <item><p>List contain even station homepages mostly.</p></item>
+         <item><p>Station lists contain even station homepages mostly.</p></item>
          <item><p>And the channel plugin selects among the available
          streaming URLs based on format (Ogg, AAC, preferred over MP3) and
          maximum bitrate.</p></item>
         </list>
-	
+        
+        <section>
+        <title>Station status indicators</title>
+        <p>For the dirble plugin each station entry may contain a stream
+        status icon. They often just represent a heuristic check or general
+        reachability statistic. You can usually start playback without
+        paying attention to the status icons: </p>
+        <terms>
+          <item>
+            <title>▮▮</title>
+            <p>Maybe currently inactive.</p>
+          </item>
+          <item>
+            <title>▶▶▮</title>
+            <p>Available stream, no recent outage.</p>
+          </item>
+          <item>
+            <title>◀◀</title>
+            <p>Unclear Status 2</p>
+          </item>
+        </terms>
+        </section>
+
+        <section>	
         <note><p>There's a hidden config option for a custom API key.
         It's perhaps redundant. Should streamtuner2 -D however reveal an error,
         you can configure your own account in <file>settings.json</file>.
         </p></note>
+        </section>
 </page>

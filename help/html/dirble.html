@@ -24,16 +24,36 @@
 	user-contributed entries and automatic streaming server polling.</p>
 <div class="list"><div class="inner"><div class="region"><ul class="list">
 <li class="list"><p class="p">Provides a JSON API, which in v2 is easy to extract from.</p></li>
-<li class="list"><p class="p">List contain even station homepages mostly.</p></li>
+<li class="list"><p class="p">Station lists contain even station homepages mostly.</p></li>
 <li class="list"><p class="p">And the channel plugin selects among the available
          streaming URLs based on format (Ogg, AAC, preferred over MP3) and
          maximum bitrate.</p></li>
 </ul></div></div></div>
-<div class="note" title="Note"><div class="inner"><div class="region"><div class="contents"><p class="p">There's a hidden config option for a custom API key.
+</div>
+<div id="" class="sect"><div class="inner">
+<div class="hgroup"><h2 class="title"><span class="title">Station status indicators</span></h2></div>
+<div class="region"><div class="contents">
+<p class="p">For the dirble plugin each station entry may contain a stream
+        status icon. They often just represent a heuristic check or general
+        reachability statistic. You can usually start playback without
+        paying attention to the status icons: </p>
+<div class="terms"><div class="inner"><div class="region"><dl class="terms">
+<dt class="terms">▮▮</dt>
+<dd class="terms"><p class="p">Maybe currently inactive.</p></dd>
+<dt class="terms">▶▶▮</dt>
+<dd class="terms"><p class="p">Available stream, no recent outage.</p></dd>
+<dt class="terms">◀◀</dt>
+<dd class="terms"><p class="p">Unclear Status 2</p></dd>
+</dl></div></div></div>
+</div></div>
+</div></div>
+<div id="" class="sect"><div class="inner">
+<div class="hgroup"></div>
+<div class="region"><div class="contents"><div class="note" title="Note"><div class="inner"><div class="region"><div class="contents"><p class="p">There's a hidden config option for a custom API key.
         It's perhaps redundant. Should streamtuner2 -D however reveal an error,
         you can configure your own account in <span class="file">settings.json</span>.
-        </p></div></div></div></div>
-</div>
+        </p></div></div></div></div></div></div>
+</div></div>
 <div class="sect sect-links" role="navigation">
 <div class="hgroup"></div>
 <div class="contents"><div class="links guidelinks"><div class="inner">
