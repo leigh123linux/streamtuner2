@@ -9,6 +9,7 @@
     <desc><key>F12</key> brings up the options window with the Player, Display, System and Plugin sections.</desc>
 </info>
 
+<section>
 <title>Configuration / Settings dialog</title>
 
 <p>
@@ -20,31 +21,31 @@ There are various options for streamtuner2, available under <guiseq><gui>Edit</g
 <terms>
   <title>It's grouped into:</title>
   <item>
-    <title>🔊 Player</title>
+    <title>🔊 <link xref="#apps">Player</link></title>
     <p>Associates media formats to audio player applications or recording tools.</p>
   </item>
   <item>
-    <title>☑ Options</title>
+    <title>☑ <link xref="#gui">Options</link></title>
     <p>Influences the display of all stream/station lists, and contains some
     behaviour and system settings.</p>
   </item>
   <item>
-    <title>📻 Channel Plugins</title>
+    <title>📻 <link xref="#plugins">Channel Plugins</link></title>
     <p>Allows to enable or disable channel tabs. Each can have specific
     options, which can be configured here.</p>
   </item>
   <item>
-    <title>🔌 Feature Plugins</title>
+    <title>🔌 <link xref="#plugins">Feature Plugins</link></title>
     <p>Another class of plugins enables internal functions, or adds extra menu
     entries, or further configuration options.</p>
   </item>
   <item>
-    <title>📦 Add</title>
+    <title>📦 <link xref="pluginmanager2">Add</link></title>
     <p>The <link xref="pluginmanager2">Plugin Manager 2</link> adds another
     tab for updating or installing new plugins.</p>
   </item>
 </terms>
-
+</section>
 
 
 <section id="apps">

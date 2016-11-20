@@ -8,6 +8,7 @@
         <desc>Wiki list of radio stations</desc>
 </info>
 
+	<section>
 	<title>UbuntuUsers</title>
 	<subtitle><link	href="http://ubuntuusers.de/">//ubuntuusers.de/</link></subtitle>
 
@@ -23,5 +24,6 @@
 	<note><p>There's also a small streaming TV list. But most entries
 	aren't really accessible (anymore) without command line tools. 
 	(Which that very Wiki page covers in detail.)</p></note>
+	</section>
 
 </page>

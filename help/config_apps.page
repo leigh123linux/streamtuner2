@@ -8,6 +8,7 @@
 	<desc>Common applications to use as players.</desc>
 </info>
 
+	<section>
 	<title>Audio players</title>
 
 	<p>On BSD/Linux systems there are a plethora of audio players. In streamtuner2 you can
@@ -39,6 +40,7 @@
 	<p>Some applications, like Rhythmbox or Banshee, are primarily playlist managers, not players,
         and cannot be invoked with a station URL. This makes them less suitable for use with streamtuner2.
         (Same goes for streamtuner2 itself. It's not a player, but just a playlist browser.)</p>
+	</section>
 
 	<section id="placeholders">
 	<title>URL placeholders</title>

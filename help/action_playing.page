@@ -9,6 +9,7 @@
 	<link type="guide" xref="streams#actions"/>
 	</info>
 
+	<section>
 	<title>Playing</title>
 
 	<p>To start playing a station, you can:</p>
@@ -32,6 +33,7 @@
         <link xref="configuration">settings dialog</link>, you can associate one player
         with each audio file (MIME) type. Nowadays you can often configure the same player
         for all audio (and even video) types.</p>
+	</section>
 
 
 </page>

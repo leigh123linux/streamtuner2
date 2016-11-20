@@ -8,6 +8,7 @@
         <desc>Dirble.com</desc>
 </info>
 
+	<section>
 	<title>Dirble</title>
         <subtitle><link href="http://dirble.com/">//dirble.com/</link></subtitle>
 
@@ -21,9 +22,10 @@
          streaming URLs based on format (Ogg, AAC, preferred over MP3) and
          maximum bitrate.</p></item>
         </list>
+	</section>
         
         <section>
-        <title>Station status indicators</title>
+        <subtitle>Station status indicators</subtitle>
         <p>For the dirble plugin each station entry may contain a stream
         status icon. They often just represent a heuristic check or general
         reachability statistic. You can usually start playback without

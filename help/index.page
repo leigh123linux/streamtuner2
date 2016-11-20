@@ -2,19 +2,21 @@
 # title: streamtuner2 mallard help pages
 # pack: *.page=../../doc/streamtuner2/help/, img=../../doc/streamtuner2/help/
 -->
-<page	xmlns="http://projectmallard.org/1.0/"
-	type="guide"
-	id="index">
+<page xmlns="http://projectmallard.org/1.0/" type="guide" id="index">
 
 	<info>
+	<title>Streamtuner2</title>
 	<credit type="author"><name>Mario Salzer</name></credit>
         <desc>Internet radio station browser</desc>
         <revision pkgversion="2.1.9" version="2.1.9"/>
 	</info>
-
+        <title>Streamtuner2</title>
+        
+        <section>
 	<title><media type="image" mime="image/png" src="img/logo.png">♪</media> Streamtuner2 </title>
 
 	<p>Streamtuner2 shows internet radio stations for easy browsing, playing, recording.</p>
+	</section>
 
 	<section id="browsing" style="2column">
             <title>Browsing channels and radio stations</title>

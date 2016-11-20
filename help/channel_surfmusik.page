@@ -9,6 +9,7 @@
         <desc>International radio listings.</desc>
 </info>
 
+	<section>
 	<title>SurfMusic</title>
 	<subtitle><link	href="http://surfmusic.de/">//surfmusic.de/</link></subtitle>
 
@@ -23,6 +24,7 @@
 
         <note style="bug"><p>The MusicTV and NewsTV sections also return results, but those are mostly
         web-based video stations. Some of them are outdated links even.</p></note>
+	</section>
 
 <section id="options">
   <title>Channel options.</title>

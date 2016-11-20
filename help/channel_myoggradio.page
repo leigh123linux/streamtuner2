@@ -9,6 +9,7 @@
         <desc>Open source stream directory.</desc>
 </info>
 
+<section>
 <title>MyOggRadio</title>
 <subtitle><link href="http://myoggradio.org/">//myoggradio.org/</link></subtitle>          
 
@@ -16,6 +17,7 @@
 source internet radio directory project.</p>
 
 <p>Since it provides its station list as JSON it's very well supported.</p>
+</section>
 
 <section>
   <title>Sharing is caring</title>

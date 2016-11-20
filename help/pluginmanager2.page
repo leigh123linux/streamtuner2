@@ -1,13 +1,11 @@
-<page	xmlns="http://projectmallard.org/1.0/"
-	type="guide"
-	id="pluginmanager2">
+<page xmlns="http://projectmallard.org/1.0/" type="guide" id="pluginmanager2">
+  <info>
+    <link type="guide" xref="index#extra"/>
+    <link type="topic" xref="configuration#plugins"/>
+    <desc>User plugin installation</desc>
+  </info>
 
-<info>
-	<link type="guide" xref="index#extra"/>
-	<link type="topic" xref="configuration#plugins"/>
-        <desc>User plugin installation</desc>
-</info>
-
+	<section>
 	<title>Plugin Manager 2 - <key>📦 Add</key> </title>
 
 	<p>For updating or installing new plugins (extra channels or
@@ -35,6 +33,7 @@
 	<note><p>Updated plugin versions won't be instantiated right away
 	if they've been active already. That requires either a restart.
 	Or disabling + saving once, then reenabling them.</p></note>
+	</section>
 	
 	<section id="configuration">
 	<title>Configuration</title>
@@ -55,7 +54,7 @@
    	</list>
 	</section>
 
-	<section id="configuration">
+	<section id="userplugins">
 	<title>User plugins</title>
 	<p>Downloaded plugins are stored in <file>~/.config/streamtuner2/plugins</file>.
 	To remove them, delete the individual *.py files there manually. But

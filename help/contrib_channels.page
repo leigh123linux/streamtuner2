@@ -9,6 +9,7 @@
 	<link type="guide" xref="channels#list"/>
         <desc>Downloadable channel plugins</desc>
 </info>
+<section>
 
 <title>→ Contrib/Extra Channels</title>
 
@@ -17,15 +18,6 @@ for download. See the <link xref="pluginmanager2">Plugin Manager</link>
 and its <key>📦 Add</key> tab.</p>
 
 <terms>
-  <item>
-    <title><link href="http://reddit.com/">Reddit</link></title>
-    <p>Reddit is a social media site. Among its various sections is a large
-    /r/Music subreddit group. Most of them link popular or novel Youtube
-    music videos, or user-produced content etc. Radioreddit.com even provides
-    streaming servers. This plugin can also list Soundcloud/Mixcloud/Bandcamp
-    links. But those would require a custom audio player. There's an extra
-    Soundcloud plugin however, which makes those streams readily playble.</p>
-  </item>
   <item>
     <title><link href="http://radio.net/">Radio.net</link></title>
     <p>Radio.net is a European radio directory. It nicely catalogues
@@ -48,11 +40,15 @@ and its <key>📦 Add</key> tab.</p>
     <title><link href="http://delicast.com/">Delicast</link></title>
     <p>Delicast.com is another web directory of radio stations. It's
     somewhat slower because playback addresses are hidden away with extra
-    page requests. Works reliably still. </p>
+    page requests. Works reliably still.</p>
   </item>
   <item>
     <title><link href="http://listenlive.eu/">ListenLive.eu</link></title>
-    <p>ListenLive is also an Europe-centric radio directory. </p>
+    <p>ListenLive is also an Europe-centric radio directory.</p>
+  </item>
+  <item>
+    <title><link href="http://liveradio.ie/">Liveradio.ie</link></title>
+    <p>Is an Ireland-based radio station directory.</p>
   </item>
   <item>
     <title><link href="http://radiosure.com/">RadioSure</link></title>
@@ -111,4 +107,5 @@ and its <key>📦 Add</key> tab.</p>
 <link href="http://fossil.include-once.org/streamtuner2/wiki/plugins">available
 plugins</link> in the project wiki.</p>
 
+</section>
 </page>

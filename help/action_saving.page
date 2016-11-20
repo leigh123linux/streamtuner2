@@ -8,6 +8,7 @@
 	<desc>Export a station entry as .m3u/.pls file.</desc>
 </info>
 
+	<section>
 	<title>Saving</title>
 
 	<p>You can export the currently selected stream using
@@ -23,6 +24,7 @@
 	or <file>.asx</file> or <file>.smil</file> format.  In current
 	releases the file extension is automatically adapted when changing
 	the filter dropdown (bottom right corner in the file dialog). </p></note>
+	</section>
 
 
 </page>

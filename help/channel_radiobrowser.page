@@ -9,6 +9,7 @@
         <desc>Community-driven streaming directory</desc>
 </info>
 
+<section>
 <title>Radio-Browser</title>
 <subtitle><link href="http://radio-browser.info/">//radio-browser.info/</link></subtitle>
 
@@ -31,6 +32,7 @@ documented API, with a simple JSON interface.</p>
 <p>Since v0.3 / streamtuner2.2.0 you can now also share your favorite
 stations directly. There's a new <guiseq><gui>context menu</gui> <gui>Share in
 Radio-Browser</gui></guiseq>.</p>
+</section>
 
 <section id="options">
  <title>Configuration</title>

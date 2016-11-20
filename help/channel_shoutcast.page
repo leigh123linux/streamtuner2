@@ -8,6 +8,7 @@
         <desc>Probably still the largest radio station list.</desc>
 </info>
 
+	<section>
 	<title>Shoutcast</title>
 	<subtitle><link	href="http://shoutcast.com/">//shoutcast.com/</link></subtitle>
 
@@ -25,6 +26,7 @@
         <p>Since being sold from AOL to Radionomy, the directory got cut down. There are no longer
         entries for currently played songs, and homepage links are largely gone. Hencewhy the
         Shoutcast channel is no longer considered a primary feature.</p>
+	</section>
 
 
 </page>

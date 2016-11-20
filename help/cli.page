@@ -7,6 +7,7 @@
         <desc>Console interface, exporting data.</desc>
 </info>
 
+	<section>
 	<title>CLI (command line interface)</title>
 
 	<p>Streamtuner2 is a graphical tool. But it also has a limited commandline interface,
@@ -47,6 +48,7 @@
 
 	<p>Specifying a channel name is often optional. If you add one, it should be all-lowercase.
 	You can also give a list, like "shoutcast,xiph" which would be searched then.</p>
+	</section>
 
         <section>
         <title>GUI options</title>

@@ -9,6 +9,7 @@
 	<desc>Save radio songs as MP3 files via streamripper.</desc>
 </info>
 
+<section>
 <title>Recording</title>
 
 <p>Most stations that stream MP3 or OGG music can be recorded. This is
@@ -17,6 +18,7 @@ select a station and press <gui style="button">● record</gui>, a console
 window should appear, where streamripper shows its progress.</p>
 
 <p>You can <link xref="configuration">configure the recording tool</link> according to audio types again.</p>
+</section>
 
 <section>
 <title>Streamripper</title>

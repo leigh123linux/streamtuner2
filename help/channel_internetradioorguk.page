@@ -9,6 +9,7 @@
         <desc>Large radio directory from the UK.</desc>
 </info>
 
+	<section>
 	<title>Internet-Radio</title>
         <subtitle><link href="http://internet-radio.com/">//internet-radio.com/</link></subtitle>
         
@@ -20,6 +21,7 @@
  	 <item><p>Updating station lists is comperatively fast.</p></item>
  	 <item><p>Uses HTML extraction (regex or pyquery) internally.</p></item>
  	</list>
+	</section>
 
         <section id="options">
         <title>Configuration</title>

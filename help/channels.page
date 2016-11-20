@@ -7,6 +7,7 @@
 	<desc>Switching through the channel tabs, different radio directory services.</desc>
 	</info>
 
+	<section>
 	<title>Channels</title>
 
 	<p>The tabs in the main window represent the music directory
@@ -31,6 +32,7 @@
 	<p>Individual channels provide different music/radio information. The table
         views are however mostly identical for each tab. Some views may rename columns,
         or remove them alltogether.</p>
+	</section>
 
 	<section id="list">
 		<title>Available channels</title>

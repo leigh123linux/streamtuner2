@@ -9,6 +9,7 @@
         <desc>Youtube music/video listings.</desc>
 </info>
 
+	<section>
 	<title>Youtube</title>
 	<subtitle><link	href="http://youtube.com/">//youtube.com/</link></subtitle>
 
@@ -27,6 +28,7 @@
         <p>Of course you could also just invoke a specific YT video by
         opening it in your web browser - click the station <key>home</key>
         button simply.</p>
+	</section>
 
 
         <section id="options">

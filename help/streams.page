@@ -8,6 +8,7 @@
         <desc>Radio streams lists, station information columns, entry actions.</desc>
 </info>
 
+<section>
 	<title>Streams / Stations</title>
 
 	<p>Radio stations are listed in the right pane. Usually they have a title and a
@@ -19,7 +20,7 @@
         <p>You can double click a station line to get it to play. Alternatively there are the
         play and record buttons in the menubar. You can also invoke a stations homepage, if it
         has one.</p>
-
+</section>
 
 <section id="actions">
 	<title>Actions</title>

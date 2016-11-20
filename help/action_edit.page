@@ -8,6 +8,7 @@
 	<desc>Edit or inspect a station entry.</desc>
 </info>
 
+	<section>
 	<title>Edit</title>
 
 	<p>You probably won't need this often. But there's an
@@ -30,6 +31,7 @@
 	changes will be lost once you hit Reload). A proper "Add station..."
 	dialog is planned though.</p>
 	</note>
+	</section>
 
 
 </page>

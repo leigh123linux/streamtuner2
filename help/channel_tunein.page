@@ -9,12 +9,14 @@
         <desc>Radio and Podcast directory.</desc>
 </info>
 
+	<section>
 	<title>TuneIn</title>
 	<subtitle><link	href="http://tunein.com/">//tunein.com/</link></subtitle>
 
 	<p>TuneIn hosts a major radio, show and podcast directory. It also provides the
         RadioTime/AIR interface for listener feedback or something. ST2 queries the OPML
         lists only for radio stations currently.</p>
+	</section>
         
         <section id="options">
         <title>Configuration</title>

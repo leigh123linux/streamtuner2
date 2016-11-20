@@ -9,6 +9,7 @@
         <desc>ICEcast radio directory.</desc>
 </info>
 
+<section>
 <title>Xiph.org</title>
 <subtitle><link href="http://dir.xiph.org/">//dir.xiph.org/</link></subtitle>
 
@@ -27,6 +28,7 @@ various audio- and video-related standards.</p>
 lists available on dir.xiph.org.  That's because this is a primary
 plugin, and fallback solutions therefore important.  Each fetching
 mode has its own advantages and drawbacks though.</p>
+</section>
 
 
 <section id="options">

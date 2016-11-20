@@ -9,6 +9,7 @@
         <desc>Creative Commons music and artist hub.</desc>
 </info>
 
+<section>
 <title>Jamendo</title>
 <subtitle><link href="http://jamendo.com/">//jamendo.com/</link></subtitle>
 
@@ -24,6 +25,7 @@ albums, playlists, and individual tracks by genre.</p>
 </list>
 
 <p>Tracks and albums can be downloaded free of charge (Creative Commons). Yeah, imagine that.</p>
+</section>
 
 <section id="options">
 <title><link xref="configuration">Config</link> options</title>
