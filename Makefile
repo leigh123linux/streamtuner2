@@ -48,7 +48,7 @@ tar:
 	$(PACK) -t $@ $(OPTS) $(DEPS) -p "$(NAME)-VERSION.bin.txz" st2.py
 exe:
 	$(PACK) -t $@ $(OPTS) $(DEPS) -p "$(NAME)-VERSION.exe" \
-	--exe-exec 'cmd /K c:\usr\share\streamtuner2\dev\install_python_gtk.bat' \
+	--exe-exec 'usr\share\streamtuner2\dev\install_python_gtk.bat' \
 	--exe-dest c:/ --version $(VERSION) help/help.chm dev/install_python_gtk.* dev/*ico st2.py
 arch:
 	$(PACK) -t $@ $(OPTS) $(DEPS_A) -p "$(NAME)-VERSION.arch.txz" st2.py
@@ -66,6 +66,9 @@ check:
 	dpkg-deb -c streamtuner2*deb
 	dpkg-deb -I streamtuner2*deb
 	rpm -qpil *rpm
+	
+upload:
+	scp *.{deb,rpm,exe,pyz,arch,txz} io:st2/
 
 # manual installation
 install:
