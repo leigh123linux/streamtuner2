@@ -70,10 +70,10 @@ class modarchive (ChannelPlugin):
         for uu in rx_current.findall(html):
             (main, id, subname) = uu
             if main:
-                if sub:
-                    self.categories.append(sub)
-                sub = []
                 self.categories.append(main)
+                self.catmap[main] = 0
+                sub = []
+                self.categories.append(sub)
             else:
                 sub.append(subname)
                 self.catmap[subname] = id
