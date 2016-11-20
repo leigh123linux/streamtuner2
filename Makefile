@@ -49,7 +49,7 @@ tar:
 exe:
 	$(PACK) -t $@ $(OPTS) $(DEPS) -p "$(NAME)-VERSION.exe" \
 	--exe-exec 'cmd /K c:\usr\share\streamtuner2\dev\install_python_gtk.bat' \
-	--exe-dest c:/ --version $(VERSION) help/help.chm dev/install_python_gtk.* st2.py
+	--exe-dest c:/ --version $(VERSION) help/help.chm dev/install_python_gtk.* dev/*ico st2.py
 arch:
 	$(PACK) -t $@ $(OPTS) $(DEPS_A) -p "$(NAME)-VERSION.arch.txz" st2.py
 pyz:

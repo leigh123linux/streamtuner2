@@ -14,6 +14,7 @@ zip:
 rpm:
 exe:
 	mv usr/share/streamtuner2/help/help.chm usr/share/doc/streamtuner2/help.chm
+	mv usr/share/streamtuner2/dev/streamtuner2.ico usr/share/pixmaps/streamtuner2.ico
 src:
 tar:
 
