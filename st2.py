@@ -342,7 +342,7 @@ class StreamTunerTwo(gtk.Builder):
         fn = uikit.save_file("Save Stream", None, default_fn, [(".m3u","*m3u"),(".pls","*pls"),(".xspf","*xspf"),(".jspf","*jspf"),(".smil","*smil"),(".asx","*asx"),("all files","*")])
         if fn:
             source = row.get("listformat", self.channel().listformat)
-            dest = (re.findall("\.(m3u|pls|xspf|jspf|json|smil|asx|wpl)8?$", fn) or ["pls"])[0]
+            dest = (re.findall("\.(m3u|pls|xspf|jspf|json|smil|asx|wpl|qtl)8?$", fn) or ["pls"])[0]
             action.save_playlist(source=source, multiply=True).file(rows=[row], fn=fn, dest=dest)
         pass
 

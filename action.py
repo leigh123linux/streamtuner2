@@ -106,6 +106,7 @@ playlist_content_map = [
    ("html", r""" (?i)<(audio|video)\b[^>]+\bsrc\s*=\s*["']?https?:// """),
    ("wpl",  r""" <\?wpl \s+ version="1\.0" \s* \?> """),
    ("b4s",  r""" <WinampXML> """),   # http://gonze.com/playlists/playlist-format-survey.html
+   ("qtl",  r""" <?quicktime\d+type="application/x-quicktime-media-link"\d*?> """),
    ("jspf", r""" ^ \s* \{ \s* "playlist": \s* \{ """),
    ("asf",  r""" ^ \[Reference\] .*? ^Ref\d+= """),
    ("url",  r""" ^ \[InternetShortcut\] .*? ^URL= """),
@@ -147,7 +148,9 @@ def run(cmd):
 
 # Open help browser, chm, or streamtuner2 pages
 def help(*args):
-    for path in [p for p in ("./help", "/usr/share/doc/streamtuner2/help") if os.path.exists(p)]:
+    for path in ("./help", "/usr/share/doc/streamtuner2/help", "./usr/share/doc/streamtuner2"):
+        if not os.path.exists(path):
+            continue
         if conf.windows:
             return run(("%s/help.chm" % path).replace("/", '\\'))
         else:
@@ -536,6 +539,10 @@ class extract_playlist(object):
             url   = r" (?m) ^ \s*Ref\d+ = (\w+://[^\s]+) ",
             unesc = "xml",
         ),
+        "qtl": dict(
+            url   = r" <embed\s+src=[\"\']([^\"\']+)[\"\']\s*/>",
+            unesc = "xml",
+        ),
         "url": dict(
             url   = r"(?m) ^URL=(\w+://.+)",
         ),
@@ -741,6 +748,12 @@ class save_playlist(object):
             txt += """\t<entry>\n\t\t<title>%s</title>\n\t\t<ref href="%s"/>\n\t</entry>\n""" % (xmlentities(row["title"]), xmlentities(row["url"]))
         txt += """</asx>\n"""
         return txt
+
+
+    # QTL
+    def qtl(self, rows):
+        return """<?xml version="1.0"?>\n<?quicktime type="application/x-quicktime-media-link"?>\n"""\
+            + "<embed src=\"%s\" />\n" % xmlentities(rows[0]["url"])
 
 
     # SMIL
