@@ -13,103 +13,47 @@
 [CmdletBinding()]            
 Param()            
 
-# admin check            
-function Test-IsElevated {
-    [CmdletBinding()]
-    param()
-    [Security.Principal.WindowsPrincipal] $Identity = [Security.Principal.WindowsIdentity]::GetCurrent()
-    $Identity.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-}
-
-
-# prerequisites check
-function Check-Prerequisites {
-    [CmdletBinding()]
-    param()
-
-    ForEach ($task in $tasks) {
-       $title, $url, $cmd, $args, $regkey, $check = $task;
-        if ($regkey) { 
-            if (!(Get-Item -Path $regkey)) {     # avoid runtime error if not existent (not working in PS1)
-                Write-Host $title " not found"
-                return 0
-            }
-            else {
-                Write-Host (Get-ItemProperty -Path $regkey -Name "DisplayName".DisplayName).DisplayName " found"
-            }
-        }
-        elseif ($title = "Python requests") {
-            if (!(Get-Item -Path "$PYTHON\Lib\site-packages\requests-2.12.1-py2.7.egg")) {
-                write-Host $title " not found"
-                return 0
-            }
-            else {
-                Write-Host $title " found"
-            }
-        }
-    
-        elseif ($title = "PyQuery 1.2.1") {
-            if (!(Get-Item -Path "$PYTHON\Lib\site-packages\pyquery-1.2.17.dist-info")) {
-                Write-Host $title " not found"
-                return 0
-            }
-            else {
-                Write-Host $title " found"
-            }
-        }
-    }
-    return 1
-}
 
 # default paths
 $TEMP = $env:TEMP
 $PYTHON = "C:\Python27"
 $OutputEncoding = [System.Text.Encoding]::UTF8
 $StartMenu = "$env:USERPROFILE\AppData\Roaming\Microsoft\Windows\Start Menu\Programs"
-
-#-- Get ST installation folder
-$ScriptPath = (Split-Path $MyInvocation.MyCommand.Path -Parent).Split("\") #PS1/2 compatibility"
-$UsrFolder=$ScriptPath[0]+"\"
-for ($i=1; $i -le $ScriptPath.Length - 4; $i++) {
-    $UsrFolder = $UsrFolder+$ScriptPath[$i]+"\"
-}
-if (!(Test-Path -Path("..\..\..\bin\streamtuner2"))) {
-    Write-Host -foregroundcolor Red "The Streamtuner2 start script could not be found. The installation cannot continue."
-    Write-Host -foregroundcolor Red "Please do not change the folder structure of the Streamtuner2 package!"
-    Write-Host -foregroundcolor Red "Press any key to exit ..."
-    $null = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
-    exit;
-}    
-
-# prepare registry lookup
+$UsrFolder = $MyInvocation.MyCommand.Path -replace "([\\/][^\\/]+){4}$",""
 $regPathCU = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall"
-$regPathHK = "HKLM:\Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall"
-if(!(Test-Path $regPathHK)) {
-    $regPathHK = "HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall"
-}
+$regPathLM = "HKLM:\Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall"
+if(!(Test-Path $regPathLM)) { $regPathLM = "HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall" }
 
 
 #-- what and how to install
 #   each row is a list of (title,url,cmd,msi args,regkey,reghive)
 $tasks = @(
   @(
+    "Package Dependencies",
+    "",
+    "Check-Prerequisites",
+    "",
+    "",
+    ""
+  ),
+  @(
     "Python 2.7.12",                                                  # title
     "https://www.python.org/ftp/python/2.7.12/python-2.7.12.msi",     # url
     "",                                                               # custom cmd
     "TARGETDIR=C:\Python27 /qb",                                      # msi args
-    "$regPathHK\{9DA28CE5-0AA5-429E-86D8-686ED898C665}",              # registry
-    "$regPathHK\{9DA28CE5-0AA5-429E-86D8-686ED898C665}"               # installed check
+    "$regPathLM\{9DA28CE5-0AA5-429E-86D8-686ED898C665}",              # registry
+    "$regPathLM\{9DA28CE5-0AA5-429E-86D8-686ED898C665}"               # installed check
   ),
   @(
     "PyGtk 2.24.2",
     "http://ftp.gnome.org/pub/GNOME/binaries/win32/pygtk/2.24/pygtk-all-in-one-2.24.2.win32-py2.7.msi",
     "",
     "TARGETDIR=C:\Python27 ADDLOCAL=ALL REMOVE=PythonExtensionModulePyGtkSourceview2,PythonExtensionModulePyGoocanvas,PythonExtensionModulePyRsvg,DevelopmentTools /qb",
-    "$regPathHK\{09F82967-D26B-48AC-830E-33191EC177C8}",
-    "$regPathHK\{09F82967-D26B-48AC-830E-33191EC177C8}"
+    "$regPathLM\{09F82967-D26B-48AC-830E-33191EC177C8}",
+    "$regPathLM\{09F82967-D26B-48AC-830E-33191EC177C8}"
   ),
   @(
-    "Python requests",
+    "Python requests 2.12.1",
     "requests", # no download url, pip handles this
     "easy_install",
     "",
@@ -122,7 +66,7 @@ $tasks = @(
     "",
     "",
     "$regPathCU\lxml-py2.7",
-    "$regPathCU\lxml-py2.7"
+    "$PYTHON\Lib\site-packages\lxml-2.3-py2.7.egg-info"
   ),
   @(
     "PyQuery 1.2.1",
@@ -138,10 +82,10 @@ $tasks = @(
     "",
     "",
     "$regPathCU\PIL-py2.7",
-    "$regPathCU\PIL-py2.7"
+    "$PYTHON\Lib\site-packages\PIL"
   ),
   @(
-    "ST2 invocation (relocatability)",
+    "ST2 relocatable start script patch",
     "",
     'Rewrite-Startscript',
     "",
@@ -173,7 +117,7 @@ $tasks = @(
     ""
   ),
   @(
-    "**FINISHED**.", "", '$true', "", "", ""
+    "FINISHED", "", '$true', "", "", ""
   )
 )
 
@@ -188,9 +132,9 @@ function Make-Shortcut {
     $lnk = $wsh.CreateShortcut("$dir\$name")
     $lnk.TargetPath = $target
     if ($arg) {
-        $lnk.Arguments = $arg
-        $lnk.IconLocation = $UsrFolder + "share\pixmaps\streamtuner2.ico"
-        $lnk.WorkingDirectory = $UsrFolder + "bin"
+        $lnk.Arguments = """"$arg""""
+        $lnk.IconLocation = "$UsrFolder\share\pixmaps\streamtuner2.ico"
+        $lnk.WorkingDirectory = "$UsrFolder\bin"
     }
     $lnk.Save()
 }
@@ -200,81 +144,114 @@ function Make-Shortcut {
 function Rewrite-Startscript {
     [CmdletBinding()]
     param()
-    $WrapperScript = Get-Content -Path $UsrFolder"\bin\streamtuner2"
+    $WrapperScript = Get-Content -Path "$UsrFolder\bin\streamtuner2"
     for ($i=0; $i -lt $WrapperScript.Length ; $i++) {
         $WrapperScript[$i] = $WrapperScript[$i].Replace("sys.path.insert(0, " + """" + "/usr/","sys.path.insert(0, " + """" + $UsrFolder)
-        Out-File -FilePath $UsrFolder"\bin\streamtuner2.new" -Encoding ascii -Append -InputObject $WrapperScript[$i]
+        Out-File -FilePath "$UsrFolder\bin\streamtuner2.new" -Encoding ascii -Append -InputObject $WrapperScript[$i]
     }
 
-    if (Test-Path -Path $UsrFolder"\bin\streamtuner2.bak") {
-        Remove-Item -Path $UsrFolder"\bin\streamtuner2.bak" -Force
+    if (Test-Path -Path "$UsrFolder\bin\streamtuner2.bak") {
+        Remove-Item -Path "$UsrFolder\bin\streamtuner2.bak" -Force
     }
-    Rename-Item -NewName "streamtuner2.bak" -Path $UsrFolder"\bin\streamtuner2" #save old script
-    Rename-Item -NewName "streamtuner2" -Path $UsrFolder"\bin\streamtuner2.new"
-    Set-Acl $UsrFolder"\bin\streamtuner2" (Get-Acl $UsrFolder"\bin\streamtuner2.bak") # set file permissions 
+    Rename-Item -NewName "streamtuner2.bak" -Path "$UsrFolder\bin\streamtuner2" #save old script
+    Rename-Item -NewName "streamtuner2" -Path "$UsrFolder\bin\streamtuner2.new"
+    Set-Acl "$UsrFolder\bin\streamtuner2" (Get-Acl "$UsrFolder\bin\streamtuner2.bak") # set file permissions 
 }
 
+#-- admin check
+function Test-IsElevated {
+    [CmdletBinding()]
+    param()
+    [Security.Principal.WindowsPrincipal] $Identity = [Security.Principal.WindowsIdentity]::GetCurrent()
+    $Identity.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+}
+
+#-- check prereqs installation
+function Check-Prerequisites {
+    [CmdletBinding()]
+    param()
+    Check-Package
+    $result = 1
+    ForEach ($task in $tasks) {
+        $title, $url, $cmd, $args, $regkey, $check = $task;
+        if ($regkey) { 
+            if (!(Test-Path -Path $regkey)) {     # avoid runtime error if not existent (not working in PS1)
+                Write-Host "   - $title not found"
+                $result = 0
+            }
+            else {
+                Write-Host "   + $title found"
+            }
+        }
+        elseif ($title -match "requests|PyQuery") {
+            if (!(Test-Path -Path $check)) {
+                write-Host "   - $title not found"
+                $result = 0
+            }
+            else {
+                Write-Host "   + $title found"
+            }
+        }
+    }
+    if ($result) {
+        Write-Host -f Green "`nAll required Python components are already installed. You can use 'none' or 'skip' or 'S' to skip them. Or just press ENTER on each following prompt. If you want to reinstall them though, use 'all' or 'reinstall' or 'R'.`n"
+    }
+}
+
+#-- ensure ST2 startup script exists in relative path to this install script
+function Check-Package {
+    if (!(Test-Path -Path("$UsrFolder\bin\streamtuner2"))) {
+        Write-Host -b DarkRed -f White @"
+The Streamtuner2 start script could not be found. The installation cannot continue.
+Please do not change the folder structure of the Streamtuner2 package!
+
+[Press any key to exit ...]
+"@
+        $null = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+        exit;
+    }
+}
 
 
 #-- ask before running
-Write-Host ""
-Write-Host -foregroundcolor Yellow "Do you want to install Python 2.7 and Gtk dependencies now?"
-Write-Host -foregroundcolor Yellow "–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––"
-Write-Host -foregroundcolor Yellow " → This will install 32-bit versions of Python and Gtk."
-Write-Host -foregroundcolor Yellow " → Downloads will remain in $TEMP"
+Write-Host -f White -b Blue @"
+–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+Do you want to install Python 2.7 and Gtk dependencies now?
+–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+"@
 if(!(Test-IsElevated)) {
-    Write-Host ""
-    Write-Host -foregroundcolor red "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓"
-    Write-Host -foregroundcolor red "┃ ⚠ ⛔  If you run this script in non-elevated mode you will not be able to  ┃"
-    Write-Host -foregroundcolor red "┃      uninstall Python and Gtk using the control panels´ software list.    ┃"
-    Write-Host -foregroundcolor red "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛"
+    Write-Host -f red @"
+/---------------------------------------------------------------------------\
+| (!)  Since you run this script in non-elevated mode you will not be able  |
+|      to uninstall Python and Gtk using the control panels´ software list. |
+\---------------------------------------------------------------------------/
+"@
 }
-Write-Host ""
-if ((Read-Host "y/n") -notmatch "[yY123ar]") {
+if ((Read-Host "[Y/n]") -notmatch "[yYi123ar]|^$") {
     exit;
 }
-Write-Host ""
 
-
-#-- check prereqs installation
-<#
-Write-Host ""
-Write-Host "Checking installation"
-Write-Host "------------------------"
-Write-Host ""
-$prereqs = (Check-Prerequisites)
-if ($prereqs -match 1) {
-    Write-Host ""
-    Write-Host -foregroundcolor Yellow "All required Python components are already installed."
-    Write-Host -foregroundcolor Yellow "Do you want to (R)einstall them or (S)kip the installation?"
-    $y = Read-Host "R/S"
-    if ($y -match "s|S|2") {
-        exit
-    }
-}
-#>
 
 #-- process
 $reinstall = "ask"
 ForEach ($task in $tasks) {
     $title, $url, $cmd, $args, $regkey, $testpath = $task;
 
-    Write-Host ""
-    Write-Host "Installing $title"
-    Write-Host "------------------------"
-    Write-Host ""
+    # print step
+    if ($title -match "\d+\.\d+") { $title = "Installing $title" }
+    Write-Host -b DarkBlue "`n $title `n"
     chdir($TEMP);
     
-    # test if element (directory/file or registry key) already exists:
+    # test if element (file path or registry key) already exists:
     if ($reinstall -eq "all") {
     }
     elseif ($testpath -AND (Test-Path -Path $testpath)) {
         echo " → Is already present."
         if ($reinstall -eq "none") { continue }
         $y = Read-Host "   Reinstall [y/N/all/none]?"
-        if ($y -match "all|always|re|A") { $reinstall = "all" }
-        elseif ($y -match "never|none|skipall|S") { $reinstall = "none"; continue }
-        elseif ($y -match "y|yes|1|go|R") { } # YES
+        if ($y -match "^all|always|re|^A") { $reinstall = "all" }
+        elseif ($y -match "never|none|skip|^S") { $reinstall = "none"; continue }
+        elseif ($y -match "^y|yes|1|go|^R") { } # YES
         else { continue } # everything else counts as NO
     }
 
@@ -283,34 +260,34 @@ ForEach ($task in $tasks) {
 
     # download
     if ($url -match "https?://.+") {
-        Write-Host -foregroundcolor DarkGreen  " → download( $url )"
+        Write-Host -f DarkGreen  " ← $url"
         $wget = New-Object System.Net.WebClient
         $wget.DownloadFile($url, "$TEMP\$file");
     }
 
     # run shorthand or custom command
     if ($cmd) {
-        chdir($PYTHON)
+        if (Test-Path $PYTHON) { chdir($PYTHON) }
         if ($cmd -eq "pip") {
-            $cmd = "$PYTHON\Scripts\pip.exe install $TEMP\$file"
+            $cmd = "& $PYTHON\Scripts\pip.exe install $TEMP\$file"
         }
         elseif ($cmd -match "^(easy|easy_install|silent)$") {
-             $cmd = "$PYTHON\Scripts\easy_install.exe $url"
+             $cmd = "& $PYTHON\Scripts\easy_install.exe $url"
         }
-        Write-Host -foregroundcolor DarkYellow   " → exec( $cmd )"
+        Write-Host -f DarkYellow   " → $cmd"
         Invoke-Expression "$cmd"
     }
     # msi
     elseif ($file -match ".+.msi$") {
-        write-host -foregroundcolor DarkYellow " → exec( msiexec /i $file $args )"
+        write-host -f DarkYellow " → msiexec /i $file $args"
         Start-Process -Wait msiexec -ArgumentList /i,"$TEMP\$file",$args
-        if ($regkey) { Try {
-            Set-ItemProperty -Path "$regkey" -Name "WindowsInstaller"  -Value "0"
-        } Catch {} }
+        if ($regkey) {
+            Set-ItemProperty -Path "$regkey" -Name "WindowsInstaller"  -Value "0" -ErrorAction SilentlyContinue
+        }
     }
     # exe
     elseif ($file -match ".+.exe$") {
-        write-host -foregroundcolor DarkYellow " → exec( $file $args )"
+        write-host -f DarkYellow " → $file $args"
         if ($args) {
             Start-Process -Wait "$TEMP\$file" -ArgumentList $args
         }
@@ -320,7 +297,7 @@ ForEach ($task in $tasks) {
     }
     # other files
     elseif ($file) {
-      echo " → exec( $file )"
+      echo " → $file"
       & "$TEMP\$file"
     }
 }
