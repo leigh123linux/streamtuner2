@@ -8,7 +8,6 @@
         <desc>Tracker audio file collection.</desc>
 </info>
 
-	<section>
 	<title>The MOD Archive</title>
         <subtitle><link href="http://modarchive.org/">//modarchive.org/</link></subtitle>          
         
@@ -22,7 +21,6 @@
              <item><p>GModplay</p></item>
              <item><p>VLC (built-in support)</p></item>
         </list>
-	</section>
         
         <section id="options">
         <title>Configuration</title>

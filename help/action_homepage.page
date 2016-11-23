@@ -8,7 +8,6 @@
 	<link type="guide" xref="streams#actions"/>
 	</info>
 
-	<section>
 	<title>Radio homepages</title>
 
 	<p>Most radio stations are listed with a homepage URL. Use the <gui style="button">house</gui> symbol in the
@@ -18,7 +17,6 @@
 	If you play a station without homepage URL, it automatically gets googled. (The link will be visible
         once you reselect the genre/category.)
         </p>
-	</section>
 
 	<section>
 	<title>Channel homepages</title>

@@ -9,7 +9,6 @@
         <desc>Selection of the best radio stations</desc>
 </info>
 
-	<section>
 	<title>filtermusic</title>
         <subtitle><link href="http://filtermusic.net/">//filtermusic.net/</link></subtitle>
 
@@ -24,7 +23,6 @@
 
 	<p>Most useful if you don't like to browse around, and want to
 	listen to most popular stations.</p>
-	</section>
 
         <section id="options">	
         <title>Configuration</title>

@@ -7,7 +7,6 @@
         <desc>Global keyboard shortcut for radio switching.</desc>
 </info>
 
-<section>
 	<title>Global_key</title>
 
 	<p>Using the global_key extension you can define a keyboard shortcut for switching within
@@ -37,5 +36,4 @@
 	generic, you won't be able to type longer documents.  Also found
 	out: key names are case sensitive.</p></note>
 
-</section>
 </page>

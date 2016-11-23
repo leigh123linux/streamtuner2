@@ -9,7 +9,6 @@
         <desc>Collect favourites via bookmark function, entry editing and deleting.</desc>
 </info>
 
-	<section>
 	<title>Bookmarks</title>
 
 	<p>Streamtuner2 allows to bookmark favourite streams/stations.</p>
@@ -25,7 +24,6 @@
 
         <p>Additionally every appearance of the station in other channel
         tabs gets a ★ star icon.</p>
-	</section>
 
 	<section id="editing">
 	<title>Editing</title>

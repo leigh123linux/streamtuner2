@@ -8,7 +8,6 @@
         <desc>Dirble.com</desc>
 </info>
 
-	<section>
 	<title>Dirble</title>
         <subtitle><link href="http://dirble.com/">//dirble.com/</link></subtitle>
 
@@ -22,7 +21,6 @@
          streaming URLs based on format (Ogg, AAC, preferred over MP3) and
          maximum bitrate.</p></item>
         </list>
-	</section>
         
         <section>
         <subtitle>Station status indicators</subtitle>

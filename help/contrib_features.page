@@ -9,13 +9,12 @@
 	<link type="seealso" xref="index#channels"/>
         <desc>Additional feature plugins</desc>
 </info>
-<section>
+
 <title>→ Feature plugins</title>
 
 <p>Extra functionality and behaviour changes are available in
 the <key>🔌 Feature</key> <link xref="configuration">configuration</link>
 section.</p>
-</section>
 
 
 <section>

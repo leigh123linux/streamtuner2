@@ -9,7 +9,6 @@
 	<link type="guide" xref="channels#list"/>
         <desc>Downloadable channel plugins</desc>
 </info>
-<section>
 
 <title>→ Contrib/Extra Channels</title>
 
@@ -107,5 +106,4 @@ and its <key>📦 Add</key> tab.</p>
 <link href="http://fossil.include-once.org/streamtuner2/wiki/plugins">available
 plugins</link> in the project wiki.</p>
 
-</section>
 </page>

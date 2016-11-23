@@ -3,11 +3,10 @@
 	id="introduction">
 
 <info>
-	<link type="guide" xref="index"/>
+	<link type="guide" xref="index#index"/>
         <desc>Basic usage instructions. Selecting a channel, category, and playing a radio.</desc>
 </info>
 
-	<section>
 	<title>Introduction</title>
 
 	<p>Streamtuner2 is a simple browser for internet radios. It aquires its radio lists
@@ -16,7 +15,6 @@
 	to them.</p>
 
 	<media src="img/mainwindow.png" type="image" mime="image/png" />
-	</section>
 
         <section id="play">
 	<title>How to select and play a radio.</title>

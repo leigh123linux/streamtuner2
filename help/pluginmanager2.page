@@ -5,7 +5,6 @@
     <desc>User plugin installation</desc>
   </info>
 
-	<section>
 	<title>Plugin Manager 2 - <key>📦 Add</key> </title>
 
 	<p>For updating or installing new plugins (extra channels or
@@ -33,7 +32,6 @@
 	<note><p>Updated plugin versions won't be instantiated right away
 	if they've been active already. That requires either a restart.
 	Or disabling + saving once, then reenabling them.</p></note>
-	</section>
 	
 	<section id="configuration">
 	<title>Configuration</title>

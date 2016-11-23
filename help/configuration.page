@@ -9,7 +9,6 @@
     <desc><key>F12</key> brings up the options window with the Player, Display, System and Plugin sections.</desc>
 </info>
 
-<section>
 <title>Configuration / Settings dialog</title>
 
 <p>
@@ -45,7 +44,6 @@ There are various options for streamtuner2, available under <guiseq><gui>Edit</g
     tab for updating or installing new plugins.</p>
   </item>
 </terms>
-</section>
 
 
 <section id="apps">

@@ -12,7 +12,7 @@
 	</info>
         <title>Streamtuner2</title>
         
-        <section>
+        <section id="index">
 	<title><media type="image" mime="image/png" src="img/logo.png">♪</media> Streamtuner2 </title>
 
 	<p>Streamtuner2 shows internet radio stations for easy browsing, playing, recording.</p>

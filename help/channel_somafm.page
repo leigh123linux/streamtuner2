@@ -9,7 +9,6 @@
         <desc>Set of radio stations</desc>
 </info>
 
-	<section>
 	<title>SomaFM</title>
 	<subtitle><link	href="http://somafm.com/">//somafm.com/</link></subtitle>
 
@@ -18,7 +17,6 @@
 
         <note><p>SomaFM is a non-commercial and ad-free provider. It
         strongly depends on listener donations.</p></note>
-	</section>
 
         <section id="configuration">	
         <title>Bitrate configuration</title>
@@ -29,5 +27,6 @@
 
 	<p>After reconfiguring the bitrate/format, you can Reload the
 	station list to update them. Otherwise refreshing has no effect.</p>
-	</section>
+        </section>	
+
 </page>
