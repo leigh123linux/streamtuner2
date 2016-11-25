@@ -56,7 +56,7 @@ $tasks = @(
     "$regPathLM\{09F82967-D26B-48AC-830E-33191EC177C8}"
   ),
   @(
-    "Python requests",
+    "Python requests 2.12.1",
     "requests", # no download url, pip handles this
     "easy_install",
     "",
@@ -128,15 +128,13 @@ $tasks = @(
     ""
   ),
   @(
-    "FINISHED", "", 'Any-Key Green', "", "", ""
+    "FINISHED", "", 'Display-Logo ; Any-Key Green', "", "", ""
   )
 )
 
 
 #-- startup messages
 function Display-Logo {
-    Clear-Host
-    Console-MaxHeight
     Write-Host -b DarkBlue @"
  _____________________________________________________________________________ 
 |                                                                             |
@@ -319,6 +317,8 @@ function Check-Prerequisites {
 
 
 #-- ask before running
+Console-MaxHeight
+Clear-Host
 Display-Logo
 Warn-NonElevated
 Ask-First
@@ -337,7 +337,7 @@ ForEach ($task in $tasks) {
     if ($reinstall -eq "all") {
     }
     elseif ($testpath -AND (Test-Path -Path $testpath)) {
-        echo -f Yellow " → Is already present."
+        Write-Host -f Green " → Is already present."
         if ($reinstall -eq "none") { continue }
         Write-Host -f Yellow -NoNewline "   Reinstall [y/N/all/none]? " ; $y = Read-Host ; Write-Host ""
         if ($y -match "^all|always|re|^A") { $reinstall = "all" }
@@ -350,7 +350,7 @@ ForEach ($task in $tasks) {
     $file = [regex]::match($url, "/([^/]+?)([\?\#]|$)").Groups[1].Value;
 
     # download
-    if (($url -match "https?://.+") -AND ($keepdownloads -OR !(Test-Path "$TEMP\$file"))) {
+    if (($url -match "https?://.+") -AND ((!(Test-Path "$TEMP\$file")) -OR (!$keepdownloads))) {
         Write-Host -f DarkGreen  " ← $url"
         $wget = New-Object System.Net.WebClient
         $wget.DownloadFile($url, "$TEMP\$file");
