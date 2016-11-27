@@ -118,14 +118,14 @@ There are various options for streamtuner2, available under <span class="guiseq"
 <div class="terms"><div class="inner">
 <div class="title title-terms"><h3><span class="title">Display settings</span></h3></div>
 <div class="region"><dl class="terms">
-<dt class="terms">Show bookmark star</dt>
+<dt class="terms">☑ Show bookmark star</dt>
 <dd class="terms"><p class="p">Bookmarked stations will be marked with a ★ star in all other station lists / categories.
       That doesn't often work for the same station entry from two different channel services / tabs though.</p></dd>
-<dt class="terms">Save window states</dt>
+<dt class="terms">☑ Save window states</dt>
 <dd class="terms"><p class="p">Automatically remember window size, selected channel tab, categories, or selected station.
       Also keeps the width of station list columns. If disabled, you can manually save the current
       layout/selections via <span class="guiseq"><span class="gui">Edit</span> ▸ <span class="gui">Save States</span></span>.</p></dd>
-<dt class="terms">Update window title</dt>
+<dt class="terms">☑ Update window title</dt>
 <dd class="terms"><p class="p">When switching channel tabs, the Streamtuner2 window title usually gets the current
       channel name appended (such as "- Shoutcast" or "- Xiph"). You can disable this if it
       looks confusing. (Requires a restart to fully take effect.)</p></dd>
@@ -136,27 +136,27 @@ There are various options for streamtuner2, available under <span class="guiseq"
 <div class="terms"><div class="inner">
 <div class="title title-terms"><h3><span class="title">Station loading</span></h3></div>
 <div class="region"><dl class="terms">
-<dt class="terms">Prefer HTML traversing (PyQuery) over regex</dt>
+<dt class="terms">☑ Prefer HTML traversing (PyQuery) over regex</dt>
 <dd class="terms"><p class="p">Some channels provide proper APIs to fetch station lists. Others are just websites that
       require scraping listings out. Most channel tabs provide two alternative methods for that.
       The DOM/HTML selection method is sometimes slower, but more reliable. As fallback streamtuner2
       plugins often use a regex to match text. Occassionally the regex method is surprisingly more exact,
       because directory services often use frightful unstructured HTML. If available, both methods
       are tried. You can influence the order with this setting, and thus speed it up.</p></dd>
-<dt class="terms">[<span class="input">500</span>] Limit stream number</dt>
+<dt class="terms">🔟 Limit stream number</dt>
 <dd class="terms"><p class="p"> Constraints the length of station lists per category.
       The number of stations option is not honored by all channel plugins. Often it's not possible to
       load more or fewer station entries. Some plugins have own settings (in the 'Plugins' section) even.
       For the major plugins this however limits how many scrollable entries appear in the stream lists.</p></dd>
-<dt class="terms">Retain deleted stations</dt>
+<dt class="terms">☑ Retain deleted stations</dt>
 <dd class="terms"><p class="p">When enabled, keeps old station entries when
       updating/reloading a category/genre.  Services often forget stations or throws them out when inavailable.
       With this option enabled, these entries are kept in streamtuner2 as strikethrough entries (often
       at the end of the list).</p></dd>
-<dt class="terms">Update favouries from freshened URLs</dt>
+<dt class="terms">☑ Update favouries from freshened URLs</dt>
 <dd class="terms"><p class="p">Streaming URLs in bookmarked stations get renewed on category reloads/updates. This isn't
       very reliable, as often station titles change together with the streaming URLs.</p></dd>
-<dt class="terms">Save station lists after updates</dt>
+<dt class="terms">☑ Save station lists after updates</dt>
 <dd class="terms"><p class="p">After reloading (<span class="key"><kbd>F5</kbd></span>) the updated station lists are
       autoamtically saved. For favicon updates or drag and drop events this
       only happens automatically when this option is set.</p></dd>
@@ -165,7 +165,7 @@ There are various options for streamtuner2, available under <span class="guiseq"
 <div class="terms"><div class="inner">
 <div class="title title-terms"><h3><span class="title">Playlist</span></h3></div>
 <div class="region"><dl class="terms">
-<dt class="terms">Reuse .m3u/.pls files</dt>
+<dt class="terms">☑ Reuse .m3u/.pls files</dt>
 <dd class="terms"><p class="p">When converting online station playlists,
       streamtuner2 creates temporary files like <span class="var">shoutcast.11539398391891.m3u</span> for
       your audio player.  It'll keep those files around in /tmp/streamtuner2 until you quit. 
@@ -174,7 +174,7 @@ There are various options for streamtuner2, available under <span class="guiseq"
       For <span class="var">%pls</span> references your player typically usues the online-only playlist
       files anyway.  If you disable this option, then converted pls/m3u/xspf files get
       recreated repeatedly.</p></dd>
-<dt class="terms">Forgo any playlist conversion</dt>
+<dt class="terms">☑ Forgo any playlist conversion</dt>
 <dd class="terms">
 <p class="p">Per default most server playlists (be they .pls or .m3u, .xpsf) are converted.
       All player/recording apps receive a default <span class="var">%pls</span> file normally.
@@ -194,7 +194,7 @@ There are various options for streamtuner2, available under <span class="guiseq"
 <div class="terms"><div class="inner">
 <div class="title title-terms"><h3><span class="title">System</span></h3></div>
 <div class="region"><dl class="terms">
-<dt class="terms">Temporary files</dt>
+<dt class="terms">🔠 Temporary files</dt>
 <dd class="terms"><p class="p">Streamtuner2 creates temporary .m3u files - for audio
       players that are configured to use %m3u files instead of %pls or %srv URLs.  For
       archival purposes you might want to set a dedicated directory for this.  In recent
@@ -202,15 +202,15 @@ There are various options for streamtuner2, available under <span class="guiseq"
       (You cannot set just `/tmp` anymore, because that will be mapped to the longer name. 
       You can trick the old behaviour with `/tmp/.` however.  Don't do that unless you have a
       reason).</p></dd>
-<dt class="terms">Config directory</dt>
+<dt class="terms">🔠 Config directory</dt>
 <dd class="terms"><p class="p">Is where streamtuner2 keeps its <span class="file">settings.json</span> and channel caches, favicons, etc.
       You can't set this in the config dialog. This is just for display. Set the <span class="sys">XDG_CONFIG_HOME</span>
       environment variable to adapt.</p></dd>
-<dt class="terms">Enable debug messages</dt>
+<dt class="terms">☑ Enable debug messages</dt>
 <dd class="terms"><p class="p">If you start streamtuner2 from a terminal window (xterm/rxvt), you can get a load of state
       and processing or debug infos. Enable this only for testing, as it might slow down station
       rendering.</p></dd>
-<dt class="terms">Disable threading</dt>
+<dt class="terms">☑ Disable threading</dt>
 <dd class="terms"><p class="p">Now "threading" is a somewhat technical term.  It
       means that an application runs different tasks internally at the same time.  It's used
       for snappier interfaces.  However, it's also difficult to get right at times.  In

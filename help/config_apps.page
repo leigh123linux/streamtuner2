@@ -138,25 +138,21 @@ mpc play</code>
 </terms>
 </section>
 
-<section>
+<section id="windows">
 <title>Windows config</title>
-<note style="bug"><p>There's a few gothchas when running streamtuner2 on
-Windows.</p></note>
-<list>
- <item><p>You will often have to quote command paths (e.g. to 
-  <cmd>"C:/Program Files/Mozilla Firefox/firefox.exe"</cmd> or
-  <cmd>vlc.exe</cmd>) in double quotes.  In particular if those paths
-  contain spaces.</p></item>
-
- <item><p>If you're using streamripper.exe it's best to put it into a directory
-  without spaces. For some reason quoting the full exe path will not pass on
-  parameters.</p></item>
-
- <item><p>If you want to be extra safe, just extend your system %PATH variable
-  to include all relevant directories. Then just specify the basenames, like
-  <file>firefox.exe</file> for browsing, or <file>vlc.exe</file> as
-  player.</p></item>
-</list>
+<p>There's a few things you have to take care of when configuring players
+and recording apps on Windows. Common applications and settings would be:</p>
+<table shade="rows" rules="rows cols">
+  <tr><td colspan="3"><p><strong>Player config</strong></p></td></tr>
+  <tr><td><p><app>audio/mpeg</app></p></td>  <td><p><cmd>wmplayer.exe %asx</cmd></p></td>   <td><note style="bug"><p>Windows media player doesn't understand PLS or M3U files.</p></note></td></tr>
+  <tr><td><p><app>video/*</app></p></td>     <td><p><cmd>C:\Programs\VLC\vlc.exe %srv</cmd></p></td>   <td><note style="info"><p>VLC pretty much works alike on Windows.</p></note></td></tr>
+  <tr><td><p><app>url/http</app></p></td>    <td><p><cmd>"C:/Program Files/Mozilla Firefox/firefox.exe" %url</cmd></p></td>   <td><note style="info"><p>It's best to enclose paths with spaces in quotes.</p></note></td></tr>
+  <tr><td><p><app>url/http</app></p></td>    <td><p><cmd>iexplore.exe %url</cmd></p></td>   <td><note style="note"><p>IE is not recommended, of course.</p></note></td></tr>
+  <tr><td colspan="3"><p><strong>Recording apps</strong></p></td></tr>
+  <tr><td><p><app>audio/*</app></p></td>     <td><p><cmd>/D "C:\Programs\Streamripper" streamripper.exe %srv</cmd></p></td>   <td><note style="bug"><p>Command line programs need the /D switch first, then its path enclosed in quotes and a space before the program.</p></note></td></tr>
+</table>
+<p>You can avoid a few issues: if you put your executables in paths without
+spaces, or set the system $PATH variable accordingly.</p>
 <note style="info"><p>As reported by Oliver in the sourceforge Discussion
 board.</p></note>
 </section>

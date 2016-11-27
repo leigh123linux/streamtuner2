@@ -107,18 +107,18 @@ There are various options for streamtuner2, available under <guiseq><gui>Edit</g
   <terms>
     <title>Display settings</title>
     <item>
-      <title>Show bookmark star</title>
+      <title>☑ Show bookmark star</title>
       <p>Bookmarked stations will be marked with a ★ star in all other station lists / categories.
       That doesn't often work for the same station entry from two different channel services / tabs though.</p>
     </item>
     <item>
-      <title>Save window states</title>
+      <title>☑ Save window states</title>
       <p>Automatically remember window size, selected channel tab, categories, or selected station.
       Also keeps the width of station list columns. If disabled, you can manually save the current
       layout/selections via <guiseq><gui>Edit</gui> <gui>Save States</gui></guiseq>.</p>
     </item>
     <item>
-      <title>Update window title</title>
+      <title>☑ Update window title</title>
       <p>When switching channel tabs, the Streamtuner2 window title usually gets the current
       channel name appended (such as "- Shoutcast" or "- Xiph"). You can disable this if it
       looks confusing. (Requires a restart to fully take effect.)</p>
@@ -129,7 +129,7 @@ There are various options for streamtuner2, available under <guiseq><gui>Edit</g
   <terms>
     <title>Station loading</title>
     <item>
-      <title>Prefer HTML traversing (PyQuery) over regex</title>
+      <title>☑ Prefer HTML traversing (PyQuery) over regex</title>
       <p>Some channels provide proper APIs to fetch station lists. Others are just websites that
       require scraping listings out. Most channel tabs provide two alternative methods for that.
       The DOM/HTML selection method is sometimes slower, but more reliable. As fallback streamtuner2
@@ -138,25 +138,25 @@ There are various options for streamtuner2, available under <guiseq><gui>Edit</g
       are tried. You can influence the order with this setting, and thus speed it up.</p>
     </item>
     <item>
-      <title>[<input>500</input>] Limit stream number</title>
+      <title>🔟 Limit stream number</title>
       <p> Constraints the length of station lists per category.
       The number of stations option is not honored by all channel plugins. Often it's not possible to
       load more or fewer station entries. Some plugins have own settings (in the 'Plugins' section) even.
       For the major plugins this however limits how many scrollable entries appear in the stream lists.</p>
     </item>
     <item>
-      <title>Retain deleted stations</title> <p>When enabled, keeps old station entries when
+      <title>☑ Retain deleted stations</title> <p>When enabled, keeps old station entries when
       updating/reloading a category/genre.  Services often forget stations or throws them out when inavailable.
       With this option enabled, these entries are kept in streamtuner2 as strikethrough entries (often
       at the end of the list).</p>
     </item>
     <item>
-      <title>Update favouries from freshened URLs</title>
+      <title>☑ Update favouries from freshened URLs</title>
       <p>Streaming URLs in bookmarked stations get renewed on category reloads/updates. This isn't
       very reliable, as often station titles change together with the streaming URLs.</p>
     </item>
     <item>
-      <title>Save station lists after updates</title>
+      <title>☑ Save station lists after updates</title>
       <p>After reloading (<key>F5</key>) the updated station lists are
       autoamtically saved. For favicon updates or drag and drop events this
       only happens automatically when this option is set.</p>
@@ -166,7 +166,7 @@ There are various options for streamtuner2, available under <guiseq><gui>Edit</g
   <terms>
     <title>Playlist</title>
     <item>
-      <title>Reuse .m3u/.pls files</title> <p>When converting online station playlists,
+      <title>☑ Reuse .m3u/.pls files</title> <p>When converting online station playlists,
       streamtuner2 creates temporary files like <var>shoutcast.11539398391891.m3u</var> for
       your audio player.  It'll keep those files around in /tmp/streamtuner2 until you quit. 
       That speeds up switching between and reconnecting to a previous station.  It's in
@@ -176,7 +176,7 @@ There are various options for streamtuner2, available under <guiseq><gui>Edit</g
       recreated repeatedly.</p>
     </item>
     <item>
-      <title>Forgo any playlist conversion</title>
+      <title>☑ Forgo any playlist conversion</title>
       <p>Per default most server playlists (be they .pls or .m3u, .xpsf) are converted.
       All player/recording apps receive a default <var>%pls</var> file normally.
       Set this option to disable any such placeholders from the Player tab, and avoid
@@ -194,7 +194,7 @@ There are various options for streamtuner2, available under <guiseq><gui>Edit</g
   <terms>
     <title>System</title>
     <item>
-      <title>Temporary files</title> <p>Streamtuner2 creates temporary .m3u files - for audio
+      <title>🔠 Temporary files</title> <p>Streamtuner2 creates temporary .m3u files - for audio
       players that are configured to use %m3u files instead of %pls or %srv URLs.  For
       archival purposes you might want to set a dedicated directory for this.  In recent
       versions streamtuner2 will create a <file>/tmp/streamtuner2</file> directory for itself. 
@@ -203,19 +203,19 @@ There are various options for streamtuner2, available under <guiseq><gui>Edit</g
       reason).</p>
     </item>
     <item>
-      <title>Config directory</title>
+      <title>🔠 Config directory</title>
       <p>Is where streamtuner2 keeps its <file>settings.json</file> and channel caches, favicons, etc.
       You can't set this in the config dialog. This is just for display. Set the <sys>XDG_CONFIG_HOME</sys>
       environment variable to adapt.</p>
     </item>
     <item>
-      <title>Enable debug messages</title>
+      <title>☑ Enable debug messages</title>
       <p>If you start streamtuner2 from a terminal window (xterm/rxvt), you can get a load of state
       and processing or debug infos. Enable this only for testing, as it might slow down station
       rendering.</p>
     </item>
     <item>
-      <title>Disable threading</title> <p>Now "threading" is a somewhat technical term.  It
+      <title>☑ Disable threading</title> <p>Now "threading" is a somewhat technical term.  It
       means that an application runs different tasks internally at the same time.  It's used
       for snappier interfaces.  However, it's also difficult to get right at times.  In
       Streamtuner2 some concurrent tasks conflict with updating the Gtk3 user interface. 

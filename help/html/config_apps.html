@@ -228,24 +228,42 @@ mpc play</pre></div>
 </dl></div></div></div>
 </div></div>
 </div></div>
-<div id="" class="sect"><div class="inner">
+<div id="windows" class="sect"><div class="inner">
 <div class="hgroup"><h2 class="title"><span class="title">Windows config</span></h2></div>
 <div class="region"><div class="contents">
-<div class="note note-bug" title="Bug"><div class="inner"><div class="region"><div class="contents"><p class="p">There's a few gothchas when running streamtuner2 on
-Windows.</p></div></div></div></div>
-<div class="list"><div class="inner"><div class="region"><ul class="list">
-<li class="list"><p class="p">You will often have to quote command paths (e.g. to 
-  <span class="cmd">"C:/Program Files/Mozilla Firefox/firefox.exe"</span> or
-  <span class="cmd">vlc.exe</span>) in double quotes.  In particular if those paths
-  contain spaces.</p></li>
-<li class="list"><p class="p">If you're using streamripper.exe it's best to put it into a directory
-  without spaces. For some reason quoting the full exe path will not pass on
-  parameters.</p></li>
-<li class="list"><p class="p">If you want to be extra safe, just extend your system %PATH variable
-  to include all relevant directories. Then just specify the basenames, like
-  <span class="file">firefox.exe</span> for browsing, or <span class="file">vlc.exe</span> as
-  player.</p></li>
-</ul></div></div></div>
+<p class="p">There's a few things you have to take care of when configuring players
+and recording apps on Windows. Common applications and settings would be:</p>
+<div class="table"><div class="inner"><div class="region"><table class="table">
+<tr><td colspan="3"><p class="p">Player config</p></td></tr>
+<tr class="shade">
+<td style="border-top-style: solid;"><p class="p"><span class="app">audio/mpeg</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">wmplayer.exe %asx</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><div class="note note-bug" title="Bug"><div class="inner"><div class="region"><div class="contents"><p class="p">Windows media player doesn't understand PLS or M3U files.</p></div></div></div></div></td>
+</tr>
+<tr>
+<td style="border-top-style: solid;"><p class="p"><span class="app">video/*</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">C:\Programs\VLC\vlc.exe %srv</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><div class="note" title="Note"><div class="inner"><div class="region"><div class="contents"><p class="p">VLC pretty much works alike on Windows.</p></div></div></div></div></td>
+</tr>
+<tr class="shade">
+<td style="border-top-style: solid;"><p class="p"><span class="app">url/http</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">"C:/Program Files/Mozilla Firefox/firefox.exe" %url</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><div class="note" title="Note"><div class="inner"><div class="region"><div class="contents"><p class="p">It's best to enclose paths with spaces in quotes.</p></div></div></div></div></td>
+</tr>
+<tr>
+<td style="border-top-style: solid;"><p class="p"><span class="app">url/http</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">iexplore.exe %url</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><div class="note" title="Note"><div class="inner"><div class="region"><div class="contents"><p class="p">IE is not recommended, of course.</p></div></div></div></div></td>
+</tr>
+<tr class="shade"><td style="border-top-style: solid;" colspan="3"><p class="p">Recording apps</p></td></tr>
+<tr>
+<td style="border-top-style: solid;"><p class="p"><span class="app">audio/*</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">/D "C:\Programs\Streamripper" streamripper.exe %srv</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><div class="note note-bug" title="Bug"><div class="inner"><div class="region"><div class="contents"><p class="p">Command line programs need the /D switch first, then its path enclosed in quotes and a space before the program.</p></div></div></div></div></td>
+</tr>
+</table></div></div></div>
+<p class="p">You can avoid a few issues: if you put your executables in paths without
+spaces, or set the system $PATH variable accordingly.</p>
 <div class="note" title="Note"><div class="inner"><div class="region"><div class="contents"><p class="p">As reported by Oliver in the sourceforge Discussion
 board.</p></div></div></div></div>
 </div></div>
