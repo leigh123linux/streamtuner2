@@ -32,33 +32,22 @@ $pythonPathCU = (Get-ItemProperty -path ($regPathCU.substring(0,$regPathCU.index
 
 
 #-- what and how to install
-#   each row is a list of (title,url,cmd,msi args,regkey,reghive,optional)
+#   each row is a list of (title,url,cmd,msi args,regkey,optional)
 $tasks = @(
-  <#
-  @(
-    "Package Dependencies",
-    "",
-    "Check-Prerequisites",
-    "",
-    "",
-    "",
-    ""
-  ),
-  #>
   @(
     "Python 2.7.12",                                                  # title
     "https://www.python.org/ftp/python/2.7.12/python-2.7.12.msi",     # url
     "",                                                               # custom cmd
-    'TARGETDIR="#PYTHON#" /qb-!',                                 # msi args
+    'TARGETDIR="{PYTHON}" /qb-!',                                     # msi args
     "$regPathLM\{9DA28CE5-0AA5-429E-86D8-686ED898C665}",              # registry
-    "#PYTHON#\pythonw.exe",                                       # installed check
-    ""                                                                # optional component
+    "{PYTHON}\pythonw.exe",                                           # installed check
+    ""                                                                # is optional?
   ),
   @(
     "PyGtk 2.24.2",
     "http://ftp.gnome.org/pub/GNOME/binaries/win32/pygtk/2.24/pygtk-all-in-one-2.24.2.win32-py2.7.msi",
     "",
-    'TARGETDIR="#PYTHON#" ADDLOCAL=ALL REMOVE=PythonExtensionModulePyGtkSourceview2,PythonExtensionModulePyGoocanvas,PythonExtensionModulePyRsvg,DevelopmentTools /qb-!',
+    'TARGETDIR="{PYTHON}" ADDLOCAL=ALL REMOVE=PythonExtensionModulePyGtkSourceview2,PythonExtensionModulePyGoocanvas,PythonExtensionModulePyRsvg,DevelopmentTools /qb-!',
     "$regPathLM\{09F82967-D26B-48AC-830E-33191EC177C8}",
     "$regPathLM\{09F82967-D26B-48AC-830E-33191EC177C8}",
     ""
@@ -69,7 +58,7 @@ $tasks = @(
     "easy_install",
     "",
     "",
-    "#PYTHON#\Lib\site-packages\requests-2.12.1-py2.7.egg",
+    "{PYTHON}\Lib\site-packages\requests-2.12.1-py2.7.egg",
     ""
   ),
   @(
@@ -78,7 +67,7 @@ $tasks = @(
     "",
     "",
     "$regPathCU\lxml-py2.7",
-    "#PYTHON#\Lib\site-packages\lxml-2.3-py2.7.egg-info",
+    "{PYTHON}\Lib\site-packages\lxml-2.3-py2.7.egg-info",
     ""
   ),
   @(
@@ -87,7 +76,7 @@ $tasks = @(
     "pip",
     "--disable-pip-version-check",
     "",
-    "#PYTHON#\Lib\site-packages\pyquery-1.2.17.dist-info",
+    "{PYTHON}\Lib\site-packages\pyquery-1.2.17.dist-info",
     ""
   ),
   @(
@@ -96,7 +85,7 @@ $tasks = @(
     "",
     "",
     "$regPathCU\PIL-py2.7",
-    "#PYTHON#\Lib\site-packages\PIL",
+    "{PYTHON}\Lib\site-packages\PIL",
     ""
   ),
   @(
@@ -105,7 +94,7 @@ $tasks = @(
     "",
     "",
     "$regPathLM\Streamripper",
-    "#STREAMRIPPER#\streamripper.exe",
+    "{STREAMRIPPER}\streamripper.exe",
     '($true)'
   ),
   @(
@@ -172,6 +161,9 @@ $tasks = @(
     ""
   ),
   @(
+    "Basic configuration", "", 'Create-StreamtunerJSON', "", "", "", ""
+  ),
+  @(
     "FINISHED", "",  'Any-Key Green', "", "", "", ""
   )
 )
@@ -180,8 +172,6 @@ $tasks = @(
 
 #-- startup messages
 function Display-Logo {
-#    Clear-Host
-#    Console-MaxHeight
     Write-Host -b DarkBlue @"
  _____________________________________________________________________________ 
 |                                                                             |
@@ -202,55 +192,31 @@ function Display-Logo {
  ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– 
 "@
 }
-<#
-function Warn-NonElevated {
-    if (Test-IsElevated) {
-        return
-    }
-    Write-Host ""
-    Write-Host -f red " ___________________________________________________________________________"
-    Write-Host -f red "|   If you run this script in non-elevated mode you will not be able to     |"
-    Write-Host -f red "|               uninstall Streamtuner2, Python and Gtk                      |" 
-    Write-Host -f red "|              using the control panels´ software list.                     |"
-    Write-Host -f red " ___________________________________________________________________________"
-}
-#>
 function Ask-First {
     Write-Host ""
-    Write-Host -f Yellow "Do you want to install Python 2.7.12 and Gtk dependencies now?"
-    Write-Host -f Yellow "––––––––––––––––––––––––––––––––––––---–––––––––––––––––––––––"
-    Write-Host ""
-    if ((Read-Host "[Y/n]") -notmatch "^[yY]|^$") {
+    if ((Ask "Do you want to install Python 2.7.12 and Gtk dependencies now? [Y/n] ") -notmatch "^[yY]|^$") {
         exit;
         # or $tasks = $tasks[7..($tasks.length-1)]
     }
+    $reuseCachedFiles = (Ask "Do you want to reuse any cached setup files? [r]euse/[I]gnore) ") -match "^[Rr]"
+    $optionalInstall =  (Ask "Do you want to check optional components? [y/N] ") -match "^[Yy]"
     Write-Host ""
-    Write-Host -f Yellow "Do you want to reuse any cached setup files?"
-    Write-Host -f Yellow "--------------------------------------------"
-    $reuseCachedFiles = Read-Host "[r]euse/[I]gnore)" -match "^[Rr]"
-    Write-Host ""
-    Write-Host -f Yellow "Do you want to check optional components?"
-    Write-Host -f Yellow "-----------------------------------------"
-    $optionalInstall = Read-Host "[y/N]" -match "^[Yy]"
-    Write-Host ""
-    $reuseCachedFiles
-    $optionalInstall
-    return 
+    return $reuseCachedFiles, $optionalInstall
 }
 
 function Console-MaxHeight {
-  if ($Host.Name -match "console") {
-    $MaxHeight = $host.UI.RawUI.MaxPhysicalWindowSize.Height
-    $MaxWidth = $host.UI.RawUI.MaxPhysicalWindowSize.Width
-    $MyBuffer = $Host.UI.RawUI.BufferSize
-    $MyWindow = $Host.UI.RawUI.WindowSize
-    $MyWindow.Height = ($MaxHeight)
-    $MyWindow.Width = (80)
-    $MyBuffer.Height = (9999)
-    #$MyBuffer.Width = (80)
-    $host.UI.RawUI.set_bufferSize($MyBuffer)
-    $host.UI.RawUI.set_windowSize($MyWindow)
-  }
+    if ($Host.Name -match "console") {
+        $MaxHeight = $host.UI.RawUI.MaxPhysicalWindowSize.Height
+        $MaxWidth = $host.UI.RawUI.MaxPhysicalWindowSize.Width
+        $MyBuffer = $Host.UI.RawUI.BufferSize
+        $MyWindow = $Host.UI.RawUI.WindowSize
+        $MyWindow.Height = ($MaxHeight)
+        $MyWindow.Width = (80)
+        $MyBuffer.Height = (9999)
+        #$MyBuffer.Width = (80)
+        $host.UI.RawUI.set_bufferSize($MyBuffer)
+        $host.UI.RawUI.set_windowSize($MyWindow)
+    }
 }
 
 #-- create Desktop/Startmenu shortcuts
@@ -302,21 +268,52 @@ function Create-Uninstallscript {
     #}
 }
 
+#-- prefill settings.json
+function Create-StreamtunerJSON {
+    $dir = "$env:APPDATA\streamtuner2"
+    if (!(Test-Path $dir)) {
+        New-Item -Path $dir -ItemType directory
+    }
+    if (($STREAMRIPPER) -AND !(Test-Path ($fn = "$dir/settings.json"))) {
+        $dq = '^"'
+        $json = @{
+            "windows" = $True;
+            "play" = @{
+                "audio/*" = "wmplayer.exe %asx";
+                "video/*" = "wmplayer.exe %asx"
+            };
+            "record" = @{
+                "audio/*" = "/D $($dq)$($STREAMRIPPER)$($dq) streamripper.exe %srv -d $Home\Desktop"
+            }
+        }
+        $json | ConvertTo-Json | Out-File $fn -Encoding ASCII 
+    }
+}
+
 function Any-Key($color) {
     Write-Host -f $color "[Press any key]"
     $null = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
 }
 
+#-- colorized Read-Host
+function Ask($str) {
+    if ($str -cmatch "^(.+?)(\[[a-z/]*)([A-Z]+)([\w/]*\])(.*)$") {
+        Write-Host -n -f Yellow     $matches[1] # Want to install
+        Write-Host -n -f DarkYellow $matches[2] # [n/
+        Write-Host -n -f Green      $matches[3] # Y
+        Write-Host -n -f DarkYellow $matches[4] # /a]
+        Write-Host -n -f Yellow     $matches[5] # ?
+    }
+    else {
+        Write-Host -n -f Yellow $str
+    }
+    Read-Host ; Write-Host ""
+}
+
 #-- ensure ST2 startup script exists in relative path to this install script
 function Check-Package {
     if (!(Test-Path -Path("$UsrFolder\bin\streamtuner2"))) {
-        Write-Host -b DarkRed -f White @"
-The bin\streamtuner2 start script could not be found.
-The installation cannot continue.
-Do not change the folder structure of the Streamtuner2 package!
-If you want to run the install_python_gtk.ps1 script post-install,
-please use the -UsrFolder parameter.
-"@
+        Write-Host -b DarkRed -f White "`nThe bin\streamtuner2 start script could not be found.`nThe installation cannot continue.`nDo not change the folder structure of the Streamtuner2 package!`nIf you want to run the install_python_gtk.ps1 script post-install,`nplease use the -UsrFolder parameter.`n"
         Any-Key Red ; exit
     }
 }
@@ -347,8 +344,7 @@ Continuing this setup might result in loss of functionality
 for other Python applications on your computer!
 "@
             Write-Host ""
-            Write-Host "Do you want to continue with the setup anyway?"
-            if ((Read-Host "[y/N]") -notmatch "[yY]") {
+            if ((Ask "Do you want to continue with the setup anyway? [y/N]") -notmatch "[yY]") {
                 exit;
             }
         }
@@ -363,7 +359,7 @@ function Check-Prerequisites {
     Check-Package
     ForEach ($task in $tasks) {
         $title, $url, $cmd, $args, $regkey, $check, $optionalComp = $task;
-        if ($optionalComp and $optionalInstall) {
+        if ($optionalComp -and $optionalInstall) {
                 if ($title -match "Streamripper") {
                     $StreamripperPath = (get-itemproperty -path HKCU:\Software\Streamripper).'(default)' 2> $null
                     if (!(Test-Path -Path ($StreamripperPath + "\streamripper.exe"))) {
@@ -386,12 +382,12 @@ function Check-Prerequisites {
                 }
             }
             elseif ($title -match "requests|PyQuery") {
-                if (!(Test-Path -Path ($check -replace "#PYTHON#","$PYTHON"))) {
+                if (!(Test-Path -Path ($check -replace "{PYTHON}","$PYTHON"))) {
                     write-Host "   - $title not found"
                     $result = 0
                 }
                 else {
-                    Write-Host "   + $title found"
+                    Write-Host "   + $title found in $PYTHON"
                 }
             }
         }
@@ -415,25 +411,25 @@ If you want to reinstall them though, use 'all' or 'reinstall' or 'R'.`n
 
 
 #-- ask before running
+Clear-Host
 Console-MaxHeight
 Display-Logo
 $UsrFolder = $MyInvocation.MyCommand.Path -replace ("([\\/][^\\/]+){4}$","") #temp fix for running on Windows 10
 $PYTHON = Check-PythonInstall
 $reuseCachedFiles, $optionalInstall = Ask-First
 $STREAMRIPPER = Check-Prerequisites
-Clear-Host
-Display-Logo
-
+#Clear-Host
+#Display-Logo
 
 
 #-- process
 ForEach ($task in $tasks) {
-    ForEach ($key in $task.keys()) { $task[$key] = [regex]::Replace($task[$key], "#(\w+)#", { param($m) Invoke-Expression ("$"+$m.Groups[1].Value) }) }
-    $title, $url, $cmd, $args, $regkey, $testpath, $optional = $task;
+    $title, $url, $cmd, $args, $regkey, $testpath, $optional = $task | 
+       % { [regex]::Replace($_, "[#{](\w+)[}#]", { param($m) Invoke-Expression ("$"+$m.Groups[1].Value) }) }
     
     # options
     if ($optional -AND (Invoke-Expression $optional) -AND !$optionalInstall) {
-        continue    # ↑ expression test
+        continue    # optional expression test
     }
 
     # print step
@@ -447,9 +443,7 @@ ForEach ($task in $tasks) {
     elseif ($testpath -AND (Test-Path -Path $testpath)) {
         if ($reinstall -eq "none") {Write-Host " → Kept as is."; continue }
         Write-Host -f Green -NoNewline " → Is already present."
-        #if ($title -match "Python 2.7.12") {Write-Host -f Green " (in $PYTHON)"}
-        #if ($title -match "Streamripper 1.64.6") {Write-Host -f Green " (in $STREAMRIPPER)"}
-        Write-Host -f Yellow -NoNewline "   Reinstall [y/N/all/none]? " ; $y = Read-Host ; Write-Host ""
+        $y = Ask "   Reinstall [y/N/all/none]? "
         if ($y -match "^all|always|re|^A") { $reinstall = "all" }
         elseif ($y -match "never|none|skip|^S") { $reinstall = "none"; continue }
         elseif ($y -match "^y|yes|1|go|^R") { } # YES
@@ -482,7 +476,6 @@ ForEach ($task in $tasks) {
     }
     # msi
     elseif ($file -match ".+.msi$") {
-        $args = $args -replace "#PYTHON#","$PYTHON"
         Write-Host -f DarkYellow (" → msiexec /i " + "$file " + $args)
         Start-Process -Wait msiexec -ArgumentList /i,"$TEMP\$file", $args
         if ($regkey) {
