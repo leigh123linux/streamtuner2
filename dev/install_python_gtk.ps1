@@ -18,15 +18,29 @@ Param(
   [string]$TEMP = $env:TEMP,
   [string]$PYTHON = "C:\Python27",
   [string]$StartMenu = "$env:USERPROFILE\AppData\Roaming\Microsoft\Windows\Start Menu\Programs",
-  [string]$UsrFolder = $MyInvocation.MyCommand.Path -replace ("([\\/][^\\/]+){4}$","")
+ #[string]$UsrFolder = $MyInvocation.MyCommand.Path -replace ("([\\/][^\\/]+){4}$",""),
+  [string]$ProgramFiles = "%ProgramFiles(x86)%",
+ #[string]$UninstallPath = "$UsrFolder\share\streamtuner2\dev\uninstall.cmd",
+ #[string]$IconPath = "$UsrFolder\share\pixmaps\streamtuner2.ico",
+  [string]$AboutLink = "http://freshcode.club/projects/streamtuner2"
+ #[string]$ModifyPath = $MyInvocation.MyCommand.Path -replace (".ps1", ".bat")
 )            
+
+#-- paths
+$UsrFolder = $MyInvocation.MyCommand.Path -replace ("([\\/][^\\/]+){4}$","")
+$UninstallPath = "$UsrFolder\share\streamtuner2\dev\uninstall.cmd"
+$ModifyPath = $MyInvocation.MyCommand.Path -replace (".ps1", ".bat")
+$IconPath = "$UsrFolder\share\pixmaps\streamtuner2.ico"
 
 #-- system configuration
 $OutputEncoding = [System.Text.Encoding]::UTF8
 $regPathCU = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall"
 $regPathLM = "HKLM:\Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall" #64-Bit machine
-if(!(Test-Path $regPathLM)) { $regPathLM = "HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall" } #32-Bit machine
-
+if(!(Test-Path $regPathLM)) {                                                        #32-Bit machine
+    $regPathLM = "HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall"
+    $ProgramFiles = "%ProgramFiles%"
+}
+$STREAMRIPPER = "$ProgramFiles\Streamripper"
 $pythonPathLM = (Get-ItemProperty -path ($regPathLM.substring(0,$regPathLM.indexOf("\Microsoft"))+ "\Python\PythonCore\2.7\InstallPath\")).'(default)' 2> $null
 $pythonPathCU = (Get-ItemProperty -path ($regPathCU.substring(0,$regPathCU.indexOf("\Microsoft"))+ "\Python\PythonCore\2.7\InstallPath\")).'(default)' 2> $null
 
@@ -63,11 +77,11 @@ $tasks = @(
   ),
   @(
     "LXML 2.3",
-    "https://pypi.python.org/packages/3d/ee/affbc53073a951541b82a0ba2a70de266580c00f94dd768a60f125b04fca/lxml-2.3.win32-py2.7.exe",
+    "https://pypi.python.org/packages/d4/fa/e4e0c7a8fe971b10e275cdc20efd16f553a225e700c400c11da25276e4f4/lxml-2.3-py2.7-win32.egg",
+    "easy_install",
     "",
     "",
-    "$regPathCU\lxml-py2.7",
-    "{PYTHON}\Lib\site-packages\lxml-2.3-py2.7.egg-info",
+    "{PYTHON}\Lib\site-packages\lxml-2.3-py2.7-win32.egg",
     ""
   ),
   @(
@@ -92,7 +106,7 @@ $tasks = @(
     "Streamripper 1.64.6",
     "http://downloads.sourceforge.net/project/streamripper/streamripper%20%28current%29/1.64.6/streamripper-windows-installer-1.64.6.exe?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fstreamripper%2Ffiles%2Fstreamripper%2520%2528current%2529%2F1.64.6%2F&ts=1480104543&use_mirror=kent"
     "",
-    "",
+    "/S  /D={STREAMRIPPER}"  #NSIS does not use double quotes in /D parm,
     "$regPathLM\Streamripper",
     "{STREAMRIPPER}\streamripper.exe",
     '($true)'
@@ -136,7 +150,7 @@ $tasks = @(
   @(
     "Startmenu uninstall",
     "",
-    'Make-Shortcut -dir "$StartMenu\Streamtuner2" -name Uninstall.lnk -target $UsrFolder\share\streamtuner2\dev\uninstall.cmd',
+    'Make-Shortcut -dir "$StartMenu\Streamtuner2" -name Uninstall.lnk -target $UninstallPath',
     "",
     "",
     "",
@@ -145,7 +159,7 @@ $tasks = @(
   @(
     "Startmenu Internet",
     "",
-    'Make-Shortcut -dir "$StartMenu\Streamtuner2" -name "Streamtuner2 on the Web.lnk" -target "http://freshcode.club/projects/streamtuner2"',
+    'Make-Shortcut -dir "$StartMenu\Streamtuner2" -name "Streamtuner2 on the Web.lnk" -target "$AboutLink"',
     "",
     "",
     "",
@@ -154,14 +168,11 @@ $tasks = @(
   @(
     "Startmenu Reconfigure",
     "",
-    'Make-Shortcut -dir "$StartMenu\Streamtuner2" -name "Reconfigure.lnk" -target $UsrFolder\share\streamtuner2\dev\install_python_gtk.bat',
+    'Make-Shortcut -dir "$StartMenu\Streamtuner2" -name "Reconfigure.lnk" -target $ModifyPath',
     "",
     "",
     "",
     ""
-  ),
-  @(
-    "Basic configuration", "", 'Create-StreamtunerJSON', "", "", "", ""
   ),
   @(
     "FINISHED", "",  'Any-Key Green', "", "", "", ""
@@ -195,8 +206,7 @@ function Display-Logo {
 function Ask-First {
     Write-Host ""
     if ((Ask "Do you want to install Python 2.7.12 and Gtk dependencies now? [Y/n] ") -notmatch "^[yY]|^$") {
-        exit;
-        # or $tasks = $tasks[7..($tasks.length-1)]
+        exit;  # or $tasks = $tasks[7..($tasks.length-1)]
     }
     $reuseCachedFiles = (Ask "Do you want to reuse any cached setup files? [r]euse/[I]gnore) ") -match "^[Rr]"
     $optionalInstall =  (Ask "Do you want to check optional components? [y/N] ") -match "^[Yy]"
@@ -231,7 +241,7 @@ function Make-Shortcut {
     $lnk.TargetPath = $target
     if ($arg) {
         $lnk.Arguments = '"'+$arg+'"'
-        $lnk.IconLocation = "$UsrFolder\share\pixmaps\streamtuner2.ico"
+        $lnk.IconLocation = "$IconPath"
         $lnk.WorkingDirectory = "$UsrFolder\bin"
     }
     $lnk.Save()
@@ -248,48 +258,35 @@ function Create-Uninstallscript {
     Out-File -FilePath $UninstallScriptPath -Encoding ascii -InputObject "@set installFolder=$installFolder"
     Out-File -FilePath $UninstallScriptPath -Encoding ascii -Append -InputObject "@set usrFolder=$usrFolder"
     Out-File -FilePath $UninstallScriptPath -Encoding ascii -Append -InputObject "@set Python=$PYTHON"
-    for ($i=3; $i -lt $UninstallScript.Length ; $i++) {
+    Out-File -FilePath $UninstallScriptPath -Encoding ascii -Append -InputObject "@set StreamripperFolder=$STREAMRIPPER"
+    <#
+    if ($STREAMRIPPER) {
+        Out-File -FilePath $UninstallScriptPath -Encoding ascii -Append -InputObject "@set StreamripperFolder=$STREAMRIPPER"
+    }
+    #>
+    for ($i=4; $i -lt $UninstallScript.Length ; $i++) {
         Out-File -FilePath $UninstallScriptPath -Encoding ascii -Append -InputObject $UninstallScript[$i]
     }
-    Out-File -FilePath "$UsrFolder\share\streamtuner2\dev\Y" -Encoding ascii -InputObject "Y"
+    #Out-File -FilePath "$UsrFolder\share\streamtuner2\dev\Y" -Encoding ascii -InputObject "Y"
     #if (Test-IsElevated) {
-        #Write-Host "   Writing to registry"
-        Remove-Item -Path $regPathCU\Streamtuner2 2> $null        
-        New-Item $regPathCU -Name "Streamtuner2" > $null
-        Set-Location -Path $regPathCU\Streamtuner2
-        New-ItemProperty -Path . -Name DisplayName -PropertyType String -Value "Streamtuner2" > $null
-        New-ItemProperty -Path . -Name DisplayVersion -PropertyType String -Value "2.2.0" > $null
-        New-ItemProperty -Path . -Name DisplayIcon -PropertyType String -Value "$UsrFolder\share\pixmaps\streamtuner2.ico" > $null
-        New-ItemProperty -Path . -Name UninstallString -PropertyType String -Value "$UsrFolder\share\streamtuner2\dev\uninstall.cmd" > $null
-        New-ItemProperty -Path . -Name URLInfoAbout -PropertyType String -Value "http://freshcode.club/projects/streamtuner2" > $null
-        New-ItemProperty -Path . -Name Publisher -PropertyType String -Value "Mario Salzer" > $null
-        New-ItemProperty -Path . -Name NoModify -PropertyType DWord -Value 1 > $null
-        New-ItemProperty -Path . -Name NoRepair -PropertyType DWord -Value 1 > $null
+    #Write-Host "   Writing to registry"
+    Remove-Item -Path $regPathCU\Streamtuner2 2> $null        
+    New-Item $regPathCU -Name "Streamtuner2" > $null
+    Set-Location -Path $regPathCU\Streamtuner2
+    New-ItemProperty -Path . -Name DisplayName -PropertyType String -Value "Streamtuner2" > $null
+    New-ItemProperty -Path . -Name DisplayVersion -PropertyType String -Value "2.2.0" > $null
+    New-ItemProperty -Path . -Name DisplayIcon -PropertyType String -Value "$IconPath" > $null
+    New-ItemProperty -Path . -Name UninstallString -PropertyType String -Value "$UninstallPath" > $null
+    New-ItemProperty -Path . -Name URLInfoAbout -PropertyType String -Value "$AboutLink" > $null
+    New-ItemProperty -Path . -Name Publisher -PropertyType String -Value "Mario Salzer" > $null
+    New-ItemProperty -Path . -Name NoModify -PropertyType DWord -Value 0 > $null
+    New-ItemProperty -Path . -Name ModifyPath -PropertyType String -Value "$ModifyPath" > $null
+    New-ItemProperty -Path . -Name NoRepair -PropertyType DWord -Value 1 > $null
+    New-ItemProperty -Path . -Name HelpLink -PropertyType String -Value "http://fossil.include-once.org/streamtuner2/wiki?name=windows" > $null
     #}
 }
 
-#-- prefill settings.json
-function Create-StreamtunerJSON {
-    $dir = "$env:APPDATA\streamtuner2"
-    if (!(Test-Path $dir)) {
-        New-Item -Path $dir -ItemType directory
-    }
-    if (($STREAMRIPPER) -AND !(Test-Path ($fn = "$dir/settings.json"))) {
-        $dq = '^"'
-        $json = @{
-            "windows" = $True;
-            "play" = @{
-                "audio/*" = "wmplayer.exe %asx";
-                "video/*" = "wmplayer.exe %asx"
-            };
-            "record" = @{
-                "audio/*" = "/D $($dq)$($STREAMRIPPER)$($dq) streamripper.exe %srv -d $Home\Desktop"
-            }
-        }
-        $json | ConvertTo-Json | Out-File $fn -Encoding ASCII 
-    }
-}
-
+#-- wait for keypress
 function Any-Key($color) {
     Write-Host -f $color "[Press any key]"
     $null = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
@@ -299,9 +296,9 @@ function Any-Key($color) {
 function Ask($str) {
     if ($str -cmatch "^(.+?)(\[[a-z/]*)([A-Z]+)([\w/]*\])(.*)$") {
         Write-Host -n -f Yellow     $matches[1] # Want to install
-        Write-Host -n -f DarkYellow $matches[2] # [n/
-        Write-Host -n -f Green      $matches[3] # Y
-        Write-Host -n -f DarkYellow $matches[4] # /a]
+        Write-Host -n -f Gray       $matches[2] # [n/
+        Write-Host -n -f DarkCyan   $matches[3] # Y
+        Write-Host -n -f Gray       $matches[4] # /a]
         Write-Host -n -f Yellow     $matches[5] # ?
     }
     else {
@@ -358,9 +355,11 @@ function Check-Prerequisites {
     param($result = 1)
     Check-Package
     ForEach ($task in $tasks) {
-        $title, $url, $cmd, $args, $regkey, $check, $optionalComp = $task;
-        if ($optionalComp -and $optionalInstall) {
+        $title, $url, $cmd, $args, $regkey, $check, $optional = $task;
+        if ($optional) {
+            if ($optionalInstall) {
                 if ($title -match "Streamripper") {
+
                     $StreamripperPath = (get-itemproperty -path HKCU:\Software\Streamripper).'(default)' 2> $null
                     if (!(Test-Path -Path ($StreamripperPath + "\streamripper.exe"))) {
                         write-host "   - $title not found"
@@ -368,8 +367,10 @@ function Check-Prerequisites {
                     else {
                         Write-Host "   + $title found in $StreamripperPath"
                     }
+                }
             }
         }
+        
         else {
             if ($regkey) { 
                 if (!(Test-Path -Path $regkey)) {     # avoid runtime error if not existent (not working in PS2)
@@ -378,16 +379,21 @@ function Check-Prerequisites {
                 }
                 else {
                     #Write-Host (Get-ItemProperty -Path $regkey -Name "DisplayName".DisplayName).DisplayName " found"
-                    Write-Host "   + $title found"
+                    if ($title -match "Python 2.7.12") {
+                        Write-Host "   + $title found in $PYTHON"
+                    }
+                    else {
+                        Write-Host "   + $title found"
+                    }
                 }
             }
-            elseif ($title -match "requests|PyQuery") {
+            elseif ($title -match "requests|PyQuery|LXML") {
                 if (!(Test-Path -Path ($check -replace "{PYTHON}","$PYTHON"))) {
                     write-Host "   - $title not found"
                     $result = 0
                 }
                 else {
-                    Write-Host "   + $title found in $PYTHON"
+                    Write-Host "   + $title found"
                 }
             }
         }
@@ -410,23 +416,23 @@ If you want to reinstall them though, use 'all' or 'reinstall' or 'R'.`n
 
 
 
+
 #-- ask before running
 Clear-Host
 Console-MaxHeight
 Display-Logo
-$UsrFolder = $MyInvocation.MyCommand.Path -replace ("([\\/][^\\/]+){4}$","") #temp fix for running on Windows 10
 $PYTHON = Check-PythonInstall
 $reuseCachedFiles, $optionalInstall = Ask-First
-$STREAMRIPPER = Check-Prerequisites
+if ($SR = Check-Prerequisites) {$STREAMRIPPER = $SR}
 #Clear-Host
 #Display-Logo
 
 
 #-- process
-ForEach ($task in $tasks) {
+:tasks ForEach ($task in $tasks) {
     $title, $url, $cmd, $args, $regkey, $testpath, $optional = $task | 
        % { [regex]::Replace($_, "[#{](\w+)[}#]", { param($m) Invoke-Expression ("$"+$m.Groups[1].Value) }) }
-    
+
     # options
     if ($optional -AND (Invoke-Expression $optional) -AND !$optionalInstall) {
         continue    # optional expression test
@@ -438,16 +444,15 @@ ForEach ($task in $tasks) {
     chdir($TEMP);
 
     # test if element (file path or registry key) already exists:
-    if ($reinstall -eq "all") {
-    }
-    elseif ($testpath -AND (Test-Path -Path $testpath)) {
-        if ($reinstall -eq "none") {Write-Host " → Kept as is."; continue }
+    if ($testpath -AND ($reinstall -ne "all") -AND (Test-Path -Path $testpath)) {
         Write-Host -f Green -NoNewline " → Is already present."
-        $y = Ask "   Reinstall [y/N/all/none]? "
-        if ($y -match "^all|always|re|^A") { $reinstall = "all" }
-        elseif ($y -match "never|none|skip|^S") { $reinstall = "none"; continue }
-        elseif ($y -match "^y|yes|1|go|^R") { } # YES
-        else { continue } # everything else counts as NO
+        if ($reinstall -eq "none") { continue tasks }
+        Switch -regex ( Ask "   Reinstall [y/N/all/none]? " ) {
+            "^all|always|re|^A" { $reinstall = "all" }
+            "never|none|skip|^S" { $reinstall = "none"; continue tasks }
+            "^y|yes|1|go|^R" { } # YES
+            ".*" { continue tasks } # everything else counts as NO
+        }
     }
 
     # get "filename" part from url
@@ -467,7 +472,12 @@ ForEach ($task in $tasks) {
             $cmd = "& `"$PYTHON\Scripts\pip.exe`" install $TEMP\$file", $args #"
         }
         elseif ($cmd -match "^(easy|easy_install|silent)$") {
-            $cmd = "& `"$PYTHON\Scripts\easy_install.exe`" $url" #"
+            if (!($file)) {
+                $cmd = "& `"$PYTHON\Scripts\easy_install.exe`" $url" #"
+            }
+            else {
+                $cmd = "& `"$PYTHON\Scripts\easy_install.exe`" $TEMP\$file" #"
+            }
         }
         if ($title -notmatch "FINISHED") {
             Write-Host -f DarkYellow   " → $cmd"

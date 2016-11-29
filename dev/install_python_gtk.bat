@@ -16,4 +16,5 @@ echo ^|                                                                         
 echo ^|    Installer for Python 2.7.12 ^& Gtk 2.24.2                                 ^|
 echo  ----------------------------------------------------------------------------- 
 echo.
+echo PowerShell "install_python_gtk.ps1"...
 PowerShell.exe -Command "& {Start-Process Powershell.exe -ArgumentList '-ExecutionPolicy ByPass -File ""%~dpn0.ps1""' -Verb RunAs}" 
