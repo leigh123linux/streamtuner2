@@ -31,12 +31,19 @@ Radionomy is therefore pretty popular and growing.</p>
 <section id="options">
  <title>Configuration</title>
  
- <p> You can configure the number of pages it'll try (<key>3</key> by
- default) to influence the length of station lists.</p>
-
- <p> And the song title updating ("<key>OnAir Updates</key>") can be disabled.
- Future versions of this channel plugin might poll it automatically,
- and keep the station list auto-updated.</p>
+ <list>
+ <item>
+  <title>🔟 Number of pages</title>
+  <p> You can configure the number of pages it'll try (<key>3</key> by
+  default) to influence the length of station lists.</p>
+ </item>
+ <item>
+  <title>☑ OnAir updates</title>
+  <p> And the song title updating can be disabled (for speedier loading).
+  Future versions of this channel plugin might poll it automatically,
+  and keep the station list auto-updated.</p>
+ </item>
+ </list>
 
 </section>
 

@@ -24,14 +24,21 @@
         
         <section id="options">
         <title>Configuration</title>
-        
-	<p>See <link xref="recording">recording configuration</link> if you
-	want to enable the download mode.</p>
 
-	<note><p>Audio files are packaged up in ZIP files on MODArchive. 
+	<p>Audio files are packaged up in ZIP files on MODArchive. 
 	While they are different formats (IT, S3M, XM, etc) they'll all
 	carry a generic <var>audio/mod+zip</var> type specifier in
-	streamtuner2.</p></note>
+	streamtuner2 for configuration:</p>
+	
+        <table shade="rows" rules="rows cols">
+            <tr><td rowspan="2">Recording apps</td></tr>
+            <tr><td><p><var>audio/mod+zip</var></p></td>   <td><p><cmd>cd ~/Music ; wget %srv</cmd></p></td></tr>
+        </table>
+        
+	<p>You can use <cmd>curl</cmd>, or wrap the command with <cmd>xterm</cmd>
+	(though files are too quick to download).
+	A few file managers might be able to open the URLs directly even.
+	See <link xref="recording">recording configuration</link> for more examples.</p>
 	
 	</section>
 

@@ -18,7 +18,7 @@ section.</p>
 
 
 <section>
-<title>Filter Bitrate</title>
+<title>🔌 Filter Bitrate</title>
 <p>Some channels provide lower-quality audio streams. In particular
 Xiph lists some awful radio stations. And this plugin helps filtering
 those out of station lists.</p>
@@ -32,7 +32,7 @@ their streams with 64kbit/s only.</p>
 </section>
 
 <section>
-<title>Channel toolbar link</title>
+<title>🔌 Channel toolbar link</title>
 <p>Adds a toolbar entry which shows the current channel/directory
 service title and its homepage link. Such as:</p>
 <code><span style="bold">  ▶    ●    🏠     Shoutcast</span>
@@ -42,7 +42,7 @@ play rcrd  hmpg   <link href="http://shoutcast.com/">//shoutcast.com/</link>
 </section>
 
 <section>
-<title>Export all stations</title>
+<title>🔌 Export all stations</title>
 <p>There's an "Export All" plugin available. It adds an entry under
 <guiseq><gui>Main menu</gui> <gui>Extensions</gui> <gui>Export all stations</gui></guiseq>.
 Which allows to export all stations from the currently visible channel category.</p>
@@ -54,7 +54,7 @@ Which allows to export all stations from the currently visible channel category.
 </section>
 
 <section>
-<title>RadioTray hook</title>
+<title>🔌 RadioTray hook</title>
 <p>This plugin enables an extra category in the <key>bookmarks</key> tab.
 It shows bookmarked stations from the RadioTray application, if that's
 installed. Additionally it adds an context option to save new stations
@@ -64,7 +64,7 @@ radios are recategorized in RadioTray.</p>
 </section>
 
 <section>
-<title><p>User Agent Switcher</p></title>
+<title>🔌 User Agent Switcher</title>
 <p>This plugin merely masks Streamtuner2 as an ordinary web browser when retrieving station lists.</p>
 <list>
  <item><p> It's technically unneeded, as ST2 isn't stressful to directory websites and not blocked anywhere. </p></item>
@@ -75,11 +75,11 @@ radios are recategorized in RadioTray.</p>
 <section>
  <title>Other feature plugins</title>
  <list>
-   <item><p><link xref="dragndrop">Drag and Drop</link></p></item>
-   <item><p><link xref="favicon">Favicons</link></p></item>
-   <item><p><link xref="global_key">Global key shortcut</link></p></item>
-   <item><p><link xref="timer">Timer</link></p></item>
-   <item><p><link xref="specbuttons">Specbuttons</link></p></item>
+   <item><p><link xref="dragndrop">🔌 Drag and Drop</link></p></item>
+   <item><p><link xref="favicon">🔌 Favicons</link></p></item>
+   <item><p><link xref="global_key">🔌 Global key shortcut</link></p></item>
+   <item><p><link xref="timer">🔌 Timer</link></p></item>
+   <item><p><link xref="specbuttons">🔌 Specbuttons</link></p></item>
  </list>
  <p>The "<link xref="search">search</link>",
  "<link xref="configuration">configwin</link>" and
@@ -96,8 +96,9 @@ available feature plugins in the <key>📦 Add</key> tab.</p>
 
 <terms>
   <item>
-    <title><p>Soundcloud streaming</p></title>
-    <p>Enables playback of soundcloud.com links in the Reddit plugin.
+    <title>🔌 Soundcloud streaming</title>
+    <p>Enables playback of soundcloud.com links, which are only used
+    in the <link xref="channel_reddit">📻 Reddit</link> plugin currently.
     Homepage links are transformed into direct MP3 streaming addresses
     on playback.</p>
     <note><p>Depends on python-soundcloud, which you can install per
@@ -107,25 +108,25 @@ available feature plugins in the <key>📦 Add</key> tab.</p>
     Use the pseudo type "audio/soundcloud" for the player settings table.</p>
   </item>
   <item>
-    <title><p>dev_faulthandler</p></title>
+    <title>🔌 dev_faulthandler</title>
     <p>This is a pure development plugin, meant to debug ST2 crashes.</p>
   </item>
   <item>
-    <title><p>bookmarks_show_extra</p></title>
+    <title>🔌 bookmarks_show_extra</title>
     <p>Is a slim UI adaption to show the `extra` field in the bookmarks
     channel. This field can contain user comments, but is used per default
     to store the originating channel in.</p>
   </item>
   <item>
-    <title><p>new_station</p></title>
+    <title>🔌 new_station</title>
     <p>Currently not working. Small plugin to provide an "Add station..."
     menu entry. Note that ST2 is not meant as playlist manager, which is
     why this isn't a built-in feature. However, it's oft-requested anyway.</p>
   </item>
   <item>
-    <title><p>tmp_clean_multiurl</p></title>
+    <title>🔌 tmp_clean_multiurl</title>
     <p>Strips extra space-separate URLs from station list. (Currently only
-    required for RadioSure channel. Later ST2 versions will likely support
+    required for 📻 RadioSure channel. Later ST2 versions will likely support
     such entries per default again).</p>
   </item>
 </terms>

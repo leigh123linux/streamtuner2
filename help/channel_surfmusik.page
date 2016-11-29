@@ -28,9 +28,10 @@
   <title>Channel options.</title>
   <terms>
   <item>
-    <title><code>Language</code></title>
+    <title><code>🔠 Language</code></title>
     <p>There's an English and a German variant of this radio directory. Genres are
-    also localized. Restart streamtuner2 after switching the Language option. Then
+    also localized.</p>
+    <p>Restart streamtuner2 after switching the Language option. Then
     use <guiseq><gui>Channel</gui> <gui>Reload category tree</gui></guiseq>.</p>
   </item>
   </terms>

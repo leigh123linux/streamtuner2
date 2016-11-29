@@ -38,7 +38,7 @@
 	<list>
 	<item><p>Alternative download repositories may be configured. (Little
 	practical value at the moment.)</p></item>
-	<item><p>And you can let the plugin manager handle autoactivation
+	<item><p>And you can let the plugin manager handle ☑ autoactivation
 	of changed plugin states.</p>
 	  <list>
 	  <item><p>After reconfiguring existing channel plugins, they get

@@ -35,7 +35,25 @@
 <div id="options" class="sect"><div class="inner">
 <div class="hgroup"><h2 class="title"><span class="title">Configuration</span></h2></div>
 <div class="region"><div class="contents">
-<p class="p">Like the Xiph plugin this channel provides two/three fetch modes.</p>
+<p class="p">Like the <span class="link"><a href="channel_xiph.html" title="channel_xiph">📻 Xiph plugin</a></span> this channel provides
+	three fetch modes:</p>
+<div class="list"><div class="inner"><div class="region"><ul class="list">
+<li class="list">
+<div class="title title-item"><h3><span class="title">Website</span></h3></div>
+<p class="p">Extract all streams from the web page
+         directly.</p>
+</li>
+<li class="list">
+<div class="title title-item"><h3><span class="title">XML Data</span></h3></div>
+<p class="p">Use <span class="file">💾 list.2.0.xml</span> which
+         the channel service provides directly.</p>
+</li>
+<li class="list">
+<div class="title title-item"><h3><span class="title">Buffered</span></h3></div>
+<p class="p">Keeps the XML file in memory. (It
+         rarely changes.)</p>
+</li>
+</ul></div></div></div>
 <div class="note" title="Note"><div class="inner"><div class="region"><div class="contents"><p class="p">
 	There's no speed or feature differences this time. You might prefer
 	the buffered mode, as it reduces update requests, but still allows

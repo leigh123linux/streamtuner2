@@ -33,26 +33,26 @@ Images are kept in the <span class="file">~/.config/streamtuner2/icons</span> di
 <div id="configuration" class="sect"><div class="inner">
 <div class="hgroup"><h2 class="title"><span class="title">Configuration options</span></h2></div>
 <div class="region"><div class="contents"><div class="terms"><div class="inner"><div class="region"><dl class="terms">
-<dt class="terms">Load favicons on playing</dt>
+<dt class="terms">☑ Load favicons on playing</dt>
 <dd class="terms"><p class="p">When starting to play a station, its homepage favicon is automatically downloaded
     in the background. It's even displayed right away as soon as it's there. You can
     also have a whole category/genre list updated right away per menu command
     <span class="guiseq"><span class="gui">Channel</span> ▸ <span class="gui">Update favicons...</span></span>.</p></dd>
-<dt class="terms">Homepage googling</dt>
+<dt class="terms">☑ Homepage googling</dt>
 <dd class="terms"><p class="p">When playing a station that doesn't have a homepage entry, streamtuner2 tries
     to google the station title. The found URL is then used/kept as station homepage.
     This isn't super exact however, so you might end up with homepages and icons
     from Wikipedia, Twitter, Facebook or something for generic radio station names.
     (Btw, station titles like www.mymusicstation.com are automatically mapped to
     homepage URLs already.)</p></dd>
-<dt class="terms">Use Google favicon service</dt>
+<dt class="terms">☑ Use Google favicon service</dt>
 <dd class="terms"><p class="p">Downloading favicons directly from station homepages can sometimes be
     a little slow. Which is because it requires to inspect the homepage
     itself first, and then uncovering an image resource. The Google method
     instead uses <span class="cmd">http://www.google.com/s2/favicons?domain=www.example.com</span>
     to fetch a PNG icon right away. Which is often faster. You might want to
     disable this for privacy reasons though.</p></dd>
-<dt class="terms">Omit placeholders</dt>
+<dt class="terms">☑ Omit placeholders</dt>
 <dd class="terms"><p class="p">Oftentimes the Google favicon service sends back a placeholder icon
     (a blue mini globe), which doesn't look very interesting. So you might
     want to disable those. (They're still downloaded, but just not saved in

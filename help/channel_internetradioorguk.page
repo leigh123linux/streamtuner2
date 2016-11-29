@@ -23,9 +23,14 @@
 
         <section id="options">
         <title>Configuration</title>
-	<p>Note that this plugin has its own setting on how many
-	links to retrieve.  Instead of stream numbers, it only counts pages.
-	Which however speeds up processing now.</p>
+	<list>
+ 	 <item>
+ 	 <title>🔟 pages to fetch</title>
+         <p>Note that this plugin has its own setting on how many
+         links to retrieve.  Instead of stream numbers, it only counts pages.
+         Which is because this directly influences the stream loading time.</p>
+ 	 </item>
+ 	</list>
 	</section>
 
 </page>

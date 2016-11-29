@@ -30,18 +30,18 @@ albums, playlists, and individual tracks by genre.</p>
 <terms>
    <title>System</title>
    <item>
-     <title>Streaming format</title>
+     <title>🔠 Streaming format</title>
      <p>You can switch between MP3 and Ogg Vorbis audio streams for Jamendo.
      It's not honored by the radio section, but albums and tracks should be
      received as Ogg when configured so.</p>
    </item>
    <item>
-     <title>Preview image sizes</title>
+     <title>🔠 Preview image sizes</title>
      <p>Album covers are downloaded in lieu of favicons. They're available
      in different sizes. Use 25px if you want just favicon-sized icons.</p>
    </item>
    <item>
-     <title>Result length</title>
+     <title>🔟 Result length</title>
      <p>Currently only 1 page (of 200 entries each) of album/track lists are
      fetched.</p>
      <note style="bug"><p>Setting a higher value may not work.</p></note>

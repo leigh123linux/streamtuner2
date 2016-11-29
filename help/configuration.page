@@ -54,34 +54,49 @@ There are various options for streamtuner2, available under <guiseq><gui>Edit</g
     example represents MP3 files, and <var>audio/ogg</var> means OGG Vorbis.  And the player
     setting dialog simply associates an audio type with a playback application:</p>
 
-<table shade="rows" rules="rows cols">
-  <thead>  <tr><td><p>Format</p></td>     <td><p>Application</p></td></tr> </thead>
-    <tr><td><p><var>audio/mpeg</var></p></td>     <td><p><cmd>audacious</cmd></p></td></tr>
-    <tr><td><p><var>audio/ogg</var></p></td>      <td><p><cmd>audacious</cmd></p></td></tr>
-    <tr><td><p><var>audio/*</var></p></td>        <td><p><cmd>vlc --one-instance</cmd></p></td></tr>
-    <tr><td><p><var>video/*</var></p></td>        <td><p><cmd>totem</cmd></p></td></tr>
-    <tr><td><p><var>video/youtube</var></p></td>  <td><p><cmd>vlc %srv</cmd></p></td></tr>
-</table>
+    <p><media type="image" src="img/configapps.png" mime="image/png" /></p>
 
-    <p>Application names are most always lowercase binary names. Double click an entry to edit it.
-    After editing, the icon next to the application name will be updated. If it stays green, it's
-    likely to work. If it turns red / into a stop symbol, then the entered name is likely incorrect.</p>
+    <list>
+      <item><p><link xref="config_apps">Application names</link> are most
+      always lowercase binary names.</p></item>
+      
+      <item><p> Double click an entry to edit it. After editing, the icon
+      next to the application name will be updated.  If it stays green, it's
+      likely to work.  If it turns red / into a stop symbol, then the
+      entered name is likely incorrect. (Only works on U*ix-systems.)</p></item>
 
-   <p><media type="image" src="img/configapps.png" mime="image/png" /></p>
+      <item><p>After the application name, you can optionally use
+      <link xref="config_apps#placeholders">a placeholder</link>:</p>
+        <list>
+        <item><p><var>%pls</var> → default format</p></item>
+        <item><p><var>%m3u</var> → older scheme</p></item>
+        <item><p><var>%xspf</var> → modern playlists,</p></item>
+        <item><p><var>%srv</var> → for direct streaming URLs</p></item>
+        </list>
+      </item>
 
-    <p>After the application name, you can optionally use a placeholder like "<var>%pls</var>" (default),
-    "<var>%m3u</var>" (old), or "<var>%xspf</var>" (modern), and "<var>%srv</var>" (for direct
-    streaming URLs). See <link xref="config_apps#placeholders">placeholders</link>.</p>
+      <item><p>The format entries can specify generic or custom handlers:</p>
+      <list>
+        <item><p>Catch-all specifiers like <var>*/*</var> or a generic
+        <var>audio/*</var> entry allow to configure a default
+        player.</p></item>
+        
+        <item><p>While <var>video/youtube</var> is specific to the Youtube
+        channel.</p></item>
+        
+        <item><p>And <var>url/http</var> a pseudo MIME type to configure a
+        web browser (for station homepages).</p></item>
+      </list>
+      </item>
 
-    <p>Catch-all entries like <var>*/*</var> or a generic <var>audio/*</var> entry allow to
-    configure a default player.  While <var>video/youtube</var> is specific to the Youtube
-    channel.  And <var>url/http</var> a pseudo MIME type to configure a web browser (for
-    station homepages).</p>
-    
-    <p>In practice you only need one entry for <var>audio/*</var> and one for
-    <var>video/*</var>, both can use the same player even.  You can remove default entries by
-    clearing both the Format field and its associated Application.  Add completely new
-    associations through the emtpy line.  (Reopen the dialog to add another one.)</p>
+      <item><p>In practice you only needed one entry for <var>audio/*</var>
+      and one for <var>video/*</var>, both can use the same player even. 
+      </p></item>
+
+      <item><p> You can remove existing entries by clearing both the Format
+      field and its associated Application.  Add completely new associations
+      through the emtpy line.  </p></item>
+    </list>
 
 </section>
 <section id="recording">
@@ -232,9 +247,13 @@ There are various options for streamtuner2, available under <guiseq><gui>Edit</g
 <section id="plugins">
     <title>Channel and feature plugins and settings</title>
 
-    <p>The tabs <key>📻 Channels</key> lists all available directory services.
-    While the <key>🔌 Features</key> group provides internal or menu enhancements.
-    Disabling or enabling a plugin however requires a restart of Streamtuner2
+    <table><tr>
+    <td><p>The <key>📻 Channels</key> tab shows all available directory
+    services.</p></td>
+    <td><p>While the <key>🔌 Features</key> group provides internal or menu
+    enhancements.</p></td>
+    </tr></table>
+    <p>Disabling or enabling a plugin however requires a restart of Streamtuner2
     to take effect. (Unless the <link xref="pluginmanager2">Plugin Manager 2</link>
     is enabled, with its <key>📦 Add</key> tab visible.)</p>
     

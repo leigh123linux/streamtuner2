@@ -48,47 +48,43 @@ There are various options for streamtuner2, available under <span class="guiseq"
 <p class="p">MIME types are abstract identifiers for media types. <span class="var">Audio/mpeg</span> for
     example represents MP3 files, and <span class="var">audio/ogg</span> means OGG Vorbis.  And the player
     setting dialog simply associates an audio type with a playback application:</p>
-<div class="table"><div class="inner"><div class="region"><table class="table">
-<thead><tr>
-<td><p class="p">Format</p></td>
-<td style="border-left-style: solid;"><p class="p">Application</p></td>
-</tr></thead>
-<tr>
-<td><p class="p"><span class="var">audio/mpeg</span></p></td>
-<td style="border-left-style: solid;"><p class="p"><span class="cmd">audacious</span></p></td>
-</tr>
-<tr class="shade">
-<td style="border-top-style: solid;"><p class="p"><span class="var">audio/ogg</span></p></td>
-<td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">audacious</span></p></td>
-</tr>
-<tr>
-<td style="border-top-style: solid;"><p class="p"><span class="var">audio/*</span></p></td>
-<td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">vlc --one-instance</span></p></td>
-</tr>
-<tr class="shade">
-<td style="border-top-style: solid;"><p class="p"><span class="var">video/*</span></p></td>
-<td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">totem</span></p></td>
-</tr>
-<tr>
-<td style="border-top-style: solid;"><p class="p"><span class="var">video/youtube</span></p></td>
-<td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">vlc %srv</span></p></td>
-</tr>
-</table></div></div></div>
-<p class="p">Application names are most always lowercase binary names. Double click an entry to edit it.
-    After editing, the icon next to the application name will be updated. If it stays green, it's
-    likely to work. If it turns red / into a stop symbol, then the entered name is likely incorrect.</p>
 <p class="p"><span class="media"><span class="media media-image"><img src="img/configapps.png" class="media media-inline" alt=""></span></span></p>
-<p class="p">After the application name, you can optionally use a placeholder like "<span class="var">%pls</span>" (default),
-    "<span class="var">%m3u</span>" (old), or "<span class="var">%xspf</span>" (modern), and "<span class="var">%srv</span>" (for direct
-    streaming URLs). See <span class="link"><a href="config_apps.html#placeholders" title="URL placeholders">placeholders</a></span>.</p>
-<p class="p">Catch-all entries like <span class="var">*/*</span> or a generic <span class="var">audio/*</span> entry allow to
-    configure a default player.  While <span class="var">video/youtube</span> is specific to the Youtube
-    channel.  And <span class="var">url/http</span> a pseudo MIME type to configure a web browser (for
-    station homepages).</p>
-<p class="p">In practice you only need one entry for <span class="var">audio/*</span> and one for
-    <span class="var">video/*</span>, both can use the same player even.  You can remove default entries by
-    clearing both the Format field and its associated Application.  Add completely new
-    associations through the emtpy line.  (Reopen the dialog to add another one.)</p>
+<div class="list"><div class="inner"><div class="region"><ul class="list">
+<li class="list"><p class="p"><span class="link"><a href="config_apps.html" title="Audio players">Application names</a></span> are most
+      always lowercase binary names.</p></li>
+<li class="list"><p class="p"> Double click an entry to edit it. After editing, the icon
+      next to the application name will be updated.  If it stays green, it's
+      likely to work.  If it turns red / into a stop symbol, then the
+      entered name is likely incorrect. (Only works on U*ix-systems.)</p></li>
+<li class="list">
+<p class="p">After the application name, you can optionally use
+      <span class="link"><a href="config_apps.html#placeholders" title="URL placeholders">a placeholder</a></span>:</p>
+<div class="list"><div class="inner"><div class="region"><ul class="list">
+<li class="list"><p class="p"><span class="var">%pls</span> → default format</p></li>
+<li class="list"><p class="p"><span class="var">%m3u</span> → older scheme</p></li>
+<li class="list"><p class="p"><span class="var">%xspf</span> → modern playlists,</p></li>
+<li class="list"><p class="p"><span class="var">%srv</span> → for direct streaming URLs</p></li>
+</ul></div></div></div>
+</li>
+<li class="list">
+<p class="p">The format entries can specify generic or custom handlers:</p>
+<div class="list"><div class="inner"><div class="region"><ul class="list">
+<li class="list"><p class="p">Catch-all specifiers like <span class="var">*/*</span> or a generic
+        <span class="var">audio/*</span> entry allow to configure a default
+        player.</p></li>
+<li class="list"><p class="p">While <span class="var">video/youtube</span> is specific to the Youtube
+        channel.</p></li>
+<li class="list"><p class="p">And <span class="var">url/http</span> a pseudo MIME type to configure a
+        web browser (for station homepages).</p></li>
+</ul></div></div></div>
+</li>
+<li class="list"><p class="p">In practice you only needed one entry for <span class="var">audio/*</span>
+      and one for <span class="var">video/*</span>, both can use the same player even. 
+      </p></li>
+<li class="list"><p class="p"> You can remove existing entries by clearing both the Format
+      field and its associated Application.  Add completely new associations
+      through the emtpy line.  </p></li>
+</ul></div></div></div>
 <div class="links topiclinks"><div class="inner"><div class="region"><div class="linkdiv "><a class="linkdiv" href="config_apps.html" title="Audio players"><span class="title">Audio players</span><span class="linkdiv-dash"> — </span><span class="desc">Common applications to use as players.</span></a></div></div></div></div>
 </div></div>
 </div></div>
@@ -228,9 +224,13 @@ There are various options for streamtuner2, available under <span class="guiseq"
 <div class="hgroup"><h2 class="title"><span class="title">Channel and feature plugins and settings</span></h2></div>
 <div class="region">
 <div class="contents">
-<p class="p">The tabs <span class="key"><kbd>📻 Channels</kbd></span> lists all available directory services.
-    While the <span class="key"><kbd>🔌 Features</kbd></span> group provides internal or menu enhancements.
-    Disabling or enabling a plugin however requires a restart of Streamtuner2
+<div class="table"><div class="inner"><div class="region"><table class="table"><tr>
+<td><p class="p">The <span class="key"><kbd>📻 Channels</kbd></span> tab shows all available directory
+    services.</p></td>
+<td><p class="p">While the <span class="key"><kbd>🔌 Features</kbd></span> group provides internal or menu
+    enhancements.</p></td>
+</tr></table></div></div></div>
+<p class="p">Disabling or enabling a plugin however requires a restart of Streamtuner2
     to take effect. (Unless the <span class="link"><a href="pluginmanager2.html" title="Plugin Manager 2 - 📦 Add">Plugin Manager 2</a></span>
     is enabled, with its <span class="key"><kbd>📦 Add</kbd></span> tab visible.)</p>
 <p class="p"><span class="media"><span class="media media-image"><img src="img/configplugins.png" class="media media-inline" alt=""></span></span></p>

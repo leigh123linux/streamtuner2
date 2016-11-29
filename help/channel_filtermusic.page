@@ -26,7 +26,16 @@
 
         <section id="options">	
         <title>Configuration</title>
-	<p>Like the Xiph plugin this channel provides two/three fetch modes.</p>
+	<p>Like the <link xref="channel_xiph">📻 Xiph plugin</link> this channel provides
+	three fetch modes:</p>
+        <list>
+         <item><title>Website</title><p>Extract all streams from the web page
+         directly.</p></item>
+         <item><title>XML Data</title><p>Use <file>💾 list.2.0.xml</file> which
+         the channel service provides directly.</p></item>
+         <item><title>Buffered</title><p>Keeps the XML file in memory. (It
+         rarely changes.)</p></item>
+        </list>
 	<note><p>
 	There's no speed or feature differences this time. You might prefer
 	the buffered mode, as it reduces update requests, but still allows

@@ -33,12 +33,21 @@
 <div id="options" class="sect"><div class="inner">
 <div class="hgroup"><h2 class="title"><span class="title">Configuration</span></h2></div>
 <div class="region"><div class="contents">
-<p class="p">See <span class="link"><a href="recording.html" title="Recording">recording configuration</a></span> if you
-	want to enable the download mode.</p>
-<div class="note" title="Note"><div class="inner"><div class="region"><div class="contents"><p class="p">Audio files are packaged up in ZIP files on MODArchive. 
+<p class="p">Audio files are packaged up in ZIP files on MODArchive. 
 	While they are different formats (IT, S3M, XM, etc) they'll all
 	carry a generic <span class="var">audio/mod+zip</span> type specifier in
-	streamtuner2.</p></div></div></div></div>
+	streamtuner2 for configuration:</p>
+<div class="table"><div class="inner"><div class="region"><table class="table">
+<tr><td rowspan="2"></td></tr>
+<tr class="shade">
+<td style="border-top-style: solid;"><p class="p"><span class="var">audio/mod+zip</span></p></td>
+<td style="border-top-style: solid;border-left-style: solid;"><p class="p"><span class="cmd">cd ~/Music ; wget %srv</span></p></td>
+</tr>
+</table></div></div></div>
+<p class="p">You can use <span class="cmd">curl</span>, or wrap the command with <span class="cmd">xterm</span>
+	(though files are too quick to download).
+	A few file managers might be able to open the URLs directly even.
+	See <span class="link"><a href="recording.html" title="Recording">recording configuration</a></span> for more examples.</p>
 </div></div>
 </div></div>
 <div class="sect sect-links" role="navigation">

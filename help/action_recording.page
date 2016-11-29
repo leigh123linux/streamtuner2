@@ -16,7 +16,9 @@ accomplished through the command-line tool <app>streamripper</app>.  If you
 select a station and press <gui style="button">● record</gui>, a console
 window should appear, where streamripper shows its progress.</p>
 
-<p>You can <link xref="configuration">configure the recording tool</link> according to audio types again.</p>
+<p>You can <link xref="configuration">configure the recording tool</link>
+according to audio types again. Usually you want to use the <link
+xref="config_apps#placeholders"><cmd>%srv</cmd> placeholder</link>.</p>
 
 <section>
 <title>Streamripper</title>
