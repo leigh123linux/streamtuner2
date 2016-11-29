@@ -37,7 +37,7 @@
 
 
 from __future__ import print_function
-import os
+import os, glob
 import sys
 import json
 import gzip
@@ -111,6 +111,7 @@ class ConfigDict(dict):
 
     # some defaults
     def defaults(self):
+        self.windows = platform.system()=="Windows"
         self.play = {
            "audio/mpeg": self.find_player(),
            "audio/ogg": self.find_player(),
@@ -120,8 +121,8 @@ class ConfigDict(dict):
            "url/http": self.find_player(typ="browser"),
         }
         self.record = {
-           "audio/*": self.find_player(typ="xterm") + " -e \"streamripper %srv\"",   # -d /home/***USERNAME***/Musik
-           "video/youtube": self.find_player(typ="xterm") + " -e \"youtube-dl %srv\"",
+           "audio/*": self.find_player(typ="xterm", append=' -e "streamripper %srv"'),   # -d /home/***USERNAME***/Musik
+           "video/youtube": self.find_player(typ="video", append=' $("youtube-dl %srv")'),
         }
         self.specbuttons = {
            #"gtk-media-forward": "pavucontrol",
@@ -149,17 +150,12 @@ class ConfigDict(dict):
         self.playlist_asis = 0
         self.window_title = 0
         self.google_homepage = 0
-        self.windows = platform.system()=="Windows"
         self.open_mode = "r" if self.windows and PY2 else "rt"
         self.pyquery = 1
         self.debug = 0
 
     # update old setting names
     def migrate(self):
-        # 2.1.1
-        if "audio/mp3" in self.play:
-            self.play["audio/mpeg"] = self.play["audio/mp3"]
-            del self.play["audio/mp3"]
         # 2.1.7
         if self.tmp == "/tmp":
             self.tmp = "/tmp/streamtuner2"
@@ -170,18 +166,36 @@ class ConfigDict(dict):
 
 
     # look at system binaries for standard audio players
-    def find_player(self, typ="audio", default="xdg-open"):
-        players = {
-           "audio": ["audacious %m3u", "audacious2", "exaile %pls", "xmms2", "banshee", "amarok %pls", "clementine", "qmmp", "quodlibet", "aqualung", "mp3blaster %m3u", "vlc --one-instance", "totem"],
-           "video": ["umplayer", "xnoise", "gxine", "totem", "vlc --one-instance", "parole", "smplayer", "gnome-media-player", "xine", "bangarang"],
-           "browser": ["opera", "midori", "sensible-browser"],
-           "xterm": ["xfce4-terminal", "x-termina-emulator", "gnome-terminal", "xterm", "rxvt"],
+    def find_player(self, typ="audio", default="xdg-open", append=""):
+        if self.windows:
+            return self.find_player_win(typ, default)
+        players = {  # linux
+            "audio": ["audacious %m3u", "audacious2", "exaile %pls", "xmms2", "banshee", "amarok %pls", "clementine", "qmmp", "quodlibet", "aqualung", "mp3blaster %m3u", "vlc --one-instance", "totem"],
+            "video": ["umplayer", "xnoise", "gxine", "totem", "vlc --one-instance", "parole", "smplayer", "gnome-media-player", "xine", "bangarang"],
+            "browser": ["opera", "midori", "firefox", "sensible-browser"],
+            "xterm": ["xfce4-terminal", "x-terminal-emulator", "gnome-terminal", "xterm", "rxvt"],
         }
         for bin in players[typ]:
             if find_executable(bin.split()[0]):
                 return bin
         return default
 
+    # Windows look for c:/program files/*/*.exe
+    def find_player_win(self, typ="audio", default="wmplayer %asx", append=""):
+        base = [os.environ["ProgramFiles"], "c:/windows", "c:/program files", "c:/windows/internet explorer/"]
+        players = {
+            "audio": ["/VLC*/vlc.exe", "wmplayer.exe %asx"],
+            "browser": ["/Moz*/firefox.exe", "iexplore.exe %url"],
+            "xterm": ['/D "C:/program files/streamripper" streamripper.exe %srv']
+        }
+        typ = typ if typ in players else "audio"
+        for bin in players[typ]:
+            for b in base:
+                fn = glob.glob(b + bin)
+                if len(fn):
+                    return fn[0] + append
+        return players[typ][-1]
+    
         
     # http://standards.freedesktop.org/basedir-spec/basedir-spec-0.6.html
     def xdg(self, path="/streamtuner2"):
