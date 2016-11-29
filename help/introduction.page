@@ -38,11 +38,11 @@
 		<tr><td><p><link xref="playing">Play</link></p></td><td><p>Starts the radio in a configured audio player</p></td></tr>
 		<tr><td><p><link xref="recording">Record</link></p></td><td><p>Opens a terminal window and streamripper, which cuts the radio broadcast into individual mp3 songs.</p></td></tr>
 		<tr><td><p><link xref="bookmarks">Bookmarks</link></p></td><td><p>Copy radio entry over into the <gui>bookmarks</gui> channel.</p></td></tr>
-		<tr><td><p>Homepage</p></td><td><p>Most radio stations have a homepage, which you can start a web browser for.</p></td></tr>
-		<tr><td><p>Saving</p></td><td><p>A radio entry can be exported as .pls, .xspf, .m3u, .desktop, or .json file.</p></td></tr>
-		<tr><td><p>Extensions<guiseq><gui/><gui/></guiseq></p></td><td><p>Some plugins add other features in this submenu.</p></td></tr>
-		<tr><td><p>Editing</p></td><td><p>This command is in the <gui>Edit</gui> and context menu, allows to inspect and modify radio descriptions.</p></td></tr>
-		<tr><td><p>Searching</p></td><td><p>You can get a radio list according to search criteria.</p></td></tr>
+		<tr><td><p><link xref="homepage">Homepage</link></p></td><td><p>Most radio stations have a homepage, which you can start a web browser for.</p></td></tr>
+		<tr><td><p><link xref="saving">Saving</link></p></td><td><p>A radio entry can be exported as .pls, .xspf, .m3u, .desktop, or .json file.</p></td></tr>
+		<tr><td><p><link xref="contrib_features">Extensions<guiseq><gui/><gui/></guiseq></link></p></td><td><p>Some plugins add other features in this submenu.</p></td></tr>
+		<tr><td><p><link xref="edit">Editing</link></p></td><td><p>This command is in the <gui>Edit</gui> and context menu, allows to inspect and modify radio descriptions.</p></td></tr>
+		<tr><td><p><link xref="search">Searching</link></p></td><td><p>You can get a radio list according to search criteria.</p></td></tr>
 	</table>
 	<p> Play, Record and Homepage also have buttons in the toolbar.</p>
 	</section>
@@ -50,9 +50,10 @@
 	<section id="none">
 	<title>Refresh radio lists</title>
 	<p>After some time, stream informations become obsolete. Therefore you should regularily
-	refresh the lists. The <gui>Reload</gui> button in the toolbar (or <key>F5</key>) is your friend. You can
-	also update the category lists with <guiseq><gui>Channel</gui> <gui>Reload Category Tree</gui></guiseq>
-	and load favicons using <guiseq><gui>Channel</gui> <gui>Update favicons..</gui></guiseq>.</p>
+	<link xref="reloading">refresh</link> the lists. The <gui>Reload</gui> button in the toolbar
+	(or <key>F5</key>) is your friend.</p>
+	<p>You can also update the category lists with <guiseq><gui>Channel</gui> <gui>Reload Category Tree</gui></guiseq>
+	and load <link xref="favicon">favicons</link> using <guiseq><gui>Channel</gui> <gui>Update favicons..</gui></guiseq>.</p>
 	</section>
 
 	<section>

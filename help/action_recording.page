@@ -13,7 +13,7 @@
 
 <p>Most stations that stream MP3 or OGG music can be recorded. This is
 accomplished through the command-line tool <app>streamripper</app>.  If you
-select a station and press <gui style="button">● record</gui>, a console
+select a station and press <gui style="button"><key>●</key> record</gui>, a console
 window should appear, where streamripper shows its progress.</p>
 
 <p>You can <link xref="configuration">configure the recording tool</link>
