@@ -148,7 +148,7 @@ def run(cmd):
 
 # Open help browser, chm, or streamtuner2 pages
 def help(*args):
-    for path in ("./help", "/usr/share/doc/streamtuner2/help", "../share/streamtuner2/help"):
+    for path in ("./help", "../share/streamtuner2/help", "/usr/share/doc/streamtuner2/help"):
         if not os.path.exists(path):
             continue
         if conf.windows:

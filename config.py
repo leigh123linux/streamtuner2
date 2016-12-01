@@ -182,11 +182,11 @@ class ConfigDict(dict):
 
     # Windows look for c:/program files/*/*.exe
     def find_player_win(self, typ="audio", default="wmplayer %asx", append=""):
-        base = [os.environ["ProgramFiles"], "c:/windows", "c:/program files", "c:/windows/internet explorer/"]
+        base = [os.environ["ProgramFiles"], "c:\\windows", "c:\\program files", "c:\\windows\\internet explorer\\"]
         players = {
-            "audio": ["/VLC*/vlc.exe", "wmplayer.exe %asx"],
-            "browser": ["/Moz*/firefox.exe", "iexplore.exe %url"],
-            "xterm": ['/D "C:/program files/streamripper" streamripper.exe %srv']
+            "audio": ["\\VLC*\\vlc.exe", "wmplayer.exe %asx"],
+            "browser": ["\\Moz*\\firefox.exe", "iexplore.exe %url"],
+            "xterm": ['/D "C:\\program files\\streamripper" streamripper.exe %srv']
         }
         typ = typ if typ in players else "audio"
         for bin in players[typ]:
