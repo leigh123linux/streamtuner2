@@ -4,7 +4,7 @@
 # type: application
 # title: streamtuner2
 # description: Directory browser for internet radio, audio and video streams
-# version: 2.2.0-rc1
+# version: 2.2.0-rc2
 # state: stable
 # author: Mario Salzer <mario@include-once.org>
 # license: Public Domain
@@ -20,16 +20,19 @@
 #   NEWS=/usr/share/doc/streamtuner2/, icon.png=/usr/share/pixmaps/streamtuner2.png
 # architecture: all
 #
-# Streamtuner2 is a GUI for browsing internet radio directories, music
-# collections, and video services - grouped by genres or categories.
-# It runs your preferred audio player, and streamripper for recording.
+# Streamtuner2 is a GUI for browsing internet radio directories,
+# music collections, and video services - grouped by genres or
+# categories. It runs your preferred audio player or streamripper
+# for recording.
 #
-# It's an independent rewrite of streamtuner1. Being written in Python,
-# can be more easily extended and fixed. The mix of JSON APIs, regex
-# or PyQuery extraction makes list generation simpler and more robust.
+# It's an independent rewrite of streamtuner1. Being written in
+# Python, can be more easily extended and fixed. The mix of
+# JSON APIs, regex or PyQuery extraction simplifies collecting
+# station lists.
 #
-# Primarily radio stations are displayed, some channels however are music
-# collections. Commercial and sign-up services are not an objective.
+# Primarily radio stations are displayed, some channels however
+# are music collections. Commercial and sign-up services are not
+# an objective.
 
 
 # standard modules
