@@ -5,7 +5,7 @@
 # type: feature
 # category: hook
 # depends: kronos, action >= 1.1.1
-# version: 0.7.5
+# version: 0.7.6
 # config: 
 #   { name: timer_duration, type: select, select: "auto|streamripper|fpls", value: none, description: "Support for time ranges" }
 #   { name: timer_crontab, type: bool, value: 0, description: "Utilize cron instead of runtime scheduler. (not implemented yet)" }
@@ -113,6 +113,10 @@ class timer:
         if row.get(self.timefield):
             row["title"] = row["title"] + " -- " + row[self.timefield]
         row[self.timefield] = self.parent.timer_value.get_text()
+        
+        # basic check for consistency
+        if not re.match("^(\w{2,3}|\*|,)+\s+(\d+:\d+[-.\d+:]*)\s+(record|play)", row[self.timefield]):
+            self.parent.status("⛔ Danger, Will Robinson! → The given timer date/action is likely invalid. This won't work.", timeout=22)
         
         # store
         self.save_timer(row)
