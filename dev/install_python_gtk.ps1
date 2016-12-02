@@ -73,7 +73,7 @@ $tasks = @(
     "easy_install",
     "",
     "",
-    "{PYTHON}\Lib\site-packages\requests-2.12.1-py2.7.egg",
+    "{PYTHON}\Lib\site-packages\requests-2*py2.7.egg",
     "",
     ''
   ),
@@ -183,11 +183,12 @@ function Display-Logo {
 }
 function Ask-First {
     Write-Host ""
-    if ((Ask "Do you want to install Python and Gtk now? [Y/n] ") -notmatch "^[yY]|^$") {
+    if ((Ask "Do you want install Streamtuner2 and its Python dependencies now? [Y/n] ") -notmatch "^[yY]|^$") {
         $tasks = $tasks[7..($tasks.length-1)]
-        return
+        exit
     }
-    $reuseCachedFiles = (Ask "Reuse any cached setup files? [r]euse/[I]gnore) ") -match "^[Rr]"
+#   $reuseCachedFiles = (Ask "Reuse any cached setup files? [r]euse/[I]gnore) ") -match "^[Rr]"
+    $reuseCachedFiles = (Ask "Reuse any cached setup files or ignore them? [r/I] ") -match "^[Rr]"
     $optionalInstall =  (Ask "Install optional components? [y/N] ") -match "^[Yy]"
     Write-Host ""
     return $reuseCachedFiles, $optionalInstall
@@ -213,7 +214,7 @@ function Make-Shortcut {
     [CmdletBinding()]
     param($dir, $name, $target, $arg=$false)
     if (!(Test-Path -Path $dir)) {
-        New-Item -Path $dir -ItemType directory 2> $null
+        New-Item -Path $dir -ItemType directory > $null
     }
     $wsh = New-Object -ComObject WScript.Shell
     if (!$wsh) { return }
@@ -232,20 +233,17 @@ function Create-Uninstallscript {
     [CmdletBinding()]
     param()
     #Write-Host " → Creating uninstall script"
-    $UninstallScriptPath = "$UsrFolder\share\streamtuner2\dev\uninstall.cmd"
     $installFolder = $usrFolder.substring(0,$usrFolder.LastIndexOf('\'))
-    $UninstallScript = Get-Content -Path $UninstallScriptPath
-    Out-File -FilePath $UninstallScriptPath -Encoding ascii -InputObject "@set installFolder=$installFolder"
-    Out-File -FilePath $UninstallScriptPath -Encoding ascii -Append -InputObject "@set usrFolder=$usrFolder"
-    Out-File -FilePath $UninstallScriptPath -Encoding ascii -Append -InputObject "@set Python=$PYTHON"
-    Out-File -FilePath $UninstallScriptPath -Encoding ascii -Append -InputObject "@set StreamripperFolder=$STREAMRIPPER"
-    Out-File -FilePath $UninstallScriptPath -Encoding ascii -Append -InputObject "@echo off"
+    $UninstallScript = Get-Content -Path $UninstallPath
+    Out-File -FilePath $UninstallPath -Encoding ascii -InputObject @"
+@set installFolder=$installFolder
+@set usrFolder=$usrFolder
+@set Python=$PYTHON
+@set StreamripperFolder=$STREAMRIPPER
+"@
     for ($i=4; $i -lt $UninstallScript.Length ; $i++) {
-        Out-File -FilePath $UninstallScriptPath -Encoding ascii -Append -InputObject $UninstallScript[$i]
+        Out-File -FilePath $UninstallPath -Encoding ascii -Append -InputObject $UninstallScript[$i]
     }
-    #Out-File -FilePath "$UsrFolder\share\streamtuner2\dev\Y" -Encoding ascii -InputObject "Y"
-    #if (Test-IsElevated) {
-    #Write-Host "   Writing to registry"
     Remove-Item -Path $regPathCU\Streamtuner2 2> $null        
     New-Item $regPathCU -Name "Streamtuner2" > $null
     Set-Location -Path $regPathCU\Streamtuner2
@@ -273,7 +271,7 @@ function Ask($str) {
     if ($str -cmatch "^(.+?)(\[[a-z/]*)([A-Z]+)([\w/]*\])(.*)$") {
         Write-Host -n -f Yellow     $matches[1] # Want to install
         Write-Host -n -f Gray       $matches[2] # [n/
-        Write-Host -n -f DarkCyan   $matches[3] # Y
+        Write-Host -n -f Green      $matches[3] # Y
         Write-Host -n -f Gray       $matches[4] # /a]
         Write-Host -n -f Yellow     $matches[5] # ?
     }
@@ -341,7 +339,7 @@ function Check-Prerequisites {
             continue
         }
         if ($presearch) {  # expression for e.g. registry → path lookup
-            Invoke-Expression $presearch # should set $_found + global $PLACEHOLDER variable
+            Invoke-Expression $presearch > $null # should set $_found + global $PLACEHOLDER variable
         }
         elseif ($checkpath) {
             if (Test-Path $checkpath) {
@@ -349,7 +347,7 @@ function Check-Prerequisites {
             }
         }
         elseif ($regkey -and (Test-Path $regkey)) {
-            $_found = $regkey -replace ".+\\", ""
+            $_found = "installer/registry"
         }
         if (!$_found) {
             Write-Host "   - $title not found"
@@ -379,6 +377,7 @@ If you want to reinstall them though, use 'all' or 'reinstall' or 'R'.`n
 
 #-- ask before running
 Clear-Host
+$host.ui.RawUI.BackgroundColor = ($bckgrnd = 'Black')
 Console-MaxHeight
 Display-Logo
 Check-Package
@@ -404,7 +403,7 @@ Check-Prerequisites
 
     # test if element (file path or registry key) already exists:
     if ($testpath -AND ($reinstall -ne "all") -AND (Test-Path -Path $testpath)) {
-        Write-Host -f Green -NoNewline " → Is already present."
+        Write-Host -f DarkGreen -NoNewline " → Is already present."
         if ($reinstall -eq "none") { continue tasks }
         Switch -regex ( Ask "   Reinstall [y/N/all/none]? " ) {
             "^all|always|re|^A" { $reinstall = "all"; break }
@@ -438,12 +437,12 @@ Check-Prerequisites
                 $cmd = "& `"$PYTHON\Scripts\easy_install.exe`" $TEMP\$file" #"
             }
         }
-        Write-Host -f DarkYellow   " → $cmd"
+        Write-Host -f DarkGray   " → $cmd"
         Invoke-Expression "$cmd"
     }
     # msi
     elseif ($file -match ".+.msi$") {
-        Write-Host -f DarkYellow (" → msiexec /i " + "$file " + $args)
+        Write-Host -f DarkGray (" → msiexec /i " + "$file " + $args)
         Start-Process -Wait msiexec -ArgumentList /i,"$TEMP\$file", $args
         if ($regkey) {
             Set-ItemProperty -Path "$regkey" -Name "WindowsInstaller"  -Value "0"
@@ -451,7 +450,7 @@ Check-Prerequisites
     }
     # exe
     elseif ($file -match ".+.exe$") {
-        write-host -f DarkYellow " → $file $args"
+        write-host -f DarkGray " → $file $args"
         if ($args) {
             Start-Process -Wait "$TEMP\$file" -ArgumentList $args
         }

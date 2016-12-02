@@ -1,6 +1,7 @@
 @set installFolder=Do_not_change
 @set usrFolder=Do_not_change
 @set Python=Do_not_change
+@set StreamripperFolder=Do_not_change
 @echo off
 
 >nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
@@ -20,11 +21,7 @@ if '%errorlevel%' NEQ '0' (
 :goADMIN
     pushd "%CD%"
     CD /D "%~dp0"
-
-
-
 cls
-
 echo  -----------------------------------------------------------------------------
 echo ^|                                                                             ^|
 echo ^|       _____/\\\\\\\\\\\____/\\\\\\\\\\\\\\\____/\\\\\\\\\_____              ^|
@@ -48,40 +45,58 @@ setlocal enableextensions
 cd /d "%~dp0"
 
 if NOT "%cd%" == "%TEMP%" (
-	copy "%UsrFolder%\share\streamtuner2\dev\uninstall.cmd" "%temp%\STuninst.cmd" 1>nul 2>&1
+	copy "%UsrFolder%\share\streamtuner2\dev\uninstall.cmd" "%temp%\STuninst.cmd" 
 	"%temp%\STuninst.cmd"
 )
 
-echo | set /p=Do you want to uninstall Streamtuner2 for Windows? (y/n)
+echo | set /p=Do you want to uninstall Streamtuner2 for Windows? [y/N]
 set /P INPUT=%=%
-If /I NOT %INPUT% == Y exit
+If /I NOT '%INPUT%' == 'Y' exit
 
-echo | set /p=Do you want to keep your Streamtuner2 settings? (y/n)
+echo | set /p=Do you want to keep your Streamtuner2 settings? [Y/n]
 set /P INPUT=%=%
-If /I %INPUT% == N (
+If /I '%INPUT%' == 'N' (
 	echo Deleting personal settings...
 	del "%Userprofile%\AppData\Roaming\streamtuner2\*.*" /F /S /Q
 )
- 
-echo | set /p=Do you want to keep your Python 2.7.12 installation? (y/n)
+set INPUT=
+
+if '"%StreamripperFolder%"' NEQ '' ( 
+	echo | set /p=Do you want to uninstall Streamripper? [y/N]
+	goto uninstallSR
+)
+goto uninstallPython
+
+:uninstallSR
 set /P INPUT=%=%
-If /I %INPUT% == N (
-	echo Removing LXML 2.3
-	"%Python%\Removelxml.exe" -u "%Python%\lxml-wininst.log"
-	REM reg delete HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\lxml-py2.7 /f 1>nul
+If /I '%INPUT%' == 'Y'  (
+	echo Uninstalling Streamripper...
+	"%StreamripperFolder%\Uninstall.exe" /S
+ 	reg delete HKCU\SOFTWARE\Streamripper /f 1>nul 2>&1
+ 	reg delete HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Streamripper /f 1>nul 2>&1
+ 	reg delete HKLM\SOFTWARE\WoW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Streamripper /f 1>nul 2>&1
+)
+set INPUT=
+
+:uninstallPython
+echo | set /p=Do you want to keep your Python 2.7.12 installation? [Y/n]
+set /P INPUT=%=%
+If /I '%INPUT%' == 'N' (
 	echo Removing PIL 1.1.7
 	"%Python%\RemovePIL.exe" -u "%Python%\PIL-wininst.log"
-	REM reg delete HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\PIL-py2.7 /f 1>nul
-	echo Removing requests
-	"%Python%\scripts\pip.exe" uninstall requests -q <"%UsrFolder%\share\streamtuner2\dev\Y" 1>nul
 	echo Removing pyquery 1.2.17
-	"%Python%\scripts\pip.exe" uninstall pyquery -q <"%UsrFolder%\share\streamtuner2\dev\Y" 1>nul
+	"%Python%\scripts\pip.exe" uninstall pyquery -y -q
+	echo Removing LXML 2.3
+	"%Python%\scripts\pip.exe" uninstall lxml -y -q
+	echo Removing requests
+	"%Python%\scripts\pip.exe" uninstall requests -y -q
 	echo Removing cssselect
-	"%Python%\scripts\pip.exe" uninstall cssselect -q <"%UsrFolder%\share\streamtuner2\dev\Y" 1>nul
+	"%Python%\scripts\pip.exe" uninstall cssselect -y -q
 	echo Removing PyGtk 2.24.2
 	MsiExec.exe /x{09F82967-D26B-48AC-830E-33191EC177C8} /qb-!
 	echo Removing Python 2.7.12
 	MsiExec.exe /x{9DA28CE5-0AA5-429E-86D8-686ED898C665} /qb-!
+	reg delete HKCU\SOFTWARE\Python\PythonCore\2.7 /f 1>nul 2>&1
 	rd "%Python%"  /S /Q
 )
 
@@ -92,7 +107,7 @@ echo Removing shortcuts
 rd "%USERPROFILE%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Streamtuner2" /S /Q
 del "%USERPROFILE%\Desktop\Streamtuner2.lnk" 1>nul
 
-reg delete HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Streamtuner2 /f 1>nul
+reg delete HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Streamtuner2 /f 1>nul  2>&1
 
 echo Finished uninstalling Streamtuner2
 pause
