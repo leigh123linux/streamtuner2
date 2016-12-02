@@ -5,18 +5,15 @@
 <page xmlns="http://projectmallard.org/1.0/" type="guide" id="index">
 
 	<info>
-	<title>Streamtuner2</title>
+	<title>Streamtuner2 </title>
 	<credit type="author"><name>Mario Salzer</name></credit>
         <desc>Internet radio station browser</desc>
-        <revision pkgversion="2.1.9" version="2.1.9"/>
+        <revision pkgversion="2.2.0" version="2.2.0"/>
 	</info>
-        <title>Streamtuner2</title>
-        
-        <section id="index">
-	<title><media type="image" mime="image/png" src="img/logo.png">♪</media> Streamtuner2 </title>
 
+	<title><media type="image" mime="image/png" src="img/logo.png">♪</media> Streamtuner2 </title>
+        
 	<p>Streamtuner2 shows internet radio stations for easy browsing, playing, recording.</p>
-	</section>
 
 	<section id="browsing" style="2column">
             <title>Browsing channels and radio stations</title>
