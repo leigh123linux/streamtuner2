@@ -19,7 +19,7 @@ documented API, with a simple JSON interface.</p>
 <p>It's now the backend in many open source music players:</p>
 
 <list>
-  <item><p>Rhytmbox (for which it was originally intended)</p></item>
+  <item><p>Rhythmbox (for which it was originally intended)</p></item>
   <item><p>Streamtuner2 (obviously)</p></item>
   <item><p>RadioDroid (Android)</p></item>
   <item><p>DreamBox plugin</p></item>
@@ -28,7 +28,7 @@ documented API, with a simple JSON interface.</p>
   <item><p>Kodi/XBMC</p></item>
 </list>
 
-<p>Since v0.3 / streamtuner2.2.0 you can now also share your favorite
+<p>Since v0.3 (in streamtuner2 2.2.0) you can now also share your favorite
 stations directly. There's a new <guiseq><gui>context menu</gui> <gui>Share in
 Radio-Browser</gui></guiseq>.</p>
 
@@ -39,7 +39,7 @@ Radio-Browser</gui></guiseq>.</p>
  countries.</p>
 
  <p> Note that you'll have to use <guiseq><gui>Channel</gui> <gui>Reload Category Tree (F5)</gui></guiseq>
- again to update the catogory view.</p>
+ again to update the category view.</p>
 
 </section>
 

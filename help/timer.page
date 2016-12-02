@@ -13,9 +13,10 @@
 <section id="intro">
 
 	<p>You can programm play/recording events with the timer plugin. Simply select a station
-	and choose <guiseq><gui>Station</gui> <gui>Extensions</gui> <gui>Add timer...</gui></guiseq>.
+	and choose <guiseq><gui>Station</gui> <gui>Add timer...</gui></guiseq>.
 	A small popup will ask for a data/time string. If you press <key>OK</key> the station
-	and the programmed time will be stored in the bookmarks channel in the "timer" category.</p>
+	and the programmed time will be stored in the bookmarks channel in the "timer" category.
+	<em>Please take note of the required text format</em>.</p>
 	
 	<p><media type="image" src="img/timer.png" mime="image/png">Timer</media></p>
 
@@ -33,7 +34,7 @@
 	<p>A clock range of "<code>18:00-20:00</code>"
 	would start the event at 18 o'clock and last it two hours. Note that for "play" events, the end
 	time is irrelevant, since streamtuner2 can't kill your audio player anyway.</p>
-        <p>The end time is only important, if you replace "play" with the word "<code>record</code>"
+        <p>The end time is only important if you replace "play" with the word "<code>record</code>"
         in the timer event string. This runs streamripper instead and limits the recording time.</p>
 	</section>
 
@@ -43,7 +44,7 @@
 	that. It's also possible to modify the date+time strings by editing the stream info and
 	the specification in the "playing" field.</p>
 
-	<note style="warning"><p>However, such changes don't take effect until you restart streamtuner2. The timer
+	<note style="warning"><p>However, such edits don't take effect until you restart streamtuner2. The timer
 	events are only scheduled when adding a new event, or on starting streamtuner2.</p></note>
 	</section>
 

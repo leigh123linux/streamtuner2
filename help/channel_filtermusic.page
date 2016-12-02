@@ -26,7 +26,7 @@
 
         <section id="options">	
         <title>Configuration</title>
-	<p>Like the <link xref="channel_xiph">📻 Xiph plugin</link> this channel provides
+	<p>Like the <link xref="xiph">📻 Xiph plugin</link> this channel provides
 	three fetch modes:</p>
         <list>
          <item><title>Website</title><p>Extract all streams from the web page

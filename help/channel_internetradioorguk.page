@@ -17,7 +17,7 @@
 	<list>
  	 <item><p>It has regained station homepages for most entries again.</p></item>
  	 <item><p>Genres are similiar to Shoutcast.</p></item>
- 	 <item><p>Updating station lists is comperatively fast.</p></item>
+ 	 <item><p>Updating station lists is comparatively fast.</p></item>
  	 <item><p>Uses HTML extraction (regex or pyquery) internally.</p></item>
  	</list>
 

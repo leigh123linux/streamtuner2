@@ -26,7 +26,8 @@ or banners even. Whereas normal favicons are just 16x16 pixel images.</p>
 converted to ensure they're really image files).
 Albeit that's not strictly necessary for modern Gtk versions. (But
 better safe than sorry).
-Images are kept in the <file>~/.config/streamtuner2/icons</file> directory.
+Images are kept in the <file>~/.config/streamtuner2/icons</file> directory
+(or below <file>%APPDATA%\</file> on Windows).
 </p></note>
 
 

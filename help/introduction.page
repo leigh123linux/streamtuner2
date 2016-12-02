@@ -9,7 +9,7 @@
 
 	<title>Introduction</title>
 
-	<p>Streamtuner2 is a simple browser for internet radios. It aquires its radio lists
+	<p>Streamtuner2 is a simple browser for internet radios. It acquires its radio lists
 	from various directory services. These are represented as "channel" tabs in the main
 	window. The category/genre lists are in the left pane, and associated stations right
 	to them.</p>

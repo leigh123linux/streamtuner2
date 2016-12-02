@@ -73,6 +73,18 @@ radios are recategorized in RadioTray.</p>
 </section>
 
 <section>
+<title>🔌 History</title>
+<p>Provides the small "history" category in the bookmarks tab. The length of
+which is configurable (defaults to 20).</p>
+</section>
+
+<section>
+<title>🔌 Links to directory services</title>
+<p>Adds a list of weblinks to other online music services in the "links" category
+within the bookmarks tab.</p>
+</section>
+
+<section>
  <title>Other feature plugins</title>
  <list>
    <item><p><link xref="dragndrop">🔌 Drag and Drop</link></p></item>
@@ -128,6 +140,12 @@ available feature plugins in the <key>📦 Add</key> tab.</p>
     <p>Strips extra space-separate URLs from station list. (Currently only
     required for 📻 RadioSure channel. Later ST2 versions will likely support
     such entries per default again).</p>
+  </item>
+  <item>
+    <title>🔌 stop_button</title>
+    <p>Adds the toolbar button to stop streamripper/fpls - same as in
+    streamtuner1. Has become kind of redundant due to the newer
+    <link xref="specbuttons">🔌 specbuttons</link> plugin.</p>
   </item>
 </terms>
 </section>

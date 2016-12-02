@@ -20,14 +20,14 @@ source internet radio directory project.</p>
 <section>
   <title>Sharing is caring</title>
   <p>To help with populating the directory further,
-  streamtuner2 provides an option to share radion station links.
+  streamtuner2 provides an option to share radio station links.
   Use the <guiseq><gui>Station</gui> <gui>Share on MyOggRadio...</gui></guiseq>
   context menu entry to upload a selected radio (e.g. from your bookmarks).</p>
 </section>
 
 <section>
   <title>Personal</title>
-  <p>The personal section is empty per default. You need to specify an user account
+  <p>The personal section is empty per default. You need to specify a user account
   in the settings dialog, and actually bookmark stations in the MyOggRadio web site.
   Shared entries aren't automatically in the <gui style="button">personal</gui> list.</p>
 

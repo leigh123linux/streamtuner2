@@ -54,9 +54,10 @@
 
 	<section id="userplugins">
 	<title>User plugins</title>
-	<p>Downloaded plugins are stored in <file>~/.config/streamtuner2/plugins</file>.
+	<p>Downloaded plugins are stored in <file>~/.config/streamtuner2/plugins/</file>.
 	To remove them, delete the individual *.py files there manually. But
 	keep the <file>__init__.py</file> stub.</p>
+	<p>On Windows they're stored in <file>%APPDATA%\streamtuner2\plugins\</file>.</p>
 	<note style="bug"><p>Core plugins (those which are installed
 	system-wide) can often also be updated. The user-saved plugin will
 	take precedence after a restart. However the version number in
