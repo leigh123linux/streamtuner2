@@ -68,6 +68,9 @@
             <p>Contain downloaded contrib/ plugins.</p>
           </item>
 	</terms>
+	<p>On Windows the <file>~/.config/</file> directory is called
+	<file>%APPDATA%</file> instead. The paths in there are equally
+	structured.</p>
 	</section>
 
 
