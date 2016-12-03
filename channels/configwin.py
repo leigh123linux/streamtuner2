@@ -155,7 +155,7 @@ class configwin (AuxiliaryWindow):
 
             # drop down list
             elif opt["type"] in ("select", "choose", "options"):
-                cb = ComboBoxText(ComboBoxText.parse_options(opt["select"])) # custom uikit widget
+                cb = ComboBoxText(ComboBoxText.parse_options(opt.get("select"))) # custom uikit widget
 
             # numeric
             elif opt["type"] in ("int", "integer", "numeric"):
