@@ -6,86 +6,92 @@
 	<link type="guide" xref="index#extra"/>
         <link type="guide" xref="pluginmanager2"/>
         <link type="guide" xref="configuration#plugins"/>
-	<link type="seealso" xref="index#channels"/>
+	<!--link type="seealso" xref="index#channels"/-->
         <desc>Additional feature plugins</desc>
 </info>
-
 <title>→ Feature plugins</title>
+
+<section>
+<title><key>🔌 Feature</key> plugins and settings</title>
 
 <p>Extra functionality and behaviour changes are available in
 the <key>🔌 Feature</key> <link xref="configuration">configuration</link>
 section.</p>
 
 
-<section>
-<title>🔌 Filter Bitrate</title>
-<p>Some channels provide lower-quality audio streams. In particular
-Xiph lists some awful radio stations. And this plugin helps filtering
-those out of station lists.</p>
-<list>
- <item><p>MP3 streams often start to sound okay at 96kbit/s.</p></item>
- <item><p>Whereas OGG Vorbis or AAC are sometimes acceptable at 64kbit/s already.</p></item>
-</list>
-<p>Note that you may end up with empty channel lists
-altogether if you set these options too high. Some channels provide all
-their streams with 64kbit/s only.</p>
+  <section>
+  <title>🔌 Filter Bitrate</title>
+  <p>Some channels provide lower-quality audio streams. In particular
+  Xiph lists some awful radio stations. And this plugin helps filtering
+  those out of station lists.</p>
+  <list>
+   <item><p>MP3 streams often start to sound okay at 96kbit/s.</p></item>
+   <item><p>Whereas OGG Vorbis or AAC are sometimes acceptable at 64kbit/s already.</p></item>
+  </list>
+  <p>Note that you may end up with empty channel lists
+  altogether if you set these options too high. Some channels provide all
+  their streams with 64kbit/s only.</p>
+  </section>
+
+  <section>
+  <title>🔌 Channel toolbar link</title>
+  <p>Adds a toolbar entry which shows the current channel/directory
+  service title and its homepage link. Such as:</p>
+  <code><span style="bold">    ▶    ●    🏠     Shoutcast</span>
+  play rcrd  hmpg   <link href="http://shoutcast.com/">//shoutcast.com/</link>
+  </code>
+  <p>It depends on the "update window title" option being enabled.</p>
+  </section>
+
+  <section>
+  <title>🔌 Export all stations</title>
+  <p>There's an "Export All" plugin available. It adds an entry under
+  <guiseq><gui>Main menu</gui> <gui>Extensions</gui> <gui>Export all stations</gui></guiseq>.
+  Which allows to export all stations from the currently visible channel category.</p>
+  <list>
+   <item><p>This is of course intended primarily for saving your bookmarks.</p></item>
+   <item><p>And it allows to import radio lists into any other music player  or playlist collection/management app (such as Rhythmbox).</p></item>
+   <item><p>You can set the desired playlist format in the file saving dialog that pops up.</p></item>
+  </list>
+  </section>
+
+  <section>
+  <title>🔌 RadioTray hook</title>
+  <p>This plugin enables an extra category in the <key>bookmarks</key> tab.
+  It shows bookmarked stations from the RadioTray application, if that's
+  installed. Additionally it adds an context option to save new stations
+  from Streamtuner2 to RadioTray. The mapping option influences if added
+  radios are recategorized in RadioTray.</p>
+  <note><p> Please see the Wiki for further <link href="http://fossil.include-once.org/streamtuner2/wiki/radiotray">setup instructions</link>.</p></note>
+  </section>
+
+  <section>
+  <title>🔌 User Agent Switcher</title>
+  <p>This plugin merely masks Streamtuner2 as an ordinary web browser when retrieving station lists.</p>
+  <list>
+   <item><p> It's technically unneeded, as ST2 isn't stressful to directory websites and not blocked anywhere. </p></item>
+   <item><p>It's only useful as additional privacy feature really, but shouldn't be used habitually. </p></item>
+  </list>
+  </section>
+
+  <section>
+  <title>🔌 History</title>
+  <p>Provides the small "history" category in the bookmarks tab. The length of
+  which is configurable (defaults to 20).</p>
+  </section>
+
+  <section>
+  <title>🔌 Links to directory services</title>
+  <p>Adds a list of weblinks to other online music services in the "links" category
+  within the bookmarks tab.</p>
+  </section>
+
 </section>
 
 <section>
-<title>🔌 Channel toolbar link</title>
-<p>Adds a toolbar entry which shows the current channel/directory
-service title and its homepage link. Such as:</p>
-<code><span style="bold">  ▶    ●    🏠     Shoutcast</span>
-play rcrd  hmpg   <link href="http://shoutcast.com/">//shoutcast.com/</link>
-</code>
-<p>It depends on the "update window title" option being enabled.</p>
-</section>
-
-<section>
-<title>🔌 Export all stations</title>
-<p>There's an "Export All" plugin available. It adds an entry under
-<guiseq><gui>Main menu</gui> <gui>Extensions</gui> <gui>Export all stations</gui></guiseq>.
-Which allows to export all stations from the currently visible channel category.</p>
-<list>
- <item><p>This is of course intended primarily for saving your bookmarks.</p></item>
- <item><p>And it allows to import radio lists into any other music player  or playlist collection/management app (such as Rhythmbox).</p></item>
- <item><p>You can set the desired playlist format in the file saving dialog that pops up.</p></item>
-</list>
-</section>
-
-<section>
-<title>🔌 RadioTray hook</title>
-<p>This plugin enables an extra category in the <key>bookmarks</key> tab.
-It shows bookmarked stations from the RadioTray application, if that's
-installed. Additionally it adds an context option to save new stations
-from Streamtuner2 to RadioTray. The mapping option influences if added
-radios are recategorized in RadioTray.</p>
-<note><p> Please see the Wiki for further <link href="http://fossil.include-once.org/streamtuner2/wiki/radiotray">setup instructions</link>.</p></note>
-</section>
-
-<section>
-<title>🔌 User Agent Switcher</title>
-<p>This plugin merely masks Streamtuner2 as an ordinary web browser when retrieving station lists.</p>
-<list>
- <item><p> It's technically unneeded, as ST2 isn't stressful to directory websites and not blocked anywhere. </p></item>
- <item><p>It's only useful as additional privacy feature really, but shouldn't be used habitually. </p></item>
-</list>
-</section>
-
-<section>
-<title>🔌 History</title>
-<p>Provides the small "history" category in the bookmarks tab. The length of
-which is configurable (defaults to 20).</p>
-</section>
-
-<section>
-<title>🔌 Links to directory services</title>
-<p>Adds a list of weblinks to other online music services in the "links" category
-within the bookmarks tab.</p>
-</section>
-
-<section>
- <title>Other feature plugins</title>
+ <title>Core feature plugins</title>
+ <p>Following plugins are covered more in-depth in the according manual
+ sections:</p>
  <list>
    <item><p><link xref="dragndrop">🔌 Drag and Drop</link></p></item>
    <item><p><link xref="favicon">🔌 Favicons</link></p></item>
@@ -103,12 +109,11 @@ within the bookmarks tab.</p>
 <section id="contrib">
 <title>Downloadable contrib/ feature plugins</title>
 
-<p>The <link xref="pluginmanager2">Plugin Manager</link> lists other
-available feature plugins in the <key>📦 Add</key> tab.</p>
+<p>The <link xref="pluginmanager2">Plugin Manager</link> lists more
+downloadable feature plugins in the <key>📦 Add</key> tab.</p>
 
-<terms>
-  <item>
-    <title>🔌 Soundcloud streaming</title>
+  <section>
+    <subtitle>🔌 Soundcloud streaming</subtitle>
     <p>Enables playback of soundcloud.com links, which are only used
     in the <link xref="channel_reddit">📻 Reddit</link> plugin currently.
     Homepage links are transformed into direct MP3 streaming addresses
@@ -118,36 +123,59 @@ available feature plugins in the <key>📦 Add</key> tab.</p>
     <p> Alternatively you could configure an external player like <link
     href="http://github.com/rekado/soundCLI">soundcli</link> of course.
     Use the pseudo type "audio/soundcloud" for the player settings table.</p>
-  </item>
-  <item>
-    <title>🔌 dev_faulthandler</title>
+  </section>
+
+  <section>
+    <subtitle>🔌 dev_faulthandler</subtitle>
     <p>This is a pure development plugin, meant to debug ST2 crashes.</p>
-  </item>
-  <item>
-    <title>🔌 bookmarks_show_extra</title>
+  </section>
+
+  <section>
+    <subtitle>🔌 bookmarks_show_extra</subtitle>
     <p>Is a slim UI adaption to show the `extra` field in the bookmarks
     channel. This field can contain user comments, but is used per default
     to store the originating channel in.</p>
-  </item>
-  <item>
-    <title>🔌 new_station</title>
-    <p>Currently not working. Small plugin to provide an "Add station..."
+  </section>
+
+  <section>
+    <subtitle>🔌 new_station</subtitle>
+    <p>(Still unfinished). Small plugin to provide an "Add station..."
     menu entry. Note that ST2 is not meant as playlist manager, which is
     why this isn't a built-in feature. However, it's oft-requested anyway.</p>
-  </item>
-  <item>
-    <title>🔌 tmp_clean_multiurl</title>
+  </section>
+
+  <section>
+    <subtitle>🔌 tmp_clean_multiurl</subtitle>
     <p>Strips extra space-separate URLs from station list. (Currently only
     required for 📻 RadioSure channel. Later ST2 versions will likely support
     such entries per default again).</p>
-  </item>
-  <item>
-    <title>🔌 stop_button</title>
+  </section>
+
+  <section>
+    <subtitle>🔌 Gtk theme setting</subtitle>
+    <p>You can set a custom theme for Streamtuner2 using the gtk_theme
+    plugin. It ought to list all available themes for Gtk2 or Gtk3 in
+    the according dropdown box. The "apply instantly" option may help
+    with enabling them right away.</p>
+    <note style="bug"><p>Take note that not all Gtk themes will work,
+    and some might crash streamtuner2.</p></note>
+    <p>If you see ST2 hang at startup, then either edit
+    <file>settings.json</file> to remove the <cmd>"theme": "..."</cmd>
+    name, or use the <code><app>streamtuner2 -d gtk_theme</app></code>
+    start command.</p>
+    <p>To install/enable themes just for ST2, you could create a
+    <file>~/.config/streamtuner2/themes/</file> folder, or one below
+    <file>/usr/share/streamtuner2/themes/</file> even.</p>
+  </section>
+
+  <section>
+    <subtitle>🔌 stop_button</subtitle>
     <p>Adds the toolbar button to stop streamripper/fpls - same as in
     streamtuner1. Has become kind of redundant due to the newer
     <link xref="specbuttons">🔌 specbuttons</link> plugin.</p>
-  </item>
-</terms>
+  </section>
+
 </section>
+
 
 </page>

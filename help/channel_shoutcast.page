@@ -8,7 +8,7 @@
         <desc>Probably still the largest radio station list.</desc>
 </info>
 
-	<title>Shoutcast</title>
+	<title><media type="image" src="img/channel_shoutcast.png" /> Shoutcast</title>
 	<subtitle><link	href="http://shoutcast.com/">//shoutcast.com/</link></subtitle>
 
 	<p>SHOUTcast is the name of a MP3 streaming server software. It automatically collects all

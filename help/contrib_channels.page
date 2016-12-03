@@ -12,86 +12,87 @@
 
 <title>→ Contrib/Extra Channels</title>
 
+<section>
+<title>More channels to install</title>
 <p>Besides the standard channels, there are a few more plugins available
 for download. See the <link xref="pluginmanager2">Plugin Manager</link>
-and its <key>📦 Add</key> tab.</p>
+and its <key>📦 Add</key> tab, where you can easily install them.</p>
 
-<terms>
-  <item>
-    <title>📻 <link href="http://radio.net/">Radio.net</link></title>
+  <section>
+    <subtitle>📻 <link href="http://radio.net/">Radio.net</link></subtitle>
     <p>Radio.net is a European radio directory. It nicely catalogues
     stations into genres as usual. The primary list is ordered by
     popularity even. </p>
-  </item>
-  <item>
-    <title>📻 <link href="http://magnatune.com/">Magnatune</link></title>
+  </section>
+  <section>
+    <subtitle>📻 <link href="http://magnatune.com/">Magnatune</link></subtitle>
     <p>Magnatune is an independent label for artists. It makes most
     albums available for free listening with only a few intermittent
     adverts. Otherwise it's a flatrate payable music discovery and
     download service. </p>
-  </item>
-  <item>
-    <title>📻 <link href="http://publicradiofan.com/">PublicRadioFan</link></title>
+  </section>
+  <section>
+    <subtitle>📻 <link href="http://publicradiofan.com/">PublicRadioFan</link></subtitle>
     <p>PublicRadioFan.com hosts a huge lists of worldwide radio stations.
     This plugin displays just the genre list though.</p>
-  </item>
-  <item>
-    <title>📻 <link href="http://delicast.com/">Delicast</link></title>
+  </section>
+  <section>
+    <subtitle>📻 <link href="http://delicast.com/">Delicast</link></subtitle>
     <p>Delicast.com is another web directory of radio stations. It's
     somewhat slower because playback addresses are hidden away with extra
     page requests. Works reliably still.</p>
-  </item>
-  <item>
-    <title>📻 <link href="http://listenlive.eu/">ListenLive.eu</link></title>
+  </section>
+  <section>
+    <subtitle>📻 <link href="http://listenlive.eu/">ListenLive.eu</link></subtitle>
     <p>ListenLive is also an Europe-centric radio directory.</p>
-  </item>
-  <item>
-    <title>📻 <link href="http://liveradio.ie/">Liveradio.ie</link></title>
+  </section>
+  <section>
+    <subtitle>📻 <link href="http://liveradio.ie/">Liveradio.ie</link></subtitle>
     <p>Is an Ireland-based radio station directory.</p>
-  </item>
-  <item>
-    <title>📻 <link href="http://radiosure.com/">RadioSure</link></title>
+  </section>
+  <section>
+    <subtitle>📻 <link href="http://radiosure.com/">RadioSure</link></subtitle>
     <p>Station database that's readily available as CSV list. You'll
     currently need the tmp_clean_multiurl plugin as well, as most entries
     supply multiple URLs, but action.py doesn't support those currently.</p>
-  </item>
-  <item>
-    <title>📻 <link href="http://vtuner.com/">vTuner</link></title>
+  </section>
+  <section>
+    <subtitle>📻 <link href="http://vtuner.com/">vTuner</link></subtitle>
     <p>Categorized station list by a cross-platform streaming service provider. </p>
-  </item>
-  <item>
-    <title>📻 <link href="http://reciva.com/">Reciva</link></title>
+  </section>
+  <section>
+    <subtitle>📻 <link href="http://reciva.com/">Reciva</link></subtitle>
     <p>Reciva is an iPhone app, with a browsable station list. </p>
-  </item>
-  <item>
-    <title>📻 <link href="http://house-mixes.com/">house-mixes</link></title>
+  </section>
+  <section>
+    <subtitle>📻 <link href="http://house-mixes.com/">house-mixes</link></subtitle>
     <p>House-mixes.com provides a growing collection of DJ mixes (house,
     dance, etc). The website can be used after a free registration to download
     complete MP3s (often in high quality). In Streamtuner2 you can even
     drag and drop them onto your desktop directly.</p>
-  </item>
-  <item>
-    <title>📻 <link href="http://punkcast.com/">PunkCast</link></title>
+  </section>
+  <section>
+    <subtitle>📻 <link href="http://punkcast.com/">PunkCast</link></subtitle>
     <p>PunkCast is no longer maintained. It covered the NY music and tech
     scenes, but existing recordings are still accessible mostly (some are
     just weblinks however). This plugin is kept for nostalgic reasons;
     it was available with streamtuner1 as well. </p>
-  </item>
-  <item>
-    <title>📻 GrLittleRadioPlayer</title>
+  </section>
+  <section>
+    <subtitle>📻 GrLittleRadioPlayer</subtitle>
     <p>Great Little Radio Player is another Linux desktop radio browser.
     It comes with a default set of categorized stations. This plugin merely
     imports that list as static directory. </p>
-  </item>
-  <item>
-    <title>📻 Compound</title>
+  </section>
+  <section>
+    <subtitle>📻 Compound</subtitle>
     <p>The compound channel is a meta plugin. It can aggregate categories
     from other channel plugins on a per-category basis. You for example
     can mash Top40 or Classic genres from Shoutcast, Xiph, InternetRadio,
     Tunein, etc. Which avoids switching between channel tabs somewhat. </p>
-  </item>
-  <item>
-    <title>📻 File browser</title>
+  </section>
+  <section>
+    <subtitle>📻 File browser</subtitle>
     <p>You can also browse local files with streamtuner2 using the file
     browser plugin. It must be configured with your music collection path.
     It's not a default plugin, because this isn't really what Streamtuner2
@@ -99,11 +100,13 @@ and its <key>📦 Add</key> tab.</p>
     Linux. It's just here for convenience, and displays files just as any
     other channel list. It has no specific file management features, and
     won't receive any. </p>
-  </item>
-</terms>
+  </section>
+</section>
 
+<section>
+<subtitle>Repository</subtitle>
 <p>See also the list of
 <link href="http://fossil.include-once.org/streamtuner2/wiki/plugins">available
 plugins</link> in the project wiki.</p>
-
+</section>
 </page>

@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="439.92966"
+   height="274.76151"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.47 r22583"
+   sodipodi:docname="mainwindow.svg">
+  <defs
+     id="defs4">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       id="perspective10" />
+    <inkscape:perspective
+       id="perspective2844"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective2844-9"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective2844-94"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective2844-3"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective2939"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="258.4942"
+     inkscape:cy="185.63951"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1146"
+     inkscape:window-height="972"
+     inkscape:window-x="32"
+     inkscape:window-y="172"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-159.09078,-322.02188)">
+    <g
+       id="g2852">
+      <rect
+         y="322.02188"
+         x="159.6041"
+         height="274.76151"
+         width="439.41635"
+         id="rect2816"
+         style="fill:#e6e6e6;fill-opacity:1;stroke:none" />
+      <rect
+         y="322.02188"
+         x="159.6041"
+         height="20.203051"
+         width="272.74118"
+         id="rect2818"
+         style="fill:#666666;fill-opacity:1;stroke:none" />
+      <path
+         transform="translate(6.0609153,8.0812204)"
+         d="m 188.89853,353.33661 -11.36421,6.56113 -11.36422,6.56114 0,-13.12227 0,-13.12227 11.36422,6.56114 11.36421,6.56113 z"
+         inkscape:randomized="0"
+         inkscape:rounded="0"
+         inkscape:flatsided="false"
+         sodipodi:arg2="1.0471976"
+         sodipodi:arg1="0"
+         sodipodi:r2="7.5761442"
+         sodipodi:r1="15.152288"
+         sodipodi:cy="353.33661"
+         sodipodi:cx="173.74625"
+         sodipodi:sides="3"
+         id="path2820"
+         style="fill:#008000;fill-opacity:1;stroke:none"
+         sodipodi:type="star" />
+      <path
+         transform="translate(-2.0203051,-3.0304576)"
+         inkscape:transform-center-x="-6.0609153"
+         d="m 233.34524,364.4483 c 0,6.69471 -5.87939,12.12183 -13.13198,12.12183 -7.2526,0 -13.13199,-5.42712 -13.13199,-12.12183 0,-6.6947 5.87939,-12.12183 13.13199,-12.12183 7.25259,0 13.13198,5.42713 13.13198,12.12183 z"
+         sodipodi:ry="12.121831"
+         sodipodi:rx="13.131983"
+         sodipodi:cy="364.4483"
+         sodipodi:cx="220.21326"
+         id="path2822"
+         style="fill:#800000;fill-opacity:1;stroke:none"
+         sodipodi:type="arc" />
+      <text
+         transform="scale(0.618526,1.6167469)"
+         id="text2824"
+         y="230.25543"
+         x="707.06281"
+         style="font-size:36.30619431px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           y="230.25543"
+           x="707.06281"
+           id="tspan2826"
+           sodipodi:role="line">streamtuner2</tspan></text>
+      <path
+         id="path2828"
+         d="m 159.69408,399.56285 398.39683,-0.89352 36.79897,0.36494"
+         style="fill:none;stroke:#000000;stroke-width:1.20659292px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <text
+         transform="scale(0.99810497,1.0018986)"
+         id="text2830"
+         y="336.47824"
+         x="168.58113"
+         style="font-size:15.96251678px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           y="336.47824"
+           x="168.58113"
+           id="tspan2832"
+           sodipodi:role="line">Station Edit Channel Help</tspan></text>
+      <rect
+         y="381.62091"
+         x="168.69548"
+         height="19.192898"
+         width="60.609154"
+         id="rect2834"
+         style="fill:#999999;fill-opacity:1;stroke:none" />
+      <rect
+         y="382.12598"
+         x="236.37569"
+         height="19.192898"
+         width="60.609154"
+         id="rect2834-0"
+         style="fill:#666666;fill-opacity:1;stroke:none" />
+      <rect
+         y="381.11581"
+         x="304.05594"
+         height="19.192898"
+         width="60.609154"
+         id="rect2834-09"
+         style="fill:#999999;fill-opacity:1;stroke:none" />
+      <rect
+         y="382.12598"
+         x="371.73615"
+         height="19.192898"
+         width="60.609154"
+         id="rect2834-5"
+         style="fill:#999999;fill-opacity:1;stroke:none" />
+      <rect
+         y="382.12598"
+         x="438.40622"
+         height="19.192898"
+         width="60.609154"
+         id="rect2834-7"
+         style="fill:#999999;fill-opacity:1;stroke:none" />
+      <text
+         transform="scale(0.87874836,1.1379822)"
+         id="text2887"
+         y="348.10754"
+         x="193.84726"
+         style="font-size:12.21920872px;font-style:normal;font-weight:normal;fill:#e6e6e6;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           y="348.10754"
+           x="193.84726"
+           id="tspan2889"
+           sodipodi:role="line">bookmarks   Shoutcast     Xiph            Jamendo</tspan></text>
+      <rect
+         y="409.90515"
+         x="166.67517"
+         height="167.68532"
+         width="81.822365"
+         id="rect2891"
+         style="fill:#f9f9f9;fill-opacity:1;stroke:none" />
+      <text
+         transform="scale(0.98758137,1.0125748)"
+         id="text2893"
+         y="425.48941"
+         x="175.3701"
+         style="font-size:13.59386539px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           y="425.48941"
+           x="175.3701"
+           id="tspan2895"
+           sodipodi:role="line">Category</tspan><tspan
+           id="tspan2897"
+           y="442.48175"
+           x="175.3701"
+           sodipodi:role="line">Genre</tspan><tspan
+           id="tspan2899"
+           y="459.47406"
+           x="175.3701"
+           sodipodi:role="line">genre</tspan><tspan
+           id="tspan2901"
+           y="476.4664"
+           x="175.3701"
+           sodipodi:role="line">genre</tspan><tspan
+           id="tspan2903"
+           y="493.45874"
+           x="175.3701"
+           sodipodi:role="line">genre</tspan><tspan
+           id="tspan2905"
+           y="510.45108"
+           x="175.3701"
+           sodipodi:role="line">genre</tspan></text>
+      <rect
+         y="410.91531"
+         x="265.67014"
+         height="168.69548"
+         width="317.1879"
+         id="rect2907"
+         style="fill:#f9f9f9;fill-opacity:1;stroke:none" />
+      <text
+         transform="scale(1.0541937,0.94859229)"
+         id="text2893-5"
+         y="453.32745"
+         x="260.99759"
+         style="font-size:14.31282997px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           id="tspan2905-3"
+           y="453.32745"
+           x="260.99759"
+           sodipodi:role="line">Radio station      128   http://www.radi</tspan><tspan
+           id="tspan2981"
+           y="471.21851"
+           x="260.99759"
+           sodipodi:role="line">Station title ...     128   http://123.fm/</tspan><tspan
+           id="tspan2983"
+           y="489.10953"
+           x="260.99759"
+           sodipodi:role="line">Stream title ....    128   http://www....</tspan><tspan
+           id="tspan2985"
+           y="507.00058"
+           x="260.99759"
+           sodipodi:role="line">....</tspan><tspan
+           id="tspan2987"
+           y="524.8916"
+           x="260.99759"
+           sodipodi:role="line">....</tspan><tspan
+           id="tspan2989"
+           y="542.78265"
+           x="260.99759"
+           sodipodi:role="line">...</tspan><tspan
+           id="tspan2991"
+           y="560.67371"
+           x="260.99759"
+           sodipodi:role="line">.....</tspan><tspan
+           id="tspan2993"
+           y="578.5647"
+           x="260.99759"
+           sodipodi:role="line">...</tspan><tspan
+           id="tspan2995"
+           y="596.45575"
+           x="260.99759"
+           sodipodi:role="line">........</tspan></text>
+    </g>
+  </g>
+</svg>

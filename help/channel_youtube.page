@@ -9,7 +9,7 @@
         <desc>Youtube music/video listings.</desc>
 </info>
 
-	<title>Youtube</title>
+	<title><media type="image" src="img/channel_youtube.png" /> Youtube</title>
 	<subtitle><link	href="http://youtube.com/">//youtube.com/</link></subtitle>
 
 	<p>Googles Youtube provides a quirky JSON API that makes browsing
