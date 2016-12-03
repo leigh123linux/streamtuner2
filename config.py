@@ -194,7 +194,7 @@ class ConfigDict(dict):
             for b in base:
                 fn = glob.glob(b + bin)
                 if len(fn):
-                    return re.sub("^(.+?)(\s%\w+)?$", '"\\g<1>"\\g<2>', fn[0], 1) + append
+                    return re.sub("^(.+?)((\s%\w+)?)$", '"\\g<1>"\\g<2>', fn[0], 1) + append
         return players[typ][-1]
     
         
