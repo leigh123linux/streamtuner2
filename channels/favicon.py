@@ -3,7 +3,7 @@
 # title: Favicons
 # description: Load and display station favicons/logos.
 # config:
-#    { name: load_favicon, type: bool, value: 1, description: "Load favicon instantly when ▸playing a station.", color: "#fff7cc" }
+#    { name: load_favicon, type: bool, value: 1, description: "Load favicon instantly when ▸playing a station." }
 #    { name: favicon_google_first, type: bool, value: 1, description: "Use Google favicon-to-PNG conversion service (faster)." }
 #    { name: favicon_delete_stub , type: bool, value: 1, description: "Don't accept any placeholder favicons." }
 #    { name: google_homepage, type: bool, value: 0, description: "Google missing station homepages right away." }
