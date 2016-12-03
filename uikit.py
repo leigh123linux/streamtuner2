@@ -477,8 +477,8 @@ class uikit:
 
     # Wrap two widgets in horizontal box
     @staticmethod
-    def hbox(w1, w2, exr=True):
-        b = gtk.HBox(homogeneous=False, spacing=5)
+    def hbox(w1, w2, exr=True, spacing=5):
+        b = gtk.HBox(homogeneous=False, spacing=spacing)
         ######b.set_property("visible", True)
         b.pack_start(w1, expand=not exr, fill=not exr)
         b.pack_start(w2, expand=exr, fill=exr)
@@ -493,7 +493,7 @@ class uikit:
         if label:
             if type(w) is gtk.Entry:
                 w.set_width_chars(11)
-            w = uikit.hbox(w, uikit.label(label, size=label_size, markup=label_markup))
+            w = uikit.hbox(w, uikit.label(label, size=label_size, markup=label_markup), exr=True)
         if image:
             pix = gtk.image_new_from_pixbuf(uikit.pixbuf(image))
             if pix:

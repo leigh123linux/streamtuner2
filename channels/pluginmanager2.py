@@ -110,11 +110,6 @@ class pluginmanager2(object):
             self.add_(uikit.label(""))
 
 
-    # Append to vbox
-    def add_(self, w, label=None, markup=0):
-        w = uikit.wrap(w=w, label=label, align=10, label_size=400, label_markup=1)
-        self.vbox.add(w)
-
     # Create button, connect click signal    
     def button(self, label, stock=None, cb=None):
         b = gtk.Button(label, stock=stock)
@@ -147,6 +142,11 @@ class pluginmanager2(object):
         _ = [self.add_(uikit.label("")) for i in range(1,3)]
 
 
+    # Append to vbox
+    def add_(self, w, label=None, markup=0, align=10, label_size=400):
+        w = uikit.wrap(w=w, label=label, align=align, label_size=label_size, label_markup=markup)
+        self.vbox.add(w)
+
     # Entry for plugin list
     def add_plugin(self, p):
         b = self.button("Install", stock="gtk-save", cb=lambda *w:self.install(p))
@@ -157,7 +157,7 @@ class pluginmanager2(object):
                "category: <i><span color='blue'>$category</span></i></small>\n"\
                "<span size='smaller' color='#364'>$description</span>\n"\
                "<span size='small' color='#532' weight='ultralight'>$extras, <a href='$file'>view src</a></span>"
-        self.add_(b, safe_format(text, **p), markup=1)
+        self.add_(b, label=safe_format(text, **p), markup=1, align=10, label_size=375)
 
         
     # Add placeholder fields
