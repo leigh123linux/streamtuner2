@@ -1,0 +1,126 @@
+<page	xmlns="http://projectmallard.org/1.0/"
+	type="guide"
+	id="filetypes">
+
+<info>
+	<link type="guide" xref="glossary#filetypes"/>
+        <desc>PLS, M3U, JSON files types.</desc>
+</info>
+
+<title>File types</title>
+
+<p>Streamtuner2 understands different playlist formats as used by various
+directory services and audio players.</p>
+
+<section>
+<title>.M3U files</title>
+<info><desc>MP3-URL playlist file.</desc></info>
+<p>M3U files are one of the simplest playlist types. They're often used by desktop audio players.</p>
+<p>The MIME type of these files is <sys>audio/x-mpegurl</sys> and often contain just a list of URLs:</p>
+<code mime="audio/x-mpegurl">
+#M3U
+http://123.45.67.189:8222/
+http://123.45.67.222:7555/
+</code>
+</section>
+
+<section>
+<title>.PLS files</title>
+<info><desc>Playlist file format.</desc></info>
+<p>Playlist files often have the extension <file>.pls</file>. It's the primary station
+stream link format of SHOUTcast, and was popularized by WinAmp.</p>
+<p>The MIME type of these files is <sys>audio/x-scpls</sys> and they often look like: </p>
+<code mime="audio/x-scpls">
+[playlist]
+numberofentries=1
+File1=http://123.45.67.189:8222
+Title1=(#1 - 555/2000) radio station Xyz - top 100 - all the hitzez
+Length1=-1
+</code>
+</section>
+
+<section>
+<title>.JSON files</title>
+<info><desc>JavaScript Object-Notation</desc></info>
+<p>JSON is a data representation format derived from Javascript (the browser embedded
+programming language for websites). It's commonly used because it provides a
+nice balance between terse and exact data represantion, while still being
+readable.</p>
+<p>Streamtuner2 uses it to store all of its configuration and radio station data files.
+The MIME type of these files is <sys>application/json</sys> and they often look like: </p>
+<code mime="application/json">
+[
+  {
+    "title": "Station title..",
+    "url": "http://1.2.3.4:8000/",
+    "homepage": "http://radio.org/",
+  },
+  { "title": "second" }
+]
+</code>
+<p>It's also the basis for JSPF, the JSON variant of XSPF.</p>
+</section>
+
+<section>
+<title>.XSPF files</title>
+<info><desc>Xiph Shareable Playlist File</desc></info>
+<p>The Xiph foundation manages the Ogg streaming format, Vorbis and other
+codecs, and introduced XML shareable playlist format "XSPF". They're
+ hard to look at and not very widespread. On the upside they
+contain more meta information than any other playlist store.</p>
+<p>As MIME type <sys>application/xspf+xml</sys> and they often look like: </p>
+<code mime="application/xspf+xml"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<playlist version="1" xmlns="http://xspf.org/ns/0/">
+  <trackList>
+    <track>
+      <title>Top 500 hitz station XY</title>
+      <annotation>Paris</annotation>
+      <location>http://123.24.67.189:8222</location>
+      <info>Pop, Rock, Future-Jazz</info>
+      <homepage>http://example.com/</homepage>
+    </track>
+  </trackList>
+</playlist>
+]]></code>
+<p>A variation of this format exists as JSPF, using JSON (yay!) instead of XML.</p>
+</section>
+
+<section>
+<title>Uncommon formats</title>
+<p>Various other file formats are in existence, but not widely used:</p>
+<list>
+  <item>
+  <title>SMIL</title>
+  <p>Synchronized Multimedia Integration Language is a HTML-style
+  audio/video/stream-link format.</p>
+  </item>
+  <item>
+  <title>ASX</title>
+  <p>Is a Windows-only format, a variation of SMIL. There's an abhorrent
+  number of similar formats, like .ASF and .WPL, basically doing the same
+  thing. Nobody knows why.</p>
+  </item>
+  <item>
+  <title>QTL</title>
+  <p>QuickTime Link files are also a variation of SMIL</p>
+  </item>
+  <item>
+  <title>B4S</title>
+  <p>.B4S is a failed WinAmp XML playlist format.</p>
+  </item>
+  <item>
+  <title>.desktop</title>
+  <p>*.desktop files can contain just one link.</p>
+  </item>
+  <item>
+  <title>.url</title>
+  <p>*.url (Internet Shortcut) files also are single-link containers.</p>
+  </item>
+</list>
+<p>For a comparison of what various audio player support, see also
+<link href="http://fossil.include-once.org/streamtuner2/wiki/Playlist+format+support">Playlist format support</link>
+in the ST2 fossil wiki.</p>
+</section>
+
+</page>

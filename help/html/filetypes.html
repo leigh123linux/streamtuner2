@@ -1,0 +1,133 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>File types</title>
+<link rel="stylesheet" type="text/css" href="C.css">
+<script type="text/javascript" src="jquery.js"></script><script type="text/javascript" src="jquery.syntax.js"></script><script type="text/javascript" src="yelp.js"></script>
+</head>
+<body><div class="page" role="main">
+<div class="header"><div class="trails" role="navigation"><div class="trail">
+<a class="trail" href="index.html" title="♪ Streamtuner2"><span class="media"><span class="media media-image"><img src="img/logo.png" class="media media-inline" alt="♪"></span></span> Streamtuner2 </a> › <a class="trail" href="index.html#footer" title="index#footer"></a> » <a class="trail" href="glossary.html" title="Glossary">Glossary</a> › <a class="trail" href="glossary.html#filetypes" title="Filetypes">Filetypes</a> » </div></div></div>
+<div class="body">
+<div class="hgroup"><h1 class="title"><span class="title">File types</span></h1></div>
+<div class="region">
+<div class="contents"><p class="p">Streamtuner2 understands different playlist formats as used by various
+directory services and audio players.</p></div>
+<div id="" class="sect"><div class="inner">
+<div class="hgroup"><h2 class="title"><span class="title">.M3U files</span></h2></div>
+<div class="region"><div class="contents">
+<p class="p">M3U files are one of the simplest playlist types. They're often used by desktop audio players.</p>
+<p class="p">The MIME type of these files is <span class="sys">audio/x-mpegurl</span> and often contain just a list of URLs:</p>
+<div class="code"><pre class="contents ">#M3U
+http://123.45.67.189:8222/
+http://123.45.67.222:7555/</pre></div>
+</div></div>
+</div></div>
+<div id="" class="sect"><div class="inner">
+<div class="hgroup"><h2 class="title"><span class="title">.PLS files</span></h2></div>
+<div class="region"><div class="contents">
+<p class="p">Playlist files often have the extension <span class="file">.pls</span>. It's the primary station
+stream link format of SHOUTcast, and was popularized by WinAmp.</p>
+<p class="p">The MIME type of these files is <span class="sys">audio/x-scpls</span> and they often look like: </p>
+<div class="code"><pre class="contents ">[playlist]
+numberofentries=1
+File1=http://123.45.67.189:8222
+Title1=(#1 - 555/2000) radio station Xyz - top 100 - all the hitzez
+Length1=-1</pre></div>
+</div></div>
+</div></div>
+<div id="" class="sect"><div class="inner">
+<div class="hgroup"><h2 class="title"><span class="title">.JSON files</span></h2></div>
+<div class="region"><div class="contents">
+<p class="p">JSON is a data representation format derived from Javascript (the browser embedded
+programming language for websites). It's commonly used because it provides a
+nice balance between terse and exact data represantion, while still being
+readable.</p>
+<p class="p">Streamtuner2 uses it to store all of its configuration and radio station data files.
+The MIME type of these files is <span class="sys">application/json</span> and they often look like: </p>
+<div class="code"><pre class="contents ">[
+  {
+    "title": "Station title..",
+    "url": "http://1.2.3.4:8000/",
+    "homepage": "http://radio.org/",
+  },
+  { "title": "second" }
+]</pre></div>
+<p class="p">It's also the basis for JSPF, the JSON variant of XSPF.</p>
+</div></div>
+</div></div>
+<div id="" class="sect"><div class="inner">
+<div class="hgroup"><h2 class="title"><span class="title">.XSPF files</span></h2></div>
+<div class="region"><div class="contents">
+<p class="p">The Xiph foundation manages the Ogg streaming format, Vorbis and other
+codecs, and introduced XML shareable playlist format "XSPF". They're
+ hard to look at and not very widespread. On the upside they
+contain more meta information than any other playlist store.</p>
+<p class="p">As MIME type <span class="sys">application/xspf+xml</span> and they often look like: </p>
+<div class="code"><pre class="contents syntax brush-html">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;playlist version="1" xmlns="http://xspf.org/ns/0/"&gt;
+  &lt;trackList&gt;
+    &lt;track&gt;
+      &lt;title&gt;Top 500 hitz station XY&lt;/title&gt;
+      &lt;annotation&gt;Paris&lt;/annotation&gt;
+      &lt;location&gt;http://123.24.67.189:8222&lt;/location&gt;
+      &lt;info&gt;Pop, Rock, Future-Jazz&lt;/info&gt;
+      &lt;homepage&gt;http://example.com/&lt;/homepage&gt;
+    &lt;/track&gt;
+  &lt;/trackList&gt;
+&lt;/playlist&gt;</pre></div>
+<p class="p">A variation of this format exists as JSPF, using JSON (yay!) instead of XML.</p>
+</div></div>
+</div></div>
+<div id="" class="sect"><div class="inner">
+<div class="hgroup"><h2 class="title"><span class="title">Uncommon formats</span></h2></div>
+<div class="region"><div class="contents">
+<p class="p">Various other file formats are in existence, but not widely used:</p>
+<div class="list"><div class="inner"><div class="region"><ul class="list">
+<li class="list">
+<div class="title title-item"><h3><span class="title">SMIL</span></h3></div>
+<p class="p">Synchronized Multimedia Integration Language is a HTML-style
+  audio/video/stream-link format.</p>
+</li>
+<li class="list">
+<div class="title title-item"><h3><span class="title">ASX</span></h3></div>
+<p class="p">Is a Windows-only format, a variation of SMIL. There's an abhorrent
+  number of similar formats, like .ASF and .WPL, basically doing the same
+  thing. Nobody knows why.</p>
+</li>
+<li class="list">
+<div class="title title-item"><h3><span class="title">QTL</span></h3></div>
+<p class="p">QuickTime Link files are also a variation of SMIL</p>
+</li>
+<li class="list">
+<div class="title title-item"><h3><span class="title">B4S</span></h3></div>
+<p class="p">.B4S is a failed WinAmp XML playlist format.</p>
+</li>
+<li class="list">
+<div class="title title-item"><h3><span class="title">.desktop</span></h3></div>
+<p class="p">*.desktop files can contain just one link.</p>
+</li>
+<li class="list">
+<div class="title title-item"><h3><span class="title">.url</span></h3></div>
+<p class="p">*.url (Internet Shortcut) files also are single-link containers.</p>
+</li>
+</ul></div></div></div>
+<p class="p">For a comparison of what various audio player support, see also
+<span class="link"><a href="http://fossil.include-once.org/streamtuner2/wiki/Playlist+format+support" title="http://fossil.include-once.org/streamtuner2/wiki/Playlist+format+support">Playlist format support</a></span>
+in the ST2 fossil wiki.</p>
+</div></div>
+</div></div>
+<div class="sect sect-links" role="navigation">
+<div class="hgroup"></div>
+<div class="contents"><div class="links guidelinks"><div class="inner">
+<div class="title"><h2><span class="title">More Information</span></h2></div>
+<div class="region"><ul><li class="links "><a href="glossary.html#filetypes" title="Filetypes">Filetypes</a></li></ul></div>
+</div></div></div>
+</div>
+</div>
+<div class="clear"></div>
+</div>
+<div class="footer"></div>
+</div></body>
+</html>
