@@ -18,7 +18,7 @@
 # (!) Only works with `librezlooks.dll` in place however.
 
 
-import os
+import os, shutil
 from config import *
 from uikit import gtk
 from compat2and3 import *
@@ -38,8 +38,12 @@ class win_theme_rezlooks(object):
     def __init__(self, parent):
         # assert gtk-engine is there, else copy it over
         if not os.path.exists(self.gtk_dll):
-            if os.path.exists(self.gtk_dll_src)
-                os.copy(self.gtk_dll_src, self.gtk_dll)
+            if os.path.exists(self.gtk_dll_src):
+                try:
+                    shutil.copyfile(self.gtk_dll_src, self.gtk_dll)
+                except:
+                    log.ERR("could not copy librezlooks.dll")
+                    return
             else:
                 return
         # apply theme
