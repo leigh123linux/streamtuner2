@@ -5,6 +5,7 @@
 # category: ui
 # priority: default
 # pack: win_theme_rezlooks.py=../channels/
+# depends: librezlooks.dll
 # version: -1
 # author: Doug Whiteley
 # license: GNU GPL
@@ -13,11 +14,13 @@
 # uncheck this plugin. The standard rendering will take hold after
 # a restart.
 # Other themes can be used with the `gtk_theme` plugin easily.
+#
+# (!) Only works with `librezlooks.dll` in place however.
 
 
 import os
 from config import *
-import uikit
+from uikit import gtk
 from compat2and3 import *
 
 
@@ -28,13 +31,25 @@ class win_theme_rezlooks(object):
     # plugin info
     module = "win_theme_rezlooks"
     meta = plugin_meta()
-    theme_dirs = [uikit.gtk.rc_get_theme_dir(), conf.dir + "/themes", conf.share + "/themes"]
+    gtk_dll = 'C:\\Python27\\Lib\\site-packages\\gtk-2.0\\runtime\\lib\\gtk-2.0\\2.10.0\\engines\\librezlooks.dll'
+    gtk_dll_src = '%s/dev/librezlooks.dll' % conf.share
 
     # use builtin .GTKRC
     def __init__(self, parent):
-        uikit.gtk.rc_parse_string(self.gtkrc)
-        uikit.gtk.rc_reparse_all()
+        # assert gtk-engine is there, else copy it over
+        if not os.path.exists(self.gtk_dll):
+            if os.path.exists(self.gtk_dll_src)
+                os.copy(self.gtk_dll_src, self.gtk_dll)
+            else:
+                return
+        # apply theme
+        gtk.rc_parse_string(self.gtkrc)
+        gtk.rc_reparse_all()
+        # probably redundant:
+        gtk.rc_reset_styles(gtk.settings_get_for_screen(gtk.gdk.screen_get_default()))
+        parent.win_streamtuner2.queue_draw()
 
+    # theme settings
     gtkrc = """
 style "rezlooks-default"
 {
@@ -245,4 +260,5 @@ widget_class "*GtkCTree*" style "evolution-hack"
 widget_class "*GtkList*" style "evolution-hack"
 widget_class "*GtkCList*" style "evolution-hack"
 widget_class "*.ETree.*" style "evolution-hack"
+
 """

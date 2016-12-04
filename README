@@ -62,9 +62,19 @@ PYZ
 Other users may wish to try the new Python archive (.PYZ) instead. Which
 requires little installation and can be run asis:
 
-    python streamtuner-2.1.5.pyz
+    python streamtuner2.pyz
 
 You could even make this Python ZIP executable, and copy it in your PATH.
+
+
+EXE
+---
+
+The Windows SFX package can meanwhile post-install Python and Gtk. It's
+well-tested and even comes with an uninstaller.
+The default path of "C:/" would create a standard Linux-esque C:/usr/bin
+directory structure.  But the package is relocatable, so allows to be
+unpacked even under "c:\program files\st2\" or else.
 
 
 Manual installation
@@ -182,4 +192,7 @@ Public Domain. (Unrestricted copying, modification, etc.)
 
 If you wish you could thus redistribute it under a BSD/MIT
 or even GNU-style license.
+
+(!) Plugins that fall under other licenses always carry a
+custom `# license: …` comment.
 
