@@ -87,13 +87,13 @@ mediafmt_t = {
 
 # Player command placeholders for playlist formats
 placeholder_map = dict(
-    pls = "(%url | %pls | %u | %l | %r) \\b",
-    m3u = "(%m3u | %f | %g | %m) \\b",
-    xspf= "(%xspf | %xpsf | %x) \\b",
-    jspf= "(%jspf | %j) \\b",
-    asx = "(%asx) \\b",
-    smil= "(%smil) \\b",
-    srv = "(%srv | %d | %s) \\b",
+    pls = "(%url | %pls | %u | %l | %r)",
+    m3u = "(%m3u | %f | %g | %m)",
+    xspf= "(%xspf | %xpsf | %x)",
+    jspf= "(%jspf | %j)",
+    asx = "(%asx)",
+    smil= "(%smil)",
+    srv = "(%srv | %d | %s)",
 )
 
 # Playlist format content probing (assert type)
@@ -258,6 +258,7 @@ def interpol(cmd, source="pls", row={}, add_default=True):
 
     # Playlist type placeholders (%pls, %m3u, %xspf, etc.)
     for dest, rx in placeholder_map.items():
+        rx = "(?<!%%)%s\\b" % rx
         if re.search(rx, cmd, re.X):
             # no conversion
             if conf.playlist_asis:
@@ -266,7 +267,7 @@ def interpol(cmd, source="pls", row={}, add_default=True):
             else:
                 url = convert_playlist(row["url"], listfmt(source), listfmt(dest), local_file=True, row=row)
             # insert quoted URL/filepath
-            return re.sub(rx, quote(url), cmd, 2, re.X)
+            return re.sub(rx, quote(url), cmd.replace("%%", "%"), 2, re.X)
 
     if not add_default:
         return cmd
