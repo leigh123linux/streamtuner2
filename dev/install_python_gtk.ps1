@@ -27,6 +27,7 @@ Param(
 #-- paths
 $UsrFolder = $MyInvocation.MyCommand.Path -replace ("([\\/][^\\/]+){4}$","")
 $UninstallPath = "$UsrFolder\share\streamtuner2\dev\uninstall.cmd"
+$ResetPrefsPath = $UninstallPath -replace ("uninstall", "resetprefs")
 $ModifyPath = $MyInvocation.MyCommand.Path -replace ("[.]ps1$", ".bat")
 $IconPath = "$UsrFolder\share\pixmaps\streamtuner2.ico"
 
@@ -39,121 +40,109 @@ if(!(Test-Path $regPathLM)) {                                                   
     $regPathLM = "HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall"
     $ProgramFiles = "%ProgramFiles%"
 }
-New-Variable -Name STREAMRIPPER -Option AllScope -Value "$ProgramFiles\Streamripper"
+New-Variable -Name STREAMRIPPER -Option AllScope -Value "$ProgramFiles\Streamripper" #can be changed in Check-Prerequisites
 
-
-#-- what and how to install
-#   each row is a list of (title, url, cmd, msi args, regkey, pathcheck, is_optional, prelookup)
+#-- what and how to install (hash list as used by Run-Task and Check-Prerequisites)
 $tasks = @(
-  @(
-    "Python 2.7.12",                                                  # title
-    "https://www.python.org/ftp/python/2.7.12/python-2.7.12.msi",     # url
-    "",                                                               # custom cmd
-    'TARGETDIR="{PYTHON}" /qb-!',                                     # msi args
-    "$regPathLM\{9DA28CE5-0AA5-429E-86D8-686ED898C665}",              # registry
-    "{PYTHON}\pythonw.exe",                                           # installed check
-    "",                                                               # is optional?
-    ''                                                                # check-prerequisite→$_found?
-  ),
-  @(
-    "PyGtk 2.24.2",
-    "http://ftp.gnome.org/pub/GNOME/binaries/win32/pygtk/2.24/pygtk-all-in-one-2.24.2.win32-py2.7.msi",
-    "",
-    'TARGETDIR="{PYTHON}" ADDLOCAL=ALL REMOVE=PythonExtensionModulePyGtkSourceview2,PythonExtensionModulePyGoocanvas,PythonExtensionModulePyRsvg,DevelopmentTools /qb-!',
-    "$regPathLM\{09F82967-D26B-48AC-830E-33191EC177C8}",
-#    "$regPathLM\{09F82967-D26B-48AC-830E-33191EC177C8}",
-    "{PYTHON}\Lib\site-packages\gtk-2.0\pygtk-2.24.0-py2.7.egg-info",
-    "",
-    ''
-  ),
-  @(
-    "Python requests",
-    "requests", # no download url, pip handles this
-    "easy_install",
-    "",
-    "",
-    "{PYTHON}\Lib\site-packages\requests-2*py2.7.egg",
-    "",
-    ''
-  ),
-  @(
-    "LXML 2.3",
-    "https://pypi.python.org/packages/d4/fa/e4e0c7a8fe971b10e275cdc20efd16f553a225e700c400c11da25276e4f4/lxml-2.3-py2.7-win32.egg",
-    "easy_install",
-    "",
-    "",
-    "{PYTHON}\Lib\site-packages\lxml-2.3-py2.7-win32.egg",
-    "",
-    ''
-  ),
-  @(
-    "PyQuery 1.2.1",
-    "https://pypi.python.org/packages/62/71/8ac1f5c0251e51714d20e4b102710d5eee1683c916616129552b0a025ba5/pyquery-1.2.17-py2.py3-none-any.whl",
-    "pip",
-    "--disable-pip-version-check",
-    "",
-    "{PYTHON}\Lib\site-packages\pyquery-1.2.17.dist-info",
-    "",
-    ''
-  ),
-  @(
-    "PIL 1.1.7",
-    "http://effbot.org/downloads/PIL-1.1.7.win32-py2.7.exe",
-    "",
-    "",
-    "$regPathCU\PIL-py2.7",
-    "{PYTHON}\Lib\site-packages\PIL",
-    "",
-    ''
-  ),
-  @(
-    "Streamripper 1.64.6",
-    "https://netcologne.dl.sourceforge.net/project/streamripper/streamripper%20%28current%29/1.64.6/streamripper-windows-installer-1.64.6.exe",
-    "",
-    "/S  /D={STREAMRIPPER}"  #NSIS does not use double quotes in /D parm,
-    "$regPathLM\Streamripper",
-    "{STREAMRIPPER}\streamripper.exe",
-    '($true)',     # ← could use '((Ask "Install streamripper too [y/N]") -match N)' instead
-    '($optionalInstall -AND ($_found = (Get-ITPV "Streamripper")) -AND ($STREAMRIPPER = $_found) -OR ((!$optionalInstall) -AND $STREAMRIPPER=""))'  # look up path in Check-Prerequisites
-  ),
-  @(
-    "Uninstall script",
-    "",
-    'Create-Uninstallscript'
-  ),
-  @(
-    "Desktop shortcut",
-    "",
-    'Make-Shortcut -dir $Home\Desktop -name Streamtuner2.lnk -target $PYTHON\pythonw.exe -arg $UsrFolder\bin\streamtuner2'
-  ),
-  @(
-    "Startmenu shortcut",
-    "",
-    'Make-Shortcut -dir "$StartMenu\Streamtuner2" -name Streamtuner2.lnk -target $PYTHON\pythonw.exe -arg $UsrFolder\bin\streamtuner2'
-  ),
-  @(
-    "Startmenu help.chm",
-    "",
-    'Make-Shortcut -dir "$StartMenu\Streamtuner2" -name Help.lnk -target $UsrFolder\share\streamtuner2\help\help.chm'
-  ),
-  @(
-    "Startmenu uninstall",
-    "",
-    'Make-Shortcut -dir "$StartMenu\Streamtuner2" -name Uninstall.lnk -target $UninstallPath'
-  ),
-  @(
-    "Startmenu Internet",
-    "",
-    'Make-Shortcut -dir "$StartMenu\Streamtuner2" -name "Streamtuner2 on the Web.lnk" -target "$AboutLink"'
-  ),
-  @(
-    "Startmenu Reconfigure",
-    "",
-    'Make-Shortcut -dir "$StartMenu\Streamtuner2" -name "Reconfigure.lnk" -target $ModifyPath'
-  ),
-  @(
-    "FINISHED"
-  )
+  @{
+    title  = "Python 2.7.12"
+    url    = "https://www.python.org/ftp/python/2.7.12/python-2.7.12.msi"
+    cmd    = ""
+    args   = 'TARGETDIR="{PYTHON}" /qb-!'
+    regkey = "$regPathLM\{9DA28CE5-0AA5-429E-86D8-686ED898C665}"
+    testpth= "{PYTHON}\pythonw.exe"
+    is_opt = ''
+    prescn = ''
+  },
+  @{
+    title  = "PyGtk 2.24.2"
+    url    = "http://ftp.gnome.org/pub/GNOME/binaries/win32/pygtk/2.24/pygtk-all-in-one-2.24.2.win32-py2.7.msi"
+    cmd    = ""
+    args   = 'TARGETDIR="{PYTHON}" ADDLOCAL=ALL REMOVE=PythonExtensionModulePyGtkSourceview2,PythonExtensionModulePyGoocanvas,PythonExtensionModulePyRsvg,DevelopmentTools /qb-!'
+    regkey = "$regPathLM\{09F82967-D26B-48AC-830E-33191EC177C8}"
+    testpth= "{PYTHON}\Lib\site-packages\gtk-2.0\pygtk-2.24.0-py2.7.egg-info"
+  },
+  @{
+    title  = "Python requests"
+    url    = "requests" # no download url, pip handles this
+    cmd    = "easy_install"
+    testpth= "{PYTHON}\Lib\site-packages\requests-2*py2.7.egg"
+  },
+  @{
+    title  = "LXML 2.3"
+    url    = "https://pypi.python.org/packages/d4/fa/e4e0c7a8fe971b10e275cdc20efd16f553a225e700c400c11da25276e4f4/lxml-2.3-py2.7-win32.egg"
+    cmd    = "easy_install"
+    testpth= "{PYTHON}\Lib\site-packages\lxml-2.3-py2.7-win32.egg"
+  },
+  @{
+    title  = "PyQuery 1.2.1"
+    url    = "https://pypi.python.org/packages/62/71/8ac1f5c0251e51714d20e4b102710d5eee1683c916616129552b0a025ba5/pyquery-1.2.17-py2.py3-none-any.whl"
+    cmd    = "pip"
+    args   = "--disable-pip-version-check"
+    testpth= "{PYTHON}\Lib\site-packages\pyquery-1.2.17.dist-info"
+  },
+  @{
+    title  = "PIL 1.1.7"
+    url    = "http://effbot.org/downloads/PIL-1.1.7.win32-py2.7.exe"
+    regkey = "$regPathCU\PIL-py2.7"
+    testpth= "{PYTHON}\Lib\site-packages\PIL"
+  },
+  @{
+    title  = "Streamripper 1.64.6"
+    url    = "https://netcologne.dl.sourceforge.net/project/streamripper/streamripper%20%28current%29/1.64.6/streamripper-windows-installer-1.64.6.exe"
+    cmd    = ""
+    args   = "/S  /D={STREAMRIPPER}"  #NSIS does not use double quotes in /D parm
+    regkey = "$regPathLM\Streamripper"
+    testpth= "{STREAMRIPPER}\streamripper.exe"
+    is_opt = '($optionalInstall)'     # ← could use '((Ask "Install streamripper too [y/N]") -match N)' instead
+    prescn = 'if ($optionalInstall) {if ($_found = (Get-ITPV "Streamripper")) {$STREAMRIPPER = $_found}} else {$STREAMRIPPER=""; continue;}'
+  },
+  @{
+    title  = "Uninstall script"
+    cmd    = 'Create-Uninstallscript'
+  },
+  @{
+    title  = "Desktop shortcut"
+    cmd    = 'Make-Shortcut -dir $Home\Desktop -name Streamtuner2.lnk -target $PYTHON\pythonw.exe -arg $UsrFolder\bin\streamtuner2'
+  },
+  @{
+    title  = "Startmenu shortcut"
+    cmd    = 'Make-Shortcut -dir "$StartMenu\Streamtuner2" -name Streamtuner2.lnk -target $PYTHON\pythonw.exe -arg $UsrFolder\bin\streamtuner2'
+  },
+  @{
+    title  = "Startmenu help.chm"
+    cmd    = 'Make-Shortcut -dir "$StartMenu\Streamtuner2" -name Help.lnk -target $UsrFolder\share\streamtuner2\help\help.chm'
+  },
+  @{
+    title  = "Startmenu uninstall"
+    cmd    = 'Make-Shortcut -dir "$StartMenu\Streamtuner2" -name Uninstall.lnk -target $UninstallPath'
+  },
+  @{
+    title  = "Startmenu Internet"
+    cmd    = 'Make-Shortcut -dir "$StartMenu\Streamtuner2" -name "Streamtuner2 on the Web.lnk" -target "$AboutLink"'
+  },
+  @{
+    title  = "Startmenu Reconfigure"
+    cmd    = 'Make-Shortcut -dir "$StartMenu\Streamtuner2\Advanced" -name "Reconfigure.lnk" -target $ModifyPath'
+  },
+  @{
+    title  = "Startmenu RunDebug"
+    cmd    = 'Make-Shortcut -dir "$StartMenu\Streamtuner2\Advanced" -name "Run in debug mode.lnk" -target $PYTHON\python.exe -arg "$UsrFolder\bin\streamtuner2" -parm "-D"'
+  },
+  @{
+    title  = "Startmenu RunConsole"
+    cmd    = 'Make-Shortcut -dir "$StartMenu\Streamtuner2\Advanced" -name "Run with console.lnk" -target $PYTHON\python.exe -arg "$UsrFolder\bin\streamtuner2"'
+  },
+  @{
+    title  = "Startmenu ResetPrefs"
+    cmd    = 'Make-Shortcut @task'
+       dir = "$StartMenu\Streamtuner2\Advanced"
+      name = "Reset preferences.lnk"
+    target = "$ResetPrefsPath"
+  },
+  @{
+    title  = "FINISHED"
+  }
 )
 
 
@@ -209,8 +198,7 @@ function Console-MaxHeight {
 
 #-- create Desktop/Startmenu shortcuts
 function Make-Shortcut {
-    [CmdletBinding()]
-    param($dir, $name, $target, $arg=$false)
+    param($dir, $name, $target, $arg=$false, $parm=$false, [parameter(ValueFromRemainingArguments)]$kwargs)
     if (!(Test-Path -Path $dir)) {
         New-Item -Path $dir -ItemType directory > $null
     }
@@ -219,7 +207,7 @@ function Make-Shortcut {
     $lnk = $wsh.CreateShortcut("$dir\$name")
     $lnk.TargetPath = $target
     if ($arg) {
-        $lnk.Arguments = '"'+$arg+'"'
+        ($lnk.Arguments =  '"'+$arg+'"') | %{if ($parm) {$lnk.Arguments += " $parm"}}
         $lnk.IconLocation = "$IconPath"
         $lnk.WorkingDirectory = "$UsrFolder\bin"
     }
@@ -332,34 +320,32 @@ for other Python applications on your computer!
 function Check-Prerequisites {
     [CmdletBinding()]
     param($result = 1)
-    ForEach ($task in $tasks) {
-        $title, $url, $cmd, $args, $regkey, $checkpath, $is_optional, $presearch, $_found = $task;
-        $checkpath = $checkpath -replace "{PYTHON}","$PYTHON"
-        #if ($is_optional -and !$optionalInstall) {
-        #    $STREAMRIPPER = ""
-        #    continue
-        #}
-        if (!$regkey -and !$checkpath) {
+    ForEach ($t in $tasks) {
+        $t.found = 0
+        $t.testpth = $t.testpth -replace "{PYTHON}","$PYTHON"
+        if (!$t.regkey -and !$t.testpth) {
             continue
         }
-        if ($presearch) {  # expression for e.g. registry → path lookup
-            Invoke-Expression $presearch > $null # should set $_found + global $PLACEHOLDER variable
+        if ($t.prescn) {  # expression for e.g. registry → path lookup
+            Invoke-Expression $t.prescn  # should set $_found + global $PLACEHOLDER variable
         }
-        elseif ($checkpath) {
-            if (Test-Path $checkpath) {
-                $_found = $checkpath
+        elseif ($t.testpth) {
+            if (Test-Path $t.testpth) {
+                $t.found = $t.testpth
             }
-            elseif ($regkey -and (Test-Path $regkey)) {
-                $_found = "installer/registry"
+            elseif ($t.regkey -and (Test-Path $t.regkey)) {
+                $t.found = "installer/registry"
             }
         }
-        if (!$_found) {
-            Write-Host "   - $title not found"
-            $result = 0;
+        if (!$t.found) {
+            if ((!$t.is_opt) -or ($optionalInstall)) {
+                Write-Host "   - $($t.title) not found"
+                $result = 0;
+            }
         }
         else {
-            Write-Host -n "   + $title found "  # and display shortened path:
-            Write-Host -f DarkGray "($($_found -replace '(?<!^.{1,4})(\\[^\\]+(?=\\)){2,5}(?!.?$)', '...'))"
+            Write-Host -n "   + $($t.title) found "  # and display shortened path:
+            Write-Host -f DarkGray "($($t.found -replace '(?<!^.{1,4})(\\[^\\]+(?=\\)){2,5}(?!.?$)', '...'))"
         }
     }
     if ($result) {
@@ -376,28 +362,24 @@ If you want to reinstall them though, use 'all' or 'reinstall' or 'R'.`n
     Any-Key Green
 }
 
+#-- Operates on parameters of each hash from `$tasks`
+#
+#  · $title   → print current step
+#  · $url     → download from given link, keep as local `$file`
+#  · $cmd     → instead of running file, run a custom command
+#  · $args    → used for MSI installation
+#  · $testpth → check for exisiting dir/file
+#  · $regkey  → set registry key if successful
+#  · $is_opt  → run as expression
+#  · $prescn  → used in check-prereq()
+#
+filter Run-Task {
+    # extract flags/vars from $tasks pipe
+    $title=""; $cmd=""; $url=""; $args=""; $testpth=""; $regkey=""; $is_opt=""; $prescn=""; $_found=""
+    ($task = $_).GetEnumerator() | % { Set-Variable -Scope Local -Name $_.key -Value ([regex]::Replace($_.value, "[#{](\w+)[}#]", { param($m) Invoke-Expression ("$"+$m.Groups[1].Value) })) }
 
-
-
-#-- ask before running
-Clear-Host
-$host.ui.RawUI.BackgroundColor = ($bckgrnd = 'Black')
-Console-MaxHeight
-Display-Logo
-Check-Package
-$PYTHON = Check-PythonInstall
-$reuseCachedFiles, $optionalInstall = Ask-First
-Check-Prerequisites
-
-
-#-- process
-:tasks ForEach ($task in $tasks) {
-    $title, $url, $cmd, $args, $regkey, $testpath, $is_optional, $presearch = $task | 
-       % { [regex]::Replace($_, "[#{](\w+)[}#]", { param($m) Invoke-Expression ("$"+$m.Groups[1].Value) }) }
-    # options
-    if ($is_optional -AND (Invoke-Expression $is_optional) -AND !$optionalInstall) {
-        continue    # optional expression test
-    }
+    # skip optionals
+    if ($is_opt -AND !(Invoke-Expression $is_opt)) { return }
 
     # print step
     if ($title -match "\d+\.\d+") { $title = "Installing $title" }
@@ -405,14 +387,14 @@ Check-Prerequisites
     chdir($TEMP);
 
     # test if element (file path or registry key) already exists:
-    if ($testpath -AND ($reinstall -ne "all") -AND (Test-Path -Path $testpath)) {
+    if ($testpth -AND ($reinstall -ne "all") -AND (Test-Path -Path $testpth)) {
         Write-Host -f DarkGreen -NoNewline " → Is already present."
-        if ($reinstall -eq "none") { continue tasks }
+        if ($reinstall -eq "none") { return }
         Switch -regex ( Ask "   Reinstall [y/N/all/none]? " ) {
             "^all|always|re|^A" { $reinstall = "all"; break }
-            "never|none|skip|^S" { $reinstall = "none"; continue tasks }
+            "never|none|skip|^S" { $reinstall = "none"; return }
             "^y|yes|1|go|^R" { break } # YES
-            ".*" { continue tasks } # everything else counts as NO
+            ".*" { return } # everything else counts as NO
         }
     }
 
@@ -440,7 +422,7 @@ Check-Prerequisites
                 $cmd = "& `"$PYTHON\Scripts\easy_install.exe`" $TEMP\$file" #"
             }
         }
-        Write-Host -f DarkGray   " → $cmd"
+        Write-Host -f Yellow " → $cmd"
         Invoke-Expression "$cmd"
     }
     # msi
@@ -468,6 +450,17 @@ Check-Prerequisites
     }
 }
 
-#Clear-Host
-#Display-Logo
+
+
+#-- run through tasks
+Clear-Host
+$host.ui.RawUI.BackgroundColor = ($bckgrnd = 'Black')
+Console-MaxHeight
+Display-Logo
+Check-Package
+$PYTHON = Check-PythonInstall
+$reuseCachedFiles, $optionalInstall = Ask-First
+Check-Prerequisites
+$tasks | Run-Task  # <-- main loop: process all commands
 Any-Key Green
+

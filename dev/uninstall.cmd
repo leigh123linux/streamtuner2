@@ -49,6 +49,20 @@ if NOT "%cd%" == "%TEMP%" (
 	"%temp%\STuninst.cmd"
 )
 
+tasklist /fi "Imagename eq python.exe" /fi "Windowtitle eq Streamtuner2*" /v | find "Streamtuner2" >nul
+if %errorlevel% EQU 0 goto ST2isRunning
+tasklist /fi "Imagename eq pythonw.exe" /fi "Windowtitle eq Streamtuner2*" /v | find "Streamtuner2" >nul
+if %errorlevel% EQU 1 goto NotRunning
+
+:ST2isRunning
+echo Streamtuner2 is still running!
+echo Please close all instances of Streamtuner2 before uninstalling!
+pause
+exit
+
+
+
+:NotRunning
 echo | set /p=Do you want to uninstall Streamtuner2 for Windows? [y/N]
 set /P INPUT=%=%
 If /I NOT '%INPUT%' == 'Y' exit
@@ -57,7 +71,7 @@ echo | set /p=Do you want to keep your Streamtuner2 settings? [Y/n]
 set /P INPUT=%=%
 If /I '%INPUT%' == 'N' (
 	echo Deleting personal settings...
-	del "%Userprofile%\AppData\Roaming\streamtuner2\*.*" /F /S /Q
+	del "%Userprofile%\AppData\Roaming\streamtuner2\*.*" /F /S /Q 1>nul
 )
 set INPUT=
 
@@ -104,7 +118,7 @@ echo Removing Streamtuner2
 rd "%installFolder%" /S /Q
 
 echo Removing shortcuts
-rd "%USERPROFILE%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Streamtuner2" /S /Q
+rd "%USERPROFILE%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Streamtuner2" /S /Q 1>nul
 del "%USERPROFILE%\Desktop\Streamtuner2.lnk" 1>nul
 
 reg delete HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Streamtuner2 /f 1>nul  2>&1
