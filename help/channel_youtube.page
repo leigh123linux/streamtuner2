@@ -21,7 +21,7 @@
         For example <cmd>totem $(youtube-dl %srv)</cmd> as configured player
         command.</p>
         
-        <p>Youtube-dl is preconfigued as "recording"/download tool for this channel
+        <p>Youtube-dl is preconfigured as "recording"/download tool for this channel
         tab.</p>
 
         <p>Of course you could also just invoke a specific YT video by
