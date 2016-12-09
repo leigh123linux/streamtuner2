@@ -104,24 +104,27 @@ class timer:
 
     # close dialog,get data
     def add_timer(self, *w):
-        row = self.parent.row()
-        row = copy.copy(row)
+        timespec = self.parent.timer_value.get_text()
 
         # basic check for consistency
-        if not re.match("^(\w{2,3}|\*|,)+\s+(\d+:\d+[-.\d+:]*)\s+(record|play)", row[self.timefield]):
+        if not re.match("^(\w{2,3}|\*|,)+\s+(\d+:\d+[-.\d+:]*)\s+(record|play)", timespec):
             self.parent.status("⛔ Danger, Will Robinson! → The given timer date/action is likely invalid. Entry not saved.", timeout=22)
             return
 
+        # hide dialog
         self.parent.timer_dialog.hide()
+        row = self.parent.row()
+        row = copy.copy(row)
 
         # add data
         row["listformat"] = "href" #self.parent.channel().listformat
         if row.get(self.timefield):
             row["title"] = row["title"] + " -- " + row[self.timefield]
-        row[self.timefield] = self.parent.timer_value.get_text()
+        row[self.timefield] = timespec
 
         # store
         self.save_timer(row)
+        self.parent.status("Timer saved.")
     
     
     # store row in timer database
