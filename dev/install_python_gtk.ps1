@@ -338,10 +338,8 @@ function Check-Prerequisites {
             }
         }
         if (!$t.found) {
-            if ((!$t.is_opt) -or ($optionalInstall)) {
-                Write-Host "   - $($t.title) not found"
-                $result = 0;
-            }
+            Write-Host "   - $($t.title) not found"
+            $result = 0;
         }
         else {
             Write-Host -n "   + $($t.title) found "  # and display shortened path:
