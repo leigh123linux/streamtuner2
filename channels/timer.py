@@ -5,7 +5,7 @@
 # type: feature
 # category: hook
 # depends: kronos, action >= 1.1.1
-# version: 0.7.6
+# version: 0.7.7
 # config: 
 #   { name: timer_duration, type: select, select: "auto|streamripper|fpls", value: none, description: "Support for time ranges" }
 #   { name: timer_crontab, type: bool, value: 0, description: "Utilize cron instead of runtime scheduler. (not implemented yet)" }
@@ -15,7 +15,7 @@
 # Provides an internal timer, to configure recording and playback times/intervals
 # for stations. It accepts a natural language time string when registering a stream.
 #
-# Context menu > Extension > Add timer
+# Context menu > Add timer for station
 #
 # Programmed events are visible in "timer" under the "bookmarks" channel. Times
 # are stored in the description field, and can thus be edited. However, after editing
@@ -107,7 +107,7 @@ class timer:
         timespec = self.parent.timer_value.get_text()
 
         # basic check for consistency
-        if not re.match("^(\w{2,3}|\*|,)+\s+(\d+:\d+[-.\d+:]*)\s+(record|play)", timespec):
+        if not re.match("^(\w{2,3}|[*,;+])+\s+(\d+:\d+)\s*((\.\.+|-+)\s*(\d+:\d+))?\s+(record|play)", timespec):
             self.parent.status("⛔ Danger, Will Robinson! → The given timer date/action is likely invalid. Entry not saved.", timeout=22)
             return
 
