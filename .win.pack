@@ -1,0 +1,7 @@
+# pack:
+#    dev/install_python_gtk.*, dev/*.cmd,
+#    dev/librezlooks.dll,
+#    dev/*.ico=/usr/share/pixmaps/,
+#    help/help.chm,
+#    contrib/disabled/win_theme_rezlooks.py=channels/,
+#    .win.pack=
