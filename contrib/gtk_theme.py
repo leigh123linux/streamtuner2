@@ -89,7 +89,7 @@ class gtk_theme(object):
         # add to list
         for t in themes:
             cb.ls.append([t, t])
-        if conf.theme in themes:
+        if ("theme" in conf) and (conf.theme in themes):
             cb.set_default(conf.theme)
         else:
             cb.set_default("default")
