@@ -3,6 +3,7 @@
 @set Python=Do_not_change
 @set StreamripperFolder=Do_not_change
 @echo off
+set ST2=Streamtuner2
 
 >nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
 
@@ -49,29 +50,37 @@ if NOT "%cd%" == "%TEMP%" (
 	"%temp%\STuninst.cmd"
 )
 
-tasklist /fi "Imagename eq python.exe" /fi "Windowtitle eq Streamtuner2*" /v | find "Streamtuner2" >nul
+tasklist /fi "Imagename eq python.exe" /fi "Windowtitle eq %ST2%*" /v | find "%ST2%" >nul
 if %errorlevel% EQU 0 goto ST2isRunning
-tasklist /fi "Imagename eq pythonw.exe" /fi "Windowtitle eq Streamtuner2*" /v | find "Streamtuner2" >nul
+tasklist /fi "Imagename eq pythonw.exe" /fi "Windowtitle eq %ST2%*" /v | find "%ST2%" >nul
+if %errorlevel% EQU 0 goto ST2isRunning
+tasklist /fi "Imagename eq python.exe" | find "python.exe" >nul
 if %errorlevel% EQU 1 goto NotRunning
+echo.
+echo There's a Python process running.
+echo Please close all instances of Python before uninstalling!
+set Pythonrun=Y
+pause
+goto NotRunning
 
 :ST2isRunning
-echo Streamtuner2 is still running!
-echo Please close all instances of Streamtuner2 before uninstalling!
+echo %ST2% is still running!
+echo Please close all instances of %ST2% before uninstalling!
 pause
 exit
 
 
 
 :NotRunning
-echo | set /p=Do you want to uninstall Streamtuner2 for Windows? [y/N]
+echo | set /p=Do you want to uninstall %ST2% for Windows? [y/N]
 set /P INPUT=%=%
 If /I NOT '%INPUT%' == 'Y' exit
 
-echo | set /p=Do you want to keep your Streamtuner2 settings? [Y/n]
+echo | set /p=Do you want to keep your %ST2% settings? [Y/n]
 set /P INPUT=%=%
 If /I '%INPUT%' == 'N' (
 	echo Deleting personal settings...
-	del "%Userprofile%\AppData\Roaming\streamtuner2\*.*" /F /S /Q 1>nul
+	del "%APPDATA%\streamtuner2\*.*" /F /S /Q 1>nul
 )
 set INPUT=
 
@@ -79,7 +88,7 @@ if '"%StreamripperFolder%"' NEQ '' (
 	echo | set /p=Do you want to uninstall Streamripper? [y/N]
 	goto uninstallSR
 )
-goto uninstallPython
+% goto uninstallPython
 
 :uninstallSR
 set /P INPUT=%=%
@@ -93,9 +102,14 @@ If /I '%INPUT%' == 'Y'  (
 set INPUT=
 
 :uninstallPython
+if '%Pythonrun%' EQU 'Y' (
+	echo Skipping uninstall of Python
+	goto uninstallST2
+)
 echo | set /p=Do you want to keep your Python 2.7.12 installation? [Y/n]
 set /P INPUT=%=%
 If /I '%INPUT%' == 'N' (
+	echo Uninstalling Python...
 	echo Removing PIL 1.1.7
 	"%Python%\RemovePIL.exe" -u "%Python%\PIL-wininst.log"
 	echo Removing pyquery 1.2.17
@@ -114,14 +128,14 @@ If /I '%INPUT%' == 'N' (
 	rd "%Python%"  /S /Q
 )
 
-echo Removing Streamtuner2
+:uninstallST2 echo Removing %ST2%...
 rd "%installFolder%" /S /Q
 
-echo Removing shortcuts
-rd "%USERPROFILE%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Streamtuner2" /S /Q 1>nul
+echo Removing shortcuts...
+rd "%APPDATA%\Microsoft\Windows\Start Menu\Programs\%ST2%" /S /Q 1>nul
 del "%USERPROFILE%\Desktop\Streamtuner2.lnk" 1>nul
 
-reg delete HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Streamtuner2 /f 1>nul  2>&1
+reg delete HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\%ST2% /f 1>nul  2>&1
 
-echo Finished uninstalling Streamtuner2
+echo Finished uninstalling %ST2%
 pause
