@@ -41,7 +41,7 @@ import re
 class timer:
 
     # plugin info
-    module = "timer"
+    module = __name__
     meta = plugin_meta()
     
     # configuration settings

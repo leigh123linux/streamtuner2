@@ -48,7 +48,7 @@ from xml.sax.saxutils import escape as html_escape
 # Plugin manager
 class pluginmanager2(object):
 
-    module = "pluginmanager2"
+    module = __name__
     meta = plugin_meta()
     parent = None
     vbox = None

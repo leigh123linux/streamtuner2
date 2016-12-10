@@ -72,7 +72,7 @@ def sndcl_convert(row={}, audioformat="audio/mpeg", source="pls", assoc={}):
 # far only the reddit module uses them anyway.
 #
 class url_soundcloud(object):
-    module = "url_soundcloud"
+    module = __name__
 
     # override action.play() with wrapper
     def __init__(self, parent, *a, **kw):

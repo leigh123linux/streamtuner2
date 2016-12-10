@@ -36,7 +36,7 @@ import re
 class exportcat():
 
     meta = plugin_meta()
-    module = "exportcat"
+    module = __name__
 
     # Register callback
     def __init__(self, parent):

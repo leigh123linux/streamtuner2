@@ -23,8 +23,8 @@ import json
 # hooks three functions to the main extension menu
 class prefstore():
 
+    module = __name__
     meta = plugin_meta()
-    module = "prefstore"
 
     # Register callback
     def __init__(self, parent):

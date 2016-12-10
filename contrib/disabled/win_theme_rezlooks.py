@@ -3,7 +3,7 @@
 # description: Use "Rezlooks-dark" as default theme on Windows for SFX/EXE installer
 # type: feature
 # category: ui
-# priority: default
+# priority: optional
 # pack: win_theme_rezlooks.py=../channels/
 # depends: librezlooks.dll
 # version: -1

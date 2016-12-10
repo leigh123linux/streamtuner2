@@ -29,7 +29,7 @@ from channels import GenericChannel
 class filter_bitrate(object):
 
     meta = plugin_meta()
-    module = "filter_bitrate"
+    module = __name__
 
     # Hijack postprocessing filters in stream_update handler 
     def __init__(self, parent):

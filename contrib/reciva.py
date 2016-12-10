@@ -38,7 +38,7 @@ from channels import *
 class reciva (ChannelPlugin):
 
     # module attributes
-    module = "reciva"
+    module = __name__
     listformat = "pls"
     has_search = True
     categories = ['60s', '70s', '80s', '90s', 'Adult', ['Adult Contemporary'], 'Alternative', 'Ambient', 'Bluegrass', 'Blues', 'Bollywood', 'Christian', ['Christian Contemporary'], 'Classic Rock', 'Classical', 'College', 'Comedy', 'Contemporary', 'Country', 'Dance', 'Discussion', 'Easy', 'Electronica', 'Experimental', 'Folk', 'Gospel', 'Greek', 'Hip Hop', 'Indian', 'Indie', ['Indie Rock'], 'Jazz', 'Jungle', 'Kids', 'Latin Hits', 'New Age', 'News', ['News Talk', 'News Updates'], 'Oldies', 'Pop', 'Public', 'Punk', 'Rap', 'Reggae', 'Religious', 'Rock', 'Short Wave Radio', 'Soft Rock', 'Spanish', 'Sports', 'Talk', 'Top 40', 'Unknown', 'Varied', 'World', ['World Africa', 'World Asia', 'World Caribbean', 'World Europe', 'World Mediterranean', 'World Middle East', 'World Tropical']]

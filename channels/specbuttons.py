@@ -30,18 +30,22 @@ import os.path
 import subprocess
 import math
 import re
-from config import conf, log
+from config import conf, log, plugin_meta
 import action
 from uikit import gtk
 
 
 # Extra/mini buttons in toolbar
 class specbuttons(object):
+    meta = plugin_meta()
     module = __name__
 
     # Hook toolbar label
     def __init__(self, parent):
+        if not parent:
+            return
         self.parent = parent
+        conf.add_plugin_defaults(self.meta, self.module)
         self.specbuttons = parent.get_widget("specbuttons")
         parent.hooks["init"].append(self.update_buttons)
         parent.hooks["config_save"].append(self.update_paths)

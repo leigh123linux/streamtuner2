@@ -20,7 +20,7 @@ from channels import *
 class history:
 
     # plugin attributes
-    module = "history"
+    module = __name__
     meta = plugin_meta()
     
     # store
@@ -30,6 +30,7 @@ class history:
     # hook up to main tab
     def __init__(self, parent):
         self.config = self.meta["config"]
+        conf.add_plugin_defaults(self.meta, self.module)
 
         # keep reference to main window    
         self.bm = parent.channels["bookmarks"]

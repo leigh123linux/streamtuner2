@@ -57,7 +57,7 @@ import compat2and3
 # Drag and Drop support
 class dnd(object):
 
-    module = "dnd"
+    module = __name__
     meta = plugin_meta()
 
     # Keeps selected row on starting DND event

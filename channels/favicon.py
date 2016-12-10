@@ -74,7 +74,7 @@ tried_urls = []
 class favicon(object):
 
     # plugin attributes
-    module = "favicon"
+    module = __name__
     meta = plugin_meta()
     
     

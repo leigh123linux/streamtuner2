@@ -30,7 +30,7 @@ import random
 class global_key(object):
 
     # control attributes
-    module = "global_key"
+    module = __name__
     meta = plugin_meta()
     last = 0
 

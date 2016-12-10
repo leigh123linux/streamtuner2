@@ -58,7 +58,7 @@ def get(item, tag, hint=None):
 class podspider (ChannelPlugin):
 
     # pi info
-    module = "podspider"
+    module = __name__
     homepage = "http://www.radiograbber.de/"
     listformat = "rss"
 

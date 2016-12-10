@@ -43,7 +43,7 @@ from channels import *
 class surfmusik (ChannelPlugin):
 
     # module attributes
-    module = "surfmusik"
+    module = __name__
     listformat = "m3u"
     has_search = False
     lang = "DE"   # last configured categories

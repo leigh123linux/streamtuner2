@@ -36,7 +36,7 @@ from channels import *
 class vtuner (ChannelPlugin):
 
     # module attributes
-    module = "vtuner"
+    module = __name__
     listformat = "pls"
     has_search = False
     categories = [

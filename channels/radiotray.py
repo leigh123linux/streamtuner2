@@ -42,7 +42,7 @@ from xml.etree import ElementTree
 class radiotray:
 
     # plugin info
-    module = "radiotray"
+    module = __name__
     meta = plugin_meta()
     # bookmarks cat
     parent = None
