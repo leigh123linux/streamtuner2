@@ -25,8 +25,8 @@
 	AAC64 is guaranteed to be available for all. Other bitrates depend
 	on the station.</p>
 
-	<p>After reconfiguring the bitrate/format, you can Reload the
-	station list to update them. Otherwise refreshing has no effect.</p>
-        </section>	
+	<p>After reconfiguring the bitrate/format, you can <link
+	xref="reloading">Reload</link> the station list to update them. 
+	Otherwise refreshing has no effect.</p> </section>
 
 </page>

@@ -18,7 +18,7 @@
         <list>
          <item><p>There's around a dozen categories with 20-30 radios each.</p></item>
          <item><p>Prioritizes stations on listener popularity and freshness or something.</p></item>
-         <item><p>The plugin fetches a XML list of stations, or extracts from the homepage.</p></item>
+         <item><p>The plugin fetches an XML list of stations, or extracts from the homepage.</p></item>
         </list>
 
 	<p>Most useful if you don't like to browse around, and want to

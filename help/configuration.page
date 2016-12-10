@@ -148,7 +148,7 @@ There are various options for streamtuner2, available under <guiseq><gui>Edit</g
       <p>Some channels provide proper APIs to fetch station lists. Others are just websites that
       require scraping listings out. Most channel tabs provide two alternative methods for that.
       The DOM/HTML selection method is sometimes slower, but more reliable. As fallback streamtuner2
-      plugins often use a regex to match text. Occassionally the regex method is surprisingly more exact,
+      plugins often use a regex to match text. Occasionally the regex method is surprisingly more exact,
       because directory services often use frightful unstructured HTML. If available, both methods
       are tried. You can influence the order with this setting, and thus speed it up.</p>
     </item>
@@ -161,19 +161,19 @@ There are various options for streamtuner2, available under <guiseq><gui>Edit</g
     </item>
     <item>
       <title>☑ Retain deleted stations</title> <p>When enabled, keeps old station entries when
-      updating/reloading a category/genre.  Services often forget stations or throws them out when inavailable.
+      updating/reloading a category/genre.  Services often forget stations or throw them out when inavailable.
       With this option enabled, these entries are kept in streamtuner2 as strikethrough entries (often
       at the end of the list).</p>
     </item>
     <item>
-      <title>☑ Update favouries from freshened URLs</title>
+      <title>☑ Update favourites from freshened URLs</title>
       <p>Streaming URLs in bookmarked stations get renewed on category reloads/updates. This isn't
       very reliable, as often station titles change together with the streaming URLs.</p>
     </item>
     <item>
       <title>☑ Save station lists after updates</title>
       <p>After reloading (<key>F5</key>) the updated station lists are
-      autoamtically saved. For favicon updates or drag and drop events this
+      automatically saved. For favicon updates or drag and drop events this
       only happens automatically when this option is set.</p>
     </item>
  </terms>
@@ -186,7 +186,7 @@ There are various options for streamtuner2, available under <guiseq><gui>Edit</g
       your audio player.  It'll keep those files around in /tmp/streamtuner2 until you quit. 
       That speeds up switching between and reconnecting to a previous station.  It's in
       particular necessary when you use <key>⏭</key> or <key>⏪</key> directly in your player. 
-      For <var>%pls</var> references your player typically usues the online-only playlist
+      For <var>%pls</var> references your player typically uses the online-only playlist
       files anyway.  If you disable this option, then converted pls/m3u/xspf files get
       recreated repeatedly.</p>
     </item>
@@ -201,7 +201,7 @@ There are various options for streamtuner2, available under <guiseq><gui>Edit</g
       even provide standard stream addresses and playlists. (Jamendo albums for example really
       need pre-conversion; no audio player can deal with such custom JSON playlists).
       In short: you don't normally want to enable this flag - unless you run into problems
-      with streamtuner2 taking too long, or when it hang by accidentially downloading streams
+      with streamtuner2 taking too long, or when it hangs by accidentially downloading streams
       itself.</p></note>
     </item>
  </terms>

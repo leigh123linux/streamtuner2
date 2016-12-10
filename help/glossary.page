@@ -25,7 +25,8 @@
 	    data.  MP3 radio music for example is streamed, because it's not
 	    just a time-limited audio file, but unending (unless you stop
 	    the player or paying your ISP).</p>
-	    <p>In streamtuner2 the terms "stream" and radio "station" are used interchangably.</p>
+	    <p>In streamtuner2 the terms "stream" and radio "station" are used
+	    interchangeably.</p>
 	  </item>
 
 	  <item>
@@ -52,7 +53,7 @@
 
 	  <item>
 	    <title>Favicons</title> <p>Favicons are small symbols for
-	    websites.  Most website should have one.  (ST2 downloads
+	    websites.  Most websites should have one.  (ST2 downloads
 	    favicons either per menu command or automatically for the
 	    current station once you hit play.) </p>
 	  </item>

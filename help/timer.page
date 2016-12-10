@@ -12,9 +12,9 @@
 
 <section id="intro">
 
-	<p>You can programm play/recording events with the timer plugin. Simply select a station
+	<p>You can program play/recording events with the timer plugin. Simply select a station
 	and choose <guiseq><gui>Station</gui> <gui>Add timer...</gui></guiseq>.
-	A small popup will ask for a data/time string. If you press <key>OK</key> the station
+	A small popup will ask for a date/time string. If you press <key>OK</key> the station
 	and the programmed time will be stored in the bookmarks channel in the "timer" category.
 	<em>Please take note of the required text format</em>.</p>
 	
@@ -29,7 +29,7 @@
 	<title>Time specification strings</title>
 	<p>The time and date specificators follow a simple scheme. It's always one or more day names
 	followed by a clock range, and finally the action.</p>
-	<p>For example "<code>Mon,Tue,Wed</code>" will make the event occour on the first
+	<p>For example "<code>Mon,Tue,Wed</code>" will make the event occur on the first
 	three days of each week, while just "Fri" would limit it to Fridays.</p>
 	<p>A clock range of "<code>18:00-20:00</code>"
 	would start the event at 18 o'clock and last it two hours. Note that for "play" events, the end

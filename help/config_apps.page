@@ -87,8 +87,8 @@
 	<title>Other placeholders</title>
 
 	<p>In addition to stream URL + type placeholders (<var>%r</var>, <var>%x</var>, 
-	<var>%pls</var>, <var>%m3u</var>, etc),	you can also pass row
-	placeholders. These contain the stream information like title or
+	<var>%pls</var>, <var>%m3u</var>, etc),	you can also pass station
+	info placeholders. These contain the stream information like title or
 	bitrate, or any other internal field:</p>
 
 	<table shade="rows" rules="rows cols">

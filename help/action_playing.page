@@ -21,7 +21,7 @@
 
 	  <item><p>Right click for the context menu and the <key>play</key> action.</p></item>
 
-	  <item><p>Drag and drop it directly into your audio player.</p></item>
+	  <item><p>Drag and drop it directly into your audio player. (Only on U*ix/X11 systems)</p></item>
 
 	  <item><p>Save it (<key>F2</key>) to a playlist file, then start your player with that.</p></item>
 
