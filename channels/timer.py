@@ -108,8 +108,7 @@ class timer:
 
         # basic check for consistency
         if not re.match("^(\w{2,3}|[*,;+])+\s+(\d+:\d+)\s*((\.\.+|-+)\s*(\d+:\d+))?\s+(record|play)", timespec):
-            self.parent.status("⛔ Danger, Will Robinson! → The given timer date/action is likely invalid. Entry not saved.", timeout=22)
-            return
+            self.parent.status('<span background="orange">⛔ Danger, Will Robinson! → The given timer date/action is likely invalid.</span>', timeout=22, markup=1)
 
         # hide dialog
         self.parent.timer_dialog.hide()
