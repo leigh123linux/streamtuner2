@@ -40,6 +40,7 @@ class links (object):
         ("stream", "Pirateradio Network", "http://www.pirateradionetwork.com/"),
         ("stream", "radio-locator", "http://www.radio-locator.com/"),
         ("stream", "Radio Station World", "http://radiostationworld.com/"),
+        ("stream", "iHeart", "http://www.iheartradio.com/"),
         ("stream", "MusicGOAL", "http://www.musicgoal.com/"),
         ("download", "Live Music Archive(.org)", "https://archive.org/details/etree"),
         ("download", "FMA, free music archive", "http://freemusicarchive.org/"),
