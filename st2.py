@@ -279,10 +279,10 @@ class StreamTunerTwo(gtk.Builder):
             
     # Play button
     def on_play_clicked(self, widget, event=None, *args):
-        self.status("Starting player...")
+        self.status("Starting player...", timeout=1.25)
         channel = self.channel()
         row = channel.play()
-        self.status("")
+        #self.status("")
         [callback(row, channel=channel) for callback in self.hooks["play"]]
 
     # Recording: invoke streamripper for current stream URL
@@ -369,7 +369,7 @@ class StreamTunerTwo(gtk.Builder):
 
 
     # Shortcut to statusbar and progressbar (receives either a string, or a float).
-    def status(self, text=None, timeout=3):
+    def status(self, text=None, timeout=3, markup=False):
         self.status_last = time.time() + timeout
         gobject.timeout_add(int(timeout*1000), self.status_clear)
         #log.UI("progressbar := %s" %text)
@@ -384,7 +384,7 @@ class StreamTunerTwo(gtk.Builder):
                 uikit.do(self.progress.set_fraction, text, immediate=1)
         # add text
         elif isinstance(text, (str, unicode)):
-            uikit.do(self.statusbar.set_text, text)
+            uikit.do(self.statusbar.set_markup if markup else self.statusbar.set_text, text)
         # clean up
         else:
             self.status_clear(anyway=True)
