@@ -299,6 +299,7 @@ def convert_playlist(url, source, dest, local_file=True, row={}):
         return [tmp_fn(row, dest)]
     
     # Retrieve from URL
+    main.status("Converting " + url, timeout=0.95)
     (mime, cnt) = http_probe_get(url)
     
     # Leave streaming server as is
