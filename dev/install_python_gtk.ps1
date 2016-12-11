@@ -198,7 +198,7 @@ function Console-MaxHeight {
 
 #-- create Desktop/Startmenu shortcuts
 function Make-Shortcut {
-    param($dir, $name, $target, $arg=$false, $parm=$false, [parameter(ValueFromRemainingArguments)]$kwargs)
+    param($dir, $name, $target, $arg=$false, $parm=$false, [parameter(ValueFromRemainingArguments=$true)]$kwargs=0)
     if (!(Test-Path -Path $dir)) {
         New-Item -Path $dir -ItemType directory > $null
     }
