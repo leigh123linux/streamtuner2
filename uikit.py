@@ -365,19 +365,20 @@ class uikit:
 
     #-- Save-As dialog
     #
+    save_formats = [("*.pls", "*.pls"), ("*.xspf", "*.xpsf"), ("*.m3u", "*.m3u"), ("*.jspf", "*.jspf"), ("*.asx", "*.asx"), ("*.json", "*.json"), ("*.smil", "*.smil"), ("*.desktop", "*.desktop"), ("*","*")]
     @staticmethod
-    def save_file(title="Save As", parent=None, fn="", formats=[("*.pls", "*.pls"), ("*.xspf", "*.xpsf"), ("*.m3u", "*.m3u"), ("*.jspf", "*.jspf"), ("*.asx", "*.asx"), ("*.json", "*.json"), ("*.smil", "*.smil"), ("*.desktop", "*.desktop"), ("*","*")]):
+    def save_file(title="Save As", parent=None, fn="", formats=None, action=gtk.FILE_CHOOSER_ACTION_SAVE, action_btn=gtk.STOCK_SAVE):
 
         # With overwrite confirmation
-        c = gtk.FileChooserDialog(title, parent, action=gtk.FILE_CHOOSER_ACTION_SAVE,
-                buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_SAVE, gtk.RESPONSE_OK))
+        buttons = (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, action_btn, gtk.RESPONSE_OK)
+        c = gtk.FileChooserDialog(title, parent, action=action, buttons=buttons)
         c.set_do_overwrite_confirmation(True)
 
         # Params
         if fn:
             c.set_current_name(fn)
             fn = ""
-        for fname,ftype in formats:
+        for fname,ftype in (formats or self.save_formats):
             f = gtk.FileFilter()
             f.set_name(fname)
             f.add_pattern(ftype)

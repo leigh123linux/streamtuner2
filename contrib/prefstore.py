@@ -2,7 +2,7 @@
 # api: streamtuner2
 # title: Config save/import/reset
 # description: Allows to store, reimport or delete all preferences
-# version: 0.1
+# version: 0.2
 # type: feature
 # category: config
 # priority: optional
@@ -14,7 +14,7 @@
 from config import *
 from channels import *
 import ahttp
-from uikit import uikit
+from uikit import uikit, gtk
 import action
 import re
 import json
@@ -37,7 +37,7 @@ class prefstore():
 
     # Save conf.
     def save(self, *w):
-        fn = uikit.save_file(title="Export streamtuner2 config",fn="streatuner2-config.json", formats=[("*.json", "*.json")])
+        fn = uikit.save_file(title="Export streamtuner2 config", fn="streatuner2-config.json", formats=[("*.json", "*.json")])
         if not fn:
             return
         data = vars(conf)
@@ -48,7 +48,7 @@ class prefstore():
 
     # Save conf.
     def restore(self, *w):
-        fn = uikit.save_file(title="Import streamtuner2 config",fn="streatuner2-config.json", formats=[("*.json", "*.json")])
+        fn = uikit.save_file(title="Import streamtuner2 config", fn="streatuner2-config.json", formats=[("*.json", "*.json")], action=gtk.FILE_CHOOSER_ACTION_OPEN, action_btn=gtk.STOCK_OPEN)
         if not fn:
             return
         with open(fn, "r") as f:
