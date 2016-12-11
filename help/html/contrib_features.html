@@ -179,6 +179,38 @@ downloadable feature plugins in the <span class="key"><kbd>📦 Add</kbd></span>
     streamtuner1. Has become kind of redundant due to the newer
     <span class="link"><a href="specbuttons.html" title="Special extra/mini buttons">🔌 specbuttons</a></span> plugin.</p></div></div>
 </div></div>
+<div id="" class="sect"><div class="inner">
+<div class="hgroup"><h4 class="subtitle"><span class="subtitle">🔌 Config prefs</span></h4></div>
+<div class="region"><div class="contents">
+<p class="p">Introduces three main menu entries:</p>
+<div class="list"><div class="inner"><div class="region"><ul class="list">
+<li class="list">
+<div class="title title-item"><h4><span class="title"><span class="guiseq"><span class="gui">Station</span> ▸ <span class="gui">Extensions</span> ▸ <span class="gui">Config save</span></span></span></h4></div>
+<p class="p">Saves the streamtuner2.json file verbatim.</p>
+</li>
+<li class="list">
+<div class="title title-item"><h4><span class="title"><span class="guiseq"><span class="gui">Station</span> ▸ <span class="gui">Extensions</span> ▸ <span class="gui">Config restore</span></span></span></h4></div>
+<p class="p">While the file dialog incorrectly says and behaves like a file
+       save dialog, it does in fact open and load the JSON file.</p>
+</li>
+<li class="list">
+<div class="title title-item"><h4><span class="title"><span class="guiseq"><span class="gui">Station</span> ▸ <span class="gui">Extensions</span> ▸ <span class="gui">Config delete</span></span></span></h4></div>
+<p class="p">The config reset additionally opens the settings window and
+       requires you to hit <span class="key"><kbd>Save</kbd></span> for confirmation. In any case
+       ST2 should also be restarted afterwards to unload disabled plugins.</p>
+</li>
+</ul></div></div></div>
+</div></div>
+</div></div>
+<div id="" class="sect"><div class="inner">
+<div class="hgroup"><h4 class="subtitle"><span class="subtitle">🔌 Cache reset</span></h4></div>
+<div class="region"><div class="contents"><p class="p">Adds a <span class="key"><kbd>Cache reset</kbd></span> button in the Options tab of
+    the settings window. It shows how much space all cache files of
+    ST2 occupy. Usually the icons take up most, while the channel/station
+    archive is often just 2-3 MB. Temporary m3u/pls files can also
+    be deleted. → Tick the parts you want to have removed before hitting
+    the reset button.</p></div></div>
+</div></div>
 </div>
 </div></div>
 <div class="sect sect-links" role="navigation">

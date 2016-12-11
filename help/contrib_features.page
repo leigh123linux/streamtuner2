@@ -175,6 +175,38 @@ downloadable feature plugins in the <key>📦 Add</key> tab.</p>
     <link xref="specbuttons">🔌 specbuttons</link> plugin.</p>
   </section>
 
+  <section>
+    <subtitle>🔌 Config prefs</subtitle>
+    <p>Introduces three main menu entries:</p>
+    <list>
+     <item>
+       <title><guiseq><gui>Station</gui> <gui>Extensions</gui> <gui>Config save</gui></guiseq></title>
+       <p>Saves the streamtuner2.json file verbatim.</p>
+     </item>
+     <item>
+       <title><guiseq><gui>Station</gui> <gui>Extensions</gui> <gui>Config restore</gui></guiseq></title>
+       <p>While the file dialog incorrectly says and behaves like a file
+       save dialog, it does in fact open and load the JSON file.</p>
+     </item>
+     <item>
+       <title><guiseq><gui>Station</gui> <gui>Extensions</gui> <gui>Config delete</gui></guiseq></title>
+       <p>The config reset additionally opens the settings window and
+       requires you to hit <key>Save</key> for confirmation. In any case
+       ST2 should also be restarted afterwards to unload disabled plugins.</p>
+     </item>
+    </list>
+  </section>
+
+  <section>
+    <subtitle>🔌 Cache reset</subtitle>
+    <p>Adds a <key>Cache reset</key> button in the Options tab of
+    the settings window. It shows how much space all cache files of
+    ST2 occupy. Usually the icons take up most, while the channel/station
+    archive is often just 2-3 MB. Temporary m3u/pls files can also
+    be deleted. → Tick the parts you want to have removed before hitting
+    the reset button.</p>
+  </section>
+
 </section>
 
 
