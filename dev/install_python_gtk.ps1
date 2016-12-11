@@ -48,7 +48,7 @@ $tasks = @(
     title  = "Python 2.7.12"
     url    = "https://www.python.org/ftp/python/2.7.12/python-2.7.12.msi"
     cmd    = ""
-    args   = 'TARGETDIR="{PYTHON}" /qb-!'
+    iargs   = 'TARGETDIR="{PYTHON}" /qb-!'
     regkey = "$regPathLM\{9DA28CE5-0AA5-429E-86D8-686ED898C665}"
     testpth= "{PYTHON}\pythonw.exe"
     is_opt = ''
@@ -58,7 +58,7 @@ $tasks = @(
     title  = "PyGtk 2.24.2"
     url    = "http://ftp.gnome.org/pub/GNOME/binaries/win32/pygtk/2.24/pygtk-all-in-one-2.24.2.win32-py2.7.msi"
     cmd    = ""
-    args   = 'TARGETDIR="{PYTHON}" ADDLOCAL=ALL REMOVE=PythonExtensionModulePyGtkSourceview2,PythonExtensionModulePyGoocanvas,PythonExtensionModulePyRsvg,DevelopmentTools /qb-!'
+    iargs   = 'TARGETDIR="{PYTHON}" ADDLOCAL=ALL REMOVE=PythonExtensionModulePyGtkSourceview2,PythonExtensionModulePyGoocanvas,PythonExtensionModulePyRsvg,DevelopmentTools /qb-!'
     regkey = "$regPathLM\{09F82967-D26B-48AC-830E-33191EC177C8}"
     testpth= "{PYTHON}\Lib\site-packages\gtk-2.0\pygtk-2.24.0-py2.7.egg-info"
   },
@@ -78,7 +78,7 @@ $tasks = @(
     title  = "PyQuery 1.2.1"
     url    = "https://pypi.python.org/packages/62/71/8ac1f5c0251e51714d20e4b102710d5eee1683c916616129552b0a025ba5/pyquery-1.2.17-py2.py3-none-any.whl"
     cmd    = "pip"
-    args   = "--disable-pip-version-check"
+    iargs   = "--disable-pip-version-check"
     testpth= "{PYTHON}\Lib\site-packages\pyquery-1.2.17.dist-info"
   },
   @{
@@ -91,7 +91,7 @@ $tasks = @(
     title  = "Streamripper 1.64.6"
     url    = "https://netcologne.dl.sourceforge.net/project/streamripper/streamripper%20%28current%29/1.64.6/streamripper-windows-installer-1.64.6.exe"
     cmd    = ""
-    args   = "/S  /D={STREAMRIPPER}"  #NSIS does not use double quotes in /D parm
+    iargs   = "/S  /D={STREAMRIPPER}"  #NSIS does not use double quotes in /D parm
     regkey = "$regPathLM\Streamripper"
     testpth= "{STREAMRIPPER}\streamripper.exe"
     is_opt = '($optionalInstall)'     # ← could use '((Ask "Install streamripper too [y/N]") -match N)' instead
@@ -123,20 +123,20 @@ $tasks = @(
   },
   @{
     title  = "Startmenu Reconfigure"
-    cmd    = 'Make-Shortcut -dir "$StartMenu\Streamtuner2\Advanced" -name "Reconfigure.lnk" -target $ModifyPath'
+    cmd    = 'Make-Shortcut -dir "$StartMenu\Streamtuner2\Extra" -name "Reconfigure.lnk" -target $ModifyPath'
   },
   @{
     title  = "Startmenu RunDebug"
-    cmd    = 'Make-Shortcut -dir "$StartMenu\Streamtuner2\Advanced" -name "Run in debug mode.lnk" -target $PYTHON\python.exe -arg "$UsrFolder\bin\streamtuner2" -parm "-D"'
+    cmd    = 'Make-Shortcut -dir "$StartMenu\Streamtuner2\Extra" -name "Run in debug mode (-D).lnk" -target $PYTHON\python.exe -arg "$UsrFolder\bin\streamtuner2" -parm "-D"'
   },
   @{
     title  = "Startmenu RunConsole"
-    cmd    = 'Make-Shortcut -dir "$StartMenu\Streamtuner2\Advanced" -name "Run with console.lnk" -target $PYTHON\python.exe -arg "$UsrFolder\bin\streamtuner2"'
+    cmd    = 'Make-Shortcut -dir "$StartMenu\Streamtuner2\Extra" -name "Run with console.lnk" -target $PYTHON\python.exe -arg "$UsrFolder\bin\streamtuner2"'
   },
   @{
     title  = "Startmenu ResetPrefs"
     cmd    = 'Make-Shortcut @task'
-       dir = "$StartMenu\Streamtuner2\Advanced"
+       dir = "$StartMenu\Streamtuner2\Extra"
       name = "Reset preferences.lnk"
     target = "$ResetPrefsPath"
   },
@@ -198,7 +198,7 @@ function Console-MaxHeight {
 
 #-- create Desktop/Startmenu shortcuts
 function Make-Shortcut {
-    param($dir, $name, $target, $arg=$false, $parm=$false, [parameter(ValueFromRemainingArguments=$true)]$kwargs=0)
+    param($dir, $name, $target, $arg=$false, $parm=$false)
     if (!(Test-Path -Path $dir)) {
         New-Item -Path $dir -ItemType directory > $null
     }
@@ -365,7 +365,7 @@ If you want to reinstall them though, use 'all' or 'reinstall' or 'R'.`n
 #  · $title   → print current step
 #  · $url     → download from given link, keep as local `$file`
 #  · $cmd     → instead of running file, run a custom command
-#  · $args    → used for MSI installation
+#  · $iargs    → used for MSI installation
 #  · $testpth → check for exisiting dir/file
 #  · $regkey  → set registry key if successful
 #  · $is_opt  → run as expression
@@ -373,7 +373,7 @@ If you want to reinstall them though, use 'all' or 'reinstall' or 'R'.`n
 #
 filter Run-Task {
     # extract flags/vars from $tasks pipe
-    $title=""; $cmd=""; $url=""; $args=""; $testpth=""; $regkey=""; $is_opt=""; $prescn=""; $_found=""
+    $title=""; $cmd=""; $url=""; $iargs=""; $testpth=""; $regkey=""; $is_opt=""; $prescn=""; $_found=""
     ($task = $_).GetEnumerator() | % { Set-Variable -Scope Local -Name $_.key -Value ([regex]::Replace($_.value, "[#{](\w+)[}#]", { param($m) Invoke-Expression ("$"+$m.Groups[1].Value) })) }
 
     # skip optionals
@@ -410,7 +410,7 @@ filter Run-Task {
     if ($cmd) {
         if (Test-Path $PYTHON) { chdir($PYTHON) }
         if ($cmd -eq "pip") {
-            $cmd = "& `"$PYTHON\Scripts\pip.exe`" install $TEMP\$file", $args #"
+            $cmd = "& `"$PYTHON\Scripts\pip.exe`" install $TEMP\$file", $iargs #"
         }
         elseif ($cmd -match "^(easy|easy_install|silent)$") {
             if (!($file)) {
@@ -420,22 +420,22 @@ filter Run-Task {
                 $cmd = "& `"$PYTHON\Scripts\easy_install.exe`" $TEMP\$file" #"
             }
         }
-        Write-Host -f Yellow " → $cmd"
+        Write-Host -f DarkGray " → $cmd"
         Invoke-Expression "$cmd"
     }
     # msi
     elseif ($file -match ".+.msi$") {
-        Write-Host -f DarkGray (" → msiexec /i " + "$file " + $args)
-        Start-Process -Wait msiexec -ArgumentList /i,"$TEMP\$file", $args
+        Write-Host -f DarkGray (" → msiexec /i " + "$file " + $iargs)
+        Start-Process -Wait msiexec -ArgumentList /i,"$TEMP\$file", $iargs
         if ($regkey) {
             Set-ItemProperty -Path "$regkey" -Name "WindowsInstaller"  -Value "0"
         }
     }
     # exe
     elseif ($file -match ".+.exe$") {
-        write-host -f DarkGray " → $file $args"
-        if ($args) {
-            Start-Process -Wait "$TEMP\$file" -ArgumentList $args
+        Write-Host -f DarkGray " → $file $iargs"
+        if ($iargs) {
+            Start-Process -Wait "$TEMP\$file" -ArgumentList $iargs
         }
         else {
             Start-Process -Wait "$TEMP\$file"

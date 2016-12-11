@@ -58,8 +58,9 @@ exit
 :NotRunning
 echo Your personal files are in %PrefsFolder%
 echo.
-echo This will delete all settings of %ST2% and the cached files. 
-echo If you want to save your bookmarks before, then quit now and come back later...
+echo This will delete all settings of %ST2%, all cached files...
+echo ...and the downloaded plug-ins. 
+echo If you want to save your bookmarks before, then quit now and come back later!
 echo.
 echo.
 echo | set /p=Do you want to clear all settings of %ST2% now? [y/N]
