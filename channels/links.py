@@ -23,7 +23,7 @@ import copy
 class links (object):
 
     # plugin info
-    module = __name__
+    module = "links"
     meta = plugin_meta()
     
     # list
