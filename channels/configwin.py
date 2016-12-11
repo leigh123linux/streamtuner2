@@ -53,8 +53,11 @@ class configwin (AuxiliaryWindow):
         for key,val in config.items():
             w = self.main.get_widget(prefix + key)
             if w:
+                # number
+                if isinstance(w, gtk.SpinButton):
+                    w.set_value(int(val))
                 # input field
-                if isinstance(w, gtk.Entry):
+                elif isinstance(w, gtk.Entry):
                     w.set_text(str(val))
                 # checkmark
                 elif isinstance(w, gtk.CheckButton):
@@ -62,9 +65,6 @@ class configwin (AuxiliaryWindow):
                 # dropdown
                 elif isinstance(w, ComboBoxText):
                     w.set_default(val)
-                # number
-                elif isinstance(w, gtk.SpinButton):
-                    w.set_value(int(val))
                 # list
                 elif isinstance(w, gtk.ListStore):
                     w.clear()
@@ -117,6 +117,7 @@ class configwin (AuxiliaryWindow):
         for name,meta in sorted(ls.items(), key=lambda e: e[1]["type"]+e[1]["title"].lower(), reverse=False):
             if not name in conf.plugins:
                 conf.plugins[name] = False
+                conf.add_plugin_defaults(meta, name)
             add_ = self.add_channels if meta.get("type") == "channel" else self.add_features
             self.add_plg(name, meta, add_)
         pass
