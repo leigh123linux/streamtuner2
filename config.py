@@ -340,7 +340,10 @@ class log_printer(object):
             if "debug" in conf and not conf.debug:
                 return
         # color/prefix
-        method = r"[{}[{}][0m".format(self.colors.get(method.split("_")[0], "47m"), method)
+        if conf.windows:
+            method = "[%s]" % method
+        else:
+            method = r"[{}[{}][0m".format(self.colors.get(method.split("_")[0], "47m"), method)
         # output
         print(method + " " + " ".join([str(a) for a in args]), file=sys.stderr)
 
