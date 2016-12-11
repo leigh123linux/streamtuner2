@@ -95,7 +95,7 @@ $tasks = @(
     regkey = "$regPathLM\Streamripper"
     testpth= "{STREAMRIPPER}\streamripper.exe"
     is_opt = '($optionalInstall)'     # ← could use '((Ask "Install streamripper too [y/N]") -match N)' instead
-    prescn = 'if ($optionalInstall) {if ($_found = (Get-ITPV "Streamripper")) {$STREAMRIPPER = $_found}} else {$STREAMRIPPER=""; continue;}'
+    prescn = 'if ($optionalInstall) {if ($t.found = (Get-ITPV "Streamripper")) {$STREAMRIPPER = $_found}} else {$STREAMRIPPER=""; continue;}'
   },
   @{
     title  = "Uninstall script"
@@ -198,7 +198,7 @@ function Console-MaxHeight {
 
 #-- create Desktop/Startmenu shortcuts
 function Make-Shortcut {
-    param($dir, $name, $target, $arg=$false, $parm=$false)
+    param($dir, $name, $target, $arg=$false, $parm=$false, [parameter(ValueFromRemainingArguments=$true)]$kwargs=0)
     if (!(Test-Path -Path $dir)) {
         New-Item -Path $dir -ItemType directory > $null
     }
@@ -327,7 +327,7 @@ function Check-Prerequisites {
             continue
         }
         if ($t.prescn) {  # expression for e.g. registry → path lookup
-            Invoke-Expression $t.prescn  # should set $_found + global $PLACEHOLDER variable
+            Invoke-Expression $t.prescn  # should set $.found + global $PLACEHOLDER variable
         }
         elseif ($t.testpth) {
             if (Test-Path $t.testpth) {
@@ -433,7 +433,7 @@ filter Run-Task {
     }
     # exe
     elseif ($file -match ".+.exe$") {
-        Write-Host -f DarkGray " → $file $iargs"
+        write-host -f DarkGray " → $file $iargs"
         if ($iargs) {
             Start-Process -Wait "$TEMP\$file" -ArgumentList $iargs
         }
