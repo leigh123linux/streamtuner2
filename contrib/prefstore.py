@@ -72,5 +72,5 @@ class prefstore():
             if not name in conf.plugins:
                 conf.add_plugin_defaults(plugin_meta(module=name), name)
         # show configwin
-        self.parent.status("Default settings restored. Press [save] to apply them, then restart Streamtuner2.")
+        self.parent.status('<span background="yellow">Default settings restored. Press [save] to apply them, then restart Streamtuner2.</span>', markup=1)
         self.parent.configwin.open(None)
