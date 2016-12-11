@@ -55,6 +55,7 @@ class specbuttons(object):
     def update_buttons(self, parent):
     
         # define table width (2 rows default)
+        y = conf.specbuttons_rows if "specbuttons_rows" in conf else 2
         y = max(min(int(conf.specbutton_rows), 4), 1) # 1 <= y <= 4
         self.specbuttons.resize(y, int(math.ceil(len(conf.specbuttons) / y)))
         # clean up
