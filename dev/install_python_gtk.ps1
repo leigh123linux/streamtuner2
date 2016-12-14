@@ -22,7 +22,7 @@ Param(
   [string]$ProgramFiles = "%ProgramFiles(x86)%",
   [string]$AboutLink = "http://freshcode.club/projects/streamtuner2",
   [string]$VERSION = "2.2.0"
-)            
+)
 
 #-- paths
 $UsrFolder = $MyInvocation.MyCommand.Path -replace ("([\\/][^\\/]+){4}$","")
@@ -193,6 +193,7 @@ function Console-MaxHeight {
         #$MyBuffer.Width = (80)
         $host.UI.RawUI.set_bufferSize($MyBuffer)
         $host.UI.RawUI.set_windowSize($MyWindow)
+        $host.ui.RawUI.BackgroundColor = ($bckgrnd = 'Black')
     }
 }
 
@@ -327,7 +328,7 @@ function Check-Prerequisites {
             continue
         }
         if ($t.prescn) {  # expression for e.g. registry → path lookup
-            Invoke-Expression $t.prescn  # should set $.found + global $PLACEHOLDER variable
+            Invoke-Expression $t.prescn  # should set $t.found + global $PLACEHOLDER variable
         }
         elseif ($t.testpth) {
             if (Test-Path $t.testpth) {
@@ -365,7 +366,7 @@ If you want to reinstall them though, use 'all' or 'reinstall' or 'R'.`n
 #  · $title   → print current step
 #  · $url     → download from given link, keep as local `$file`
 #  · $cmd     → instead of running file, run a custom command
-#  · $iargs    → used for MSI installation
+#  · $iargs   → used for MSI installation
 #  · $testpth → check for exisiting dir/file
 #  · $regkey  → set registry key if successful
 #  · $is_opt  → run as expression
@@ -373,7 +374,7 @@ If you want to reinstall them though, use 'all' or 'reinstall' or 'R'.`n
 #
 filter Run-Task {
     # extract flags/vars from $tasks pipe
-    $title=""; $cmd=""; $url=""; $iargs=""; $testpth=""; $regkey=""; $is_opt=""; $prescn=""; $_found=""
+    $title=""; $cmd=""; $url=""; $iargs=""; $testpth=""; $regkey=""; $is_opt=""; $prescn=""; $found=""
     ($task = $_).GetEnumerator() | % { Set-Variable -Scope Local -Name $_.key -Value ([regex]::Replace($_.value, "[#{](\w+)[}#]", { param($m) Invoke-Expression ("$"+$m.Groups[1].Value) })) }
 
     # skip optionals
@@ -433,7 +434,7 @@ filter Run-Task {
     }
     # exe
     elseif ($file -match ".+.exe$") {
-        write-host -f DarkGray " → $file $iargs"
+        Write-Host -f DarkGray " → $file $iargs"
         if ($iargs) {
             Start-Process -Wait "$TEMP\$file" -ArgumentList $iargs
         }
@@ -452,7 +453,6 @@ filter Run-Task {
 
 #-- run through tasks
 Clear-Host
-$host.ui.RawUI.BackgroundColor = ($bckgrnd = 'Black')
 Console-MaxHeight
 Display-Logo
 Check-Package

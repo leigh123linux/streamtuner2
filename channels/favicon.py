@@ -325,7 +325,7 @@ def store_image(imgdata, fn, resize=None):
             #traceback.print_exc()
             return log.ERR("favicon/logo conversion error:", e) and False
     else:
-        log.WARN("Couldn't detect valig image type from its raw content")
+        log.WARN("Couldn't detect valid image type from its raw content")
 
     # PNG already?
     if re.match(b"^.(PNG)", imgdata):
