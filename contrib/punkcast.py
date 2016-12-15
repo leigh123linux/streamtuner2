@@ -1,4 +1,3 @@
-
 # api: streamtuner2
 # title: PunkCast
 # description: Online video site that covered NYC artists. Not updated anymore.
@@ -15,8 +14,9 @@
 #   jG6XbGGWemeAkc+hNEE0DtCSmngUCkFSixn321iWyVzGImEIVssllAh5e9kkCDV2T05pD4dMTeWpv6ohwghp6opCOOHh1kfcXZzm8S/bPNs/ZOC4mELj4eYGWiT54Z896qMJ9vws4XBE3lRIBeqmDmk/
 #   Qmnw+YNNlsur/PrbDqv5NFm7SHMwpNbuMggClmYL5JWkqytErKGPPVQmilhLSpbtBE1nxMFhjedHrymkNUrv3KHTuqLvjWl7MQevL+gNXaqNLlGzSyUvUVuEzMzkWVhZYqd6xPc//o6MBfWrAZcdBxnH
 #   zOcy/F1rsf3yFFmtEcWwOZ2h1R8hP5jATGmRQE+wXz0gjiMWihnO2z1qjS6ZQoF76yuU7DSxFFhJC10phmHIhVT8D1yefHn5PzXrAAAAAElFTkSuQmCC
-# priority: obsolete
+# priority: outdated
 # config: { name: punkcast_img, type: boolean, value: 0, description: Load banners. (Channel - Update favicons) }
+# extraction-method: regex, play-handler
 #
 # Punkcast is no longer updated. This plugin is kept for
 # historic reasons. It was one of the default streamtuner1
@@ -31,7 +31,7 @@ from channels import *
 from config import *
 
 
-# basic.ch broadcast archive
+# Punkcast video archive
 class punkcast (ChannelPlugin):
 
     # keeps category titles->urls    
