@@ -60,7 +60,7 @@ class gtk_theme(object):
             if uikit.ver == 2:
                 uikit.gtk.rc_parse(fn)
                 if now or conf.theme_instant:
-                    uikit.gtk.reset_styles(uikit.gtk.settings_get_for_screen(uikit.gtk.gdk.screen_get_default()))
+                    uikit.gtk.rc_reset_styles(uikit.gtk.settings_get_for_screen(uikit.gtk.gdk.screen_get_default()))
                     uikit.gtk.rc_reparse_all()
             # .CSS/Gtk3
             elif now or conf.theme_instant:
