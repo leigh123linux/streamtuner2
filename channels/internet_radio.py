@@ -15,6 +15,7 @@
 #   8TLTIp4U3I01ljY5f/gQu1LPGvWS7Rel5NtLzOzRlfk+Ngd4i48Ke9PZVpNGUCvwawvsZm6db8GtoLt9s4iIFotZFEwXybU1VjO+z4egv/MVKlIaqTMMJ2nh
 #   eeH0wQYX4BwbiQkRTSmdktJ1KY3lGYznuw3zWsS2lLo2WMl4P49ycjCbn3k0pfuVg5m1432e4zr9UGMbLwv8avmP/OJOBQOlAsvF3hYNMititzg2Kuxn7iyr
 #   VbSG/tltFHt3CVvATRBRH0lpEvfwXXL3L9zE/NEe0EfHAAAAAElFTkSuQmCC
+# extraction-method: regex, dom
 #
 # Internet-Radio.co.uk/.com is one of the largest stream directories.
 # Available music genre classifications are mirrored verbatim and flatly.

@@ -9,6 +9,7 @@
 # url: http://www.radiograbber.de/
 # status: unsupported
 # priority: never
+# extraction-method: dom
 #
 # Podspider is one part of the commercial Windows "Radiograbber" software.
 # A demo version is available from http://www.surfmusik.net/downloads/download.php?pid=13
@@ -58,7 +59,7 @@ def get(item, tag, hint=None):
 class podspider (ChannelPlugin):
 
     # pi info
-    module = __name__
+    module = 'podspider'
     homepage = "http://www.radiograbber.de/"
     listformat = "rss"
 

@@ -29,7 +29,7 @@ import os, os.path
 
 # Stop button
 class continuous_record(object):
-    module = __name__
+    module = 'continuous_record'
     meta = plugin_meta()
     parent = None
     rec = None

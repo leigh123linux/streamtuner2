@@ -17,6 +17,7 @@
 #   WAiBo/fbHLx5Te/LZzQYgFW6qbsMKEcf+CWRpCm+2aK5ts6drZfMP9okH4/pSxV91NeI4RLmA0mS4ns9JHGaJvzMc1Lpwo3Smyi7wl6FwHmScNzt8mPnA4fv3lLrtJkIHqt+AXvViFPB+JCQ0HQDrTyg127jvu4T
 #   D3Jqzg0LDLWQ2lYj7oDulmlJZCEwZuD+GGMlRae2eiNqeVgOUA9AAAuAmSEzCq4cKs5TwYvIwzPBJ+A2F2s8XZQcXedL7qwY1neDHa4dvwFfDLdx6YbozgAAAABJRU5ErkJggg==
 # depends: bin:youtube-dl
+# extraction-method: json
 #
 # 
 # Lists recently popular youtube videos by category or channels.

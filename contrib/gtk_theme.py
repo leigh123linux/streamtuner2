@@ -30,7 +30,7 @@ from compat2and3 import *
 class gtk_theme(object):
 
     # plugin info
-    module = __name__
+    module = 'gtk_theme'
     meta = plugin_meta()
     theme_dirs = [uikit.gtk.rc_get_theme_dir(), conf.dir + "/themes", conf.share + "/themes"]
 

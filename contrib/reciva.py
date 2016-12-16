@@ -12,6 +12,7 @@
 #    iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAGFBMVEXiMATfORfhQyTrZk7uh3Tzs6n10879+/iUjtOkAAAAAWJLR0QAiAUdSAAAAAlwSFlzAAALEwAA
 #    CxMBAJqcGAAAAAd0SU1FB+AEBw4nI8D7wUYAAACISURBVAjXDc09D4JAFETREcParl/UvKdoKxi1JgZoiYnQSiJua2ST+ftud3KLGZDvYteT4DRTifqAFCvVmPBRl6um
 #    DsOWP1W5oUw42dQaFBu2lckqqJwxHg8Burx+u0WGXOW5nuoYZUhN6xMMKr03ryYMyj36WAee5OJaE7687R5zF8Cx2DvyD3ZIHyPRcAnIAAAAAElFTkSuQmCC
+# extraction-method: dom, action-handler
 #
 # Reciva is a mobile app. They have a web directory though.
 # It's a bit difficult to query, and streaming urls aren't
@@ -38,7 +39,7 @@ from channels import *
 class reciva (ChannelPlugin):
 
     # module attributes
-    module = __name__
+    module = 'reciva'
     listformat = "pls"
     has_search = True
     categories = ['60s', '70s', '80s', '90s', 'Adult', ['Adult Contemporary'], 'Alternative', 'Ambient', 'Bluegrass', 'Blues', 'Bollywood', 'Christian', ['Christian Contemporary'], 'Classic Rock', 'Classical', 'College', 'Comedy', 'Contemporary', 'Country', 'Dance', 'Discussion', 'Easy', 'Electronica', 'Experimental', 'Folk', 'Gospel', 'Greek', 'Hip Hop', 'Indian', 'Indie', ['Indie Rock'], 'Jazz', 'Jungle', 'Kids', 'Latin Hits', 'New Age', 'News', ['News Talk', 'News Updates'], 'Oldies', 'Pop', 'Public', 'Punk', 'Rap', 'Reggae', 'Religious', 'Rock', 'Short Wave Radio', 'Soft Rock', 'Spanish', 'Sports', 'Talk', 'Top 40', 'Unknown', 'Varied', 'World', ['World Africa', 'World Asia', 'World Caribbean', 'World Europe', 'World Mediterranean', 'World Middle East', 'World Tropical']]

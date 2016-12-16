@@ -17,10 +17,10 @@ from config import *
 from channels import *
 
 
-class history:
+class history (object):
 
     # plugin attributes
-    module = __name__
+    module = 'history'
     meta = plugin_meta()
     
     # store

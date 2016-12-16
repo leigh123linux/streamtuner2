@@ -24,7 +24,7 @@ import ahttp
 # override ahttp.session headers, hooks into config dialog
 class useragentswitcher():
 
-    module = __name__
+    module = 'useragentswitcher'
     meta = plugin_meta()
     map = {
        "default": "streamtuner2/2.1 (X11; Linux amd64; rv:33.0) like WinAmp/2.1",

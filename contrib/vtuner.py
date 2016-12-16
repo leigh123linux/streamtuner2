@@ -15,6 +15,7 @@
 #   TmkAP3wAP3wAP3yIowAAP3wJRXQzZU5Vfi9ehCcRTG1EcT4aUmWAnQgiWF0rXlVmih88a0Z3lxBNdzZvkBf///9k8C2HAAAAGnRSTlMAML8QgO8wIJ9wj3DfEN9wr2BAr++/z1Cfzypf+6cAAAABYktHRCskueQIAAAAB3RJTUUH4AQEFxQcg7S+WgAAAJFJREFUGNNVjlkWgjAMRSOiOCJzMa9SQGit
 #   +1+gQ5CD+ct9Q0JEtArW9Dchb7ZEUTiDaLc/0PHEC885pvgSLFNJmizXLC9Q5Nm8p/rWGNO06U8H0DH3wOQpAXNnHjRKAdAjM1tAQ8DYOgHoBbgGsPx4R0YBFetvK1wlQHmr4fnZd2q6W/vhU+vr+TN1HTpXif4CK/0NNsIh2vQAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTYtMDQtMDVUMDE6MjA6MjAr
 #   MDI6MDD2b3oJAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE2LTA0LTA1VDAxOjIwOjIwKzAyOjAwhzLCtQAAAABJRU5ErkJggg==
+# extraction-method: regex
 #
 #
 # vTuner is a rather large station directory. The website is somewhat
@@ -36,7 +37,7 @@ from channels import *
 class vtuner (ChannelPlugin):
 
     # module attributes
-    module = __name__
+    module = 'vtuner'
     listformat = "pls"
     has_search = False
     categories = [

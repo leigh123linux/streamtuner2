@@ -11,6 +11,7 @@
 # png: 
 #   iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAgMAAABinRfyAAAADFBMVEULDgpKTEmQko/19/S0inLcAAAAUklEQVQI12P4DwQMDvuBBIs92zcGHh2G
 #   BQw+FvUPGDwq/n9gaPoj/5DB6b/TQwaH/18uMrjs/yPI4FP2R4kh1vBHPUO8SsAnBn8P9ocMYFNABADRrSa61FmXoAAAAABJRU5ErkJggg==
+# extraction-method: csv
 #
 # RadioSure is a Windows freeware/shareware for playing internet
 # stations. It comes with a huge database of streams.

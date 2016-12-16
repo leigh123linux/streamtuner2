@@ -16,6 +16,7 @@
 #   24rAyHffOTRwphN69oBz0Jrz3fONMDS6vFyqYEWIFZKaiEfvQ7Gw5Owqhb/O+F1oMBBAksuQyu+q2oP3eK9KpGtGWW+Ha2vjYPJUiWLQEkrSvZNehDEjpCIQBBsc74pT
 #   mNrXxtlbPTIjTVeUPzeFy8+0eWiUHdUEg2z8GY3gom1MPizLTy4qfwFNC7cqp8RdxgAAAABJRU5ErkJggg==
 # priority: extra
+# extraction-method: csv
 #
 # Imports the playlist CSV from Great Little Radio Player.
 

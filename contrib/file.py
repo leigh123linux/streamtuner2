@@ -18,6 +18,7 @@
 #   kkQEtk1g2wRSEihV+badR7Va2vS8ceR5A9uYrimKv/LZ7MhU1VF7efnD2sWL3cb6+slzrT9IgKXFxT8W07S33GpZywsLHxzLep/Gcac3Gu0H9fp7Z3X1KLp27WT9+vXh8epq8vXdu7N+FPG61UIXBXZZAmCVJX8DADze5LjPkMQAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTUtMDUtMDVUMTU6MTA6NTkrMDI6MDBD/PY6AAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE1LTA1LTA1VDE1OjEwOjU5KzAyOjAwMqFOhgAAAABJRU5ErkJggg==
 # png-orig:
 #   https://openclipart.org/detail/168001/folder-icon-red-music
+# extraction-method: os
 #
 # Local file browser. Presents files from configured directories.
 # This is not what streamtuner2 is meant for. Therefore this is

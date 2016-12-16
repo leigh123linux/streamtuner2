@@ -17,6 +17,7 @@
 #   1tuFhWAqdcWYz/fuPa+qCjFWWy7Xnzv3bnU1nU53dnZms1lKqTEmEAjAMeJkOu0AfGxre7O/v72xoYTo6e7e2tpCxEwmAwA1NTV7e3vlclkIQSt9/0Yymevvt7a3ry4tVV66dCylYezw4GBnZ2dzc5NznslkwuGw1poQQoque6ai4oixQ9tumJr6VSjU1tU9XFo6ikaL
 #   +fzZ8+cTiURHR4fW2hhDKeUIIJRC191wnHwkEmtqutDY6H7/fn9oKBqNVldXA4AQglJKCAEAcBxHKTU3NwcAAHArFns2NdXb15fP540xpVKpVCqd/lIpRbTWAICI8/PzrutalmXb9uDgYCQS8TyPcw5/IYT8BpJoukMEtogaAAAAAElFTkSuQmCC
 # recognizes: max_streams
+# extraction-method: regex
 # url: http://surfmusic.de/
 #
 # This plugin comes in German (SurfMusik) and English (SurfMusic) variations.
@@ -43,7 +44,7 @@ from channels import *
 class surfmusik (ChannelPlugin):
 
     # module attributes
-    module = __name__
+    module = 'surfmusik'
     listformat = "m3u"
     has_search = False
     lang = "DE"   # last configured categories

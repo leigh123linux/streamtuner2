@@ -15,7 +15,7 @@ import re
 
 # Channel Homepage in Toolbar
 class ui_cht(object):
-    module = __name__
+    module = 'ui_cht'
 
     # Hook toolbar label
     def __init__(self, parent):

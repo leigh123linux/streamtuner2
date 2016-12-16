@@ -13,6 +13,7 @@
 #    skYa4HwfSS5w2otd8svtWurqHyvnCZcXAHRRW7v8nANnq6bSPk0ucFQS+M3G2fkduMqLrJF5d3zSTnyYATsXmhO89WLfix8A1NWjvwhek5+m
 #    praLGibPC8knFwnEh4U1ct9FvUvoLk0uPbjiCgCPyd+KD0/WyKX4EPcJFLG2/8EaMeLDoE91sH0B3ERWq2CKMoYAAAAASUVORK5CYII=
 # priority: extra
+# extraction-method: regex, action-handler
 #
 # LiveRadio.ie, based in Ireland, is a radio station directory. It provides
 # genre or country browsing (not in this plugin). It accepts user submissions.

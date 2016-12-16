@@ -11,6 +11,7 @@
 #   ABsA1OC6XOP/5f8nwIaYAg0k2gBFsAsgTgcZkvnfDugFEeK9AFKsCPMG0CU6eZJgQ4R1eP8H7LLEivWyFJANQcQCLPBAmkGG4MJohmA6C6QA5gI5OxEUDNII
 #   MwSvASBFIA3ociCxkWQAKMDICkSQIpgh2LDnSmP80YhsCFEJiRIMADpmeUOpqgjRAAAAAElFTkSuQmCC
 # priority: optional
+# extraction-method: regex
 #
 # Radio.net lists around 20.000 worldwide radio stations.
 # A maximum of three pages from each genre are fetched here,

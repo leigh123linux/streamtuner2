@@ -14,6 +14,7 @@
 #    RLaqBwvxAAAAB3RJTUUH3wQMETciyGk1tQAAAHlJREFUGFd1jTESQUEQBbtnd+cXJxBwDiQSN3EwV5F+ZxC6hUAJlvIVJuya7ie48nWXOxVivtbRjaPRQWu6U4sBFaIMXSgGBEQ5Z2Zm1vr8qKaq9aXU/UT5avwCQG+E/gW0KWizheot39FUHT5Xjh5sBgjLbV9VT1ceE5sL4EiAe2YAAAAASUVORK5CYII=
 # config: -
 # priority: extra
+# extraction-method: regex
 #
 # Short user-collected list of internet radio stations
 # on UbuntuUsers.de wiki. Only provides a single category,

@@ -16,6 +16,7 @@
 #   /v/8V5P////+WUJFFrYAAAABYktHRM702fL/AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wQdFiYdwDwd5wAAAQdJREFUCNdjYAADRiYubh5ePmZGEJuRX4BFUEhYRFRMHMhnlJCUkpaRlZPfpqCoxMjAqKyiqqauoamlraOrp8/IYGBoZGxiamZuYWllbWPLyGBn7+Do5Ozi6ubu4enFyMjg7ePr5x8QGBQcEhrGCjQuPCIyKnp7TGxcfEJiUnIKQ2paekbmjqzsnNy8/ILCIobiktKdZeUVlVXVNb
 #   V19Q0MjU3NLa1t7R2dXd09vX39DAwTJk6avGv3lKnTps+YOWs2A9ucuXv27ts/b/6BBQsXLV7CwL502cFDh48sX3H02PGVqzgYGFafOHHy1Ok1a0+cObtuPScDw4YTG4Fg0+aNG09s2coAANV6WR2+KyzWAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE1LTA0LTMwVDAwOjM4OjA5KzAyOjAwPqZVxAAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxNS0wNC0zMFQwMDozODowOSswMjowME/77XgAAAAASUVORK5CYII=
 # x-png-src: https://openclipart.org/detail/101737/vacuum-tubes
+# extraction-method: regex
 #
 # PRF is a privately maintained directory of international
 # radio stations, scheduled broadcasting programs, and

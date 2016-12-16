@@ -1,7 +1,7 @@
 # api: dbus
 # title: RadioTray hook
 # description: Allows to bookmark stations to RadioTray
-# version: 0.3
+# version: 0.4
 # type: feature
 # category: bookmarks
 # depends: deb:python-dbus, deb:streamtuner2, deb:python-xdg
@@ -10,6 +10,7 @@
 # url: http://radiotray.sourceforge.net/
 # priority: extra
 # id: streamtuner2-radiotray
+# extraction-method: xml
 # pack: radiotray.py
 # fpm-prefix: /usr/share/streamtuner2/channels/
 #
@@ -39,10 +40,10 @@ from xml.etree import ElementTree
 
 
 # not a channel plugin, just a category in bookmarks, and a context menu
-class radiotray:
+class radiotray (object):
 
     # plugin info
-    module = __name__
+    module = 'radiotray'
     meta = plugin_meta()
     # bookmarks cat
     parent = None
@@ -72,7 +73,7 @@ class radiotray:
 
         # create category
         self.bm.add_category("radiotray", plugin=self);
-        self.bm.streams["radiotray"] = self.update_streams(cat="radiotray")
+        self.bm.category_plugins["radiotray"] = self #.update_streams(cat="radiotray")
         self.bm.reload_if_current(self.module)
 
         # add context menu

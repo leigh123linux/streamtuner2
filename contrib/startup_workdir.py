@@ -21,7 +21,7 @@ import os, os.path
 
 # Stop button
 class startup_workdir(object):
-    module = __name__
+    module = 'startup_workdir'
 
     # button + hook
     def __init__(self, parent):

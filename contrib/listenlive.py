@@ -15,6 +15,7 @@
 #   Fo3QBSp7xmChOhSxjNfJsM5OaKadncWWkL9V/6rrc7Ceg59/vWLRN2yqCjHMvARcAAAAAElFTkSuQmCC
 # png-orig: https://openclipart.org/detail/148465/1-euro
 # priority: extra
+# extraction-method: regex
 #
 # And another radio directory, primarily collecting euro
 # stations, mixed genres, and grouping by country.

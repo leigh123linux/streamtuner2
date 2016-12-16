@@ -15,6 +15,7 @@
 # x-doc:
 #   http://code.google.com/p/filtermusic-dot-net/source/browse/
 # priority: extra
+# extraction-method: regex, xml
 #
 #
 # Filtermusic.net is a radio collection with primarily electronic

@@ -24,6 +24,7 @@
 #   ADIwMTUtMDQtMDJUMDE6NDk6MTcrMDI6MDAcO09kAAAAAElFTkSuQmCC
 # x-icon-src: openclipart:tape.png
 # x-service-by: segler_alex
+# extraction-method: json
 #
 #
 # Radio-Browser is a community-collected list of internet radios.

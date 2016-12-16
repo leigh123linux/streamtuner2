@@ -9,6 +9,7 @@
 # config:
 #   { name: somafm_bitrate, value: 64, type: select, select: "130=AAC → 128 kbit/s|64=AAC → 64 kbit/s|32=AAC → 32 kbit/s|0=MP3 → 128 kbit/s|56=MP3 → 56 kbit/s|24=MP3 → 24 kbit/s", description: "Most streams are accessible in different bitrates." }
 # priority: extra
+# extraction-method: static
 # png:
 #    iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAA3NCSVQICAjb4U/gAAACpUlEQVQokQXBS28bVRQA4HvOfcwd2xNP7caFtgiqkoglKyhCiFZiUSGxQcACdkis2SGx5lcgumFXhNoNGwpISGUZMKJSGtooStM4teOJXeOZufO4j8P3wZeff7r3z32tRaL7g/7Ikq/qXKEI4BZ5HnzYiJQn
 #    50IAxuIkFe9/+NXDP+9JVr++tX3jk2/I29lkV0fd0DY741+z7PC9dz7Ki9XZ8kSrDudKSIBExx3ulVJJL5UcvVkoob0zm8Nzoc0uXnq1Mcuko9NewnkkgvNaMQVCQWirugz4w88/nUyPPrh+M9a9SGAIbVXWPlSmEkIxUeanArnkrLbNepX9vffw2x+/Z2Rni7PP3n0rjuLkxf7R8b+tMVYwaKzIJvuc

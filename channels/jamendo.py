@@ -19,6 +19,8 @@
 #   khgvJqUqBhFBnSeTS1O/XOPou0eoVxuIsfgkRDsqxBIQgaEVXyIyTVdvGFdbQlD1LibpJDTWG9w8NcHsgRfIb8ni4qbIxhISGU87+Z00BMTuDPhfg47b4X4+oHZ4VxiksxRHi9x3y71M7p5EjAWE6OxBkj/OaSqTgyvJUUIQncuDDx6qRsHHLqpHuR0PW3vbbCj5EYyAAq7dgMVPfHRytt2Kkv7i
 #   5vAw0n1wZuFvFcDq/kGP5/X1tnm+2aiTLQy59MiE00wZ49okK2fNxsWfgnRfmvJA8D3E98tztTWdBtG9IPuw+tqgI+RRTLin1miNJ3EkRhQFxIRcl8+tgj9EN35VXqrV9G2MPIPvWfgv5I1Bh/pNBOGtYCeALEKM6nlc52uUP+XFDfRpRN7psa/ZeBWSAmJ99qrQGaANeJA3AUjpXhLZ1zsD+g+5
 #   Cnd9pANrngAAAABJRU5ErkJggg==
+# extraction-method: json, custom-mime
+#
 #
 # Utilizes the Jamendo /v3.0/ API now completely. That means all tracks will
 # be available as Ogg Vorbis per default.

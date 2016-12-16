@@ -13,6 +13,7 @@
 #    AAAldEVYdGRhdGU6Y3JlYXRlADIwMTUtMDQtMzBUMjI6MzY6MDMrMDI6MDAFLUvfAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE1LTA0LTMwVDIyOjM2OjAzKzAyOjAwdHDz
 #    YwAAAABJRU5ErkJggg==
 # priority: rare
+# extraction-method: regex, action-handler
 #
 # Just a standard genre/country radio directory. Not very
 # suitable for extraction actually, because it requires a

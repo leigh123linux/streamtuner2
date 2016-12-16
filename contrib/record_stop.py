@@ -14,7 +14,7 @@ from config import log, conf
 
 # Stop button
 class record_stop(object):
-    module = __name__
+    module = 'record_stop'
 
     # button + hook
     def __init__(self, parent):

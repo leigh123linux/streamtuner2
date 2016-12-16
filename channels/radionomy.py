@@ -14,6 +14,7 @@
 #   JhESypZnwAKYAWP6wwN3wLUz+gkgEsglsOR/MXdGryK5yaMk34ECWAPVFmMCTIFb4FByeSrl1JDMGf0VcIt7ZcsMeBPYIpaeABSBEABEW8jnLG00dt0WK1ueSikvwDnw4YzeNCS1Z5w2klULkgAb4Bh4AC7kKOrypDsq+JHnBDgBRtuE
 #   aWBLrpzRr32COBD0vEsQCvocCsQ+oKTj/Ehm5rtnyv9AXt6nrYGrgKyxBl1Re3ykbHkDzPdcEZQtDxorshxsaQf7jcTSjxWQC8wHmL1oc/HyC1/TWBfFRR9xAAAAAElFTkSuQmCC
 # priority: extra
+# extraction-method: regex, dom, json
 #
 # Over 6500 radio stations of mixed genres and from different
 # countries.

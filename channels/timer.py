@@ -38,10 +38,10 @@ import re
 
 
 # timed events (play/record) within bookmarks tab
-class timer:
+class timer (object):
 
     # plugin info
-    module = __name__
+    module = 'timer'
     meta = plugin_meta()
     
     # configuration settings

@@ -23,6 +23,7 @@
 #    u+uAt1KkwvVxAGJsEEWxEWzGm4iV8l1HM9K0BmEkrP8BlhoAUfmOxecAAAAASUVORK5CYII=
 # priority: optional
 # documentation: http://dirble.com/developer/api
+# extraction-method: json
 #
 #
 # Dirble is a user-contributed list of radio stations,

@@ -25,7 +25,7 @@ import os
 class cachereset():
 
     meta = plugin_meta()
-    module = __name__
+    module = 'cachereset'
 
     # Register in configwin
     def __init__(self, parent):

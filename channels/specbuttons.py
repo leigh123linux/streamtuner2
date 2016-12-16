@@ -38,7 +38,7 @@ from uikit import gtk
 # Extra/mini buttons in toolbar
 class specbuttons(object):
     meta = plugin_meta()
-    module = __name__
+    module = 'specbuttons'
 
     # Hook toolbar label
     def __init__(self, parent):

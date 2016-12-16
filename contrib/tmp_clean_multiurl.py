@@ -17,7 +17,7 @@ from config import log, conf
 
 # filter
 class tmp_clean_multiurl(object):
-    module = __name__
+    module = 'tmp_clean_multiurl'
     rx_space = re.compile(r"\s")
     rx_nonurl = re.compile(r"(^|\s)(?!\w+:)\S+")
 

@@ -15,6 +15,7 @@
 #   f46cLIKu61yJXufr5VO0voyzEZ/k8sI4s9ns0RFarRZjL56inIshekWGenYS6IzhR9PCntRBIBCw8XsiFItFNLMxPJgfwVjDi4Y8g2b9DILaMKZGd2Ca5tEGiqJg2xjF200H6J+AvKtjeG8T3998xW5nAk6n08bviSBJEqhewLlpN4bMHfwxfuH5J8J98SGerS/B4XDY
 #   d+FwQ6rVKm8vXeP++6vku2lu3FEZubFIXdc5qNm2x93ILZobszRfaYwuaIzH4wOFfafwt7CFb59/Y0uYx8rLR1BVtXd1u2AzCMwsQg6cx+O5uWOFBxAGnfNJ8Q/z/DNTtgbnsgAAAABJRU5ErkJggg==
 # depends: re, ahttp
+# extraction-method: json, regex
 #
 # Shoutcast is a server software for audio streaming. It automatically spools
 # station information on shoutcast.com, which today lists over 60000 radios.

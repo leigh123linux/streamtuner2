@@ -16,6 +16,7 @@
 #   mBhqVCWV2E0MDz9dYLo8ptWbwdrP2aC6nSYhIOck2PiVdDwvfXxox9WqVAcPVtc/jOkm68uf56M/9T4AoAhMq5V06NCc2d+hNAzhwBttPz5q36FxchOT0xT5HwMEvRO1CHITk9MEgHHdfED4z4La9nmQqiY2dNywHY6b++d6h65OhVvVElw3
 #   7rmY2VOE7xZ5pWTdwh2t52NEzwEeQtgTIXhR5uUfnVlr783m7vXGx0/32oOlCC7dLs4COAWwfiTH9+PTrrFnbWan6LkA/HLXAFckaJ+9bKYyeKP4cIEpK/wffVOh5FvT8j8AAAAASUVORK5CYII=
 # documentation: http://opml.radiotime.com/
+# extraction-method: dom
 #
 # RadioTime API uses OPML for station/podcast entries.
 #

@@ -15,7 +15,7 @@
 #   AQCanBgAAAAHdElNRQffBQ4EMidI8LXfAAABGUlEQVQoz32NPU7DQBCFx4aOxosIIOzGlkWRiogGkBssRfQoK/cxRBwAaw6AhJcLoAwtlTdlKtiSMj4U++PIBiReM/O+mXkD0ImdMxhqp23bsyHINkp9/Qu8TLXBj5BMrfsp
 #   08rk2hT7KtIf2o1cmWJzIqU+pVVD9i6SW9Ev0BC9D0FDSzEExouyB0QkLGAQunMSL7IuwVNB+EZu/Bw/lLAnJ1fa6nOBT3CZQ0irDzsWiHo/gLFwqhFxbl6Me+/AiXhdmnUHfIBDMb+onccZnE7AXwTHncfH5CYHSGALeHGH
 #   tybGAr7gFS8KC464Vs7Se84dGGlvmvQPqAZgFoM/7QYwQqx0fIoFuo0DE3oNuzbbgP1EKwDPlPgb5NefnUHe3aAAAAAASUVORK5CYII=
-# support: experimental
+# support: stable
 #
 # Scans for new plugins from the repository server, using
 # a common-repo.json list. Compares new against installed
@@ -48,7 +48,7 @@ from xml.sax.saxutils import escape as html_escape
 # Plugin manager
 class pluginmanager2(object):
 
-    module = __name__
+    module = 'pluginmanager2'
     meta = plugin_meta()
     parent = None
     vbox = None

@@ -15,6 +15,7 @@
 #    tkk4YpUKFkmnupxMovx5hfR0kHTCgPLBaub7NdztfopEeD89p3+gNfotla+8TY6seqE1Gbpal2GsMNG0wUMiNsDvn4e4+smbfDYYYOjdHlrCk9SEzrKpOU5llRPjRg9PV/oof2EXz7+6m03VftaYhYnLDVY0Ukpv9xAnv0qxtWmUDe4TlL4Rocz6PmW2YdZ7T1LVcgpL6Byu8EV8vVNU
 #    VLeyWv+a8EBW8aRhB8HOYepbeqnfE6ZBTmtLHzY56wJiC/RQ5+/BGYzSFIpR/mKAHOHHQgsFpkaRqntRphkpCzQi5TyxF4p8C0wiYZH0QyLnh00uCsweFv4YF+X8L6KBLpzwswJYAAAAAElFTkSuQmCC
 # priority: optional
+# extraction-method: regex
 #
 # A station list website featuring a map. (Uncovered via streamripper
 # homepage, which however mentions those streams not being recordable).

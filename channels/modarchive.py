@@ -15,6 +15,8 @@
 #   SMZzaZ52WFrdxk3a5DwXKQRxbFBXKkP09WRQlsRozc5Bk3J5hHTK4cb1F1HKJmkrJqujWMqmmM8QRTFBGLG+fYgaLRWJtUbrmISTZL/RwnOTfPXdr0xXB8nlciSUxI1aVIqSZvcMIxw816E2XkKFUYQRAokgDCO8dArfD/npz4fUd/c564acz2qmJqqkvDySmLnflwli
 #   SRxrpDGgpAQhSNoWh6chc3cWKWRcrFSWMPCpjJX4+d4+n389D1JxtTqC0ZqTsw7ywT+PCMIIP4h4WN9j4f4Wvy0fkM+l6XZ9elKSSvUiipjmwQ7NZoNSfy+NVpvVzQNUfa/B49YZWms6fog2mr7eAo5t0zo5pVz06Osf4N03X+b6czVGR4aZv7vB/NI6aTeJVFLypBvQ
 #   8UMSCQsQZFwHEAijGRk8h207fPrlj2wdthkq9dNotQkjjZISpY1BSoExoLXBmKcoSxBr8ENYvLfKDwsPWPt7k8nxAX5ZXMFOWERaIy7f/tj8L0n5tGzWSzJdHcZNOihpOGic8tfaI4TRZNM2j4+7yP9+/hd7YWLXivTEWgAAAABJRU5ErkJggg==
+# extraction-method: regex
+#
 #
 # A genre browser for tracker music files from the MOD Archive.
 #

@@ -15,6 +15,7 @@
 #   /1+tGYr2//tj9O/dH3EGl/vHzhr9yf1nyqD6vqjW6AfXu2AgKwnIkvoXDJSFsMyAOkCyUkAdF/MTaw1/cAFNeSZ1/d6sv3VN
 #   cQx/neb///f/BdC2/0dEz717E2QLclWycKihGchV/99Mc8k89/8/AD9dZbS2m1Y9AAAAAElFTkSuQmCC
 # priority: extra
+# extraction-method: regex
 # 
 # Magnatune is a label for independent music. It provides
 # free access to a partial section of its reportoire as MP3.

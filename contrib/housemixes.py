@@ -14,6 +14,7 @@
 #    AJqcGAAAAAd0SU1FB+AKCQwWONCoEiQAAACPSURBVAjXLY29DsIgFIUPxehaExJXW+EB7MJaCE/gAKvRaNdWYu/rewve6bsn5wcARN+3KNeE7hgq60t8X30Rx4mIhjOj2tMr
 #    UnaMPmXAUsPiSBwRdHMcWtEKpIdHMFk7FQ6fAG0WPe46OXgos9QhrpC5jm576wayvBO0x7Pgaebee0HJDlv9sN80/xGxOH8QkRfKLi9RvwAAAABJRU5ErkJggg==
 # depends: pq, ahttp
+# extraction-method: dom, action-handler
 #
 # House-mixes.com is an UK platform for DJs to showcase their
 # house/dance/techno mixes.
