@@ -1,7 +1,7 @@
 # encoding: utf-8
 # title: Spec buttons for apps
 # description: Adds configurable mini toolbar buttons
-# version: 0.8
+# version: 0.8.1
 # depends: streamtuner2 >= 2.2.0
 # type: feature
 # category: ui
@@ -97,8 +97,11 @@ class specbuttons(object):
         return wi
 
     # Look for image basename (e.g. "play") in /usr/share/icons/*.* and /pixmaps/*
-    def locate(self, btn):
-        f = subprocess.Popen(["locate", "/usr/share/[pi]*s/*%s*.*" % btn], stdout=subprocess.PIPE)
+    def locate(self, btn, f=None):
+        try:
+            f = subprocess.Popen(["locate", "/usr/share/[pi]*s/*%s*.*" % btn], stdout=subprocess.PIPE)
+        except:
+            return None
         path, err = f.communicate()
         if not err:
             return path.split("\n")[0]
