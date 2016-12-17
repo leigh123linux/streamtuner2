@@ -3,7 +3,7 @@
 # description: 
 # type: channel
 # category: radio
-# version: 0.1
+# version: 0.2
 # url: http://www.streema.com/
 # png:
 #   iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABF0lEQVR42oWTMWsCURCE/Y/Bxh+QLrUIloKdELCxTOOBRSSgpZVYhCAWCtcEETGQJmCTkG7k47HcereeA4vnu32zszt7jceRFMXDQGoN
@@ -60,7 +60,7 @@ class streema (ChannelPlugin):
         if cat:
             html = ahttp.get(self.base + "/genre/" + cat)
         elif search:
-            html = ahttp.get(self.base + "/search/?q=" + cat)
+            html = ahttp.get(self.base + "/search/?q=" + search)
         else:
             return
         
@@ -70,7 +70,7 @@ class streema (ChannelPlugin):
             # not very efficient
             url = re.findall('data-url="/radios/play/(\d+)"', html)
             homepage = re.findall('data-profile-url="/radios/(.+?)"', html)
-            title = re.findall('title="(.+?)"', html)
+            title = re.findall('title="Play (.+?)"', html)
             img = re.findall('<img\s*src="(.+?)"', html)
             playing = re.findall('<span class="now-playing-text">(.*?)</span>', html, re.S)
             genre = re.findall('<p class="genre">(.*?)</p>', html, re.S)
