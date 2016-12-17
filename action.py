@@ -159,20 +159,20 @@ def help(*args):
 
 # Invokes player/recorder for stream url and format
 def run_fmt_url(row={}, audioformat="audio/mpeg", source="pls", assoc={}, append=None, cmd=None, add_default=True):
-    # look for specific "audio/type" or "urn:service:…" resolvers
+    # look for specific "audio/type"
     if audioformat in handler:
-        handler[audioformat](row, audioformat, source, assoc)
+        return handler[audioformat](row, audioformat, source, assoc)
+    # or "urn:service:…" resolvers (though this is usally done by genericchannel.row() already)
     elif row.get("url", "").startswith("urn:"):
-        row = resolve_urn(row);
-    else:
-        # use default handler for mime type
-        if not cmd:
-            cmd = mime_app(audioformat, assoc)
-        # replace %u, %url or $title placeholders
-        cmd = interpol(cmd, source, row, add_default=add_default)
-        if append:
-            cmd = re.sub('(["\']?\s*)$', " " + append + "\\1", cmd)
-        run(cmd)
+        row = resolve_urn(row) or row
+    # use default handler for mime type
+    if not cmd:
+        cmd = mime_app(audioformat, assoc)
+    # replace %u, %url or $title placeholders
+    cmd = interpol(cmd, source, row, add_default=add_default)
+    if append:
+        cmd = re.sub('(["\']?\s*)$', " " + append + "\\1", cmd)
+    run(cmd)
 
 # Start web browser
 def browser(url):

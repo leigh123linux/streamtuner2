@@ -264,7 +264,8 @@ class GenericChannel(object):
         # resolve stream url for some plugins
         if row.get("url", "urn:x-streamtuner2:no").startswith("urn:"):
             self.status("Resolving actual stream URL for `%s`" % row["url"], timeout=2)
-            action.resolve_urn(row)
+            # most urn: handlers update `row` - some return a new value - which is handled in action.run_fmt_url() however
+            action.resolve_urn(row)  # row = ..() or row
         return row
         
     # Fetches a single varname from currently selected station entry
