@@ -378,7 +378,7 @@ class uikit:
         if fn:
             c.set_current_name(fn)
             fn = ""
-        for fname,ftype in (formats or self.save_formats):
+        for fname,ftype in (formats or uikit.save_formats):
             f = gtk.FileFilter()
             f.set_name(fname)
             f.add_pattern(ftype)
