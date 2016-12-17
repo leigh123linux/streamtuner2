@@ -39,8 +39,16 @@ class bookmarks(GenericChannel):
     # content
     listformat = "any"
     categories = ["favourite", ]  # timer, links, search, and links show up as needed
-    finder_song = { "genre": "Youtube ", "format": "video/youtube", "playing": "current_", "title": "The Finder song", "url": "http://youtube.com/v/omyZy4H8y9M", "homepage": "http://youtu.be/omyZy4H8y9M" }
-    streams = {"favourite":[finder_song], "search":[], "scripts":[], "timer":[], "history":[], }
+    streams = {
+        "favourite": [
+          { "genre": "Top 40", "title": "Frequence3", "playing": "The French hit web radio from Paris!", "format": "audio/mpeg",
+            "url": "http://ice.stream.frequence3.net/frequence3-256.mp3", "homepage": "http://www.frequence3.fr/" }
+        ],
+        "search": [],
+        "scripts": [],
+        "timer": [],
+        "history": []
+    }
     default = "favourite"
     fixed_size = [32,24]
 
