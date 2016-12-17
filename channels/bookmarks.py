@@ -42,6 +42,7 @@ class bookmarks(GenericChannel):
     finder_song = { "genre": "Youtube ", "format": "video/youtube", "playing": "current_", "title": "The Finder song", "url": "http://youtube.com/v/omyZy4H8y9M", "homepage": "http://youtu.be/omyZy4H8y9M" }
     streams = {"favourite":[finder_song], "search":[], "scripts":[], "timer":[], "history":[], }
     default = "favourite"
+    fixed_size = [32,24]
 
 
     # cache list, to determine if a PLS url is bookmarked
