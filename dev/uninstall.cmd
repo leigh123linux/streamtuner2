@@ -1,7 +1,7 @@
-@set installFolder=Do_not_change
-@set usrFolder=Do_not_change
-@set Python=Do_not_change
-@set StreamripperFolder=Do_not_change
+@set installFolder=Do_not_Change
+@set usrFolder=Do_not_Change
+@set Python=Do_not_Change
+@set StreamripperFolder=Do_not_Change
 @echo off
 set ST2=Streamtuner2
 
@@ -70,8 +70,13 @@ pause
 exit
 
 
-
 :NotRunning
+if exist "%windir%\SysWOW64" (
+	set RegUninstallBase="HKLM\Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall"
+) else (
+	set RegUninstallBase="HKLM\Software\Microsoft\Windows\CurrentVersion\Uninstall"
+)
+
 echo | set /p=Do you want to uninstall %ST2% for Windows? [y/N]
 set /P INPUT=%=%
 If /I NOT '%INPUT%' == 'Y' exit
@@ -84,11 +89,11 @@ If /I '%INPUT%' == 'N' (
 )
 set INPUT=
 
-if '"%StreamripperFolder%"' NEQ '' ( 
+if '"%StreamripperFolder%"' NEQ '""' ( 
 	echo | set /p=Do you want to uninstall Streamripper? [y/N]
 	goto uninstallSR
 )
-% goto uninstallPython
+goto uninstallPython
 
 :uninstallSR
 set /P INPUT=%=%
@@ -96,8 +101,7 @@ If /I '%INPUT%' == 'Y'  (
 	echo Uninstalling Streamripper...
 	"%StreamripperFolder%\Uninstall.exe" /S
  	reg delete HKCU\SOFTWARE\Streamripper /f 1>nul 2>&1
- 	reg delete HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Streamripper /f 1>nul 2>&1
- 	reg delete HKLM\SOFTWARE\WoW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Streamripper /f 1>nul 2>&1
+ 	reg delete %RegUninstallBase%\Streamripper /f 1>nul 2>&1
 )
 set INPUT=
 
@@ -123,12 +127,15 @@ If /I '%INPUT%' == 'N' (
 	echo Removing PyGtk 2.24.2
 	MsiExec.exe /x{09F82967-D26B-48AC-830E-33191EC177C8} /qb-!
 	echo Removing Python 2.7.12
+	reg delete %RegUninstallBase%\{09F82967-D26B-48AC-830E-33191EC177C8} /f 1>nul 2>&1
 	MsiExec.exe /x{9DA28CE5-0AA5-429E-86D8-686ED898C665} /qb-!
 	reg delete HKCU\SOFTWARE\Python\PythonCore\2.7 /f 1>nul 2>&1
+	reg delete %RegUninstallBase%\{9DA28CE5-0AA5-429E-86D8-686ED898C665} /f 1>nul 2>&1
 	rd "%Python%"  /S /Q
 )
 
-:uninstallST2 echo Removing %ST2%...
+:uninstallST2 
+echo Removing %ST2%...
 rd "%installFolder%" /S /Q
 
 echo Removing shortcuts...

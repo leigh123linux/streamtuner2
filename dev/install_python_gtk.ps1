@@ -171,7 +171,7 @@ function Display-Logo {
 }
 function Ask-First {
     Write-Host ""
-    if ((Ask "Do you want install Streamtuner2 and its Python dependencies now? [Y/n] ") -notmatch "^[yY]|^$") {
+    if ((Ask "Do you want to install Streamtuner2 and its Python dependencies now? [Y/n] ") -notmatch "^[yY]|^$") {
         #$tasks = $tasks[7..($tasks.length-1)]; return 0,0
         exit
     }
@@ -191,9 +191,9 @@ function Console-MaxHeight {
         $MyWindow.Width = (80)
         $MyBuffer.Height = (9999)
         #$MyBuffer.Width = (80)
+        $host.ui.RawUI.BackgroundColor = ($bckgrnd = 'Black')
         $host.UI.RawUI.set_bufferSize($MyBuffer)
         $host.UI.RawUI.set_windowSize($MyWindow)
-        $host.ui.RawUI.BackgroundColor = ($bckgrnd = 'Black')
     }
 }
 
