@@ -60,7 +60,8 @@ class theme_installer(object):
     meta = plugin_meta()
     category = "themes"
     theme_dir = conf.dir + "/themes/"
-    themes_url = "http://milki.include-once.org/streamtuner2/themes/"
+#    themes_url = "http://milki.include-once.org/streamtuner2/themes/"
+    themes_url = "http://oha59.bplaced.net/streamtuner2/themes/"
     themes_csv = "themes.json"
     mime = "zip/gtk-theme"
     parent = None
@@ -93,7 +94,7 @@ class theme_installer(object):
         fn = "%s%s/%s" % (self.theme_dir, conf.theme, "gtk-2.0/gtkrc")
         if not os.path.exists(fn):
             return
-        log.GTK_THEME_FILE(fn)
+        log.GTK_THEME_FILE("XYZ " + fn)
         # .GTKRC/Gtk2
         uikit.gtk.rc_parse_string("module_path \"%s:%s\"\n" % (uikit.gtk.rc_get_module_dir(), self.theme_dir))
         uikit.gtk.rc_parse(fn)
@@ -144,6 +145,7 @@ class theme_installer(object):
         
         return r
 
+
     # invoked by action. module when encounterin a zip/gtk-theme links
     def install_handler(self, row, audioformat, source, assoc):
         if not "url" in row:
@@ -158,6 +160,8 @@ class theme_installer(object):
         # extract
         z = zipfile.ZipFile(zip)
         z.extractall(self.theme_dir)
+        z.close()
+        os.remove(zip)
         ls = z.namelist()
         dll = [fn for fn in ls if re.search("\w+\.(dll|so)$", fn)]
         base = [m.group(1) for fn in ls for m in [re.match("^([\w\s\-\.]+)/gtk-2.0/.+", fn)] if m]
@@ -169,11 +173,36 @@ class theme_installer(object):
                     if fn.find("/") > 0:  # create lib/engines/.../ if given
                         try: os.makedirs(self.theme_dir + os.path.basename(fn))
                         except: pass      # copy file
-                    if shutil.copy(self.theme_dir + fn, gtk_dir):
-                        break
+                    try:                
+                        if shutil.copy(self.theme_dir + fn, gtk_dir):
+                            break
+                    except Exception as e:
+                        log.THEME_INSTALL("Copy Gtk theme engine error ", e)
+                        self.parent.status('<span background="orange">⛔ Set theme unsuccessful. - Check access rights!</span>', timeout=22, markup=1)
+                        self.clear_theme(ls, dll)
+                        return
+            else:
+                self.clear_theme(ls)
+                return
 
         # enable
+        if dll:
+            self.clear_dll(dll)
+            
         conf.theme = base[0]
         self.apply_theme(True)
         conf.save()
 
+    # delete theme files if application failed
+    def clear_theme(self, ls, dll):
+        for fn in ls:
+            try:
+                shutil.rmtree(self.theme_dir + fn)
+            except: pass # probably not found
+        if dll:
+            self.clear_dll(dll)
+
+    # delete theme engine dll
+    def clear_dll(self, dll):
+        for fn in dll:
+            os.remove(self.theme_dir + fn)
