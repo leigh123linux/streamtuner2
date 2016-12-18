@@ -1,6 +1,6 @@
 # api: streamtuner2
 # title: Streema
-# description: 
+# description: Directory and app for over 70.000 stations
 # type: channel
 # category: radio
 # version: 0.2
@@ -46,11 +46,14 @@ class streema (ChannelPlugin):
     def update_categories(self):
         self.categories = []
         html = ahttp.get(self.base)
-        for cat in re.findall('<a href="/radios/main-genre/(\w+)">', html):
+        main_cats = re.findall('<a href="/radios/main-genre/(\w+)">', html)
+        for cat in main_cats:
+            self.progress(main_cats)
             html = ahttp.get(self.base + "/main-genre/" + cat)
             sub = re.findall('<a href="/radios/genre/(\w+)">', html)
             self.categories.append(cat)
             self.categories.append(sub)
+        self.progress(0)
         return self.categories
 
 
@@ -91,7 +94,7 @@ class streema (ChannelPlugin):
             except:
                 pass #some field missing
         
-        # done    
+        # done
         return r
 
 

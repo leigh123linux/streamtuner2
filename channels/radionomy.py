@@ -88,6 +88,7 @@ class radionomy (ChannelPlugin):
         self.onair_update(req)
         # collect additional pages
         for i in range(0, int(conf.radionomy_pages) - 1):
+            self.progress(conf.radionomy_pages)
             add = ahttp.get(req, { "scrollOffset": i }, post=1, ajax=1, referer=1)
             if add.find("browseRadio") < 0:
                 break

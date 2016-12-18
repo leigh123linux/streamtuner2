@@ -344,6 +344,7 @@ class GenericChannel(object):
         # get data from cache or download
         if force or not category in self.streams:
             log.PROC("load", "update_streams")
+            self.progress(None)
             self.status("Updating streams...")
             self.status(-0.1)
             if category == "empty":
@@ -448,6 +449,20 @@ class GenericChannel(object):
                 diff.append(row)
         return diff
 
+    # sets updating progress bar for .update_streams or .reload_categores
+    def progress(self, max, i=None):
+        if not max:
+            self.status()
+            self.status(1.0)
+            self.progress_state = 1
+            return
+        if isinstance(max, (list, dict)):
+            max = len(max)
+        if not i:
+            i = self.progress_state
+        self.status( float(int(i)) / (float(int(max)) + 1.5) )
+        self.progress_state = self.progress_state + 1
+    progress_state = 1
 
         
     # Display .current category, once notebook/channel tab is first opened

@@ -240,6 +240,7 @@ class reddit (ChannelPlugin):
         data = []
         after = None
         for i in range(1, int(conf.reddit_pages) + 1):
+            self.progress(conf.reddit_pages)
             try:
                 j = ahttp.get(
                     "http://www.reddit.com/r/{}/new.json".format(cat.lower()),

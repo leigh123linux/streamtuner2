@@ -83,6 +83,7 @@ class dirble (ChannelPlugin):
 
     # Fetch entries
     def update_streams(self, cat, search=None):
+        self.progress(1)
         return [
             self.unpack(r)
                for r in

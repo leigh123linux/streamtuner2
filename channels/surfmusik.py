@@ -129,6 +129,7 @@ class surfmusik (ChannelPlugin):
         else:
             path = path_country
         
+        self.status(-1.0)
         if path is not None:
             ucat = cat.replace(" ", "+").lower()
             html = ahttp.get(base_url + path + ucat + ".html")
