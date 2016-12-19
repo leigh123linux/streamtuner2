@@ -4,7 +4,7 @@
 # description: Shows themes in the bookmarks pane for installation
 # type: feature
 # category: ui
-# version: 0.3.1
+# version: 0.4
 # priority: experimental
 #
 # Downloads a list of Gtk themes and presents it in the bookmarks
@@ -160,9 +160,9 @@ class theme_installer(object):
         # extract
         z = zipfile.ZipFile(zip)
         z.extractall(self.theme_dir)
+        ls = z.namelist()
         z.close()
         os.remove(zip)
-        ls = z.namelist()
         dll = [fn for fn in ls if re.search("\w+\.(dll|so)$", fn)]
         base = [m.group(1) for fn in ls for m in [re.match("^([\w\s\-\.]+)/gtk-2.0/.+", fn)] if m]
 
