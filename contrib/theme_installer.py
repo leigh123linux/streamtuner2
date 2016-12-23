@@ -4,7 +4,7 @@
 # description: Shows themes in the bookmarks pane for installation
 # type: feature
 # category: ui
-# version: 0.4
+# version: 0.4.2
 # priority: experimental
 #
 # Downloads a list of Gtk themes and presents it in the bookmarks
@@ -60,8 +60,7 @@ class theme_installer(object):
     meta = plugin_meta()
     category = "themes"
     theme_dir = conf.dir + "/themes/"
-#    themes_url = "http://milki.include-once.org/streamtuner2/themes/"
-    themes_url = "http://oha59.bplaced.net/streamtuner2/themes/"
+    themes_url = "http://milki.include-once.org/streamtuner2/themes/"
     themes_csv = "themes.json"
     mime = "zip/gtk-theme"
     parent = None
@@ -94,7 +93,7 @@ class theme_installer(object):
         fn = "%s%s/%s" % (self.theme_dir, conf.theme, "gtk-2.0/gtkrc")
         if not os.path.exists(fn):
             return
-        log.GTK_THEME_FILE("XYZ " + fn)
+        log.GTK_THEME_FILE(fn)
         # .GTKRC/Gtk2
         uikit.gtk.rc_parse_string("module_path \"%s:%s\"\n" % (uikit.gtk.rc_get_module_dir(), self.theme_dir))
         uikit.gtk.rc_parse(fn)
@@ -160,9 +159,9 @@ class theme_installer(object):
         # extract
         z = zipfile.ZipFile(zip)
         z.extractall(self.theme_dir)
-        ls = z.namelist()
         z.close()
         os.remove(zip)
+        ls = z.namelist()
         dll = [fn for fn in ls if re.search("\w+\.(dll|so)$", fn)]
         base = [m.group(1) for fn in ls for m in [re.match("^([\w\s\-\.]+)/gtk-2.0/.+", fn)] if m]
 
@@ -173,20 +172,24 @@ class theme_installer(object):
                     if fn.find("/") > 0:  # create lib/engines/.../ if given
                         try: os.makedirs(self.theme_dir + os.path.basename(fn))
                         except: pass      # copy file
-                    try:                
+                    try:            
                         if shutil.copy(self.theme_dir + fn, gtk_dir):
                             break
-                    except Exception as e:
-                        log.THEME_INSTALL("Copy Gtk theme engine error ", e)
-                        self.parent.status('<span background="orange">⛔ Set theme unsuccessful. - Check access rights!</span>', timeout=22, markup=1)
-                        self.clear_theme(ls, dll)
-                        return
+                    except Exception as e: #access denied - either 'file in use'
+                        if not os.path.exists(gtk_dir + "/" + fn): # or missing file system rights
+                            log.THEME_INSTALL("Copy Gtk theme engine error ", e)
+                            self.parent.status('<span background="orange">⛔ Set theme unsuccessful. - Check access rights!</span>', timeout=22, markup=1)
+                            self.clear_theme(ls, dll)
+                            return
             else:
-                self.clear_theme(ls)
-                return
+		if conf.windows:
+		  log.THEME_INSTALL("Copy Gtk theme engine error, gtk_dir= " + gtk_dir)
+		  self.parent.status('<span background="orange">⛔ Set theme unsuccessful. - Check ' + gtk_dir + '</span>', timeout=22, markup=1)
+		  self.clear_theme(ls, dll)
+		  return
 
         # enable
-        if dll:
+        if dll and conf.windows:
             self.clear_dll(dll)
             
         conf.theme = base[0]
