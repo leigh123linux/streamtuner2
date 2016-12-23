@@ -59,7 +59,7 @@ exit
 echo Your personal files are in %PrefsFolder%
 echo.
 echo This will delete all settings of %ST2%, all cached files...
-echo ...and the downloaded plug-ins. 
+echo ...the downloaded plug-ins and Gtk themes. 
 echo If you want to save your bookmarks before, then quit now and come back later!
 echo.
 echo.

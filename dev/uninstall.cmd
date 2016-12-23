@@ -1,5 +1,4 @@
 @set installFolder=Do_not_Change
-@set usrFolder=Do_not_Change
 @set Python=Do_not_Change
 @set StreamripperFolder=Do_not_Change
 @echo off
@@ -46,7 +45,7 @@ setlocal enableextensions
 cd /d "%~dp0"
 
 if NOT "%cd%" == "%TEMP%" (
-	copy "%UsrFolder%\share\streamtuner2\dev\uninstall.cmd" "%temp%\STuninst.cmd" 
+	copy "%installFolder%\usr\share\streamtuner2\dev\uninstall.cmd" "%temp%\STuninst.cmd" 
 	"%temp%\STuninst.cmd"
 )
 
@@ -110,12 +109,16 @@ if '%Pythonrun%' EQU 'Y' (
 	echo Skipping uninstall of Python
 	goto uninstallST2
 )
-echo | set /p=Do you want to keep your Python 2.7.12 installation? [Y/n]
+echo | set /p=Do you want to keep your Python 2.7.13 installation? [Y/n]
 set /P INPUT=%=%
 If /I '%INPUT%' == 'N' (
 	echo Uninstalling Python...
 	echo Removing PIL 1.1.7
 	"%Python%\RemovePIL.exe" -u "%Python%\PIL-wininst.log"
+	if exist "%Python%\Lib\site-packages\mutagen-1*py2.7.egg-info" (
+		echo Removing Mutagen
+		"%Python%\scripts\pip.exe" uninstall mutagen -y -q
+	)
 	echo Removing pyquery 1.2.17
 	"%Python%\scripts\pip.exe" uninstall pyquery -y -q
 	echo Removing LXML 2.3
@@ -126,12 +129,14 @@ If /I '%INPUT%' == 'N' (
 	"%Python%\scripts\pip.exe" uninstall cssselect -y -q
 	echo Removing PyGtk 2.24.2
 	MsiExec.exe /x{09F82967-D26B-48AC-830E-33191EC177C8} /qb-!
-	echo Removing Python 2.7.12
 	reg delete %RegUninstallBase%\{09F82967-D26B-48AC-830E-33191EC177C8} /f 1>nul 2>&1
-	MsiExec.exe /x{9DA28CE5-0AA5-429E-86D8-686ED898C665} /qb-!
+	echo Removing Python 2.7.13
+	MsiExec.exe /x{4A656C6C-D24A-473F-9747-3A8D00907A03} /qb-!
 	reg delete HKCU\SOFTWARE\Python\PythonCore\2.7 /f 1>nul 2>&1
-	reg delete %RegUninstallBase%\{9DA28CE5-0AA5-429E-86D8-686ED898C665} /f 1>nul 2>&1
+	reg delete %RegUninstallBase%\{4A656C6C-D24A-473F-9747-3A8D00907A03} /f 1>nul 2>&1
 	rd "%Python%"  /S /Q
+	echo Removing installed Gtk2-Themes
+	rd "%APPDATA%\streamtuner2\themes" /S /Q
 )
 
 :uninstallST2 

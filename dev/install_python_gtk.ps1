@@ -17,6 +17,7 @@ Param(
   [string]$reinstall = "ask",
   [string]$TEMP = $env:TEMP,
   [string]$PYTHON = "C:\Python27",
+  [string]$PythonGUID = "{4A656C6C-D24A-473F-9747-3A8D00907A03}", #Python 2.7.13
   [string]$StartMenu = "$env:USERPROFILE\AppData\Roaming\Microsoft\Windows\Start Menu\Programs",
  #[string]$UsrFolder = $MyInvocation.MyCommand.Path -replace ("([\\/][^\\/]+){4}$",""),
   [string]$ProgramFiles = "%ProgramFiles(x86)%",
@@ -45,11 +46,11 @@ New-Variable -Name STREAMRIPPER -Option AllScope -Value "$ProgramFiles\Streamrip
 #-- what and how to install (hash list as used by Run-Task and Check-Prerequisites)
 $tasks = @(
   @{
-    title  = "Python 2.7.12"
-    url    = "https://www.python.org/ftp/python/2.7.12/python-2.7.12.msi"
+    title  = "Python 2.7.13"
+    url    = "https://www.python.org/ftp/python/2.7.13/python-2.7.13.msi"
     cmd    = ""
     iargs   = 'TARGETDIR="{PYTHON}" /qb-!'
-    regkey = "$regPathLM\{9DA28CE5-0AA5-429E-86D8-686ED898C665}"
+    regkey = "$regPathLM\$PythonGUID"
     testpth= "{PYTHON}\pythonw.exe"
     is_opt = ''
     prescn = ''
@@ -95,7 +96,16 @@ $tasks = @(
     regkey = "$regPathLM\Streamripper"
     testpth= "{STREAMRIPPER}\streamripper.exe"
     is_opt = '($optionalInstall)'     # ← could use '((Ask "Install streamripper too [y/N]") -match N)' instead
-    prescn = 'if ($optionalInstall) {if ($t.found = (Get-ITPV "Streamripper")) {$STREAMRIPPER = $_found}} else {$STREAMRIPPER=""; continue;}'
+    prescn = 'if ($optionalInstall) {if ($t.found = (Get-ITPV "Streamripper")) {$STREAMRIPPER = $t.found}} else {$STREAMRIPPER=""; continue;}'
+  },
+  @{
+    title  = "Mutagen (ID3-Support)"
+    url    = "mutagen" # no download url
+    cmd    = "pip"
+    iargs   = "--disable-pip-version-check"
+    testpth= "{PYTHON}\Lib\site-packages\mutagen-1*py2.7.egg-info"
+    is_opt = '($optionalInstall)'     
+    prescn = 'if ($optionalInstall) {if ($t.found = (test-path -path $t.testpth)) {$t.found = $t.testpth}} else {continue}'
   },
   @{
     title  = "Uninstall script"
@@ -103,35 +113,64 @@ $tasks = @(
   },
   @{
     title  = "Desktop shortcut"
-    cmd    = 'Make-Shortcut -dir $Home\Desktop -name Streamtuner2.lnk -target $PYTHON\pythonw.exe -arg $UsrFolder\bin\streamtuner2'
+    cmd    = 'Make-Shortcut @task'
+       dir = "$Home\Desktop"
+      name = "Streamtuner2.lnk"
+    target = "$PYTHON\pythonw.exe"
+       arg = "$UsrFolder\bin\streamtuner2"
   },
   @{
     title  = "Startmenu shortcut"
-    cmd    = 'Make-Shortcut -dir "$StartMenu\Streamtuner2" -name Streamtuner2.lnk -target $PYTHON\pythonw.exe -arg $UsrFolder\bin\streamtuner2'
+    cmd    = 'Make-Shortcut @task'
+       dir = "$StartMenu\Streamtuner2"
+      name = "Streamtuner2.lnk"
+    target = "$PYTHON\pythonw.exe"
+       arg = "$UsrFolder\bin\streamtuner2"
   },
   @{
     title  = "Startmenu help.chm"
-    cmd    = 'Make-Shortcut -dir "$StartMenu\Streamtuner2" -name Help.lnk -target $UsrFolder\share\streamtuner2\help\help.chm'
+    cmd    = 'Make-Shortcut @task'
+       dir = "$StartMenu\Streamtuner2"
+      name = "Help.lnk"
+    target = "$UsrFolder\share\streamtuner2\help\help.chm"
   },
   @{
     title  = "Startmenu uninstall"
-    cmd    = 'Make-Shortcut -dir "$StartMenu\Streamtuner2" -name Uninstall.lnk -target $UninstallPath'
+    cmd    = 'Make-Shortcut @task'
+       dir = "$StartMenu\Streamtuner2"
+      name = "Uninstall.lnk"
+    target = "$UninstallPath"
   },
   @{
     title  = "Startmenu Internet"
-    cmd    = 'Make-Shortcut -dir "$StartMenu\Streamtuner2" -name "Streamtuner2 on the Web.lnk" -target "$AboutLink"'
+    cmd    = 'Make-Shortcut @task'
+       dir = "$StartMenu\Streamtuner2"
+      name = "Streamtuner2 on the Web.lnk"
+    target = "$AboutLink"
   },
   @{
     title  = "Startmenu Reconfigure"
-    cmd    = 'Make-Shortcut -dir "$StartMenu\Streamtuner2\Extra" -name "Reconfigure.lnk" -target $ModifyPath'
+    cmd    = 'Make-Shortcut @task'
+       dir = "$StartMenu\Streamtuner2\Extra"
+      name = "Reconfigure.lnk"
+    target = "$ModifyPath"
   },
   @{
     title  = "Startmenu RunDebug"
-    cmd    = 'Make-Shortcut -dir "$StartMenu\Streamtuner2\Extra" -name "Run in debug mode (-D).lnk" -target $PYTHON\python.exe -arg "$UsrFolder\bin\streamtuner2" -parm "-D"'
+    cmd    = 'Make-Shortcut @task'
+       dir = "$StartMenu\Streamtuner2\Extra"
+      name = "Run in debug mode (-D).lnk"
+    target = "$PYTHON\python.exe"
+       arg = "$UsrFolder\bin\streamtuner2"
+      parm = "-D"
   },
   @{
     title  = "Startmenu RunConsole"
-    cmd    = 'Make-Shortcut -dir "$StartMenu\Streamtuner2\Extra" -name "Run with console.lnk" -target $PYTHON\python.exe -arg "$UsrFolder\bin\streamtuner2"'
+    cmd    = 'Make-Shortcut @task'
+       dir = "$StartMenu\Streamtuner2\Extra"
+      name = "Run with console.lnk"
+    target = "$PYTHON\python.exe"
+       arg = "$UsrFolder\bin\streamtuner2"
   },
   @{
     title  = "Startmenu ResetPrefs"
@@ -165,7 +204,7 @@ function Display-Logo {
 |                                                                             |
 |    Streamtuner2 for Windows                               Version $VERSION     |
 |                                                                             |
-|    Installer for Python 2.7.12 & Gtk 2.24.2                                 |
+|    Installer for Python 2.7.13 & Gtk 2.24.2                                 |
  ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– 
 "@
 }
@@ -224,7 +263,6 @@ function Create-Uninstallscript {
     $UninstallScript = Get-Content -Path $UninstallPath
     Out-File -FilePath $UninstallPath -Encoding ascii -InputObject @"
 @set installFolder=$installFolder
-@set usrFolder=$usrFolder
 @set Python=$PYTHON
 @set StreamripperFolder=$STREAMRIPPER
 "@
@@ -289,8 +327,8 @@ function Get-ITPV($regpath, $value="(default)") {
 function Check-PythonInstall {
     $PythonInstalledPath = Get-ITPV('Python\PythonCore\2.7\InstallPath\')
     
-    #-- if Python 2.7.12 installed, reuse installation folder
-    if (Get-Item -path "$regPathLM\{9DA28CE5-0AA5-429E-86D8-686ED898C665}" 2> $null ) {
+    #-- if Python 2.7.13 installed, reuse installation folder
+    if (Get-Item -path "$regPathLM\$PythonGUID" 2> $null ) {
         $PYTHON = $pythonInstalledPath -replace "\\$", ""
     }
 
@@ -377,6 +415,8 @@ filter Run-Task {
     $title=""; $cmd=""; $url=""; $iargs=""; $testpth=""; $regkey=""; $is_opt=""; $prescn=""; $found=""
     ($task = $_).GetEnumerator() | % { Set-Variable -Scope Local -Name $_.key -Value ([regex]::Replace($_.value, "[#{](\w+)[}#]", { param($m) Invoke-Expression ("$"+$m.Groups[1].Value) })) }
 
+#    $iargs = $iargs -replace "{PYTHON}","$PYTHON"
+
     # skip optionals
     if ($is_opt -AND !(Invoke-Expression $is_opt)) { return }
 
@@ -411,14 +451,19 @@ filter Run-Task {
     if ($cmd) {
         if (Test-Path $PYTHON) { chdir($PYTHON) }
         if ($cmd -eq "pip") {
-            $cmd = "& `"$PYTHON\Scripts\pip.exe`" install $TEMP\$file", $iargs #"
+            if (!($file)) {
+                $cmd = "& `"$PYTHON\Scripts\pip.exe`" install $url", $iargs
+            }
+            else {
+                $cmd = "& `"$PYTHON\Scripts\pip.exe`" install $TEMP\$file", $iargs 
+            }
         }
         elseif ($cmd -match "^(easy|easy_install|silent)$") {
             if (!($file)) {
-                $cmd = "& `"$PYTHON\Scripts\easy_install.exe`" $url" #"
+                $cmd = "& `"$PYTHON\Scripts\easy_install.exe`" $url", $iargs 
             }
             else {
-                $cmd = "& `"$PYTHON\Scripts\easy_install.exe`" $TEMP\$file" #"
+                $cmd = "& `"$PYTHON\Scripts\easy_install.exe`" $TEMP\$file", $iargs  
             }
         }
         Write-Host -f DarkGray " → $cmd"
