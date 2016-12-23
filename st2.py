@@ -307,8 +307,6 @@ class StreamTunerTwo(gtk.Builder):
     # Reload stream list in current channel-category
     def on_reload_clicked(self, widget=None, reload=1):
         log.UI("on_reload_clicked()", "reload=", reload, "current_channel=", self.current_channel, "c=", self.channels[self.current_channel], "cat=", self.channel().current)
-        if self.current_channel == "file": # reload is removing entries without Station Title...
-            reload=0
         self.thread(self._on_reload, self.channel(), reload)
     def _on_reload(self, channel, reload):
         self.channel().load(channel.current, force=reload)

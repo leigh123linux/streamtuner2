@@ -3,7 +3,7 @@
 # description: Displays mp3/oggs or m3u/pls files from local media file directories.
 # type: channel
 # category: local
-# version: 0.2
+# version: 0.3.2
 # priority: optional
 # status: unsupported
 # depends: python:mutagen, python:id3
@@ -193,6 +193,13 @@ class file (ChannelPlugin):
     
     # don't load cache file
     cache = lambda *x: None
+    
+    
+    # override: set force=0 always, as otherwise list gets cleared (bug)
+    # Called on switching genre/category, or loading a genre for the first time.
+    def load(self, category, force=False, y=None):
+        log.UI("no reloading for file plugin")
+        ChannelPlugin.load(self, self.current, force=0)
 
 
     # read dirs
@@ -230,10 +237,11 @@ class file (ChannelPlugin):
     # extract meta data
     def file_entry(self, fn, dir):
         # basic data
+        url = ("%s/%s" % (dir, fn)).replace("\\", "/")
         meta = {
             "title": "",
             "filename": fn,
-            "url": "file://" + dir + "/" + fn,
+            "url": url,
             "genre": "",
             "album": "",
             "artist": "",
@@ -274,7 +282,7 @@ class file (ChannelPlugin):
 
         
     # same as init
-    def update_streams(self, cat, x=0):
+    def update_streams(self, cat, *k, **kw):
         self.scan_dirs()
         return self.streams.get(os.path.basename(cat))
 
