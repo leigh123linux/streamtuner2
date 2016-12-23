@@ -10,6 +10,7 @@
 # config:  
 #   { name: file_browser_dir, type: text, value: "$XDG_MUSIC_DIR, ~/MP3", description: "List of directories to scan for audio files." },
 #   { name: file_browser_ext, type: text, value: "mp3,ogg, m3u,pls,xspf, avi,flv,mpg,mp4", description: "File type/extension filter." },
+# url: http://freshcode.club/projects/streamtuner2
 # png:
 #   iVBORw0KGgoAAAANSUhEUgAAABQAAAAPCAYAAADkmO9VAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wUFDQsK23vYngAAA6lJREFUOMtFz8tu1FYAxvH/sc+xxx7bM8lkElAgISoV4qIgpEaomwg2bMqiQmo3lfowPElVVbQr3gBVqGJRGi6VEERFDROS0Ewmc/N47Bkf+7gLevke4Kfv
 #   L374/vufxm/ffjnudJQoisoVonLDcN+sr39z7uXLXzfOn6cRhmSTCf3TUwa9HoN+H601ynXxwhA7ivhdCH48PkZOut0vdh48cKtej9C2iSyLsF7/xLpx4/5eu/1LZzSiaQx1z8O5cIHapUvVmpRkaUqcJMRpSjydmnEcP/2zKH6WOs/7mdZBVVXIqsKuKk4nE4qdnTueUncCpZh5HoHj4AqBVRQIrUFrLGPwlaLhOLiWtX93OPxKIuX+0HHWJ5ZF03VxpaRfFLRmM1rTKUGrRX1piUYQEIUhfhRRC0OqOMZxHIIwJIgiHFj77OnT+7KEd0Wt
@@ -29,7 +30,7 @@
 # per pluginmanager2 for instance. And LANG=C breaks it on startup,
 # if media directories contain anything but ASCII filenames.
 
-
+#from __future__ import print_function
 # modules
 import os
 import re
@@ -50,22 +51,77 @@ except:
         get_meta = lambda *x: {}
 
 
+#Convert seconds to a time string "[[[DD:]HH:]MM:]SS".
+def ddhhmmss(seconds):
+    dhms = ''
+    for scale in 86400, 3600, 60:
+        result, seconds = divmod(seconds, scale)
+        if dhms != '' or result > 0:
+            dhms += '{0:02d}:'.format(result)
+    dhms += '{0:02d}'.format(seconds)
+    if len(dhms) == 2:
+        dhms = "00:" + dhms
+    return dhms
+
 # work around mutagens difficult interface
 def mutagen_postprocess(d):
+
+    IDTitle = ""
+    IDArtist = ""
+    IDGenre = ""
+    IDAlbum = ""
+
+    #Beware: Keep the order MP3 - FLAC/OGG - MP4/M4A!
+    #MP3
     if d.get("TIT2"):
+        IDTitle = d["TIT2"][0]
+        if d.get("TPE1"):
+            IDArtist = d["TPE1"][0]
+        if d.get("TCON"):
+            IDGenre = d["TCON"][0]
+        if d.get("TALB"):
+            IDAlbum = d["TALB"][0]
         return {
-            "encoder": d["TENC"][0],
-            "title": d["TIT2"][0],
-            "artist": d["TPE1"][0],
-#            "tyer?????????????": d["TYER"][0],
-#            "track": d["TRCK"][0],
-            "album": d["TALB"][0],
+            #"encoder": d["TENC"][0],            
+            "title": IDTitle,
+            "artist": IDArtist,
+            "genre": IDGenre,
+            "album": IDAlbum
+            #"tyer?????????????": d["TYER"][0], (YEAR)
+            #"track": d["TRCK"][0],
+        }
+    #FLAC/OGG
+    elif d.get("title"):
+        IDTitle = d["title"][0]
+        if d.get("artist"):
+            IDArtist = d["artist"][0]
+        if d.get("album"):
+            IDAlbum = d["album"][0]
+        if d.get("genre"):
+            IDGenre = d["genre"][0]
+        return {
+            "title": IDTitle,
+            "artist": IDArtist,
+            "album": IDAlbum,
+            "genre": IDGenre
+        }            
+    #MP4/M4A
+    elif d.get("\xa9nam"):
+        IDTitle = d["\xa9nam"][0]
+        if d.get("\xa9ART"):
+            IDArtist = d["\xa9ART"][0]
+        if d.get("\xa9alb"):
+            IDAlbum = d["\xa9alb"][0]
+        if d.get("\xa9gen"):
+            IDGenre = d["\xa9gen"][0]
+        return {
+            "title": IDTitle,
+            "artist": IDArtist,
+            "genre": IDGenre,
+            "album": IDAlbum
         }
     else:
         return d
-
-
-
 
 # file browser / mp3 directory listings
 class file (ChannelPlugin):
@@ -80,13 +136,14 @@ class file (ChannelPlugin):
     # display
     datamap = [ # coltitle   width	[ datasrc key, type, renderer, attrs ]	[cellrenderer2], ...
            ["",		20,	["state",	str,  "pixbuf",	{}],	],
-           ["Genre",	65,	['genre',	str,	"t",	{"editable":8}],	],
-           ["File",	160,	["filename",	str,	"t",	{"strikethrough":10, "cell-background":11, "cell-background-set":12}],	],
-           ["Title",	205,	["title",	str,    "t",	{"editable":8}], ],
-           ["Artist",	125,	["artist",	str,	"t",	{"editable":8}],	],
-           ["Album", 	125,	["album",	str,	"t",	{"editable":8}],	],
-           ["Bitrate",	35,	["bitrate",	int,	"t",	{}],	],
-           ["Format",	50,	["format",	str,	None,	{}],	],
+           ["Genre",	65,	['genre',	str,	"t",	{"editable":9}],	],
+           ["Title",	205,	["title",	str,    "t",	{"editable":9}], ],
+           ["Artist",	160,	["artist",	str,	"t",	{}],	],
+           ["Album", 	150,	["album",	str,	"t",	{}],	],
+           ["Length", 	50,	["length",	str,	"t",	{}],	],
+           ["Bitrate",	50,	["bitrate",	str,	"t",	{}],	],
+           ["Format",	80,	["format",	str,	None,	{}],	],
+           ["File",	160,	["filename",	str,	"t",	{"strikethrough":11, "cell-background":12, "cell-background-set":13}],	],
            [False,	0,	["editable",	bool,	None,	{}],	],
            [False,	0,	["favourite",	bool,	None,	{}],	],
            [False,	0,	["deleted",	bool,	None,	{}],	],
@@ -174,20 +231,40 @@ class file (ChannelPlugin):
     def file_entry(self, fn, dir):
         # basic data
         meta = {
-            "title": fn,
+            "title": "",
             "filename": fn,
             "url": "file://" + dir + "/" + fn,
             "genre": "",
-            "format": mime_fmt(fn[-3:]),
-            "editable": True,
-        }
-        # add ID3
-        meta.update(mutagen_postprocess(get_meta(dir + "/" + fn) or {}))
+            "album": "",
+            "artist": "",
+            "length": "n/a",
+            "bitrate": "n/a",
+#            "format": mime_fmt(fn[-3:]),
+            "format": mime_fmt(fn[-(len(fn)-fn.rfind(".")-1):]),
+            "editable": False,
+            }
+        try:
+            streaminfo =get_meta(dir + "/" + fn)
+            # add streaminfo
+            if streaminfo.info: # no streaminfo.info, maybe ID3 available
+                try:
+                    if not streaminfo.info.bitrate == 0:
+                        meta.update({"bitrate": streaminfo.info.bitrate/1000})
+                except: #FLAC and M4A do not have bitrate property
+                    pass
+                if not streaminfo.info.length == 0.0: #FLAC sometimes have it...
+                    meta.update({"length": ddhhmmss(int(streaminfo.info.length))})
+            # add ID3
+            meta.update(mutagen_postprocess(streaminfo) or {})
+            
+        except: # unsupported by Mutagen
+            pass
         return meta
         
     # check fn for .ext
     def we_like_that_extension(self, fn):
-        return fn[-3:] in self.ext
+ #       return fn[-3:] in self.ext
+        return fn[-(len(fn)-fn.rfind(".")-1):] in self.ext
     
 
 
