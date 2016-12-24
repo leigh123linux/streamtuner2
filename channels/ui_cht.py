@@ -1,7 +1,7 @@
 # encoding: utf-8
 # title: Channel toolbar link
 # description: Shows current channel and a link to online service in toolbar.
-# version: 1.0
+# version: 1.1
 # depends: streamtuner2 >= 2.1.9
 # type: feature
 # category: ui
@@ -24,8 +24,8 @@ class ui_cht(object):
 
     # Update link label
     def switchy(self, meta, *x, **y):
-        title = meta.get("title")
-        url = meta.get("url")
+        title = meta.get("title", meta.get("id", ("")))
+        url = meta.get("url", "")
         domain = re.sub("^.+?//|/.+$", "", url)
         self.label.set_markup("<big><b>{}</b></big>\n<a href='{}'>{}</a>".format(title, url, domain))
 
