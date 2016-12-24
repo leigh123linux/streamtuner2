@@ -1,7 +1,7 @@
 # encoding: utf-8
 # title: Spec buttons for apps
 # description: Adds configurable mini toolbar buttons
-# version: 0.8.1
+# version: 0.8.2
 # depends: streamtuner2 >= 2.2.0
 # type: feature
 # category: ui
@@ -63,7 +63,9 @@ class specbuttons(object):
             widget.destroy()
         
         # add icon buttons
-        for xy, (btn, cmd) in enumerate(conf.specbuttons.items()):
+        #for xy, (btn, cmd) in enumerate(conf.specbuttons.items()):
+        for xy, (btn) in enumerate( sorted ( conf.specbuttons )):
+            cmd = conf.specbuttons [btn]
             #log.IN(btn, cmd)
             w_btn = gtk.Button()
             w_btn.set_image(self.icon(btn))
