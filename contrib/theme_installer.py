@@ -4,7 +4,7 @@
 # description: Shows themes in the bookmarks pane for installation
 # type: feature
 # category: ui
-# version: 0.4.2
+# version: 0.5
 # priority: experimental
 #
 # Downloads a list of Gtk themes and presents it in the bookmarks
@@ -19,12 +19,8 @@
 # Reuses the `conf.theme` setting from the `gtk_theme` plugin, and
 # should work in conjunction to it.
 #
-# The theme repository is a CSV file of:
-#   themepkg.zip, theme.png, Title, Author, http://homepage/
-# with the packages residing next to it.
-#
-# Using a repo.json works better however, and would allow to
-# integrate it with the regular plugin manager somewhen.
+# Using a repo.json-style format, which mirrors the station row{}
+# layout however. Allows later integration with pluginmanager2...
 # The bookmark/themes channel provides the nicer UI however.
 #
 # A theme.zip should contain a structure like:
@@ -46,6 +42,7 @@ import re
 import json
 import ahttp
 from config import *
+from config import pluginconf
 import uikit
 from compat2and3 import *
 import action
@@ -127,17 +124,8 @@ class theme_installer(object):
                 # add
                 r.append(d)
 
-        # filter on properties
-        d_platform = "win32" if conf.windows else "linux"
-        d_gtk = "gtk2" if uikit.ver == 2 else "gtk3"
-        for i,d in enumerate(r):
-            if not d.get("depends"):
-                continue
-            for dep in re.split("\s*,\s*", d["depends"]):
-                if dep in ("gtk", "streamtuner2", "theme_installer", "gtk2|gtk3", "win32|linux"):
-                    continue
-                if not dep in (d_platform, d_gtk):
-                    del r[i]
+        # filter on depends: (such as "gtk => 2.0, win32")
+        r = [d for d in r if self.deps(d)]
 
         # convert relative references
         for d in r:
@@ -221,3 +209,19 @@ class theme_installer(object):
     def clear_dll(self, dll):
         for fn in dll:
             os.remove(self.theme_dir + fn)
+
+    # instantiate pluginconf.dependency()
+    def deps(self, theme):
+        d = pluginconf.dependency()
+        d.have.update(dict([name, {"version": str(ver)}] for name,ver in [
+            ("gtk", ".".join(str(i) for i in uikit.gtk.gtk_version)),
+            ("gtk2", "2" if uikit.ver == 2 else "-1"),
+            ("gtk3", "3" if uikit.ver == 3 else "-1"),
+            ("linux", "-1" if conf.windows else "4.0.0"),
+            ("win32", "6.1" if conf.windows else "-1")
+        ]))
+        #log.HAVE(dict((k,d.have[k].get("version")) for k in d.have))
+        self.deps = d.depends
+        return self.deps(theme)
+
+    

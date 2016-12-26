@@ -399,7 +399,8 @@ def argparse_map(opt):
 class dependency(object):
 
     # prepare list of known plugins and versions
-    def __init__(self):
+    def __init__(self, core={}):
+        self.have = {}.update(core)
         self.have = all_plugin_meta()
         # dependencies on core modules are somewhat more interesting:
         for name in ("st2", "uikit", "config", "action"):
@@ -461,6 +462,7 @@ class dependency(object):
                 "<":  curr < ver,
                 "!=": curr != ver,
             }
+            #log.VERSION_COMPARE(name, " → (", curr, op, ver, ") == ", r)
             r &= tbl.get(op, True)
         return r
 
