@@ -182,14 +182,14 @@ class theme_installer(object):
                             self.clear_theme(ls, dll)
                             return
             else:
-		if conf.windows:
-		  log.THEME_INSTALL("Copy Gtk theme engine error, gtk_dir= " + gtk_dir)
-		  self.parent.status('<span background="orange">⛔ Set theme unsuccessful. - Check ' + gtk_dir + '</span>', timeout=22, markup=1)
-		  self.clear_theme(ls, dll)
-		  return
+                if conf.windows:
+                    log.THEME_INSTALL("Copy Gtk theme engine error, gtk_dir= " + gtk_dir)
+                    self.parent.status('<span background="orange">⛔ Set theme unsuccessful. - Check ' + gtk_dir + '</span>', timeout=22, markup=1)
+                    self.clear_theme(ls, dll)
+                    return
 
         # enable
-        if dll and conf.windows:
+        if dll: 
             self.clear_dll(dll)
             
         conf.theme = base[0]
