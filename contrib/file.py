@@ -136,6 +136,7 @@ class file (ChannelPlugin):
     # display
     datamap = [ # coltitle   width	[ datasrc key, type, renderer, attrs ]	[cellrenderer2], ...
            ["",		20,	["state",	str,  "pixbuf",	{}],	],
+           ["File",	160,	["filename",	str,	"t",	{"strikethrough":11, "cell-background":12, "cell-background-set":13}],	],
            ["Genre",	65,	['genre',	str,	"t",	{"editable":9}],	],
            ["Title",	205,	["title",	str,    "t",	{"editable":9}], ],
            ["Artist",	160,	["artist",	str,	"t",	{}],	],
@@ -143,7 +144,6 @@ class file (ChannelPlugin):
            ["Length", 	50,	["length",	str,	"t",	{}],	],
            ["Bitrate",	50,	["bitrate",	str,	"t",	{}],	],
            ["Format",	80,	["format",	str,	None,	{}],	],
-           ["File",	160,	["filename",	str,	"t",	{"strikethrough":11, "cell-background":12, "cell-background-set":13}],	],
            [False,	0,	["editable",	bool,	None,	{}],	],
            [False,	0,	["favourite",	bool,	None,	{}],	],
            [False,	0,	["deleted",	bool,	None,	{}],	],
@@ -238,12 +238,13 @@ class file (ChannelPlugin):
     def file_entry(self, fn, dir):
         # basic data
         url = ("%s/%s" % (dir, fn))
-        if not conf.windows: # needed for VLC playback
-            url = url.replace("\\", "/")
+        url = url.replace("\\", "/")
+#        if conf.windows: # needed for VLC playback
+        url = url.replace(" ", "%20")
         meta = {
             "title": "",
             "filename": fn,
-            "url": url,
+            "url": "file:///"+url,
             "genre": "",
             "album": "",
             "artist": "",
