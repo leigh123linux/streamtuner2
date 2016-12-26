@@ -194,9 +194,9 @@ def quote(ins):
         return " ".join([quote(s) for s in ins])
     # Windows: double quotes / caret escaping
     elif conf.windows:
-        if re.search(r"""[()<>&%!^'";\s]""", ins):
+        if re.search(r"""[()<>&!^'";\s]""", ins):
             ins = '"%s"' % ins
-            ins = re.sub(r'([()<>"&%^])', r"^\1", ins)
+            ins = re.sub(r'([()<>"&^])', r"^\1", ins)
             return ins
         else:
             return subprocess.list2cmdline([ins])
