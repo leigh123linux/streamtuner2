@@ -127,6 +127,18 @@ class theme_installer(object):
                 # add
                 r.append(d)
 
+        # filter on properties
+        d_platform = "win32" if conf.windows else "linux"
+        d_gtk = "gtk2" if uikit.ver == 2 else "gtk3"
+        for i,d in enumerate(r):
+            if not d.get("depends"):
+                continue
+            for dep in re.split("\s*,\s*", d["depends"]):
+                if dep in ("gtk", "streamtuner2", "theme_installer", "gtk2|gtk3", "win32|linux"):
+                    continue
+                if not dep in (d_platform, d_gtk):
+                    del r[i]
+
         # convert relative references
         for d in r:
             for field in ("url", "img", '$file'):
