@@ -237,7 +237,9 @@ class file (ChannelPlugin):
     # extract meta data
     def file_entry(self, fn, dir):
         # basic data
-        url = ("%s/%s" % (dir, fn)).replace("\\", "/")
+        url = ("%s/%s" % (dir, fn))
+        if not conf.windows: # needed for VLC playback
+            url = url.replace("\\", "/")
         meta = {
             "title": "",
             "filename": fn,
