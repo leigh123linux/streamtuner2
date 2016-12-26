@@ -3,8 +3,8 @@
 # description: Broad list of webradios from all genres.
 # type: channel
 # category: radio
-# version: 1.2
-# url: http://www.internet-radio.org.uk/
+# version: 1.5
+# url: http://www.internet-radio.com/
 # config:
 #    { name: internetradio_max_pages,  type: int,  value: 5,  category: limit,  description: How many pages to fetch and read. }
 # priority: standard
@@ -43,6 +43,7 @@ class internet_radio (ChannelPlugin):
     listformat = "pls"
     categories = []
     base_url = "https://www.internet-radio.com/"
+    has_search = True
 
 
     # load genres
@@ -57,10 +58,10 @@ class internet_radio (ChannelPlugin):
 
 
     # fetch station lists
-    def update_streams(self, cat):
+    def update_streams(self, cat, search=None):
     
         entries = []
-        if cat not in self.categories:
+        if not search and cat not in self.categories:
             return []
 
         rx_pages = re.compile('href="/stations/[-+\w%\d\s]+/page(\d+)">\d+</a>')
@@ -71,13 +72,14 @@ class internet_radio (ChannelPlugin):
         for page in range(1, max_pages):
         
             # Append HTML source
-            html.append(
-                ahttp.get(
-                    self.base_url + "stations/" +
-                    cat.lower().replace(" ", "%20") +
-                    "/" + ("page"+str(page) if page>1 else "")
+            if search:
+                html.append(
+                    ahttp.get("%ssearch/?radio=%s%s" % (self.base_url, search, "&page=%s" % page if page>1 else ""))
                 )
-            )
+            else:
+                html.append(
+                    ahttp.get("%sstations/%s/%s" % (self.base_url, cat.lower().replace(" ", "%20"), "page%s" % page if page>1 else ""))
+                )
 
             # Is there a next page?
             if str(page+1) not in rx_pages.findall(html[-1]):
@@ -152,13 +154,17 @@ class internet_radio (ChannelPlugin):
             # the streams are arranged in table rows
             doc = pq(html)
             for dir in (pq(e) for e in doc("tr")):
+                #log.HTML(dir)
                 
                 # bitrate/listeners
-                bl = dir.find("p").text()
-                bl = rx_numbers.findall(str(bl) + " 0 0")
+                bl = dir.find("p")
+                if bl:
+                    bl = rx_numbers.findall(str(bl.text()) + " 0 0")
+                else:
+                    bl = [0, 0]
                 
                 # stream url
-                url = dir.find("i").eq(0).attr("onclick")
+                url = dir.find("i").eq(0).parent().attr("onclick")
                 if url:
                     url = re.search("(http://[^\'\"\>]+)", url)
                     if url:
@@ -168,16 +174,18 @@ class internet_radio (ChannelPlugin):
                 else:
                     url = ""
                 
-                r.append({
+                row = {
                     "title": dir.find("h4").text(),
-                    "homepage": ahttp.fix_url(dir.find("a.small").attr("href")),
+                    "homepage": ahttp.fix_url(dir.find("a.small").attr("href") or ""),
                     "url": url,
-                    "genre": dir.find("a[href^='/stations/']").text(),
+                    "genre": dir.find("a[href^='/stations/']").text() or "",
                     "listeners": int(bl[0]),
                     "bitrate": int(bl[1]),
                     "format": "audio/mpeg",
                     "playing": dir.find("b").text(),
-                })
+                }
+                #log.DATA(row)
+                r.append(row)
         return r
             
 
