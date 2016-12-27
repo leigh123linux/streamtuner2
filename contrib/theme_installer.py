@@ -212,16 +212,14 @@ class theme_installer(object):
 
     # instantiate pluginconf.dependency()
     def deps(self, theme):
-        d = pluginconf.dependency()
-        d.have.update(dict([name, {"version": str(ver)}] for name,ver in [
-            ("gtk", ".".join(str(i) for i in uikit.gtk.gtk_version)),
-            ("gtk2", "2" if uikit.ver == 2 else "-1"),
-            ("gtk3", "3" if uikit.ver == 3 else "-1"),
-            ("linux", "-1" if conf.windows else "4.0.0"),
-            ("win32", "6.1" if conf.windows else "-1")
-        ]))
+        self.deps = pluginconf.dependency(add = dict(
+            gtk = uikit.gtk.gtk_version,
+            gtk2 = uikit.ver == 2,
+            gtk3 = uikit.ver == 3,
+            linux = "-1" if conf.windows else "3.0.0",
+            win32 = "6.1" if conf.windows else "-1"
+        )).depends
         #log.HAVE(dict((k,d.have[k].get("version")) for k in d.have))
-        self.deps = d.depends
         return self.deps(theme)
 
     
