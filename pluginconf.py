@@ -399,20 +399,32 @@ def argparse_map(opt):
 class dependency(object):
 
     # prepare list of known plugins and versions
-    def __init__(self, core={}):
-        self.have = {}.update(core)
-        self.have = all_plugin_meta()
-        # dependencies on core modules are somewhat more interesting:
-        for name in ("st2", "uikit", "config", "action"):
+    def __init__(self, add={}, core=["st2", "uikit", "config", "action"]):
+        self.have = {
+            "python": { "version": sys.version }
+        }
+        # inject virtual modules
+        for name, meta in add.items():
+            if isinstance(meta, bool): meta = 1 if meta else -1
+            if isinstance(meta, tuple): meta = ".".join(str(n) for n in meta)
+            if isinstance(meta, (int, float, str)): meta = {"version": str(meta)}
+            self.have[name] = meta
+        # read plugins/*
+        self.have.update(all_plugin_meta())
+        # add core modules
+        for name in core:
             self.have[name] = plugin_meta(module=name, extra_base=["config"])
-        self.have["streamtuner2"] = self.have["st2"]
-    have = {}
+        # aliases
+        for name, meta in self.have.items():
+            if meta.get("alias"):
+                for alias in re.split("\s*[,;]\s*", meta["alias"]):
+                    self.have[alias] = self.have[name]
 
     # depends:
     def depends(self, plugin):
         if plugin.get("depends"):
-            d = self.deps(plugin["depends"])
-            if not self.cmp(d, self.have):
+            dep_cmp = self.deps(plugin["depends"])
+            if not (True in [self.cmp(alt_cmp, self.have) for alt_cmp in dep_cmp]):
                 return False
         return True
 
@@ -432,19 +444,23 @@ class dependency(object):
         else:
             return True
 
-    # Split trivial "pkg, mod >= 1, uikit < 4.0" list
+    # Split trivial "pkg | alt, mod >= 1, uikit < 4.0" string into nested list [[dep],[alt,alt],[dep]]
     def deps(self, dep_str):
-        d = []
-        for dep in re.split(r"\s*[,;]+\s*", dep_str):
-            # skip deb:pkg-name, rpm:name, bin:name etc.
-            if not len(dep) or dep.find(":") >= 0:
-                continue
-            # find comparison and version num
-            dep += " >= 0"
-            m = re.search(r"([\w.-]+)\s*([>=<!~]+)\s*([\d.]+([-~.]\w+)*)", dep)
-            if m and m.group(2):
-                d.append([m.group(i) for i in (1, 2, 3)])
-        return d
+        dep_cmp = []
+        for alt_str in re.split(r"\s*[,;]+\s*", dep_str):
+            alt_cmp = []
+            # split alternatives |
+            for part in re.split(r"\s*\|+\s*", alt_str):
+                # skip deb:pkg-name, rpm:name, bin:name etc.
+                if not len(part) or part.find(":") >= 0:
+                    continue
+                # find comparison and version num
+                part += " >= 0"
+                m = re.search(r"([\w.-]+)\s*([>=<!~]+)\s*([\d.]+([-~.]\w+)*)", part)
+                if m and m.group(2):
+                    alt_cmp.append([m.group(i) for i in (1, 2, 3)])
+            dep_cmp.append(alt_cmp)
+        return dep_cmp
 
     # Do actual comparison
     def cmp(self, d, have):
@@ -462,8 +478,8 @@ class dependency(object):
                 "<":  curr < ver,
                 "!=": curr != ver,
             }
-            #log.VERSION_COMPARE(name, " → (", curr, op, ver, ") == ", r)
             r &= tbl.get(op, True)
+            #print "log.VERSION_COMPARE: ", name, " → (", curr, op, ver, ") == ", r
         return r
 
 

@@ -4,7 +4,7 @@
 # type: application
 # title: streamtuner2
 # description: Directory browser for internet radio, audio and video streams
-# version: 2.2.0-rc3
+# version: 2.2.0-rc4
 # state: stable
 # author: Mario Salzer <mario@include-once.org>
 # license: Public Domain
@@ -14,7 +14,8 @@
 #   { type: env, name: XDG_CONFIG_HOME, description: relocates user .config subdirectory }
 # category: sound
 # depends: pygtk | gi, threading, requests, pyquery, lxml
-# id: streamtuner2
+# alias: streamtuner2, main
+# id: st2
 # pack: *.py, gtk3.xml.gz, bin, channels/__init__.py, bundle/*.py, CREDITS, help/index.page,
 #   streamtuner2.desktop, README, help/streamtuner2.1=/usr/share/man/man1/,
 #   NEWS=/usr/share/doc/streamtuner2/, icon.png=/usr/share/pixmaps/streamtuner2.png
