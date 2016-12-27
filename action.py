@@ -259,7 +259,6 @@ def interpol(cmd, source="pls", row={}, add_default=True):
     # Playlist type placeholders (%pls, %m3u, %xspf, etc.)
     for dest, rx in placeholder_map.items():
         rx = "(?<!%%)%s\\b" % rx
-#        rx = '(?!"\a"|"\n")%s\\b' % rx
         if re.search(rx, cmd, re.X):
             # no conversion
             if conf.playlist_asis:
@@ -274,7 +273,7 @@ def interpol(cmd, source="pls", row={}, add_default=True):
     if not add_default:
         return cmd
     else:
-         return "/bin/false"
+        return "/bin/false"
 
 
 # Substitute streaming address with desired playlist format
