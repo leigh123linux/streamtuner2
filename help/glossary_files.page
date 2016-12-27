@@ -44,7 +44,7 @@ Length1=-1
 <info><desc>JavaScript Object-Notation</desc></info>
 <p>JSON is a data representation format derived from Javascript (the browser embedded
 programming language for websites). It's commonly used because it provides a
-nice balance between terse and exact data represantion, while still being
+nice balance between terse and exact data representation, while still being
 readable.</p>
 <p>Streamtuner2 uses it to store all of its configuration and radio station data files.
 The MIME type of these files is <sys>application/json</sys> and they often look like: </p>
@@ -65,8 +65,8 @@ The MIME type of these files is <sys>application/json</sys> and they often look 
 <title>.XSPF files</title>
 <info><desc>Xiph Shareable Playlist File</desc></info>
 <p>The Xiph foundation manages the Ogg streaming format, Vorbis and other
-codecs, and introduced XML shareable playlist format "XSPF". They're
- hard to look at and not very widespread. On the upside they
+codecs, and introduced the "XML shareable playlist format" or "XSPF" for short.
+They're hard to look at and not very widespread. On the upside they
 contain more meta information than any other playlist store.</p>
 <p>As MIME type <sys>application/xspf+xml</sys> and they often look like: </p>
 <code mime="application/xspf+xml"><![CDATA[
@@ -92,7 +92,7 @@ contain more meta information than any other playlist store.</p>
 <list>
   <item>
   <title>SMIL</title>
-  <p>Synchronized Multimedia Integration Language is a HTML-style
+  <p>Synchronized Multimedia Integration Language is an HTML-style
   audio/video/stream-link format.</p>
   </item>
   <item>
@@ -118,7 +118,7 @@ contain more meta information than any other playlist store.</p>
   <p>*.url (Internet Shortcut) files also are single-link containers.</p>
   </item>
 </list>
-<p>For a comparison of what various audio player support, see also
+<p>For a comparison of what various audio players support, see also
 <link href="http://fossil.include-once.org/streamtuner2/wiki/Playlist+format+support">Playlist format support</link>
 in the ST2 fossil wiki.</p>
 </section>
