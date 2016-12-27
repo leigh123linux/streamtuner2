@@ -249,7 +249,7 @@ class file (ChannelPlugin):
             "album": "",
             "artist": "",
             "length": "n/a",
-            "bitrate": "n/a",
+            "bitrate": 0,
 #            "format": mime_fmt(fn[-3:]),
             "format": mime_fmt(fn[-(len(fn)-fn.rfind(".")-1):]),
             "editable": False,
