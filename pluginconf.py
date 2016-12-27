@@ -4,7 +4,7 @@
 # category: io
 # title: Plugin configuration
 # description: Read meta data, pyz/package contents, module locating
-# version: 0.6.2
+# version: 0.6.5
 # priority: core
 # docs: http://fossil.include-once.org/streamtuner2/wiki/plugin+meta+data
 # config: -
@@ -55,10 +55,11 @@
 #  Converts a list of config: options with arg: attribute for use as
 #  argparser parameters.
 #
-# dependency().valid/depends()
-# ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+# dependency().depends()/.valid()
+# ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 #  Probes a new plugins` depends: list against installed base modules.
-#  Very crude and tied to streamtuner2 base names.
+#  Utilizes each version: fields and allows for virtual modules, or
+#  alternatives and honors alias: names.
 #
 #
 # Generally this scheme concerns itself more with plugin basenames.
@@ -72,7 +73,7 @@
 # for example.
 #
 # Plugin loading thus becomes as simple as __import__("ext.local").
-# The attachaed plugin_state config dictionary in most cases can just
+# The attached plugin_state config dictionary in most cases can just
 # list module basenames, if there's only one set to manage.
 
 
