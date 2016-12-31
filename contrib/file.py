@@ -3,13 +3,14 @@
 # description: Displays mp3/oggs or m3u/pls files from local media file directories.
 # type: channel
 # category: local
-# version: 0.3.2
+# version: 0.4.5
 # priority: optional
 # status: unsupported
 # depends: python:mutagen, python:id3
 # config:  
 #   { name: file_browser_dir, type: text, value: "$XDG_MUSIC_DIR, ~/MP3", description: "List of directories to scan for audio files." },
 #   { name: file_browser_ext, type: text, value: "mp3,ogg, m3u,pls,xspf, avi,flv,mpg,mp4", description: "File type/extension filter." },
+#   { name: file_browser_converttourl, type: bool, value: 1, description: "Convert file path to 'file:///' style URL" }  },
 # url: http://freshcode.club/projects/streamtuner2
 # png:
 #   iVBORw0KGgoAAAANSUhEUgAAABQAAAAPCAYAAADkmO9VAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wUFDQsK23vYngAAA6lJREFUOMtFz8tu1FYAxvH/sc+xxx7bM8lkElAgISoV4qIgpEaomwg2bMqiQmo3lfowPElVVbQr3gBVqGJRGi6VEERFDROS0Ewmc/N47Bkf+7gLevke4Kfv
@@ -22,15 +23,21 @@
 # extraction-method: os
 #
 # Local file browser. Presents files from configured directories.
-# This is not what streamtuner2 is meant for. Therefore this is
+# This is not what Streamtuner2 is meant for. Therefore this is
 # an optional plugin, and not overly well integrated.
 #
 # Bugs:
 # Only loads directories on startup. Doesn't work when post-activated
 # per pluginmanager2 for instance. And LANG=C breaks it on startup,
 # if media directories contain anything but ASCII filenames.
+#
+# Currently does not play files with UTF characters on Windows.
+#
+# If your player doesn't play local files try unchecking "Convert file path to 'file:///' style URL". (Might happen on Windows when not using VLC.exe).
+# When using VLC however it must be checked.
+#
+# After checking/unchecking restart Streamtuner2 for recollecting the local files.
 
-#from __future__ import print_function
 # modules
 import os
 import re
@@ -161,6 +168,8 @@ class file (ChannelPlugin):
         self.dir = [self.env_dir(s) for s in conf.file_browser_dir.split(",")]
         self.ext = [s.strip() for s in conf.file_browser_ext.split(",")]
         # first run
+        if not "file_browser_converttourl" in conf:
+            conf.file_browser_converttourl = 1
         if not self.categories or not self.streams:
             self.scan_dirs()
             
@@ -239,23 +248,27 @@ class file (ChannelPlugin):
         # basic data
         url = ("%s/%s" % (dir, fn))
         url = url.replace("\\", "/")
-#        if conf.windows: # needed for VLC playback
-        url = url.replace(" ", "%20")
+        if conf.file_browser_converttourl:
+            url = url.replace(" ", "%20")
+            if url.startswith("/"):
+                url = "file://" + url
+            else:
+                url = "file:///" + url
         meta = {
             "title": "",
             "filename": fn,
-            "url": "file:///"+url,
+            "url": url,
             "genre": "",
             "album": "",
             "artist": "",
             "length": "n/a",
             "bitrate": 0,
-#            "format": mime_fmt(fn[-3:]),
-            "format": mime_fmt(fn[-(len(fn)-fn.rfind(".")-1):]),
+            "format": mime_fmt(self.fnext(fn)),
             "editable": False,
             }
+        # add ID3 tag infos
         try:
-            streaminfo =get_meta(dir + "/" + fn)
+            streaminfo = get_meta(dir + "/" + fn)
             # add streaminfo
             if streaminfo.info: # no streaminfo.info, maybe ID3 available
                 try:
@@ -268,15 +281,17 @@ class file (ChannelPlugin):
             # add ID3
             meta.update(mutagen_postprocess(streaminfo) or {})
             
-        except: # unsupported by Mutagen
+        except: # not supported by Mutagen
             pass
         return meta
+
         
     # check fn for .ext
     def we_like_that_extension(self, fn):
- #       return fn[-3:] in self.ext
-        return fn[-(len(fn)-fn.rfind(".")-1):] in self.ext
-    
+        return self.fnext(fn) in self.ext
+        
+    def fnext(self, fn):
+        return os.path.splitext(fn)[1][1:]
 
 
     # same as init
