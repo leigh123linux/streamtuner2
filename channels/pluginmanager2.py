@@ -174,9 +174,11 @@ class pluginmanager2(object):
     # Download a plugin
     def install(self, p):
         src = ahttp.get(p["$file"], encoding="utf-8")
-        with open("{}/{$name}.py".format(conf.plugin_dir, **p), "w") as f:
+        name = p["$name"]
+        with open("{}/{}.py".format(conf.plugin_dir, name), "w") as f:
             f.write(src)
-        self.parent.status("Plugin '{$name}.py' installed.".format(**p))
+        self.parent.status("Plugin '{}.py' installed.".format(name))
+        conf.add_plugin_defaults(plugin_meta(module=name), name)
 
 
     # Empty out [channels] and [feature] tab in configdialog, so it rereads them
