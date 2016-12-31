@@ -1,4 +1,31 @@
 
+2.2.0 (2016-12-31)
+ * Adds new plugins for RCast, Streema, vTuner2, Liveradio.ie, RadioSure,
+   house-mixes, and Reciva.
+ * Feature extensions include the Cache Reset, Config import/export,
+   Gtk theme setting and installer, and Specbuttons for custom shortcuts,
+   and script stations.
+ * Live365, di.fm and WindowsMediaGuide are gone.
+ * Marks the first release with thorough Windows support, and comes with
+   a Python+Gtk post-installer and additional tools for the SFX archive.
+   Comes with a CHM manual version instead.
+ * Many typos and stale infos in the manual have been remedied, more details
+   on contrib plugins and station status icons (reddit, dirble, etc), and
+   stream $placeholders have been documented.
+ * Internet-Radio now supports the search, its DOM extraction was updated.
+ * Other fixes encompass the file browser, MODarchive categories,
+   Radio-Browser submit function, Radionomy icon sizes, ...
+ * Reddit and Record-stop are now distributed plugins.
+ * Channels can easier hook new content types and extractors in the action
+   module, the .QTL export format was added, better cross-platform quoting
+   and a multi-URL workaround added.
+ * Better channel refresh indication, and colorized status bar.
+ * Plugin management has been extended, and a few fixes and option
+   safeguards applied, support for table/dict settings.
+ * Other internal changes include plugin init2() callbacks, a secret
+   `conf.cmd` option, "rt" open flag fixes, new unichr() alias, a cmd=
+   flag for run_fmt_url()
+
 2.1.9 (2015-05-25)
  * Overhaul favicon/banner module, support instant icon display updates,
    simpler cache filenames, rescaling, implicit sanitizing, less coupling.

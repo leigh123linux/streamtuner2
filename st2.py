@@ -4,7 +4,7 @@
 # type: application
 # title: streamtuner2
 # description: Directory browser for internet radio, audio and video streams
-# version: 2.2.0-rc4
+# version: 2.2.0
 # state: stable
 # author: Mario Salzer <mario@include-once.org>
 # license: Public Domain

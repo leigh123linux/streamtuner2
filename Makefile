@@ -68,7 +68,7 @@ check:
 	rpm -qpil *rpm
 	
 upload:
-	scp *.{deb,rpm,exe,pyz,arch,txz} io:st2/
+	scp *.{deb,rpm,exe,pyz,arch.txz,txz} io:st2/
 
 # manual installation
 install:
