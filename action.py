@@ -268,7 +268,6 @@ def interpol(cmd, source="pls", row={}, add_default=True):
                 url = convert_playlist(row["url"], listfmt(source), listfmt(dest), local_file=True, row=row)
             # insert quoted URL/filepath
             return re.sub(rx, quote(url), cmd.replace("%%", "%"), 2, re.X)
-                
 
     if not add_default:
         return cmd

@@ -57,7 +57,7 @@ class theme_installer(object):
     meta = plugin_meta()
     category = "themes"
     theme_dir = conf.dir + "/themes/"
-    themes_url = "http://milki.include-once.org/streamtuner2/themes/"
+    themes_url = "http://oha59.bplaced.net/streamtuner2/themes/" #"http://milki.include-once.org/streamtuner2/themes/"
     themes_csv = "themes.json"
     mime = "zip/gtk-theme"
     parent = None
