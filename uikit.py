@@ -798,12 +798,13 @@ class AuxiliaryWindow(object):
 #
 class AboutStreamtuner2(AuxiliaryWindow):
     def __init__(self, parent):
+        m = parent.meta
         a = gtk.AboutDialog()
-        a.set_name(parent.meta["id"])
-        a.set_version(parent.meta["version"])
-        a.set_license(parent.meta["license"])
+        a.set_name(m.get("title"))
+        a.set_version(m.get("version"))
+        a.set_license(m.get("license"))
         a.set_authors((get_data("CREDITS") or parent.meta["author"]).split("\n"))
-        a.set_website(parent.meta["url"])
+        a.set_website(m.get("url"))
         a.connect("response", lambda a, ok: ( a.hide(), a.destroy() ) )
         a.show_all()
-            
+
