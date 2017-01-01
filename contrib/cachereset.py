@@ -62,7 +62,13 @@ class cachereset():
 
     # Calculate folder size (flat dir)
     def foldersize(self, p):
-        return sum([os.path.getsize(p+"/"+fn) for fn in os.listdir(p)])
+        if os.path.exists(p):
+            try:
+                return sum([os.path.getsize(p+"/"+fn) for fn in os.listdir(p)])
+            except:
+                pass
+        return 0
+        
 
     # Actually delete stuff
     def execute(self, *w):
