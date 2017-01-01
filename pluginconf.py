@@ -4,7 +4,7 @@
 # category: io
 # title: Plugin configuration
 # description: Read meta data, pyz/package contents, module locating
-# version: 0.6.5
+# version: 0.6.6
 # priority: core
 # docs: http://fossil.include-once.org/streamtuner2/wiki/plugin+meta+data
 # config: -
@@ -420,14 +420,19 @@ class dependency(object):
             if meta.get("alias"):
                 for alias in re.split("\s*[,;]\s*", meta["alias"]):
                     self.have[alias] = self.have[name]
+        #dbg
+        #for name,meta in sorted(self.have.items()):
+        #    print "HAVE ", name, " == ", meta.get("version")
 
     # depends:
     def depends(self, plugin):
+        r = True
         if plugin.get("depends"):
             dep_cmp = self.deps(plugin["depends"])
-            if not (True in [self.cmp(alt_cmp, self.have) for alt_cmp in dep_cmp]):
-                return False
-        return True
+            for alt_cmp in dep_cmp:
+                if not True in [self.cmp([d], self.have) for d in alt_cmp]:
+                    r = False
+        return r
 
     # basic list pre-filtering (skip __init__, filter by api:,
     # exclude installed & same-version plugins)
