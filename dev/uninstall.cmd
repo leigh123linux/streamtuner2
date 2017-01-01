@@ -84,7 +84,8 @@ echo | set /p=Do you want to keep your %ST2% settings? [Y/n]
 set /P INPUT=%=%
 If /I '%INPUT%' == 'N' (
 	echo Deleting personal settings...
-	del "%APPDATA%\streamtuner2\*.*" /F /S /Q 1>nul
+	rd "%APPDATA%\streamtuner2" /S /Q 1>nul 
+	rem del "%APPDATA%\streamtuner2\*.*" /F /S /Q 1>nul
 )
 set INPUT=
 
