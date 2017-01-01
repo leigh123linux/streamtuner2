@@ -20,8 +20,8 @@ GUI for internet radio directories.</description>
     <implementation arch="*-*" id="sha1new=eb30588bc3898004fa8dff776930396c7437e4c8" released="2015-05-25" version="2.1.9">
       <file dest="streamtuner2.pyz" href="http://downloads.sourceforge.net/project/streamtuner2/streamtuner2-2.1.9.pyz" size="231620" type="x-executable/python+zip"/>
     </implementation>
-    <implementation arch="*-*" id="sha1new=4b153950ca1c0bdbff1e7cb7c8a781c982c988ba" released="2016-12-31" stability="stable" version="2.2.0">
-      <file dest="streamtuner2.pyz" href="http://downloads.sourceforge.net/project/streamtuner2/streamtuner2-2.2.0.pyz" size="421208" type="x-executable/python+zip"/>
+    <implementation arch="*-*" id="sha1new=8ff9dfb200894e92232d8466c7d1e2ae17bbbc57" released="2016-12-31" stability="stable" version="2.2.0">
+      <file dest="streamtuner2.pyz" href="http://downloads.sourceforge.net/project/streamtuner2/streamtuner2-2.2.0.pyz" size="431065" type="x-executable/python+zip"/>
     </implementation>
 
     <!-- Invoke PYZ via Python handler -->
@@ -38,7 +38,7 @@ GUI for internet radio directories.</description>
   </group>
 </interface>
 <!-- Base64 Signature
-iF4EABEIAAYFAlhn3xYACgkQ4aA2BuVY6szD+wD+K3tinZpZTXIzxwajjfxVoxidgOHyYrXt0Mp+
-+2ckQdsBAMiBmh2T7nB6bGaBP1jy4mjbES//HkCt/q4BHq3HJx6l
+iF4EABEIAAYFAlhpGIsACgkQ4aA2BuVY6sxOZQEAqv2lo/cdryBOdgdSgbNbsnsl/+g5ErTbBmls
+YQASGZ4A/jwYGrLIsHLGSotB0ThMCqmDhJs9Es0XVworu9AOboEJ
 
 -->
