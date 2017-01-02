@@ -13,7 +13,7 @@ echo ^|               ___\///////////___________\///________\///////////////__  
 echo ^|                                                                             ^|
 echo ^|    Streamtuner2 for Windows                               Version 2.2.0     ^|
 echo ^|                                                                             ^|
-echo ^|    Installer for Python 2.7.12 ^& Gtk 2.24.2                                 ^|
+echo ^|    Installer for Python 2.7.13 ^& Gtk 2.24.2                                 ^|
 echo  ----------------------------------------------------------------------------- 
 echo.
 echo PowerShell "install_python_gtk.ps1"...

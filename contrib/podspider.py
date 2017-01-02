@@ -29,13 +29,13 @@
 
 
 import action
-import http
+import ahttp
 from config import conf
 from channels import *
 import os, os.path
 from pq import pq
 import lxml.etree
-import mygtk
+import uikit
 
 
 
@@ -86,7 +86,7 @@ class podspider (ChannelPlugin):
 
     # gtk.messagebox
     def warn(self):
-        mygtk.msg("Podspiderpdb.xml.tmp_ couldn't be found anywhere.\nInstall Radiograbber via Wine to create it.")
+        uikit.msg("Podspiderpdb.xml.tmp_ couldn't be found anywhere. Install Radiograbber via Wine to create it.")
 
 
     # prevent cache file creation, as it would contain sublists and ends up being unreadable by json module
@@ -149,7 +149,7 @@ class podspider (ChannelPlugin):
     def play(self, row):
         audio = "audio/mp3"
         r = []
-        for e in pq(http.get(row["homepage"])).find("enclosure"):
+        for e in pq(ahttp.get(row["homepage"])).find("enclosure"):
             r.append(e.get("url"))
             audio = e.get("type")
         if r:
