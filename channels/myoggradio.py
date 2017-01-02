@@ -1,4 +1,4 @@
-
+# encoding: utf-8
 # api: streamtuner2
 # title: MyOggRadio
 # description: Open source internet radio directory.
@@ -120,6 +120,9 @@ class myoggradio(ChannelPlugin):
                 row["url"] = ahttp.fix_url(urls[0])
                 
             # prevent double check-ins
+            if not self.streams.get("common"):
+                log.WARN("Cache empty. Cannot compare stream info for newness. Please reload MyOggRadio channel first.")
+                return
             if row["title"] in (r.get("title") for r in self.streams["common"]):
                 pass
             elif row["url"] in (r.get("url") for r in self.streams["common"]):
@@ -185,7 +188,7 @@ class myoggradio(ChannelPlugin):
             if lap:
                 return [lap[0] or lap[1], lap[2]]
             else:
-                self.parent.status("No login data for MyOggRadio configured. See F12 for setup, or F1 for help.");
+                self.parent.status('<span background="orange">⛔ No login data for MyOggRadio configured. See F12 for setup, or F1 for help.</span>', timeout=10, markup=1);
         pass        
 
 
