@@ -4,7 +4,7 @@
 # category: io
 # title: Plugin configuration
 # description: Read meta data, pyz/package contents, module locating
-# version: 0.6.6
+# version: 0.6.8
 # priority: core
 # docs: http://fossil.include-once.org/streamtuner2/wiki/plugin+meta+data
 # config: -
@@ -82,6 +82,7 @@ import os
 import re
 import pkgutil
 import inspect
+from compat2and3 import find_executable
 try:
     from compat2and3 import gzip_decode
 except:
@@ -420,21 +421,8 @@ class dependency(object):
             if meta.get("alias"):
                 for alias in re.split("\s*[,;]\s*", meta["alias"]):
                     self.have[alias] = self.have[name]
-        #dbg
-        #for name,meta in sorted(self.have.items()):
-        #    print "HAVE ", name, " == ", meta.get("version")
 
-    # depends:
-    def depends(self, plugin):
-        r = True
-        if plugin.get("depends"):
-            dep_cmp = self.deps(plugin["depends"])
-            for alt_cmp in dep_cmp:
-                if not True in [self.cmp([d], self.have) for d in alt_cmp]:
-                    r = False
-        return r
-
-    # basic list pre-filtering (skip __init__, filter by api:,
+    # basic plugin pre-screening (skip __init__, filter by api:,
     # exclude installed & same-version plugins)
     def valid(self, newpl):
         id = newpl.get("$name", "__invalid")
@@ -450,43 +438,76 @@ class dependency(object):
         else:
             return True
 
+    # Verify depends: and breaks: against existing plugins/modules
+    def depends(self, plugin):
+        r = True
+        if plugin.get("depends"):
+            r &= self.and_or(self.split(plugin["depends"]), self.have)
+        if plugin.get("breaks"):
+            r &= self.neither(self.split(plugin["breaks"]), self.have)
+        return r
+
     # Split trivial "pkg | alt, mod >= 1, uikit < 4.0" string into nested list [[dep],[alt,alt],[dep]]
-    def deps(self, dep_str):
+    def split(self, dep_str):
         dep_cmp = []
         for alt_str in re.split(r"\s*[,;]+\s*", dep_str):
             alt_cmp = []
             # split alternatives |
             for part in re.split(r"\s*\|+\s*", alt_str):
                 # skip deb:pkg-name, rpm:name, bin:name etc.
-                if not len(part) or part.find(":") >= 0:
+                if not len(part):
                     continue
+                if part.find(":") >= 0:
+                    self.have[part] = { "version": self.module_test(*part.split(":")) }
                 # find comparison and version num
                 part += " >= 0"
-                m = re.search(r"([\w.-]+)\s*([>=<!~]+)\s*([\d.]+([-~.]\w+)*)", part)
+                m = re.search(r"([\w.:-]+)\s*\(?\s*([>=<!~]+)\s*([\d.]+([-~.]\w+)*)", part)
                 if m and m.group(2):
                     alt_cmp.append([m.group(i) for i in (1, 2, 3)])
-            dep_cmp.append(alt_cmp)
+            if alt_cmp:
+                dep_cmp.append(alt_cmp)
         return dep_cmp
 
-    # Do actual comparison
-    def cmp(self, d, have):
-        r = True
-        for name, op, ver in d:
-            # skip unknown plugins, might be python module references
-            if not have.get(name, {}).get("version"):
-                continue
-            curr = have[name]["version"]
-            tbl = {
-                ">=": curr >= ver,
-                "<=": curr <= ver,
-                "==": curr == ver,
-                ">":  curr > ver,
-                "<":  curr < ver,
-                "!=": curr != ver,
-            }
-            r &= tbl.get(op, True)
-            #print "log.VERSION_COMPARE: ", name, " → (", curr, op, ver, ") == ", r
+    # Single comparison
+    def cmp(self, d, have, absent=True):
+        name, op, ver = d
+        # absent=True is the relaxed check, will ignore unknown plugins // set absent=False or None for strict check (as in breaks: rule e.g.)
+        if not have.get(name, {}).get("version"):
+            return absent
+        # curr = installed version
+        curr = have[name]["version"]
+        tbl = {
+            ">=": curr >= ver,
+            "<=": curr <= ver,
+            "==": curr == ver,
+            ">":  curr > ver,
+            "<":  curr < ver,
+            "!=": curr != ver,
+        }
+        r = tbl.get(op, True)
+        #print "log.VERSION_COMPARE: ", name, " → (", curr, op, ver, ") == ", r
         return r
+
+    # Compare nested structure of [[dep],[alt,alt]]
+    def and_or(self, deps, have, r = True):
+        #print deps
+        return not False in [True in [self.cmp(d, have) for d in alternatives] for alternatives in deps]
+
+    # Breaks/Conflicts: check [[or],[or]]
+    def neither(self, deps, have):
+        return not True in [self.cmp(d, have, absent=None) for cnd in deps for d in cnd]
+
+    # Resolves/injects complex "bin:name" or "python:name" dependency URNs
+    def module_test(self, type, name):
+        return "1"  # disabled for now
+        if "_" + type in dir(self):
+            return "1" if bool(getattr(self, "_" + type)(name)) else "-1"
+    # `bin:name` lookup
+    def _bin(self, name):
+        return find_executable(name)
+    # `python:module` test
+    def _python(self, name):
+        return __import__("imp").find_module(name) is not None
 
 
 # Add plugin defaults to conf.* store
