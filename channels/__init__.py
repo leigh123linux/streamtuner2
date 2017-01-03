@@ -199,6 +199,8 @@ class GenericChannel(object):
     def status(self, *args, **kw):
         if self.parent: self.parent.status(*args, **kw)
         else: log.INFO("status():", *v)
+    def warn(self, *args, **kw):
+        self.status(*args, icon="gtk-dialog-warning", **kw)
 
 
         

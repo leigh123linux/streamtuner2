@@ -370,7 +370,7 @@ class StreamTunerTwo(gtk.Builder):
 
 
     # Shortcut to statusbar and progressbar (receives either a string, or a float).
-    def status(self, text=None, timeout=3, markup=False):
+    def status(self, text=None, timeout=3, markup=False, icon=None, *k, **kw):
         self.status_last = time.time() + timeout
         gobject.timeout_add(int(timeout*1000), self.status_clear)
         #log.UI("progressbar := %s" %text)
@@ -386,6 +386,8 @@ class StreamTunerTwo(gtk.Builder):
         # add text
         elif isinstance(text, (str, unicode)):
             uikit.do(self.statusbar.set_markup if markup else self.statusbar.set_text, text)
+            if icon:
+                uikit.do(lambda icon=icon, *x: self.statusbar_img.show() or self.statusbar_img.set_from_stock(icon, 2))
         # clean up
         else:
             self.status_clear(anyway=True)
@@ -395,6 +397,7 @@ class StreamTunerTwo(gtk.Builder):
         if anyway or time.time() >= self.status_last:
             #log.UI("progressbar.hide()")
             self.statusbar.set_text("")
+            self.statusbar_img.hide()
             self.progress.hide()
             return False
         else:
@@ -525,6 +528,7 @@ def main():
         if (conf.get("firstrun")):
             main.configwin.open(None)
             del conf.firstrun
+        main.status("Initial startup, configure your audio players!", timeout=10, icon="gtk-dialog-error")
 
         # run
         gtk.main()
