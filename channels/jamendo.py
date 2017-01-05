@@ -324,7 +324,7 @@ class jamendo (ChannelPlugin):
                     "listformat": "jamj",
                     "format": fmt_mime,
                 })
-		
+
         # Feeds (News)
         elif cat == "feeds":
             for e in self.api(method="feeds", order="date_start_desc", target="notlogged"):

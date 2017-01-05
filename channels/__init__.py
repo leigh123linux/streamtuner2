@@ -4,7 +4,7 @@
 # category: ui
 # title: Channel plugins
 # description: Base implementation for channels and feature plugins
-# version: 1.6
+# version: 1.7
 # license: public domain
 # author: mario
 # url: http://fossil.include-once.org/streamtuner2/
@@ -38,15 +38,65 @@ import inspect
 
 # Only export plugin classes and a few utility functions
 __all__ = [
-    "GenericChannel", "ChannelPlugin", "use_rx", "mime_fmt",
-    "entity_decode", "strip_tags", "nl", "unhtml", "to_int"
+    "FeaturePlugin", "GenericChannel", "ChannelPlugin", "use_rx", "mime_fmt",
+    "stub_parent", "entity_decode", "strip_tags", "nl", "unhtml", "to_int"
 ]
 __path__.insert(0, conf.dir + "/plugins")
 
 
 
+# Base class for plugins (features or channels)
+class FeaturePlugin(object):
+
+    # plugin meta and object references
+    module = ""
+    meta = { "config": [] }
+    parent = None     # main window
+
+    # minimum setup for ChannelPlugins and feature hooks
+    def __init__(self, parent, *k, **kw):
+
+        # set up meta infos
+        self.parent = parent
+        self.module = self.__class__.__name__
+        self.meta = plugin_meta(src = inspect.getcomments(inspect.getmodule(self)))
+        self.config = self.meta.get("config", [])
+        self.title = self.meta.get("title", self.module)
+
+        # add default options values to config.conf.* dict
+        conf.add_plugin_defaults(self.meta, self.module)
+
+        # implicit action handler registration
+        if hasattr(self, "resolve_urn"):
+            action.handler["urn:%s" % self.module] = self.resolve_urn
+
+        # secondary init function
+        self.init2(parent)
+
+    # optionally to be overriden by plugins (run after base __init__)
+    def init2(self, parent, *k, **kw):
+        pass
+
+    # Statusbar stub (defers to parent/main window, if in GUI mode)
+    def status(self, *args, **kw):
+        if self.parent:
+            self.parent.status(*args, **kw)
+        else:
+            log.INFO("status():", *v)
+        
+    # Statusbar with highlighting and default icon
+    def warn(self, text, *args, **kw):
+        if isinstance(text, (str, unicode)) and "status_color" in conf:
+            text = "<span background='%s'>%s</span>" % (conf.status_color, text)
+            kw["markup"] = 1
+        if not "icon" in kw:
+            kw["icon"] = "gtk-dialog-warning"
+        self.status(text, *args, **kw)
+
+
+
 # Generic channel module
-class GenericChannel(object):
+class GenericChannel(FeaturePlugin):
 
     # control attributes
     meta = { "config": [] }
@@ -71,7 +121,6 @@ class GenericChannel(object):
     pix_entry = None  # ListStore entry that contains favicon
     img_resize = None  # Rescale `img` references to icon size
     fixed_size = [24,24]  # Default height+width for favicons
-    parent = None     # reference to main window
 
     # mapping of stream{} data into gtk treeview/treestore representation
     datamap = [
@@ -128,19 +177,9 @@ class GenericChannel(object):
         #self.streams = {}
         self.gtk_list = None
         self.gtk_cat = None
-        self.module = self.__class__.__name__
-        self.meta = plugin_meta(src = inspect.getcomments(inspect.getmodule(self)))
-        self.config = self.meta.get("config", [])
-        self.title = self.meta.get("title", self.module)
-
-        # add default options values to config.conf.* dict
-        conf.add_plugin_defaults(self.meta, self.module)
         
-        # extra init function
-        if hasattr(self, "init2"):
-            self.init2(parent)
-        if hasattr(self, "resolve_urn"):
-            action.handler["urn:%s" % self.module] = self.resolve_urn
+        # base init (meta infos, parent reference, init2)
+        FeaturePlugin.__init__(self, parent)
         
         # Only if streamtuner2 is run in graphical mode        
         if (parent):
@@ -193,14 +232,6 @@ class GenericChannel(object):
             show_favicons=True, fixed_size=self.fixed_size
         )
         # no longer using `conf.show_favicons`
-
-
-    # Statusbar stub (defers to parent/main window, if in GUI mode)
-    def status(self, *args, **kw):
-        if self.parent: self.parent.status(*args, **kw)
-        else: log.INFO("status():", *v)
-    def warn(self, *args, **kw):
-        self.status(*args, icon="gtk-dialog-warning", **kw)
 
 
         
@@ -590,15 +621,6 @@ class GenericChannel(object):
 
     
 
-        
-    
-
-
-
-
-
-
-
 
 # channel plugin without glade-pre-defined notebook tab
 #
@@ -682,6 +704,8 @@ class ChannelPlugin(GenericChannel):
         # add notebook tab
         tab = parent.notebook_channels.insert_page_menu(vbox, ev_label, plain_label, -1)
         parent.notebook_channels.set_tab_reorderable(vbox, True)
+
+
 
 
 
