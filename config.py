@@ -153,6 +153,7 @@ class ConfigDict(dict):
         self.open_mode = "r" if self.windows and PY2 else "rt"
         self.pyquery = 1
         self.debug = 0
+        self.status_color = "#ffeecc"
 
     # update old setting names
     def migrate(self):
