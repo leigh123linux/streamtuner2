@@ -5,7 +5,7 @@
 # type: feature
 # category: hook
 # depends: kronos, action >= 1.1.1
-# version: 0.7.7
+# version: 0.7.8
 # config: 
 #   { name: timer_duration, type: select, select: "auto|streamripper|fpls", value: none, description: "Support for time ranges" }
 #   { name: timer_crontab, type: bool, value: 0, description: "Utilize cron instead of runtime scheduler. (not implemented yet)" }
@@ -38,12 +38,8 @@ import re
 
 
 # timed events (play/record) within bookmarks tab
-class timer (object):
+class timer (FeaturePlugin):
 
-    # plugin info
-    module = 'timer'
-    meta = plugin_meta()
-    
     # configuration settings
     timefield = "playing"
     
@@ -51,15 +47,10 @@ class timer (object):
     sched = None
     
     
-    
     # prepare gui
-    def __init__(self, parent):
-        if not parent:
-            return
-        conf.add_plugin_defaults(self.meta, self.module)
+    def init2(self, parent):
           
-        # keep reference to main window
-        self.parent = parent
+        # bookmarks channel shortcut
         self.bookmarks = parent.bookmarks
         
         # add menu
@@ -108,7 +99,7 @@ class timer (object):
 
         # basic check for consistency
         if not re.match("^(\w{2,3}|[*,;+])+\s+(\d+:\d+)\s*((\.\.+|-+)\s*(\d+:\d+))?\s+(record|play)", timespec):
-            self.parent.status('<span background="orange">⛔ Danger, Will Robinson! → The given timer date/action is likely invalid.</span>', timeout=22, markup=1)
+            self.warn('Danger, Will Robinson! → The given timer date/action is likely invalid.', timeout=22)
 
         # hide dialog
         self.parent.timer_dialog.hide()
@@ -155,9 +146,11 @@ class timer (object):
             activity, action_method = "play", self.play
         
         # add
-        task = self.sched.add_daytime_task(action_method, activity, days, None, time, kronos.method.threaded, [row], {})
-
-        log.QUEUE( activity, self.sched, (action_method, activity, days, None, time, kronos.method.threaded, [row], {}), task.get_schedule_time(True) )
+        if days and time and activity:
+            task = self.sched.add_daytime_task(action_method, activity, days, None, time, kronos.method.threaded, [row], {})
+            log.QUEUE( activity, self.sched, (action_method, activity, days, None, time, kronos.method.threaded, [row], {}), task.get_schedule_time(True) )
+        else:
+            log.ERR_QUEUE( activity, self.sched, (action_method, activity, days, None, time, kronos.method.threaded, [row], {}) )
     
     
     
@@ -176,7 +169,8 @@ class timer (object):
     # get start time 18:00
     def time(self, s):
         r = re.search("(\d+):(\d+)", s)
-        return int(r.group(1)), int(r.group(2))
+        if r:
+            return int(r.group(1)), int(r.group(2))
         
     # convert "18:00-19:15" to minutes
     def duration(self, s):
