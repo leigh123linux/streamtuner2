@@ -388,6 +388,8 @@ class StreamTunerTwo(gtk.Builder):
             uikit.do(self.statusbar.set_markup if markup else self.statusbar.set_text, text)
             if icon:
                 uikit.do(lambda icon=icon, *x: self.statusbar_img.show() or self.statusbar_img.set_from_stock(icon, 2))
+            else:
+                uikit.do(self.statusbar_img.hide)
         # clean up
         else:
             self.status_clear(anyway=True)
@@ -526,9 +528,9 @@ def main():
 
         # first invocation
         if (conf.get("firstrun")):
-            main.configwin.open(None)
             del conf.firstrun
-        main.status("Initial startup, configure your audio players!", timeout=10, icon="gtk-dialog-error")
+            main.configwin.open(None)
+            main.status("Initial startup, configure your audio players!", timeout=10, icon="gtk-dialog-info")
 
         # run
         gtk.main()
