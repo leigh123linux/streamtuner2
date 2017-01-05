@@ -4,7 +4,7 @@
 # description: Open source internet radio directory.
 # type: channel
 # category: radio
-# version: 0.7
+# version: 0.7.5
 # url: http://www.myoggradio.org/
 # depends: json, ahttp >= 1.5
 # config:
@@ -34,6 +34,7 @@ from config import *
 import action
 from uikit import uikit
 import ahttp
+import time
 
 import re
 import json
@@ -90,7 +91,7 @@ class myoggradio(ChannelPlugin):
         
         # unknown
         else:
-            self.parent.status("Unknown category")
+            self.status("Unknown category")
             pass
 
         # augment result list
@@ -130,13 +131,17 @@ class myoggradio(ChannelPlugin):
 
             # send
             else:
-                self.parent.status("Sharing station URL...")
-                self.upload(row)
-                sleep(0.5) # artificial slowdown, else user will assume it didn't work
-            
-        # tell Gtk we've handled the situation
-        self.parent.status("Shared '" + row["title"][:30] + "' on MyOggRadio.org")
-        return True
+                self.status("Sharing station URL...")
+                if (self.upload(row)):
+                    # artificial slowdown, else user will assume it didn't work
+                    self.status(0.5)
+                    time.sleep(0.1)
+
+                    # tell Gtk we've handled the situation
+                    self.status("Shared '" + row["title"][:30] + "' on MyOggRadio.org", icon="gtk-save")
+                else:
+                    self.status()
+            return True
 
 
     # upload bookmarks
@@ -148,11 +153,15 @@ class myoggradio(ChannelPlugin):
 
     # send row to MyOggRadio
     def upload(self, e, form=0):
+        return True
         if e:
             login = self.user_pw()
+            if not login:
+                return
+
             submit = {
-                "user": login[0],    	  # api
-                "passwort": login[1], 	  # api
+                "user": login[0],         # api
+                "passwort": login[1],     # api
                 "url": e["url"],
                 "bemerkung": e["title"],
                 "genre": e["genre"],
@@ -188,8 +197,6 @@ class myoggradio(ChannelPlugin):
             if lap:
                 return [lap[0] or lap[1], lap[2]]
             else:
-                self.parent.status('<span background="orange">⛔ No login data for MyOggRadio configured. See F12 for setup, or F1 for help.</span>', timeout=10, markup=1);
+                self.status("No login data for MyOggRadio configured. See F12 for setup, or F1 for help.", timeout=10, icon="gtk-dialog-error")
         pass        
-
-
 
