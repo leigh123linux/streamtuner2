@@ -604,6 +604,8 @@ class GenericChannel(FeaturePlugin):
             listformat = row.get("listformat", self.listformat)
             # invoke audio player
             action.play(row, audioformat, listformat)
+        elif row.get("homepage") and row.get("format") == "text/html":
+            action.browser(row["homepage"])
         else:
             self.status("No station selected for playing.")
         return row

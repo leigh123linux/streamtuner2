@@ -3,7 +3,7 @@
 # description: Static list of various music directory websites.
 # type: group
 # category: web
-# version: 0.2
+# version: 0.3
 # priority: standard
 # config: -
 #
@@ -20,12 +20,8 @@ import copy
 
 
 # hooks into main.bookmarks
-class links (object):
+class links (FeaturePlugin):
 
-    # plugin info
-    module = 'links'
-    meta = plugin_meta()
-    
     # list
     streams = [    ]
     default = [
@@ -63,18 +59,18 @@ class links (object):
     
     
     # prepare gui
-    def __init__(self, parent):
+    def init2(self, parent):
+        if not parent:
+            return
 
-        if parent:
-
-            # prepare target category
-            bookmarks = parent.bookmarks
-            if not bookmarks.streams.get(self.module):
-                bookmarks.streams[self.module] = []
-            bookmarks.add_category(self.module)
-            
-            # fill it up later
-            parent.hooks["init"].append(self.populate)
+        # prepare target category
+        bookmarks = parent.bookmarks
+        if not bookmarks.streams.get(self.module):
+            bookmarks.streams[self.module] = []
+        bookmarks.add_category(self.module)
+        
+        # fill it up later
+        parent.hooks["init"].append(self.populate)
 
 
     def populate(self, parent):
@@ -87,7 +83,7 @@ class links (object):
                     "genre": "channel",
                     "title": channel.meta.get("title", channel.module),
                     "homepage": channel.meta.get("url", ""),
-                    "type": "text/html",
+                    "format": "text/html",
                 })
             except Exception as e:
                 log.ERR("links: adding entry failed:", e)
