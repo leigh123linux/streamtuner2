@@ -116,7 +116,7 @@ class specbuttons(object):
             if re.match("^gtk\.\w+", btn, re.I):
                 btn = re.sub("[._]+", "-", btn).lower()
             # not /path or gtk-
-            elif not re.match("^/|\./|gtk-", btn):
+            elif not re.match("^(/|\./|gtk-|\w:[\\\\/])", btn):
                 path = self.locate(btn)
                 if path:
                     btn = path

@@ -153,7 +153,6 @@ class myoggradio(ChannelPlugin):
 
     # send row to MyOggRadio
     def upload(self, e, form=0):
-        return True
         if e:
             login = self.user_pw()
             if not login:
@@ -197,6 +196,6 @@ class myoggradio(ChannelPlugin):
             if lap:
                 return [lap[0] or lap[1], lap[2]]
             else:
-                self.status("No login data for MyOggRadio configured. See F12 for setup, or F1 for help.", timeout=10, icon="gtk-dialog-error")
+                self.warn("No login data for MyOggRadio configured. See F12 for setup, or F1 for help.", timeout=10, icon="gtk-dialog-error")
         pass        
 
