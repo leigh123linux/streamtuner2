@@ -113,16 +113,15 @@ class timer (FeaturePlugin):
         row[self.timefield] = timespec
 
         # store
-        self.save_timer(row)
-        self.parent.status("Timer saved.")
+        if self.save_timer(row):
+            self.status("Timer saved.")
     
     
     # store row in timer database
     def save_timer(self, row):
         self.streams.append(row)
         self.bookmarks.save()
-        self.queue(row)
-        pass
+        return self.queue(row)
         
         
     # Add timer/recording events to scheduler (or later crontab)
@@ -130,8 +129,7 @@ class timer (FeaturePlugin):
     
         # chk
         if not row.get(self.timefield) or not row.get("url"):
-            #log.DATA("NO TIME DATA", row)
-            return
+            return log.DATA("NO TIME DATA", row)
     
         # extract timing parameters
         _ = row[self.timefield]
@@ -149,6 +147,7 @@ class timer (FeaturePlugin):
         if days and time and activity:
             task = self.sched.add_daytime_task(action_method, activity, days, None, time, kronos.method.threaded, [row], {})
             log.QUEUE( activity, self.sched, (action_method, activity, days, None, time, kronos.method.threaded, [row], {}), task.get_schedule_time(True) )
+            return True
         else:
             log.ERR_QUEUE( activity, self.sched, (action_method, activity, days, None, time, kronos.method.threaded, [row], {}) )
     
