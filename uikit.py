@@ -519,12 +519,15 @@ class uikit:
         else:
             liststore = gtk.ListStore(*[str for i in range(0, lno)])
         w = gtk.TreeView(liststore)
+        sw = gtk.ScrolledWindow()
+        sw.set_border_width(5)
+        sw.add(w)
         # two text columns and renderers
         for i in range(0, lno):
             c = gtk.TreeViewColumn(columns[i])
             c.set_resizable(True)
             c.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
-            c.set_fixed_width(int(430/lno))
+            c.set_fixed_width(int(550/lno))
             r = gtk.CellRendererText()
             c.pack_end(r, expand=True)
             r.set_property("editable", True)
@@ -537,9 +540,9 @@ class uikit:
             r = gtk.CellRendererPixbuf()
             c.pack_start(r, expand=False)
             c.add_attribute(r, "stock_id", 2)
-        w.set_property("width_request", 450)
+        w.set_property("width_request", 470)
         w.set_property("height_request", 115)
-        return w, liststore
+        return sw, liststore
         
     # Generic Gtk callback to update ListStore when entries get edited.
     # where user_data = (liststore, column #id)
