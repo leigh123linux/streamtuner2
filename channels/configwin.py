@@ -49,9 +49,9 @@ class configwin (AuxiliaryWindow):
 
     
     # Load values from conf. store into gtk widgets
-    def load_config(self, config, prefix="config_"):
+    def load_config(self, config, prefix="config_", widgets={}):
         for key,val in config.items():
-            w = self.main.get_widget(prefix + key)
+            w = self.main.get_widget(prefix + key) or widgets.get(prefix + key)
             if w:
                 # number
                 if isinstance(w, gtk.SpinButton):
@@ -81,9 +81,9 @@ class configwin (AuxiliaryWindow):
             #log.CONF("config load", prefix+key, val, type(w))
 
     # Store gtk widget valus back into conf. dict
-    def save_config(self, config, prefix="config_", save=0):
+    def save_config(self, config, prefix="config_", save=0, widgets={}):
         for key,val in config.items():
-            w = self.main.get_widget(prefix + key)
+            w = self.main.get_widget(prefix + key) or widgets.get(prefix + key)
             if w:
                 # text
                 if isinstance(w, gtk.Entry):
@@ -129,7 +129,7 @@ class configwin (AuxiliaryWindow):
                 + "<span size='smaller' stretch='ultraexpanded'>{description}</span>"
 
     # Add [x] plugin setting, and its configuration definitions, set defaults from conf.*
-    def add_plg(self, name, meta, add_):
+    def add_plg(self, name, meta, add_, prefix_="config_"):
 
         # Plugin enable button
         cb = gtk.CheckButton(name)
@@ -180,7 +180,7 @@ class configwin (AuxiliaryWindow):
             else:
                 cb = gtk.Entry()
            
-            add_( "config_"+opt["name"], cb, description, color )
+            add_( prefix_+opt["name"], cb, description, color )
 
         # Spacer between plugins
         add_( None, gtk.HSeparator() )
