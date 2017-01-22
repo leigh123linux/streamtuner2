@@ -18,6 +18,7 @@ exe:
 	sed -i '10 s/"\/usr\/share\/streamtuner2"/os.path.realpath(os.path.dirname(__file__)+"\/..\/share\/streamtuner2")/' usr/bin/streamtuner2
 src:
 tar:
+osxpkg:
 
 arch:
 	sed -i '1 s/python/python2/' usr/bin/streamtuner2

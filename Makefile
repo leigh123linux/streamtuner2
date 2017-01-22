@@ -52,6 +52,8 @@ exe:
 	--exe-dest c:/ --version $(VERSION) .win.pack st2.py
 arch:
 	$(PACK) -t $@ $(OPTS) $(DEPS_A) -p "$(NAME)-VERSION.arch.txz" st2.py
+osxpkg:
+	$(PACK) -t $@ $(OPTS) $(DEPS_A) -p "$(NAME)-VERSION.osxz" st2.py
 pyz:
         #@BUG: relative package references leave a /tmp/doc/ folder
 	$(PACK) -u packfile -s src -t zip --zip-shebang "/usr/bin/env python"	\
