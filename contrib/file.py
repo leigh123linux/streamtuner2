@@ -31,19 +31,18 @@
 # per pluginmanager2 for instance. And LANG=C breaks it on startup,
 # if media directories contain anything but ASCII filenames.
 #
-# Currently does not play files with UTF characters on Windows.
-#
 # If your player doesn't play local files try unchecking "Convert file path to 'file:///' style URL". (Might happen on Windows when not using VLC.exe).
-# When using VLC however it must be checked.
 #
 # After checking/unchecking restart Streamtuner2 for recollecting the local files.
 
 # modules
 import os
 import re
+import sys
 
 from channels import *
 from config import *
+from compat2and3 import urlquote
 
 # ID3 libraries
 try:
@@ -247,13 +246,17 @@ class file (ChannelPlugin):
     def file_entry(self, fn, dir):
         # basic data
         url = ("%s/%s" % (dir, fn))
-        url = url.replace("\\", "/")
+        url = url.replace("\\", "/") 
         if conf.file_browser_converttourl:
-            url = url.replace(" ", "%20")
+            url = urlquote(url.encode('utf-8'),":/") # needed also in VLC 2.0.8 on Ubuntu 12.04
+            #url = url.replace(" ", "%20") # for better readability on Ubuntu..., but not working with VLC 2.08
             if url.startswith("/"):
                 url = "file://" + url
             else:
                 url = "file:///" + url
+        else:
+            if conf.windows:
+                url=url.replace("/","\\",1) #1st slash must be backslash for VLC on Windows
         meta = {
             "title": "",
             "filename": fn,
@@ -274,7 +277,7 @@ class file (ChannelPlugin):
                 try:
                     if not streaminfo.info.bitrate == 0:
                         meta.update({"bitrate": streaminfo.info.bitrate/1000})
-                except: #FLAC and M4A do not have bitrate property
+                except: #FLAC bitrate available in Mutagen 1.36; for M4A not available
                     pass
                 if not streaminfo.info.length == 0.0: #FLAC sometimes have it...
                     meta.update({"length": ddhhmmss(int(streaminfo.info.length))})
