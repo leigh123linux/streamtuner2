@@ -4,7 +4,7 @@
 # category: io
 # title: play/record actions
 # description: Starts audio applications, guesses MIME types for URLs
-# version: 1.2.0
+# version: 1.2.1
 # priority: core
 #
 # Multimedia interface for starting audio players, recording app,
@@ -43,6 +43,7 @@ from xml.sax.saxutils import escape as xmlentities, unescape as xmlunescape
 
 import ahttp
 from config import *
+import sys
 
 
 # Coupling to main window
@@ -137,7 +138,7 @@ def run(cmd):
     if "cmd" in conf:
         cmd = conf.cmd % cmd
     elif conf.windows:
-        cmd = "start " + cmd
+        cmd = "start " + cmd.encode(sys.getfilesystemencoding())
     else:
         cmd = cmd + " &"
     try:
