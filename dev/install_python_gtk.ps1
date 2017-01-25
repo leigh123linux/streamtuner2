@@ -102,7 +102,7 @@ $tasks = @(
     title  = "Mutagen (ID3-Support)"
     url    = "mutagen" # no download url
     cmd    = "pip"
-    iargs   = "--disable-pip-version-check"
+    iargs   = "--disable-pip-version-check -U"
     testpth= "{PYTHON}\Lib\site-packages\mutagen-1*py2.7.egg-info"
     is_opt = '($optionalInstall)'     
     prescn = 'if ($optionalInstall) {if ($t.found = (test-path -path $t.testpth)) {$t.found = $t.testpth}} else {continue}'
@@ -337,11 +337,11 @@ function Check-PythonInstall {
         if ($PythonInstalledPath) {
             Write-Host ""
             Write-Host -b Red -f White @"
-Setup has detected an older version of Python 2.7 
+Setup has detected a version of Python different from 2.7.13 
 in $PythonInstalledPath.
 
 It is strongly recommended to exit this setup now and uninstall 
-the previous Python version before installing Streamtuner2.
+the installed Python version before installing Streamtuner2.
 
 Continuing this setup might result in loss of functionality 
 for other Python applications on your computer!
