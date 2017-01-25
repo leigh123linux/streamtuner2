@@ -143,24 +143,26 @@ class configwin (AuxiliaryWindow):
         for opt in meta["config"]:
             color = opt.get("color", None)
             type = opt.get("type", "str")
-            description = opt.get("description", "./.")
+            desc = opt.get("description", "./.")
             
             # hidden
             if opt.get("hidden"):
                 continue 
 
             # display checkbox
-            elif opt["type"] in ("bool", "boolean"):
-                cb = gtk.CheckButton(opt["description"])
-                description = None
+            elif type in ("bool", "boolean"):
+                cb = gtk.CheckButton(desc)
+                if re.search("<(\w+)[^>]*>.+</\\1>", desc):
+                    cb.get_child().set_use_markup(True)
+                desc = None
 
             # drop down list
-            elif opt["type"] in ("select", "choose", "options"):
+            elif type in ("select", "choose", "options"):
                 cb = ComboBoxText(ComboBoxText.parse_options(opt.get("select"))) # custom uikit widget
 
             # numeric
-            elif opt["type"] in ("int", "integer", "numeric"):
-                adj = gtk.Adjustment(0, 0, 5000, 1, 10, 0)
+            elif type in ("int", "integer", "numeric"):
+                adj = gtk.Adjustment(0, 0, int(opt.get("max", 5000)), 1, 10, 0)
                 if ver == 2:
                     cb = gtk.SpinButton(adj, 1.0, 0)
                 else:
@@ -173,14 +175,14 @@ class configwin (AuxiliaryWindow):
                 cb, ls = uikit.config_treeview(opt, opt.get("columns", "Key,Value").split(","))
                 add_("cfgui_tv", cb, "", None)
                 self.widgets["config_" + opt["name"]] = ls
-                add_({}, uikit.label("<small>%s</small>" % description, markup=True, size=455))
+                add_({}, uikit.label("<small>%s</small>" % desc, markup=True, size=455))
                 continue
 
             # text field
             else:
                 cb = gtk.Entry()
            
-            add_( prefix_+opt["name"], cb, description, color )
+            add_( prefix_+opt["name"], cb, desc, color )
 
         # Spacer between plugins
         add_( None, gtk.HSeparator() )
