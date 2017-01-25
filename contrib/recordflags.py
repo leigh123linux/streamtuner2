@@ -2,7 +2,7 @@
 # api: streamtuner2
 # title: Recording options
 # description: Allows to set streamripper/fIcy options before recording
-# version: 0.7
+# version: 0.8
 # depends: streamtuner2 > 2.2.0
 # conflicts: continuous_record
 # priority: optional
@@ -10,6 +10,7 @@
 #    { name: recordflags_auto, type: bool, value: 1, description: Apply options automatically once saved. }
 #    { name: recordflags_row, type: select, value: record_flags, select: "record_flags|extras", description: Station field for saved options. }
 #    { name: recordflags_dir, type: str, value: "", description: Default output directory. }
+#    { name: recordflags_extra, type: select, value: basic, select: basic|extra|verbose, description: Detailed tool options. }
 # type: handler
 # category: ui
 #
@@ -18,12 +19,15 @@
 # recording for example.
 #
 # Reuses the known option scheme from the config window. Which is perhaps
-# less pretty than a custom dialog, but allows to show options for different
-# download/recording tools.
+# less pretty than a custom dialog, but allows to set options for different
+# download/recording tools: streamripper, fPls, youtube-dl, wget.
 #
 # Note that predefining -flags in the Apps/Recording config table might
 # conflict with per-stream options. In particular avoid a -d directory
 # default for streamripper; and use this plugins´ option instead.
+#
+# You can set the "detailed" option to show more tool options. Per default
+# only the most useful flags are shown.
 #
 # ToDo:
 #  → override main.record() instead of action.record
@@ -58,29 +62,30 @@ class recordflags (FeaturePlugin):
             "category": "recording",
             "version": "1.64.6",
             "description": "Standard radio/stream recording tool",
+            "doc": "streamripper is the standard tool for recording and extracting songs from internet radio stations. It does have a plethora of options, some of which are available here:",
             "config": [
-                { "name": "A",	"arg": "-A",	"type": "bool",	"description": "➖𝘼 Don't split individual tracks/MP3s", "value": False },
-                { "name": "a",	"arg": "-a",	"type": "str",	"description": "➖𝙖 Single MP3 output file", "value": "" },
-                { "name": "dir", "arg": "-d",	"type": "str",	"description": "➖𝙙 Destination directory", "value": "" },
-                { "name": "D",	"arg": "-D",	"type": "str",	"description": "➖𝘿 Filename pattern", "value": "" },
-                { "name": "s",	"arg": "-s",	"type": "bool",	"description": "➖𝙨 No subdirectories for each stream", "value": False },
-                { "name": "t",	"arg": "-t",	"type": "bool",	"description": "➖𝙩 Never overwrite incomplete tracks", "value": False },
-                { "name": "T",	"arg": "-T",	"type": "bool",	"description": "➖𝙏 Truncate duplicated incompletes", "value": False },
-                { "name": "o",	"arg": "-o",	"type": "select",	"description": "➖𝙤 Incomplete track overwriting", "select": "|always|never|larger|version", "value": "" },
-                { "name": "l",	"arg": "-l",	"type": "int",	"description": "➖𝙡 Seconds to record", "value": 3600 },
-                { "name": "M",	"arg": "-M",	"type": "int",	"description": "➖𝙈 Max megabytes to record", "value": 16 },
-                { "name": "xs2", "arg": "--xs2", "type": "bool", "description": "➖➖𝙭𝙨𝟮 New pause detection algorithm", "value": False },
-                { "name": "xsnone", "arg": "--xs-none", "type": "bool", "description": "➖➖𝙭𝙨➖𝙣𝙤𝙣𝙚 No silence splitting", "value": False },
-                { "name": "i",	"arg": "-i",	"type": "bool", "description": "➖𝙞 Don't add any ID3 tags", "value": False },
-                { "name": "id3v1", "arg": "--with-id3v1", "type": "bool", "description": "➖➖𝙬𝙞𝙩𝙝➖𝙞𝙙𝟯𝙫𝟭 Add ID3v1 tags", "value": False },
-                { "name": "noid3v2", "arg": "--without-id3v2", "type": "bool", "description": "➖➖𝙬𝙞𝙩𝙝𝙤𝙪𝙩➖𝙞𝙙𝟯𝙫𝟮 Omit ID3v2 tags", "value": False },
-                { "name": "cs_fs", "arg": "--codeset-filesys", "type": "str", "description": "Charset filesystem", "value": "" },
-                { "name": "cs_id3", "arg": "--codeset-id3", "type": "str", "description": "Charset ID3 tags", "value": "" },
-                { "name": "u",	"arg": "-u",	"type": "str", "description": "➖𝙪 User-agent (browser id)", "value": "" },
-                { "name": "p",	"arg": "-p",	"type": "str", "description": "➖𝙥 Url for HTTP proxy to use", "value": "" },
-                { "name": "r",	"arg": "-r",	"type": "str", "description": "➖𝙧 Relay server 'localhost:8000'", "value": "" },
-                { "name": "m",	"arg": "-m",	"type": "int", "description": "➖𝙢 Timeout for stalled connection", "value": 15 },
-                { "name": "debug", "arg": "--debug", "type": "bool", "description": "➖➖𝙙𝙚𝙗𝙪𝙜 Extra verbosity", "value": False },
+                #{ "name": "A",	"arg": "-A",	"type": "bool",	"description": "<b>-A</b> Don't split individual tracks/MP3s", "value": False },
+                { "name": "Aa",	"arg": "-A -a",	"type": "str",	"description": "<b>-a</b> Single MP3 output filename. (Instead of splitting by song.)", "value": "" },
+                { "name": "dir", "arg": "-d",	"type": "str",	"description": "<b>-s</b> Destination directory", "value": "" },
+                { "name": "D",	"arg": "-D",	"type": "str",	"description": "<b>-D</b> Filename pattern", "value": "" },
+                { "name": "s",	"arg": "-s",	"type": "bool",	"description": "<b>-s</b> No subdirectories for each stream", "value": False },
+                { "name": "o",	"arg": "-o",	"type": "select",	"description": "<b>-o</b> Incomplete track overwriting", "select": "|always|never|larger|version", "value": "" },
+                { "name": "t",	"arg": "-t",	"type": "bool",	"description": "<b>-t</b> Never overwrite incomplete tracks", "value": False, "category": "extra" },
+                { "name": "T",	"arg": "-T",	"type": "bool",	"description": "<b>-T</b> Truncate duplicated incompletes", "value": False, "category": "extra" },
+                { "name": "l",	"arg": "-l",	"type": "int",	"description": "<b>-l</b> Seconds to record", "value": 0, "max": 7*24*3600 },
+                { "name": "M",	"arg": "-M",	"type": "int",	"description": "<b>-M</b> Max megabytes to record", "value": 512 },
+                { "name": "xs2", "arg": "--xs2", "type": "bool", "description": "<b>--xs2</b> New pause detection algorithm", "value": False },
+                { "name": "xsnone", "arg": "--xs-none", "type": "bool", "description": "<b>--xs-none</b> No silence splitting", "value": False, "category": "extra" },
+                { "name": "i",	"arg": "-i",	"type": "bool", "description": "<b>-i</b> Don't add any ID3 tags", "value": False, "category": "extra" },
+                { "name": "id3v1", "arg": "--with-id3v1", "type": "bool", "description": "<b>--with-id3v1</b> Add ID3v1 tags", "value": False },
+                { "name": "noid3v2", "arg": "--without-id3v2", "type": "bool", "description": "<b>--without-id3v2</b> Omit ID3v2 tags", "value": False, "category": "verbose" },
+                { "name": "cs_fs", "arg": "--codeset-filesys", "type": "str", "description": "Charset filesystem", "value": "", "category": "extra" },
+                { "name": "cs_id3", "arg": "--codeset-id3", "type": "str", "description": "Charset ID3 tags", "value": "", "category": "extra" },
+                { "name": "u",	"arg": "-u",	"type": "str", "description": "<b>-u</b> User-agent (browser id)", "value": "", "category": "extra" },
+                { "name": "p",	"arg": "-p",	"type": "str", "description": "<b>-p</b> Url for HTTP proxy to use", "value": "", "category": "extra" },
+                { "name": "r",	"arg": "-r",	"type": "str", "description": "<b>-r</b> Relay server 'localhost:8000'", "value": "", "category": "extra" },
+                { "name": "m",	"arg": "-m",	"type": "int", "description": "<b>-m</b>Timeout for stalled connection", "value": 15, "category": "verbose" },
+                { "name": "debug", "arg": "--debug", "type": "bool", "description": "<b>--debug</b> Extra verbosity", "value": False, "category": "verbose"},
             ]
         },
         "fPls": {
@@ -91,16 +96,16 @@ class recordflags (FeaturePlugin):
             "version": "1.0.19",
             "description": "Alternative station recording tool",
             "config": [
-                { "name": "max", "arg": "-M", "type": "int", "description": "➖𝙈 Maximum cumulative playing time", "value": 0 },
-                { "name": "loop", "arg": "-L", "type": "int", "description": "➖𝙇 Maximum playlist loops", "value": 0 },
-                { "name": "retry", "arg": "-R", "type": "int", "description": "➖𝙍 Maximum per-stream retries", "value": 0 },
-                { "name": "redir", "arg": "-l", "type": "int", "description": "➖𝙡 Redirect follow limit", "value": 0 },
-                { "name": "fail", "arg": "-T", "type": "int", "description": "➖𝙏 Wait time after failure", "value": 0 },
-                { "name": "daemon", "arg": "-i", "type": "int", "description": "➖𝙞 Max network idle seconds", "value": 0 },
-                { "name": "authfn", "arg": "-a", "type": "str", "description": "➖𝙛 HTTP auth file (user:pass)", "value": "" },
-                { "name": "verbose", "arg": "-v", "type": "bool", "description": "➖𝙫 Verbose mode", "value": False },
-                { "name": "daemon", "arg": "-d", "type": "str", "description": "➖𝙙 Daemon mode: log file", "value": "" },
-                { "name": "ficy", "arg": "-P", "type": "str", "description": "➖𝙋 Path to fIcy", "value": "" },
+                { "name": "max", "arg": "-M", "type": "int", "description": "<b>-M</b> Maximum cumulative playing time", "value": 0 },
+                { "name": "loop", "arg": "-L", "type": "int", "description": "<b>-L</b> Maximum playlist loops", "value": 0 },
+                { "name": "retry", "arg": "-R", "type": "int", "description": "<b>-R</b> Maximum per-stream retries", "value": 0 },
+                { "name": "redir", "arg": "-l", "type": "int", "description": "<b>-l</b> Redirect follow limit", "value": 0 },
+                { "name": "fail", "arg": "-T", "type": "int", "description": "<b>-T</b> Wait time after failure", "value": 0 },
+                { "name": "daemon", "arg": "-i", "type": "int", "description": "<b>-i</b> Max network idle seconds", "value": 0 },
+                { "name": "authfn", "arg": "-a", "type": "str", "description": "<b>-a</b> HTTP auth file (user:pass)", "value": "" },
+                { "name": "verbose", "arg": "-v", "type": "bool", "description": "<b>-v</b> Verbose mode", "value": False },
+                { "name": "daemon", "arg": "-d", "type": "str", "description": "<b>-d</b> Daemon mode: log file", "value": "" },
+                { "name": "ficy", "arg": "-P", "type": "str", "description": "<b>-P</b> Path to fIcy", "value": "" },
             ]
         },
         "youtube-dl": {
@@ -112,14 +117,14 @@ class recordflags (FeaturePlugin):
             "description": "Youtube downloader",
             "config": [
                 { "name": "freeformats", "arg": "--prefer-free-formats", "type": "bool", "description": "Prefer free audio formats", "value": False },
-                { "name": "format", "arg": "-f", "type": "select", "select": "=any|b=best|249=webm audio only DASH|250=webm audio only DASH|140=m4a audio only DASH|171=webm audio only DASH|251=webm audio only DASH|278=webm 256x144 DASH|160=mp4 256x144 DASH|242=webm 426x240 DASH|133=mp4 426x240 DASH|243=webm 640x360 DASH|134=mp4 640x360 DASH|244=webm 854x480 DASH|135=mp4 854x480 DASH|247=webm 1280x720 DASH|136=mp4 1280x720 DASH|248=webm 1920x1080 DASH|137=mp4 1920x1080 DASH|17=3gp 176x144 small|36=3gp 320x180 small|43=webm 640x360 medium|18=mp4 640x360 medium|22=mp4 1280x720 hd720", "description": "➖𝙛 Format", "value": "b" },
-                { "name": "c", "arg": "-c", "type": "bool", "description": "➖𝙘 Continue partial downloads ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ", "value": True },
-                { "name": "netrc", "arg": "-n", "type": "bool", "description": "➖𝙣 Use .netrc for auth/login", "value": False },
-                { "name": "ignore", "arg": "-i", "type": "bool", "description": "➖𝙞 Ignore errors", "value": False },
-                { "name": "proxy", "arg": "--proxy", "type": "str", "description": "➖𝙥 Proxy", "value": "" },
-                { "name": "verbose", "arg": "-v", "type": "bool", "description": "➖𝙫 Verbose mode", "value": False },
-                { "name": "ipv4", "arg": "-4", "type": "bool", "description": "➖𝟰 Use IPv4", "value": False },
-                { "name": "ipv6", "arg": "-6", "type": "bool", "description": "➖𝟲 Use IPv6", "value": False },
+                { "name": "format", "arg": "-f", "type": "select", "select": "=any|b=best|249=webm audio only DASH|250=webm audio only DASH|140=m4a audio only DASH|171=webm audio only DASH|251=webm audio only DASH|278=webm 256x144 DASH|160=mp4 256x144 DASH|242=webm 426x240 DASH|133=mp4 426x240 DASH|243=webm 640x360 DASH|134=mp4 640x360 DASH|244=webm 854x480 DASH|135=mp4 854x480 DASH|247=webm 1280x720 DASH|136=mp4 1280x720 DASH|248=webm 1920x1080 DASH|137=mp4 1920x1080 DASH|17=3gp 176x144 small|36=3gp 320x180 small|43=webm 640x360 medium|18=mp4 640x360 medium|22=mp4 1280x720 hd720", "description": "<b>-f</b> Format", "value": "b" },
+                { "name": "c", "arg": "-c", "type": "bool", "description": "<b>-c</b> Continue partial downloads ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ", "value": True },
+                { "name": "netrc", "arg": "-n", "type": "bool", "description": "<b>-n</b> Use .netrc for auth/login", "value": False },
+                { "name": "ignore", "arg": "-i", "type": "bool", "description": "<b>-i</b> Ignore errors", "value": False },
+                { "name": "proxy", "arg": "--proxy", "type": "str", "description": "<b>-p</b> Proxy", "value": "" },
+                { "name": "verbose", "arg": "-v", "type": "bool", "description": "<b>-v</b> Verbose mode", "value": False, "category": "extra" },
+                { "name": "ipv4", "arg": "-4", "type": "bool", "description": "<b>-4</b> Use IPv4", "value": False, "category": "extra" },
+                { "name": "ipv6", "arg": "-6", "type": "bool", "description": "<b>-6</b> Use IPv6", "value": False, "category": "extra" },
             ]
         },
         "wget": {
@@ -130,13 +135,13 @@ class recordflags (FeaturePlugin):
             "version": "1.15",
             "description": "HTTP download utility",
             "config": [
-                { "name": "c", "arg": "-c", "type": "bool", "description": "➖𝙘 Continue partial downloads.", "value": True },
-                { "name":"nc", "arg":"-nc", "type": "bool", "description": "➖𝙣𝙘 No-clobber, keep existing files.", "value": False },
-                { "name": "N", "arg": "-N", "type": "bool", "description": "➖𝙉 Only fetch newer files", "value": False },
-                { "name": "O", "arg": "-O", "type": "str",  "description": "➖𝙊 Output to file", "value": "" },
-                { "name": "v", "arg": "-v", "type": "bool", "description": "➖𝙫 Verbose mode", "value": False },
-                { "name": "S", "arg": "-S", "type": "bool", "description": "➖𝙎 Show response headers", "value": False },
-                { "name": "U", "arg": "-U", "type": "str",  "description": "➖𝙐 Useragent to send", "value": "" },
+                { "name": "c", "arg": "-c", "type": "bool", "description": "<b>-c</b> Continue partial downloads.", "value": True },
+                { "name":"nc", "arg":"-nc", "type": "bool", "description": "<b>-nc</b> No-clobber, keep existing files.", "value": False },
+                { "name": "N", "arg": "-N", "type": "bool", "description": "<b>-N</b> Only fetch newer files", "value": False },
+                { "name": "O", "arg": "-O", "type": "str",  "description": "<b>-O</b> Output to file", "value": "" },
+                { "name": "v", "arg": "-v", "type": "bool", "description": "<b>-v</b> Verbose mode", "value": False },
+                { "name": "S", "arg": "-S", "type": "bool", "description": "<b>-S</b> Show response headers", "value": False },
+                { "name": "U", "arg": "-U", "type": "str",  "description": "<b>-U</b> Useragent to send", "value": "" },
             ]
         },
     }
@@ -162,7 +167,7 @@ class recordflags (FeaturePlugin):
         #parent.on_record_clicked = self.show_window
 
         # add menu entry (for simple triv#1 option)
-        uikit.add_menu([parent.streammenu], "Set single MP3 record -A flag", self.set_cont)
+        uikit.add_menu([parent.extensions_context], "Set single MP3 record -A flag", self.set_cont)
 
         # default widget actions
         parent.win_recordoptions.connect("delete-event", self.hide)
@@ -175,11 +180,11 @@ class recordflags (FeaturePlugin):
         self.load_config = parent.configwin.load_config   # populate _cfg widgets
         self.save_config = parent.configwin.save_config   # save from _cfg widgets
         self.recordoptions_cfg = parent.recordoptions_cfg # our vbox widget
-
+        
     # prepares a few shortcuts
     def map_app_args(self, app):
         config = self.flag_meta[app]["config"]
-        self.argmap = { row["arg"]: row["name"] for row in config if row.get("arg") }
+        self.argmap = { row["arg"].split(" ")[0]: row["name"] for row in config if row.get("arg") }
         self.namemap = dict(zip(self.argmap.values(), self.argmap.keys()))
         self.typemap = { row["name"]: row["type"] for row in config if row.get("type") }
         self.defmap = { row["name"]: row["value"] for row in config if row.get("value") is not None }
@@ -249,19 +254,27 @@ class recordflags (FeaturePlugin):
         # show window
         p.win_recordoptions.show()
 
-    # Put config widgets into recordoptions_cfg vbox
-    def add_flag(self, id=None, w=None, label=None, color=None, image=None, align=5):
-        self.parent.recordoptions_cfg.pack_start(uikit.wrap(self.widgets, id, w, label, color, image, align, label_markup=1, label_size=250))
-
 
     # populate config widgets, seth defaults/current settings
     def load_config_widgets(self, row, group="streamripper", p=None):
         # clean up previous
         [self.recordoptions_cfg.remove(w) for w in self.recordoptions_cfg.get_children()]
         # add plugins
-        self.add_plg(group, self.flag_meta[group], self.add_flag, self.cfg_widget_pfx)
+        self.add_plg(group, self.filter_options(self.flag_meta[group]), self.add_flag, self.cfg_widget_pfx)
         # set values
         self.load_config(self.configdict_from_args(row), self.cfg_widget_pfx, widgets=self.widgets)
+
+    # clean up options according to each {category:} and `recordflags_extra`
+    def filter_options(self, meta):
+        meta = copy.copy(meta)
+        filter = ["basic", conf.recordflags_extra, None, {"verbose":["extra"]}.get(conf.recordflags_extra)]
+        meta["config"] = [desc for desc in meta["config"] if desc.get("category") in filter]
+        return meta
+
+    # Put config widgets into recordoptions_cfg vbox
+    def add_flag(self, id=None, w=None, label=None, color=None, image=None, align=5):
+        self.parent.recordoptions_cfg.pack_start(uikit.wrap(self.widgets, id, w, label, color, image, align, label_markup=1, label_size=250))
+
         
     # return "--args str" for current config widget states
     def args_from_configwin(self):
@@ -278,7 +291,8 @@ class recordflags (FeaturePlugin):
         # add default options from configured recoding app
         if conf.record.get("audio/*"):
             add = re.findall('"(.+?)"', conf.record["audio/*"])
-            cmdstr = add[0] + " " + cmdstr
+            if add:
+                cmdstr = add[0] + " " + cmdstr
         # global/default plugin option, if set
         if conf.recordflags_dir:
             r["dir"] = conf.recordflags_dir
