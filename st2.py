@@ -518,7 +518,7 @@ class StreamTunerTwo(gtk.Builder):
 def main():
 
     # graphical
-    if not len(conf.args.action):
+    if not len(conf.args.action) and not conf.args.version:
 
         # prepare for threading in Gtk+ callbacks
         gobject.threads_init()
@@ -540,6 +540,7 @@ def main():
     # invoke command-line interface
     else:
         import cli
+        #print "CLI.py:"
         cli.StreamTunerCLI(conf.args.action)
 
 # run

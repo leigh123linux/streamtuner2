@@ -38,14 +38,17 @@ class StreamTunerCLI (object):
     
     # start
     def __init__(self, actions):
-
+        #log.INIT(actions)
+        #log.CONF(conf.args)
         # fake init    
         action.main = empty_parent()
         action.main.current_channel = self.current_channel
 
         # check if enough arguments, else  help
-        if not actions:
-            a = self.help
+        if conf.args.version:
+            cmd = self.show_version
+        elif not actions:
+            cmd = self.help
         # first cmdline arg == action
         else:
             command = actions[0]
@@ -56,6 +59,7 @@ class StreamTunerCLI (object):
                 return
 
         # run
+        #log.CONF(cmd)
         result = cmd(*actions[1:])
         if result:
             self.json(result)
@@ -75,7 +79,18 @@ syntax:  streamtuner2 action [channel] "stream title"
           streamtuner2 category shoutcast "Top 40"
           streamtuner2 categories xiph
         """)
-        
+
+    # only show -V version
+    def show_version(self, *args):
+        print(plugin_meta(frame=3)["version"])
+
+    # show modules and versions
+    def modules(self, *args):
+        self.channel("pluginmanager2")
+        for name in ["st2", "config", "uikit", "pluginconf", "action", "cli", "ahttp"] + module_list():
+            meta = plugin_meta(module=name, extra_base=["config"])
+            print("%s: %s" % (name, meta["version"]))
+    
     # prints stream data from cache
     def stream(self, *args):
  
@@ -142,8 +157,8 @@ syntax:  streamtuner2 action [channel] "stream title"
     def channel(self, module):
         plugin = __import__("channels."+module, None, None, [""])
         plugin_class = plugin.__dict__[module]
-        p = plugin_class(None)
-        p.parent = empty_parent()
+        parent = empty_parent()
+        p = plugin_class(parent)
         return p
     
     # load all channel modules    
@@ -165,6 +180,7 @@ syntax:  streamtuner2 action [channel] "stream title"
 # trap for some main window calls
 class empty_parent (object):    
     channel = {}
+    hooks = { "init": [], "config_save": [], "config_load": [] }
     null = lambda *a: None
     status = lambda *a: None
     thread = lambda *a: None
