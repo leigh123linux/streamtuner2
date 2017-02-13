@@ -3,7 +3,7 @@
 # title: radiolist.net
 # description: Station list by continent+country
 # url: http://radiolist.net/
-# version: 0.1
+# version: 0.2
 # type: channel
 # category: radio
 # priority: extra
@@ -20,12 +20,32 @@
 
 
 import re
+import action
 import ahttp
 from config import *
 from channels import *
 
 
 # radiolist.net
+#
+# · Groups stations by continents and countries. Where Europe seems to be the
+#   main category (empty "" path), while U.S. is labeled "/world", and Canada
+#   and Asia etc. again a subpath "/world/canada" even. The .catmap{} assigns
+#   paths to titles.
+#
+# · Playlist formats vary wildly. Therefore this module comes with a guessing
+#   method (super crude) of its own.
+#
+# · The audio-format-from-URL guessing should be generalized out of here perhaps.
+#
+# · Each station is in a <tr>…</tr> block. Invidual regexps are used for field
+#   extraction afterwards (instead of a block match).
+#
+# · Entries may contain more than one streaming url. Each accompanied by a
+#   bitrate. → Therefore the .best_url() sorting method.
+#
+# · Later versions might of course use multi-urls again…
+#
 class radiolist (ChannelPlugin):
 
     # module attributes
@@ -62,10 +82,10 @@ class radiolist (ChannelPlugin):
         entries = []
         html = ahttp.get("http://www.radiolist.net/" + self.catmap[cat])
         for block in re.findall("<tr>(.+?)</tr>", html, re.S):
-            ut = re.findall(rx_title, block)
-            uu = re.findall(rx_urls, block)
-            lg = re.findall(rx_genre, block)
-            print ut, uu, lg
+            ut = re.findall(rx_title, block)  # homepage+title
+            uu = re.findall(rx_urls, block)   # urls+bitrates
+            lg = re.findall(rx_genre, block)  # location+genre
+            #print ut, uu, lg
             if ut and uu and lg:
                 url, br = self.best_url(uu)
                 entries.append(dict(
@@ -79,21 +99,18 @@ class radiolist (ChannelPlugin):
                     genre = lg[1]
                 ))
         # done    
+        [log.DATA(e) for e in entries]
         return entries
 
-    # pick highest rated URL
+    # pick highest rated URL from [(url,bitrate),…] tuples
     def best_url(self, urls):
-        r = {}
-        for url, br in urls:
-            r[url] = to_int(br)
-        #print "r=", r
+        r = dict([(u, to_int(b)) for u,b in urls])  # {url: bitrate, …}
         best = sorted(r, key=r.get, reverse=True)
-        #print "best=", best
         return best[0], r[best[0]]
 
     # see if audio type can be guessed
     def guess_fmt(self, url):
-        ext = re.findall("mp3|ogg|wma|asx", url)
+        ext = re.findall("mp3|ogg|wma|aac|mp4", url)
         if ext:
             return mime_fmt(ext[0])
         else:
@@ -101,7 +118,7 @@ class radiolist (ChannelPlugin):
 
     # guess PLS/M3U from url
     def guess_pls(self, url):
-        ext = re.findall("pls|asx|m3u|srv", url)
+        ext = re.findall("|".join(action.playlist_fmt_prio), url)
         if ext:
             return ext[0]
         else:
