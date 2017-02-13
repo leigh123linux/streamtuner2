@@ -7,10 +7,11 @@
 #    { arg: -d,     type: str,      name: disable[], description: Omit plugin from initialization.  }
 #    { arg: -e,     type: str,      name: enable[],  description: Add channel plugin.  }
 #    { arg: --gtk3, type: boolean,  name: gtk3,      description: Start with Gtk3 interface. }
+#    { arg: --nt,   type: boolean,  name: nothreads, description: Disable threading/gtk_idle UI. }
 #    { arg: -D,     type: boolean,  name: debug,     description: Enable debug messages on console }
 #    { arg: action, type: str *,    name: action[],  description: CLI interface commands. }
 #    { arg: -x,     type: boolean,  name: exit,      hidden: 1 }
-#    { arg: --nt,   type: boolean,  name: nothreads, description: Disable threading/gtk_idle UI. }
+#    { arg: -V,     type: boolean,  name: version,   description: Print version.  }
 # version: 2.7
 # priority: core
 # depends: pluginconf >= 0.1, os, json, re, zlib, pkgutil
