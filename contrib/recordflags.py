@@ -122,7 +122,7 @@ class recordflags (FeaturePlugin):
                 { "name": "netrc", "arg": "-n", "type": "bool", "description": "<b>-n</b> Use .netrc for auth/login", "value": False },
                 { "name": "ignore", "arg": "-i", "type": "bool", "description": "<b>-i</b> Ignore errors", "value": False },
                 { "name": "proxy", "arg": "--proxy", "type": "str", "description": "<b>-p</b> Proxy", "value": "" },
-                { "name": "verbose", "arg": "-v", "type": "bool", "description": "<b>-v</b> Verbose mode", "value": False, "category": "extra" },
+                { "name": "verbose", "arg": "-v", "type": "bool", "description": "<b>-v</b> Verbose mode", "value": False, "category": "verbose" },
                 { "name": "ipv4", "arg": "-4", "type": "bool", "description": "<b>-4</b> Use IPv4", "value": False, "category": "extra" },
                 { "name": "ipv6", "arg": "-6", "type": "bool", "description": "<b>-6</b> Use IPv6", "value": False, "category": "extra" },
             ]
