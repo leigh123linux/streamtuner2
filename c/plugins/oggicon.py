@@ -2,7 +2,7 @@
 # api: streamtuner2
 # title: OGG icon
 # description: highlights OGG Vorbis and Opus stations with icons
-# version: 0.1
+# version: 0.2
 # depends: uikit
 # type: feature
 # category: ui
@@ -44,8 +44,6 @@ class oggicon (FeaturePlugin):
     # hook filter, set gtk icons
     def init2(self, parent):
         GenericChannel.postprocess_filters.append(self.row_icon)
-        #uikit.gtk.rc_parse_string(gtkrc)
-        #uikit.gtk.rc_reset_styles(uikit.gtk.settings_get_for_screen(uikit.gtk.gdk.screen_get_default()))
         self.add_icons()
  
     # adds gtk.IconFactory and one IconSet/Pixbuf each
@@ -56,11 +54,10 @@ class oggicon (FeaturePlugin):
             fact.add(stock_id, img)
         fact.add_default()
 
-    # filter: add `state` icon name depending on audio format
+    # postprocess_filter: add `state` icon name depending on audio format
     def row_icon(self, row, channel):
-        if row.get("format") == "audio/ogg":
-            row["state"] = "ogg"
-        if row.get("format") == "audio/opus":
-            row["state"] = "opus"
+        fmt = str(row.get("format", channel.audioformat))[6:]
+        if fmt in ("ogg", "opus"):
+            row["state"] = fmt
         return True
 
