@@ -3,7 +3,7 @@
 # title: radio.net
 # description: Europe's biggest radio platform
 # url: http://radio.net/
-# version: 0.5
+# version: 0.6
 # type: channel
 # category: radio
 # png:
@@ -79,13 +79,31 @@ class radionet (ChannelPlugin):
                 html += ahttp.get(self.genre_url.format(cat) + "?p={}".format(p))
         self.set_key(html)
         r = []
-
+        """
+        <div class="stationinfo-content">Fresh pop music, R&#039;n&#039;B, the newest chart hits and the Top 40 can all be found on this Internet radio station, ANTENNE BAYERN.</div>
+        </div><div class="stationinfo   stationinfo-extended  "  expandable ng-cloak >
+        <a href="http://antennefrankfurt.radio.net/" class="stationinfo-link" id="">
+        <svg class="icon icon-play" id=""><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-play" id=""></use></svg>
+        <img src="http://static.radio.net/images/broadcasts/60/cf/19304/c44.png" onError="this.src=window.stationLogo;" alt="ANTENNE FRANKFURT 95.1 " id="">
+        <strong id="">
+        <svg class="icon icon-podcast"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-podcast"></use></svg>
+        <span highlight-text="Top 40" highlight-class="highlight-tags" id="">antenne frankfurt 95.1 </span>
+        </strong>
+        <small highlight-text="Top 40" highlight-class="highlight-tags" id="">
+        Frankfurt am Main, Germany / Charts, News, Pop, Top 40, News, Weather</small>
+        <em now-playing="19304" searched-term="Top 40" id=""></em>
+        </a>
+        <a class="stationinfo-info-toggle" href="" ng-click="toggle()">
+        <svg class="icon icon-arrow-up"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-arrow-up"></use></svg>
+        <svg class="icon icon-arrow-down"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-arrow-down"></use></svg>
+        </a>
+        """
         # split station blocks
-        for row in re.split("""<div class="stationinfo""", html):
+        for row in re.split("""<div class="stationinfo""", html)[1:]:
         
             # extract text fields
             d = re.findall("""
-              <a\s+href="(//([\w-]+)\.radio\.net/?)" .*?
+              <a\s+href="(?:http:)?(//([\w-]+)\.radio\.net/?)" .*?
               <img\s+src="([^<">]+)" .*?
               <strong[^>]*>(.*?)</strong> .*?
               <small[^>]*>\s*(.*?)\s*</small> .*?
