@@ -86,6 +86,25 @@ section.</p>
   within the bookmarks tab.</p>
   </section>
 
+  <section>
+  <title>🔌 Recording options</title>
+  <p>Overrides the <gui style="button"><key>●</key> record</gui> button to
+  not start streamripper right away. Instead it prompts for additional
+  settings before proceeding.</p>
+  <p>Common options are conveniently listed and saveable on a per-station
+  basis. Which allows to suppress stream editing (record just one long
+  MP3 file), or file naming schemes.</p>
+  <p>Additionally it supports options of following recording backends:</p>
+  <list>
+   <item><p><app>streamrippper</app> - for radio stations</p></item>
+   <item><p><app>fPls/fIcy</app> - for radio stations</p></item>
+   <item><p><app>youtube-dl</app> - video downloads</p></item>
+   <item><p><app>wget</app> - plain MOD/ZIP files</p></item>
+  </list>
+  <p>The plugin provides config options of its own, such as a default
+  output directory, or how many / how detailed options to show.</p>
+  </section>
+
 </section>
 
 <section>
@@ -205,6 +224,13 @@ downloadable feature plugins in the <key>📦 Add</key> tab.</p>
     archive is often just 2-3 MB. Temporary m3u/pls files can also
     be deleted. → Tick the parts you want to have removed before hitting
     the reset button.</p>
+  </section>
+
+  <section>
+    <subtitle>🔌 OGG Icon</subtitle>
+    <p>Introduces small state icons to make higher-quality Vorbis and
+    Opus stations stand out. (Not all channels provide exact format
+    information, so you'll mostly notice for Jamendo and Xiph.) </p>
   </section>
 
 </section>

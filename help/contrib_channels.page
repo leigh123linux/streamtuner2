@@ -85,21 +85,35 @@ and its <key>📦 Add</key> tab, where you can easily install them.</p>
     imports that list as static directory. </p>
   </section>
   <section>
-    <subtitle>📻 Compound</subtitle>
-    <p>The compound channel is a meta plugin. It can aggregate categories
-    from other channel plugins on a per-category basis. You for example
-    can mash Top40 or Classic genres from Shoutcast, Xiph, InternetRadio,
-    Tunein, etc. Which avoids switching between channel tabs somewhat. </p>
-  </section>
-  <section>
     <subtitle>📻 File browser</subtitle>
     <p>You can also browse local files with streamtuner2 using the file
     browser plugin. It must be configured with your music collection path.
     It's not a default plugin, because this isn't really what Streamtuner2
     is made for. There are way better local music collection managers for
     Linux. It's just here for convenience, and displays files just as any
-    other channel list. It has no specific file management features, and
-    won't receive any. </p>
+    other channel list. It has no specific file management features. (ID3
+    editing or file renaming were planned, but never implemented.) </p>
+  </section>
+  <section>
+    <subtitle>📻 <link href="http://tuner2.com/">Tuner2</link></subtitle>
+    <p>Map-oriented radio station directory. </p>
+  </section>
+  <section>
+    <subtitle>📻 <link href="http://radiolist.net/">radiolist.net</link></subtitle>
+    <p>Is a continent/country-oriented radio directory. The stream formats
+    vary wildly however.</p>
+  </section>
+  <section>
+    <subtitle>📻 <link href="http://streamlicensing.com/">streamlicensing</link></subtitle>
+    <p>Is a streaming server provider and handles licensing for stations.
+    Provides a small genre-oriented directory. </p>
+  </section>
+  <section>
+    <subtitle>📻 Compound</subtitle>
+    <p>The compound channel is a meta plugin. It can aggregate categories
+    from other channel plugins on a per-category basis. You for example
+    can mash Top40 or Classic genres from Shoutcast, Xiph, InternetRadio,
+    Tunein, etc. Which avoids switching between channel tabs somewhat. </p>
   </section>
 </section>
 
