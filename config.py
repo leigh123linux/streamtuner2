@@ -12,6 +12,7 @@
 #    { arg: action, type: str *,    name: action[],  description: CLI interface commands. }
 #    { arg: -x,     type: boolean,  name: exit,      hidden: 1 }
 #    { arg: -V,     type: boolean,  name: version,   description: Print version.  }
+#    { arg: -w,     type: boolean,  name: pydoc,     hiden: 1  }
 # version: 2.7
 # priority: core
 # depends: pluginconf >= 0.1, os, json, re, zlib, pkgutil
