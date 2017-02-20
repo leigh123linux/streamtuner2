@@ -92,7 +92,7 @@ section.</p>
   not start streamripper right away. Instead it prompts for additional
   settings before proceeding.</p>
   <p>Common options are conveniently listed and saveable on a per-station
-  basis. Which allows to suppress stream editing (record just one long
+  basis. Which allows to suppress stream splitting (record just one long
   MP3 file), or file naming schemes.</p>
   <p>Additionally it supports options of following recording backends:</p>
   <list>
