@@ -179,7 +179,12 @@ class recordflags (FeaturePlugin):
         self.add_plg = parent.configwin.add_plg           # create _cfg widgets
         self.load_config = parent.configwin.load_config   # populate _cfg widgets
         self.save_config = parent.configwin.save_config   # save from _cfg widgets
-        self.recordoptions_cfg = parent.recordoptions_cfg # our vbox widget
+        self.cfg_vbox = { 
+            "basic": self.parent.recordoptions_cfg,
+            "extra": self.parent.recordoptions_cfg_extra,
+            "verbose": self.parent.recordoptions_cfg_verbose,
+        }
+
         
     # prepares a few shortcuts
     def map_app_args(self, app):
@@ -258,23 +263,16 @@ class recordflags (FeaturePlugin):
     # populate config widgets, seth defaults/current settings
     def load_config_widgets(self, row, group="streamripper", p=None):
         # clean up previous
-        [self.recordoptions_cfg.remove(w) for w in self.recordoptions_cfg.get_children()]
+        [vbox.remove(w) for vbox in self.cfg_vbox.values() for w in vbox.get_children()]
         # add plugins
-        self.add_plg(group, self.filter_options(self.flag_meta[group]), self.add_flag, self.cfg_widget_pfx)
+        self.add_plg(group, self.flag_meta[group], self.pack_option, self.cfg_widget_pfx)
         # set values
         self.load_config(self.configdict_from_args(row), self.cfg_widget_pfx, widgets=self.widgets)
 
-    # clean up options according to each {category:} and `recordflags_extra`
-    def filter_options(self, meta):
-        meta = copy.copy(meta)
-        filter = ["basic", conf.recordflags_extra, None, {"verbose":"extra"}.get(conf.recordflags_extra)]
-        log.CONF(filter)
-        meta["config"] = [desc for desc in meta["config"] if desc.get("category") in filter]
-        return meta
-
-    # Put config widgets into recordoptions_cfg vbox
-    def add_flag(self, id=None, w=None, label=None, color=None, image=None, align=5):
-        self.parent.recordoptions_cfg.pack_start(uikit.wrap(self.widgets, id, w, label, color, image, align, label_markup=1, label_size=250))
+    # Put config widgets into recordoptions_cfg_*** vbox
+    def pack_option(self, id=None, w=None, label=None, color=None, image=None, align=5, opt={}):
+        vbox = self.cfg_vbox.get(opt.get("category"), self.cfg_vbox["basic"])
+        vbox.pack_start(uikit.wrap(self.widgets, id, w, label, color, image, align, label_markup=1, label_size=250))
 
         
     # return "--args str" for current config widget states
