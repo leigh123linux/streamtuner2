@@ -118,8 +118,8 @@ class configwin (AuxiliaryWindow):
             if not name in conf.plugins:
                 conf.plugins[name] = False
                 conf.add_plugin_defaults(meta, name)
-            add_ = self.add_channels if meta.get("type") == "channel" else self.add_features
-            self.add_plg(name, meta, add_)
+            pack_ = self.pack_channels if meta.get("type") == "channel" else self.pack_features
+            self.add_plg(name, meta, pack_)
         pass
 
     # Description text
@@ -129,14 +129,14 @@ class configwin (AuxiliaryWindow):
                 + "<span size='smaller' stretch='ultraexpanded'>{description}</span>"
 
     # Add [x] plugin setting, and its configuration definitions, set defaults from conf.*
-    def add_plg(self, name, meta, add_, prefix_="config_"):
+    def add_plg(self, name, meta, pack_, prefix_="config_"):
 
         # Plugin enable button
         cb = gtk.CheckButton(name)
         cb.set_sensitive(not meta.get("priority") in ("core", "required", "builtin"))
         cb.get_children()[0].set_markup(self.plugin_text.format(**meta))
         cb.set_tooltip_text(self._tooltip(meta))
-        add_( "config_plugins_"+name, cb, color=meta.get("color"), image=meta.get("png"), align=0)
+        pack_("config_plugins_"+name, cb, color=meta.get("color"), image=meta.get("png"), align=0)
 
         # Default values are already in conf[] dict
         # (now done in conf.add_plugin_defaults)
@@ -173,19 +173,19 @@ class configwin (AuxiliaryWindow):
             # ListView
             elif opt["type"] in ("list", "table", "array", "dict"):
                 cb, ls = uikit.config_treeview(opt, opt.get("columns", "Key,Value").split(","))
-                add_("cfgui_tv", cb, "", None)
+                pack_("cfgui_tv", cb, "", None, opt=opt)
                 self.widgets["config_" + opt["name"]] = ls
-                add_({}, uikit.label("<small>%s</small>" % desc, markup=True, size=455))
+                pack_({}, uikit.label("<small>%s</small>" % desc, markup=True, size=455))
                 continue
 
             # text field
             else:
                 cb = gtk.Entry()
            
-            add_( prefix_+opt["name"], cb, desc, color )
+            pack_( prefix_+opt["name"], cb, desc, color, opt=opt )
 
-        # Spacer between plugins
-        add_( None, gtk.HSeparator() )
+        # spacer between plugins
+        pack_( None, gtk.HSeparator() )
 
     # Reformat `doc` linebreaks for gtk.tooltip
     def _tooltip(self, meta):
@@ -195,11 +195,11 @@ class configwin (AuxiliaryWindow):
         return doc
 
     # Put config widgets into channels/features configwin notebooks
-    def add_channels(self, id=None, w=None, label=None, color=None, image=None, align=20):
+    def pack_channels(self, id=None, w=None, label=None, color=None, image=None, align=20, opt={}):
         self.plugin_options.pack_start(uikit.wrap(self.widgets, id, w, label, color, image, align, label_markup=1))
 
     # Separate tab for non-channel plugins
-    def add_features(self, id=None, w=None, label=None, color=None, image=None, align=20):
+    def pack_features(self, id=None, w=None, label=None, color=None, image=None, align=20, opt={}):
         self.feature_options.pack_start(uikit.wrap(self.widgets, id, w, label, color, image, align, label_markup=1))
 
 
