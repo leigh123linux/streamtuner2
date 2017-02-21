@@ -2,7 +2,7 @@
 # api: streamtuner2
 # title: Recording options
 # description: Allows to set streamripper/fIcy options before recording
-# version: 0.8
+# version: 0.8.1
 # depends: streamtuner2 > 2.2.0
 # conflicts: continuous_record
 # priority: optional
@@ -66,7 +66,7 @@ class recordflags (FeaturePlugin):
             "config": [
                 #{ "name": "A",	"arg": "-A",	"type": "bool",	"description": "<b>-A</b> Don't split individual tracks/MP3s", "value": False },
                 { "name": "Aa",	"arg": "-A -a",	"type": "str",	"description": "<b>-a</b> Single MP3 output filename. (Instead of splitting by song.)", "value": "" },
-                { "name": "dir", "arg": "-d",	"type": "str",	"description": "<b>-s</b> Destination directory", "value": "" },
+                { "name": "dir", "arg": "-d",	"type": "str",	"description": "<b>-d</b> Destination directory", "value": "" },
                 { "name": "D",	"arg": "-D",	"type": "str",	"description": "<b>-D</b> Filename pattern", "value": "" },
                 { "name": "s",	"arg": "-s",	"type": "bool",	"description": "<b>-s</b> No subdirectories for each stream", "value": False },
                 { "name": "o",	"arg": "-o",	"type": "select",	"description": "<b>-o</b> Incomplete track overwriting", "select": "|always|never|larger|version", "value": "" },
@@ -267,7 +267,8 @@ class recordflags (FeaturePlugin):
     # clean up options according to each {category:} and `recordflags_extra`
     def filter_options(self, meta):
         meta = copy.copy(meta)
-        filter = ["basic", conf.recordflags_extra, None, {"verbose":["extra"]}.get(conf.recordflags_extra)]
+        filter = ["basic", conf.recordflags_extra, None, {"verbose":"extra"}.get(conf.recordflags_extra)]
+        log.CONF(filter)
         meta["config"] = [desc for desc in meta["config"] if desc.get("category") in filter]
         return meta
 
