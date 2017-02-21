@@ -2,7 +2,7 @@
 # api: streamtuner2
 # title: Recording options
 # description: Allows to set streamripper/fIcy options before recording
-# version: 0.8.1
+# version: 0.8.5
 # depends: streamtuner2 > 2.2.0
 # conflicts: continuous_record
 # priority: optional
@@ -10,7 +10,6 @@
 #    { name: recordflags_auto, type: bool, value: 1, description: Apply options automatically once saved. }
 #    { name: recordflags_row, type: select, value: record_flags, select: "record_flags|extras", description: Station field for saved options. }
 #    { name: recordflags_dir, type: str, value: "", description: Default output directory. }
-#    { name: recordflags_extra, type: select, value: basic, select: basic|extra|verbose, description: Detailed tool options. }
 # type: handler
 # category: ui
 #
@@ -25,9 +24,6 @@
 # Note that predefining -flags in the Apps/Recording config table might
 # conflict with per-stream options. In particular avoid a -d directory
 # default for streamripper; and use this plugins´ option instead.
-#
-# You can set the "detailed" option to show more tool options. Per default
-# only the most useful flags are shown.
 #
 # ToDo:
 #  → override main.record() instead of action.record
@@ -77,7 +73,7 @@ class recordflags (FeaturePlugin):
                 { "name": "xs2", "arg": "--xs2", "type": "bool", "description": "<b>--xs2</b> New pause detection algorithm", "value": False },
                 { "name": "xsnone", "arg": "--xs-none", "type": "bool", "description": "<b>--xs-none</b> No silence splitting", "value": False, "category": "extra" },
                 { "name": "i",	"arg": "-i",	"type": "bool", "description": "<b>-i</b> Don't add any ID3 tags", "value": False, "category": "extra" },
-                { "name": "id3v1", "arg": "--with-id3v1", "type": "bool", "description": "<b>--with-id3v1</b> Add ID3v1 tags", "value": False },
+                { "name": "id3v1", "arg": "--with-id3v1", "type": "bool", "description": "<b>--with-id3v1</b> Add ID3v1 tags", "value": False, "category": "extra" },
                 { "name": "noid3v2", "arg": "--without-id3v2", "type": "bool", "description": "<b>--without-id3v2</b> Omit ID3v2 tags", "value": False, "category": "verbose" },
                 { "name": "cs_fs", "arg": "--codeset-filesys", "type": "str", "description": "Charset filesystem", "value": "", "category": "extra" },
                 { "name": "cs_id3", "arg": "--codeset-id3", "type": "str", "description": "Charset ID3 tags", "value": "", "category": "extra" },
@@ -102,10 +98,10 @@ class recordflags (FeaturePlugin):
                 { "name": "redir", "arg": "-l", "type": "int", "description": "<b>-l</b> Redirect follow limit", "value": 0 },
                 { "name": "fail", "arg": "-T", "type": "int", "description": "<b>-T</b> Wait time after failure", "value": 0 },
                 { "name": "daemon", "arg": "-i", "type": "int", "description": "<b>-i</b> Max network idle seconds", "value": 0 },
-                { "name": "authfn", "arg": "-a", "type": "str", "description": "<b>-a</b> HTTP auth file (user:pass)", "value": "" },
-                { "name": "verbose", "arg": "-v", "type": "bool", "description": "<b>-v</b> Verbose mode", "value": False },
-                { "name": "daemon", "arg": "-d", "type": "str", "description": "<b>-d</b> Daemon mode: log file", "value": "" },
-                { "name": "ficy", "arg": "-P", "type": "str", "description": "<b>-P</b> Path to fIcy", "value": "" },
+                { "name": "authfn", "arg": "-a", "type": "str", "description": "<b>-a</b> HTTP auth file (user:pass)", "value": "", "category": "extra" },
+                { "name": "verbose", "arg": "-v", "type": "bool", "description": "<b>-v</b> Verbose mode", "value": False, "category": "verbose" },
+                { "name": "daemon", "arg": "-d", "type": "str", "description": "<b>-d</b> Daemon mode: log file", "value": "", "category": "verbose" },
+                { "name": "ficy", "arg": "-P", "type": "str", "description": "<b>-P</b> Path to fIcy", "value": "", "category": "extra" },
             ]
         },
         "youtube-dl": {
@@ -119,9 +115,9 @@ class recordflags (FeaturePlugin):
                 { "name": "freeformats", "arg": "--prefer-free-formats", "type": "bool", "description": "Prefer free audio formats", "value": False },
                 { "name": "format", "arg": "-f", "type": "select", "select": "=any|b=best|249=webm audio only DASH|250=webm audio only DASH|140=m4a audio only DASH|171=webm audio only DASH|251=webm audio only DASH|278=webm 256x144 DASH|160=mp4 256x144 DASH|242=webm 426x240 DASH|133=mp4 426x240 DASH|243=webm 640x360 DASH|134=mp4 640x360 DASH|244=webm 854x480 DASH|135=mp4 854x480 DASH|247=webm 1280x720 DASH|136=mp4 1280x720 DASH|248=webm 1920x1080 DASH|137=mp4 1920x1080 DASH|17=3gp 176x144 small|36=3gp 320x180 small|43=webm 640x360 medium|18=mp4 640x360 medium|22=mp4 1280x720 hd720", "description": "<b>-f</b> Format", "value": "b" },
                 { "name": "c", "arg": "-c", "type": "bool", "description": "<b>-c</b> Continue partial downloads ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ", "value": True },
-                { "name": "netrc", "arg": "-n", "type": "bool", "description": "<b>-n</b> Use .netrc for auth/login", "value": False },
+                { "name": "netrc", "arg": "-n", "type": "bool", "description": "<b>-n</b> Use .netrc for auth/login", "value": False, "category": "extra" },
                 { "name": "ignore", "arg": "-i", "type": "bool", "description": "<b>-i</b> Ignore errors", "value": False },
-                { "name": "proxy", "arg": "--proxy", "type": "str", "description": "<b>-p</b> Proxy", "value": "" },
+                { "name": "proxy", "arg": "--proxy", "type": "str", "description": "<b>-p</b> Proxy", "value": "", "category": "extra" },
                 { "name": "verbose", "arg": "-v", "type": "bool", "description": "<b>-v</b> Verbose mode", "value": False, "category": "verbose" },
                 { "name": "ipv4", "arg": "-4", "type": "bool", "description": "<b>-4</b> Use IPv4", "value": False, "category": "extra" },
                 { "name": "ipv6", "arg": "-6", "type": "bool", "description": "<b>-6</b> Use IPv6", "value": False, "category": "extra" },
@@ -139,9 +135,9 @@ class recordflags (FeaturePlugin):
                 { "name":"nc", "arg":"-nc", "type": "bool", "description": "<b>-nc</b> No-clobber, keep existing files.", "value": False },
                 { "name": "N", "arg": "-N", "type": "bool", "description": "<b>-N</b> Only fetch newer files", "value": False },
                 { "name": "O", "arg": "-O", "type": "str",  "description": "<b>-O</b> Output to file", "value": "" },
-                { "name": "v", "arg": "-v", "type": "bool", "description": "<b>-v</b> Verbose mode", "value": False },
-                { "name": "S", "arg": "-S", "type": "bool", "description": "<b>-S</b> Show response headers", "value": False },
-                { "name": "U", "arg": "-U", "type": "str",  "description": "<b>-U</b> Useragent to send", "value": "" },
+                { "name": "v", "arg": "-v", "type": "bool", "description": "<b>-v</b> Verbose mode", "value": False, "category": "verbose" },
+                { "name": "S", "arg": "-S", "type": "bool", "description": "<b>-S</b> Show response headers", "value": False, "category": "verbose" },
+                { "name": "U", "arg": "-U", "type": "str",  "description": "<b>-U</b> Useragent to send", "value": "", "category": "extra" },
             ]
         },
     }
@@ -162,15 +158,12 @@ class recordflags (FeaturePlugin):
     # hooks for user interface/handlers
     def init2(self, parent, *k, **kw):
         # TEMPORARY WORKAROUND: swap action.record()
-        action.record = self.action_record
+        action.record = self.action_hook
         # BETTER APPROACH: hook record button
         #parent.on_record_clicked = self.show_window
 
-        # add menu entry (for simple triv#1 option)
-        uikit.add_menu([parent.extensions_context], "Set single MP3 record -A flag", self.set_cont)
-
         # default widget actions
-        parent.win_recordoptions.connect("delete-event", self.hide)
+        parent.win_recordoptions.connect("delete-event", self.hide_dialog)
         parent.recordoptions_go.connect("clicked", self.do_record)
         parent.recordoptions_save.connect("clicked", self.save_only)
         parent.recordoptions_eventbox.modify_bg(gtk.STATE_NORMAL, gtk.gdk.Color("#442211"))
@@ -185,6 +178,9 @@ class recordflags (FeaturePlugin):
             "verbose": self.parent.recordoptions_cfg_verbose,
         }
 
+        # add menu entry (for simple triv#1 option)
+        #uikit.add_menu([parent.extensions_context], "Set single MP3 record -A flag", self.set_cont)
+
         
     # prepares a few shortcuts
     def map_app_args(self, app):
@@ -197,16 +193,16 @@ class recordflags (FeaturePlugin):
 
 
     # triv #1 menu option → only saves `-A` flag to row["recordflags"]
-    def set_cont(self, row):
-        row[conf.recordflags_row] = "-A"
+    #def set_cont(self, row):
+    #    row[conf.recordflags_row] = "-A"
         
     # override GtkWindow.destroy/delete-event
-    def hide(self, *x):
+    def hide_dialog(self, *x):
         self.parent.win_recordoptions.hide()
         return True
         
     # hook for action.record
-    def action_record(self, row={}, *k, **kw):
+    def action_hook(self, row={}, *k, **kw):
         kw["assoc"] = conf.record
         # default
         if not self.can_handle(row):
@@ -302,6 +298,7 @@ class recordflags (FeaturePlugin):
             name = self.argmap[arg]
             r[name] = val.strip() if len(val) else 1
         return r
+        # ToDo: differentiate `-A -a …` and `-A` only
 
     #-- convert { name=>value, .... } dict into "--arg str"
     def args_from_configdict(self, loaded_config):
