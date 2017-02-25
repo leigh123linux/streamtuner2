@@ -3,7 +3,7 @@
 # title: Dirble
 # description: Song history tracker for Internet radio stations.
 # url: http://dirble.com/
-# version: 2.2
+# version: 2.3
 # type: channel
 # category: radio
 # config:
@@ -27,13 +27,12 @@
 #
 #
 # Dirble is a user-contributed list of radio stations,
-# auot-updating song titles and station information.
+# auto-updating song titles and station information.
 # Homepages are there now, and thus favicons readily
 # available. Extra station banners aren't fetched.
 #
-# It provides a JSON API. Which in this newer version
-# is actually speedier, as it doesn't strictly impose
-# pagination roundtrips anymore.
+# It provides a JSON API. Since plugin version 2.3
+# we're back to slower pagination requests however.
 #
 # Response times are fixed now by overriding the HTTP
 # encoding. (A python-requests issue mostly).
@@ -63,7 +62,7 @@ class dirble (ChannelPlugin):
     # control flags
     has_search = False
     listformat = "srv"
-    titles = dict(listeners=False, playing="Location")
+    titles = dict(playing="Location")
     base = "http://api.dirble.com/v2/{}"
     key = "a0bdd7b8efc2f5d1ebdf1728b65a07ece4c73de5"
 
@@ -78,21 +77,24 @@ class dirble (ChannelPlugin):
                 cats += [[c["title"] for c in row["children"]]]
                 for c in row["children"]:
                     self.catmap[c["title"]] = c["id"]
-        self.categories = cats
+        self.categories = ["Popular", "Recent"] + cats
 
 
     # Fetch entries
     def update_streams(self, cat, search=None):
         self.progress(1)
-        return [
-            self.unpack(r)
-               for r in
-            self.api("category/{}/stations".format(self.catmap.get(cat, 0)), all=1)# per_page=200 won't work
-        ]
+        if search:
+            r = self.api("search", query=search, page=0, pages=1)
+        elif cat in ("Popular", "Recent"):
+            r = self.api("stations/{}".format(cat.lower()), pages=15)
+        else:
+            r = self.api("category/{}/stations".format(self.catmap.get(cat, 0)), pages=10)
+        return [self.unpack(row) for row in r]
 
     
     # Extract rows
     def unpack(self, r):
+        listeners = 0
 
         # find stream
         if len(r.get("streams", [])):
@@ -103,6 +105,7 @@ class dirble (ChannelPlugin):
             # select "best" stream if there are alternatives
             if len(r["streams"]) > 0:
                 for alt in r["streams"]:
+                    listeners += alt.get("listeners", 0)
 
                     # set defaults
                     if not alt.get("content_type"):
@@ -139,7 +142,9 @@ class dirble (ChannelPlugin):
             url = s["stream"],
             format = s["content_type"],
             bitrate = s["bitrate"],
-           # img = r["image"]["image"]["thumb"]["url"], # CDN HTTPS trip up requests.get
+            listeners = listeners,
+            img = r.get("image", {}).get("thumb", {}).get("url", ""), # CDN HTTPS trip up requests.get
+            img_resize = 32,
             state = self.state_map.get(int(s["status"]), ""),
             deleted = s.get("timedout", False),
         )
@@ -152,18 +157,33 @@ class dirble (ChannelPlugin):
 
 
     # Patch API url together, send request, decode JSON list
-    def api(self, method, **params):
+    def api(self, method, pages=1, **params):
+        # pagination parameters
+        if pages > 1:
+            params["page"] = 0
+            params["per_page"] = 30
+            params["offset"] = 0
         params["token"] = conf.dirble_api_key or self.key
         try:
-            # HTTP request and JSON decoding take a while
-            r = ahttp.get(self.base.format(method), params, encoding="utf-8")
-            r = json.loads(r)
-            if isinstance(r, dict) and "error" in r:
-                log.ERR(r["error"])
-                raise Exception
+            r = []
+            # paginate results
+            for params["page"] in range(0, pages):
+                self.progress(pages)
+                # send HTTP request and extract JSON
+                add = ahttp.get(self.base.format(method), params, encoding="utf-8")
+                add = json.loads(add)
+                # check for errors
+                if isinstance(add, dict) and add.get("error"):
+                    if r:
+                        log.WARN(add["error"])
+                        break
+                    else:
+                        raise Exception(add)
+                r += add
             # cut down stream list
-            if len(r) > int(conf.max_streams):
-                del r[int(conf.max_streams):]
+            self.progress(0)
+            #if len(r) > int(conf.max_streams):
+            #    del r[int(conf.max_streams):]
         except Exception as e:
             log.ERR("Dirble API retrieval failure:", e)
             r = []
