@@ -4,7 +4,7 @@
 # category: io
 # title: play/record actions
 # description: Starts audio applications, guesses MIME types for URLs
-# version: 1.2.1
+# version: 1.3
 # priority: core
 #
 # Multimedia interface for starting audio players, recording app,
@@ -12,7 +12,7 @@
 # It maps audio MIME types, and extracts/converts playlist types
 # (PLS, M3U, XSPF, SMIL, JSPF, ASX, raw urls).
 #
-# Each channel plugin has a .listtype which defines the linked
+# Each channel plugin has a .listformat which defines the linked
 # audio playlist format. It's "pls", seldomly "m3u", or "xspf".
 # Some channels list raw "srv" addresses, while Youtube "href"
 # entries point to Flash videos.
@@ -374,13 +374,38 @@ def http_probe_get(url):
 
 
 
+# A few guessing functions
+#
+class heuristic_funcs(object):
+
+    # Probe url "extensions" for common media types
+    # (only care about the common audio formats, don't need an exact match or pre-probing in practice)
+    def mime_guess(self, url, default="x-audio-video/unknown"):
+        audio = re.findall("\\b(ogg|opus|spx|aacp|aac|mpeg|mp3|m4a|mp2|flac|midi|mod|kar|aiff|wma|ram|wav)", url)
+        if audio:
+            return "audio/{}".format(*audio)
+        video = re.findall("\\b(mp4|flv|avi|mp2|theora|3gp|nsv|fli|ogv|webm|mng|mxu|wmv|mpv|mkv)", url)
+        if audio:
+            return "video/{}".format(*audio)
+        return default
+
+    # guess PLS/M3U from url
+    def list_guess(self, url):
+        ext = re.findall("|".join(playlist_fmt_prio), url)
+        if ext:
+            return ext[0]
+        else:
+            return "srv"
+
+
+
 # Extract URLs and meta infos (titles) from playlist formats
 # ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 # It's mostly regex-based at the moment, because that's more
-# resilient against mailformed XSPF or JSON. But specialized
+# resilient against malformed XSPF or JSON. But specialized
 # import helpers can be added as needed.
 #
-class extract_playlist(object):
+class extract_playlist(heuristic_funcs):
 
     # Content of playlist file
     src = ""
@@ -605,18 +630,6 @@ class extract_playlist(object):
         }
         comb.update(row)
         return comb
-
-
-    # Probe url "extensions" for common media types
-    # (only care about the common audio formats, don't need an exact match or pre-probing in practice)
-    def mime_guess(self, url):
-        audio = re.findall("(ogg|opus|spx|aacp|aac|mpeg|mp3|m4a|mp2|flac|midi|mod|kar|aiff|wma|ram|wav)", url)
-        if audio:
-            return "audio/{}".format(*audio)
-        video = re.findall("(mp4|flv|avi|mp2|theora|3gp|nsv|fli|ogv|webm|mng|mxu|wmv|mpv|mkv)", url)
-        if audio:
-            return "video/{}".format(*audio)
-        return "x-audio-video/unknown"
 
 
 
