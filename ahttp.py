@@ -52,7 +52,7 @@ def progress_feedback(*args, **kwargs):
 session = requests.Session()
 # default HTTP headers for requests
 session.headers.update({
-    "User-Agent": "streamtuner2/2.1 (X11; Linux amd64; rv:33.0) like WinAmp/2.1",
+    "User-Agent": "streamtuner2/2.2 (X11; Linux amd64; rv:52.0) like WinAmp/2.1",
     "Accept": "*/*",
     "Accept-Language": "en-US,en,de,es,fr,it,*;q=0.1",
     "Accept-Encoding": "gzip, deflate",
@@ -65,9 +65,9 @@ session.headers.update({
 #  Well, it says "get", but it actually does POST and AJAXish GET requests too.
 #
 def get(
-       url, params={}, referer=None, post=0, ajax=0,
+       url, params={}, referer=None, post=0, ajax=0, json=0,
        binary=0, content=True, encoding=None, verify=False,
-       statusmsg=None, timeout=9.25, quieter=0
+       statusmsg=None, timeout=9.25, quieter=0, add_headers={}
     ):
 
     # statusbar info
@@ -75,7 +75,7 @@ def get(
         progress_feedback(url, timeout=timeout/1.5)
     
     # combine headers
-    headers = {}
+    headers = {}.update(add_headers)
     if ajax:
         headers["X-Requested-With"] = "XMLHttpRequest"
     if referer:
@@ -88,7 +88,10 @@ def get(
     # read
     if post:
         log.HTTP("POST", url, params)
-        r = session.post(url, data=params, headers=headers, timeout=timeout)
+        if json:
+            r = session.post(url, json=params, headers=headers, timeout=timeout)
+        else:
+            r = session.post(url, data=params, headers=headers, timeout=timeout)
     else:    
         log.HTTP("GET"+(" AJAX" if ajax else ""), url, params )
         r = session.get(url, params=params, headers=headers, verify=verify, timeout=timeout)
