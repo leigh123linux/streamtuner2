@@ -46,7 +46,7 @@ from channels import *
 #
 # · Later versions might of course use multi-urls again…
 #
-class radiolist (ChannelPlugin):
+class radiolist (ChannelPlugin, action.heuristic_funcs):
 
     # module attributes
     listformat = "pls"
@@ -93,8 +93,8 @@ class radiolist (ChannelPlugin):
                     title = unhtml(ut[0][1]),
                     url = url,
                     bitrate = br,
-                    format = self.guess_fmt(url),
-                    listformat = self.guess_pls(url),
+                    format = self.mime_guess(url, "audio/mpeg"),
+                    listformat = self.list_guess(url),
                     playing = lg[0],
                     genre = lg[1]
                 ))
@@ -108,19 +108,4 @@ class radiolist (ChannelPlugin):
         best = sorted(r, key=r.get, reverse=True)
         return best[0], r[best[0]]
 
-    # see if audio type can be guessed
-    def guess_fmt(self, url):
-        ext = re.findall("mp3|ogg|wma|aac|mp4", url)
-        if ext:
-            return mime_fmt(ext[0])
-        else:
-            return "audio/mpeg"
-
-    # guess PLS/M3U from url
-    def guess_pls(self, url):
-        ext = re.findall("|".join(action.playlist_fmt_prio), url)
-        if ext:
-            return ext[0]
-        else:
-            return "srv"
     
