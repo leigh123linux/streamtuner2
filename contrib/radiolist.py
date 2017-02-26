@@ -3,7 +3,7 @@
 # title: radiolist.net
 # description: Station list by continent+country
 # url: http://radiolist.net/
-# version: 0.2
+# version: 0.3
 # type: channel
 # category: radio
 # priority: extra
