@@ -3,7 +3,7 @@
 # title: Dirble
 # description: Song history tracker for Internet radio stations.
 # url: http://dirble.com/
-# version: 2.3
+# version: 2.4
 # type: channel
 # category: radio
 # config:
@@ -60,7 +60,7 @@ import ahttp
 class dirble (ChannelPlugin):
 
     # control flags
-    has_search = False
+    has_search = True
     listformat = "srv"
     titles = dict(playing="Location")
     base = "http://api.dirble.com/v2/{}"
@@ -84,11 +84,11 @@ class dirble (ChannelPlugin):
     def update_streams(self, cat, search=None):
         self.progress(1)
         if search:
-            r = self.api("search", query=search, page=0, pages=1)
+            r = self.api("search", query=search, page=0, pages=1, post=1)
         elif cat in ("Popular", "Recent"):
-            r = self.api("stations/{}".format(cat.lower()), pages=15)
+            r = self.api("stations/{}".format(cat.lower()), pages=5)
         else:
-            r = self.api("category/{}/stations".format(self.catmap.get(cat, 0)), pages=10)
+            r = self.api("category/{}/stations".format(self.catmap.get(cat, 0)), pages=5)
         return [self.unpack(row) for row in r]
 
     
@@ -157,7 +157,7 @@ class dirble (ChannelPlugin):
 
 
     # Patch API url together, send request, decode JSON list
-    def api(self, method, pages=1, **params):
+    def api(self, method, pages=1, post=0, **params):
         # pagination parameters
         if pages > 1:
             params["page"] = 0
@@ -170,7 +170,10 @@ class dirble (ChannelPlugin):
             for params["page"] in range(0, pages):
                 self.progress(pages)
                 # send HTTP request and extract JSON
-                add = ahttp.get(self.base.format(method), params, encoding="utf-8")
+                if post:
+                    method += "?token=" + params["token"]
+                    del params["token"]
+                add = ahttp.get(self.base.format(method), params, post=post, json=post, encoding="utf-8")
                 add = json.loads(add)
                 # check for errors
                 if isinstance(add, dict) and add.get("error"):
