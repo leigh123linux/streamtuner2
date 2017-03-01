@@ -14,12 +14,32 @@ streamtuner2 \- Browser for internet radio stations
 
 .SH DESCRIPTION
 Streamtuner2 is a graphical application for browsing through internet
-radio station directories, like
-.BR Shoutcast.com " and " Xiph.org " or " Internet-Radio.org.uk .
-It is written in Python and easy to extend. And besides the grapical
-interface, has a commandline interface.
+radio station directories, like:
+.2c
+.R "\(bu Shoutcast"
+.R "\(bu Xiph.org"
+.R "\(bu SurfMusik"
+.R "\(bu Internet-Radio"
+.R "\(bu Jamendo"
+.R "\(bu MyOggRadio"
+.R "\(bu RadioBrowser"
+.R "\(bu SomaFM"
+.R "\(bu TuneIn"
+.R "\(bu Streema"
+.1c
+.PP
+It utilizes your configured audio player or recording applications, which
+can be configured in the 
+.BR "<F12>"
+settings window.
+
+It is written in
+.IR Python
+and easy to extend. And besides the grapical interface, has a commandline
+interface. It comes with a couple of feature plugins and additional channels.
 
 .SH OPTIONS
+Without any options, it starts in the graphical mode, of course.
 
 .TP
 .BI help
@@ -58,6 +78,9 @@ returns all info about the first match as JSON output.
 .TP
 .BI streamtuner2 " play frequence3"
 Looks for the first occourence, and starts the audio player for FREQUENCE3.
+.TP
+.BI streamtuner2 " category tunein Jazz"
+Dumps a JSON list of all stations the named genre.
 
 
 .SH GRAPHICAL MODE
@@ -68,6 +91,37 @@ There's only one option for the graphical UI mode:
 Loads Gtk3 via PyGI instead of Gtk2. This is implicit when running on Python3
 anyway.
 
+.TP
+.BI --nt
+No-threading mode avoids some UI separation, but stabilizes the interface
+(in particular channel loading crashes occassionally) for some Gtk2/Gtk3
+and Python combinations.
+
+.TP
+.BI -d " plugin"
+Disable plugin from loading. Plugin names are all-lowercase and sometimes
+short versions of the channel or feature, such as "reddit", "xiph",
+"favicons" or "dnd".
+
+.TP
+.BI -e " plugin"
+Load a plugin that isn't set by default.
+
+.SH OTHER OPTIONS
+
+.TP
+.BI -D
+Enable debug mode, which shows a lot of activity messages during
+Streamtuner2 running - including UI changes and network requests or
+extraction steps.
+
+.TP
+.BI -V
+Show streamtuner version.
+
+.TP
+.BI version " -v"
+Summarize all plugin versions.
 
 .SH FILES
 .IR /home/ $USER /.config/streamtuner2/settings.json
