@@ -3,7 +3,7 @@
 # description: Directory and app for over 70.000 stations
 # type: channel
 # category: radio
-# version: 0.2
+# version: 0.3
 # url: http://www.streema.com/
 # png:
 #   iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABF0lEQVR42oWTMWsCURCE/Y/Bxh+QLrUIloKdELCxTOOBRSSgpZVYhCAWCtcEETGQJmCTkG7k47HcereeA4vnu32zszt7jceRFMXDQGoN
@@ -68,7 +68,7 @@ class streema (ChannelPlugin):
             return
         
         # split into blocks
-        for html in re.split('<div[^>]+class="item"', html):
+        for html in re.split('<div[^>]+?(?:data-role="player-popup"|class="item")', html):
 
             # not very efficient
             url = re.findall('data-url="/radios/play/(\d+)"', html)
