@@ -13,16 +13,20 @@
 #    skYa4HwfSS5w2otd8svtWurqHyvnCZcXAHRRW7v8nANnq6bSPk0ucFQS+M3G2fkduMqLrJF5d3zSTnyYATsXmhO89WLfix8A1NWjvwhek5+m
 #    praLGibPC8knFwnEh4U1ct9FvUvoLk0uPbjiCgCPyd+KD0/WyKX4EPcJFLG2/8EaMeLDoE91sH0B3ERWq2CKMoYAAAAASUVORK5CYII=
 # priority: extra
+# x-elevate: priority:default
 # extraction-method: regex, action-handler
 #
 # LiveRadio.ie, based in Ireland, is a radio station directory. It provides
-# genre or country browsing (not in this plugin). It accepts user submissions.
+# genre or country browsing (not in this plugin). Already lists over 5550
+# stations (more unique selections). Also accepts user submissions.
 #
-# This channel loads their station logos as favicons, provides a live search.
+# This channel loads their station logos as favicons. Even allows to utilize
+# the live search function.
 #
 # However, station URLs have to be fetched in a second page request. Such
 # the listings are unsuitable for exporting right away. OTOH the website is
 # pretty fast; so no delay there or in fetching complete categories.
+#
 
 import re
 from config import *
@@ -31,7 +35,7 @@ import ahttp
 import action
 
 
-# Just a blog, needs per-page lookup
+# Categorized directory, secondary URL lookup
 class liveradio (ChannelPlugin):
 
     # control flags
@@ -48,7 +52,7 @@ class liveradio (ChannelPlugin):
     base = "http://www.liveradio.ie/"
     
 
-    # static
+    # Extract genre links and URL aliases (e.g. "Top 20" maps to "/top-20")
     def update_categories(self):
         html = ahttp.get("http://www.liveradio.ie/genres")
         self.categories = ["Top 20"]
@@ -60,7 +64,7 @@ class liveradio (ChannelPlugin):
     # Fetch entries
     def update_streams(self, cat, search=None):
 
-        # fetch
+        # Assemble HTML (collect 1..9 into single blob prior extraction)
         html = ""
         page = 1
         while page < 9:
@@ -75,7 +79,13 @@ class liveradio (ChannelPlugin):
             else:
                 break
 
-        # extract
+        # Extract all the things
+        #
+        # · entries utilize HTML5 microdata classification
+        # · title and genre available right away
+        # · img url is embedded
+        # · keep station ID as `urn:liveradion:12345`
+        #
         r = []
         ls = re.findall("""
            itemtype="http://schema.org/RadioStation"> .*?
@@ -101,6 +111,11 @@ class liveradio (ChannelPlugin):
       
 
     # Update `url` on station data access (incurs a delay for playing or recording)
+    #
+    # · utilizes action.handler["urn:liveradio"] → urn_resolve hook
+    # · where the .update_streams() extraction stores `urn:liveradio:12345` as urls
+    # · and this callback extracts the JS invocation URL from liveradio.de station summaries
+    #
     def resolve_urn(self, row):
         if row.get("url").startswith("urn:liveradio"):
             id = row["url"].split(":")[2]
