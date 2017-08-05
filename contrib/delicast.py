@@ -3,7 +3,7 @@
 # title: Delicast
 # description: directory of streaming media
 # url: http://delicast.com/
-# version: 0.5
+# version: 0.7
 # type: channel
 # category: radio
 # config: -
@@ -19,10 +19,10 @@
 # suitable for extraction actually, because it requires a
 # second page request for uncovering the streaming URLs.
 #
-# This is done in row(), so only happens on playback. Which
-# of course won't allow for exporting/bookmarking etc.
-# And the server is somewhat unresponsive at times. Only one
-# page (50 stations) is fetched.
+# Audio URL lookup is done in urn_resolve action handler now,
+# so only happens on playback. Which of course won't allow for
+# exporting/bookmarking etc.
+# Now fetches up to 5 pages (20 entries each).
 
 
 import re
@@ -59,19 +59,24 @@ class delicast (ChannelPlugin):
     def update_streams(self, cat, search=None):
 
         ucat = re.sub("\W+", "-", cat.lower())
-        html = ahttp.get("http://delicast.com/radio/" + ucat)
-
+        html = ""
+        for i in range(1, 5):
+            add = ahttp.get("http://delicast.com/radio/" + ucat + ("" if i == 1 else "/%s" % i))
+            html += add
+            if not re.search("href='http://delicast.com/radio/%s/%s'" % (ucat, i+1), add):
+                break
         r = []
-        for tr in html.split("<tr>")[1:]:
-            ls = re.findall("""
-                "pStop\(\)" \s href="(.*?)">
+        for ls in re.findall("""
+                <b>\d+</b>\.
                 .*?
-                pics/((?!play_triangle)\w+)
+                <a[^>]+href="(http[^"]+/radio/\w+/\w+)"
+                .*?
+                /pics/((?!play_tri)\w+)
                 .*?
                 120%'>([^<>]+)</span>
-            """, tr, re.X|re.S)
+            """, html, re.X|re.S):
             if len(ls):
-                homepage, country, title = ls[0]
+                homepage, country, title = ls
                 r.append(dict(
                     homepage = homepage,
                     playing = country,
