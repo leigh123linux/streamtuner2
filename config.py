@@ -123,7 +123,7 @@ class ConfigDict(dict):
            "url/http": self.find_player(typ="browser"),
         }
         self.record = {
-           "audio/*": self.find_player(typ="xterm", append=' -e "streamripper %srv"'),   # -d /home/***USERNAME***/Musik
+           "audio/*": self.find_player(typ="xterm", append=' -e "streamripper %srv" -u "NSPlayer/10.0.0.3802" '),   # -d /home/***USERNAME***/Musik
            "video/youtube": self.find_player(typ="video", append=' $("youtube-dl %srv")'),
         }
         self.specbuttons = {
