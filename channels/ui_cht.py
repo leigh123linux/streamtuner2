@@ -8,6 +8,9 @@
 #
 # Reintroduces the channel/service link in the toolbar,
 # just like in streamtuner1.
+#
+# Note this requires '[✔] Add current channel name to window title'
+# in the general Options.
 
 
 import re
