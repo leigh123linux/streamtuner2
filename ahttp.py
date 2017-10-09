@@ -75,7 +75,8 @@ def get(
         progress_feedback(url, timeout=timeout/1.5)
     
     # combine headers
-    headers = {}.update(add_headers)
+    headers = {}
+    headers.update(add_headers)
     if ajax:
         headers["X-Requested-With"] = "XMLHttpRequest"
     if referer:
