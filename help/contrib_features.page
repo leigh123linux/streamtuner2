@@ -233,6 +233,15 @@ downloadable feature plugins in the <key>📦 Add</key> tab.</p>
     information, so you'll mostly notice for Jamendo and Xiph.) </p>
   </section>
 
+  <section>
+    <subtitle>🔌  Win32/subprocess</subtitle>
+    <p>Wraps the player/application exec() method. Instead of simple
+    shell execution, uses the Python subprocess module or win32 API
+    functions. This is mostly unneeded on Linux (kills a few features
+    even), but avoids the cmd.exe popup and delay on Windows. Highly
+    experimental at the moment.</p>
+  </section>
+
 </section>
 
 
