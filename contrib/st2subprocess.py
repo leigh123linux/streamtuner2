@@ -2,7 +2,7 @@
 # api: streamtuner2
 # title: win32/subprocess
 # description: Utilizes subprocess spawning or win32 API instead of os.system
-# version: 0.3
+# version: 0.3.1
 # depends: streamtuner2 > 2.2.0, python >= 2.7
 # priority: optional
 # config:
@@ -101,15 +101,12 @@ class st2subprocess (FeaturePlugin):
                  
         #-- Popen → https://docs.python.org/2/library/subprocess.html#popen-constructor
         v = conf.cmd_spawn
-        if v in ("popen"):
+        if v in ("popen", "shell"):
+            #-- Popen w/ shell=True and string cmd
+            if (v=="shell"):
+                args = [cmd]
             log.POPEN(
                 subprocess.Popen(args, shell=(v=="shell"), creationflags=flags).__dict__
-            )
-        #-- Popen w/ shell=True and string cmd
-        v = conf.cmd_spawn
-        if v in ("popen", "shell"):
-            log.POPEN_SHELL(
-                subprocess.Popen(cmd, shell=(v=="shell"), creationflags=flags).__dict__
             )
         #-- call → https://docs.python.org/2/library/subprocess.html#replacing-os-system
         elif v == "call":
