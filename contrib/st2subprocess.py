@@ -2,12 +2,12 @@
 # api: streamtuner2
 # title: win32/subprocess
 # description: Utilizes subprocess spawning or win32 API instead of os.system
-# version: 0.3.1
+# version: 0.4
 # depends: streamtuner2 > 2.2.0, python >= 2.7
 # priority: optional
 # config:
 #    { name: cmd_spawn, type: select, select: "popen|shell|call|execv|spawnv|pywin32|win32api|system", value: popen, description: Spawn method }
-#    { name: cmd_flags, type: select, select: "none|nowait|detached|nowaito|all|sw_hide||sw_minimize|sw_show", value: nowait, description: Process creation flags (win32) }
+#    { name: cmd_flags, type: select, select: "none|nowait|detached|nowaito|all|sw_hide|sw_maximize|sw_minimize|sw_show", value: nowait, description: Process creation flags (win32) }
 # type: handler
 # category: io
 #
@@ -25,7 +25,7 @@
 #  | os.execv         | w32 | s/[] | -       | full& | fork+exec            |
 #  | os.spawnv        | lnx | s/[] | nowait  | full& | ?                    |
 #  | pywin32.CreatePr | w32 | str  | detached| full  | Few parameters used  |
-#  | win32api.WinExec | w32 | str  | sw_show | base  | Mostly like `start`? |
+#  | win32api.WinExec | w32 | str  | sw_*    | base  | Mostly like `start`? |
 #  | system/default   |  *  | str  | -       | base  | normal action.run()  |
 #  +------------------+-----+------+---------+-------+----------------------+
 #
@@ -56,51 +56,74 @@ try:
     import win32process
     import win32api
 except Exception as e:
-    log.ERR("pywin32/win32api not available", e)
+    log.ERR("st2subprocess:", e)
+
+
+# references to original action.* methods
+orig_run = action.run
+orig_quote = action.quote    
 
 
 # hook action.run
 class st2subprocess (FeaturePlugin):
 
+
     # option strings to creationflags
     flagmap = {
         "nowait": os.P_NOWAIT,
         "detached": 0x00000008,  # https://stackoverflow.com/a/13593257/345031
-        "nowait0": os.P_NOWAITO,
+        "nowaito": os.P_NOWAITO,
         "all": 8 | os.P_NOWAIT | os.P_NOWAITO,
         "wait": os.P_WAIT, 
         "none": 0,
         "sw_hide": 0, # https://docs.python.org/2.7/library/subprocess.html#subprocess.STARTUPINFO
         "sw_minimize": 2,  # or 6
+        "sw_maximize": 3,
         "sw_show": 5,  # https://msdn.microsoft.com/en-us/library/windows/desktop/ms633548(v=vs.85).aspx
     }
 
 
     # swap out action.run()
     def init2(self, parent, *k, **kw):
-        self.osrun = action.run
-        action.run = self.action_run
-        
+        action.run = self.run
+        if conf.windows:
+            action.quote = self.quote
 
-    # override for exec method
-    def action_run(self, cmd):
+    
+    # override for action.quote
+    def quote(self, ins):
+        # use default for string-style exec methods / or array arg
+        if conf.cmd_spawn in ("system", "default", "win32api") or type(ins) is list:
+            return orig_quote(ins)
+        # only Posix-style shell quoting
+        return pipes.quote(ins)
+    
+
+    # override for action.run (os.system exec method)
+    def run(self, cmd):
 
         # blacklist
         if re.search("streamripper|cmd\.exe", cmd):
-            return self.osrun(cmd)
+            return orig_run(cmd)
+
         
         # split args
         args = shlex.split(cmd)
         # undo win32 quoting damage
-        if conf.windows and re.search('\^', cmd):
+        if conf.windows and re.search('\^', cmd): #and action.quote != self.quote:
             args = [re.sub(r'\^(?=[()<>"&^])', '', s) for s in args]
         # flags
-        flags = self.flagmap[conf.cmd_flags] if conf.windows and conf.cmd_flags in self.flagmap else 0
+        if conf.windows and conf.cmd_flags in self.flagmap:
+            flags = self.flagmap[conf.cmd_flags]
+        else:
+            flags = 0
+        # variant
+        v = conf.cmd_spawn
         # debug
-        log.EXEC("st2subprocess:", args, "creationflags=%s"%flags)
+        log.EXEC("st2subprocess/%s:" % v, args, "creationflags=%s"%flags)
+
                  
         #-- Popen → https://docs.python.org/2/library/subprocess.html#popen-constructor
-        v = conf.cmd_spawn
         if v in ("popen", "shell"):
             #-- Popen w/ shell=True and string cmd
             if (v=="shell"):
@@ -111,7 +134,7 @@ class st2subprocess (FeaturePlugin):
         #-- call → https://docs.python.org/2/library/subprocess.html#replacing-os-system
         elif v == "call":
             log.CALL(
-                subprocess.call(args, creationflags=flags).__dict__
+                subprocess.call(args, creationflags=flags)
             )
         #-- execv → https://docs.python.org/2/library/os.html#os.execv
         elif v == "execv":
@@ -134,12 +157,11 @@ class st2subprocess (FeaturePlugin):
         #-- win32api
         elif conf.cmd_spawn == "win32api":
             log.WIN32API_WinExec(
-                win32api.WinExec(cmd, flags)
+                win32api.WinExec(cmd, flags)  # should only use SW_* flags
             )
-            
         # fallback
         else:
-           return self.osrun(cmd)
+           return orig_run(cmd)
 
 
 
