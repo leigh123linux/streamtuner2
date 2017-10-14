@@ -3,7 +3,7 @@
 # title: Jamendo
 # description: A license-free music collection and artist hub.
 # type: channel
-# version: 2.2
+# version: 2.3
 # category: radio
 # url: http://jamendo.com/
 # depends: json
@@ -274,14 +274,17 @@ class jamendo (ChannelPlugin):
         # Static list of Radios
         if cat == "radios":
             for radio in ["BestOf", "Pop", "Rock", "Lounge", "Electro", "HipHop", "World", "Jazz", "Metal", "Soundtrack", "Relaxation", "Classical"]:
+                j = self.api(method="radios/stream", name=radio.lower(), imagesize=30)
+                if not len(j):
+                    continue
                 entries.append({
                     "genre": radio,
-                    "title": radio,
-                    "url": "http://streaming.radionomy.com/Jam" + radio,  # optional +".m3u"
+                    "title": j[0]["dispname"],
+                    "url": j[0]["stream"], #"http://streaming.jamendo.com/Jam" + radio,  # optional +".m3u"
                     "playing": "various artists",
                     "format": "audio/mpeg",
                     "homepage": "http://www.jamendo.com/en/radios",
-                    "img": "http://imgjam1.jamendo.com/new_jamendo_radios/%s30.jpg" % radio.lower(),
+                    "img": j[0]["image"] #"http://imgjam1.jamendo.com/new_jamendo_radios/%s30.jpg" % radio.lower(),
                 })
         
         # Playlist
