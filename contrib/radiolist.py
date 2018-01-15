@@ -3,7 +3,7 @@
 # title: radiolist.net
 # description: Station list by continent+country
 # url: http://radiolist.net/
-# version: 0.3
+# version: 0.4
 # type: channel
 # category: radio
 # priority: extra
@@ -76,17 +76,20 @@ class radiolist (ChannelPlugin, action.heuristic_funcs):
 
     # extract stream urls
     def update_streams(self, cat):
-        rx_title = re.compile('<a href="([^">]+)" target="_blank">(.+?)</a>', re.I)
-        rx_urls = re.compile('<a href="([^">]+)">(\d+)(?: Kbps)?</a>', re.I)
-        rx_genre = re.compile('<td class="cell">([^<]+)</td>', re.I)
+        rx_title = re.compile('<a\s+href="([^">]+)"[^>]+target="_blank"[^>]*>(.+?)</a>', re.I)
+        rx_urls = re.compile('<a href="([^">]+)">(\d+)(?: Kbps)*</a>', re.I)
+        rx_genre = re.compile('<td[^>]+>(\w*[^<>]*)</td>\s*<td[^>]+>(\w+[^<>]+)</td>\s*$', re.I)
         entries = []
-        html = ahttp.get("http://www.radiolist.net/" + self.catmap[cat])
+        html = ahttp.get("http://radiolist.net/" + self.catmap[cat])
+        log.DATA(html)
         for block in re.findall("<tr>(.+?)</tr>", html, re.S):
+            log.BLOCK(block)
             ut = re.findall(rx_title, block)  # homepage+title
             uu = re.findall(rx_urls, block)   # urls+bitrates
             lg = re.findall(rx_genre, block)  # location+genre
             #print ut, uu, lg
             if ut and uu and lg:
+                log.D(ut,uu,lg)
                 url, br = self.best_url(uu)
                 entries.append(dict(
                     homepage = ut[0][0],
@@ -95,8 +98,8 @@ class radiolist (ChannelPlugin, action.heuristic_funcs):
                     bitrate = br,
                     format = self.mime_guess(url, "audio/mpeg"),
                     listformat = self.list_guess(url),
-                    playing = lg[0],
-                    genre = lg[1]
+                    playing = lg[0][0],
+                    genre = lg[0][1]
                 ))
         # done    
         [log.DATA(e) for e in entries]
