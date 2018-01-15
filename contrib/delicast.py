@@ -3,7 +3,7 @@
 # title: Delicast
 # description: directory of streaming media
 # url: http://delicast.com/
-# version: 0.7
+# version: 0.8
 # type: channel
 # category: radio
 # config: -
@@ -61,15 +61,16 @@ class delicast (ChannelPlugin):
         ucat = re.sub("\W+", "-", cat.lower())
         html = ""
         for i in range(1, 5):
-            add = ahttp.get("http://delicast.com/radio/" + ucat + ("" if i == 1 else "/%s" % i))
+            add = ahttp.get("http://delicast.com/radio/q:" + ucat + ("" if i == 1 else "/%s" % i))
             html += add
-            if not re.search("href='http://delicast.com/radio/%s/%s'" % (ucat, i+1), add):
+            if not re.search("href='http://delicast.com/radio/q:%s/%s'" % (ucat, i+1), add):
                 break
         r = []
+        log.HTML(html)
         for ls in re.findall("""
                 <b>\d+</b>\.
                 .*?
-                <a[^>]+href="(http[^"]+/radio/\w+/\w+)"
+                <a[^>]+href="(http[^"]+/radio/\w+)"
                 .*?
                 /pics/((?!play_tri)\w+)
                 .*?
