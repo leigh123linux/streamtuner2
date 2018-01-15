@@ -81,15 +81,12 @@ class radiolist (ChannelPlugin, action.heuristic_funcs):
         rx_genre = re.compile('<td[^>]+>(\w*[^<>]*)</td>\s*<td[^>]+>(\w+[^<>]+)</td>\s*$', re.I)
         entries = []
         html = ahttp.get("http://radiolist.net/" + self.catmap[cat])
-        log.DATA(html)
         for block in re.findall("<tr>(.+?)</tr>", html, re.S):
-            log.BLOCK(block)
             ut = re.findall(rx_title, block)  # homepage+title
             uu = re.findall(rx_urls, block)   # urls+bitrates
             lg = re.findall(rx_genre, block)  # location+genre
             #print ut, uu, lg
             if ut and uu and lg:
-                log.D(ut,uu,lg)
                 url, br = self.best_url(uu)
                 entries.append(dict(
                     homepage = ut[0][0],
