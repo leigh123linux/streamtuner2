@@ -68,6 +68,7 @@ else:
 try:
     from distutils.spawn import find_executable
 except:
+    import os
     def find_executable(bin):
         exists = [os.path.exists(dir+"/"+bin) for dir in os.environ.get("PATH").split(":")+["/"]]
         return exists[0] if len(exists) else None
