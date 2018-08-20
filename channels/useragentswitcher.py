@@ -27,9 +27,9 @@ class useragentswitcher():
     module = 'useragentswitcher'
     meta = plugin_meta()
     map = {
-       "default": "streamtuner2/2.1 (X11; Linux amd64; rv:33.0) like WinAmp/2.1",
+       "default": "streamtuner2/2.2 (X11; Linux amd64; rv:62.0) like WinAmp/2.1",
        "vlc": "vlc 1.1.0-git-20100330-0003",
-       "firefox": "Mozilla/5.0 (Windows NT 6.3; rv:36.0) Gecko/20100101 Firefox/36.0",
+       "firefox": "Mozilla/5.0 (Windows NT 6.3; rv:62.0) Gecko/20100101 Firefox/62.0",
        "chrome": "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36",
        "android": "Mozilla/5.0 (Linux; U; Android 4.2; en-us; Nexus 10 Build/JVP15I) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Safari/534.30",
        "msie": "Mozilla/5.0 (compatible, MSIE 11, Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko",
