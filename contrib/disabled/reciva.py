@@ -7,6 +7,7 @@
 # type: channel
 # category: radio
 # config: -
+# status: obsolete
 # priority: contrib
 # png:
 #    iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAGFBMVEXiMATfORfhQyTrZk7uh3Tzs6n10879+/iUjtOkAAAAAWJLR0QAiAUdSAAAAAlwSFlzAAALEwAA
